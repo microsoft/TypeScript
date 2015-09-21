@@ -1,3 +1,4 @@
+// @jsExtensions: js
 // @declaration: true
 // @filename: a.ts
 class c {

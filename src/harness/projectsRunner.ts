@@ -2,7 +2,7 @@
 ///<reference path="runnerbase.ts" />
 
 // Test case is json of below type in tests/cases/project/
-interface ProjectRunnerTestCase {
+interface ProjectRunnerTestCase extends ts.CompilerOptions{
     scenario: string;
     projectRoot: string; // project where it lives - this also is the current directory when compiling
     inputFiles: string[]; // list of input files to be given to program
@@ -50,7 +50,7 @@ class ProjectRunner extends RunnerBase {
     }
 
     private runProjectTestCase(testCaseFileName: string) {
-        let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
+        let testCase: ProjectRunnerTestCase;
 
         let testFileText: string = null;
         try {
@@ -61,7 +61,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         try {
-            testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText);
+            testCase = <ProjectRunnerTestCase>JSON.parse(testFileText);
         }
         catch (e) {
             assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
@@ -181,8 +181,13 @@ class ProjectRunner extends RunnerBase {
             let nonSubfolderDiskFiles = 0;
 
             let outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
-            let compilerOptions = createCompilerOptions();
             let inputFiles = testCase.inputFiles;
+            let { errors, compilerOptions } = createCompilerOptions();
+            if (errors.length) {
+                moduleKind,
+                errors
+            };
+
             let configFileName: string;
             if (compilerOptions.project) {
                 // Parse project
@@ -203,7 +208,7 @@ class ProjectRunner extends RunnerBase {
                 }
 
                 let configObject = result.config;
-                let configParseResult = ts.parseConfigFile(configObject, { fileExists, readFile: getSourceFileText, readDirectory }, ts.getDirectoryPath(configFileName));
+                let configParseResult = ts.parseConfigFile(configObject, { fileExists, readFile: getSourceFileText, readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,
@@ -211,7 +216,7 @@ class ProjectRunner extends RunnerBase {
                     };
                 }
                 inputFiles = configParseResult.fileNames;
-                compilerOptions = ts.extend(compilerOptions, configParseResult.options);
+                compilerOptions = configParseResult.options;
             }
 
             let projectCompilerResult = compileProjectFiles(moduleKind, () => inputFiles, getSourceFileText, writeFile, compilerOptions);
@@ -224,7 +229,7 @@ class ProjectRunner extends RunnerBase {
                 errors: projectCompilerResult.errors,
             };
 
-            function createCompilerOptions(): ts.CompilerOptions {
+            function createCompilerOptions() {
                 // Set the special options that depend on other testcase options
                 let compilerOptions: ts.CompilerOptions = {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
@@ -232,7 +237,7 @@ class ProjectRunner extends RunnerBase {
                     module: moduleKind,
                     moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
                 };
-
+                let errors: ts.Diagnostic[] = [];
                 // Set the values specified using json
                 let optionNameMap: ts.Map<ts.CommandLineOption> = {};
                 ts.forEach(ts.optionDeclarations, option => {
@@ -241,19 +246,14 @@ class ProjectRunner extends RunnerBase {
                 for (let name in testCase) {
                     if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
                         let option = optionNameMap[name];
-                        let optType = option.type;
-                        let value = <any>testCase[name];
-                        if (typeof optType !== "string") {
-                            let key = value.toLowerCase();
-                            if (ts.hasProperty(optType, key)) {
-                                value = optType[key];
-                            }
+                        let { hasValidValue, value } = ts.parseJsonCompilerOption(option, testCase[name], errors);
+                        if (hasValidValue) {
+                            compilerOptions[option.name] = value;
                         }
-                        compilerOptions[option.name] = value;
                     }
                 }
 
-                return compilerOptions;
+                return { errors, compilerOptions };
             }
             
             function getFileNameInTheProjectTest(fileName: string): string {
@@ -389,11 +389,11 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
-            let inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
+            let inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
                 sourceFile => sourceFile.fileName !== "lib.d.ts"),
                 sourceFile => {
                     return { unitName: sourceFile.fileName, content: sourceFile.text };
-                });
+                }): [];
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }

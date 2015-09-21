@@ -247,8 +247,11 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
-            name: "consumeJsFiles",
-            type: "boolean",
+            name: "jsExtensions",
+            type: "string[]",
+            description: Diagnostics.Specifies_extensions_to_treat_as_javascript_file_To_specify_multiple_extensions_either_use_this_option_multiple_times_or_provide_comma_separated_list,
+            paramType: Diagnostics.EXTENSION_S,
+            error: Diagnostics.Argument_for_jsExtensions_option_must_be_either_extension_or_comma_separated_list_of_extensions,
         }
     ];
 
@@ -309,31 +312,23 @@ namespace ts {
                     if (hasProperty(optionNameMap, s)) {
                         let opt = optionNameMap[s];
 
-                        // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                        if (!args[i] && opt.type !== "boolean") {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                        if (opt.type === "boolean") {
+                            // This needs to be treated specially since it doesnt accept argument
+                            options[opt.name] = true;
                         }
+                        else {
+                            // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
+                            if (!args[i]) {
+                                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                            }
 
-                        switch (opt.type) {
-                            case "number":
-                                options[opt.name] = parseInt(args[i++]);
-                                break;
-                            case "boolean":
-                                options[opt.name] = true;
-                                break;
-                            case "string":
-                                options[opt.name] = args[i++] || "";
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            default:
-                                let map = <Map<number>>opt.type;
-                                let key = (args[i++] || "").toLowerCase();
-                                if (hasProperty(map, key)) {
-                                    options[opt.name] = map[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                }
+                            let { hasError, value} = parseOption(opt, args[i++], options[opt.name]);
+                            if (hasError) {
+                                errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                            }
+                            else {
+                                options[opt.name] = value;
+                            }
                         }
                     }
                     else {
@@ -345,7 +340,7 @@ namespace ts {
                 }
             }
         }
-
+        
         function parseResponseFile(fileName: string) {
             let text = readFile ? readFile(fileName) : sys.readFile(fileName);
 
@@ -380,6 +375,63 @@ namespace ts {
         }
     }
 
+    function parseMultiValueStringArray(s: string, existingValue: string[]) {
+        let value: string[] = existingValue || [];
+        let hasError: boolean;
+        let currentString = "";
+        if (s) {
+            for (let i = 0; i < s.length; i++) {
+                let ch = s.charCodeAt(i);
+                if (ch === CharacterCodes.comma) {
+                    pushCurrentStringToResult();
+                }
+                else {
+                    currentString += s.charAt(i);
+                }
+            }
+            // push last string
+            pushCurrentStringToResult();
+        }
+        return { value, hasError };
+
+        function pushCurrentStringToResult() {
+            if (currentString) {
+                value.push(currentString);
+                currentString = "";
+            }
+            else {
+                hasError = true;
+            }
+        }
+    }
+
+    /* @internal */
+    export function parseOption(option: CommandLineOption, stringValue: string, existingValue: CompilerOptionsValueType) {
+        let hasError: boolean;
+        let value: CompilerOptionsValueType;
+        switch (option.type) {
+            case "number":
+                value = parseInt(stringValue);
+                break;
+            case "string":
+                value = stringValue || "";
+                break;
+            case "string[]":
+                return parseMultiValueStringArray(stringValue, <string[]>existingValue);
+            // If not a primitive, the possible types are specified in what is effectively a map of options.
+            default:
+                let map = <Map<number>>option.type;
+                let key = (stringValue || "").toLowerCase();
+                if (hasProperty(map, key)) {
+                    value = map[key];
+                }
+                else {
+                    hasError = true;
+                }
+        }
+        return { hasError, value };
+    }
+
     /**
       * Read tsconfig.json file
       * @param fileName The path to the config file
@@ -409,23 +461,57 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function parseJsonCompilerOption(opt: CommandLineOption, jsonValue: any, errors: Diagnostic[]) {
+        let optType = opt.type;
+        let expectedType = typeof optType === "string" ? optType : "string";
+        let hasValidValue = true;
+        if (typeof jsonValue === expectedType) {
+            if (typeof optType !== "string") {
+                let key = jsonValue.toLowerCase();
+                if (hasProperty(optType, key)) {
+                    jsonValue = optType[key];
+                }
+                else {
+                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                    jsonValue = 0;
+                }
+            }
+        }
+        // Check if the value asked was string[] and value provided was not string[]
+        else if (expectedType !== "string[]" ||
+            typeof jsonValue !== "object" ||
+            typeof jsonValue.length !== "number" ||
+            forEach(<string[]>jsonValue, individualValue => typeof individualValue !== "string")) {
+            // Not expectedType
+            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.name, expectedType));
+            hasValidValue = false;
+        }
+
+        return {
+            value: <CompilerOptionsValueType>jsonValue,
+            hasValidValue
+        };
+    }
+
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
+      * @param existingOptions optional existing options to extend into
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}): ParsedCommandLine {
         let errors: Diagnostic[] = [];
 
-        let options = getCompilerOptions();
+        let options = getCompilerOptions(existingOptions);
         return {
             options,
             fileNames: getFileNames(),
             errors
         };
 
-        function getCompilerOptions(): CompilerOptions {
+        function getCompilerOptions(existingOptions: CompilerOptions): CompilerOptions {
             let options: CompilerOptions = {};
             let optionNameMap: Map<CommandLineOption> = {};
             forEach(optionDeclarations, option => {
@@ -436,27 +522,9 @@ namespace ts {
                 for (let id in jsonOptions) {
                     if (hasProperty(optionNameMap, id)) {
                         let opt = optionNameMap[id];
-                        let optType = opt.type;
-                        let value = jsonOptions[id];
-                        let expectedType = typeof optType === "string" ? optType : "string";
-                        if (typeof value === expectedType) {
-                            if (typeof optType !== "string") {
-                                let key = value.toLowerCase();
-                                if (hasProperty(optType, key)) {
-                                    value = optType[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                    value = 0;
-                                }
-                            }
-                            if (opt.isFilePath) {
-                                value = normalizePath(combinePaths(basePath, value));
-                            }
-                            options[opt.name] = value;
-                        }
-                        else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                        let { hasValidValue, value } = parseJsonCompilerOption(opt, jsonOptions[id], errors);
+                        if (hasValidValue) {
+                            options[opt.name] = opt.isFilePath ? normalizePath(combinePaths(basePath, <string>value)) : value;
                         }
                     }
                     else {
@@ -464,7 +532,7 @@ namespace ts {
                     }
                 }
             }
-            return options;
+            return extend(existingOptions, options);
         }
 
         function getFileNames(): string[] {
@@ -479,31 +547,30 @@ namespace ts {
             }
             else {
                 let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
-                if (options.consumeJsFiles) {
-                    sysFiles = sysFiles.concat(host.readDirectory(basePath, ".js", exclude));
-                }
-                for (let i = 0; i < sysFiles.length; i++) {
-                    let name = sysFiles[i];
-                    if (fileExtensionIs(name, ".js")) {
-                        let baseName = name.substr(0, name.length - ".js".length);
-                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts") && !contains(sysFiles, baseName + ".d.ts")) {
-                            fileNames.push(name);
+                let extensionsToRead = getSupportedExtensions(options);
+                for (let extensionsIndex = 0; extensionsIndex < extensionsToRead.length; extensionsIndex++) {
+                    let extension = extensionsToRead[extensionsIndex];
+                    let sysFiles = host.readDirectory(basePath, extension, exclude);
+                    for (let i = 0; i < sysFiles.length; i++) {
+                        let fileName = sysFiles[i];
+                        // If this is not the extension of one of the lower priority extension, then only we can use this file name
+                        // This could happen if the extension taking priority is substring of lower priority extension. eg. .ts and .d.ts
+                        let hasLowerPriorityExtension: boolean;
+                        for (let j = extensionsIndex + 1; !hasLowerPriorityExtension && j < extensionsToRead.length; j++) {
+                            hasLowerPriorityExtension = fileExtensionIs(fileName, extensionsToRead[j]);
+                        };
+                        if (!hasLowerPriorityExtension) {
+                            // If the basename + higher priority extensions arent in the filenames, use this file name
+                            let baseName = fileName.substr(0, fileName.length - extension.length - 1);
+                            let hasSameNameHigherPriorityExtensionFile: boolean;
+                            for (let j = 0; !hasSameNameHigherPriorityExtensionFile && j < extensionsIndex; j++) {
+                                hasSameNameHigherPriorityExtensionFile = contains(fileNames, baseName + "." + extensionsToRead[j]);
+                            };
+
+                            if (!hasSameNameHigherPriorityExtensionFile) {
+                                fileNames.push(fileName);
+                            }
                         }
-                    }
-                    else if (fileExtensionIs(name, ".d.ts")) {
-                        let baseName = name.substr(0, name.length - ".d.ts".length);
-                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
-                            fileNames.push(name);
-                        }
-                    }
-                    else if (fileExtensionIs(name, ".ts")) {
-                        if (!contains(sysFiles, name + "x")) {
-                            fileNames.push(name);
-                        }
-                    }
-                    else {
-                        fileNames.push(name);
                     }
                 }
             }

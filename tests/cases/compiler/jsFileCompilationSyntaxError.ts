@@ -1,3 +1,4 @@
+// @jsExtensions: js
 // @filename: a.js
 /**
   * @type {number}

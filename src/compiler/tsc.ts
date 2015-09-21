@@ -223,13 +223,13 @@ namespace ts {
                     }
 
                     let configObject = result.config;
-                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
+                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
                     if (configParseResult.errors.length > 0) {
                         reportDiagnostics(configParseResult.errors);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
                     rootFileNames = configParseResult.fileNames;
-                    compilerOptions = extend(commandLine.options, configParseResult.options);
+                    compilerOptions = configParseResult.options;
                 }
                 else {
                     rootFileNames = commandLine.fileNames;
@@ -519,8 +519,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
-            let result: Map<string|number|boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean | string[]> {
+            let result: Map<string | number | boolean | string[]> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (let name in options) {
@@ -537,8 +537,8 @@ namespace ts {
                             let optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
                                 if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
+                                    // string, number, boolean or string[]
+                                    result[name] = <string | number | boolean | string[]>value;
                                 }
                                 else {
                                     // Enum

@@ -148,7 +148,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it("Correct JS output for " + fileName, () => {
-                if (!ts.fileExtensionIs(lastUnit.name, ".d.ts") && this.emit) {
+                if (!ts.fileExtensionIs(lastUnit.name, "d.ts") && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
                         throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
                     }

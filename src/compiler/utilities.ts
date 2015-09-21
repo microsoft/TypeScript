@@ -1783,11 +1783,15 @@ namespace ts {
                 // 1. in-browser single file compilation scenario
                 // 2. non supported extension file
                 return compilerOptions.isolatedModules ||
-                    forEach(supportedExtensions, extension => fileExtensionIs(sourceFile.fileName, extension));
+                    forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(sourceFile.fileName, extension));
             }
             return false;
         }
         return false;
+    }
+
+    export function getSupportedExtensions(options: CompilerOptions): string[] {
+        return options.jsExtensions ? supportedTypeScriptExtensions.concat(options.jsExtensions) : supportedTypeScriptExtensions;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
@@ -2063,13 +2067,18 @@ namespace ts {
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
+    
+    export function hasExtension(fileName: string): boolean {
+        return getBaseFileName(fileName).indexOf(".") >= 0;
+    }
 
     export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+        // Treat file as typescript if the extension is not supportedTypeScript
+        return hasExtension(fileName) && !forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+        return fileExtensionIs(fileName, "tsx");
     }
 
     /**
