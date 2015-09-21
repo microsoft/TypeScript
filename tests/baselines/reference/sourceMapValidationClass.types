@@ -14,7 +14,7 @@ class Greeter {
 >"<h1>" + this.greeting : string
 >"<h1>" : string
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
 >"</h1>" : string
     }
@@ -30,7 +30,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
     }
     get greetings() {
@@ -38,7 +38,7 @@ class Greeter {
 
         return this.greeting;
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
     }
     set greetings(greetings: string) {
@@ -48,7 +48,7 @@ class Greeter {
         this.greeting = greetings;
 >this.greeting = greetings : string
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
 >greetings : string
     }

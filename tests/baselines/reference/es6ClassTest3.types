@@ -24,14 +24,14 @@ module M {
 	        this.x = 1;
 >this.x = 1 : number
 >this.x : number
->this : Visibility
+>this : this
 >x : number
 >1 : number
 
 	        this.y = 2;
 >this.y = 2 : number
 >this.y : number
->this : Visibility
+>this : this
 >y : number
 >2 : number
 	    }

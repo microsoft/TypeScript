@@ -37,6 +37,6 @@ class FooIterator {
 >iterator : symbol
 
         return this;
->this : FooIterator
+>this : this
     }
 }

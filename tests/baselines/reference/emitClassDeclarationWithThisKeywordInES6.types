@@ -10,7 +10,7 @@ class B {
         this.x = 10;
 >this.x = 10 : number
 >this.x : number
->this : B
+>this : this
 >x : number
 >10 : number
     }
@@ -27,7 +27,7 @@ class B {
 >B : typeof B
 >log : (a: number) => void
 >this.x : number
->this : B
+>this : this
 >x : number
     }
 
@@ -36,7 +36,7 @@ class B {
 
         return this.x;
 >this.x : number
->this : B
+>this : this
 >x : number
     }
 
@@ -47,7 +47,7 @@ class B {
         this.x = y;
 >this.x = y : number
 >this.x : number
->this : B
+>this : this
 >x : number
 >y : number
     }

@@ -10,7 +10,7 @@ class Foo {
 	    var n = this.pvar;
 >n : number
 >this.pvar : number
->this : Foo
+>this : this
 >pvar : number
 	}
 
@@ -18,7 +18,7 @@ class Foo {
 >meth : () => void
 >q : number
 >this.pvar : number
->this : Foo
+>this : this
 >pvar : number
 }
 

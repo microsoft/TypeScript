@@ -42,6 +42,6 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }

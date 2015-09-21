@@ -10,7 +10,7 @@ class Test {
 >x : () => number
 >() => this["prop1"] : () => number
 >this["prop1"] : number
->this : Test
+>this : this
 >"prop1" : string
 
         var y: number = x();

@@ -23,7 +23,7 @@ class C {
 
         for (var x in this) {
 >x : any
->this : C
+>this : this
         }
     }
 }

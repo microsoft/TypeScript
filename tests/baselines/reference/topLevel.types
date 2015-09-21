@@ -18,26 +18,26 @@ class Point implements IPoint {
 >y : any
 
     public move(xo:number,yo:number) {
->move : (xo: number, yo: number) => Point
+>move : (xo: number, yo: number) => this
 >xo : number
 >yo : number
 
 	this.x+=xo;
 >this.x+=xo : any
 >this.x : any
->this : Point
+>this : this
 >x : any
 >xo : number
 
 	this.y+=yo;
 >this.y+=yo : any
 >this.y : any
->this : Point
+>this : this
 >y : any
 >yo : number
 
 	return this;
->this : Point
+>this : this
     }
     public toString() {
 >toString : () => string
@@ -50,11 +50,11 @@ class Point implements IPoint {
 >"("+this.x : string
 >"(" : string
 >this.x : any
->this : Point
+>this : this
 >x : any
 >"," : string
 >this.y : any
->this : Point
+>this : this
 >y : any
 >")" : string
     }

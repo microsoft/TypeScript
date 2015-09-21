@@ -26,7 +26,7 @@ class C2 {
 
         return this.x;
 >this.x : IHasVisualizationModel
->this : C2
+>this : this
 >x : IHasVisualizationModel
     }
     set A(x) {

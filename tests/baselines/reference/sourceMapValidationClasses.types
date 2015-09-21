@@ -21,7 +21,7 @@ module Foo.Bar {
 >"<h1>" + this.greeting : string
 >"<h1>" : string
 >this.greeting : string
->this : Greeter
+>this : this
 >greeting : string
 >"</h1>" : string
         }

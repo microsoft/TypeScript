@@ -25,7 +25,7 @@ class D {
 
         return this._bar;
 >this._bar : string
->this : D
+>this : this
 >_bar : string
     } 
     baz(a: any, x: string): string {

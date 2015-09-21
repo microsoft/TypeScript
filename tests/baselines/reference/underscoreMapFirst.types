@@ -124,7 +124,7 @@ class MyView extends View {
 >this.model.get("data") : any
 >this.model.get : any
 >this.model : any
->this : MyView
+>this : this
 >model : any
 >get : any
 >"data" : string

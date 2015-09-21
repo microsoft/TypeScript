@@ -32,7 +32,7 @@ module Test {
 >name : string
 >this.getName() : string
 >this.getName : () => string
->this : Bug
+>this : this
 >getName : () => string
 >length : number
 >0 : number

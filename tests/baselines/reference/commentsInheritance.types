@@ -170,7 +170,7 @@ class c2 {
         this.c2_p1 = a;
 >this.c2_p1 = a : number
 >this.c2_p1 : number
->this : c2
+>this : this
 >c2_p1 : number
 >a : number
     }

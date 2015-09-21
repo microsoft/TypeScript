@@ -18,26 +18,26 @@ export module TopLevelModule1 {
                     var a1: ClassA; a1.AisIn1_1_1();
 >a1 : Symbol(a1, Decl(typeResolution.ts, 6, 23))
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
->a1.AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a1.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 >a1 : Symbol(a1, Decl(typeResolution.ts, 6, 23))
->AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 >a2 : Symbol(a2, Decl(typeResolution.ts, 7, 23))
 >SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
->a2.AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a2.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 >a2 : Symbol(a2, Decl(typeResolution.ts, 7, 23))
->AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 >a3 : Symbol(a3, Decl(typeResolution.ts, 8, 23))
 >SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
 >SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
->a3.AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a3.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 >a3 : Symbol(a3, Decl(typeResolution.ts, 8, 23))
->AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : Symbol(a4, Decl(typeResolution.ts, 9, 23))
@@ -45,9 +45,9 @@ export module TopLevelModule1 {
 >SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
 >SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
 >ClassA : Symbol(ClassA, Decl(typeResolution.ts, 2, 37))
->a4.AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>a4.AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
 >a4 : Symbol(a4, Decl(typeResolution.ts, 9, 23))
->AisIn1_1_1 : Symbol(AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
+>AisIn1_1_1 : Symbol(ClassA.AisIn1_1_1, Decl(typeResolution.ts, 3, 33))
                     
                     // Two variants of qualifying a peer type
                     var b1: ClassB; b1.BisIn1_1_1();
@@ -142,9 +142,9 @@ export module TopLevelModule1 {
                     var b1: ClassB; b1.BisIn1_1_1();
 >b1 : Symbol(b1, Decl(typeResolution.ts, 34, 23))
 >ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
->b1.BisIn1_1_1 : Symbol(BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>b1.BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
 >b1 : Symbol(b1, Decl(typeResolution.ts, 34, 23))
->BisIn1_1_1 : Symbol(BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
 
                     var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
 >b2 : Symbol(b2, Decl(typeResolution.ts, 35, 23))
@@ -152,9 +152,9 @@ export module TopLevelModule1 {
 >SubModule1 : Symbol(SubModule1, Decl(typeResolution.ts, 0, 31))
 >SubSubModule1 : Symbol(SubSubModule1, Decl(typeResolution.ts, 1, 30))
 >ClassB : Symbol(ClassB, Decl(typeResolution.ts, 22, 13))
->b2.BisIn1_1_1 : Symbol(BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>b2.BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
 >b2 : Symbol(b2, Decl(typeResolution.ts, 35, 23))
->BisIn1_1_1 : Symbol(BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
+>BisIn1_1_1 : Symbol(ClassB.BisIn1_1_1, Decl(typeResolution.ts, 23, 33))
                     
                     // Type only accessible from the root
                     var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();

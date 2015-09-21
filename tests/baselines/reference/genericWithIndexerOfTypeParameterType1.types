@@ -15,7 +15,7 @@ class LazyArray<T> {
 
         return this.objects;
 >this.objects : { [objectId: string]: T; }
->this : LazyArray<T>
+>this : this
 >objects : { [objectId: string]: T; }
     }
 }

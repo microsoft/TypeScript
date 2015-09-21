@@ -5,7 +5,7 @@ class A {
     get testProp() { return this.testProp; }
 >testProp : any
 >this.testProp : any
->this : A
+>this : this
 >testProp : any
 }
 
@@ -17,7 +17,7 @@ class B {
 >value : string
 >this.testProp = value : string
 >this.testProp : string
->this : B
+>this : this
 >testProp : string
 >value : string
 }

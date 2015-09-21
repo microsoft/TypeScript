@@ -7,9 +7,11 @@ tests/cases/compiler/inheritance1.ts(31,1): error TS2322: Type 'Control' is not 
 tests/cases/compiler/inheritance1.ts(37,1): error TS2322: Type 'Control' is not assignable to type 'TextBox'.
   Property 'select' is missing in type 'Control'.
 tests/cases/compiler/inheritance1.ts(40,1): error TS2322: Type 'ImageBase' is not assignable to type 'SelectableControl'.
+  Property 'select' is missing in type 'ImageBase'.
 tests/cases/compiler/inheritance1.ts(46,1): error TS2322: Type 'Image1' is not assignable to type 'SelectableControl'.
   Property 'select' is missing in type 'Image1'.
 tests/cases/compiler/inheritance1.ts(52,1): error TS2322: Type 'Locations' is not assignable to type 'SelectableControl'.
+  Property 'state' is missing in type 'Locations'.
 tests/cases/compiler/inheritance1.ts(53,1): error TS2322: Type 'Locations' is not assignable to type 'Control'.
   Property 'state' is missing in type 'Locations'.
 tests/cases/compiler/inheritance1.ts(55,1): error TS2322: Type 'Control' is not assignable to type 'Locations'.
@@ -77,6 +79,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2322: Type 'Control' is not 
     sc = i;
     ~~
 !!! error TS2322: Type 'ImageBase' is not assignable to type 'SelectableControl'.
+!!! error TS2322:   Property 'select' is missing in type 'ImageBase'.
     c = i;
     i = sc;
     i = c;
@@ -94,6 +97,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2322: Type 'Control' is not 
     sc = l;
     ~~
 !!! error TS2322: Type 'Locations' is not assignable to type 'SelectableControl'.
+!!! error TS2322:   Property 'state' is missing in type 'Locations'.
     c = l;
     ~
 !!! error TS2322: Type 'Locations' is not assignable to type 'Control'.

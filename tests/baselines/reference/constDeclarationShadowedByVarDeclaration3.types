@@ -20,7 +20,7 @@ class Rule {
         this.name = name;
 >this.name = name : string
 >this.name : string
->this : Rule
+>this : this
 >name : string
 >name : string
     }

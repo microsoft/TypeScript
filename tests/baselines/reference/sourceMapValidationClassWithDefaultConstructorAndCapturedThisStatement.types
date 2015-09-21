@@ -10,6 +10,6 @@ class Greeter {
 >returnA : () => number
 >() => this.a : () => number
 >this.a : number
->this : Greeter
+>this : this
 >a : number
 }

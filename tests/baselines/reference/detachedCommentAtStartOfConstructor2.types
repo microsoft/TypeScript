@@ -20,13 +20,13 @@ class TestFile {
 >message + this.name : string
 >message : string
 >this.name : string
->this : TestFile
+>this : this
 >name : string
 
         this.message = getMessage();
 >this.message = getMessage() : string
 >this.message : string
->this : TestFile
+>this : this
 >message : string
 >getMessage() : string
 >getMessage : () => string

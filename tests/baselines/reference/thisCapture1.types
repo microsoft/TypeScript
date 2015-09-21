@@ -25,7 +25,7 @@ class X {
             this.y = 0;
 >this.y = 0 : number
 >this.y : number
->this : X
+>this : this
 >y : number
 >0 : number
 

@@ -10,7 +10,7 @@ class C {
     protected get y() { return this.x; }
 >y : string
 >this.x : string
->this : C
+>this : this
 >x : string
 
     protected set y(x) { this.y = this.x; }
@@ -18,16 +18,16 @@ class C {
 >x : string
 >this.y = this.x : string
 >this.y : string
->this : C
+>this : this
 >y : string
 >this.x : string
->this : C
+>this : this
 >x : string
 
     protected foo() { return this.foo; }
 >foo : () => any
 >this.foo : () => any
->this : C
+>this : this
 >foo : () => any
 
     protected static x: string;
@@ -75,7 +75,7 @@ class C2 {
 >y : any
 >() => this.x : () => string
 >this.x : string
->this : C2
+>this : this
 >x : string
 >null : null
 
@@ -85,17 +85,17 @@ class C2 {
 >() => { this.y = this.x; } : () => void
 >this.y = this.x : string
 >this.y : any
->this : C2
+>this : this
 >y : any
 >this.x : string
->this : C2
+>this : this
 >x : string
 
     protected foo() { () => this.foo; }
 >foo : () => void
 >() => this.foo : () => () => void
 >this.foo : () => void
->this : C2
+>this : this
 >foo : () => void
 
     protected static x: string;
