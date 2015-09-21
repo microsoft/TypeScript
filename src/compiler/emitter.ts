@@ -1966,7 +1966,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
                 // When diagnosing whether the expression needs parentheses, the decision should be based
                 // on the innermost expression in a chain of nested type assertions.
-                while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
+                while (isTypeAssertion(expr)) {
                     expr = (<AssertionExpression>expr).expression;
                 }
 
@@ -2189,7 +2189,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function skipParentheses(node: Expression): Expression {
-                while (node.kind === SyntaxKind.ParenthesizedExpression || node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression) {
+                while (node.kind === SyntaxKind.ParenthesizedExpression || isTypeAssertion(node)) {
                     node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
                 return node;
@@ -2340,12 +2340,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
                 if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    if (node.expression.kind === SyntaxKind.TypeAssertionExpression || node.expression.kind === SyntaxKind.AsExpression) {
-                        let operand = (<TypeAssertion>node.expression).expression;
+                    let innerExpression = node.expression;
+                    if (isTypeAssertion(innerExpression)) {
+                        let operand = innerExpression.expression;
 
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
+                        while (isTypeAssertion(operand)) {
                             operand = (<TypeAssertion>operand).expression;
                         }
 

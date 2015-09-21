@@ -992,6 +992,10 @@ namespace ts {
         return false;
     }
 
+    export function isTypeAssertion(node: Node): node is AssertionExpression {
+        return node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression;
+    }
+
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         let moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
