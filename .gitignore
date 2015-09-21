@@ -18,7 +18,7 @@ tests/services/browser/typescriptServices.js
 scripts/configureNightly.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
-scripts/importDefinitelyTypedTests.js
+scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 src/harness/*.js
 rwc-report.html
 *.swp
@@ -35,6 +35,7 @@ scripts/run.bat
 scripts/word2md.js
 scripts/ior.js
 scripts/*.js.map
+scripts/typings/
 coverage/
 internal/
 **/.DS_Store
