@@ -352,6 +352,15 @@ namespace ts {
 
     let hasOwnProperty = Object.prototype.hasOwnProperty;
 
+    function isValidRegex(r : string): boolean {
+        try {
+            RegExp(r);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     export function isWhiteSpace(ch: number): boolean {
         // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
         // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
@@ -1541,6 +1550,11 @@ namespace ts {
                 }
                 pos = p;
                 tokenValue = text.substring(tokenPos, pos);
+                
+                if (inCharacterClass || !isValidRegex(tokenValue)) {
+                    error(Diagnostics.Invalid_regular_expression_literal);
+                }
+                
                 token = SyntaxKind.RegularExpressionLiteral;
             }
             return token;
