@@ -86,7 +86,7 @@ namespace ts {
                         // we know there is going to be a .d.ts file matching it. Emit that reference
                         shouldEmitRefrence = true;
                     }
-                    else if (compilerOptions.out && !addedGlobalFileReference && isExternalModule(sourceFile)) {
+                    else if ((compilerOptions.out || compilerOptions.outFile) && !addedGlobalFileReference && isExternalModule(sourceFile)) {
                         // This is a reference to a file in the global island, since out is on, all files
                         // in the global island will be merged into one. so keep only one of these references
                         addedGlobalFileReference = true;
@@ -105,7 +105,7 @@ namespace ts {
                     ? referencedFile.fileName // Declaration file, use declaration file name
                     : shouldEmitToOwnFile(referencedFile, compilerOptions)
                         ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                        : removeFileExtension(compilerOptions.out) + ".d.ts"; // Global out file
+                        : removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts"; // Global out file
 
                 declFileName = getRelativePathToDirectoryOrUrl(
                     getDirectoryPath(normalizeSlashes(outputFileName)),
@@ -1740,10 +1740,10 @@ namespace ts {
             }
         }
 
-        if (compilerOptions.out) {
+        if (compilerOptions.outFile || compilerOptions.out) {
             // Emit any files that did not have their own output file
             // all these files will emit to a single output file specified by compiler options.out
-            let outputFilePath = removeFileExtension(compilerOptions.out) + ".d.ts"
+            let outputFilePath = removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts"
             let sourceFiles = filter(host.getSourceFiles(), sourceFile => !isExternalModuleOrDeclarationFile(sourceFile));
             action(outputFilePath, sourceFiles);
         }
