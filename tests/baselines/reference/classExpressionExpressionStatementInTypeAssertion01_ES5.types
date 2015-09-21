@@ -1,0 +1,67 @@
+=== tests/cases/conformance/statements/expressionStatements/classExpressionExpressionStatementInTypeAssertion01_ES5.ts ===
+
+(<any>class { });
+>(<any>class { }) : any
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+(class { } as any);
+>(class { } as any) : any
+>class { } as any : any
+>class { } : typeof (Anonymous class)
+
+<any>class { };
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+<any>class { } as any;
+><any>class { } as any : any
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+
+function f() {
+>f : () => void
+
+    (<any>class { });
+>(<any>class { }) : any
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+    (class { } as any);
+>(class { } as any) : any
+>class { } as any : any
+>class { } : typeof (Anonymous class)
+
+    <any>class { };
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+    <any>class { } as any;
+><any>class { } as any : any
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+}
+
+namespace n {
+>n : typeof n
+
+    (<any>class { });
+>(<any>class { }) : any
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+    (class { } as any);
+>(class { } as any) : any
+>class { } as any : any
+>class { } : typeof (Anonymous class)
+
+    <any>class { };
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+
+    <any>class { } as any;
+><any>class { } as any : any
+><any>class { } : any
+>class { } : typeof (Anonymous class)
+}
