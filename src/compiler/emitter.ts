@@ -996,6 +996,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
                     forEach((<TemplateExpression>node.template).templateSpans, templateSpan => {
                         write(", ");
+                        // TODO (drosen): Something like
+                        //      `${ { hello: 10; world: 20 } }HELLO`
+                        // will get emitted as
+                        //      { hello: 10; world: 20 } + "HELLO"
+                        //
+                        // As an expresssion statement, the former evaluates to '"[object Object]HELLO"' while the latter evaluates to 'NaN'.
+                        // Look into using 'meaningChangesAsExpressionStatement' here.
                         let needsParens = templateSpan.expression.kind === SyntaxKind.BinaryExpression
                             && (<BinaryExpression>templateSpan.expression).operatorToken.kind === SyntaxKind.CommaToken;
                         emitParenthesizedIf(templateSpan.expression, needsParens);
@@ -2618,8 +2625,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            function meaningChangesAsExpressionStatement(node: Node): boolean {
+                switch (node.kind) {
+                    // Arrow functions are emitted as function expressions,
+                    // which would become function declarations in a statement context.
+                    case SyntaxKind.ArrowFunction:
+                        return languageVersion < ScriptTarget.ES6;
+
+                    // Object literals become a block body.
+                    case SyntaxKind.ObjectLiteralExpression:
+                    // These become function/class *declarations* in a statement context.
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.ClassExpression:
+                        return true;
+                }
+
+                return false;
+            }
+
             function emitExpressionStatement(node: ExpressionStatement) {
-                emitParenthesizedIf(node.expression, /*parenthesized*/ node.expression.kind === SyntaxKind.ArrowFunction);
+                emitParenthesizedIf(node.expression, /*parenthesized*/ meaningChangesAsExpressionStatement(node.expression));
                 write(";");
             }
 
