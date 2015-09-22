@@ -1,6 +1,5 @@
 === tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter01.ts ===
 
-
 function f({}) {
 >f : ({}: {}) => void
 
