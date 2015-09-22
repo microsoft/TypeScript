@@ -4809,7 +4809,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseOptionalIdentifier();
+            node.name = parseNameOfClassDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
 
@@ -4825,7 +4825,22 @@ namespace ts {
 
             return finishNode(node);
         }
-
+        
+        function parseNameOfClassDeclarationOrExpression(): Identifier {
+            // implements is a future reserved word so
+            // 'class implements' might mean either
+            // - class expression with omitted name, 'implements' starts heritage clause
+            // - class with name 'implements' 
+            // 'isImplementsClause' helps to disambiguate between these two cases 
+            return isIdentifier() && !isImplementsClause()
+                ? parseIdentifier()
+                : undefined;
+        }
+        
+        function isImplementsClause() {
+            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword)
+        }
+        
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
