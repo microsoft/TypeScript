@@ -1623,7 +1623,7 @@
     },
     "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
-        "code":2517
+        "code": 2517
     },
     "Only an ambient class can be merged with an interface.": {
         "category": "Error",
@@ -2056,6 +2056,14 @@
     "A 'tsconfig.json' file is already defined at: '{0}'.": {
         "category": "Error",
         "code": 5053
+    },
+    "The project file name is not in 'tsconfig-*.json' format: '{0}'": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Cannot find any project file in specified path: '{0}'": {
+        "category": "Error",
+        "code": 5056
     },
 
     "Concatenate and emit output to single file.": {

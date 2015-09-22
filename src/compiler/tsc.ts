@@ -190,7 +190,15 @@ namespace ts {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
             }
             else {
+                if (!/^tsconfig.*\.json$/.test(getBaseFileName(fileOrDirectory))) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_project_file_name_is_not_in_tsconfig_Asterisk_json_format_Colon_0, commandLine.options.project));
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
                 configFileName = fileOrDirectory;
+            }
+            if (!sys.fileExists(configFileName)) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_any_project_file_in_specified_path_Colon_0, commandLine.options.project));
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
