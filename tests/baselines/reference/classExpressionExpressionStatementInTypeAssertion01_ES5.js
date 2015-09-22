@@ -30,16 +30,16 @@ namespace n {
 }
 
 //// [classExpressionExpressionStatementInTypeAssertion01_ES5.js]
-(function () {
+((function () {
     function class_1() {
     }
     return class_1;
-})();
-(function () {
+})());
+((function () {
     function class_2() {
     }
     return class_2;
-})();
+})());
 (function () {
     function class_3() {
     }
@@ -51,16 +51,16 @@ namespace n {
     return class_4;
 })();
 function f() {
-    (function () {
+    ((function () {
         function class_5() {
         }
         return class_5;
-    })();
-    (function () {
+    })());
+    ((function () {
         function class_6() {
         }
         return class_6;
-    })();
+    })());
     (function () {
         function class_7() {
         }
@@ -74,16 +74,16 @@ function f() {
 }
 var n;
 (function (n) {
-    (function () {
+    ((function () {
         function class_9() {
         }
         return class_9;
-    })();
-    (function () {
+    })());
+    ((function () {
         function class_10() {
         }
         return class_10;
-    })();
+    })());
     (function () {
         function class_11() {
         }

@@ -30,12 +30,12 @@ namespace n {
 }
 
 //// [classExpressionExpressionStatementInTypeAssertion01_ES6.js]
-class class_1 {
+(class class_1 {
 }
-;
-class class_2 {
+);
+(class class_2 {
 }
-;
+);
 class class_3 {
 }
 ;
@@ -43,12 +43,12 @@ class class_4 {
 }
 ;
 function f() {
-    class class_5 {
+    (class class_5 {
     }
-    ;
-    class class_6 {
+    );
+    (class class_6 {
     }
-    ;
+    );
     class class_7 {
     }
     ;
@@ -58,12 +58,12 @@ function f() {
 }
 var n;
 (function (n) {
-    class class_9 {
+    (class class_9 {
     }
-    ;
-    class class_10 {
+    );
+    (class class_10 {
     }
-    ;
+    );
     class class_11 {
     }
     ;
