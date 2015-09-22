@@ -1,4 +1,4 @@
-tests/cases/compiler/constructorOverloads6.ts(4,25): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/constructorOverloads6.ts(4,25): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
 ==== tests/cases/compiler/constructorOverloads6.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/constructorOverloads6.ts(4,25): error TS1184: An implementa
         constructor(n: number);
         constructor(x: any) {
                             ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
     
         }
     	bar1():void;

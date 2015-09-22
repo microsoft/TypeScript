@@ -8,7 +8,8 @@
             "spaces"
         ],
         "one-line": [true,
-            "check-open-brace"
+            "check-open-brace",
+            "check-whitespace"
         ],
         "no-unreachable": true,
         "no-use-before-declare": true,
@@ -21,7 +22,8 @@
             "check-branch",
             "check-operator",
             "check-separator",
-            "check-type"
+            "check-type",
+            "check-module"
         ],
         "typedef-whitespace": [true, {
             "call-signature": "nospace",
@@ -29,6 +31,15 @@
             "parameter": "nospace",
             "property-declaration": "nospace",
             "variable-declaration": "nospace"
-        }]
+        }],
+        "next-line": [true, 
+            "check-catch",
+            "check-else"
+        ],
+        "no-internal-module": true,
+        "no-trailing-whitespace": true,
+        "no-inferrable-types": true,
+        "no-null": true,
+        "boolean-trivia": true
   }
 }
