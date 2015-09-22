@@ -186,11 +186,11 @@ namespace ts {
             }
 
             let fileOrDirectory = normalizePath(commandLine.options.project);
-            if (!fileOrDirectory || sys.directoryExists(fileOrDirectory)) {
+            if (!fileOrDirectory /* current directory */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
             }
             else {
-                if (!/^tsconfig.*\.json$/.test(getBaseFileName(fileOrDirectory))) {
+                if (!/^tsconfig(?:-.*)?.json$/.test(getBaseFileName(fileOrDirectory))) {
                     reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_project_file_name_is_not_in_tsconfig_Asterisk_json_format_Colon_0, commandLine.options.project));
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }

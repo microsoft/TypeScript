@@ -2056,7 +2056,7 @@
         "category": "Error",
         "code": 5054
     },
-    "The project file name is not in 'tsconfig-*.json' format: '{0}'": {
+    "The project file name is not in 'tsconfig(-*).json' format: '{0}'": {
         "category": "Error",
         "code": 5055
     },
