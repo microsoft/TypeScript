@@ -2385,6 +2385,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 shouldKeepParentheses = originalParentKind === SyntaxKind.PropertyAccessExpression;
                                 break;
                             default:
+                                if (originalParentKind === SyntaxKind.ExpressionStatement && meaningChangesAsExpressionStatement(operand)) {
+                                    shouldKeepParentheses = true;
+                                    break;
+                                }
+
                                 shouldKeepParentheses = false;
                         }
                     }
