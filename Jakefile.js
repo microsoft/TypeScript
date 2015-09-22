@@ -206,6 +206,9 @@ function concatenateFiles(destinationFile, sourceFiles) {
 var useDebugMode = true;
 var host = (process.env.host || process.env.TYPESCRIPT_HOST || "node");
 var compilerFilename = "tsc.js";
+var LKGCompiler = path.join(LKGDirectory, compilerFilename);
+var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
+
 /* Compiles a file from a list of sources
     * @param outFile: the target file name
     * @param sources: an array of the names of the source files
@@ -220,7 +223,7 @@ var compilerFilename = "tsc.js";
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
-        var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
+        var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
         var options = "--module commonjs --noImplicitAny --noEmitOnError";
 
         // Keep comments when specifically requested
@@ -257,7 +260,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
             options += " --stripInternal"
         }
 
-        var cmd = host + " " + dir + compilerFilename + " " + options + " ";
+        var cmd = host + " " + compilerPath + " " + options + " ";
         cmd = cmd + sources.join(" ");
         console.log(cmd + "\n");
 
@@ -328,7 +331,7 @@ compileFile(processDiagnosticMessagesJs,
 
 // The generated diagnostics map; built for the compiler and for the 'generate-diagnostics' task
 file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson], function () {
-    var cmd = "node " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
+    var cmd = host + " " + processDiagnosticMessagesJs + " "  + diagnosticMessagesJson;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
     // Add listeners for output and error
@@ -374,7 +377,7 @@ task("setDebugMode", function() {
 });
 
 task("configure-nightly", [configureNightlyJs], function() {
-    var cmd = "node " + configureNightlyJs + " " + packageJson + " " + programTs;
+    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -385,6 +388,32 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
     console.log(cmd);
     exec(cmd);
 });
+
+var scriptsTsdJson = path.join(scriptsDirectory, "tsd.json");
+file(scriptsTsdJson);
+
+task("tsd-scripts", [scriptsTsdJson], function () {
+    var cmd = "tsd --config " + scriptsTsdJson + " install";
+    console.log(cmd)
+    exec(cmd);
+}, { async: true })
+
+var importDefinitelyTypedTestsDirectory = path.join(scriptsDirectory, "importDefinitelyTypedTests");
+var importDefinitelyTypedTestsJs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.js");
+var importDefinitelyTypedTestsTs = path.join(importDefinitelyTypedTestsDirectory, "importDefinitelyTypedTests.ts");
+
+file(importDefinitelyTypedTestsTs);
+file(importDefinitelyTypedTestsJs, ["tsd-scripts", importDefinitelyTypedTestsTs], function () {
+    var cmd = host + " " + LKGCompiler + " -p " + importDefinitelyTypedTestsDirectory;
+    console.log(cmd);
+    exec(cmd);
+}, { async: true });
+
+task("importDefinitelyTypedTests", [importDefinitelyTypedTestsJs], function () {
+    var cmd = host + " " + importDefinitelyTypedTestsJs + " ./ ../DefinitelyTyped";
+    console.log(cmd);
+    exec(cmd);
+}, { async: true });
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
@@ -780,17 +809,36 @@ task("update-sublime", ["local", serverFile], function() {
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
 });
 
+var tslintRuleDir = "scripts/tslint";
+var tslintRules = ([
+    "nextLineRule",
+    "noInferrableTypesRule",
+    "noNullRule",
+    "booleanTriviaRule"
+]);
+var tslintRulesFiles = tslintRules.map(function(p) {
+    return path.join(tslintRuleDir, p + ".ts");
+});
+var tslintRulesOutFiles = tslintRules.map(function(p) {
+    return path.join(builtLocalDirectory, "tslint", p + ".js");
+});
+desc("Compiles tslint rules to js");
+task("build-rules", tslintRulesOutFiles);
+tslintRulesFiles.forEach(function(ruleFile, i) {
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ true, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+});
+
 // if the codebase were free of linter errors we could make jake runtests
 // run this task automatically
 desc("Runs tslint on the compiler sources");
-task("lint", [], function() {
+task("lint", ["build-rules"], function() {
     function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
     function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
 
     var lintTargets = compilerSources.concat(harnessCoreSources);
     for (var i in lintTargets) {
         var f = lintTargets[i];
-        var cmd = 'tslint -c tslint.json ' + f;
+        var cmd = 'tslint --rules-dir built/local/tslint -c tslint.json ' + f;
         exec(cmd, success(f), failure(f));
     }
 }, { async: true });
