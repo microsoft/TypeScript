@@ -480,7 +480,7 @@ namespace ts.formatting {
                     }
                 },
                 getIndentation: () => indentation,
-                getDelta: (child) => (!delta || SmartIndenter.shouldInheritParentIndentation(node, child)) ? 0 : delta,
+                getDelta: (child) => (delta && SmartIndenter.shouldInheritParentIndentation(node, child)) ? 0 : delta,
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
