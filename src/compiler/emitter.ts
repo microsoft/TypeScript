@@ -2343,19 +2343,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitParenExpression(node: ParenthesizedExpression) {
+                let shouldKeepParentheses = true; // meaningChangesAsExpressionStatement
+                let operand = node.expression;
+
                 // If the node is synthesized, it means the emitter put the parentheses there,
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
                 if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    let innerExpression = node.expression;
-                    if (isTypeAssertion(innerExpression)) {
-                        let operand = innerExpression.expression;
-
+                    if (isTypeAssertion(operand)) {
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        while (isTypeAssertion(operand)) {
+                        do {
                             operand = (<TypeAssertion>operand).expression;
-                        }
+                        } while (isTypeAssertion(operand));
 
                         // We have an expression of the form: (<Type>SubExpr)
                         // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
@@ -2364,25 +2364,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
                         //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
                         //      new (<any>A()) should be emitted as new (A()) and not new A()
-                        //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
-                        if (operand.kind !== SyntaxKind.PrefixUnaryExpression &&
-                            operand.kind !== SyntaxKind.VoidExpression &&
-                            operand.kind !== SyntaxKind.TypeOfExpression &&
-                            operand.kind !== SyntaxKind.DeleteExpression &&
-                            operand.kind !== SyntaxKind.PostfixUnaryExpression &&
-                            operand.kind !== SyntaxKind.NewExpression &&
-                            !(operand.kind === SyntaxKind.CallExpression && node.parent.kind === SyntaxKind.NewExpression) &&
-                            !(operand.kind === SyntaxKind.FunctionExpression && node.parent.kind === SyntaxKind.CallExpression) &&
-                            !(operand.kind === SyntaxKind.NumericLiteral && node.parent.kind === SyntaxKind.PropertyAccessExpression)) {
-                            emit(operand);
-                            return;
+                        //      (<any>function foo() { })() should be emitted as an IIFE (function foo(){})() and not declaration function foo(){} ()
+                        const originalParentKind = node.parent.kind;
+                        switch (operand.kind) {
+                            case SyntaxKind.PrefixUnaryExpression:
+                            case SyntaxKind.VoidExpression:
+                            case SyntaxKind.TypeOfExpression:
+                            case SyntaxKind.DeleteExpression:
+                            case SyntaxKind.PostfixUnaryExpression:
+                            case SyntaxKind.NewExpression:
+                                shouldKeepParentheses = true;
+                                break;
+                            case SyntaxKind.CallExpression:
+                                shouldKeepParentheses = originalParentKind === SyntaxKind.NewExpression;
+                                break;
+                            case SyntaxKind.FunctionExpression:
+                                shouldKeepParentheses = originalParentKind === SyntaxKind.CallExpression;
+                                break;
+                            case SyntaxKind.NumericLiteral:
+                                shouldKeepParentheses = originalParentKind === SyntaxKind.PropertyAccessExpression;
+                                break;
+                            default:
+                                shouldKeepParentheses = false;
                         }
                     }
                 }
 
-                write("(");
-                emit(node.expression);
-                write(")");
+                emitParenthesizedIf(node.expression, shouldKeepParentheses);
             }
 
             function emitDeleteExpression(node: DeleteExpression) {
