@@ -2887,11 +2887,14 @@ namespace ts {
             }
         }
 
-        function interfaceReferencesThisType(symbol: Symbol): boolean {
+        // Returns true if the interface given by the symbol is free of "this" references. Specifically, the result is
+        // true if the interface itself contains no references to "this" in its body, if all base types are interfaces,
+        // and if none of the base interfaces have a "this" type.
+        function isIndependentInterface(symbol: Symbol): boolean {
             for (let declaration of symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration) {
                     if (declaration.flags & NodeFlags.ContainsThis) {
-                        return true;
+                        return false;
                     }
                     let baseTypeNodes = getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration);
                     if (baseTypeNodes) {
@@ -2899,14 +2902,14 @@ namespace ts {
                             if (isSupportedExpressionWithTypeArguments(node)) {
                                 let baseSymbol = resolveEntityName(node.expression, SymbolFlags.Type, /*ignoreErrors*/ true);
                                 if (!baseSymbol || !(baseSymbol.flags & SymbolFlags.Interface) || getDeclaredTypeOfClassOrInterface(baseSymbol).thisType) {
-                                    return true;
+                                    return false;
                                 }
                             }
                         }
                     }
                 }
             }
-            return false;
+            return true;
         }
 
         function getDeclaredTypeOfClassOrInterface(symbol: Symbol): InterfaceType {
@@ -2916,7 +2919,12 @@ namespace ts {
                 let type = links.declaredType = <InterfaceType>createObjectType(kind, symbol);
                 let outerTypeParameters = getOuterTypeParametersOfClassOrInterface(symbol);
                 let localTypeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                if (outerTypeParameters || localTypeParameters || kind === TypeFlags.Class || interfaceReferencesThisType(symbol)) {
+                // A class or interface is generic if it has type parameters or a "this" type. We always give classes a "this" type
+                // because it is not feasible to analyze all members to determine if the "this" type escapes the class (in particular,
+                // property types inferred from initializers and method return types inferred from return statements are very hard
+                // to exhaustively analyze). We give interfaces a "this" type if we can't definitely determine that they are free of
+                // "this" references.
+                if (outerTypeParameters || localTypeParameters || kind === TypeFlags.Class || !isIndependentInterface(symbol)) {
                     type.flags |= TypeFlags.Reference;
                     type.typeParameters = concatenate(outerTypeParameters, localTypeParameters);
                     type.outerTypeParameters = outerTypeParameters;
@@ -3064,7 +3072,12 @@ namespace ts {
             return true;
         }
 
-        function isIndependentSymbol(symbol: Symbol): boolean {
+        // Returns true if the class or interface member given by the symbol is free of "this" references. The
+        // function may return false for symbols that are actually free of "this" references because it is not
+        // feasible to perform a complete analysis in all cases. In particular, property members with types
+        // inferred from their initializers and function members with inferred return types are convervatively
+        // assumed not to be free of "this" references.
+        function isIndependentMember(symbol: Symbol): boolean {
             if (symbol.declarations && symbol.declarations.length === 1) {
                 let declaration = symbol.declarations[0];
                 if (declaration) {
@@ -3095,7 +3108,7 @@ namespace ts {
         function createInstantiatedSymbolTable(symbols: Symbol[], mapper: TypeMapper, mappingThisOnly: boolean): SymbolTable {
             let result: SymbolTable = {};
             for (let symbol of symbols) {
-                result[symbol.name] = mappingThisOnly && isIndependentSymbol(symbol) ? symbol : instantiateSymbol(symbol, mapper);
+                result[symbol.name] = mappingThisOnly && isIndependentMember(symbol) ? symbol : instantiateSymbol(symbol, mapper);
             }
             return result;
         }
@@ -4980,18 +4993,6 @@ namespace ts {
                 }
                 return result;
             }
-
-            //function typesRelatedTo(sources: Type[], targets: Type[], reportErrors: boolean): Ternary {
-            //    let result = Ternary.True;
-            //    for (let i = 0, len = sources.length; i < len; i++) {
-            //        let related = isRelatedTo(sources[i], targets[i], reportErrors);
-            //        if (!related) {
-            //            return Ternary.False;
-            //        }
-            //        result &= related;
-            //    }
-            //    return result;
-            //}
 
             function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, reportErrors: boolean): Ternary {
                 let sources = source.typeArguments || emptyArray;

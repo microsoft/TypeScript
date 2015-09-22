@@ -376,7 +376,7 @@ namespace ts {
         OctalLiteral =      0x00010000,  // Octal numeric literal
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
-        ContainsThis =      0x00080000,  // Contains reference to "this"
+        ContainsThis =      0x00080000,  // Interface contains references to "this"
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
