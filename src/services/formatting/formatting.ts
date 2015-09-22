@@ -391,7 +391,7 @@ namespace ts.formatting {
             effectiveParentStartLine: number): Indentation {
 
             let indentation = inheritedIndentation;
-            var delta = SmartIndenter.shouldIndentChildNode(node, null) ? options.IndentSize : 0;
+            var delta = SmartIndenter.shouldIndentChildNode(node) ? options.IndentSize : 0;
 
             if (effectiveParentStartLine === startLine) {
                 // if node is located on the same line with the parent
@@ -490,7 +490,7 @@ namespace ts.formatting {
                             indentation -= options.IndentSize;
                         }
 
-                        if (SmartIndenter.shouldIndentChildNode(node, null)) {
+                        if (SmartIndenter.shouldIndentChildNode(node)) {
                             delta = options.IndentSize;
                         }
                         else {

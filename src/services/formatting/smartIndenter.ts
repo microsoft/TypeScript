@@ -471,7 +471,7 @@ namespace ts.formatting {
             return indentByDefault;
         }
 
-        export function shouldIndentChildNode(parent: TextRangeWithKind, child: TextRangeWithKind): boolean {
+        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
             if (nodeContentIsAlwaysIndented(parent.kind)) {
                 return true;
             }
