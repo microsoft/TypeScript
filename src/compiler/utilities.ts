@@ -1048,6 +1048,9 @@ namespace ts {
 
     export function isAmdExportAssignment(expression: Node): boolean;
     export function isAmdExportAssignment(expression: BinaryExpression): boolean {
+        if (!isInJavaScriptFile(expression)) {
+            return false;
+        }
         return (expression.kind === SyntaxKind.BinaryExpression) &&
             (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
             (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
@@ -1057,6 +1060,9 @@ namespace ts {
 
     export function isCommonJsExportsAssignment(expression: Node): boolean;
     export function isCommonJsExportsAssignment(expression: BinaryExpression): boolean {
+        if (!isInJavaScriptFile(expression)) {
+            return false;
+        }
         return (expression.kind === SyntaxKind.BinaryExpression) &&
             (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
             (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
