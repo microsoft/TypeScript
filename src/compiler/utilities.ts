@@ -1012,6 +1012,78 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    function isInJavaScriptFile(node: Node): boolean {
+        return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+    }
+
+    function isCalledToNamedFunction(expression: Node, name: string): boolean;
+    function isCalledToNamedFunction(expression: CallExpression, name: string) {
+        return expression.kind === SyntaxKind.CallExpression &&
+                expression.expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>expression.expression).text === name;
+    }
+
+    export function isDefineCall(expression: Node): boolean;
+    export function isDefineCall(expression: CallExpression): boolean {
+        // In .js files, calls to the identifier 'define' are treated specially
+        return expression &&
+            expression.kind === SyntaxKind.CallExpression &&
+            expression.arguments.length > 0 &&
+            isInJavaScriptFile(expression) &&
+            isCalledToNamedFunction(expression, 'define');
+    }
+
+    export function isAnonymousDefineCall(expression: Node): boolean;
+    export function isAnonymousDefineCall(expression: CallExpression): boolean {
+        return isDefineCall(expression) &&
+            expression.arguments.length > 0 &&
+            expression.arguments[0].kind !== SyntaxKind.StringLiteral;
+    }
+
+    export function isAmdRequireCall(expression: Node): boolean;
+    export function isAmdRequireCall(expression: CallExpression): boolean {
+        // of the form 'require("name")' or 'require(arg1, arg2, ...)'
+        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length >= 1;
+    }
+
+    export function isAmdExportAssignment(expression: Node): boolean;
+    export function isAmdExportAssignment(expression: BinaryExpression): boolean {
+        return (expression.kind === SyntaxKind.BinaryExpression) &&
+            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
+            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
+    }
+
+    export function isCommonJsExportsAssignment(expression: Node): boolean;
+    export function isCommonJsExportsAssignment(expression: BinaryExpression): boolean {
+        return (expression.kind === SyntaxKind.BinaryExpression) &&
+            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
+            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'module') &&
+            ((<PropertyAccessExpression>expression.left).name.text === 'exports');
+    }
+
+    export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
+        // e.g. define(['a', 'b', 'c'], ...) or define('myMod', ['a', 'b', 'c'], ...)
+        if (callExpr.arguments.length < 1) {
+            return undefined;
+        }
+
+        for (var i = 0; i < callExpr.arguments.length; i++) {
+            if (callExpr.arguments[i].kind === SyntaxKind.ArrayLiteralExpression) {
+                return (<ArrayLiteralExpression>callExpr.arguments[i]).elements;
+            }
+        }
+
+        if(isAmdRequireCall(callExpr)) {
+            return callExpr.arguments;
+        }
+
+        return undefined;
+    }
+
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
@@ -2065,11 +2137,11 @@ namespace ts {
     }
 
     export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+        return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 
     export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+        return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
     }
 
     /**

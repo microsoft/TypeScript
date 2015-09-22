@@ -208,7 +208,7 @@ module Utils {
             return isNodeOrArray(v) ? serializeNode(v) : v;
         }, "    ");
 
-        function getKindName(k: number | string): string {
+        function getKindName(k: number|string): string {
             if (typeof k === "string") {
                 return k;
             }
@@ -1698,7 +1698,7 @@ module Harness {
         };
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 1;
+    if (Error) (<any>Error).stackTraceLimit = 100;
 }
 
 // TODO: not sure why Utils.evalFile isn't working with this, eventually will concat it like old compiler instead of eval

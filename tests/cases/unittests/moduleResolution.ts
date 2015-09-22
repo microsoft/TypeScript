@@ -82,7 +82,7 @@ module ts {
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
             // expect three failed lookup location - attempt to load module as file with all supported extensions
-            assert.equal(resolution.failedLookupLocations.length, 3);
+            assert.equal(resolution.failedLookupLocations.length, 5);
         }
         
         it("module name as directory - load from typings", () => {
@@ -103,6 +103,8 @@ module ts {
                 "/a/b/foo.ts",
                 "/a/b/foo.tsx",
                 "/a/b/foo.d.ts",
+                "/a/b/foo.js",
+                "/a/b/foo.jsx",
                 "/a/b/foo/index.ts",
                 "/a/b/foo/index.tsx",
             ]);

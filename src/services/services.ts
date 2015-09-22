@@ -6865,7 +6865,6 @@ namespace ts {
                                     return ClassificationType.parameterName;
                                 }
                                 return;
-
                         }
                     }
 

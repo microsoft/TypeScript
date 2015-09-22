@@ -6,8 +6,8 @@ namespace ts {
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
-        Instantiated    = 1,
-        ConstEnumOnly   = 2
+        Instantiated = 1,
+        ConstEnumOnly = 2
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
@@ -96,6 +96,8 @@ namespace ts {
 
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
+
+        let isJavaScriptFile = isJavaScript(file.fileName);
         let classifiableNames: Map<string> = {};
 
         if (!file.locals) {
@@ -148,6 +150,7 @@ namespace ts {
                 }
                 return (<Identifier | LiteralExpression>node.name).text;
             }
+
             switch (node.kind) {
                 case SyntaxKind.Constructor:
                     return "__constructor";
@@ -166,7 +169,50 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
+                case SyntaxKind.JSDocFunctionType:
+                    return isJSDocConstructSignature(node) ? "__new" : "__call";
+                case SyntaxKind.Parameter:
+                    // Parameters with names are handled at the top of this function.  Parameters
+                    // without names can only come from JSDocFunctionTypes.
+                    Debug.assert(node.parent.kind === SyntaxKind.JSDocFunctionType);
+                    let functionType = <JSDocFunctionType>node.parent;
+                    let index = indexOf(functionType.parameters, node);
+                    return "p" + index;
+
+                case SyntaxKind.BinaryExpression:
+                    if (isAmdExportAssignment(node)) {
+                        return getAmdExportAssignmentName(node);
+                    }
+                    else if(isCommonJsExportsAssignment(node)) {
+                        return getAnonymousModuleName(node);
+                    }
+                    else {
+                        Debug.fail('Unknown binder BinaryExpression kind');
+                    }
+
+                case SyntaxKind.CallExpression:
+                    Debug.assert(isDefineCall(<CallExpression>node));
+                    if ((<CallExpression>node).arguments[0].kind === SyntaxKind.StringLiteral) {
+                        let moduleName = (<StringLiteral>(<CallExpression>node).arguments[0]).text;
+                        return '"' + moduleName + '"';
+                    }
+                    else {
+                        return getAnonymousModuleName(node);
+                    }
             }
+        }
+
+        function getAmdExportAssignmentName(node: Node) {
+            Debug.assert(isAmdExportAssignment(<BinaryExpression>node));
+
+            let binaryExpr = <BinaryExpression>node;
+            let propAccess = <PropertyAccessExpression>(binaryExpr.left);
+            return propAccess.name.text;
+        }
+
+        function getAnonymousModuleName(node: Node) {
+            let sourceFileName = removeFileExtension(file.fileName);
+            return '"' + sourceFileName + '"';
         }
 
         function getDisplayName(node: Declaration): string {
@@ -185,7 +231,7 @@ namespace ts {
             Debug.assert(!hasDynamicName(node));
 
             // The exported symbol for an export default function/class node is always named "default"
-            let name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+            let name = (node.flags & NodeFlags.Default && parent) ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -266,7 +312,7 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
+                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isAmdExportAssignment(node) || isCommonJsExportsAssignment(node)) {
                     let exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -329,6 +375,10 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
+            if (isJavaScriptFile && node.jsDocComment) {
+                bind(node.jsDocComment);
+            }
+
             forEachChild(node, bind);
 
             container = saveContainer;
@@ -342,8 +392,9 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocRecordType:
                     return ContainerFlags.IsContainer;
 
                 case SyntaxKind.CallSignature:
@@ -429,6 +480,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.JSDocRecordType:
                     // Interface/Object-types always have their children added to the 'members' of
                     // their container. They are only accessible through an instance of their
                     // container, and are never in scope otherwise (even inside the body of the
@@ -449,6 +501,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
+                case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.TypeAliasDeclaration:
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
@@ -538,7 +591,7 @@ namespace ts {
             }
         }
 
-        function bindFunctionOrConstructorType(node: SignatureDeclaration) {
+        function bindFunctionOrConstructorTypeORJSDocFunctionType(node: SignatureDeclaration): void {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
@@ -613,7 +666,7 @@ namespace ts {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
-                    // fall through.
+                // fall through.
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = {};
@@ -763,7 +816,7 @@ namespace ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node) {
+        function bind(node: Node): void {
             node.parent = parent;
 
             let savedInStrictMode = inStrictMode;
@@ -835,9 +888,16 @@ namespace ts {
 
         function bindWorker(node: Node) {
             switch (node.kind) {
+                /* Strict mode checks */
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
+                    if (isAmdExportAssignment(node)) {
+                        bindAmdExportAssignment(<BinaryExpression>node);
+                    }
+                    else if (isCommonJsExportsAssignment(node)) {
+                        bindAmdModuleExportsAssignment(<BinaryExpression>node);
+                    }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -852,6 +912,12 @@ namespace ts {
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
 
+                case SyntaxKind.CallExpression:
+                    if (isDefineCall(<CallExpression>node)) {
+                        return bindDefineCall(<CallExpression>node);
+                    }
+                    return;
+
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
@@ -861,6 +927,7 @@ namespace ts {
                     return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
+                case SyntaxKind.JSDocRecordMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
@@ -890,8 +957,10 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
+                case SyntaxKind.JSDocFunctionType:
+                    return bindFunctionOrConstructorTypeORJSDocFunctionType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocRecordType:
                     return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
                 case SyntaxKind.ObjectLiteralExpression:
                     return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
@@ -963,6 +1032,29 @@ namespace ts {
         function bindImportClause(node: ImportClause) {
             if (node.name) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            }
+        }
+
+        function bindAmdExportAssignment(node: BinaryExpression) {
+            declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.Property, SymbolFlags.None);
+        }
+
+        function bindAmdModuleExportsAssignment(node: BinaryExpression) {
+            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
+            // This file is an external module
+            getSourceFileOfNode(node).symbol = symbol;
+        }
+
+        function bindDefineCall(node: CallExpression) {
+            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
+
+            // If this was a file-level module, hook up the file symbol to this module
+            if (isAnonymousDefineCall(node)) {
+                let parent = node.parent;
+                while (parent && parent.kind !== SyntaxKind.SourceFile) {
+                    parent = parent.parent;
+                }
+                parent.symbol = symbol;
             }
         }
 

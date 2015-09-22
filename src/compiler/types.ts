@@ -753,7 +753,8 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface BinaryExpression extends Expression {
+    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
+    export interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -825,7 +826,8 @@ namespace ts {
         argumentExpression?: Expression;
     }
 
-    export interface CallExpression extends LeftHandSideExpression {
+    // Call expressions can be declarations if they are 'define' calls in JS files
+    export interface CallExpression extends LeftHandSideExpression, Declaration {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;

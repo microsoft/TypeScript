@@ -48,7 +48,7 @@ namespace ts {
     }
     
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-        let containingDirectory = getDirectoryPath(containingFile);        
+        let containingDirectory = getDirectoryPath(containingFile);
 
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             let failedLookupLocations: string[] = [];
@@ -74,7 +74,7 @@ namespace ts {
             return tryLoad(".d.ts");
         }
         else {
-            return forEach(supportedExtensions, tryLoad);
+            return forEach(supportedJsExtensions, tryLoad);
         }
         
         function tryLoad(ext: string): string {
@@ -167,9 +167,10 @@ namespace ts {
         let failedLookupLocations: string[] = [];
 
         let referencedSourceFile: string;
+        let extensions = compilerOptions.allowNonTsExtensions ? supportedJsExtensions : supportedExtensions;
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
-            referencedSourceFile = forEach(supportedExtensions, extension => {
+            referencedSourceFile = forEach(extensions, extension => {
                 if (extension === ".tsx" && !compilerOptions.jsx) {
                     // resolve .tsx files only if jsx support is enabled 
                     // 'logical not' handles both undefined and None cases
@@ -687,9 +688,14 @@ namespace ts {
             if (file.imports) {
                 return;
             }
+
+            let isJavaScriptFile = isJavaScript(file.fileName);
             
             let imports: LiteralExpression[];
-            for (let node of file.statements) {
+
+            forEachChild(file, visit);
+
+            function visit(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
@@ -703,6 +709,21 @@ namespace ts {
                         }
 
                         (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        break;
+                    case SyntaxKind.CallExpression:
+                        if (isJavaScriptFile &&
+                            (isDefineCall(node) || isAmdRequireCall(node))) {
+
+                            let jsImports = getDefineOrRequireCallImports(<CallExpression>node);
+                            if (jsImports) {
+                                imports = (imports || []);
+                                for (var i = 0; i < jsImports.length; i++) {
+                                    if (jsImports[i].kind === SyntaxKind.StringLiteral) {
+                                        imports.push(<StringLiteral>jsImports[i]);
+                                    }
+                                }
+                            }
+                        }
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
@@ -725,6 +746,10 @@ namespace ts {
                             });
                         }
                         break;
+                }
+                
+                if (isJavaScript) {
+                    forEachChild(node, visit);
                 }
             }
 

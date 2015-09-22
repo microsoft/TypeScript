@@ -3556,6 +3556,7 @@ namespace ts {
                     callExpr.expression = expression;
                     callExpr.typeArguments = typeArguments;
                     callExpr.arguments = parseArgumentList();
+
                     expression = finishNode(callExpr);
                     continue;
                 }
@@ -3563,6 +3564,7 @@ namespace ts {
                     let callExpr = <CallExpression>createNode(SyntaxKind.CallExpression, expression.pos);
                     callExpr.expression = expression;
                     callExpr.arguments = parseArgumentList();
+
                     expression = finishNode(callExpr);
                     continue;
                 }
@@ -5260,6 +5262,8 @@ namespace ts {
                     || node.kind === SyntaxKind.ImportDeclaration
                     || node.kind === SyntaxKind.ExportAssignment
                     || node.kind === SyntaxKind.ExportDeclaration
+                    || node.kind === SyntaxKind.ExpressionStatement && isAmdExportAssignment((<ExpressionStatement>node).expression)
+                    || node.kind === SyntaxKind.CallExpression && isDefineCall(node)
                     ? node
                     : undefined);
         }

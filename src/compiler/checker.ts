@@ -158,6 +158,11 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
+        let cjsModuleType: Type;
+        let cjsExportsType: Type;
+        let cjsRequireType: Type;
+        let amdRequireType: Type;
+
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let intersectionTypes: Map<IntersectionType> = {};
@@ -953,7 +958,7 @@ namespace ts {
             return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
         }
 
-        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol {
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, searchForJs = false): Symbol {
             if (moduleReferenceExpression.kind !== SyntaxKind.StringLiteral) {
                 return;
             }
@@ -968,6 +973,11 @@ namespace ts {
             if (moduleName === undefined) {
                 return;
             }
+
+            if(moduleName.indexOf('!') >= 0) {
+                moduleName = moduleName.substr(0, moduleName.indexOf('!'));
+            }
+
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
@@ -1360,7 +1370,8 @@ namespace ts {
 
         function hasExternalModuleSymbol(declaration: Node) {
             return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
-                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
+                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration)) ||
+                (declaration.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
@@ -2354,8 +2365,54 @@ namespace ts {
             return type;
         }
 
+        function getTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration) {
+            let jsDocType = getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+            if (jsDocType) {
+                return getTypeFromTypeNode(jsDocType);
+            }
+        }
+
+        function getJSDocTypeForVariableLikeDeclarationFromJSDocComment(declaration: VariableLikeDeclaration): JSDocType {
+            // First, see if this node has an @type annotation on it directly.
+            let typeTag = getJSDocTypeTag(declaration);
+            if (typeTag) {
+                return typeTag.typeExpression.type;
+            }
+
+            if (declaration.kind === SyntaxKind.VariableDeclaration &&
+                declaration.parent.kind === SyntaxKind.VariableDeclarationList &&
+                declaration.parent.parent.kind === SyntaxKind.VariableStatement) {
+
+                // @type annotation might have been on the variable statement, try that instead.
+                let typeTag = getJSDocTypeTag(declaration.parent.parent);
+                if (typeTag) {
+                    return typeTag.typeExpression.type;
+                }
+            }
+            else if (declaration.kind === SyntaxKind.Parameter) {
+                // If it's a parameter, see if the parent has a jsdoc comment with an @param 
+                // annotation.
+                let paramTag = getCorrespondingJSDocParameterTag(<ParameterDeclaration>declaration);
+                if (paramTag && paramTag.typeExpression) {
+                    return paramTag.typeExpression.type;
+                }
+            }
+
+            return undefined;
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
+            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                // If this is a variable in a JavaScript file, then use the JSDoc type (if it has
+                // one as it's type), otherwise fallback to the below standard TS codepaths to 
+                // try to figure it out.
+                let type = getTypeForVariableLikeDeclarationFromJSDocComment(declaration);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
             // A variable declared in a for..in statement is always of type any
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                 return anyType;
@@ -2372,7 +2429,7 @@ namespace ts {
             if (isBindingPattern(declaration.parent)) {
                 return getTypeForBindingElement(<BindingElement>declaration);
             }
-            
+
             // Use type from type annotation if one is present
             if (declaration.type) {
                 return getTypeFromTypeNode(declaration.type);
@@ -2387,6 +2444,22 @@ namespace ts {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
                     }
                 }
+
+                // In a JS file, we might need to add types to parameters of a function expression that is
+                // an argument to 'define'
+                if (func.kind === SyntaxKind.FunctionExpression &&
+                    func.parent &&
+                    func.parent.kind === SyntaxKind.CallExpression) {
+                    
+                    if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
+                        assignDefineOrRequireCallParameterTypes(<FunctionExpression>func);
+                        let links = getSymbolLinks(declaration.symbol);
+                        if (links.type) {
+                            return links.type;
+                        }
+                    }
+                }
+
                 // Use contextual parameter type if one is available
                 let type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
@@ -2649,7 +2722,170 @@ namespace ts {
             return links.type;
         }
 
+        function resolveAmdExportAssignment(symbol: Symbol): Type {
+            let seenTypes: Type[] = [];
+
+            for (var i = 0; i < symbol.declarations.length; i++) {
+                let decl = symbol.declarations[i];
+                Debug.assert(isAmdExportAssignment(decl));
+                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
+            }
+
+            return getUnionType(seenTypes);
+        }
+
+        function resolveCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+            let seenTypes: Type[] = [];
+
+            for (var i = 0; i < symbol.declarations.length; i++) {
+                let decl = symbol.declarations[i];
+                Debug.assert(isCommonJsExportsAssignment(decl));
+                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
+            }
+
+            return getUnionType(seenTypes);
+        }
+
+        /*
+         * Given a Symbol for a declaration of an AMD module ('define(..., ..., ...')'),
+         * produces the type of that module
+        */
+        function resolveDefineModule(symbol: Symbol): Type {
+            // Can't meaningfully define the same module more than once
+            if(symbol.declarations.length !== 1) {
+                return unknownType;
+            }
+
+            // If the invocation of 'define' has zero args ('define()')... we
+            // shouldn't really be here, but it's meaninguless
+            let callExpr = <CallExpression>symbol.declarations[0];
+            if(callExpr.arguments.length === 0) {
+                Debug.fail('Should not have a zero-arg define call');
+                return unknownType;
+            }
+
+            // If the last arg isn't a function expr, just resolve
+            // its type and define that as the shape of the module
+            let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
+            if(!isFunctionLike(lastArg)) {
+                let resultType = getTypeOfExpression(lastArg);
+                // If this type is a function type, we want to use its return type since
+                // it's going to get invoked anyway
+                let signatures = getSignaturesOfType(resultType, SignatureKind.Call);
+                if (signatures.length > 0) {
+                    return getReturnTypeOfSignature(signatures[0]);
+                }
+                else {
+                    return resultType;
+                }
+            }
+
+            // If there are any expressionful return statements in this function,
+            // we'll use those as the shape of the module
+            let bodyReturnType = getReturnTypeFromBody(lastArg);
+            if (bodyReturnType !== voidType) {
+                return bodyReturnType;
+            }
+
+            // Collect assignments in the body to 'module.exports' or 'exports.propName' or 'module.exports.propName'
+            let assignedModuleType: Type = undefined;
+            let exportAssignedProperties: Symbol[] = [];
+            let exportAssignedPropTable: SymbolTable = {};
+            
+            if (cjsModuleType === undefined || cjsExportsType === undefined) {
+                return unknownType;
+            }
+
+            traverse(lastArg.body);
+
+            // Someone assigned to 'module.exports', so ignore other assignments
+            if (assignedModuleType) {
+                return assignedModuleType;
+            }
+
+            // Otherwise return the collected property assignments
+            if (exportAssignedProperties.length > 0) {
+                return createAnonymousType(lastArg.symbol,
+                        exportAssignedPropTable,
+                        /*callSignatures*/ [],
+                        /*constructSignatures*/ [],
+                        /*stringIndexType*/ undefined,
+                        /*numberIndexType*/ undefined);
+            }
+
+            // Empty module?
+            return emptyObjectType;
+
+            function traverse(node: Node) {
+                if(node.kind === SyntaxKind.BinaryExpression &&
+                   (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    let lhs = (<BinaryExpression>node).left;
+                    if(lhs.kind === SyntaxKind.PropertyAccessExpression) {
+                        // e.g. module.exports = foo;
+                        let propertyName = (<PropertyAccessExpression>lhs).name.text;
+                        let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
+                        if (operandType === cjsModuleType && propertyName === 'exports') {
+                            assignedModuleType = getTypeOfNode((<BinaryExpression>node).right);
+                        }
+                        else if (operandType === cjsExportsType) {
+                            // e.g. exports = bar;
+                            let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propertyName);
+                            prop.type = getTypeOfNode((<BinaryExpression>node).right);
+                            exportAssignedProperties.push(prop);
+                            exportAssignedPropTable[propertyName] = prop;
+                        }
+                    }
+                }
+                forEachChild(node, traverse);
+            }
+        }
+
+        function getTypeOfDefineModule(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveDefineModule(symbol);
+            }
+            return links.type;
+        }
+
+        function getTypeOfAmdExportAssignment(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveAmdExportAssignment(symbol);
+            }
+            return links.type;
+        }
+
+        function getTypeOfCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+            let links = getSymbolLinks(symbol);
+            if (!links.type) {
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return unknownType;
+                }
+
+                links.type = resolveCommonJsModuleExportsAssignment(symbol);
+            }
+            return links.type;
+        }
+
         function getTypeOfSymbol(symbol: Symbol): Type {
+            if (symbol.declarations && forEach(symbol.declarations, isDefineCall)) {
+                return getTypeOfDefineModule(symbol);
+            }
+            if (symbol.declarations && forEach(symbol.declarations, isAmdExportAssignment)) {
+                return getTypeOfAmdExportAssignment(symbol);
+            }
+            if (symbol.declarations && forEach(symbol.declarations, isCommonJsExportsAssignment)) {
+                return getTypeOfCommonJsModuleExportsAssignment(symbol);
+            }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
@@ -3497,9 +3733,24 @@ namespace ts {
             return getIndexTypeOfStructuredType(getApparentType(type), kind);
         }
 
+        function getTypeParametersFromSignatureDeclaration(declaration: SignatureDeclaration): TypeParameter[] {
+            if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                let templateTag = getJSDocTemplateTag(declaration);
+                if (templateTag) {
+                    return getTypeParametersFromTypeParameterDeclarations(templateTag.typeParameters);
+                }
+            }
+
+            if (declaration.typeParameters) {
+                return getTypeParametersFromTypeParameterDeclarations(declaration.typeParameters);
+            }
+
+            return undefined;
+        }
+
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
-        function getTypeParametersFromDeclaration(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
+        function getTypeParametersFromTypeParameterDeclarations(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
             let result: TypeParameter[] = [];
             forEach(typeParameterDeclarations, node => {
                 let tp = getDeclaredTypeOfTypeParameter(node.symbol);
@@ -3520,12 +3771,37 @@ namespace ts {
             return result;
         }
 
-        function isOptionalParameter(node: ParameterDeclaration) {
+        function isRestOrOptionalParameter(node: ParameterDeclaration, skipSignatureCheck?: boolean) {
+            return isRestParameter(node) || isOptionalParameter(node, skipSignatureCheck);
+        }
+
+        function isOptionalParameter(node: ParameterDeclaration, skipSignatureCheck?: boolean) {
+            if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
+                    return true;
+                }
+
+                let paramTag = getCorrespondingJSDocParameterTag(node);
+                if (paramTag) {
+                    if (paramTag.isBracketed) {
+                        return true;
+                    }
+
+                    if (paramTag.typeExpression) {
+                        return paramTag.typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+                    }
+                }
+            }
+
             if (hasQuestionToken(node)) {
                 return true;
             }
 
             if (node.initializer) {
+                if (skipSignatureCheck) {
+                    return true;
+                }
+
                 let signatureDeclaration = <SignatureDeclaration>node.parent;
                 let signature = getSignatureFromDeclaration(signatureDeclaration);
                 let parameterIndex = signatureDeclaration.parameters.indexOf(node);
@@ -3539,20 +3815,27 @@ namespace ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
-                let typeParameters = classType ? classType.localTypeParameters :
-                    declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 let parameters: Symbol[] = [];
                 let hasStringLiterals = false;
                 let minArgumentCount = -1;
-                for (let i = 0, n = declaration.parameters.length; i < n; i++) {
+                let returnType: Type;
+                let typePredicate: TypePredicate;
+
+                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
+                let typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromSignatureDeclaration(declaration);
+                let isJSConstructSignature = isJSDocConstructSignature(declaration);
+
+                // If this is a JSDoc construct signature, then skip the first parameter in the 
+                // parameter list.  The first parameter represents the return type of the construct
+                // signature.
+                for (let i = isJSConstructSignature ? 1 : 0, n = declaration.parameters.length; i < n; i++) {
                     let param = declaration.parameters[i];
                     parameters.push(param.symbol);
                     if (param.type && param.type.kind === SyntaxKind.StringLiteral) {
                         hasStringLiterals = true;
                     }
 
-                    if (param.initializer || param.questionToken || param.dotDotDotToken) {
+                    if (isRestOrOptionalParameter(param, /*skipSignatureCheck*/ true)) {
                         if (minArgumentCount < 0) {
                             minArgumentCount = i;
                         }
@@ -3567,9 +3850,11 @@ namespace ts {
                     minArgumentCount = declaration.parameters.length;
                 }
 
-                let returnType: Type;
-                let typePredicate: TypePredicate;
-                if (classType) {
+                if (isJSConstructSignature) {
+                    minArgumentCount--;
+                    returnType = getTypeFromTypeNode(declaration.parameters[0].type);
+                }
+                else if (classType) {
                     returnType = classType;
                 }
                 else if (declaration.type) {
@@ -3621,6 +3906,7 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.JSDocFunctionType:
                         // Don't include signature if node is the implementation of an overloaded function. A node is considered
                         // an implementation node if it has a body and the previous node is of the same kind and immediately
                         // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -3634,6 +3920,18 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
+            let moduleSym = resolveExternalModuleName(name, name, /*includeJs*/ true);
+            if (moduleSym) {
+                let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
+                if (moduleSymSym) {
+                    return getTypeOfSymbol(moduleSymSym);
+                }
+            }
+
+            return anyType;
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -3802,7 +4100,10 @@ namespace ts {
             return type;
         }
 
-        function isTypeParameterReferenceIllegalInConstraint(typeReferenceNode: TypeReferenceNode | ExpressionWithTypeArguments, typeParameterSymbol: Symbol): boolean {
+        function isTypeParameterReferenceIllegalInConstraint(
+            typeReferenceNode: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference,
+            typeParameterSymbol: Symbol): boolean {
+
             let links = getNodeLinks(typeReferenceNode);
             if (links.isIllegalTypeReferenceInConstraint !== undefined) {
                 return links.isIllegalTypeReferenceInConstraint;
@@ -3811,7 +4112,7 @@ namespace ts {
             // bubble up to the declaration
             let currentNode: Node = typeReferenceNode;
             // forEach === exists
-            while (!forEach(typeParameterSymbol.declarations, d => d.parent === currentNode.parent)) {
+            while (!forEach(typeParameterSymbol.declarations, d => getTypeParameterOwner(d) === currentNode.parent)) {
                 currentNode = currentNode.parent;
             }
             // if last step was made from the type parameter this means that path has started somewhere in constraint which is illegal
@@ -3852,7 +4153,7 @@ namespace ts {
         }
 
         // Get type from reference to class or interface
-        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             let type = getDeclaredTypeOfSymbol(symbol);
             let typeParameters = (<InterfaceType>type).localTypeParameters;
             if (typeParameters) {
@@ -3876,7 +4177,7 @@ namespace ts {
         // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
         // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
         // declared type. Instantiations are cached using the type identities of the type arguments as the key.
-        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             let type = getDeclaredTypeOfSymbol(symbol);
             let links = getSymbolLinks(symbol);
             let typeParameters = links.typeParameters;
@@ -3897,7 +4198,7 @@ namespace ts {
         }
 
         // Get type from reference to named type that cannot be generic (enum or type parameter)
-        function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
+        function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
             if (symbol.flags & SymbolFlags.TypeParameter && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
                 // TypeScript 1.0 spec (April 2014): 3.4.1
                 // Type parameters declared in a particular type parameter list
@@ -3912,23 +4213,79 @@ namespace ts {
             return getDeclaredTypeOfSymbol(symbol);
         }
 
-        function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments): Type {
+        function getTypeReferenceName(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): LeftHandSideExpression | EntityName {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return (<TypeReferenceNode>node).typeName;
+                case SyntaxKind.JSDocTypeReference:
+                    return (<JSDocTypeReference>node).name;
+                case SyntaxKind.ExpressionWithTypeArguments:
+                    // We only support expressions that are simple qualified names. For other
+                    // expressions this produces undefined.
+                    if (isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node)) {
+                        return (<ExpressionWithTypeArguments>node).expression;
+                    }
+
+                // fall through;
+            }
+
+            return undefined;
+        }
+
+        function resolveTypeReferenceName(
+            node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference,
+            typeReferenceName: LeftHandSideExpression | EntityName) {
+
+            if (!typeReferenceName) {
+                return unknownSymbol;
+            }
+
+            let symbol = resolveEntityName(typeReferenceName, SymbolFlags.Type);
+            if (!symbol && node.kind === SyntaxKind.JSDocTypeReference) {
+                // If the reference didn't resolve to a type, try seeing if results to a 
+                // value.  If it does, get the type of that value.
+                symbol = resolveEntityName(typeReferenceName, SymbolFlags.Value);
+            }
+
+            return symbol || unknownSymbol;
+        }
+
+        function getTypeReferenceType(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol) {
+            if (symbol === unknownSymbol) {
+                return unknownType;
+            }
+
+            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                return getTypeFromClassOrInterfaceReference(node, symbol);
+            }
+
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getTypeFromTypeAliasReference(node, symbol);
+            }
+
+            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type).  In 
+                // that case, the type of this reference is just the type of the value we resolved
+                // to.
+                return getTypeOfSymbol(symbol);
+            }
+
+            return getTypeFromNonGenericTypeReference(node, symbol);
+        }
+
+        function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                // We only support expressions that are simple qualified names. For other expressions this produces undefined.
-                let typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
-                    isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
-                    undefined;
-                let symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
-                let type = symbol === unknownSymbol ? unknownType :
-                    symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                    symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                    getTypeFromNonGenericTypeReference(node, symbol);
+                let typeReferenceName = getTypeReferenceName(node);
+                let symbol = resolveTypeReferenceName(node, typeReferenceName);
+                let type = getTypeReferenceType(node, symbol);
+
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
                 links.resolvedType = type;
             }
+
             return links.resolvedType;
         }
 
@@ -3998,9 +4355,13 @@ namespace ts {
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
-            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            let typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            let typeSymbol = getExportedSymbolFromNamespace(namespace, name);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
+        }
+
+        function getExportedSymbolFromNamespace(namespace: string, name: string): Symbol {
+            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            return namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type | SymbolFlags.Value);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -4222,6 +4583,40 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromJSDocFunctionType(node: JSDocFunctionType): Type {
+            Debug.assert(!!node.symbol);
+            return createObjectType(TypeFlags.Anonymous, node.symbol);
+        }
+
+        function getTypeFromJSDocRecordType(node: JSDocRecordType): Type {
+            return createObjectType(TypeFlags.Anonymous, node.symbol);
+        }
+
+        function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
+            let type = getTypeFromTypeNode(node.type);
+            if (type) {
+                return createArrayType(type);
+            }
+        }
+
+        function getTypeForJSDocTypeReference(node: JSDocTypeReference): Type {
+            return getTypeFromTypeReference(node);
+        }
+
+        function getTypeFromJSDocArrayType(node: JSDocArrayType): Type {
+            return createArrayType(getTypeFromTypeNode(node.elementType));
+        }
+
+        function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
+            let types = map(node.types, getTypeFromTypeNode);
+            return getUnionType(types, /*noSubtypeReduction*/ true);
+        }
+
+        function getTypeFromJSDocTupleType(node: JSDocTupleType): Type {
+            let types = map(node.types, getTypeFromTypeNode);
+            return createTupleType(types);
+        }
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -4266,9 +4661,37 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     let symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
-                default:
+                case SyntaxKind.JSDocAllType:
+                    return anyType;
+                case SyntaxKind.JSDocUnknownType:
                     return unknownType;
+                case SyntaxKind.JSDocArrayType:
+                    return getTypeFromJSDocArrayType(<JSDocArrayType>node);
+                case SyntaxKind.JSDocTupleType:
+                    return getTypeFromJSDocTupleType(<JSDocTupleType>node);
+                case SyntaxKind.JSDocUnionType:
+                    return getTypeFromJSDocUnionType(<JSDocUnionType>node);
+                case SyntaxKind.JSDocNullableType:
+                    return getTypeFromTypeNode((<JSDocNullableType>node).type);
+                case SyntaxKind.JSDocNonNullableType:
+                    return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
+                case SyntaxKind.JSDocTypeReference:
+                    return getTypeForJSDocTypeReference(<JSDocTypeReference>node);
+                case SyntaxKind.JSDocOptionalType:
+                    return getTypeFromTypeNode((<JSDocOptionalType>node).type);
+                case SyntaxKind.JSDocFunctionType:
+                    return getTypeFromJSDocFunctionType(<JSDocFunctionType>node);
+                case SyntaxKind.JSDocVariadicType:
+                    return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
+                case SyntaxKind.JSDocConstructorType:
+                    return getTypeFromTypeNode((<JSDocConstructorType>node).type);
+                case SyntaxKind.JSDocRecordType:
+                    return getTypeFromJSDocRecordType(<JSDocRecordType>node);
+                case SyntaxKind.JSDocThisType:
+                    return getTypeFromTypeNode((<JSDocThisType>node).type);
             }
+
+            return unknownType;
         }
 
         function instantiateList<T>(items: T[], mapper: TypeMapper, instantiator: (item: T, mapper: TypeMapper) => T): T[] {
@@ -6450,7 +6873,25 @@ namespace ts {
                 let symbol = getSymbolOfNode(container.parent);
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : getDeclaredTypeOfSymbol(symbol);
             }
+
+            if (container.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                let type = getTypeForThisExpressionFromJSDoc(container);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
             return anyType;
+        }
+
+        function getTypeForThisExpressionFromJSDoc(node: Node) {
+            let typeTag = getJSDocTypeTag(node);
+            if (typeTag && typeTag.typeExpression.type.kind === SyntaxKind.JSDocFunctionType) {
+                let jsDocFunctionType = <JSDocFunctionType>typeTag.typeExpression.type;
+                if (jsDocFunctionType.parameters.length > 0 && jsDocFunctionType.parameters[0].type.kind === SyntaxKind.JSDocThisType) {
+                    return getTypeFromTypeNode(jsDocFunctionType.parameters[0].type);
+                }
+            }
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
@@ -8442,7 +8883,6 @@ namespace ts {
                     }
 
                 // fall-through
-
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
@@ -8492,7 +8932,6 @@ namespace ts {
                 // a string or a symbol, based on the name of the parameter's containing method.
 
                 // fall-through
-
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
@@ -8882,8 +9321,8 @@ namespace ts {
             }
 
             let funcType = checkExpression(node.expression);
-            let apparentType = getApparentType(funcType);
 
+            let apparentType = getApparentType(funcType);
             if (apparentType === unknownType) {
                 // Another error has already been reported
                 return resolveErrorCall(node);
@@ -9114,7 +9553,8 @@ namespace ts {
                 if (declaration &&
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
-                    declaration.kind !== SyntaxKind.ConstructorType) {
+                    declaration.kind !== SyntaxKind.ConstructorType &&
+                    !isJSDocConstructSignature(declaration)) {
 
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
@@ -9123,6 +9563,15 @@ namespace ts {
                     return anyType;
                 }
             }
+
+            let exprType = getTypeOfExpression(node.expression);
+            if((exprType === cjsRequireType) ||
+               (exprType === amdRequireType)) {
+                if(node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                    return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
+                }
+            }
+
             return getReturnTypeOfSignature(signature);
         }
 
@@ -9146,6 +9595,86 @@ namespace ts {
             return signature.hasRestParameter ?
                 pos < signature.parameters.length - 1 ? getTypeOfSymbol(signature.parameters[pos]) : getRestTypeOfSignature(signature) :
                 pos < signature.parameters.length ? getTypeOfSymbol(signature.parameters[pos]) : anyType;
+        }
+
+        // A function expression is a CommonJS Wrapper function if it has
+        // 1 parameter named 'require', two parameters named 'require' and 'exports',
+        // or 3 parameters named 'require', 'exports', and 'module' in that exact order
+        function isCommonJsWrapper(expression: FunctionExpression|ArrowFunction): boolean {
+           switch(expression.parameters.length) {
+                case 3:
+                    if((<Identifier>expression.parameters[2].name).text !== 'module') {
+                        return false;
+                    }
+                    // fall-through
+                case 2:
+                    if((<Identifier>expression.parameters[1].name).text !== 'exports') {
+                        return false;
+                    }
+                    // fall-through
+                case 1:
+                    if ((<Identifier>expression.parameters[0].name).text !== 'require') {
+                        return false;
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        function assignDefineOrRequireCallParameterTypes(funcExpr: FunctionExpression|ArrowFunction) {
+            let callExpr = <CallExpression>funcExpr.parent;
+
+            let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
+            let hasDependencyArray = moduleNames && moduleNames.kind === SyntaxKind.ArrayLiteralExpression;
+
+            if (!hasDependencyArray && isCommonJsWrapper(funcExpr)) {
+                // CommonJS wrapper
+                // Fall-throughs here are intentional
+                switch(funcExpr.parameters.length) {
+                    case 3:
+                        getSymbolLinks(funcExpr.parameters[2].symbol).type = cjsModuleType;
+                    case 2:
+                        getSymbolLinks(funcExpr.parameters[1].symbol).type = cjsExportsType;
+                    case 1:
+                        getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsRequireType;
+                }
+
+                return;
+            }
+
+            // Example: define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
+            if (hasDependencyArray) {
+                // Note that you might require more modules than you accept as parameters; this is fine
+                for (let i = 0; i < funcExpr.parameters.length; i++) {
+                    if (moduleNames.elements.length === i) {
+                        // We exhausted the list of modules. TODO: Issue an error; this is bad.
+                        break;
+                    }
+
+                    let links = getSymbolLinks(funcExpr.parameters[i].symbol);
+                    if (moduleNames.elements[i].kind === SyntaxKind.StringLiteral) {
+                        let moduleName = getTextOfNode(moduleNames.elements[i]);
+
+                        let unquotedName = moduleName.substr(1, moduleName.length - 2);
+                        if (unquotedName === 'require') {
+                            links.type = cjsRequireType;
+                        }
+                        else if (unquotedName === 'exports') {
+                            links.type = cjsExportsType;
+                        }
+                        else if (unquotedName === 'module') {
+                            links.type = cjsModuleType;
+                        }
+                        else {
+                            links.type = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[i]);
+                        }
+                    }
+                    else {
+                        links.type = anyType;
+                    }
+                }
+            }
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -9201,6 +9730,13 @@ namespace ts {
             }
         }
 
+        function getReturnTypeFromJSDocComment(func: FunctionLikeDeclaration): Type {
+            let returnTag = getJSDocReturnTag(func);
+            if (returnTag) {
+                return getTypeFromTypeNode(returnTag.typeExpression.type);
+            }
+        }
+
         function createPromiseType(promisedType: Type): Type {
             // creates a `Promise<T>` type where `T` is the promisedType argument
             let globalPromiseType = getGlobalPromiseType();
@@ -9214,13 +9750,21 @@ namespace ts {
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
+            let type: Type;
+            if (func.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                type = getReturnTypeFromJSDocComment(func);
+                if (type && type !== unknownType) {
+                    return type;
+                }
+            }
+
             let contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
             }
 
             let isAsync = isAsyncFunctionLike(func);
-            let type: Type;
+
             if (func.body.kind !== SyntaxKind.Block) {
                 type = checkExpressionCached(<Expression>func.body, contextualMapper);
                 if (isAsync) {
@@ -9448,6 +9992,11 @@ namespace ts {
                         checkSignatureDeclaration(node);
                     }
                 }
+            }
+
+            // Handle 'define' calls
+            if (node.parent.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>node.parent)) {
+                assignDefineOrRequireCallParameterTypes(<FunctionExpression>node);
             }
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
@@ -13885,8 +14434,9 @@ namespace ts {
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                            // fall through; this fall-through is necessary because we would like to handle
-                            // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
+
+                        // fall through; this fall-through is necessary because we would like to handle
+                        // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             // If we didn't come from static member of class or interface,
@@ -14620,10 +15170,23 @@ namespace ts {
             });
 
             // Initialize special symbols
+            if (compilerOptions.allowNonTsExtensions) {
+                let req = getExportedSymbolFromNamespace('AMD', 'require');
+                if (req) {
+                    globals['require'] = req;
+                }
+                
+                let def = getExportedSymbolFromNamespace('AMD', 'define');
+                if (def) {
+                    globals['define'] = def;
+                }
+            }
+
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
+
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
@@ -14645,6 +15208,12 @@ namespace ts {
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
+
+            cjsModuleType = getExportedTypeFromNamespace('CommonJS', 'Module');
+            cjsExportsType = getExportedTypeFromNamespace('CommonJS', 'Exports');
+            cjsRequireType = getExportedTypeFromNamespace('CommonJS', 'Require');
+            amdRequireType = getExportedTypeFromNamespace('AMD', 'Require');
+
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
