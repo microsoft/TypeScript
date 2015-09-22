@@ -2056,6 +2056,10 @@
         "category": "Error",
         "code": 5054
     },
+    "Option '{0}' cannot be utilized alongside --module or with ES6 modules.": {
+        "category": "Error",
+        "code": 5055
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",

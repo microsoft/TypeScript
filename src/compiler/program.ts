@@ -1022,6 +1022,10 @@ namespace ts {
                 programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided));
             }
 
+            if (outFile && ((firstExternalModuleSourceFile && languageVersion >= ScriptTarget.ES6) || options.module)) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_utilized_alongside_module_or_with_ES6_modules, options.out ? "out" : "outFile"));
+            }
+
             // Cannot specify module gen target when in es6 or above
             if (options.module && languageVersion >= ScriptTarget.ES6) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
