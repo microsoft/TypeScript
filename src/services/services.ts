@@ -1995,7 +1995,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx;
+            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx + +"|" + settings.jsExtensions;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -2625,7 +2625,8 @@ namespace ts {
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
                  oldSettings.noResolve !== newSettings.noResolve ||
-                 oldSettings.jsx !== newSettings.jsx);
+                 oldSettings.jsx !== newSettings.jsx || 
+                 oldSettings.jsExtensions !== newSettings.jsExtensions);
 
             // Now create a new compiler
             let compilerHost: CompilerHost = {

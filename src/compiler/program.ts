@@ -357,7 +357,8 @@ namespace ts {
                 (oldOptions.noResolve !== options.noResolve) || 
                 (oldOptions.target !== options.target) || 
                 (oldOptions.noLib !== options.noLib) ||
-                (oldOptions.jsx !== options.jsx)) {
+                (oldOptions.jsx !== options.jsx) || 
+                (oldOptions.jsExtensions !== options.jsExtensions)) {
                 oldProgram = undefined;
             }
         }
