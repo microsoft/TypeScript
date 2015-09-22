@@ -6730,8 +6730,8 @@ namespace ts {
 
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
-            if (isFunctionExpressionOrArrowFunction(parameter.parent)) {
-                let func = <FunctionExpression>parameter.parent;
+            let func = parameter.parent;
+            if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
                 if (isContextSensitive(func)) {
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
@@ -7063,7 +7063,7 @@ namespace ts {
             }
         }
 
-        function isFunctionExpressionOrArrowFunction(node: Node): boolean {
+        function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression {
             return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
         }
 
@@ -7082,8 +7082,8 @@ namespace ts {
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             let type = isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(<MethodDeclaration>node)
-                : getContextualType(<FunctionExpression>node);
+                ? getContextualTypeForObjectLiteralMethod(node)
+                : getContextualType(node);
             if (!type) {
                 return undefined;
             }
@@ -13814,7 +13814,7 @@ namespace ts {
                     forEach(node.decorators, checkFunctionAndClassExpressionBodies);
                     forEach((<MethodDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
                     if (isObjectLiteralMethod(node)) {
-                        checkFunctionExpressionOrObjectLiteralMethodBody(<MethodDeclaration>node);
+                        checkFunctionExpressionOrObjectLiteralMethodBody(node);
                     }
                     break;
                 case SyntaxKind.Constructor:

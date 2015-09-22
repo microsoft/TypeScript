@@ -28,8 +28,9 @@ tests/services/browser/typescriptServices.js
 scripts/configureNightly.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
-scripts/importDefinitelyTypedTests.js
+scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 src/harness/*.js
+src/compiler/diagnosticInformationMap.generated.ts
 rwc-report.html
 *.swp
 build.json
@@ -45,6 +46,7 @@ scripts/run.bat
 scripts/word2md.js
 scripts/ior.js
 scripts/*.js.map
+scripts/typings/
 coverage/
 internal/
 **/.DS_Store
