@@ -748,7 +748,7 @@ namespace ts {
                         break;
                 }
                 
-                if (isJavaScript) {
+                if (isJavaScript(file.fileName)) {
                     forEachChild(node, visit);
                 }
             }

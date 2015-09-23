@@ -1,25 +1,15 @@
 test1.ts(3,23): error TS1147: Import declarations in a namespace cannot reference a module.
-test2.ts(5,27): error TS1147: Import declarations in a namespace cannot reference a module.
+test1.ts(3,23): error TS2307: Cannot find module 'test2'.
 
 
-==== test2.ts (1 errors) ====
-    export var $;
-    
-    
-    export module Yo {
-        import test = require("test1");
-                              ~~~~~~~
-!!! error TS1147: Import declarations in a namespace cannot reference a module.
-        test.x;
-    
-        export function y() { return 0; }
-    }
-==== test1.ts (1 errors) ====
+==== test1.ts (2 errors) ====
     module myModule {
      
      import foo = require("test2");
                           ~~~~~~~
 !!! error TS1147: Import declarations in a namespace cannot reference a module.
+                          ~~~~~~~
+!!! error TS2307: Cannot find module 'test2'.
     
      //console.log(foo.$);
     

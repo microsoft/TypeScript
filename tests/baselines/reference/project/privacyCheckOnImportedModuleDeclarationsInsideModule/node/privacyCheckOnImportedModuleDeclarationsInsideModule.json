@@ -7,13 +7,9 @@
     "baselineCheck": true,
     "resolvedInputFiles": [
         "lib.d.ts",
-        "mExported.ts",
-        "mNonExported.ts",
         "testGlo.ts"
     ],
     "emittedFiles": [
-        "mExported.js",
-        "mNonExported.js",
         "testGlo.js"
     ]
 }

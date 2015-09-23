@@ -6,11 +6,9 @@
     ],
     "resolvedInputFiles": [
         "lib.d.ts",
-        "external2.ts",
         "internal2.ts"
     ],
     "emittedFiles": [
-        "external2.js",
         "internal2.js"
     ]
 }
