@@ -44,7 +44,7 @@ function main(): void {
             err += `The file seems to no longer have a string matching '${versionAssignmentRegExp}'.`;
         }
 
-        throw err + "\n";
+        throw new Error(err + "\n");
     }
 
     // Finally write the changes to disk.
@@ -53,7 +53,7 @@ function main(): void {
 }
 
 function getNightlyVersionString(versionString: string): string {
-    // If the version string already contains "-nightly",
+    // If the version string already contains "-dev",
     // then get the base string and update based on that.
     const dashNightlyPos = versionString.indexOf("-dev");
     if (dashNightlyPos >= 0) {
