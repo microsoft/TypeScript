@@ -2293,10 +2293,17 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
+        // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
+        // assigned by contextual typing.
+        function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
+            let symbol = getSymbolOfNode(node);
+            return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node);
+        }
+
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             let pattern = <BindingPattern>declaration.parent;
-            let parentType = getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>pattern.parent);
+            let parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
