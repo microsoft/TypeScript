@@ -97,7 +97,7 @@ namespace ts {
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
 
-        let isJavaScriptFile = isJavaScript(file.fileName);
+        let isJavaScriptFile = isSourceFileJavaScript(file);
         let classifiableNames: Map<string> = {};
 
         if (!file.locals) {

@@ -2790,7 +2790,7 @@ namespace ts {
             // For JavaScript files, we don't want to report the normal typescript semantic errors.
             // Instead, we just report errors for using TypeScript-only constructs from within a
             // JavaScript file.
-            if (isJavaScript(fileName)) {
+            if (isSourceFileJavaScript(targetSourceFile)) {
                 return getJavaScriptSemanticDiagnostics(targetSourceFile);
             }
 
@@ -3029,7 +3029,7 @@ namespace ts {
             let typeChecker = program.getTypeChecker();
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
-            let isJavaScriptFile = isJavaScript(fileName);
+            let isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
             let isJsDocTagName = false;
 
@@ -3816,7 +3816,9 @@ namespace ts {
                 return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
             }
 
-            if (isRightOfDot && isJavaScript(fileName)) {
+            let sourceFile = getValidSourceFile(fileName);
+            
+            if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
                 entries = getCompletionEntriesFromSymbols(symbols);
                 addRange(entries, getJavaScriptCompletionEntries());
             }

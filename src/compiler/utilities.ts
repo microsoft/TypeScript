@@ -1011,6 +1011,10 @@ namespace ts {
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
+    
+    export function isSourceFileJavaScript(file: SourceFile): boolean {
+        return isInJavaScriptFile(file);
+    }
 
     function isInJavaScriptFile(node: Node): boolean {
         return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
@@ -2142,7 +2146,7 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isJavaScript(fileName: string) {
+    export function hasJavaScriptFileExtension(fileName: string) {
         return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 

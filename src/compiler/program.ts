@@ -689,7 +689,7 @@ namespace ts {
                 return;
             }
 
-            let isJavaScriptFile = isJavaScript(file.fileName);
+            let isJavaScriptFile = isSourceFileJavaScript(file);
             
             let imports: LiteralExpression[];
 
@@ -748,7 +748,7 @@ namespace ts {
                         break;
                 }
                 
-                if (isJavaScript(file.fileName)) {
+                if (isSourceFileJavaScript(file)) {
                     forEachChild(node, visit);
                 }
             }
