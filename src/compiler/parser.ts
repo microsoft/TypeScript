@@ -521,7 +521,7 @@ namespace ts {
         let parseErrorBeforeNextFinishedNode: boolean = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
-            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || !!_sourceText.match(/^\/\/\s+@language\s+=\s+javascript$/m)
+            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0;
             initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
 
             let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
