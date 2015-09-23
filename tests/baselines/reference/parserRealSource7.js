@@ -1299,7 +1299,7 @@ var TypeScript;
         var isStatic = hasFlag(funcDecl.fncFlags, FncFlags.Static);
         var isPrivate = hasFlag(funcDecl.fncFlags, FncFlags.Private);
         var isConstructor = funcDecl.isConstructMember() || funcDecl.isConstructor;
-        var containerSym = (((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container);
+        var containerSym = ((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container;
         var containerScope = context.scopeChain.scope;
         var isGlobal = containerSym == context.checker.gloMod;
         var isOptional = funcDecl.name && hasFlag(funcDecl.name.flags, ASTFlags.OptionalName);

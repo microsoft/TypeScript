@@ -2353,7 +2353,7 @@ var Harness;
         };
         Runnable.prototype.runChild = function (index, done) {
             var _this = this;
-            return this.call((function (done) { return _this.children[index].run(done); }), done);
+            return this.call(function (done) { return _this.children[index].run(done); }, done);
         };
         Runnable.pushGlobalErrorHandler = function (done) {
             errorHandlerStack.push(function (e) {
@@ -2393,7 +2393,7 @@ var Harness;
             Runnable.currentStack.push(this);
             emitLog('testStart', { desc: this.description });
             if (this.block) {
-                var async = this.runBlock(function (e) {
+                var async = this.runBlock((function (e) {
                     if (e) {
                         that.passed = false;
                         that.error = e;
@@ -2405,7 +2405,7 @@ var Harness;
                     }
                     Runnable.currentStack.pop();
                     done();
-                });
+                }));
             }
         };
         return TestCase;
@@ -2423,7 +2423,7 @@ var Harness;
             var that = this;
             Runnable.currentStack.push(this);
             emitLog('scenarioStart', { desc: this.description });
-            var async = this.runBlock(function (e) {
+            var async = this.runBlock((function (e) {
                 Runnable.currentStack.pop();
                 if (e) {
                     that.passed = false;
@@ -2438,7 +2438,7 @@ var Harness;
                     that.passed = true; // so far so good.
                     that.runChildren(done);
                 }
-            });
+            }));
         };
         /** Run the children of the scenario (other scenarios and test cases). If any fail,
          *  set this scenario to failed. Synchronous tests will run synchronously without
@@ -2449,11 +2449,11 @@ var Harness;
             var that = this;
             var async = false;
             for (; index < this.children.length; index++) {
-                async = this.runChild(index, function (e) {
+                async = this.runChild(index, (function (e) {
                     that.passed = that.passed && that.children[index].passed;
                     if (async)
                         that.runChildren(done, index + 1);
-                });
+                }));
                 if (async)
                     return;
             }
@@ -2482,11 +2482,11 @@ var Harness;
             for (; index < this.children.length; index++) {
                 // Clear out bug descriptions
                 assert.bugIds = [];
-                async = this.runChild(index, function (e) {
+                async = this.runChild(index, (function (e) {
                     if (async) {
                         that.runChildren(index + 1);
                     }
-                });
+                }));
                 if (async) {
                     return;
                 }

@@ -208,7 +208,7 @@ foo(
     return 28;
 });
 // in multiple paren
-((((function (arg) { return 32; }))));
+(function (arg) { return 32; });
 // in ternary exression
 false ? function () { return 41; } : null;
 false ? function (arg) { return 42; } : null;

@@ -1,0 +1,67 @@
+=== tests/cases/conformance/statements/expressionStatements/functionExpressionExpressionStatementInTypeAssertion01.ts ===
+
+(<any>function () { });
+>(<any>function () { }) : any
+><any>function () { } : any
+>function () { } : () => void
+
+(function () { } as any);
+>(function () { } as any) : any
+>function () { } as any : any
+>function () { } : () => void
+
+<any>function () { };
+><any>function () { } : any
+>function () { } : () => void
+
+<any>function () { } as any;
+><any>function () { } as any : any
+><any>function () { } : any
+>function () { } : () => void
+
+
+function f() {
+>f : () => void
+
+    (<any>function () { });
+>(<any>function () { }) : any
+><any>function () { } : any
+>function () { } : () => void
+
+    (function () { } as any);
+>(function () { } as any) : any
+>function () { } as any : any
+>function () { } : () => void
+
+    <any>function () { };
+><any>function () { } : any
+>function () { } : () => void
+
+    <any>function () { } as any;
+><any>function () { } as any : any
+><any>function () { } : any
+>function () { } : () => void
+}
+
+namespace n {
+>n : typeof n
+
+    (<any>function () { });
+>(<any>function () { }) : any
+><any>function () { } : any
+>function () { } : () => void
+
+    (function () { } as any);
+>(function () { } as any) : any
+>function () { } as any : any
+>function () { } : () => void
+
+    <any>function () { };
+><any>function () { } : any
+>function () { } : () => void
+
+    <any>function () { } as any;
+><any>function () { } as any : any
+><any>function () { } : any
+>function () { } : () => void
+}

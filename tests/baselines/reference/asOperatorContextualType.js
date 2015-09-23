@@ -4,4 +4,4 @@ var x = (v => v) as (x: number) => string;
 
 //// [asOperatorContextualType.js]
 // should error
-var x = (function (v) { return v; });
+var x = function (v) { return v; };

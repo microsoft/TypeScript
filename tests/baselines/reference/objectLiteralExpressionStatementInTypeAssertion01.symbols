@@ -1,0 +1,58 @@
+=== tests/cases/conformance/statements/expressionStatements/objectLiteralExpressionStatementInTypeAssertion01.ts ===
+
+<any>{ a: 10, b: 20 };
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 1, 6))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 1, 13))
+
+(<any>{ a: 10, b: 20 });
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 3, 7))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 3, 14))
+
+({ a: 10, b: 20 } as any);
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 5, 2))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 5, 9))
+
+((<any>{ a: 10, b: 20 } as any));
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 7, 8))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 7, 15))
+
+
+function f() {
+>f : Symbol(f, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 7, 33))
+
+    <any>{ a: 10, b: 20 };
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 11, 10))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 11, 17))
+
+    (<any>{ a: 10, b: 20 });
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 13, 11))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 13, 18))
+
+    ({ a: 10, b: 20 } as any);
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 15, 6))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 15, 13))
+
+    ((<any>{ a: 10, b: 20 } as any));
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 17, 12))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 17, 19))
+}
+
+namespace n {
+>n : Symbol(n, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 18, 1))
+
+    <any>{ a: 10, b: 20 };
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 21, 10))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 21, 17))
+
+    (<any>{ a: 10, b: 20 });
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 23, 11))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 23, 18))
+
+    ({ a: 10, b: 20 } as any);
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 25, 6))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 25, 13))
+
+    ((<any>{ a: 10, b: 20 } as any));
+>a : Symbol(a, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 27, 12))
+>b : Symbol(b, Decl(objectLiteralExpressionStatementInTypeAssertion01.ts, 27, 19))
+}

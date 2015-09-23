@@ -1,0 +1,67 @@
+=== tests/cases/conformance/statements/expressionStatements/arrayLiteralExpressionStatementInTypeAssertion01.ts ===
+
+(<any>[]);
+>(<any>[]) : any
+><any>[] : any
+>[] : undefined[]
+
+([] as any);
+>([] as any) : any
+>[] as any : any
+>[] : undefined[]
+
+<any>[];
+><any>[] : any
+>[] : undefined[]
+
+<any>[] as any;
+><any>[] as any : any
+><any>[] : any
+>[] : undefined[]
+
+
+function f() {
+>f : () => void
+
+    (<any>[]);
+>(<any>[]) : any
+><any>[] : any
+>[] : undefined[]
+
+    ([] as any);
+>([] as any) : any
+>[] as any : any
+>[] : undefined[]
+
+    <any>[];
+><any>[] : any
+>[] : undefined[]
+
+    <any>[] as any;
+><any>[] as any : any
+><any>[] : any
+>[] : undefined[]
+}
+
+namespace n {
+>n : typeof n
+
+    (<any>[]);
+>(<any>[]) : any
+><any>[] : any
+>[] : undefined[]
+
+    ([] as any);
+>([] as any) : any
+>[] as any : any
+>[] : undefined[]
+
+    <any>[];
+><any>[] : any
+>[] : undefined[]
+
+    <any>[] as any;
+><any>[] as any : any
+><any>[] : any
+>[] : undefined[]
+}

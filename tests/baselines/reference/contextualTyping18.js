@@ -2,5 +2,5 @@
 var foo: {id:number;} = <{id:number;}>({ }); foo = {id: 5};
 
 //// [contextualTyping18.js]
-var foo = ({});
+var foo = {};
 foo = { id: 5 };
