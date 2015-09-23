@@ -324,7 +324,7 @@ namespace ts {
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
-        else if (typeof module !== "undefined" && module.exports) {
+        else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             return getNodeSystem();
         }
         else {
