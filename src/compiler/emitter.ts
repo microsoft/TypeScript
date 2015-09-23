@@ -1104,41 +1104,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             return comparePrecedenceToBinaryPlus(parent) !== Comparison.LessThan;
                     }
                 }
-
-                /**
-                 * Returns whether the expression has lesser, greater,
-                 * or equal precedence to the binary '+' operator
-                 */
-                function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
-                    // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
-                    // which have greater precedence and '-' which has equal precedence.
-                    // All unary operators have a higher precedence apart from yield.
-                    // Arrow functions and conditionals have a lower precedence,
-                    // although we convert the former into regular function expressions in ES5 mode,
-                    // and in ES6 mode this function won't get called anyway.
-                    //
-                    // TODO (drosen): Note that we need to account for the upcoming 'yield' and
-                    //                spread ('...') unary operators that are anticipated for ES6.
-                    switch (expression.kind) {
-                        case SyntaxKind.BinaryExpression:
-                            switch ((<BinaryExpression>expression).operatorToken.kind) {
-                                case SyntaxKind.AsteriskToken:
-                                case SyntaxKind.SlashToken:
-                                case SyntaxKind.PercentToken:
-                                    return Comparison.GreaterThan;
-                                case SyntaxKind.PlusToken:
-                                case SyntaxKind.MinusToken:
-                                    return Comparison.EqualTo;
-                                default:
-                                    return Comparison.LessThan;
-                            }
-                        case SyntaxKind.YieldExpression:
-                        case SyntaxKind.ConditionalExpression:
-                            return Comparison.LessThan;
-                        default:
-                            return Comparison.GreaterThan;
-                    }
-                }
             }
 
             function emitTemplateSpan(span: TemplateSpan) {
@@ -2342,60 +2307,138 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            function getInnermostExpressionOfConsecutiveTypeAssertionsAndParentheses(typeAssertion: TypeAssertion | ParenthesizedExpression): Expression {
+                let current = typeAssertion.expression
+                while (isTypeAssertion(current) || current.kind === SyntaxKind.ParenthesizedExpression) {
+                    current = (<TypeAssertion | ParenthesizedExpression>current).expression;
+                }
+                return current;
+            }
+
+            function nodeIsSensitiveToCommaExpressions(node: Node): boolean {
+                const kind = node.kind;
+
+                return isVariableLike(node)
+                    || kind === SyntaxKind.BinaryExpression
+                    || kind === SyntaxKind.ArrayLiteralExpression;
+            }
+
+            function getLeftMostNonBinaryOrPostfixExpression(expr: BinaryExpression | PostfixUnaryExpression): Expression {
+                let current: Expression = expr;
+                while (true) {
+                    if (current.kind === SyntaxKind.BinaryExpression) {
+                        current = (<BinaryExpression>current).left;
+                    }
+                    else if (current.kind === SyntaxKind.PostfixUnaryExpression) {
+                        current = (<PostfixUnaryExpression>current).operand;
+                    }
+                    else {
+                        return current;
+                    }
+                }
+            }
+
+            /**
+             * We have an expression of the form: (<Type>SubExpr)
+             * Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
+             * Omitting the parentheses, however, could cause change in the semantics of the generated
+             * code if the casted expression has a lower precedence than the rest of the expression, e.g.:
+             *     - (<any>new A).foo should be emitted as (new A).foo and not new A.foo
+             *     - (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
+             *     - new (<any>A()) should be emitted as new (A()) and not new A()
+             *     - (<any>function foo() { })() should be emitted as an IIFE (function foo(){})() and not declaration function foo(){} ()
+             *
+             * @param innerExpr The expression found after skipping through nested type assertions and parentheses
+             * @param encounteredParentheses Whether the expression had any pairs of parentheses. We are more conservative in this case.
+             * @param originalParent The parent of the original ParenthesizedExpression or TypeAssertion.
+             */
+            function assertionOrParenExprNeedsToHaveParentheses(innerExpr: Expression, encounteredParentheses: boolean, originalParent: Node): boolean {
+                const originalParentKind = originalParent.kind;
+
+                switch (innerExpr.kind) {
+                    case SyntaxKind.PrefixUnaryExpression:
+                    case SyntaxKind.PostfixUnaryExpression:
+                    case SyntaxKind.VoidExpression:
+                    case SyntaxKind.TypeOfExpression:
+                    case SyntaxKind.DeleteExpression:
+                        return true;
+                    case SyntaxKind.NewExpression:
+                        return encounteredParentheses;
+                    case SyntaxKind.CallExpression:
+                        return originalParentKind === SyntaxKind.NewExpression;
+                    case SyntaxKind.FunctionExpression:
+                        return originalParentKind === SyntaxKind.CallExpression;
+                    case SyntaxKind.NumericLiteral:
+                        return originalParentKind === SyntaxKind.PropertyAccessExpression;
+                }
+
+                const isBinaryExpr = innerExpr.kind === SyntaxKind.BinaryExpression;
+                if (isBinaryExpr) {
+                    const operator = (<BinaryExpression>innerExpr).operatorToken;
+                    if (operator.kind === SyntaxKind.CommaToken) {
+                        return nodeIsSensitiveToCommaExpressions(originalParent);
+                    }
+
+                    if (comparePrecedenceToBinaryPlus(innerExpr) !== Comparison.GreaterThan) {
+                        let parentIsAddition = originalParentKind === SyntaxKind.BinaryExpression &&
+                            (<BinaryExpression>originalParent).operatorToken.kind === SyntaxKind.PlusToken;
+
+                        return parentIsAddition || (originalParentKind === SyntaxKind.TemplateSpan && languageVersion < ScriptTarget.ES6);
+                    }
+
+                    if (isLeftHandSideExpression(originalParent)) {
+                        return true;
+                    }
+                }
+
+                let leftMostExpr = (isBinaryExpr || innerExpr.kind === SyntaxKind.PostfixUnaryExpression)
+                    ? getLeftMostNonBinaryOrPostfixExpression(<BinaryExpression | PostfixUnaryExpression>innerExpr)
+                    : innerExpr;
+
+                // need to make sure '({} + x)' doesn't become '{}; +x;'
+                if (originalParentKind === SyntaxKind.ExpressionStatement) {
+                    return meaningChangesAsExpressionStatement(leftMostExpr);
+                }
+                
+                return false;
+            }
+
+
+            function emitTypeAssertion(typeAssertion: TypeAssertion): void {
+                let encounteredParentheses = false;
+                let expression: Expression = typeAssertion.expression;
+
+                while (isTypeAssertion(expression)) {
+                    expression = (<TypeAssertion>expression).expression;
+                }
+                if (expression.kind === SyntaxKind.ParenthesizedExpression) {
+                    expression = getInnermostExpressionOfConsecutiveTypeAssertionsAndParentheses(typeAssertion);
+                    encounteredParentheses = true;
+                }
+
+                let needsParentheses = assertionOrParenExprNeedsToHaveParentheses(expression, encounteredParentheses, typeAssertion.parent);
+
+                emitParenthesizedIf(expression, needsParentheses);
+            }
+            
             function emitParenExpression(node: ParenthesizedExpression) {
-                let shouldKeepParentheses = true; // meaningChangesAsExpressionStatement
+                let shouldKeepParentheses = true;
                 let operand = node.expression;
 
                 // If the node is synthesized, it means the emitter put the parentheses there,
                 // not the user. If we didn't want them, the emitter would not have put them
                 // there.
                 if (!nodeIsSynthesized(node) && node.parent.kind !== SyntaxKind.ArrowFunction) {
-                    if (isTypeAssertion(operand)) {
+                    const originalParent = node.parent;
+                    if (isTypeAssertion(operand) || operand.kind === SyntaxKind.ParenthesizedExpression) {
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        do {
-                            operand = (<TypeAssertion>operand).expression;
-                        } while (isTypeAssertion(operand));
-
-                        // We have an expression of the form: (<Type>SubExpr)
-                        // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
-                        // Omitting the parentheses, however, could cause change in the semantics of the generated
-                        // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
-                        //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
-                        //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
-                        //      new (<any>A()) should be emitted as new (A()) and not new A()
-                        //      (<any>function foo() { })() should be emitted as an IIFE (function foo(){})() and not declaration function foo(){} ()
-                        const originalParentKind = node.parent.kind;
-                        switch (operand.kind) {
-                            case SyntaxKind.PrefixUnaryExpression:
-                            case SyntaxKind.VoidExpression:
-                            case SyntaxKind.TypeOfExpression:
-                            case SyntaxKind.DeleteExpression:
-                            case SyntaxKind.PostfixUnaryExpression:
-                            case SyntaxKind.NewExpression:
-                                shouldKeepParentheses = true;
-                                break;
-                            case SyntaxKind.CallExpression:
-                                shouldKeepParentheses = originalParentKind === SyntaxKind.NewExpression;
-                                break;
-                            case SyntaxKind.FunctionExpression:
-                                shouldKeepParentheses = originalParentKind === SyntaxKind.CallExpression;
-                                break;
-                            case SyntaxKind.NumericLiteral:
-                                shouldKeepParentheses = originalParentKind === SyntaxKind.PropertyAccessExpression;
-                                break;
-                            default:
-                                if (originalParentKind === SyntaxKind.ExpressionStatement && meaningChangesAsExpressionStatement(operand)) {
-                                    shouldKeepParentheses = true;
-                                    break;
-                                }
-
-                                shouldKeepParentheses = false;
-                        }
+                        operand = getInnermostExpressionOfConsecutiveTypeAssertionsAndParentheses(<TypeAssertion | ParenthesizedExpression>operand);
+                        shouldKeepParentheses = assertionOrParenExprNeedsToHaveParentheses(operand, /*encounteredParentheses*/ true, originalParent);
                     }
                 }
 
-                emitParenthesizedIf(node.expression, shouldKeepParentheses);
+                emitParenthesizedIf(operand, shouldKeepParentheses);
             }
 
             function emitDeleteExpression(node: DeleteExpression) {
@@ -6938,9 +6981,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.TaggedTemplateExpression:
                         return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
                     case SyntaxKind.TypeAssertionExpression:
-                        return emit((<TypeAssertion>node).expression);
                     case SyntaxKind.AsExpression:
-                        return emit((<AsExpression>node).expression);
+                        return emitTypeAssertion(<TypeAssertion>node);
                     case SyntaxKind.ParenthesizedExpression:
                         return emitParenExpression(<ParenthesizedExpression>node);
                     case SyntaxKind.FunctionDeclaration:

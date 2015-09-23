@@ -1986,9 +1986,9 @@ namespace ts {
         return 0;
     }
 
-    export function isLeftHandSideExpression(expr: Expression): boolean {
-        if (expr) {
-            switch (expr.kind) {
+    export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
+        if (node) {
+            switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.NewExpression:
@@ -2027,6 +2027,41 @@ namespace ts {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
             isClassLike(node.parent.parent);
+    }
+
+    /**
+     * Returns whether the expression has lesser, greater,
+     * or equal precedence to the binary '+' operator
+     */
+    export function comparePrecedenceToBinaryPlus(expression: Expression): Comparison {
+        // All binary expressions have lower precedence than '+' apart from '*', '/', and '%'
+        // which have greater precedence and '-' which has equal precedence.
+        // All unary operators have a higher precedence apart from yield.
+        // Arrow functions and conditionals have a lower precedence,
+        // although we convert the former into regular function expressions in ES5 mode,
+        // and in ES6 mode this function won't get called anyway.
+        //
+        // TODO (drosen): Note that we need to account for the upcoming 'yield' and
+        //                spread ('...') unary operators that are anticipated for ES6.
+        switch (expression.kind) {
+            case SyntaxKind.BinaryExpression:
+                switch ((<BinaryExpression>expression).operatorToken.kind) {
+                    case SyntaxKind.AsteriskToken:
+                    case SyntaxKind.SlashToken:
+                    case SyntaxKind.PercentToken:
+                        return Comparison.GreaterThan;
+                    case SyntaxKind.PlusToken:
+                    case SyntaxKind.MinusToken:
+                        return Comparison.EqualTo;
+                    default:
+                        return Comparison.LessThan;
+                }
+            case SyntaxKind.YieldExpression:
+            case SyntaxKind.ConditionalExpression:
+                return Comparison.LessThan;
+            default:
+                return Comparison.GreaterThan;
+        }
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
