@@ -2160,7 +2160,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return forEach(elements, e => e.kind === SyntaxKind.SpreadElementExpression);
             }
 
-            function skipParentheses(node: Expression): Expression {
+            function skipParenthesesAndTypeAssertions(node: Expression): Expression {
                 while (node.kind === SyntaxKind.ParenthesizedExpression || isTypeAssertion(node)) {
                     node = (<ParenthesizedExpression | AssertionExpression>node).expression;
                 }
@@ -2184,7 +2184,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitCallWithSpread(node: CallExpression) {
                 let target: Expression;
-                let expr = skipParentheses(node.expression);
+                let expr = skipParenthesesAndTypeAssertions(node.expression);
                 if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                     // Target will be emitted as "this" argument
                     target = emitCallTarget((<PropertyAccessExpression>expr).expression);
@@ -2307,14 +2307,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getInnermostExpressionOfConsecutiveTypeAssertionsAndParentheses(typeAssertion: TypeAssertion | ParenthesizedExpression): Expression {
-                let current = typeAssertion.expression
-                while (isTypeAssertion(current) || current.kind === SyntaxKind.ParenthesizedExpression) {
-                    current = (<TypeAssertion | ParenthesizedExpression>current).expression;
-                }
-                return current;
-            }
-
             function nodeIsSensitiveToCommaExpressions(node: Node): boolean {
                 const kind = node.kind;
 
@@ -2412,7 +2404,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     expression = (<TypeAssertion>expression).expression;
                 }
                 if (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                    expression = getInnermostExpressionOfConsecutiveTypeAssertionsAndParentheses(typeAssertion);
+                    expression = skipParenthesesAndTypeAssertions(typeAssertion);
                     encounteredParentheses = true;
                 }
 
@@ -2433,7 +2425,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (isTypeAssertion(operand) || operand.kind === SyntaxKind.ParenthesizedExpression) {
                         // Make sure we consider all nested cast expressions, e.g.:
                         // (<any><number><any>-A).x;
-                        operand = getInnermostExpressionOfConsecutiveTypeAssertionsAndParentheses(<TypeAssertion | ParenthesizedExpression>operand);
+                        operand = skipParenthesesAndTypeAssertions(<TypeAssertion | ParenthesizedExpression>operand);
                         shouldKeepParentheses = assertionOrParenExprNeedsToHaveParentheses(operand, /*encounteredParentheses*/ true, originalParent);
                     }
                 }
