@@ -20,6 +20,6 @@ var v = function (a, b) {
     if (b === void 0) { b = 2; }
     return 1;
 };
-var v = (a);
+var v = a;
 var v = (a, b);
 var v = (a = 1, b = 2);

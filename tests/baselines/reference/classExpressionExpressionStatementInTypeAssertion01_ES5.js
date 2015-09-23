@@ -40,16 +40,16 @@ namespace n {
     }
     return class_2;
 })());
-(function () {
+((function () {
     function class_3() {
     }
     return class_3;
-})();
-(function () {
+})());
+((function () {
     function class_4() {
     }
     return class_4;
-})();
+})());
 function f() {
     ((function () {
         function class_5() {
@@ -61,16 +61,16 @@ function f() {
         }
         return class_6;
     })());
-    (function () {
+    ((function () {
         function class_7() {
         }
         return class_7;
-    })();
-    (function () {
+    })());
+    ((function () {
         function class_8() {
         }
         return class_8;
-    })();
+    })());
 }
 var n;
 (function (n) {
@@ -84,14 +84,14 @@ var n;
         }
         return class_10;
     })());
-    (function () {
+    ((function () {
         function class_11() {
         }
         return class_11;
-    })();
-    (function () {
+    })());
+    ((function () {
         function class_12() {
         }
         return class_12;
-    })();
+    })());
 })(n || (n = {}));

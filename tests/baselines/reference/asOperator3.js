@@ -11,9 +11,9 @@ var g = tag `Hello ${123} World` as string;
 var h = tag `Hello` as string;
 
 //// [asOperator3.js]
-var a = "" + 123 + 456;
-var b = "leading " + 123 + 456;
-var c = 123 + 456 + " trailing";
+var a = "" + (123 + 456);
+var b = "leading " + (123 + 456);
+var c = (123 + 456) + " trailing";
 var d = ("Hello " + 123 + " World");
 var e = "Hello";
 var f = 1 + (1 + " end of string");

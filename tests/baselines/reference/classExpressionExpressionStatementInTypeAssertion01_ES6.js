@@ -36,12 +36,12 @@ namespace n {
 (class class_2 {
 }
 );
-class class_3 {
+(class class_3 {
 }
-;
-class class_4 {
+);
+(class class_4 {
 }
-;
+);
 function f() {
     (class class_5 {
     }
@@ -49,12 +49,12 @@ function f() {
     (class class_6 {
     }
     );
-    class class_7 {
+    (class class_7 {
     }
-    ;
-    class class_8 {
+    );
+    (class class_8 {
     }
-    ;
+    );
 }
 var n;
 (function (n) {
@@ -64,10 +64,10 @@ var n;
     (class class_10 {
     }
     );
-    class class_11 {
+    (class class_11 {
     }
-    ;
-    class class_12 {
+    );
+    (class class_12 {
     }
-    ;
+    );
 })(n || (n = {}));

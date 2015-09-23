@@ -186,7 +186,7 @@ var generic1; // Incorrect error, Bug 829597
 var generic2 = function (n) { return [n]; };
 var generic2;
 // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
-var asserted1 = (function (n) { return [n]; });
+var asserted1 = function (n) { return [n]; };
 var asserted1;
-var asserted2 = (function (n) { return n; });
+var asserted2 = function (n) { return n; };
 var asserted2;

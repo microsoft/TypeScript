@@ -80,7 +80,7 @@ a().x;
 (1.0).foo;
 (12e+34).foo;
 (0xff).foo;
-(1.0);
+1.0;
 (new A).foo;
 (typeof A).x;
 (-A).x;
@@ -91,4 +91,4 @@ new (A());
 // nested cast, should keep one pair of parenthese
 (-A).x;
 // nested parenthesized expression, should keep one pair of parenthese
-(A);
+A;

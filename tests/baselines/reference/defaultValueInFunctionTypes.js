@@ -4,4 +4,4 @@ var y = <(a : string = "") => any>(undefined)
 
 //// [defaultValueInFunctionTypes.js]
 var x;
-var y = (undefined);
+var y = undefined;

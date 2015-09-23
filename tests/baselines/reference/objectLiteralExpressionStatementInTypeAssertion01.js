@@ -30,19 +30,19 @@ namespace n {
 }
 
 //// [objectLiteralExpressionStatementInTypeAssertion01.js]
-{ a: 10, b: 20 };
+({ a: 10, b: 20 });
 ({ a: 10, b: 20 });
 ({ a: 10, b: 20 });
 ({ a: 10, b: 20 });
 function f() {
-    { a: 10, b: 20 };
+    ({ a: 10, b: 20 });
     ({ a: 10, b: 20 });
     ({ a: 10, b: 20 });
     ({ a: 10, b: 20 });
 }
 var n;
 (function (n) {
-    { a: 10, b: 20 };
+    ({ a: 10, b: 20 });
     ({ a: 10, b: 20 });
     ({ a: 10, b: 20 });
     ({ a: 10, b: 20 });

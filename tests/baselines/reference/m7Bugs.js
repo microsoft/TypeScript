@@ -32,7 +32,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var s = ({});
+var s = {};
 var x = {};
 var C1 = (function () {
     function C1() {
