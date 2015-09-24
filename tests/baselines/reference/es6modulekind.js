@@ -1,8 +1,10 @@
-//// [es6ModuleWithModuleGenTargetCommonjs.ts]
-export class A
+//// [es6modulekind.ts]
+
+export default class A
 {
     constructor ()
     {
+
     }
 
     public B()
@@ -11,12 +13,11 @@ export class A
     }
 }
 
-//// [es6ModuleWithModuleGenTargetCommonjs.js]
-class A {
+//// [es6modulekind.js]
+export default class A {
     constructor() {
     }
     B() {
         return 42;
     }
 }
-exports.A = A;
