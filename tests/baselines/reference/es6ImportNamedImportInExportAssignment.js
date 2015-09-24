@@ -9,9 +9,10 @@ import { a } from "./es6ImportNamedImportInExportAssignment_0";
 export = a;
 
 //// [es6ImportNamedImportInExportAssignment_0.js]
-export var a = 10;
+exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
-import { a } from "./es6ImportNamedImportInExportAssignment_0";
+var es6ImportNamedImportInExportAssignment_0_1 = require("./es6ImportNamedImportInExportAssignment_0");
+module.exports = es6ImportNamedImportInExportAssignment_0_1.a;
 
 
 //// [es6ImportNamedImportInExportAssignment_0.d.ts]

@@ -1026,9 +1026,9 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_utilized_alongside_module_or_with_ES6_modules, options.out ? "out" : "outFile"));
             }
 
-            // Cannot specify module gen target when in es6 or above
-            if (options.module && languageVersion >= ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_commonjs_amd_system_or_umd_when_targeting_ES6_or_higher));
+            // Cannot specify module gen target of es6 when below es6
+            if (options.module === ModuleKind.ES6 && languageVersion < ScriptTarget.ES6) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es6_when_targeting_ES5_or_lower));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot
