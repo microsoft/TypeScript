@@ -1,0 +1,10 @@
+tests/cases/conformance/types/tuple/wideningTuples7.ts(1,20): error TS7010: 'bar', which lacks return-type annotation, implicitly has an '[any]' return type.
+
+
+==== tests/cases/conformance/types/tuple/wideningTuples7.ts (1 errors) ====
+    var foo = function bar() {
+                       ~~~
+!!! error TS7010: 'bar', which lacks return-type annotation, implicitly has an '[any]' return type.
+        let intermediate: [string];
+        return intermediate = [undefined];
+    };

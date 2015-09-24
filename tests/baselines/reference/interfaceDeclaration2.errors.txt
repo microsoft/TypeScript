@@ -1,5 +1,5 @@
-tests/cases/compiler/interfaceDeclaration2.ts(4,11): error TS2300: Duplicate identifier 'I2'.
-tests/cases/compiler/interfaceDeclaration2.ts(5,7): error TS2300: Duplicate identifier 'I2'.
+tests/cases/compiler/interfaceDeclaration2.ts(4,11): error TS2518: Only an ambient class can be merged with an interface.
+tests/cases/compiler/interfaceDeclaration2.ts(5,7): error TS2518: Only an ambient class can be merged with an interface.
 
 
 ==== tests/cases/compiler/interfaceDeclaration2.ts (2 errors) ====
@@ -8,10 +8,10 @@ tests/cases/compiler/interfaceDeclaration2.ts(5,7): error TS2300: Duplicate iden
     
     interface I2 { }
               ~~
-!!! error TS2300: Duplicate identifier 'I2'.
+!!! error TS2518: Only an ambient class can be merged with an interface.
     class I2 { }
           ~~
-!!! error TS2300: Duplicate identifier 'I2'.
+!!! error TS2518: Only an ambient class can be merged with an interface.
     
     interface I3 { }
     function I3() { }

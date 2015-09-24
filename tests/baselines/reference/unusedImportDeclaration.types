@@ -1,5 +1,5 @@
 === tests/cases/compiler/unusedImportDeclaration_testerA.ts ===
-import B = require("unusedImportDeclaration_testerB");
+import B = require("./unusedImportDeclaration_testerB");
 >B : typeof B
 
 var thingy: B = {

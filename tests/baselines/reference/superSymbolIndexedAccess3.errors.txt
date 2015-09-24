@@ -1,0 +1,19 @@
+tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess3.ts(11,16): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+
+
+==== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess3.ts (1 errors) ====
+    var symbol = Symbol.for('myThing');
+    
+    class Foo {
+        [symbol]() {
+            return 0;
+        }
+    }
+    
+    class Bar extends Foo {
+        [symbol]() {
+            return super[Bar]();
+                   ~~~~~~~~~~
+!!! error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
+        }
+    }

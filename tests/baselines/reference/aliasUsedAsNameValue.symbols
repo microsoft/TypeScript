@@ -1,11 +1,11 @@
 === tests/cases/compiler/aliasUsedAsNameValue_2.ts ===
 ///<reference path='aliasUsedAsNameValue_0.ts' />
 ///<reference path='aliasUsedAsNameValue_1.ts' />
-import mod = require("aliasUsedAsNameValue_0");
+import mod = require("./aliasUsedAsNameValue_0");
 >mod : Symbol(mod, Decl(aliasUsedAsNameValue_2.ts, 0, 0))
 
-import b = require("aliasUsedAsNameValue_1");
->b : Symbol(b, Decl(aliasUsedAsNameValue_2.ts, 2, 47))
+import b = require("./aliasUsedAsNameValue_1");
+>b : Symbol(b, Decl(aliasUsedAsNameValue_2.ts, 2, 49))
  
 export var a = function () {
 >a : Symbol(a, Decl(aliasUsedAsNameValue_2.ts, 5, 10))
@@ -13,7 +13,7 @@ export var a = function () {
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 >b.b : Symbol(b.b, Decl(aliasUsedAsNameValue_1.ts, 0, 0))
->b : Symbol(b, Decl(aliasUsedAsNameValue_2.ts, 2, 47))
+>b : Symbol(b, Decl(aliasUsedAsNameValue_2.ts, 2, 49))
 >b : Symbol(b.b, Decl(aliasUsedAsNameValue_1.ts, 0, 0))
 >mod : Symbol(mod, Decl(aliasUsedAsNameValue_2.ts, 0, 0))
 }

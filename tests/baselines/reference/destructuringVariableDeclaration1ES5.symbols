@@ -17,6 +17,7 @@ var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [["hello"]], true];
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      Otherwise, if the declaration includes an initializer expression, T is the type of that initializer expression.
 var { b1: { b11 } = { b11: "string" }  } = { b1: { b11: "world" } };
+>b1 : Symbol(b1, Decl(destructuringVariableDeclaration1ES5.ts, 7, 44))
 >b11 : Symbol(b11, Decl(destructuringVariableDeclaration1ES5.ts, 7, 11))
 >b11 : Symbol(b11, Decl(destructuringVariableDeclaration1ES5.ts, 7, 21))
 >b1 : Symbol(b1, Decl(destructuringVariableDeclaration1ES5.ts, 7, 44))
@@ -74,6 +75,7 @@ var [d3, d4] = [1, "string", ...temp1];
 
 //  Combining both forms of destructuring,
 var {e: [e1, e2, e3 = { b1: 1000, b4: 200 }]} = { e: [1, 2, { b1: 4, b4: 0 }] }; 
+>e : Symbol(e, Decl(destructuringVariableDeclaration1ES5.ts, 31, 49))
 >e1 : Symbol(e1, Decl(destructuringVariableDeclaration1ES5.ts, 31, 9))
 >e2 : Symbol(e2, Decl(destructuringVariableDeclaration1ES5.ts, 31, 12))
 >e3 : Symbol(e3, Decl(destructuringVariableDeclaration1ES5.ts, 31, 16))
@@ -84,8 +86,10 @@ var {e: [e1, e2, e3 = { b1: 1000, b4: 200 }]} = { e: [1, 2, { b1: 4, b4: 0 }] };
 >b4 : Symbol(b4, Decl(destructuringVariableDeclaration1ES5.ts, 31, 68))
 
 var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
+>f : Symbol(f, Decl(destructuringVariableDeclaration1ES5.ts, 32, 41))
 >f1 : Symbol(f1, Decl(destructuringVariableDeclaration1ES5.ts, 32, 9))
 >f2 : Symbol(f2, Decl(destructuringVariableDeclaration1ES5.ts, 32, 12))
+>f3 : Symbol(f3, Decl(destructuringVariableDeclaration1ES5.ts, 32, 53))
 >f4 : Symbol(f4, Decl(destructuringVariableDeclaration1ES5.ts, 32, 18))
 >f5 : Symbol(f5, Decl(destructuringVariableDeclaration1ES5.ts, 32, 26))
 >f : Symbol(f, Decl(destructuringVariableDeclaration1ES5.ts, 32, 41))
@@ -96,6 +100,7 @@ var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
 // an initializer expression, the type of the initializer expression is required to be assignable
 // to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
 var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
+>g : Symbol(g, Decl(destructuringVariableDeclaration1ES5.ts, 37, 36))
 >g1 : Symbol(g1, Decl(destructuringVariableDeclaration1ES5.ts, 37, 9))
 >undefined : Symbol(undefined)
 >g : Symbol(g, Decl(destructuringVariableDeclaration1ES5.ts, 37, 36))
@@ -104,6 +109,7 @@ var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
 >g1 : Symbol(g1, Decl(destructuringVariableDeclaration1ES5.ts, 37, 64))
 
 var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] } };
+>h : Symbol(h, Decl(destructuringVariableDeclaration1ES5.ts, 38, 36))
 >h1 : Symbol(h1, Decl(destructuringVariableDeclaration1ES5.ts, 38, 9))
 >undefined : Symbol(undefined)
 >h : Symbol(h, Decl(destructuringVariableDeclaration1ES5.ts, 38, 36))

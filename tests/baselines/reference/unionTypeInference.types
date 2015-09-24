@@ -43,7 +43,7 @@ var a3 = f(1, a1 || "hello");
 >f(1, a1 || "hello") : number
 >f : <T>(x: T, y: string | T) => T
 >1 : number
->a1 || "hello" : string | number
+>a1 || "hello" : number | string
 >a1 : number
 >"hello" : string
 

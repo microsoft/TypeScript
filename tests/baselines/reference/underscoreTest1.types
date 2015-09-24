@@ -235,7 +235,7 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : (string | number | boolean)[]
+>[true, 1, null, 'yes'] : (boolean | number | string)[]
 >true : boolean
 >1 : number
 >null : null
@@ -249,7 +249,7 @@ _.any([null, 0, 'yes', false]);
 >_.any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >any : { <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator<T, boolean>, context?: any): boolean; }
->[null, 0, 'yes', false] : (string | number | boolean)[]
+>[null, 0, 'yes', false] : (number | string | boolean)[]
 >null : null
 >0 : number
 >'yes' : string
@@ -508,11 +508,11 @@ _.rest([5, 4, 3, 2, 1]);
 >1 : number
 
 _.compact([0, 1, false, 2, '', 3]);
->_.compact([0, 1, false, 2, '', 3]) : (string | number | boolean)[]
+>_.compact([0, 1, false, 2, '', 3]) : (number | boolean | string)[]
 >_.compact : <T>(list: T[]) => T[]
 >_ : Underscore.Static
 >compact : <T>(list: T[]) => T[]
->[0, 1, false, 2, '', 3] : (string | number | boolean)[]
+>[0, 1, false, 2, '', 3] : (number | boolean | string)[]
 >0 : number
 >1 : number
 >false : boolean
@@ -4071,6 +4071,9 @@ module Underscore {
         escape?: RegExp;
 >escape : RegExp
 >RegExp : RegExp
+
+        variable?: string;
+>variable : string
     }
 
     export interface Static {

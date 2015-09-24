@@ -360,7 +360,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n)) {
+            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
                 return n;
             }
 
@@ -371,24 +371,35 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n)) {
+            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
                 return n;
             }
 
-            let children = n.getChildren();
+            const children = n.getChildren();
             for (let i = 0, len = children.length; i < len; i++) {
                 let child = children[i];
-                if (nodeHasTokens(child)) {
-                    if (position <= child.end) {
-                        if (child.getStart(sourceFile) >= position) {
-                            // actual start of the node is past the position - previous token should be at the end of previous child
-                            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                            return candidate && findRightmostToken(candidate)
-                        }
-                        else {
-                            // candidate should be in this node
-                            return find(child);
-                        }
+                // condition 'position < child.end' checks if child node end after the position
+                // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
+                // aaaa___bbbb___$__ccc
+                // after we found child node with end after the position we check if start of the node is after the position.
+                // if yes - then position is in the trivia and we need to look into the previous child to find the token in question.
+                // if no - position is in the node itself so we should recurse in it.
+                // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
+                // if this is the case - then we should assume that token in question is located in previous child.
+                if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
+                    const start = child.getStart(sourceFile);
+                    const lookInPreviousChild = 
+                        (start >= position) || // cursor in the leading trivia
+                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText 
+                    
+                    if (lookInPreviousChild) {
+                        // actual start of the node is past the position - previous token should be at the end of previous child
+                        let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        return candidate && findRightmostToken(candidate)
+                    }
+                    else {
+                        // candidate should be in this node
+                        return find(child);
                     }
                 }
             }
@@ -414,6 +425,93 @@ namespace ts {
             }
         }
     }
+    
+    export function isInString(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+        return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+    }
+
+    export function isInComment(sourceFile: SourceFile, position: number) {
+        return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
+    }
+
+    /**
+     * Returns true if the cursor at position in sourceFile is within a comment that additionally
+     * satisfies predicate, and false otherwise.
+     */
+    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        if (token && position <= token.getStart()) {
+            let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+                
+            // The end marker of a single-line comment does not include the newline character.
+            // In the following case, we are inside a comment (^ denotes the cursor position):
+            //
+            //    // asdf   ^\n
+            //
+            // But for multi-line comments, we don't want to be inside the comment in the following case:
+            //
+            //    /* asdf */^
+            //
+            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+            return predicate ?
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                    predicate(c)) :
+                forEach(commentRanges, c => c.pos < position &&
+                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+        }
+
+        return false;
+    }
+
+    export function hasDocComment(sourceFile: SourceFile, position: number) {
+        let token = getTokenAtPosition(sourceFile, position);
+
+        // First, we have to see if this position actually landed in a comment.
+        let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+
+        return forEach(commentRanges, jsDocPrefix);
+        
+        function jsDocPrefix(c: CommentRange): boolean {
+            var text = sourceFile.text;
+            return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
+        }
+    }
+
+    /**
+     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
+     */
+    export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
+        let node = ts.getTokenAtPosition(sourceFile, position);
+        if (isToken(node)) {
+            switch (node.kind) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
+                    // if the current token is var, let or const, skip the VariableDeclarationList
+                    node = node.parent === undefined ? undefined : node.parent.parent;
+                    break;
+                default:
+                    node = node.parent;
+                    break;
+            }
+        }
+
+        if (node) {
+            let jsDocComment = node.jsDocComment;
+            if (jsDocComment) {
+                for (let tag of jsDocComment.tags) {
+                    if (tag.pos <= position && position <= tag.end) {
+                        return tag;
+                    }
+                }
+            }
+        }
+
+        return undefined;
+    }
 
     function nodeHasTokens(n: Node): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
@@ -429,6 +527,7 @@ namespace ts {
         if (flags & NodeFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & NodeFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
         if (flags & NodeFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & NodeFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & NodeFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (isInAmbientContext(node)) result.push(ScriptElementKindModifier.ambientModifier);
 
@@ -585,7 +684,6 @@ namespace ts {
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
             else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
 
-
             return SymbolDisplayPartKind.text;
         }
     }
@@ -622,6 +720,14 @@ namespace ts {
 
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
+    }
+
+    const carriageReturnLineFeed = "\r\n";
+    /**
+     * The default is CRLF.
+     */
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
+        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {
@@ -666,7 +772,7 @@ namespace ts {
 
         let name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
 
-        return stripQuotes(name);
+        return name;
     }
 
     export function isImportOrExportSpecifierName(location: Node): boolean {
@@ -675,9 +781,16 @@ namespace ts {
             (<ImportOrExportSpecifier>location.parent).propertyName === location;
     }
 
+    /**
+     * Strip off existed single quotes or double quotes from a given string
+     *
+     * @return non-quoted string
+     */
     export function stripQuotes(name: string) {
         let length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === CharacterCodes.doubleQuote && name.charCodeAt(length - 1) === CharacterCodes.doubleQuote) {
+        if (length >= 2 &&
+            name.charCodeAt(0) === name.charCodeAt(length - 1) &&
+            (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
             return name.substring(1, length - 1);
         };
         return name;

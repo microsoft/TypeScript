@@ -2,8 +2,10 @@ tests/cases/compiler/typeMatch2.ts(3,2): error TS2322: Type '{}' is not assignab
   Property 'x' is missing in type '{}'.
 tests/cases/compiler/typeMatch2.ts(4,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
   Property 'y' is missing in type '{ x: number; }'.
-tests/cases/compiler/typeMatch2.ts(6,5): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-  Property 'y' is missing in type '{ x: number; z: number; }'.
+tests/cases/compiler/typeMatch2.ts(5,20): error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+  Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
+tests/cases/compiler/typeMatch2.ts(6,17): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+  Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
   Type 'Animal' is not assignable to type 'Giraffe'.
     Property 'g' is missing in type 'Animal'.
@@ -11,11 +13,13 @@ tests/cases/compiler/typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: 
   Types of property 'f2' are incompatible.
     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
       Type 'Animal' is not assignable to type 'Giraffe'.
+tests/cases/compiler/typeMatch2.ts(34,26): error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+  Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
   Property 'y' is missing in type '{ x: number; }'.
 
 
-==== tests/cases/compiler/typeMatch2.ts (6 errors) ====
+==== tests/cases/compiler/typeMatch2.ts (8 errors) ====
     function f1() {
     	var a = { x: 1, y: 2 };
     	a = {}; // error
@@ -27,10 +31,13 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is
 !!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
 !!! error TS2322:   Property 'y' is missing in type '{ x: number; }'.
     	a = { x: 1, y: 2, z: 3 };
+    	                  ~~~~
+!!! error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1, z: 3 };  // error
-        ~
+                    ~~~~
 !!! error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
-!!! error TS2322:   Property 'y' is missing in type '{ x: number; z: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
     }
     
     class Animal { private a; }
@@ -68,6 +75,9 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is
         a = { x: 1, y: undefined }; 
         a = { x: 1, y: _any }; 
         a = { x: 1, y: _any, z:1 }; 
+                             ~~~
+!!! error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1 }; // error
         ~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.

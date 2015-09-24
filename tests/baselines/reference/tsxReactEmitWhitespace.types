@@ -12,6 +12,8 @@ declare module JSX {
 >s : string
 	}
 }
+declare var React: any;
+>React : any
 
 // THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
 // WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
@@ -30,7 +32,7 @@ var p = 0;
 <div>  {p}    </div>;
 ><div>  {p}    </div> : JSX.Element
 >div : any
->p : any
+>p : number
 >div : any
 
 // Emit only p
@@ -39,7 +41,7 @@ var p = 0;
 >div : any
 
       {p}    
->p : any
+>p : number
 
       </div>;
 >div : any
@@ -50,7 +52,7 @@ var p = 0;
 >div : any
 
   {p}
->p : any
+>p : number
 
     </div>;
 >div : any

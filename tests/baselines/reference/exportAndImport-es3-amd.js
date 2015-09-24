@@ -16,6 +16,7 @@ export default function f2() {
 define(["require", "exports"], function (require, exports) {
     function f1() {
     }
+    exports.__esModule = true;
     exports["default"] = f1;
 });
 //// [m2.js]
@@ -23,5 +24,6 @@ define(["require", "exports", "./m1"], function (require, exports, m1_1) {
     function f2() {
         m1_1["default"]();
     }
+    exports.__esModule = true;
     exports["default"] = f2;
 });

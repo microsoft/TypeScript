@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 // @module: commonjs
 
 // @Filename: declFileFunctions_0.ts
@@ -26,6 +26,19 @@ export function fooWithOverloads(a: any): any {
 export function fooWithSingleOverload(a: string): string;
 export function fooWithSingleOverload(a: any) {
     return a;
+}
+
+export function fooWithTypePredicate(a: any): a is number {
+    return true;
+}
+export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a is number {
+    return true;
+}
+export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
+    return true;
+}
+export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is number {
+    return true;
 }
 
 /** This comment should appear for nonExportedFoo*/

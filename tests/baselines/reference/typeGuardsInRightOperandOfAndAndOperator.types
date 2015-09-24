@@ -3,14 +3,14 @@
 // the type of a variable or parameter is narrowed by any type guard in the left operand when true, 
 // provided the right operand contains no assignments to the variable or parameter.
 function foo(x: number | string) {
->foo : (x: string | number) => boolean
->x : string | number
+>foo : (x: number | string) => boolean
+>x : number | string
 
     return typeof x === "string" && x.length === 10; // string
 >typeof x === "string" && x.length === 10 : boolean
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : number | string
 >"string" : string
 >x.length === 10 : boolean
 >x.length : number
@@ -19,53 +19,53 @@ function foo(x: number | string) {
 >10 : number
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => string | number
->x : string | number
+>foo2 : (x: number | string) => number | string
+>x : number | string
 
     // modify x in right hand operand
     return typeof x === "string" && ((x = 10) && x); // string | number
->typeof x === "string" && ((x = 10) && x) : string | number
+>typeof x === "string" && ((x = 10) && x) : number | string
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : number | string
 >"string" : string
->((x = 10) && x) : string | number
->(x = 10) && x : string | number
+>((x = 10) && x) : number | string
+>(x = 10) && x : number | string
 >(x = 10) : number
 >x = 10 : number
->x : string | number
+>x : number | string
 >10 : number
->x : string | number
+>x : number | string
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => string | number
->x : string | number
+>foo3 : (x: number | string) => number | string
+>x : number | string
 
     // modify x in right hand operand with string type itself
     return typeof x === "string" && ((x = "hello") && x); // string | number
->typeof x === "string" && ((x = "hello") && x) : string | number
+>typeof x === "string" && ((x = "hello") && x) : number | string
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | number
+>x : number | string
 >"string" : string
->((x = "hello") && x) : string | number
->(x = "hello") && x : string | number
+>((x = "hello") && x) : number | string
+>(x = "hello") && x : number | string
 >(x = "hello") : string
 >x = "hello" : string
->x : string | number
+>x : number | string
 >"hello" : string
->x : string | number
+>x : number | string
 }
 function foo4(x: number | string | boolean) {
->foo4 : (x: string | number | boolean) => boolean
->x : string | number | boolean
+>foo4 : (x: number | string | boolean) => boolean
+>x : number | string | boolean
 
     return typeof x !== "string" // string | number | boolean
 >typeof x !== "string" // string | number | boolean        && typeof x !== "number"  // number | boolean        && x : boolean
 >typeof x !== "string" // string | number | boolean        && typeof x !== "number" : boolean
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : number | string | boolean
 >"string" : string
 
         && typeof x !== "number"  // number | boolean
@@ -78,8 +78,8 @@ function foo4(x: number | string | boolean) {
 >x : boolean
 }
 function foo5(x: number | string | boolean) {
->foo5 : (x: string | number | boolean) => boolean
->x : string | number | boolean
+>foo5 : (x: number | string | boolean) => boolean
+>x : number | string | boolean
 
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
     var b: number | boolean;
@@ -89,7 +89,7 @@ function foo5(x: number | string | boolean) {
 >typeof x !== "string" // string | number | boolean        && ((b = x) && (typeof x !== "number"  // number | boolean        && x)) : boolean
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : number | string | boolean
 >"string" : string
 
         && ((b = x) && (typeof x !== "number"  // number | boolean
@@ -110,15 +110,15 @@ function foo5(x: number | string | boolean) {
 >x : boolean
 }
 function foo6(x: number | string | boolean) {
->foo6 : (x: string | number | boolean) => boolean
->x : string | number | boolean
+>foo6 : (x: number | string | boolean) => boolean
+>x : number | string | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     return typeof x !== "string" // string | number | boolean
 >typeof x !== "string" // string | number | boolean        && (typeof x !== "number" // number | boolean        ? x // boolean        : x === 10) : boolean
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : number | string | boolean
 >"string" : string
 
         && (typeof x !== "number" // number | boolean
@@ -138,14 +138,14 @@ function foo6(x: number | string | boolean) {
 >10 : number
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: string | number | boolean) => string
->x : string | number | boolean
+>foo7 : (x: number | string | boolean) => string
+>x : number | string | boolean
 
     var y: number| boolean | string;
->y : string | number | boolean
+>y : number | boolean | string
 
     var z: number| boolean | string;
->z : string | number | boolean
+>z : number | boolean | string
 
     // Mixing typeguard narrowing
     // Assigning value to x deep inside another guard stops narrowing of type too
@@ -153,52 +153,52 @@ function foo7(x: number | string | boolean) {
 >typeof x !== "string"        && ((z = x) // string | number | boolean - x changed deeper in conditional expression        && (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()))) : string
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : number | string | boolean
 >"string" : string
 
         && ((z = x) // string | number | boolean - x changed deeper in conditional expression
 >((z = x) // string | number | boolean - x changed deeper in conditional expression        && (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()))) : string
 >(z = x) // string | number | boolean - x changed deeper in conditional expression        && (typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString())) : string
->(z = x) : string | number | boolean
->z = x : string | number | boolean
->z : string | number | boolean
->x : string | number | boolean
+>(z = x) : number | string | boolean
+>z = x : number | string | boolean
+>z : number | boolean | string
+>x : number | string | boolean
 
         && (typeof x === "number"
 >(typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString())) : string
 >typeof x === "number"        // change value of x        ? (x = 10 && x.toString()) // number | boolean | string        // do not change value        : (y = x && x.toString()) : string
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | number | boolean
+>x : number | string | boolean
 >"number" : string
 
         // change value of x
         ? (x = 10 && x.toString()) // number | boolean | string
 >(x = 10 && x.toString()) : string
 >x = 10 && x.toString() : string
->x : string | number | boolean
+>x : number | string | boolean
 >10 && x.toString() : string
 >10 : number
 >x.toString() : string
->x.toString : () => string
->x : string | number | boolean
->toString : () => string
+>x.toString : (radix?: number) => string
+>x : number | string | boolean
+>toString : (radix?: number) => string
 
         // do not change value
         : (y = x && x.toString()))); // number | boolean | string
 >(y = x && x.toString()) : string
 >y = x && x.toString() : string
->y : string | number | boolean
+>y : number | boolean | string
 >x && x.toString() : string
->x : string | number | boolean
+>x : number | string | boolean
 >x.toString() : string
->x.toString : () => string
->x : string | number | boolean
->toString : () => string
+>x.toString : (radix?: number) => string
+>x : number | string | boolean
+>toString : (radix?: number) => string
 }
 function foo8(x: number | string) {
->foo8 : (x: string | number) => number
->x : string | number
+>foo8 : (x: number | string) => number
+>x : number | string
 
     // Mixing typeguard 
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
@@ -207,13 +207,13 @@ function foo8(x: number | string) {
 >typeof x !== "string"        && (x = 10) : number
 >typeof x !== "string" : boolean
 >typeof x : string
->x : string | number
+>x : number | string
 >"string" : string
 
         && (x = 10) // change x - number| string
 >(x = 10) : number
 >x = 10 : number
->x : string | number
+>x : number | string
 >10 : number
 
         && (typeof x === "number"
@@ -221,7 +221,7 @@ function foo8(x: number | string) {
 >typeof x === "number"        ? x // number        : x.length : number
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | number
+>x : number | string
 >"number" : string
 
         ? x // number

@@ -28,7 +28,7 @@ s || s;
 >s : symbol
 
 s || 1;
->s || 1 : number | symbol
+>s || 1 : symbol | number
 >s : symbol
 >1 : number
 

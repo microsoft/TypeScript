@@ -1,5 +1,10 @@
 //@filename: a.ts
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 module ElidedModule {
 }
 

@@ -5,6 +5,7 @@ declare module JSX {
 		[s: string]: any;
 	}
 }
+declare var React: any;
 
 var p;
 var selfClosed1 = <div />;
@@ -68,6 +69,6 @@ var SomeClass = (function () {
     };
     return SomeClass;
 })();
-var whitespace1 = React.createElement("div", null);
-var whitespace2 = React.createElement("div", null, p);
+var whitespace1 = React.createElement("div", null, "      ");
+var whitespace2 = React.createElement("div", null, "  ", p, "    ");
 var whitespace3 = React.createElement("div", null, p);

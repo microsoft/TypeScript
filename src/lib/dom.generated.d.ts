@@ -1092,16 +1092,11 @@ interface CanvasRenderingContext2D {
     clearRect(x: number, y: number, w: number, h: number): void;
     clip(fillRule?: string): void;
     closePath(): void;
-    createImageData(imageDataOrSw: number, sh?: number): ImageData;
-    createImageData(imageDataOrSw: ImageData, sh?: number): ImageData;
+    createImageData(imageDataOrSw: number | ImageData, sh?: number): ImageData;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
-    createPattern(image: HTMLImageElement, repetition: string): CanvasPattern;
-    createPattern(image: HTMLCanvasElement, repetition: string): CanvasPattern;
-    createPattern(image: HTMLVideoElement, repetition: string): CanvasPattern;
+    createPattern(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, repetition: string): CanvasPattern;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
-    drawImage(image: HTMLImageElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
-    drawImage(image: HTMLCanvasElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
-    drawImage(image: HTMLVideoElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
     fill(fillRule?: string): void;
     fillRect(x: number, y: number, w: number, h: number): void;
     fillText(text: string, x: number, y: number, maxWidth?: number): void;
@@ -2259,12 +2254,12 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param elementId String that specifies the ID value. Case-insensitive.
       */
     getElementById(elementId: string): HTMLElement;
-    getElementsByClassName(classNames: string): NodeList;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     /**
       * Gets a collection of objects based on the value of the NAME or ID attribute.
       * @param elementName Gets a collection of objects based on the value of the NAME or ID attribute.
       */
-    getElementsByName(elementName: string): NodeList;
+    getElementsByName(elementName: string): NodeListOf<Element>;
     /**
       * Retrieves a collection of objects based on the specified element name.
       * @param name Specifies the name of an element.
@@ -2442,8 +2437,8 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     getElementsByTagName(tagname: "wbr"): NodeListOf<HTMLElement>;
     getElementsByTagName(tagname: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(tagname: "xmp"): NodeListOf<HTMLBlockElement>;
-    getElementsByTagName(tagname: string): NodeList;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeList;
+    getElementsByTagName(tagname: string): NodeListOf<Element>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
     /**
       * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
       */
@@ -2464,7 +2459,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param features Contains a list of items separated by commas. Each item consists of an option and a value, separated by an equals sign (for example, "fullscreen=yes, toolbar=yes"). The following values are supported.
       * @param replace Specifies whether the existing entry for the document is replaced in the history list.
       */
-    open(url?: string, name?: string, features?: string, replace?: boolean): Document | Window;
+    open(url?: string, name?: string, features?: string, replace?: boolean): Document;
     /** 
       * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
       * @param commandId Specifies a command identifier.
@@ -2716,6 +2711,8 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     scrollTop: number;
     scrollWidth: number;
     tagName: string;
+    id: string;
+    className: string;
     getAttribute(name?: string): string;
     getAttributeNS(namespaceURI: string, localName: string): string;
     getAttributeNode(name: string): Attr;
@@ -2895,8 +2892,8 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByTagName(name: "wbr"): NodeListOf<HTMLElement>;
     getElementsByTagName(name: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(name: "xmp"): NodeListOf<HTMLBlockElement>;
-    getElementsByTagName(name: string): NodeList;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeList;
+    getElementsByTagName(name: string): NodeListOf<Element>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
     hasAttribute(name: string): boolean;
     hasAttributeNS(namespaceURI: string, localName: string): boolean;
     msGetRegionContent(): MSRangeCollection;
@@ -2919,6 +2916,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     webkitMatchesSelector(selectors: string): boolean;
     webkitRequestFullScreen(): void;
     webkitRequestFullscreen(): void;
+    getElementsByClassName(classNames: string): NodeListOf<Element>;
     addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
@@ -3033,7 +3031,7 @@ interface File extends Blob {
 
 declare var File: {
     prototype: File;
-    new(): File;
+    new (parts: (ArrayBuffer | ArrayBufferView | Blob | string)[], filename: string, properties?: FilePropertyBag): File;
 }
 
 interface FileList {
@@ -3077,7 +3075,7 @@ interface FormData {
 
 declare var FormData: {
     prototype: FormData;
-    new(): FormData;
+    new (form?: HTMLFormElement): FormData;
 }
 
 interface GainNode extends AudioNode {
@@ -3370,8 +3368,7 @@ interface HTMLAreasCollection extends HTMLCollection {
     /**
       * Adds an element to the areas, controlRange, or options collection.
       */
-    add(element: HTMLElement, before?: HTMLElement): void;
-    add(element: HTMLElement, before?: number): void;
+    add(element: HTMLElement, before?: HTMLElement | number): void;
     /**
       * Removes an element from the collection.
       */
@@ -3815,14 +3812,12 @@ declare var HTMLDocument: {
 interface HTMLElement extends Element {
     accessKey: string;
     children: HTMLCollection;
-    className: string;
     contentEditable: string;
     dataset: DOMStringMap;
     dir: string;
     draggable: boolean;
     hidden: boolean;
     hideFocus: boolean;
-    id: string;
     innerHTML: string;
     innerText: string;
     isContentEditable: boolean;
@@ -3909,7 +3904,6 @@ interface HTMLElement extends Element {
     contains(child: HTMLElement): boolean;
     dragDrop(): boolean;
     focus(): void;
-    getElementsByClassName(classNames: string): NodeList;
     insertAdjacentElement(position: string, insertedElement: Element): Element;
     insertAdjacentHTML(where: string, html: string): void;
     insertAdjacentText(where: string, text: string): void;
@@ -6119,8 +6113,7 @@ interface HTMLSelectElement extends HTMLElement {
       * @param element Variant of type Number that specifies the index position in the collection where the element is placed. If no value is given, the method places the element at the end of the collection.
       * @param before Variant of type Object that specifies an element to insert before, or null to append the object to the collection. 
       */
-    add(element: HTMLElement, before?: HTMLElement): void;
-    add(element: HTMLElement, before?: number): void;
+    add(element: HTMLElement, before?: HTMLElement | number): void;
     /**
       * Returns whether a form will validate when it is submitted, without having to submit it.
       */
@@ -6872,7 +6865,7 @@ interface IDBDatabase extends EventTarget {
     createObjectStore(name: string, optionalParameters?: any): IDBObjectStore;
     deleteObjectStore(name: string): void;
     transaction(storeNames: any, mode?: string): IDBTransaction;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -6993,7 +6986,7 @@ interface IDBTransaction extends EventTarget {
     READ_ONLY: string;
     READ_WRITE: string;
     VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -7023,10 +7016,13 @@ interface ImageData {
     width: number;
 }
 
-declare var ImageData: {
+interface ImageDataConstructor {
     prototype: ImageData;
-    new(): ImageData;
+    new(width: number, height: number): ImageData;
+    new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
+
+declare var ImageData: ImageDataConstructor; 
 
 interface KeyboardEvent extends UIEvent {
     altKey: boolean;
@@ -7710,7 +7706,7 @@ interface MessageEvent extends Event {
 
 declare var MessageEvent: {
     prototype: MessageEvent;
-    new(): MessageEvent;
+    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
 }
 
 interface MessagePort extends EventTarget {
@@ -8452,7 +8448,7 @@ interface ProgressEvent extends Event {
 
 declare var ProgressEvent: {
     prototype: ProgressEvent;
-    new(): ProgressEvent;
+    new(type: string, eventInitDict?: ProgressEventInit): ProgressEvent;
 }
 
 interface Range {
@@ -8722,6 +8718,7 @@ declare var SVGDescElement: {
 
 interface SVGElement extends Element {
     id: string;
+    className: any;
     onclick: (ev: MouseEvent) => any;
     ondblclick: (ev: MouseEvent) => any;
     onfocusin: (ev: FocusEvent) => any;
@@ -10281,8 +10278,7 @@ interface Screen extends EventTarget {
     systemXDPI: number;
     systemYDPI: number;
     width: number;
-    msLockOrientation(orientations: string): boolean;
-    msLockOrientation(orientations: string[]): boolean;
+    msLockOrientation(orientations: string | string[]): boolean;
     msUnlockOrientation(): void;
     addEventListener(type: "MSOrientationChange", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -10354,8 +10350,7 @@ interface SourceBuffer extends EventTarget {
     updating: boolean;
     videoTracks: VideoTrackList;
     abort(): void;
-    appendBuffer(data: ArrayBuffer): void;
-    appendBuffer(data: ArrayBufferView): void;
+    appendBuffer(data: ArrayBuffer | ArrayBufferView): void;
     appendStream(stream: MSStream, maxSize?: number): void;
     remove(start: number, end: number): void;
 }
@@ -10463,33 +10458,18 @@ declare var StyleSheetPageList: {
 }
 
 interface SubtleCrypto {
-    decrypt(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
-    decrypt(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
-    deriveBits(algorithm: string, baseKey: CryptoKey, length: number): any;
-    deriveBits(algorithm: Algorithm, baseKey: CryptoKey, length: number): any;
-    deriveKey(algorithm: string, baseKey: CryptoKey, derivedKeyType: string, extractable: boolean, keyUsages: string[]): any;
-    deriveKey(algorithm: string, baseKey: CryptoKey, derivedKeyType: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyType: string, extractable: boolean, keyUsages: string[]): any;
-    deriveKey(algorithm: Algorithm, baseKey: CryptoKey, derivedKeyType: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    digest(algorithm: string, data: ArrayBufferView): any;
-    digest(algorithm: Algorithm, data: ArrayBufferView): any;
-    encrypt(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
-    encrypt(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
+    decrypt(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): any;
+    deriveBits(algorithm: string | Algorithm, baseKey: CryptoKey, length: number): any;
+    deriveKey(algorithm: string | Algorithm, baseKey: CryptoKey, derivedKeyType: string | Algorithm, extractable: boolean, keyUsages: string[]): any;
+    digest(algorithm: string | Algorithm, data: ArrayBufferView): any;
+    encrypt(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): any;
     exportKey(format: string, key: CryptoKey): any;
-    generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): any;
-    generateKey(algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    importKey(format: string, keyData: ArrayBufferView, algorithm: string, extractable: boolean, keyUsages: string[]): any;
-    importKey(format: string, keyData: ArrayBufferView, algorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    sign(algorithm: string, key: CryptoKey, data: ArrayBufferView): any;
-    sign(algorithm: Algorithm, key: CryptoKey, data: ArrayBufferView): any;
-    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: string, extractable: boolean, keyUsages: string[]): any;
-    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: Algorithm, unwrappedKeyAlgorithm: Algorithm, extractable: boolean, keyUsages: string[]): any;
-    verify(algorithm: string, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
-    verify(algorithm: Algorithm, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
-    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string): any;
-    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: Algorithm): any;
+    generateKey(algorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): any;
+    importKey(format: string, keyData: ArrayBufferView, algorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): any;
+    sign(algorithm: string | Algorithm, key: CryptoKey, data: ArrayBufferView): any;
+    unwrapKey(format: string, wrappedKey: ArrayBufferView, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): any;
+    verify(algorithm: string | Algorithm, key: CryptoKey, signature: ArrayBufferView, data: ArrayBufferView): any;
+    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string | Algorithm): any;
 }
 
 declare var SubtleCrypto: {
@@ -10998,11 +10978,8 @@ interface WebGLRenderingContext {
     blendEquationSeparate(modeRGB: number, modeAlpha: number): void;
     blendFunc(sfactor: number, dfactor: number): void;
     blendFuncSeparate(srcRGB: number, dstRGB: number, srcAlpha: number, dstAlpha: number): void;
-    bufferData(target: number, size: number, usage: number): void;
-    bufferData(target: number, size: ArrayBufferView, usage: number): void;
-    bufferData(target: number, size: any, usage: number): void;
-    bufferSubData(target: number, offset: number, data: ArrayBufferView): void;
-    bufferSubData(target: number, offset: number, data: any): void;
+    bufferData(target: number, size: number | ArrayBufferView | ArrayBuffer, usage: number): void;
+    bufferSubData(target: number, offset: number, data: ArrayBufferView | ArrayBuffer): void;
     checkFramebufferStatus(target: number): number;
     clear(mask: number): void;
     clearColor(red: number, green: number, blue: number, alpha: number): void;
@@ -11845,8 +11822,7 @@ interface WebSocket extends EventTarget {
 
 declare var WebSocket: {
     prototype: WebSocket;
-    new(url: string, protocols?: string): WebSocket;
-    new(url: string, protocols?: any): WebSocket;
+    new(url: string, protocols?: string | string[]): WebSocket;
     CLOSED: number;
     CLOSING: number;
     CONNECTING: number;
@@ -11989,7 +11965,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     onvolumechange: (ev: Event) => any;
     onwaiting: (ev: Event) => any;
     opener: Window;
-    orientation: string;
+    orientation: string | number;
     outerHeight: number;
     outerWidth: number;
     pageXOffset: number;
@@ -12012,6 +11988,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     toolbar: BarProp;
     top: Window;
     window: Window;
+    URL: URL;
     alert(message?: any): void;
     blur(): void;
     cancelAnimationFrame(handle: number): void;
@@ -12195,7 +12172,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     LOADING: number;
     OPENED: number;
     UNSENT: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -12465,7 +12442,7 @@ interface MSBaseReader {
     DONE: number;
     EMPTY: number;
     LOADING: number;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -12515,7 +12492,7 @@ interface NavigatorStorageUtils {
 
 interface NodeSelector {
     querySelector(selectors: string): Element;
-    querySelectorAll(selectors: string): NodeList;
+    querySelectorAll(selectors: string): NodeListOf<Element>;
 }
 
 interface RandomSource {
@@ -12563,7 +12540,7 @@ interface SVGLocatable {
 }
 
 interface SVGStylable {
-    className: SVGAnimatedString;
+    className: any;
     style: CSSStyleDeclaration;
 }
 
@@ -12621,7 +12598,7 @@ interface XMLHttpRequestEventTarget {
     onloadstart: (ev: Event) => any;
     onprogress: (ev: ProgressEvent) => any;
     ontimeout: (ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: "abort", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
     addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
     addEventListener(type: "loadend", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
@@ -12643,15 +12620,34 @@ interface BlobPropertyBag {
     endings?: string;
 }
 
+interface FilePropertyBag {
+    type?: string;
+    lastModified?: number;
+}
+
 interface EventListenerObject {
     handleEvent(evt: Event): void;
 }
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
+interface MessageEventInit extends EventInit {
+    data?: any;
+    origin?: string;
+    lastEventId?: string;
+    channel?: string;
+    source?: any;
+    ports?: MessagePort[];
+}
+
+interface ProgressEventInit extends EventInit {
+    lengthComputable?: boolean;
+    loaded?: number;
+    total?: number;
+}
+
 interface ErrorEventHandler {
-    (event: Event, source?: string, fileno?: number, columnNumber?: number): void;
-    (event: string, source?: string, fileno?: number, columnNumber?: number): void;
+    (message: string, filename?: string, lineno?: number, colno?: number, error?:Error): void;
 }
 interface PositionCallback {
     (position: Position): void;
@@ -12804,7 +12800,7 @@ declare var onunload: (ev: Event) => any;
 declare var onvolumechange: (ev: Event) => any;
 declare var onwaiting: (ev: Event) => any;
 declare var opener: Window;
-declare var orientation: string;
+declare var orientation: string | number;
 declare var outerHeight: number;
 declare var outerWidth: number;
 declare var pageXOffset: number;
@@ -12827,6 +12823,7 @@ declare var styleMedia: StyleMedia;
 declare var toolbar: BarProp;
 declare var top: Window;
 declare var window: Window;
+declare var URL: URL;
 declare function alert(message?: any): void;
 declare function blur(): void;
 declare function cancelAnimationFrame(handle: number): void;

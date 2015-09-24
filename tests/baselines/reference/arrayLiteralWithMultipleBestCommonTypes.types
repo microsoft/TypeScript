@@ -23,8 +23,8 @@ var as = [a, b]; // { x: number; y?: number };[]
 >b : { x: number; z?: number; }
 
 var bs = [b, a]; // { x: number; z?: number };[]
->bs : ({ x: number; y?: number; } | { x: number; z?: number; })[]
->[b, a] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
+>bs : ({ x: number; z?: number; } | { x: number; y?: number; })[]
+>[b, a] : ({ x: number; z?: number; } | { x: number; y?: number; })[]
 >b : { x: number; z?: number; }
 >a : { x: number; y?: number; }
 

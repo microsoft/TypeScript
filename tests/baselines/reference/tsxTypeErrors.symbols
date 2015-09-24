@@ -18,6 +18,7 @@ var thing = { oops: 100 };
 var a3 = <div id={thing} />
 >a3 : Symbol(a3, Decl(tsxTypeErrors.tsx, 9, 3))
 >id : Symbol(unknown)
+>thing : Symbol(thing, Decl(tsxTypeErrors.tsx, 8, 3))
 
 // Mistyped html name (error)
 var e1 = <imag src="bar.jpg" />

@@ -98,7 +98,7 @@ x2 += E.a;
 x2 += {};
 >x2 += {} : string
 >x2 : string
->{} : {}
+>{} : { [x: number]: undefined; }
 
 x2 += null;
 >x2 += null : string

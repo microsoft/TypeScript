@@ -1,5 +1,5 @@
-//@module: amd
-// @comments: true
+// @module: amd
+// @removeComments: false
 /* Copyright */
 
 import foo = require('./foo');

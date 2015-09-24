@@ -33,15 +33,15 @@ export var aaaa = 10;
 >10 : number
 
 === tests/cases/compiler/es6ImportNamedImportInEs5_1.ts ===
-import { } from "es6ImportNamedImportInEs5_0";
-import { a } from "es6ImportNamedImportInEs5_0";
+import { } from "./es6ImportNamedImportInEs5_0";
+import { a } from "./es6ImportNamedImportInEs5_0";
 >a : number
 
 var xxxx = a;
 >xxxx : number
 >a : number
 
-import { a as b } from "es6ImportNamedImportInEs5_0";
+import { a as b } from "./es6ImportNamedImportInEs5_0";
 >a : number
 >b : number
 
@@ -49,7 +49,7 @@ var xxxx = b;
 >xxxx : number
 >b : number
 
-import { x, a as y } from "es6ImportNamedImportInEs5_0";
+import { x, a as y } from "./es6ImportNamedImportInEs5_0";
 >x : number
 >a : number
 >y : number
@@ -62,7 +62,7 @@ var xxxx = y;
 >xxxx : number
 >y : number
 
-import { x as z,  } from "es6ImportNamedImportInEs5_0";
+import { x as z,  } from "./es6ImportNamedImportInEs5_0";
 >x : number
 >z : number
 
@@ -70,14 +70,14 @@ var xxxx = z;
 >xxxx : number
 >z : number
 
-import { m,  } from "es6ImportNamedImportInEs5_0";
+import { m,  } from "./es6ImportNamedImportInEs5_0";
 >m : number
 
 var xxxx = m;
 >xxxx : number
 >m : number
 
-import { a1, x1 } from "es6ImportNamedImportInEs5_0";
+import { a1, x1 } from "./es6ImportNamedImportInEs5_0";
 >a1 : number
 >x1 : number
 
@@ -89,7 +89,7 @@ var xxxx = x1;
 >xxxx : number
 >x1 : number
 
-import { a1 as a11, x1 as x11 } from "es6ImportNamedImportInEs5_0";
+import { a1 as a11, x1 as x11 } from "./es6ImportNamedImportInEs5_0";
 >a1 : number
 >a11 : number
 >x1 : number
@@ -103,14 +103,14 @@ var xxxx = x11;
 >xxxx : number
 >x11 : number
 
-import { z1 } from "es6ImportNamedImportInEs5_0";
+import { z1 } from "./es6ImportNamedImportInEs5_0";
 >z1 : number
 
 var z111 = z1;
 >z111 : number
 >z1 : number
 
-import { z2 as z3 } from "es6ImportNamedImportInEs5_0";
+import { z2 as z3 } from "./es6ImportNamedImportInEs5_0";
 >z2 : number
 >z3 : number
 
@@ -119,11 +119,11 @@ var z2 = z3; // z2 shouldn't give redeclare error
 >z3 : number
 
 // These are elided
-import { aaaa } from "es6ImportNamedImportInEs5_0";
+import { aaaa } from "./es6ImportNamedImportInEs5_0";
 >aaaa : number
 
 // These are elided
-import { aaaa as bbbb } from "es6ImportNamedImportInEs5_0";
+import { aaaa as bbbb } from "./es6ImportNamedImportInEs5_0";
 >aaaa : number
 >bbbb : number
 

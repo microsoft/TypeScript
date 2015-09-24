@@ -6,6 +6,7 @@ declare module JSX {
 		[s: string]: any;
 	}
 }
+declare var React: any;
 
 // THIS FILE HAS TEST-SIGNIFICANT LEADING/TRAILING
 // WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT

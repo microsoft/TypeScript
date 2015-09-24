@@ -8,6 +8,5 @@
 ////    public foo3() { }
 ////}
 
-debugger;
 goTo.marker("1");
 edit.insert(" + 1");
