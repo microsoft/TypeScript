@@ -183,7 +183,7 @@ namespace ts {
                     if (isAmdExportAssignment(node)) {
                         return getAmdExportAssignmentName(node);
                     }
-                    else if(isCommonJsExportsAssignment(node)) {
+                    else if (isCommonJsExportsAssignment(node)) {
                         return getAnonymousModuleName(node);
                     }
                     else {
@@ -898,7 +898,7 @@ namespace ts {
                     else if (isCommonJsExportsAssignment(node)) {
                         bindAmdModuleExportsAssignment(<BinaryExpression>node);
                     }
-                    else if(container &&
+                    else if (container &&
                         isJavaScriptFile &&
                         container.kind === SyntaxKind.Constructor &&
                         container.parent &&
