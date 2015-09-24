@@ -7030,6 +7030,7 @@ namespace ts {
             // - class decls
             let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
 
+
             if (!containingFunction || containingFunction.getStart() < position) {
                 return undefined;
             }
@@ -7043,9 +7044,15 @@ namespace ts {
             // TODO: call a helper method instead once PR #4133 gets merged in.
             const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
 
-            let docParams = parameters.reduce((prev, cur, index) =>
-                prev +
-                indentationStr + " * @param " + (cur.name.kind === SyntaxKind.Identifier ? (<Identifier>cur.name).text : "param" + index) + newLine, "");
+            let docParams = "";
+            for (let i = 0, numParams = parameters.length; i < numParams; i++) {
+                const currentName = parameters[i].name;
+                const paramName = currentName.kind === SyntaxKind.Identifier ?
+                    (<Identifier>currentName).text :
+                    "param" + i;
+
+                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+            }
 
             // A doc comment consists of the following
             // * The opening comment line
