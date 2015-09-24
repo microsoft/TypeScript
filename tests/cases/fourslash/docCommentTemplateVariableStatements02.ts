@@ -12,10 +12,10 @@ function useCRLFAndStripLeadingNewline(str: string): string {
     return str;
 }
 
-function confirmNormalizedJsDoc(markerName: string, indentation: number, template: string): void {
+function confirmNormalizedJsDoc(markerName: string, newTextOffset: number, template: string): void {
     goTo.marker(markerName);
     const normalized = useCRLFAndStripLeadingNewline(template);
-    verify.DocCommentTemplate(normalized, indentation);
+    verify.DocCommentTemplate(normalized, newTextOffset);
 }
 
 /////*a*/
@@ -47,7 +47,7 @@ function confirmNormalizedJsDoc(markerName: string, indentation: number, templat
 ////}, f2 = null;
 
 for (const varName of "abcdef".split("")) {
-    confirmNormalizedJsDoc(varName, /*indentation*/ 0, `
+    confirmNormalizedJsDoc(varName, /*newTextOffset*/ 8, `
 /**
  * 
  */`);

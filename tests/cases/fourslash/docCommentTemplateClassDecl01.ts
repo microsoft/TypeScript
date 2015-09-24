@@ -12,10 +12,10 @@ function useCRLFAndStripLeadingNewline(str: string): string {
     return str;
 }
 
-function confirmNormalizedJsDoc(markerName: string, indentation: number, template: string): void {
+function confirmNormalizedJsDoc(markerName: string, newTextOffset: number, template: string): void {
     goTo.marker(markerName);
     const normalized = useCRLFAndStripLeadingNewline(template);
-    verify.DocCommentTemplate(normalized, indentation);
+    verify.DocCommentTemplate(normalized, newTextOffset);
 }
 
 /////*decl*/class C {
@@ -29,7 +29,8 @@ function confirmNormalizedJsDoc(markerName: string, indentation: number, templat
 ////    }
 ////}
 
-confirmNormalizedJsDoc("decl", /*indentation*/ 0, `
+confirmNormalizedJsDoc("decl", /*newTextOffset*/ 8, `
 /**
  * 
- */`);
+ */
+`);

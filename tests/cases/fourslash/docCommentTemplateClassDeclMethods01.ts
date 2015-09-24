@@ -19,8 +19,8 @@ function confirmNormalizedJsDoc(markerName: string, indentation: number, templat
 }
 
 const enum Indentation {
-    Gutter = 0,
-    Proper = 4,
+    Standard = 8,
+    Indented = 12,
 }
 
 
@@ -34,36 +34,39 @@ const enum Indentation {
 ////    }
 ////}
 
-confirmNormalizedJsDoc("0", Indentation.Gutter, `
+confirmNormalizedJsDoc("0", Indentation.Standard, `
 /**
  * 
  */`);
 
-confirmNormalizedJsDoc("2", Indentation.Proper, `
-/**
- * 
- * @param a
- */`);
+confirmNormalizedJsDoc("2", Indentation.Indented,
+   `/**
+     * 
+     * @param a
+     */
+    `);
 
-confirmNormalizedJsDoc("3", Indentation.Proper, `
-/**
- * 
- * @param a
- * @param b
- */`);
+confirmNormalizedJsDoc("3", Indentation.Indented,
+   `/**
+     * 
+     * @param a
+     * @param b
+     */
+    `);
 
-confirmNormalizedJsDoc("4", Indentation.Proper, `
-/**
- * 
- * @param a
- * @param param1
- * @param b
- */`);
+confirmNormalizedJsDoc("4", Indentation.Indented,
+   `/**
+     * 
+     * @param a
+     * @param param1
+     * @param c
+     */`);
 
-confirmNormalizedJsDoc("5", Indentation.Proper, `
-/**
- * 
- * @param a
- * @param b
- * @param args
- */`);
+confirmNormalizedJsDoc("5", Indentation.Indented, 
+    `/**
+     * 
+     * @param a
+     * @param b
+     * @param args
+     */
+    `);
