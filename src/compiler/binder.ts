@@ -898,6 +898,21 @@ namespace ts {
                     else if (isCommonJsExportsAssignment(node)) {
                         bindAmdModuleExportsAssignment(<BinaryExpression>node);
                     }
+                    else if(container &&
+                        isJavaScriptFile &&
+                        container.kind === SyntaxKind.Constructor &&
+                        container.parent &&
+                        (container.parent.flags & NodeFlags.InferredClass) &&
+                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                        // Inference in JS for this.name = expr; in class constructor bodies
+
+                        // Temporarily change the container to the class (otherwise we'd bind this member to the constructor)
+                        let saveContainer = container;
+                        container = container.parent;
+                        bindPropertyOrMethodOrAccessor(<Declaration><Node>(<BinaryExpression>node).left, SymbolFlags.Property, SymbolFlags.None);
+                        container = saveContainer;
+                    }
+                case SyntaxKind.BinaryExpression:
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -934,6 +949,7 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
+                
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -969,6 +985,8 @@ namespace ts {
                     checkStrictModeFunctionName(<FunctionExpression>node);
                     let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
+                
+                // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
@@ -980,6 +998,8 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
+                
+                // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
@@ -1072,6 +1092,14 @@ namespace ts {
             }
 
             let symbol = node.symbol;
+
+            // For a class with no declared properties in a JS file, we can infer its members from assignments
+            // of the form 'this.name = expr' in the constructor. Set the flag that indicates
+            // when that should happen.
+            if (isJavaScriptFile) {
+                let hasDeclaredProperties = forEachChild(node, child => child.kind === SyntaxKind.PropertyDeclaration);
+                node.flags = hasDeclaredProperties ? (node.flags & ~NodeFlags.InferredClass) : (node.flags | NodeFlags.InferredClass);
+            }
 
             // TypeScript 1.0 spec (April 2014): 8.4
             // Every class automatically contains a static property member named 'prototype', the

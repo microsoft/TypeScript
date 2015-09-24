@@ -2435,6 +2435,11 @@ namespace ts {
                 return getTypeFromTypeNode(declaration.type);
             }
 
+            // Inferred class property via 'this'
+            if (declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                return checkExpressionCached((<BinaryExpression>declaration.parent).right);
+            }
+
             if (declaration.kind === SyntaxKind.Parameter) {
                 let func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
@@ -2595,6 +2600,11 @@ namespace ts {
                 // Handle export default expressions
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
+                }
+                // Handle inference from 'this.name = expr' in classes
+                if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
+                    let types = symbol.declarations.map((decl: VariableLikeDeclaration) => getWidenedTypeForVariableLikeDeclaration(decl, /*reportErrors*/ true));
+                    return getUnionType(types);
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
