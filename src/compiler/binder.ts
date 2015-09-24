@@ -189,7 +189,7 @@ namespace ts {
                     if (isAmdExportAssignment(node)) {
                         return getAmdExportAssignmentName(node);
                     }
-                    else if(isCommonJsExportsAssignment(node)) {
+                    else if (isCommonJsExportsAssignment(node)) {
                         return getAnonymousModuleName(node);
                     }
                     else {
@@ -219,11 +219,11 @@ namespace ts {
         /**
          * Returns the first invocation of an identifier 'require' with one argument,
          * or undefined if that none exist.
-        */
+         */
         function findCommonJSRequireCalls(node: Node): Node {
             if (node.kind === SyntaxKind.CallExpression) {
                 let call = <CallExpression>node;
-                if(call.expression.kind === SyntaxKind.Identifier &&
+                if (call.expression.kind === SyntaxKind.Identifier &&
                     (<Identifier>call.expression).text === 'require' &&
                     call.arguments.length === 1) {
 
