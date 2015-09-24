@@ -9169,10 +9169,24 @@ namespace ts {
             }
         }
 
+        // When contextual typing assigns a type to a parameter that contains a binding pattern, we also need to push
+        // the destructured type into the contained binding elements.
+        function assignBindingElementTypes(node: VariableLikeDeclaration) {
+            if (isBindingPattern(node.name)) {
+                for (let element of (<BindingPattern>node.name).elements) {
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        assignBindingElementTypes(element);
+                    }
+                }
+            }
+        }
+
         function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper) {
             let links = getSymbolLinks(parameter);
             if (!links.type) {
                 links.type = instantiateType(contextualType, mapper);
+                assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
             }
             else if (isInferentialContext(mapper)) {
                 // Even if the parameter already has a type, it might be because it was given a type while
