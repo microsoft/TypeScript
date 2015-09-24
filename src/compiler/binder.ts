@@ -89,6 +89,13 @@ namespace ts {
         let blockScopeContainer: Node;
         let lastContainer: Node;
 
+        let isJavaScriptFile = isSourceFileJavaScript(file);
+        // In JavaScript files, we might have a CommonJS module (using 'require("name")').
+        // Scan the file for any invocations of an identifier called 'require'
+        if (isJavaScriptFile) {
+            file.externalModuleIndicator = file.externalModuleIndicator || findCommonJSRequireCalls(file);
+        }
+
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
@@ -97,7 +104,6 @@ namespace ts {
         let symbolCount = 0;
         let Symbol = objectAllocator.getSymbolConstructor();
 
-        let isJavaScriptFile = isSourceFileJavaScript(file);
         let classifiableNames: Map<string> = {};
 
         if (!file.locals) {
@@ -208,6 +214,24 @@ namespace ts {
             let binaryExpr = <BinaryExpression>node;
             let propAccess = <PropertyAccessExpression>(binaryExpr.left);
             return propAccess.name.text;
+        }
+
+        /**
+         * Returns the first invocation of an identifier 'require' with one argument,
+         * or undefined if that none exist.
+        */
+        function findCommonJSRequireCalls(node: Node): Node {
+            if (node.kind === SyntaxKind.CallExpression) {
+                let call = <CallExpression>node;
+                if(call.expression.kind === SyntaxKind.Identifier &&
+                    (<Identifier>call.expression).text === 'require' &&
+                    call.arguments.length === 1) {
+
+                    return node;
+                }
+            }
+
+            return forEachChild(node, findCommonJSRequireCalls);
         }
 
         function getAnonymousModuleName(node: Node) {
