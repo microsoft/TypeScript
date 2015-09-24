@@ -1,11 +1,14 @@
 /// <no-default-lib/>
 
-/// <reference path="..\..\built\local\lib.core.d.ts"/>
+/// <reference path="..\..\lib\lib.core.d.ts"/>
 /// <reference path="analyzerEnv.ts"/>
 /// <reference path="..\compiler\types.ts"/>
 /// <reference path="..\compiler\core.ts"/>
 /// <reference path="..\compiler\sys.ts"/>
+/// <reference path="..\compiler\commandLineParser.ts"/>
 /// <reference path="services.ts"/>
+/// <reference path="utilities.ts"/>
+/// <reference path="shims.ts"/>
 
 interface AnalyzisError {
     message: string;
@@ -42,31 +45,35 @@ interface ProcessedFile {
 }
 
 function log<T>(text: string, f: () => T): T {
-    var start = new Date().getTime();
-    var result = f();
-    var end = new Date().getTime();
+    let start = new Date().getTime();
+    let result = f();
+    let end = new Date().getTime();
     ts.sys.write(text + ": " + (end - start) + " ms" + ts.sys.newLine)
     return result;
 }
 
 function analyze(libFileName: string, files: string[], outputFolder: string): ProcessedFile[]{
 
-    var sourceFileVersion = "1";
-    var sourceFileIsOpen = false;
+    let sourceFileVersion = "1";
+    let sourceFileIsOpen = false;
 
 
-    var program = log("createProgram", () => createProgram(files));
-    var fileNames = ts.map(program.getSourceFiles(), f => f.fileName);
-    var scriptSnapshots: ts.Map<ts.IScriptSnapshot> = {};
+    let program = log("createProgram", () => createProgram(files));
+    let fileNames = ts.map(program.getSourceFiles(), f => f.fileName);
+    let scriptSnapshots: ts.Map<ts.IScriptSnapshot> = {};
 
-    var checker = log("getTypeChecker", () => program.getTypeChecker());
+    let checker = log("getTypeChecker", () => program.getTypeChecker());
 
     ts.forEach(program.getSourceFiles(), f => {
         scriptSnapshots[f.fileName] = ts.ScriptSnapshot.fromString(f.text);
     });
-
-    var host: ts.LanguageServiceHost = {
-        getCancellationToken: () => ts.CancellationTokenObject.None,
+    
+    const hostCancellationToken: ts.HostCancellationToken = {
+        isCancellationRequested: () => false
+    }
+    
+    let host: ts.LanguageServiceHost = {
+        getCancellationToken: () => hostCancellationToken,
         getCompilationSettings: () => { return {}; },
         getDefaultLibFileName: () => libFileName,
         getCurrentDirectory: () => ".",
@@ -79,24 +86,25 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
         error: (s) => { }
     };
 
-    var documentRegistry: ts.DocumentRegistry = {
+    let documentRegistry: ts.DocumentRegistry = {
         acquireDocument: (fileName, settings, snapshot, version) => program.getSourceFile(fileName),
         releaseDocument: (fileName, settings) => { },
-        updateDocument: (fileName, settings, snapshot, version) => program.getSourceFile(fileName)
+        updateDocument: (fileName, settings, snapshot, version) => program.getSourceFile(fileName),
+        reportStats: () => ""
     };
-    var ls = ts.createLanguageService(host, documentRegistry);
+    let ls = ts.createLanguageService(host, documentRegistry);
 
-    var sourceFiles = program.getSourceFiles();
-    var processedFiles: ProcessedFile[] = [];
-    for (var i = 0, len = sourceFiles.length; i < len; ++i) {
+    let sourceFiles = program.getSourceFiles();
+    let processedFiles: ProcessedFile[] = [];
+    for (let i = 0, len = sourceFiles.length; i < len; ++i) {
         var f = sourceFiles[i];
         var fileSpan = ts.createTextSpan(0, f.text.length);
-        var result = log("getClassifications '" + f.fileName + "'", () => {
-            var syntacticClassifications = ls.getSyntacticClassifications(f.fileName, fileSpan);
-            var convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
+        let result = log("getClassifications '" + f.fileName + "'", () => {
+            let syntacticClassifications = ls.getSyntacticClassifications(f.fileName, fileSpan);
+            let convertedSyntactic = convertClassifications(syntacticClassifications, f, /*addHyperlinks*/ true);
 
-            var semanticClassifications = ls.getSemanticClassifications(f.fileName, fileSpan);
-            var convertedSemantic = convertClassifications(semanticClassifications, f, /*addHyperlinks*/ false);
+            let semanticClassifications = ls.getSemanticClassifications(f.fileName, fileSpan);
+            let convertedSemantic = convertClassifications(semanticClassifications, f, /*addHyperlinks*/ false);
 
             return {
                 fileName: f.fileName,
@@ -106,8 +114,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
             };
         });
 
-        var json = JSON.stringify(result);
-        var path = ts.combinePaths(outputFolder, i + ".json");
+        let json = JSON.stringify(result);
+        let path = ts.combinePaths(outputFolder, i + ".json");
         ts.sys.writeFile(path, json, /*writeByteOrderMark*/ false);
         processedFiles.push({ fileName: f.fileName, index: i });
     }
@@ -182,8 +190,8 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
 
     function getQualifiedName(decl: ts.Declaration): string {
         // TODO: should be revised when TS have local types
-        var curr: ts.Node = decl;
-        var name = "";
+        let curr: ts.Node = decl;
+        let name = "";
         while (curr) {
             switch (curr.kind) {
                 case ts.SyntaxKind.Constructor:
@@ -214,7 +222,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 case ts.SyntaxKind.EnumDeclaration:
                 case ts.SyntaxKind.ModuleDeclaration:
                 case ts.SyntaxKind.ImportDeclaration:
-                    var currName = ts.declarationNameToString((<ts.Declaration>curr).name);
+                    let currName = ts.declarationNameToString((<ts.Declaration>curr).name);
                     name = name.length ? currName + "." + name : currName;
                 default:
                     curr = curr.parent;
@@ -224,14 +232,14 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     }
 
     function convertClassifications(classifications: ts.ClassifiedSpan[], f: ts.SourceFile, addHyperlinks: boolean): ClassifiedRange[]{
-        var ranges: ClassifiedRange[] = [];
+        let ranges: ClassifiedRange[] = [];
 
         if (addHyperlinks) {
             ts.forEach(f.referencedFiles, r => {
-                var hyperlinks = addHyperlinksForDefinition(r.pos, /*hyperlinks*/ undefined);
+                let hyperlinks = addHyperlinksForDefinition(r.pos, /*hyperlinks*/ undefined);
                 // push hyperlinks for tripleslash refs
                 if (hyperlinks) {
-                    var range: ClassifiedRange = {
+                    let range: ClassifiedRange = {
                         start: r.pos,
                         length: r.end - r.pos,
                         hyperlinks: hyperlinks,
@@ -247,15 +255,15 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 return;
             }
 
-            var classification = c.classificationType;
-            var start = c.textSpan.start;
-            var length = c.textSpan.length;
-            var hyperlinks: Hyperlink[];
+            let classification = c.classificationType;
+            let start = c.textSpan.start;
+            let length = c.textSpan.length;
+            let hyperlinks: Hyperlink[];
 
-            var definitionSymbolId: string;
-            var definitionKind: string;
-            var fullName: string;
-            var searchString: string;
+            let definitionSymbolId: string;
+            let definitionKind: string;
+            let fullName: string;
+            let searchString: string;
 
             if (addHyperlinks) {
                 switch (c.classificationType) {
@@ -265,12 +273,12 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                     case ts.ClassificationTypeNames.whiteSpace:
                         break;
                     default:
-                        var token = ts.getTokenAtPosition(f, start);
+                        let token = ts.getTokenAtPosition(f, start);
                         // yield definition info only for constructors
                         if (c.classificationType === ts.ClassificationTypeNames.keyword && token && token.kind !== ts.SyntaxKind.ConstructorKeyword) {
                             break;
                         }
-                        var declaration = token && getDeclarationForName(token);
+                        let declaration = token && getDeclarationForName(token);
                         if (declaration) {
                             searchString = declaration.name && ts.declarationNameToString(declaration.name);
                             definitionKind = getDeclarationName(declaration);
@@ -294,7 +302,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                 }
             }
 
-            var converted: ClassifiedRange = {
+            let converted: ClassifiedRange = {
                 classification: classification,
                 start: start,
                 length: length,
@@ -311,20 +319,20 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
     }
 
     function addHyperlinksForDefinition(start: number, hyperlinks: Hyperlink[]): Hyperlink[] {
-        var defs = ls.getDefinitionAtPosition(f.fileName, start);
+        let defs = ls.getDefinitionAtPosition(f.fileName, start);
         if (defs) {
             ts.forEach(defs, d => {
                 if (!hyperlinks) {
                     hyperlinks = [];
                 }
 
-                var defStart = d.textSpan.start;
-                var defFile = program.getSourceFile(d.fileName);
+                let defStart = d.textSpan.start;
+                let defFile = program.getSourceFile(d.fileName);
 
-                var token = ts.getTouchingToken(defFile, defStart, /*includeItemAtEndPosition*/ undefined);
+                let token = ts.getTouchingToken(defFile, defStart, /*includeItemAtEndPosition*/ undefined);
                 if (token && token.kind !== ts.SyntaxKind.SourceFile) {
                     // point definition to name if possible
-                    var target =
+                    let target =
                         ts.isDeclaration(token)
                         ? (<ts.Declaration>token).name
                         : token.parent && ts.isDeclaration(token.parent)
@@ -334,7 +342,7 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
                         defStart = target.getStart();
                     }
                 }
-                var link: Hyperlink = {
+                let link: Hyperlink = {
                     sourceFile: d.fileName,
                     start: d.textSpan.start,
                     symbolId: makeSymbolId(d.fileName, defStart)
@@ -350,17 +358,21 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
         return fileName + "|" + start;
     }
 
+    const cancellationToken: ts.CancellationToken = {
+        isCancellationRequested: () => false,
+        throwIfCancellationRequested: () => {}
+    }
     function createProgram(files: string[]): ts.Program {
-        var host: ts.CompilerHost = {
+        let host: ts.CompilerHost = {
             getSourceFile: (filename, languageVersion) => {
                 if (ts.sys.fileExists(filename)) {
-                    var text = ts.sys.readFile(filename);
-                    var sourceFile = ts.createSourceFile(filename, text, languageVersion);
+                    let text = ts.sys.readFile(filename);
+                    let sourceFile = ts.createSourceFile(filename, text, languageVersion);
                     sourceFile.version = sourceFileVersion;
                     return sourceFile;
                 }
             },
-            getCancellationToken: () => ts.CancellationTokenObject.None,
+            getCancellationToken: () => cancellationToken,
             getCanonicalFileName: (filename) => ts.sys.useCaseSensitiveFileNames ? filename : filename.toLowerCase(),
             useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
             getNewLine: () => "\r\n",
@@ -372,20 +384,22 @@ function analyze(libFileName: string, files: string[], outputFolder: string): Pr
             },
             getCurrentDirectory: (): string => {
                 return ts.sys.getCurrentDirectory();
-            }
+            },
+            fileExists: fileName => ts.sys.fileExists(fileName),
+            readFile: fileName => ts.sys.readFile(fileName)
         };
         return ts.createProgram(files, { target: ts.ScriptTarget.ES5 }, host)
     }
 }
 
 function analyzeShim(json: string): boolean {
-    var args = <{ fileNames: string[]; libFile: string; outputFolder?: string }>JSON.parse(json);
-    var outputFolder = args.outputFolder || "output";
+    let args = <{ fileNames: string[]; libFile: string; outputFolder?: string }>JSON.parse(json);
+    let outputFolder = args.outputFolder || "output";
     if (!ts.sys.directoryExists(outputFolder)) {
         ts.sys.createDirectory(outputFolder);
     }
     try {
-        var results = analyze(args.libFile, args.fileNames, outputFolder);
+        let results = analyze(args.libFile, args.fileNames, outputFolder);
         ts.sys.writeFile(ts.combinePaths(outputFolder, "ok.json"), JSON.stringify(results));
         return true;
     }
@@ -394,8 +408,8 @@ function analyzeShim(json: string): boolean {
         return false;
     }
 }
-declare var module: any;
-declare var process: any;
+declare let module: any;
+declare let process: any;
 if (typeof module !== "undefined" && module.exports && process.argv.length === 3) {
     analyzeShim(ts.sys.readFile(process.argv[2]));
 }
