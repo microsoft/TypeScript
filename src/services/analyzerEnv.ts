@@ -32,8 +32,6 @@ interface String {
 }
 
 module WScript {
-    var fso: any = new ActiveXObject("Scripting.FileSystemObject");
-    var stdout = fso.GetStandardStream(1);
     export module Arguments {
         export function Item(n: number): any {
             throw new Error("NYI");
@@ -42,6 +40,9 @@ module WScript {
     }
 
     export module StdOut {
+        var fso: any = ActiveXObject && new ActiveXObject("Scripting.FileSystemObject");
+        var stdout = fso && fso.GetStandardStream(1);
+        
         export function Write(s: string): void {
             stdout.Write(s);
         }
