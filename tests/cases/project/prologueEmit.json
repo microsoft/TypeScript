@@ -5,6 +5,5 @@
         "globalThisCapture.ts",
         "__extends.ts"
     ],
-    "out": "out.js",
     "baselineCheck": true
 }

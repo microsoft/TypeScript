@@ -6,7 +6,6 @@ interface ProjectRunnerTestCase {
     scenario: string;
     projectRoot: string; // project where it lives - this also is the current directory when compiling
     inputFiles: string[]; // list of input files to be given to program
-    out?: string; // --out
     outDir?: string; // --outDir
     sourceMap?: boolean; // --map
     mapRoot?: string; // --mapRoot
@@ -158,7 +157,6 @@ class ProjectRunner extends RunnerBase {
                 return {
                     declaration: !!testCase.declaration,
                     sourceMap: !!testCase.sourceMap,
-                    outFile: testCase.out,
                     outDir: testCase.outDir,
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
@@ -346,7 +344,6 @@ class ProjectRunner extends RunnerBase {
                             scenario: testCase.scenario,
                             projectRoot: testCase.projectRoot,
                             inputFiles: testCase.inputFiles,
-                            out: testCase.out,
                             outDir: testCase.outDir,
                             sourceMap: testCase.sourceMap,
                             mapRoot: testCase.mapRoot,

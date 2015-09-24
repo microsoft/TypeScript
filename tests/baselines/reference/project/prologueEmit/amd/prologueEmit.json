@@ -5,7 +5,6 @@
         "globalThisCapture.ts",
         "__extends.ts"
     ],
-    "out": "out.js",
     "baselineCheck": true,
     "resolvedInputFiles": [
         "lib.d.ts",
@@ -13,6 +12,7 @@
         "__extends.ts"
     ],
     "emittedFiles": [
-        "out.js"
+        "globalThisCapture.js",
+        "__extends.js"
     ]
 }
