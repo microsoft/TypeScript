@@ -7028,14 +7028,31 @@ namespace ts {
             // - methods
             // - constructors
             // - class decls
-            let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
+            let commentOwner: Node;
+            findOwner: for (commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
+                switch (commentOwner.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.VariableStatement:
+                        break findOwner;
+                    case SyntaxKind.SourceFile:
+                        return undefined;
+                    case SyntaxKind.ModuleDeclaration:
+                        // We don't want to give back a JSDoc for the 'b' in 'module a.b'.
+                        if (false && commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
+                            return undefined;
+                        }
+                        break findOwner;
+                }
+            }
 
-
-            if (!containingFunction || containingFunction.getStart() < position) {
+            if (!commentOwner || commentOwner.getStart() < position) {
                 return undefined;
             }
 
-            let parameters = containingFunction.parameters;
+            let parameters = isFunctionLike(commentOwner) ? commentOwner.parameters : emptyArray;
             let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
             let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 

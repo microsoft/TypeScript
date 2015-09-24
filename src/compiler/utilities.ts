@@ -621,7 +621,7 @@ namespace ts {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
-    export function isFunctionLike(node: Node): boolean {
+    export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
