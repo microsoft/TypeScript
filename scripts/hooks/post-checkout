@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "var npm = require("npm"); npm.load(function (err) {if (err) { throw err; } npm.commands.run(['jake', 'generate-diagnostics']); )" | node
