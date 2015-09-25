@@ -3,6 +3,6 @@ doc
 scripts
 src
 tests
-Jakefile
+Jakefile.js
 .travis.yml
 .settings/
