@@ -29,7 +29,7 @@ const enum Indentation {
 ////    foo();
 ////    /*2*/foo(a);
 ////    /*3*/foo(a, b);
-////    /*4*/ foo(a, {x: string}, c);
+////    /*4*/ foo(a, {x: string}, [c]);
 ////    /*5*/foo(a?, b?, ...args) {
 ////    }
 ////}
@@ -66,7 +66,7 @@ confirmNormalizedJsDoc("4", Indentation.Indented,
      * 
      * @param a
      * @param param1
-     * @param c
+     * @param param2
      */`);
 
 confirmNormalizedJsDoc("5", Indentation.Indented, 
