@@ -1908,13 +1908,20 @@ module FourSlash {
                 }
 
                 if (actual.newText !== expected.newText) {
-                    this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
+                    this.raiseError(name + ' failed - expected insertion:\n' + this.clarifyNewlines(expected.newText) + '\nactual insertion:\n' + this.clarifyNewlines(actual.newText));
                 }
 
                 if (actual.caretOffset !== expected.caretOffset) {
                     this.raiseError(name + ' failed - expected caretOffset: ' + expected.caretOffset + ',\nactual caretOffset:' + actual.caretOffset);
                 }
             }
+        }
+
+        private clarifyNewlines(str: string) {
+            return str.replace(/\r?\n/g, lineEnding => {
+                const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
+                return "# - " + representation + lineEnding;
+            });
         }
 
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
