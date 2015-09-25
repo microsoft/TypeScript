@@ -183,6 +183,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /** Called to build the opening part of a bundled module wrapper */
             let emitBundleWrapperStart: Map<() => void>  = {
+                [ModuleKind.None]() {},
                 [ModuleKind.CommonJS]() {
                     write("module.exports = ");
                 },
@@ -238,11 +239,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     increaseIndent();
                     write(`${exportStarName}(`);
-                }
+                },
+                [ModuleKind.ES6]() {},
             }
 
             /** Called to build the closing part of a bundled module wrapper */
             let emitBundleWrapperEnd: Map<() => void> = {
+                [ModuleKind.None]() {},
                 [ModuleKind.CommonJS]() {
                     write(";");
                 },
@@ -269,7 +272,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     decreaseIndent();
                     writeLine();
                     write("});");
-                }
+                },
+                [ModuleKind.ES6]() {},
             }
 
             /** Emit the text for the given token that comes after startPos
@@ -311,10 +315,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSourceFile(root);
             }
             else {
-                let originalKind = compilerOptions.module;
+                let originalKind = modulekind;
                 if (compilerOptions.bundle) {
                     buildBundleDependenciesMap();
-                    compilerOptions.module = ModuleKind.CommonJS;
+                    modulekind = ModuleKind.CommonJS;
                     emitBundleWrapperStart[originalKind]();
                     write("(function() {");
                     increaseIndent();
@@ -337,7 +341,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     decreaseIndent();
                     writeLines("})()");
                     emitBundleWrapperEnd[originalKind]();
-                    compilerOptions.module = originalKind;
+                    modulekind = originalKind;
                 }
             }
 

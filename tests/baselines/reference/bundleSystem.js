@@ -101,12 +101,12 @@ System.register([], function(exports_1) {
                     class Foo {
                     }
                     Foo.CONSTANT = "Foo";
-                    Foo = Foo;
+                    exports.Foo = Foo;
                     function assert(value) {
                         if (!value)
                             throw new Error("Assertion failed!");
                     }
-                    undefined("assert", assert);
+                    exports.assert = assert;
                 });
                 __define("/tests/cases/compiler/bundleSystem_file1", function(require, exports, module){
                     var bundleSystem_file0_1 = require("./bundleSystem_file0");

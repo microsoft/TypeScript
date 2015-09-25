@@ -102,6 +102,7 @@ define(["require"], function(require){
             exports.assert = assert;
         });
         __define("/tests/cases/compiler/bundleToES3AMD_file1", function(require, exports, module){
+            var bundleToES3AMD_file0_1 = require("./bundleToES3AMD_file0");
             bundleToES3AMD_file0_1.assert(bundleToES3AMD_file0_1.Foo.CONSTANT === "Foo");
         });
         return __define.require("bundleToES3AMD_file1");

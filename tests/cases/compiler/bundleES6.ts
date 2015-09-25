@@ -1,4 +1,5 @@
 // @target: es6
+// @module: es6
 // @outFile: bundleES6_bundle.js
 // @bundle: bundleES6_file1
 

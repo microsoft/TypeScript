@@ -675,6 +675,10 @@
         "category": "Error",
         "code": 1215
     },
+    "Cannot use option '--module none' without using '--bundle'.": {
+        "category": "Error",
+        "code": 1216
+    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
@@ -2105,7 +2109,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es6', or 'none' (only valid with --bundle)": {
         "category": "Message",
         "code": 6016
     },

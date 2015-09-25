@@ -102,6 +102,7 @@ define(["require"], function(require){
             exports.assert = assert;
         });
         __define("/tests/cases/compiler/bundleToES3Commonjs_file1", function(require, exports, module){
+            var bundleToES3Commonjs_file0_1 = require("./bundleToES3Commonjs_file0");
             bundleToES3Commonjs_file0_1.assert(bundleToES3Commonjs_file0_1.Foo.CONSTANT === "Foo");
         });
         return __define.require("bundleToES3Commonjs_file1");

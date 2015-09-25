@@ -98,18 +98,18 @@ System.register([], function(exports_1) {
                     return define;
                 })();
                 __define("/tests/cases/compiler/bundleToES3System_file0", function(require, exports, module){
-                    Foo = (function () {
+                    var Foo = (function () {
                         function Foo() {
                         }
                         Foo.CONSTANT = "Foo";
                         return Foo;
                     })();
-                    undefined("Foo", Foo);
+                    exports.Foo = Foo;
                     function assert(value) {
                         if (!value)
                             throw new Error("Assertion failed!");
                     }
-                    undefined("assert", assert);
+                    exports.assert = assert;
                 });
                 __define("/tests/cases/compiler/bundleToES3System_file1", function(require, exports, module){
                     var bundleToES3System_file0_1 = require("./bundleToES3System_file0");
