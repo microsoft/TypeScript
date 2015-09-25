@@ -46,7 +46,7 @@
         "build:tests": "jake tests",
         "clean": "jake clean",
         "jake": "jake",
-        "postinstall": "node scripts/link-hooks.js"
+        "postinstall": "echo \"try {require('./scripts/link-hooks.js')} catch (e) {console.log('Script not found, git hooks not installed.')}\" | node"
     },
     "browser": {
         "buffer": false,
