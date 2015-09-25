@@ -6997,8 +6997,12 @@ namespace ts {
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
          * Valid positions are
-         * - outside of comments, statements, and expressions, and
-         * - preceding a function declaration.
+         *      - outside of comments, statements, and expressions, and
+         *      - preceding a:
+         *          - function/constructor/method declaration
+         *          - class declarations
+         *          - variable statements
+         *          - namespace declarations
          *
          * Hosts should ideally check that:
          * - The line is all whitespace up to 'position' before performing the insertion.
@@ -7041,7 +7045,9 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         return undefined;
                     case SyntaxKind.ModuleDeclaration:
-                        // We don't want to give back a JSDoc for the 'b' in 'module a.b'.
+                        // If in walking up the tree, we hit a a nested namespace declaration,
+                        // then we must be somewhere within a dotted namespace name; however we don't
+                        // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
                         if (commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
                             return undefined;
                         }
