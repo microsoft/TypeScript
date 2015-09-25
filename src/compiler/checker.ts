@@ -12962,26 +12962,41 @@ namespace ts {
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
                 let enumSymbol = getSymbolOfNode(node);
                 let enumType = getDeclaredTypeOfSymbol(enumSymbol);
-                let autoValue = 0;
+                let autoValue = 0; // set to undefined when enum member is non-constant
                 let ambient = isInAmbientContext(node);
                 let enumIsConst = isConst(node);
 
-                forEach(node.members, member => {
-                    if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
+                for (const member of node.members) {
+                    if (member.name.kind === SyntaxKind.ComputedPropertyName) {
+                        error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
+                    }
+                    else if (isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
+
+                    const previousEnumMemberIsNonConstant = autoValue === undefined;
+                    
                     let initializer = member.initializer;
                     if (initializer) {
                         autoValue = computeConstantValueForEnumMemberInitializer(initializer, enumType, enumIsConst, ambient);
                     }
                     else if (ambient && !enumIsConst) {
+                        // In ambient enum declarations that specify no const modifier, enum member declarations 
+                        // that omit a value are considered computed members (as opposed to having auto-incremented values assigned).
                         autoValue = undefined;
+                    }
+                    else if (previousEnumMemberIsNonConstant) {
+                        // If the member declaration specifies no value, the member is considered a constant enum member. 
+                        // If the member is the first member in the enum declaration, it is assigned the value zero. 
+                        // Otherwise, it is assigned the value of the immediately preceding member plus one,
+                        // and an error occurs if the immediately preceding member is not a constant enum member
+                        error(member.name, Diagnostics.Enum_member_must_have_initializer);
                     }
 
                     if (autoValue !== undefined) {
                         getNodeLinks(member).enumMemberValue = autoValue++;
                     }
-                });
+                }
 
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
@@ -12997,11 +13012,11 @@ namespace ts {
                         if (enumIsConst) {
                             error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
                         }
-                        else if (!ambient) {
+                        else if (ambient) {
+                            error(initializer, Diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression);
+                        } 
+                        else {
                             // Only here do we need to check that the initializer is assignable to the enum type.
-                            // If it is a constant value (not undefined), it is syntactically constrained to be a number.
-                            // Also, we do not need to check this for ambients because there is already
-                            // a syntax error if it is not a constant.
                             checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                         }
                     }
@@ -13141,7 +13156,7 @@ namespace ts {
             }
 
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -15639,40 +15654,6 @@ namespace ts {
             }
 
             return false;
-        }
-
-        function checkGrammarEnumDeclaration(enumDecl: EnumDeclaration): boolean {
-            let enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
-
-            let hasError = false;
-
-            // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
-            // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
-            if (!enumIsConst) {
-                let inConstantEnumMemberSection = true;
-                let inAmbientContext = isInAmbientContext(enumDecl);
-                for (let node of enumDecl.members) {
-                    // Do not use hasDynamicName here, because that returns false for well known symbols.
-                    // We want to perform checkComputedPropertyName for all computed properties, including
-                    // well known symbols.
-                    if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                        hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
-                    }
-                    else if (inAmbientContext) {
-                        if (node.initializer && !isIntegerLiteral(node.initializer)) {
-                            hasError = grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers) || hasError;
-                        }
-                    }
-                    else if (node.initializer) {
-                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
-                    }
-                    else if (!inConstantEnumMemberSection) {
-                        hasError = grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer) || hasError;
-                    }
-                }
-            }
-
-            return hasError;
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {

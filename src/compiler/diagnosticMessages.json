@@ -195,7 +195,7 @@
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum elements can only have integer literal initializers.": {
+    "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
     },
