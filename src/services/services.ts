@@ -7059,7 +7059,7 @@ namespace ts {
                 return undefined;
             }
 
-            let parameters = isFunctionLike(commentOwner) ? commentOwner.parameters : emptyArray;
+            let parameters = getParametersForJsDocOwningNode(commentOwner);
             let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
             let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
@@ -7094,6 +7094,52 @@ namespace ts {
                 (tokenStart === position ? newLine + indentationStr : "");
 
             return { newText: result, caretOffset: preamble.length };
+        }
+
+        function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
+            if (isFunctionLike(commentOwner)) {
+                return commentOwner.parameters;
+            }
+
+            if (commentOwner.kind === SyntaxKind.VariableStatement) {
+                const varStatement = <VariableStatement>commentOwner;
+                const varDeclarations = varStatement.declarationList.declarations;
+
+                if (varDeclarations.length === 1 && varDeclarations[0].initializer) {
+                    return getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer);
+                }
+            }
+
+            return emptyArray;
+        }
+
+        /**
+         * Digs into an an initializer or RHS operand of an assignment operation
+         * to get the parameters from an apst signature corresponding to a
+         * function expression or a class expression.
+         *
+         * @param rightHandSide the expression which may contain an appropriate set of parameters
+         * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
+         */
+        function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ParameterDeclaration[] {
+            while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
+                rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
+            }
+
+            switch (rightHandSide.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    return (<FunctionExpression>rightHandSide).parameters;
+                case SyntaxKind.ClassExpression:
+                    for (let member of (<ClassExpression>rightHandSide).members) {
+                        if (member.kind === SyntaxKind.Constructor) {
+                            return (<ConstructorDeclaration>member).parameters;
+                        }
+                    }
+                    break;
+            }
+
+            return emptyArray;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
