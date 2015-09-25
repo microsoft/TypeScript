@@ -2077,6 +2077,7 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+        ES6 = 5,
     }
 
     export const enum JsxEmit {

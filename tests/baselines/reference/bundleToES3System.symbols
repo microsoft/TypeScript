@@ -1,0 +1,30 @@
+=== tests/cases/compiler/bundleToES3System_file0.ts ===
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(bundleToES3System_file0.ts, 0, 0))
+
+	static CONSTANT = "Foo";
+>CONSTANT : Symbol(Foo.CONSTANT, Decl(bundleToES3System_file0.ts, 1, 18))
+}
+
+export function assert(value: boolean) {
+>assert : Symbol(assert, Decl(bundleToES3System_file0.ts, 3, 1))
+>value : Symbol(value, Decl(bundleToES3System_file0.ts, 5, 23))
+
+	if (!value) throw new Error("Assertion failed!");
+>value : Symbol(value, Decl(bundleToES3System_file0.ts, 5, 23))
+>Error : Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
+}
+
+
+=== tests/cases/compiler/bundleToES3System_file1.ts ===
+import {Foo, assert} from "./bundleToES3System_file0";
+>Foo : Symbol(Foo, Decl(bundleToES3System_file1.ts, 0, 8))
+>assert : Symbol(assert, Decl(bundleToES3System_file1.ts, 0, 12))
+
+assert(Foo.CONSTANT === "Foo");
+>assert : Symbol(assert, Decl(bundleToES3System_file1.ts, 0, 12))
+>Foo.CONSTANT : Symbol(Foo.CONSTANT, Decl(bundleToES3System_file0.ts, 1, 18))
+>Foo : Symbol(Foo, Decl(bundleToES3System_file1.ts, 0, 8))
+>CONSTANT : Symbol(Foo.CONSTANT, Decl(bundleToES3System_file0.ts, 1, 18))
+

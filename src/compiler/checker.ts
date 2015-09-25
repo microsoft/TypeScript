@@ -44,6 +44,7 @@ namespace ts {
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
 
         let emitResolver = createResolver();
 
@@ -2293,10 +2294,17 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
+        // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
+        // assigned by contextual typing.
+        function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
+            let symbol = getSymbolOfNode(node);
+            return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node);
+        }
+
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             let pattern = <BindingPattern>declaration.parent;
-            let parentType = getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>pattern.parent);
+            let parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -6574,8 +6582,8 @@ namespace ts {
 
         // Return contextual type of parameter or undefined if no contextual type is available
         function getContextuallyTypedParameterType(parameter: ParameterDeclaration): Type {
-            if (isFunctionExpressionOrArrowFunction(parameter.parent)) {
-                let func = <FunctionExpression>parameter.parent;
+            let func = parameter.parent;
+            if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
                 if (isContextSensitive(func)) {
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
@@ -6907,7 +6915,7 @@ namespace ts {
             }
         }
 
-        function isFunctionExpressionOrArrowFunction(node: Node): boolean {
+        function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression {
             return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
         }
 
@@ -6926,8 +6934,8 @@ namespace ts {
         function getContextualSignature(node: FunctionExpression | MethodDeclaration): Signature {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             let type = isObjectLiteralMethod(node)
-                ? getContextualTypeForObjectLiteralMethod(<MethodDeclaration>node)
-                : getContextualType(<FunctionExpression>node);
+                ? getContextualTypeForObjectLiteralMethod(node)
+                : getContextualType(node);
             if (!type) {
                 return undefined;
             }
@@ -9162,10 +9170,24 @@ namespace ts {
             }
         }
 
+        // When contextual typing assigns a type to a parameter that contains a binding pattern, we also need to push
+        // the destructured type into the contained binding elements.
+        function assignBindingElementTypes(node: VariableLikeDeclaration) {
+            if (isBindingPattern(node.name)) {
+                for (let element of (<BindingPattern>node.name).elements) {
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        assignBindingElementTypes(element);
+                    }
+                }
+            }
+        }
+
         function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper) {
             let links = getSymbolLinks(parameter);
             if (!links.type) {
                 links.type = instantiateType(contextualType, mapper);
+                assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
             }
             else if (isInferentialContext(mapper)) {
                 // Even if the parameter already has a type, it might be because it was given a type while
@@ -13379,9 +13401,9 @@ namespace ts {
                     }
                 }
                 else {
-                    if (languageVersion >= ScriptTarget.ES6 && !isInAmbientContext(node)) {
+                    if (modulekind === ModuleKind.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
-                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
                 }
             }
@@ -13456,11 +13478,11 @@ namespace ts {
             checkExternalModuleExports(<SourceFile | ModuleDeclaration>container);
 
             if (node.isExportEquals && !isInAmbientContext(node)) {
-                if (languageVersion >= ScriptTarget.ES6) {
-                    // export assignment is deprecated in es6 or above
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+                if (modulekind === ModuleKind.ES6) {
+                    // export assignment is not supported in es6 modules
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
-                else if (compilerOptions.module === ModuleKind.System) {
+                else if (modulekind === ModuleKind.System) {
                     // system modules does not support export assignment
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
                 }
@@ -13656,7 +13678,7 @@ namespace ts {
                     forEach(node.decorators, checkFunctionAndClassExpressionBodies);
                     forEach((<MethodDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
                     if (isObjectLiteralMethod(node)) {
-                        checkFunctionExpressionOrObjectLiteralMethodBody(<MethodDeclaration>node);
+                        checkFunctionExpressionOrObjectLiteralMethodBody(node);
                     }
                     break;
                 case SyntaxKind.Constructor:

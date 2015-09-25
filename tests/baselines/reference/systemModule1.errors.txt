@@ -1,7 +1,0 @@
-error TS1204: Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher unless --bundle is specified.
-
-
-!!! error TS1204: Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher unless --bundle is specified.
-==== tests/cases/compiler/systemModule1.ts (0 errors) ====
-    
-    export var x = 1;
