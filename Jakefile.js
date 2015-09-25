@@ -844,6 +844,13 @@ task("lint", ["build-rules"], function() {
     }
 });
 
+/**
+ * This is required because file watches on Windows get fires _twice_
+ * when a file changes on some node/windows version configuations
+ * (node v4 and win 10, for example). By not running a lint for a file
+ * which already has a pending lint, we avoid duplicating our work.
+ * (And avoid printing duplicate results!)
+ */
 var lintSemaphores = {};
 
 function lintWatchFile(filename) {
