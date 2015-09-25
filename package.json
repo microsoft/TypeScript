@@ -44,7 +44,9 @@
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",
-        "clean": "jake clean"
+        "clean": "jake clean",
+        "jake": "jake",
+        "postinstall": "node scripts/link-hooks.js"
     },
     "browser": {
         "buffer": false,
