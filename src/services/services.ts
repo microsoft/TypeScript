@@ -7025,9 +7025,10 @@ namespace ts {
             }
 
             // TODO: add support for:
-            // - methods
-            // - constructors
-            // - class decls
+            // - enums/enum members
+            // - interfaces
+            // - property declarations
+            // - potentially property assignments
             let commentOwner: Node;
             findOwner: for (commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
                 switch (commentOwner.kind) {
@@ -7041,7 +7042,7 @@ namespace ts {
                         return undefined;
                     case SyntaxKind.ModuleDeclaration:
                         // We don't want to give back a JSDoc for the 'b' in 'module a.b'.
-                        if (false && commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
+                        if (commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
                             return undefined;
                         }
                         break findOwner;
