@@ -39,6 +39,13 @@ confirmNormalizedJsDoc("0", Indentation.Standard, `
  * 
  */`);
 
+
+confirmNormalizedJsDoc("1", Indentation.Indented,
+   `/**
+     * 
+     */`);
+
+
 confirmNormalizedJsDoc("2", Indentation.Indented,
    `/**
      * 
