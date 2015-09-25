@@ -735,8 +735,6 @@ namespace ts {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.SourceFile:
                     return node;
