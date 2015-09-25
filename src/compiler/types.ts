@@ -707,15 +707,18 @@ namespace ts {
     export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
+ 
+    export interface IncrementExpression extends UnaryExpression {
+        _incrementExpressionBrand: any;
+    }
+    //export type IncrementExpression = PrefixUnaryExpression | PostfixUnaryExpression | LeftHandSideExpression;
 
-    export interface IncrementExpression extends UnaryExpression { }
-
-    export interface PrefixUnaryExpression extends UnaryExpression {
+    export interface PrefixUnaryExpression extends IncrementExpression {
         operator: SyntaxKind;
         operand: UnaryExpression | BinaryExpression;
     }
 
-    export interface PostfixUnaryExpression extends PostfixExpression {
+    export interface PostfixUnaryExpression extends IncrementExpression {
         operand: LeftHandSideExpression;
         operator: SyntaxKind;
     }
@@ -724,7 +727,7 @@ namespace ts {
         _postfixExpressionBrand: any;
     }
 
-    export interface LeftHandSideExpression extends PostfixExpression {
+    export interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
     }
 

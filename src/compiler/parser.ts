@@ -3015,11 +3015,31 @@ namespace ts {
                 let newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
-                if (token === SyntaxKind.AsteriskAsteriskToken && newPrecedence < precedence) {
-                    // ** operator is right-assocative
-                    break;
-                }
-                else if (token !== SyntaxKind.AsteriskAsteriskToken && newPrecedence <= precedence) {
+                // - For left associative operator (all operator but **), only consume the operator
+                //   , recursively call the function below and parse binaryExpression as a rightOperand
+                //   of the caller if the new precendence of the operator is greater then or equal to the current precendence.
+                //   For example:
+                //      a - b - c;
+                //            ^token; leftOperand = b. Return b to the caller as a rightOperand
+                //      a * b - c
+                //            ^token; leftOperand = b. Return b to the caller as a rightOperand
+                //      a - b * c;
+                //            ^token; leftOperand = b. Return b * c to the caller as a rightOperand
+                // - For right associative operator (**), only consume the operator, recursively call the function
+                //   and parse binaryExpression as a rightOperand of the caller if the new precendence of
+                //   the operator is strictly grater than the current precendence
+                //   For example:
+                //      a ** b ** c;
+                //             ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
+                //      a - b ** c;
+                //            ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
+                //      a ** b - c
+                //             ^token; leftOperand = b. Return b to the caller as a rightOperand
+                const consumeCurrentOperator = token === SyntaxKind.AsteriskAsteriskToken ?
+                    newPrecedence >= precedence :
+                    newPrecedence > precedence;
+
+                if (!consumeCurrentOperator) {
                     break;
                 }
 
@@ -3226,6 +3246,7 @@ namespace ts {
          *      3) LeftHandSideExpression[?yield] [[no LineTerminator here]]--
          *      4) ++LeftHandSideExpression[?yield]
          *      5) --LeftHandSideExpression[?yield]
+         * In TypeScript (2), (3) are parsed as PostfixUnaryExpression. (4), (5) are parsed as PrefixUnaryExpression
          */
         function parseIncrementExpression(): IncrementExpression {
             if (token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) {
