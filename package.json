@@ -36,8 +36,7 @@
         "istanbul": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "tslint": "latest",
-        "tsd": "latest",
-        "npm": "^2"
+        "tsd": "latest"
     },
     "scripts": {
         "pretest": "jake tests",
