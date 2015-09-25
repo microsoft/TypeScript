@@ -1594,6 +1594,7 @@ namespace ts {
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 let globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                let inObjectTypeLiteral = false;
                 return writeType(type, globalFlags);
 
                 function writeType(type: Type, flags: TypeFormatFlags) {
@@ -1605,7 +1606,7 @@ namespace ts {
                             : (<IntrinsicType>type).intrinsicName);
                     }
                     else if (type.flags & TypeFlags.ThisType) {
-                        writer.writeKeyword("this");
+                        writer.writeKeyword(inObjectTypeLiteral ? "any" : "this");
                     }
                     else if (type.flags & TypeFlags.Reference) {
                         writeTypeReference(<TypeReference>type, flags);
@@ -1821,6 +1822,8 @@ namespace ts {
                         }
                     }
 
+                    let saveInObjectTypeLiteral = inObjectTypeLiteral;
+                    inObjectTypeLiteral = true;
                     writePunctuation(writer, SyntaxKind.OpenBraceToken);
                     writer.writeLine();
                     writer.increaseIndent();
@@ -1893,6 +1896,7 @@ namespace ts {
                     }
                     writer.decreaseIndent();
                     writePunctuation(writer, SyntaxKind.CloseBraceToken);
+                    inObjectTypeLiteral = saveInObjectTypeLiteral;
                 }
             }
 
