@@ -326,6 +326,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                 case SyntaxKind.StringLiteral:
                     return writeTextOfNode(currentSourceFile, type);
                 case SyntaxKind.ExpressionWithTypeArguments:
