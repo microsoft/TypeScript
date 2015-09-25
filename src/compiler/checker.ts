@@ -1606,7 +1606,12 @@ namespace ts {
                             : (<IntrinsicType>type).intrinsicName);
                     }
                     else if (type.flags & TypeFlags.ThisType) {
-                        writer.writeKeyword(inObjectTypeLiteral ? "any" : "this");
+                        if (inObjectTypeLiteral && globalFlags & TypeFormatFlags.RewriteInaccessibleThis) {
+                            writeType((<TypeParameter>type).constraint, flags);
+                        }
+                        else {
+                            writer.writeKeyword("this");
+                        }
                     }
                     else if (type.flags & TypeFlags.Reference) {
                         writeTypeReference(<TypeReference>type, flags);
@@ -14674,17 +14679,17 @@ namespace ts {
                 ? getTypeOfSymbol(symbol)
                 : unknownType;
 
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags | TypeFormatFlags.RewriteInaccessibleThis);
         }
 
         function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             let signature = getSignatureFromDeclaration(signatureDeclaration);
-            getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
+            getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags | TypeFormatFlags.RewriteInaccessibleThis);
         }
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             let type = getTypeOfExpression(expr);
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags | TypeFormatFlags.RewriteInaccessibleThis);
         }
 
         function hasGlobalName(name: string): boolean {
