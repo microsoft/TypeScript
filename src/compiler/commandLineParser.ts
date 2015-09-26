@@ -72,13 +72,14 @@ namespace ts {
             name: "module",
             shortName: "m",
             type: {
+                "none": ModuleKind.None,
                 "commonjs": ModuleKind.CommonJS,
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES6,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_es6_or_none_only_valid_with_bundle,
             paramType: Diagnostics.KIND,
             error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es6
         },
@@ -246,6 +247,12 @@ namespace ts {
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        },
+        {
+            name: "bundle",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specifies_entrypoint_file_for_bundling
         }
     ];
 

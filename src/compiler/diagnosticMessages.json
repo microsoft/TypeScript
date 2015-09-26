@@ -675,6 +675,10 @@
         "category": "Error",
         "code": 1215
     },
+    "Cannot use option '--module none' without using '--bundle'.": {
+        "category": "Error",
+        "code": 1216
+    },
     "Export assignment is not supported when '--module' flag is 'system'.": {
         "category": "Error",
         "code": 1218
@@ -2056,6 +2060,10 @@
         "category": "Error",
         "code": 5054
     },
+    "Option '{0}' requires both '{1}' and '{2}'.": {
+        "category": "Error",
+        "code": 5055
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2101,7 +2109,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es6', or 'none' (only valid with --bundle)": {
         "category": "Message",
         "code": 6016
     },
@@ -2293,6 +2301,10 @@
     "Suppress excess property checks for object literals.": {
         "category": "Message",
         "code": 6072
+    },
+    "Specifies entrypoint file for bundling.": {
+        "category": "Message",
+        "code": 6073
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

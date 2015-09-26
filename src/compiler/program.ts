@@ -947,6 +947,10 @@ namespace ts {
 
             return allFilesBelongToPath;
         }
+        
+        function moduleFormatProvided(): boolean {
+            return options.module !== undefined && options.module !== null;
+        }
 
         function verifyCompilerOptions() {
             if (options.isolatedModules) {
@@ -1003,10 +1007,11 @@ namespace ts {
 
             let languageVersion = options.target || ScriptTarget.ES3;
             let outFile = options.outFile || options.out;
+            let moduleProvided = moduleFormatProvided();
 
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (options.isolatedModules) {
-                if (!options.module && languageVersion < ScriptTarget.ES6) {
+                if (!moduleProvided && languageVersion < ScriptTarget.ES6) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
                 }
 
@@ -1016,10 +1021,18 @@ namespace ts {
                     programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
                 }
             }
-            else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && !options.module) {
+            else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && !moduleProvided) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
                 programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided));
+            }
+
+            if (options.bundle && !(moduleProvided && outFile) ) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_requires_both_1_and_2, "bundle", "outFile", "module"));
+            }
+
+            if (options.module === ModuleKind.None && !options.bundle) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_use_option_module_none_without_using_bundle));
             }
 
             // Cannot specify module gen target of es6 when below es6

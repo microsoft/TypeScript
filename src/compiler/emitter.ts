@@ -62,6 +62,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
     });
 };`;
 
+        const umdHelper = `(function (deps, factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define(deps, factory);
+    }
+})(`;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
@@ -72,12 +81,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
 
         if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
+            if (!compilerOptions.bundle) {
+                for (var sourceFile of host.getSourceFiles()) {
+                    if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                        let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
+                        emitFile(jsFilePath, sourceFile);
+                    }
                 }
-            });
+            }
 
             if (compilerOptions.outFile || compilerOptions.out) {
                 emitFile(compilerOptions.outFile || compilerOptions.out);
@@ -167,6 +178,103 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /** Called once the emit of the node is done */
             let emitEnd = function (node: Node) { };
+            
+            let bundleDependenciesMap: {[key: string]: string};
+
+            /** Called to build the opening part of a bundled module wrapper */
+            let emitBundleWrapperStart: Map<() => void>  = {
+                [ModuleKind.None]() {},
+                [ModuleKind.CommonJS]() {
+                    write("module.exports = ");
+                },
+                [ModuleKind.AMD]() {
+                    write("define([\"require\"");
+                    forEachKey(bundleDependenciesMap, name => write(`, "${name}"`));
+                    write("], function(require");
+                    forEachValue(bundleDependenciesMap, name => write(`, ${name}`));
+                    write("){");
+                    writeLine();
+                    increaseIndent();
+                    write("return ");
+                },
+                [ModuleKind.UMD]() {
+                    writeLines(umdHelper);
+                    write("[\"require\"");
+                    forEachKey(bundleDependenciesMap, name => write(`, "${name}"`));
+                    write("], function(require");
+                    forEachValue(bundleDependenciesMap, name => write(`, ${name}`));
+                    write("){");
+                    writeLine();
+                    increaseIndent();
+                    write("return ");
+                },
+                [ModuleKind.System]() {
+                    exportFunctionForFile = makeUniqueName("exports");
+                    let deps: string[] = [];
+                    forEachKey(bundleDependenciesMap, name => {deps.push(`"${name}"`);});
+                    writeLine();
+                    write(`System.register([${deps.join(", ")}], function(${exportFunctionForFile}) {`);
+                    writeLine();
+                    increaseIndent();
+                    let idents: string[] = [];
+                    forEachValue(bundleDependenciesMap, name => {idents.push(name);});
+                    forEach(idents, id => {
+                        write(`var ${id};`);
+                        writeLine();
+                    });
+                    let exportStarName = emitExportStarFunction(/*localNames*/undefined);
+                    exportFunctionForFile = undefined;
+                    currentSourceFile = undefined;
+                    writeLine();
+                    write("return {")
+                    writeLine();
+                    increaseIndent();
+                    let setters = map(idents, id => `function(m) {
+    ${id} = m;
+}`);
+                    writeLines("setters: ["+setters.join(","+newLine));
+                    write("],");
+                    writeLine();
+                    write("execute: function() {");
+                    writeLine();
+                    increaseIndent();
+                    write(`${exportStarName}(`);
+                },
+                [ModuleKind.ES6]() {},
+            }
+
+            /** Called to build the closing part of a bundled module wrapper */
+            let emitBundleWrapperEnd: Map<() => void> = {
+                [ModuleKind.None]() {},
+                [ModuleKind.CommonJS]() {
+                    write(";");
+                },
+                [ModuleKind.AMD]() {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                },
+                [ModuleKind.UMD]() {
+                    write(";");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                },
+                [ModuleKind.System]() {
+                    write(");");
+                    writeLine();
+                    decreaseIndent();
+                    write("}");
+                    writeLine();
+                    decreaseIndent();
+                    write("};");
+                    decreaseIndent();
+                    writeLine();
+                    write("});");
+                },
+                [ModuleKind.ES6]() {},
+            }
 
             /** Emit the text for the given token that comes after startPos
               * This by default writes the text provided with the given tokenKind
@@ -207,11 +315,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSourceFile(root);
             }
             else {
+                let originalKind = modulekind;
+                if (compilerOptions.bundle) {
+                    buildBundleDependenciesMap();
+                    modulekind = ModuleKind.CommonJS;
+                    emitBundleWrapperStart[originalKind]();
+                    write("(function() {");
+                    increaseIndent();
+                    writeDefineHelper();
+                    forEach(host.getSourceFiles(), emitEmitHelpers);
+                    writeLine();
+                }
+
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
+                    else if (compilerOptions.bundle && isExternalModule(sourceFile)) {
+                        emitBundledFile(sourceFile);
+                    }
                 });
+
+                if (compilerOptions.bundle) {
+                    writeLines(`return __define.require("${removeFileExtension(compilerOptions.bundle)}");`);
+                    decreaseIndent();
+                    writeLines("})()");
+                    emitBundleWrapperEnd[originalKind]();
+                    modulekind = originalKind;
+                }
             }
 
             writeLine();
@@ -222,6 +353,109 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
                 emit(sourceFile);
+            }
+            
+            function emitBundledFile(sourceFile: SourceFile): void {
+                let dir = host.getCurrentDirectory();
+                let canonicalName = removeFileExtension(
+                    getRelativePathToDirectoryOrUrl(dir, sourceFile.fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/false)
+                );
+                writeLine();
+                write(`__define("/${canonicalName}", function(require, exports, module){`);
+                writeLine();
+                increaseIndent();
+                emitBundledSourceFileNode(sourceFile);
+                decreaseIndent();
+                writeLine();
+                write("});");
+            }
+
+            function buildBundleDependenciesMap(): void {
+                let identifiers = deduplicate(flatten(map(host.getSourceFiles(), file => keys(file.identifiers))));
+                let identifiersMap: Map<string> = {};
+                forEach(identifiers, name => identifiersMap[name] = escapeIdentifier(name));
+                currentSourceFile = <any>{identifiers: identifiersMap}; // Enables bundlewide makeUniqueName
+                let deps = deduplicate(filter(flatten(map(host.getSourceFiles(), file => pairwiseMap(file.resolvedModules, (importName, resolvedModule) => (!resolvedModule || resolvedModule.isExternalLibraryImport) ? importName : undefined))), name => !!name));
+                let depsIdentifiers = map(deps, name => makeUniqueName(escapeIdentifier(makeIdentifierFromModuleName(name))));
+                bundleDependenciesMap = {};
+                forEach(deps, (name, index) => {
+                    bundleDependenciesMap[name] = depsIdentifiers[index];
+                });
+            }
+            
+            function writeDefineHelper(): void {
+                writeLines(`
+var __define = (this && this.__define) || (function() {
+    var cache = {},
+    id = 0,
+    idMap = {},
+    builtinRequire = typeof require === "function" ? require : function(name) { throw new Error("Could not find module named \""+name+"\"."); },
+    normalizeSlashes = function(path) { return path.replace("\\\\", "/"); },
+    forEach = function(array, callback) {
+        for (var i = 0, len = array.length; i < len; i++) {
+            callback(array[i], i);
+        }
+    },
+    resolvePath = function(base, name) {
+        var result = normalizeSlashes(base).split("/");
+        result.pop();
+        forEach(normalizeSlashes(name).split("/"), function(part, index) {
+            switch(part) {
+                case "":
+                case ".":
+                    break;
+                case "..":
+                    if (result.length <= 1) {
+                        if (result[0] === "..") {
+                            result.push("..");
+                            break;
+                        }
+                        else if (result[0] === "." || result[0] === "") {
+                            result[0] = "..";
+                            break;
+                        }
+                    }
+                    result.pop();
+                    break;
+                default:
+                    result.push(part);
+                    break;
+            }
+        });
+        if (result[0] === "") result.shift();
+        return "/"+result.join("/");
+    },
+    initializeAndGet = function(resolved) {
+        if (typeof cache[resolved] === "function") {
+            cache[resolved]();
+        }
+        return (cache[resolved] && cache[resolved].exports);
+    },
+    resolveRequire = function(name, from) {`);
+                forEachKey(bundleDependenciesMap, name => {
+                    writeLines(`        if (name === "${name}") return ${bundleDependenciesMap[name]};`);
+                });
+                writeLines(`        var resolved = resolvePath(from || "/", name);
+        return (initializeAndGet(resolved) || builtinRequire(name));
+    },
+    define = function (declaredName, factory) {
+        idMap[++id] = declaredName;
+        var module = {
+            id: id,
+            exports: {}
+        };
+        var require = function(name) {
+            if (typeof name === "number") return initializeAndGet(idMap[name]);
+            return resolveRequire(name, declaredName);
+        };
+        cache[declaredName] = function() {
+            cache[declaredName] = module;
+            factory(require, module.exports, module);
+        };
+    };
+    define.require = resolveRequire;
+    return define;
+})();`);
             }
 
             function isUniqueName(name: string): boolean {
@@ -3500,6 +3734,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function isES6ExportedDeclaration(node: Node) {
                 return !!(node.flags & NodeFlags.Export) &&
+                    languageVersion >= ScriptTarget.ES6 &&
                     modulekind === ModuleKind.ES6 &&
                     node.parent.kind === SyntaxKind.SourceFile;
             }
@@ -4600,7 +4835,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitEnd(node);
                     write(";");
                 }
-                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
+                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
                     // if this is a top level default export of decorated class, write the export after the declaration.
                     writeLine();
                     write("export default ");
@@ -5934,37 +6169,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 return emitExportStarFunction(exportedNamesStorageRef);
 
-                function emitExportStarFunction(localNames: string): string {
-                    const exportStarFunction = makeUniqueName("exportStar");
-
-                    writeLine();
-
-                    // define an export star helper function
-                    write(`function ${exportStarFunction}(m) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`var exports = {};`);
-                    writeLine();
-                    write(`for(var n in m) {`);
-                    increaseIndent();
-                    writeLine();
-                    write(`if (n !== "default"`);
-                    if (localNames) {
-                        write(`&& !${localNames}.hasOwnProperty(n)`);
-                    }
-                    write(`) exports[n] = m[n];`);
-                    decreaseIndent();
-                    writeLine();
-                    write("}");
-                    writeLine();
-                    write(`${exportFunctionForFile}(exports);`);
-                    decreaseIndent();
-                    writeLine();
-                    write("}");
-
-                    return exportStarFunction;
-                }
-
                 function writeExportedName(node: Identifier | Declaration): void {
                     // do not record default exports
                     // they are local to module and never overwritten (explicitly skipped) by star export
@@ -6349,6 +6553,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
             
+            function emitExportStarFunction(localNames: string): string {
+                const exportStarFunction = makeUniqueName("exportStar");
+
+                writeLine();
+
+                // define an export star helper function
+                write(`function ${exportStarFunction}(m) {`);
+                increaseIndent();
+                writeLine();
+                write(`var exports = {};`);
+                writeLine();
+                write(`for (var n in m) {`);
+                increaseIndent();
+                writeLine();
+                write(`if (n !== "default"`);
+                if (localNames) {
+                    write(`&& !${localNames}.hasOwnProperty(n)`);
+                }
+                write(`) exports[n] = m[n];`);
+                decreaseIndent();
+                writeLine();
+                write("}");
+                writeLine();
+                write(`${exportFunctionForFile}(exports);`);
+                decreaseIndent();
+                writeLine();
+                write("}");
+
+                return exportStarFunction;
+            }
+            
             type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
             
             function emitSystemModule(node: SourceFile, startIndex: number): void {
@@ -6504,14 +6739,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 collectExternalModuleInfo(node);
 
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
-                writeLines(`(function (deps, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
-    }
-})(`);
+                writeLines(umdHelper);
                 emitAMDDependencies(node, false);
                 write(") {");
                 increaseIndent();
@@ -6737,6 +6965,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitLeadingComments(node.endOfFileToken);
+            }
+            
+            function emitBundledSourceFileNode(node: SourceFile) {
+                currentSourceFile = node;
+                exportFunctionForFile = undefined;
+                writeLine();
+                emitShebang();
+                emitDetachedComments(node);
+
+                // emit prologue directives prior to __extends
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                emitCommonJSModule(node, startIndex);
+                emitLeadingComments(node.endOfFileToken);                
             }
 
             function emitNodeWithCommentsAndWithoutSourcemap(node: Node): void {
