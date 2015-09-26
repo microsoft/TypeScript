@@ -8,6 +8,7 @@ class C {
       var fn = async () => await this;      
 >fn : () => Promise<this>
 >async () => await this : () => Promise<this>
+>await this : this
 >this : this
    }
 }
