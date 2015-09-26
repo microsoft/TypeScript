@@ -19,41 +19,41 @@ function confirmNormalizedJsDoc(markerName: string, newTextOffset: number, templ
 }
 
 /////*a*/
-////var a = 10;
+////var a = x => x
 ////
 /////*b*/
-////let b = "";
+////let b = (x,y,z) => x + y + z;
 ////
 /////*c*/
-////const c = 30;
+////const c = ((x => +x))
 ////
 /////*d*/
-////let d = {
-////    foo: 10,
-////    bar: "20"
-////};
+////let d = (function () { })
 ////
 /////*e*/
-////let e = function e(x, y, z) {
-////    return +(x + y + z);
+////let e = function e([a,b,c]) {
+////    return "hello"
 ////};
 ////
 /////*f*/
-////let f = class F {
-////    constructor(a, b, c) {
-////        this.a = a;
-////        this.b = b || (this.c = c);
-////    }
+////let f = class {
 ////}
+////
+/////*g*/
+////const g = ((class G {
+////    constructor(private x);
+////    constructor(x,y,z);
+////    constructor(x,y,z, ...okayThatsEnough) {
+////    }
+////}))
 
-for (const varName of "abcd".split("")) {
-    confirmNormalizedJsDoc(varName, /*newTextOffset*/ 8, `
+confirmNormalizedJsDoc("a", /*newTextOffset*/ 8, `
 /**
  * 
+ * @param x
  */`);
-}
 
-confirmNormalizedJsDoc("e", /*newTextOffset*/ 8, `
+confirmNormalizedJsDoc("b", /*newTextOffset*/ 8, `
 /**
  * 
  * @param x
@@ -61,10 +61,30 @@ confirmNormalizedJsDoc("e", /*newTextOffset*/ 8, `
  * @param z
  */`);
 
+confirmNormalizedJsDoc("c", /*newTextOffset*/ 8, `
+/**
+ * 
+ * @param x
+ */`);
+
+confirmNormalizedJsDoc("d", /*newTextOffset*/ 8, `
+/**
+ * 
+ */`);
+
+confirmNormalizedJsDoc("e", /*newTextOffset*/ 8, `
+/**
+ * 
+ * @param param0
+ */`);
+
 confirmNormalizedJsDoc("f", /*newTextOffset*/ 8, `
 /**
  * 
- * @param a
- * @param b
- * @param c
+ */`);
+
+confirmNormalizedJsDoc("g", /*newTextOffset*/ 8, `
+/**
+ * 
+ * @param x
  */`);
