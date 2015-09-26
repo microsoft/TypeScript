@@ -3041,8 +3041,9 @@ namespace ts {
             return true;
         }
 
-        // A type is considered independent if it is a built-in type keyword, an array with an element type that is
-        // considered independent, or a type reference that is considered independent.
+        // A type is considered independent if it the any, string, number, boolean, symbol, or void keyword, a string
+        // literal type, an array with an element type that is considered independent, or a type reference that is
+        // considered independent.
         function isIndependentType(node: TypeNode): boolean {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -4368,7 +4369,7 @@ namespace ts {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
-            error(node, Diagnostics.this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
+            error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
             return unknownType;
         }
 

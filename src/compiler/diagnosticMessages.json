@@ -1652,7 +1652,7 @@
         "category": "Error",
         "code": 2525
     },
-    "'this' type is available only in a non-static member of a class or interface.": {
+    "A 'this' type is available only in a non-static member of a class or interface.": {
         "category": "Error",
         "code": 2526
     },
