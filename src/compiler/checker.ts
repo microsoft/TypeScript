@@ -14283,7 +14283,7 @@ namespace ts {
 
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
-                    let type = checkExpression(<Expression>node);
+                    let type = isExpression(node) ? checkExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
                     return type.symbol;
 
                 case SyntaxKind.ConstructorKeyword:
