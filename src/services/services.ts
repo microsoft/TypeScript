@@ -7115,7 +7115,7 @@ namespace ts {
 
         /**
          * Digs into an an initializer or RHS operand of an assignment operation
-         * to get the parameters from an apst signature corresponding to a
+         * to get the parameters of an apt signature corresponding to a
          * function expression or a class expression.
          *
          * @param rightHandSide the expression which may contain an appropriate set of parameters
