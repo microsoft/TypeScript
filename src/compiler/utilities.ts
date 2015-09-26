@@ -897,7 +897,6 @@ namespace ts {
 
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
@@ -930,6 +929,7 @@ namespace ts {
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.AwaitExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -943,6 +943,7 @@ namespace ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
