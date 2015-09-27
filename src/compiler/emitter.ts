@@ -4529,8 +4529,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 write("class");
 
-                // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
-                if ((node.name || !(node.flags & NodeFlags.Default)) && !thisNodeIsDecorated) {
+                // emit name if
+                // - node has a name
+                // - this is default export and target is not ES6 (for ES6 `export default` does not need to be compiled downlevel)                
+                if ((node.name || (node.flags & NodeFlags.Default && languageVersion < ScriptTarget.ES6)) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
                 }
