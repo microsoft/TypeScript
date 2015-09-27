@@ -3256,7 +3256,9 @@ namespace ts {
         }
 
         function resolveTupleTypeMembers(type: TupleType) {
-            let arrayType = resolveStructuredTypeMembers(createArrayType(getUnionType(type.elementTypes, /*noSubtypeReduction*/ true)));
+            let arrayElementType = getUnionType(type.elementTypes, /*noSubtypeReduction*/ true);
+            // Make the tuple type itself the 'this' type by including an extra type argument
+            let arrayType = resolveStructuredTypeMembers(createTypeFromGenericGlobalType(globalArrayType, [arrayElementType, type]));
             let members = createTupleTypeMemberSymbols(type.elementTypes);
             addInheritedMembers(members, arrayType.properties);
             setObjectTypeMembers(type, members, arrayType.callSignatures, arrayType.constructSignatures, arrayType.stringIndexType, arrayType.numberIndexType);
@@ -4159,20 +4161,20 @@ namespace ts {
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
-        function createTypeFromGenericGlobalType(genericGlobalType: GenericType, elementType: Type): Type {
-            return <ObjectType>genericGlobalType !== emptyGenericType ? createTypeReference(genericGlobalType, [elementType]) : emptyObjectType;
+        function createTypeFromGenericGlobalType(genericGlobalType: GenericType, typeArguments: Type[]): Type {
+            return genericGlobalType !== emptyGenericType ? createTypeReference(genericGlobalType, typeArguments) : emptyObjectType;
         }
 
         function createIterableType(elementType: Type): Type {
-            return createTypeFromGenericGlobalType(globalIterableType, elementType);
+            return createTypeFromGenericGlobalType(globalIterableType, [elementType]);
         }
 
         function createIterableIteratorType(elementType: Type): Type {
-            return createTypeFromGenericGlobalType(globalIterableIteratorType, elementType);
+            return createTypeFromGenericGlobalType(globalIterableIteratorType, [elementType]);
         }
 
         function createArrayType(elementType: Type): Type {
-            return createTypeFromGenericGlobalType(globalArrayType, elementType);
+            return createTypeFromGenericGlobalType(globalArrayType, [elementType]);
         }
 
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
