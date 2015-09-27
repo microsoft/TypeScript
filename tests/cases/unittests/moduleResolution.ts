@@ -208,6 +208,10 @@ export = C;
            assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(syntacticDiagnostics.map(diagnosticToString))}`);
            const semanticDiagnostics = program.getSemanticDiagnostics();
            assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(semanticDiagnostics.map(diagnosticToString))}`);
+
+           // try to get file using a relative name
+           const fileC = program.getSourceFile("../../../c/third/class_c.ts");
+           assert.isTrue(fileC !== undefined, `expected to get file by relative name, got ${fileC}`);
        });
        
         function diagnosticToString(diagnostic: Diagnostic) {

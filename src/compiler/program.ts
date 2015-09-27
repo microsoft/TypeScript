@@ -568,7 +568,9 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string) {
-            return filesByName.get(fileName);
+            // first try to use file name as is to find file
+            // then try to convert relative file name to absolute and use it to retrieve source file
+            return filesByName.get(fileName) || filesByName.get(getNormalizedAbsolutePath(fileName, host.getCurrentDirectory()));
         }
 
         function getDiagnosticsHelper(
