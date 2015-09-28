@@ -3183,6 +3183,7 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return parseTypeAssertion();
                     }
+                    debugger;
                     if (lookAhead(nextTokenIsIdentifierOrKeyword)) {
                         return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
                     }
