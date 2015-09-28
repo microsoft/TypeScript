@@ -445,7 +445,7 @@ namespace ts.formatting {
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                // fall-through
+                    // fall-through
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
@@ -788,7 +788,7 @@ namespace ts.formatting {
                 }
                 else {
                     lineAdded =
-                    processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation)
+                        processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation)
                 }
             }
 
@@ -934,7 +934,7 @@ namespace ts.formatting {
                 let lineEndPosition = getEndLinePosition(line, sourceFile);
 
                 // do not trim whitespaces in comments or template expression
-                if (range && (isComment(range.kind) || isTemplate(range.kind)) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
+                if (range && (isComment(range.kind) || isStringOrRegularExpressionOrTemplateLiteral(range.kind)) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
                     continue;
                 }
 
