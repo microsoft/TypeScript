@@ -6406,19 +6406,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
-                // An AMD define function has the following shape:
-                //     define(id?, dependencies?, factory);
-                //
-                // This has the shape of
-                //     define(name, ["module1", "module2"], function (module1Alias) {
-                // The location of the alias in the parameter list in the factory function needs to
-                // match the position of the module name in the dependency list.
-                //
-                // To ensure this is true in cases of modules with no aliases, e.g.:
-                // `import "module"` or `<amd-dependency path= "a.css" />`
-                // we need to add modules without alias names to the end of the dependencies list
+            interface AMDDependencyNames {
+                aliasedModuleNames: string[];
+                unaliasedModuleNames: string[];
+                importAliasNames: string[];
+            }
 
+            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean): AMDDependencyNames {
                 // names of modules with corresponding parameter in the factory function
                 let aliasedModuleNames: string[] = [];
                 // names of modules with no corresponding parameters in factory function
@@ -6453,6 +6447,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
+                return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
+            }
+
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
+                // An AMD define function has the following shape:
+                //     define(id?, dependencies?, factory);
+                //
+                // This has the shape of
+                //     define(name, ["module1", "module2"], function (module1Alias) {
+                // The location of the alias in the parameter list in the factory function needs to
+                // match the position of the module name in the dependency list.
+                //
+                // To ensure this is true in cases of modules with no aliases, e.g.:
+                // `import "module"` or `<amd-dependency path= "a.css" />`
+                // we need to add modules without alias names to the end of the dependencies list
+
+                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies);
+                emitAMDDependencyList(dependencyNames);
+                write(", ");
+                emitAMDFactoryHeader(dependencyNames);
+            }
+
+            function emitAMDDependencyList({ aliasedModuleNames, unaliasedModuleNames }: AMDDependencyNames) {
                 write("[\"require\", \"exports\"");
                 if (aliasedModuleNames.length) {
                     write(", ");
@@ -6462,11 +6479,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(", ");
                     write(unaliasedModuleNames.join(", "));
                 }
-                write("], function (require, exports");
+                write("]");
+            }
+
+            function emitAMDFactoryHeader({ importAliasNames }: AMDDependencyNames) {
+                write("function (require, exports");
                 if (importAliasNames.length) {
                     write(", ");
                     write(importAliasNames.join(", "));
                 }
+                write(") {");
             }
 
             function emitAMDModule(node: SourceFile, startIndex: number) {
@@ -6479,7 +6501,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("\"" + node.moduleName + "\", ");
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
-                write(") {");
                 increaseIndent();
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
@@ -6505,17 +6526,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
+                let dependencyNames = getAMDDependencyNames(node, /*includeNonAmdDependencies*/ false);
+
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
-                writeLines(`(function (deps, factory) {
+                writeLines(`(function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
-    }
+        define(`);
+                emitAMDDependencyList(dependencyNames);
+                write(", factory);");
+                writeLines(`    }
 })(`);
-                emitAMDDependencies(node, false);
-                write(") {");
+                emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
