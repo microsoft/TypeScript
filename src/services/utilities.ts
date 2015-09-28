@@ -562,6 +562,10 @@ namespace ts {
         return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
     }
 
+    export function isTemplate(kind: SyntaxKind): boolean {
+        return kind >= SyntaxKind.FirstTemplateToken && kind <= SyntaxKind.LastTemplateToken;
+    }
+
     export function isPunctuation(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
