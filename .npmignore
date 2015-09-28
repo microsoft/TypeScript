@@ -6,3 +6,4 @@ tests
 Jakefile.js
 .travis.yml
 .settings/
+.vscode/
