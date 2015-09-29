@@ -3549,6 +3549,9 @@ namespace ts {
                             if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
+                            else if (parent.kind === SyntaxKind.JsxAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
                             break;
 
                         // The context token is the closing } or " of an attribute, which means
