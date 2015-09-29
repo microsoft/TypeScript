@@ -1,9 +1,9 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
-import foo = require("vs/foo_0");
+import foo = require("./vs/foo_0");
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 
-import fum = require("vs/fum");
->fum : Symbol(fum, Decl(foo_1.ts, 0, 33))
+import fum = require("./vs/fum");
+>fum : Symbol(fum, Decl(foo_1.ts, 0, 35))
 
 var z = foo.x + fum.y;
 >z : Symbol(z, Decl(foo_1.ts, 2, 3))
@@ -11,7 +11,7 @@ var z = foo.x + fum.y;
 >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
 >x : Symbol(foo.x, Decl(foo_0.ts, 0, 10))
 >fum.y : Symbol(fum.y, Decl(fum.d.ts, 0, 18))
->fum : Symbol(fum, Decl(foo_1.ts, 0, 33))
+>fum : Symbol(fum, Decl(foo_1.ts, 0, 35))
 >y : Symbol(fum.y, Decl(fum.d.ts, 0, 18))
 
 === tests/cases/conformance/externalModules/vs/foo_0.ts ===

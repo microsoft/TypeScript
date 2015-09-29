@@ -5,7 +5,7 @@ export enum Mode { Open }
 
 //// [enumFromExternalModule_1.ts]
 ///<reference path='enumFromExternalModule_0.ts'/>
-import f = require('enumFromExternalModule_0');
+import f = require('./enumFromExternalModule_0');
 
 var x = f.Mode.Open;
 
@@ -17,5 +17,5 @@ var x = f.Mode.Open;
 var Mode = exports.Mode;
 //// [enumFromExternalModule_1.js]
 ///<reference path='enumFromExternalModule_0.ts'/>
-var f = require('enumFromExternalModule_0');
+var f = require('./enumFromExternalModule_0');
 var x = f.Mode.Open;

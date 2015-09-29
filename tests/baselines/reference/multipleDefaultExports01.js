@@ -14,7 +14,7 @@ var x = 10;
 export default x;
 
 //// [m2.ts]
-import Entity from "m1"
+import Entity from "./m1"
 
 Entity();
 
@@ -34,5 +34,5 @@ var x = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = x;
 //// [m2.js]
-var m1_1 = require("m1");
+var m1_1 = require("./m1");
 m1_1.default();

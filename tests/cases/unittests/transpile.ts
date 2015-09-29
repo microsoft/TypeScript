@@ -64,8 +64,8 @@ module ts {
             let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
             assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
             
-            let expectedSourceMapFileName = removeFileExtension(transpileOptions.fileName) + ".js.map";
-            let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;           
+            let expectedSourceMapFileName = removeFileExtension(getBaseFileName(normalizeSlashes(transpileOptions.fileName))) + ".js.map";
+            let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
                         
             if (testSettings.expectedOutput !== undefined) {
                 assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);    
@@ -202,14 +202,14 @@ var x = 0;`,
                 `declare function use(a: any);\n` +
                 `use(foo);`
             let output =
-                `(function (deps, factory) {\n` +
+                `(function (factory) {\n` +
                 `    if (typeof module === 'object' && typeof module.exports === 'object') {\n` +
                 `        var v = factory(require, exports); if (v !== undefined) module.exports = v;\n` +
                 `    }\n` +
                 `    else if (typeof define === 'function' && define.amd) {\n` +
-                `        define(deps, factory);\n` +
+                `        define(["require", "exports", "SomeOtherName"], factory);\n` +
                 `    }\n` +
-                `})(["require", "exports", "SomeOtherName"], function (require, exports) {\n` +
+                `})(function (require, exports) {\n` +
                 `    var SomeName_1 = require("SomeOtherName");\n` +
                 `    use(SomeName_1.foo);\n` +
                 `});\n`;
@@ -269,6 +269,10 @@ var x = 0;`,
                     }, 
                     expectedOutput: output
                 });
+        });
+
+        it("Supports backslashes in file name", () => {
+            test("var x", { expectedOutput: "var x;\r\n", options: { fileName: "a\\b.ts" }});
         });
     });
 }

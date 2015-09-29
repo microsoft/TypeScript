@@ -128,7 +128,8 @@ namespace ts {
                 return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
 
             case SyntaxKind.ExpressionStatement:
-                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
+                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -360,7 +361,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n)) {
+            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
                 return n;
             }
 
@@ -371,24 +372,35 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n)) {
+            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
                 return n;
             }
 
-            let children = n.getChildren();
+            const children = n.getChildren();
             for (let i = 0, len = children.length; i < len; i++) {
                 let child = children[i];
-                if (nodeHasTokens(child)) {
-                    if (position <= child.end) {
-                        if (child.getStart(sourceFile) >= position) {
-                            // actual start of the node is past the position - previous token should be at the end of previous child
-                            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                            return candidate && findRightmostToken(candidate)
-                        }
-                        else {
-                            // candidate should be in this node
-                            return find(child);
-                        }
+                // condition 'position < child.end' checks if child node end after the position
+                // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
+                // aaaa___bbbb___$__ccc
+                // after we found child node with end after the position we check if start of the node is after the position.
+                // if yes - then position is in the trivia and we need to look into the previous child to find the token in question.
+                // if no - position is in the node itself so we should recurse in it.
+                // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
+                // if this is the case - then we should assume that token in question is located in previous child.
+                if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
+                    const start = child.getStart(sourceFile);
+                    const lookInPreviousChild = 
+                        (start >= position) || // cursor in the leading trivia
+                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText 
+                    
+                    if (lookInPreviousChild) {
+                        // actual start of the node is past the position - previous token should be at the end of previous child
+                        let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        return candidate && findRightmostToken(candidate)
+                    }
+                    else {
+                        // candidate should be in this node
+                        return find(child);
                     }
                 }
             }

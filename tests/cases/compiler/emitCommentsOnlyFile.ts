@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 
 /**
 * @name Foo

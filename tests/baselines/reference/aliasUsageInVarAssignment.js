@@ -6,14 +6,14 @@ export class Model {
 }
 
 //// [aliasUsageInVarAssignment_moduleA.ts]
-import Backbone = require("aliasUsageInVarAssignment_backbone");
+import Backbone = require("./aliasUsageInVarAssignment_backbone");
 export class VisualizationModel extends Backbone.Model {
     // interesting stuff here
 }
 
 //// [aliasUsageInVarAssignment_main.ts]
-import Backbone = require("aliasUsageInVarAssignment_backbone");
-import moduleA = require("aliasUsageInVarAssignment_moduleA");
+import Backbone = require("./aliasUsageInVarAssignment_backbone");
+import moduleA = require("./aliasUsageInVarAssignment_moduleA");
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 }
@@ -33,7 +33,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Backbone = require("aliasUsageInVarAssignment_backbone");
+var Backbone = require("./aliasUsageInVarAssignment_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {

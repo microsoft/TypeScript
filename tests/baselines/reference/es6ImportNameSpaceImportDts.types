@@ -4,7 +4,7 @@ export class c { };
 >c : c
 
 === tests/cases/compiler/client.ts ===
-import * as nameSpaceBinding from "server";
+import * as nameSpaceBinding from "./server";
 >nameSpaceBinding : typeof nameSpaceBinding
 
 export var x = new nameSpaceBinding.c();
@@ -14,6 +14,6 @@ export var x = new nameSpaceBinding.c();
 >nameSpaceBinding : typeof nameSpaceBinding
 >c : typeof nameSpaceBinding.c
 
-import * as nameSpaceBinding2 from "server"; // unreferenced
+import * as nameSpaceBinding2 from "./server"; // unreferenced
 >nameSpaceBinding2 : typeof nameSpaceBinding
 

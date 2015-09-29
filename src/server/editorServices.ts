@@ -79,7 +79,7 @@ namespace ts.server {
         }
     }
     
-    interface TimestampedResolvedModule extends ResolvedModule {
+    interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations {
         lastCheckTime: number; 
     }
     
@@ -99,11 +99,11 @@ namespace ts.server {
             }
         }
         
-        resolveModuleNames(moduleNames: string[], containingFile: string): string[] {
+        resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
             let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
             
             let newResolutions: Map<TimestampedResolvedModule> = {};
-            let resolvedFileNames: string[] = [];
+            let resolvedModules: ResolvedModule[] = [];
             
             let compilerOptions = this.getCompilationSettings();
                         
@@ -119,25 +119,25 @@ namespace ts.server {
                     else {
                         resolution = <TimestampedResolvedModule>resolveModuleName(moduleName, containingFile, compilerOptions, this.moduleResolutionHost);
                         resolution.lastCheckTime = Date.now();
-                        newResolutions[moduleName] = resolution;                                                
+                        newResolutions[moduleName] = resolution;
                     }
                 }
                 
                 ts.Debug.assert(resolution !== undefined);
                 
-                resolvedFileNames.push(resolution.resolvedFileName);                
+                resolvedModules.push(resolution.resolvedModule);
             }
             
             // replace old results with a new one
             this.resolvedModuleNames.set(containingFile, newResolutions);
-            return resolvedFileNames;
+            return resolvedModules;
             
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
                 if (!resolution) {
                     return false;
                 }
                 
-                if (resolution.resolvedFileName) {
+                if (resolution.resolvedModule) {
                     // TODO: consider checking failedLookupLocations  
                     // TODO: use lastCheckTime to track expiration for module name resolution 
                     return true;
@@ -614,30 +614,30 @@ namespace ts.server {
             }
             this.configuredProjects = configuredProjects;
         }
-        
-        removeConfiguredProject(project: Project) {
-                project.projectFileWatcher.close();
-                this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
 
-                let fileNames = project.getFileNames();
-                for (let fileName of fileNames) {
-                    let info = this.getScriptInfo(fileName);
-                    if (info.defaultProject == project){
-                        info.defaultProject = undefined;
-                    }
+        removeConfiguredProject(project: Project) {
+            project.projectFileWatcher.close();
+            this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+
+            let fileNames = project.getFileNames();
+            for (let fileName of fileNames) {
+                let info = this.getScriptInfo(fileName);
+                if (info.defaultProject == project) {
+                    info.defaultProject = undefined;
                 }
+            }
         }
 
         setConfiguredProjectRoot(info: ScriptInfo) {
-             for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
-                 let configuredProject = this.configuredProjects[i];
-                 if (configuredProject.isRoot(info)) {
-                     info.defaultProject = configuredProject;
-                     configuredProject.addOpenRef();
-                     return true;
-                 }
-             }
-             return false;
+            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+                let configuredProject = this.configuredProjects[i];
+                if (configuredProject.isRoot(info)) {
+                    info.defaultProject = configuredProject;
+                    configuredProject.addOpenRef();
+                    return true;
+                }
+            }
+            return false;
         }
 
         addOpenFile(info: ScriptInfo) {
@@ -785,7 +785,7 @@ namespace ts.server {
         updateProjectStructure() {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
-            
+
             let unattachedOpenFiles: ScriptInfo[] = [];
             let openFileRootsConfigured: ScriptInfo[] = [];
             for (let info of this.openFileRootsConfigured) {
@@ -921,10 +921,10 @@ namespace ts.server {
             this.printProjects();
             return info;
         }
-        
+
         openOrUpdateConfiguredProjectForFile(fileName: string) {
             let searchPath = ts.normalizePath(getDirectoryPath(fileName));
-            this.log("Search path: " + searchPath,"Info");
+            this.log("Search path: " + searchPath, "Info");
             let configFileName = this.findConfigFile(searchPath);
             if (configFileName) {
                 this.log("Config file name: " + configFileName, "Info");
@@ -935,7 +935,7 @@ namespace ts.server {
                         this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
                     }
                     else {
-                        this.log("Opened configuration file " + configFileName,"Info");
+                        this.log("Opened configuration file " + configFileName, "Info");
                         this.configuredProjects.push(configResult.project);
                     }
                 }
@@ -1000,7 +1000,7 @@ namespace ts.server {
             for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
                 var project = this.configuredProjects[i];
                 project.updateGraph();
-                this.psLogger.info("Project (configured) " + (i+this.inferredProjects.length).toString());
+                this.psLogger.info("Project (configured) " + (i + this.inferredProjects.length).toString());
                 this.psLogger.info(project.filesToString());
                 this.psLogger.info("-----------------------------------------------");
             }
@@ -1048,10 +1048,10 @@ namespace ts.server {
             else {
                 var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
-                    return { succeeded: false, error: { errorMsg: "tsconfig option errors" }};
+                    return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
                 }
                 else if (parsedCommandLine.fileNames == null) {
-                    return { succeeded: false, error: { errorMsg: "no files found" }}
+                    return { succeeded: false, error: { errorMsg: "no files found" } }
                 }
                 else {
                     var projectOptions: ProjectOptions = {
@@ -1068,7 +1068,7 @@ namespace ts.server {
             let { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
             if (!succeeded) {
                 return error;
-            } 
+            }
             else {
                 let proj = this.createProject(configFilename, projectOptions);
                 for (let i = 0, len = projectOptions.files.length; i < len; i++) {
@@ -1086,7 +1086,7 @@ namespace ts.server {
                 return { success: true, project: proj };
             }
         }
-        
+
         updateConfiguredProject(project: Project) {
             if (!this.host.fileExists(project.projectFilename)) {
                 this.log("Config file deleted");
@@ -1098,16 +1098,16 @@ namespace ts.server {
                     return error;
                 }
                 else {
-                    let oldFileNames = project.compilerService.host.roots.map(info => info.fileName); 
+                    let oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
                     let newFileNames = projectOptions.files;
                     let fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
                     let fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
-                    
+
                     for (let fileName of fileNamesToRemove) {
                         let info = this.getScriptInfo(fileName);
                         project.removeRoot(info);
                     }
-                    
+
                     for (let fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {

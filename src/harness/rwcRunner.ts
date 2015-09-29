@@ -4,26 +4,25 @@
 /// <reference path="..\compiler\commandLineParser.ts"/>
 
 module RWC {
-    function runWithIOLog(ioLog: IOLog, fn: () => void) {
-        let oldSys = ts.sys;
+    function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
+        let oldIO = Harness.IO;
 
-        let wrappedSys = Playback.wrapSystem(ts.sys);
-        wrappedSys.startReplayFromData(ioLog);
-        ts.sys = wrappedSys;
+        let wrappedIO = Playback.wrapIO(oldIO);
+        wrappedIO.startReplayFromData(ioLog);
+        Harness.IO = wrappedIO;
 
         try {
-            fn();
+            fn(oldIO);
         } finally {
-            wrappedSys.endReplay();
-            ts.sys = oldSys;
+            wrappedIO.endReplay();
+            Harness.IO = oldIO;
         }
     }
 
-    let defaultLibPath = ts.sys.resolvePath("built/local/lib.d.ts");
-    let defaultLib = {
-        unitName: ts.normalizePath(defaultLibPath),
-        content: Harness.IO.readFile(defaultLibPath)
-    };
+    function isTsConfigFile(file: { path: string }): boolean {
+        const tsConfigFileName = "tsconfig.json";
+        return file.path.substr(file.path.length - tsConfigFileName.length).toLowerCase() === tsConfigFileName;
+    }
 
     export function runRWCTest(jsonPath: string) {
         describe("Testing a RWC project: " + jsonPath, () => {
@@ -38,7 +37,6 @@ module RWC {
             let baseName = /(.*)\/(.*).json/.exec(ts.normalizeSlashes(jsonPath))[2];
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
-
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
@@ -63,7 +61,7 @@ module RWC {
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
-                    opts = ts.parseCommandLine(ioLog.arguments);
+                    opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
 
                     // To provide test coverage of output javascript file,
@@ -71,24 +69,35 @@ module RWC {
                     opts.options.noEmitOnError = false;
                 });
 
-                if (!useCustomLibraryFile) {
-                    inputFiles.push(defaultLib);
-                }
-
-                runWithIOLog(ioLog, () => {
+                runWithIOLog(ioLog, oldIO => {
                     harnessCompiler.reset();
 
+                    let fileNames = opts.fileNames;
+
+                    let tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
+                    if (tsconfigFile) {
+                        let tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
+                        let parsedTsconfigFileContents = ts.parseConfigFileText(tsconfigFile.path, tsconfigFileContents.content);
+                        let configParseResult = ts.parseConfigFile(parsedTsconfigFileContents.config, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
+                        fileNames = configParseResult.fileNames;
+                        opts.options = ts.extend(opts.options, configParseResult.options);
+                    }
+
                     // Load the files
-                    ts.forEach(opts.fileNames, fileName => {
+                    for (let fileName of fileNames) {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
-                    });
+                    }
 
                     // Add files to compilation
                     let isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
                     for (let fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
-                        const resolvedPath = ts.normalizeSlashes(ts.sys.resolvePath(fileRead.path));
+                        const resolvedPath = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
                         let inInputList = ts.forEach(inputFiles, isInInputList(resolvedPath));
+
+                        if (isTsConfigFile(fileRead)) {
+                            continue;
+                        }
 
                         if (!Harness.isLibraryFile(fileRead.path)) {
                             if (inInputList) {
@@ -105,6 +114,10 @@ module RWC {
                                 // their own version of lib.d.ts because they have customized lib.d.ts
                                 if (useCustomLibraryFile) {
                                     inputFiles.push(getHarnessCompilerInputUnit(fileRead.path));
+                                }
+                                else {
+                                    // set the flag to put default library to the beginning of the list
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
                                 }
                             }
                         }
@@ -125,13 +138,13 @@ module RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
-                    let unitName = ts.normalizeSlashes(ts.sys.resolvePath(fileName));
+                    let unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
                     let content: string = null;
                     try {
-                        content = ts.sys.readFile(unitName);
+                        content = Harness.IO.readFile(unitName);
                     }
                     catch (e) {
-                        content = ts.sys.readFile(fileName);
+                        content = Harness.IO.readFile(fileName);
                     }
                     return { unitName, content };
                 }
@@ -194,7 +207,7 @@ module RWC {
                         }
 
                         return Harness.Compiler.minimalDiagnosticsToString(declFileCompilationResult.declResult.errors) +
-                            ts.sys.newLine + ts.sys.newLine +
+                            Harness.IO.newLine() + Harness.IO.newLine() +
                             Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                     }, false, baselineOpts);
                 }

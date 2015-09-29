@@ -86,7 +86,6 @@ namespace ts {
 
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-
             output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
@@ -102,6 +101,19 @@ namespace ts {
         }
     }
 
+    function reportWatchDiagnostic(diagnostic: Diagnostic) {
+        let output = new Date().toLocaleTimeString() + " - ";
+		
+        if (diagnostic.file) {
+            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+        }
+
+        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+
+        sys.write(output);
+    }
+	
     function padLeft(s: string, length: number) {
         while (s.length < length) {
             s = " " + s;
@@ -216,9 +228,9 @@ namespace ts {
             if (!cachedProgram) {
                 if (configFileName) {
 
-                    let result = readConfigFile(configFileName);
+                    let result = readConfigFile(configFileName, sys.readFile);
                     if (result.error) {
-                        reportDiagnostic(result.error);
+                        reportWatchDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
 
@@ -247,7 +259,7 @@ namespace ts {
             }
 
             setCachedProgram(compileResult.program);
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -309,7 +321,7 @@ namespace ts {
 
         function recompile() {
             timerHandle = undefined;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
     }

@@ -76,10 +76,11 @@ namespace ts {
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
+                "es6": ModuleKind.ES6,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es6
         },
         {
             name: "newLine",
@@ -243,9 +244,9 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic
             },
-            experimental: true,
-            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
-        }        
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        }
     ];
 
     /* @internal */
@@ -274,7 +275,7 @@ namespace ts {
         return optionNameMapCache;
     }
 
-    export function parseCommandLine(commandLine: string[]): ParsedCommandLine {
+    export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
         let options: CompilerOptions = {};
         let fileNames: string[] = [];
         let errors: Diagnostic[] = [];
@@ -328,7 +329,7 @@ namespace ts {
                                     options[opt.name] = map[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                 }
                         }
                     }
@@ -343,7 +344,7 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            let text = sys.readFile(fileName);
+            let text = readFile ? readFile(fileName) : sys.readFile(fileName);
 
             if (!text) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
@@ -380,10 +381,10 @@ namespace ts {
       * Read tsconfig.json file
       * @param fileName The path to the config file
       */
-    export function readConfigFile(fileName: string): { config?: any; error?: Diagnostic }  {
+    export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic }  {
         let text = "";
         try {
-            text = sys.readFile(fileName);
+            text = readFile(fileName);
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
@@ -441,7 +442,7 @@ namespace ts {
                                     value = optType[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                     value = 0;
                                 }
                             }

@@ -29,13 +29,13 @@ module FourSlash {
         fileName: string;
         version: number;
         // File-specific options (name/value pairs)
-        fileOptions: { [index: string]: string; };
+        fileOptions: Harness.TestCaseParser.CompilerSettings;
     }
 
     // Represents a set of parsed source files and options
     export interface FourSlashData {
         // Global options (name/value pairs)
-        globalOptions: { [index: string]: string; };
+        globalOptions: Harness.TestCaseParser.CompilerSettings;
 
         files: FourSlashFile[];
 
@@ -117,89 +117,17 @@ module FourSlash {
     // Add cases into convertGlobalOptionsToCompilationsSettings function for the compiler to acknowledge such option from meta data
     let metadataOptionNames = {
         baselineFile: "BaselineFile",
-        declaration: "declaration",
         emitThisFile: "emitThisFile",  // This flag is used for testing getEmitOutput feature. It allows test-cases to indicate what file to be output in multiple files project
         fileName: "Filename",
-        mapRoot: "mapRoot",
-        module: "module",
-        out: "out",
-        outFile: "outFile",
-        outDir: "outDir",
-        sourceMap: "sourceMap",
-        sourceRoot: "sourceRoot",
-        allowNonTsExtensions: "allowNonTsExtensions",
         resolveReference: "ResolveReference",  // This flag is used to specify entry file for resolve file references. The flag is only allow once per test file
-        jsx: "jsx",
     };
 
     // List of allowed metadata names
     let fileMetadataNames = [metadataOptionNames.fileName, metadataOptionNames.emitThisFile, metadataOptionNames.resolveReference];
-    let globalMetadataNames = [metadataOptionNames.allowNonTsExtensions, metadataOptionNames.baselineFile, metadataOptionNames.declaration,
-        metadataOptionNames.mapRoot, metadataOptionNames.module, metadataOptionNames.out,metadataOptionNames.outFile,
-        metadataOptionNames.outDir, metadataOptionNames.sourceMap, metadataOptionNames.sourceRoot, metadataOptionNames.jsx];
 
-    function convertGlobalOptionsToCompilerOptions(globalOptions: { [idx: string]: string }): ts.CompilerOptions {
+    function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
         let settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5 };
-        // Convert all property in globalOptions into ts.CompilationSettings
-        for (let prop in globalOptions) {
-            if (globalOptions.hasOwnProperty(prop)) {
-                switch (prop) {
-                    case metadataOptionNames.allowNonTsExtensions:
-                        settings.allowNonTsExtensions = globalOptions[prop] === "true";
-                        break;
-                    case metadataOptionNames.declaration:
-                        settings.declaration = globalOptions[prop] === "true";
-                        break;
-                    case metadataOptionNames.mapRoot:
-                        settings.mapRoot = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.module:
-                        // create appropriate external module target for CompilationSettings
-                        switch (globalOptions[prop]) {
-                            case "AMD":
-                                settings.module = ts.ModuleKind.AMD;
-                                break;
-                            case "CommonJS":
-                                settings.module = ts.ModuleKind.CommonJS;
-                                break;
-                            default:
-                                ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
-                                settings.module = ts.ModuleKind.None;
-                                break;
-                        }
-                        break;
-                    case metadataOptionNames.out:
-                        settings.out = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.outFile:
-                        settings.outFile = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.outDir:
-                        settings.outDir = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.sourceMap:
-                        settings.sourceMap = globalOptions[prop] === "true";
-                        break;
-                    case metadataOptionNames.sourceRoot:
-                        settings.sourceRoot = globalOptions[prop];
-                        break;
-                    case metadataOptionNames.jsx:
-                        switch (globalOptions[prop].toLowerCase()) {
-                            case "react":
-                                settings.jsx = ts.JsxEmit.React;
-                                break;
-                            case "preserve":
-                                settings.jsx = ts.JsxEmit.Preserve;
-                                break;
-                            default:
-                                ts.Debug.assert(globalOptions[prop] === undefined || globalOptions[prop] === "None");
-                                settings.jsx = ts.JsxEmit.None;
-                                break;
-                        }
-                        break;
-                }
-            }
-        }
+        Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
         return settings;
     }
 
@@ -1980,13 +1908,20 @@ module FourSlash {
                 }
 
                 if (actual.newText !== expected.newText) {
-                    this.raiseError(name + ' failed - expected insertion:\n' + expected.newText + '\nactual insertion:\n' + actual.newText);
+                    this.raiseError(name + ' failed - expected insertion:\n' + this.clarifyNewlines(expected.newText) + '\nactual insertion:\n' + this.clarifyNewlines(actual.newText));
                 }
 
                 if (actual.caretOffset !== expected.caretOffset) {
                     this.raiseError(name + ' failed - expected caretOffset: ' + expected.caretOffset + ',\nactual caretOffset:' + actual.caretOffset);
                 }
             }
+        }
+
+        private clarifyNewlines(str: string) {
+            return str.replace(/\r?\n/g, lineEnding => {
+                const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
+                return "# - " + representation + lineEnding;
+            });
         }
 
         public verifyMatchingBracePosition(bracePosition: number, expectedMatchPosition: number) {
@@ -2514,12 +2449,16 @@ module FourSlash {
                 // Comment line, check for global/file @options and record them
                 let match = optionRegex.exec(line.substr(2));
                 if (match) {
-                    let globalMetadataNamesIndex = globalMetadataNames.indexOf(match[1]);
                     let fileMetadataNamesIndex = fileMetadataNames.indexOf(match[1]);
-                    if (globalMetadataNamesIndex === -1) {
-                        if (fileMetadataNamesIndex === -1) {
-                            throw new Error(`Unrecognized metadata name "${match[1]}". Available global metadata names are: ${globalMetadataNames.join(", ")}; file metadata names are: ${fileMetadataNames.join(", ")}`);
-                        } else if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
+                    if (fileMetadataNamesIndex === -1) {
+                        // Check if the match is already existed in the global options
+                        if (globalOptions[match[1]] !== undefined) {
+                            throw new Error("Global Option : '" + match[1] + "' is already existed");
+                        }
+                        globalOptions[match[1]] = match[2];
+                    }
+                    else {
+                        if (fileMetadataNamesIndex === fileMetadataNames.indexOf(metadataOptionNames.fileName)) {
                             // Found an @FileName directive, if this is not the first then create a new subfile
                             if (currentFileContent) {
                                 let file = parseFileContent(currentFileContent, currentFileName, markerPositions, markers, ranges);
@@ -2540,12 +2479,6 @@ module FourSlash {
                             // Add other fileMetadata flag
                             currentFileOptions[match[1]] = match[2];
                         }
-                    } else {
-                        // Check if the match is already existed in the global options
-                        if (globalOptions[match[1]] !== undefined) {
-                            throw new Error("Global Option : '" + match[1] + "' is already existed");
-                        }
-                        globalOptions[match[1]] = match[2];
                     }
                 }
             // TODO: should be '==='?

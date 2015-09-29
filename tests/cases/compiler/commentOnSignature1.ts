@@ -1,5 +1,10 @@
 // @filename: a.ts
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 function foo(n: number): void;
 // Don't keep this comment.
 function foo(s: string): void;

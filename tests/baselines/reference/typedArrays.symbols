@@ -8,39 +8,39 @@ function CreateTypedArrayTypes() {
 
     typedArrays[0] = Int8Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
 
     typedArrays[1] = Uint8Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
 
     typedArrays[2] = Int16Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
 
     typedArrays[3] = Uint16Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
 
     typedArrays[4] = Int32Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
 
     typedArrays[5] = Uint32Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
 
     typedArrays[6] = Float32Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
 
     typedArrays[7] = Float64Array;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
 
     typedArrays[8] = Uint8ClampedArray;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
 
     return typedArrays;
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 2, 7))
@@ -55,47 +55,47 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 
     typedArrays[0] = new Int8Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[1] = new Uint8Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[2] = new Int16Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[3] = new Uint16Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[4] = new Int32Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[5] = new Uint32Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[6] = new Float32Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[7] = new Float64Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     typedArrays[8] = new Uint8ClampedArray(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 17, 7))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 16, 45))
 
     return typedArrays;
@@ -111,47 +111,47 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 
     typedArrays[0] = new Int8Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[1] = new Uint8Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[2] = new Int16Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[3] = new Uint16Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[4] = new Int32Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[5] = new Uint32Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[6] = new Float32Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[7] = new Float64Array(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     typedArrays[8] = new Uint8ClampedArray(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 32, 7))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
 >obj : Symbol(obj, Decl(typedArrays.ts, 31, 44))
 
     return typedArrays;
@@ -167,65 +167,65 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 
     typedArrays[0] = Int8Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
->from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
+>Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
+>from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[1] = Uint8Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
->from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
+>Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
+>from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[2] = Int16Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
->from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
+>Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
+>from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[3] = Uint16Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
->from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
+>Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
+>from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[4] = Int32Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
->from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
+>Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
+>from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[5] = Uint32Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
->from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
+>Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
+>from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[6] = Float32Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
->from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
+>Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
+>from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[7] = Float64Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
->from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
+>Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
+>from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     typedArrays[8] = Uint8ClampedArray.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 47, 7))
->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
->from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
+>Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
+>from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
 >obj : Symbol(obj, Decl(typedArrays.ts, 46, 44))
 
     return typedArrays;
@@ -242,65 +242,65 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 
     typedArrays[0] = Int8Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
->from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
+>Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
+>from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[1] = Uint8Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
->from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
+>Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
+>from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[2] = Int16Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
->from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
+>Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
+>from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[3] = Uint16Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
->from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
+>Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
+>from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[4] = Int32Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
->from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
+>Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
+>from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[5] = Uint32Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
->from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
+>Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
+>from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[6] = Float32Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
->from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
+>Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
+>from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[7] = Float64Array.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
->from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
+>Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
+>from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     typedArrays[8] = Uint8ClampedArray.from(obj);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 62, 7))
->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
->from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
+>Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
+>from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
 >obj : Symbol(obj, Decl(typedArrays.ts, 61, 47))
 
     return typedArrays;
@@ -333,55 +333,55 @@ function CreateTypedArraysOf2() {
     typedArrays[0] = Int8Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Int8Array.of : Symbol(Int8ArrayConstructor.of, Decl(lib.d.ts, 1635, 30))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
 >of : Symbol(Int8ArrayConstructor.of, Decl(lib.d.ts, 1635, 30))
 
     typedArrays[1] = Uint8Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Uint8Array.of : Symbol(Uint8ArrayConstructor.of, Decl(lib.d.ts, 1909, 30))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
 >of : Symbol(Uint8ArrayConstructor.of, Decl(lib.d.ts, 1909, 30))
 
     typedArrays[2] = Int16Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Int16Array.of : Symbol(Int16ArrayConstructor.of, Decl(lib.d.ts, 2456, 30))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
 >of : Symbol(Int16ArrayConstructor.of, Decl(lib.d.ts, 2456, 30))
 
     typedArrays[3] = Uint16Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Uint16Array.of : Symbol(Uint16ArrayConstructor.of, Decl(lib.d.ts, 2730, 30))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
 >of : Symbol(Uint16ArrayConstructor.of, Decl(lib.d.ts, 2730, 30))
 
     typedArrays[4] = Int32Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Int32Array.of : Symbol(Int32ArrayConstructor.of, Decl(lib.d.ts, 3003, 30))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
 >of : Symbol(Int32ArrayConstructor.of, Decl(lib.d.ts, 3003, 30))
 
     typedArrays[5] = Uint32Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Uint32Array.of : Symbol(Uint32ArrayConstructor.of, Decl(lib.d.ts, 3276, 30))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
 >of : Symbol(Uint32ArrayConstructor.of, Decl(lib.d.ts, 3276, 30))
 
     typedArrays[6] = Float32Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Float32Array.of : Symbol(Float32ArrayConstructor.of, Decl(lib.d.ts, 3549, 30))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
 >of : Symbol(Float32ArrayConstructor.of, Decl(lib.d.ts, 3549, 30))
 
     typedArrays[7] = Float64Array.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Float64Array.of : Symbol(Float64ArrayConstructor.of, Decl(lib.d.ts, 3823, 30))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
 >of : Symbol(Float64ArrayConstructor.of, Decl(lib.d.ts, 3823, 30))
 
     typedArrays[8] = Uint8ClampedArray.of(1,2,3,4);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 94, 7))
 >Uint8ClampedArray.of : Symbol(Uint8ClampedArrayConstructor.of, Decl(lib.d.ts, 2183, 30))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
 >of : Symbol(Uint8ClampedArrayConstructor.of, Decl(lib.d.ts, 2183, 30))
 
     return typedArrays;
@@ -401,73 +401,73 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 
     typedArrays[0] = Int8Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
->from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
+>Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
+>from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[1] = Uint8Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
->from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
+>Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
+>from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[2] = Int16Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
->from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
+>Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
+>from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[3] = Uint16Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
->from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
+>Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
+>from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[4] = Int32Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
->from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
+>Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
+>from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[5] = Uint32Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
->from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
+>Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
+>from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[6] = Float32Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
->from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
+>Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
+>from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[7] = Float64Array.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
->from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
+>Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
+>from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
     typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 109, 7))
->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
->from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
+>Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
+>from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
 >obj : Symbol(obj, Decl(typedArrays.ts, 108, 36))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 108, 58))
 
@@ -489,81 +489,81 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 
     typedArrays[0] = Int8Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
->Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4704, 1))
->from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4727, 48))
+>Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
+>Int8Array : Symbol(Int8Array, Decl(lib.d.ts, 1379, 42), Decl(lib.d.ts, 1652, 11), Decl(lib.d.ts, 4731, 1))
+>from : Symbol(Int8ArrayConstructor.from, Decl(lib.d.ts, 1641, 38), Decl(lib.d.ts, 4754, 48))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[1] = Uint8Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
->Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4736, 1))
->from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4759, 49))
+>Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.d.ts, 1652, 44), Decl(lib.d.ts, 1926, 11), Decl(lib.d.ts, 4763, 1))
+>from : Symbol(Uint8ArrayConstructor.from, Decl(lib.d.ts, 1915, 39), Decl(lib.d.ts, 4786, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[2] = Int16Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
->Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4804, 1))
->from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4831, 49))
+>Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
+>Int16Array : Symbol(Int16Array, Decl(lib.d.ts, 2199, 60), Decl(lib.d.ts, 2473, 11), Decl(lib.d.ts, 4831, 1))
+>from : Symbol(Int16ArrayConstructor.from, Decl(lib.d.ts, 2462, 39), Decl(lib.d.ts, 4858, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[3] = Uint16Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
->Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4840, 1))
->from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4863, 50))
+>Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
+>Uint16Array : Symbol(Uint16Array, Decl(lib.d.ts, 2473, 46), Decl(lib.d.ts, 2747, 11), Decl(lib.d.ts, 4867, 1))
+>from : Symbol(Uint16ArrayConstructor.from, Decl(lib.d.ts, 2736, 40), Decl(lib.d.ts, 4890, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[4] = Int32Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
->Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4872, 1))
->from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4895, 49))
+>Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
+>Int32Array : Symbol(Int32Array, Decl(lib.d.ts, 2747, 48), Decl(lib.d.ts, 3019, 11), Decl(lib.d.ts, 4899, 1))
+>from : Symbol(Int32ArrayConstructor.from, Decl(lib.d.ts, 3009, 39), Decl(lib.d.ts, 4922, 49))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[5] = Uint32Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
->Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4904, 1))
->from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4927, 50))
+>Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
+>Uint32Array : Symbol(Uint32Array, Decl(lib.d.ts, 3019, 46), Decl(lib.d.ts, 3292, 11), Decl(lib.d.ts, 4931, 1))
+>from : Symbol(Uint32ArrayConstructor.from, Decl(lib.d.ts, 3282, 40), Decl(lib.d.ts, 4954, 50))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[6] = Float32Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
->Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4936, 1))
->from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4959, 51))
+>Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
+>Float32Array : Symbol(Float32Array, Decl(lib.d.ts, 3292, 48), Decl(lib.d.ts, 3566, 11), Decl(lib.d.ts, 4963, 1))
+>from : Symbol(Float32ArrayConstructor.from, Decl(lib.d.ts, 3555, 41), Decl(lib.d.ts, 4986, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[7] = Float64Array.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
->Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4968, 1))
->from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 4991, 51))
+>Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
+>Float64Array : Symbol(Float64Array, Decl(lib.d.ts, 3566, 50), Decl(lib.d.ts, 3839, 11), Decl(lib.d.ts, 4995, 1))
+>from : Symbol(Float64ArrayConstructor.from, Decl(lib.d.ts, 3829, 41), Decl(lib.d.ts, 5018, 51))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))
 
     typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg);
 >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 124, 7))
->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
->Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4768, 1))
->from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4794, 56))
+>Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
+>Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.d.ts, 1926, 46), Decl(lib.d.ts, 2199, 11), Decl(lib.d.ts, 4795, 1))
+>from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.d.ts, 2189, 46), Decl(lib.d.ts, 4821, 56))
 >obj : Symbol(obj, Decl(typedArrays.ts, 123, 38))
 >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 123, 60))
 >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 123, 98))

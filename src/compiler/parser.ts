@@ -1058,11 +1058,11 @@ namespace ts {
         }
 
         function parseIdentifierName(): Identifier {
-            return createIdentifier(isIdentifierOrKeyword());
+            return createIdentifier(tokenIsIdentifierOrKeyword(token));
         }
 
         function isLiteralPropertyName(): boolean {
-            return isIdentifierOrKeyword() ||
+            return tokenIsIdentifierOrKeyword(token) ||
                 token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.NumericLiteral;
         }
@@ -1086,7 +1086,7 @@ namespace ts {
         }
 
         function isSimplePropertyName() {
-            return token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || isIdentifierOrKeyword();
+            return token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || tokenIsIdentifierOrKeyword(token);
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
@@ -1213,9 +1213,9 @@ namespace ts {
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
-                    return isIdentifierOrKeyword();
+                    return tokenIsIdentifierOrKeyword(token);
                 case ParsingContext.JsxAttributes:
-                    return isIdentifierOrKeyword() || token === SyntaxKind.OpenBraceToken;
+                    return tokenIsIdentifierOrKeyword(token) || token === SyntaxKind.OpenBraceToken;
                 case ParsingContext.JsxChildren:
                     return true;
                 case ParsingContext.JSDocFunctionParameters:
@@ -1254,7 +1254,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOrKeyword() {
             nextToken();
-            return isIdentifierOrKeyword();
+            return tokenIsIdentifierOrKeyword(token);
         }
 
         function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
@@ -1824,7 +1824,7 @@ namespace ts {
             // the code would be implicitly: "name.identifierOrKeyword; identifierNameOrKeyword".
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the identifier or keyword.
-            if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
+            if (scanner.hasPrecedingLineBreak() && tokenIsIdentifierOrKeyword(token)) {
                 let matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 if (matchesPattern) {
@@ -2282,7 +2282,7 @@ namespace ts {
                         }
                     }
 
-                    if (isIdentifierOrKeyword()) {
+                    if (tokenIsIdentifierOrKeyword(token)) {
                         return parsePropertyOrMethodSignature();
                     }
             }
@@ -4101,13 +4101,9 @@ namespace ts {
             }
         }
 
-        function isIdentifierOrKeyword() {
-            return token >= SyntaxKind.Identifier;
-        }
-
         function nextTokenIsIdentifierOrKeywordOnSameLine() {
             nextToken();
-            return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
+            return tokenIsIdentifierOrKeyword(token) && !scanner.hasPrecedingLineBreak();
         }
 
         function nextTokenIsFunctionKeywordOnSameLine() {
@@ -4117,7 +4113,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOrKeywordOrNumberOnSameLine() {
             nextToken();
-            return (isIdentifierOrKeyword() || token === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
+            return (tokenIsIdentifierOrKeyword(token) || token === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
         }
 
         function isDeclaration(): boolean {
@@ -4170,7 +4166,7 @@ namespace ts {
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
-                            token === SyntaxKind.OpenBraceToken || isIdentifierOrKeyword();
+                            token === SyntaxKind.OpenBraceToken || tokenIsIdentifierOrKeyword(token);
                     case SyntaxKind.ExportKeyword:
                         nextToken();
                         if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
@@ -4777,7 +4773,7 @@ namespace ts {
 
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name
-            if (isIdentifierOrKeyword() ||
+            if (tokenIsIdentifierOrKeyword(token) ||
                 token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.NumericLiteral ||
                 token === SyntaxKind.AsteriskToken ||
@@ -4813,7 +4809,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseOptionalIdentifier();
+            node.name = parseNameOfClassDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
 
@@ -4829,7 +4825,22 @@ namespace ts {
 
             return finishNode(node);
         }
-
+        
+        function parseNameOfClassDeclarationOrExpression(): Identifier {
+            // implements is a future reserved word so
+            // 'class implements' might mean either
+            // - class expression with omitted name, 'implements' starts heritage clause
+            // - class with name 'implements' 
+            // 'isImplementsClause' helps to disambiguate between these two cases 
+            return isIdentifier() && !isImplementsClause()
+                ? parseIdentifier()
+                : undefined;
+        }
+        
+        function isImplementsClause() {
+            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword)
+        }
+        
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
@@ -5320,7 +5331,7 @@ namespace ts {
                         return true;
                 }
 
-                return isIdentifierOrKeyword();
+                return tokenIsIdentifierOrKeyword(token);
             }
 
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {

@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 class DebugClass {
     public static debugFunc() {
         // Start Debugger Test Code

@@ -5,9 +5,9 @@
 export class c { };  
 
 //// [client.ts]
-import * as nameSpaceBinding from "server";
+import * as nameSpaceBinding from "./server";
 export var x = new nameSpaceBinding.c();
-import * as nameSpaceBinding2 from "server"; // unreferenced
+import * as nameSpaceBinding2 from "./server"; // unreferenced
 
 //// [server.js]
 var c = (function () {
@@ -18,7 +18,7 @@ var c = (function () {
 exports.c = c;
 ;
 //// [client.js]
-var nameSpaceBinding = require("server");
+var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
 
 
@@ -26,5 +26,5 @@ exports.x = new nameSpaceBinding.c();
 export declare class c {
 }
 //// [client.d.ts]
-import * as nameSpaceBinding from "server";
+import * as nameSpaceBinding from "./server";
 export declare var x: nameSpaceBinding.c;
