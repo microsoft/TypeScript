@@ -57,7 +57,7 @@ declare module Intl {
         currency?: string;
         currencyDisplay?: string;
         useGrouping?: boolean;
-        minimumintegerDigits?: number;
+        minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
         maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
@@ -70,7 +70,7 @@ declare module Intl {
         style: string;
         currency?: string;
         currencyDisplay?: string;
-        minimumintegerDigits: number;
+        minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
         minimumSignificantDigits?: number;

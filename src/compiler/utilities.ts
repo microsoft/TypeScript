@@ -1,4 +1,5 @@
 /// <reference path="binder.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -164,16 +165,16 @@ namespace ts {
         return node.pos;
     }
 
-    // Returns true if this node is missing from the actual source code.  'missing' is different
-    // from 'undefined/defined'.  When a node is undefined (which can happen for optional nodes
-    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be
+    // Returns true if this node is missing from the actual source code. A 'missing' node is different
+    // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
+    // in the tree), it is definitely missing. However, a node may be defined, but still be
     // missing.  This happens whenever the parser knows it needs to parse something, but can't
-    // get anything in the source code that it expects at that location.  For example:
+    // get anything in the source code that it expects at that location. For example:
     //
     //          let a: ;
     //
     // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source
-    // code).  So the parser will attempt to parse out a type, and will create an actual node.
+    // code). So the parser will attempt to parse out a type, and will create an actual node.
     // However, this node will be 'missing' in the sense that no actual source-code/tokens are
     // contained within it.
     export function nodeIsMissing(node: Node) {
@@ -620,7 +621,7 @@ namespace ts {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
-    export function isFunctionLike(node: Node): boolean {
+    export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -660,7 +661,7 @@ namespace ts {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
-    export function isObjectLiteralMethod(node: Node) {
+    export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
