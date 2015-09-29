@@ -108,6 +108,7 @@ module ts.server {
     module Metrics {
         var eventCounts: Map<number> = {};
         var properties: Map<string> = {};
+        var dtsCount = 0;
 
         // TODO make shorter
         var sendInterval = 1000 * 5; // 5 seconds
@@ -126,23 +127,56 @@ module ts.server {
             "noResolve",
             "preserveConstEnums",
             "removeComments",
-            "rootDir",
             "suppressImplicitAnyIndexErrors",
             "target",
-            "separateCompilation",
-            "emitDecoratorMetadata"
+            "isolatedModules",
+            "emitDecoratorMetadata",
+            "jsx",
+            "outFile"
         ];
 
+        var logPath = 'C:/throwaway/';
+
+        // Keeps a count of total invocations of various language service operations (rename, gotodef, etc)
         export function countEvent(eventName: string, projectSvc: ProjectService, host: ts.System) {
             var opts = projectSvc.getFormatCodeOptions();
             if (opts.SendMetrics) {
                 eventCounts[eventName] = (eventCounts[eventName] || 0) + 1;
 
                 if (Date.now() > nextSendTimeMs) {
-                    registerSettings(projectSvc);
+                    var props = '';
+                    props += projectSvc.configuredProjects.length + '\r\n';
+                    props += projectSvc.inferredProjects.length + '\r\n';
+                    for (var i in projectSvc.configuredProjects) {
+                        var proj = projectSvc.configuredProjects[i];
+
+                        registerSettings(projectSvc);
+
+                        props += "Project name: " + proj.projectFilename + '\r\n';
+                        props += "Files: " + proj.getFileNames().join('\r\n');
+                        props += 'compilerOptions:\r\n';
+                        for (var p in proj.projectOptions.compilerOptions) {
+                            props += p + ':' + proj.projectOptions.compilerOptions[p] + '\r\n';
+                        }
+                        props += "\r\n\CompilerOptions from settingsNames\r\n";
+                    }
+
+                    host.writeFile(logPath + 'projLog.txt', props, false);
+                    
                     send(host, opts.TelemetryUserID);
                 }
             }
+        }
+
+        // Keeps track of any .d.ts files used which correspond to known versions from DefinitelyTyped
+        export function countDts(file: string) {
+            // TODO: think this will break the ASA query right now since this ends up before host, inferred, etc
+            for(var i in properties) {
+                if(properties[i] == file) {
+                    return;
+                }
+            }
+            properties['dtf' + ++dtsCount] = file;
         }
 
         function registerSettings(svc: ProjectService) {
@@ -185,8 +219,7 @@ module ts.server {
             }];
             var payload = JSON.stringify(data);
             // TODO: stop logging this locally
-            var logPath = 'C:/throwaway/';
-            host.createDirectory(logPath);
+            
             host.writeFile(logPath + 'appLog.txt', payload, false);
             host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json', (err, data) => {
                 host.writeFile(logPath + 'errorLog.txt', err ? 'err: ' + err : 'data: ' + data, false);
@@ -194,6 +227,7 @@ module ts.server {
 
             eventCounts = {};
             properties = {};
+            dtsCount = 0;
             nextSendTimeMs = Date.now() + sendInterval;
         }
     }
@@ -380,17 +414,22 @@ module ts.server {
             var doUpToDateCheck = () => {
                 try {
                     var info = Session.matchFileByHash(file, this.dtsVersionHistory, this.host);
-                    if (info && info.commitsBehind > 0) {
-                        // Not up to date
-                        this.event({
-                            file: file, diagnostics: [{
-                                start: { line: 1, offset: 0 },
-                                end: { line: 2, offset: 0 },
-                                text: 'File ' + file + ' is ' + info.commitsBehind + ' commits out-of-date'
-                            }]
-                        }, 'infoDiag');
+                    if (info) {
+                        var r = Metrics.countDts(info.fileName);
+                        
+                        if(info.commitsBehind > 0) {
+                            // Not up to date
+                            this.event({
+                                file: file, diagnostics: [{
+                                    start: { line: 1, offset: 0 },
+                                    end: { line: 2, offset: 0 },
+                                    text: 'File ' + file + ' is ' + info.commitsBehind + ' commits out-of-date'
+                                }]
+                            // TODO: where is infoDiag reported? semanticDiag and you'll see squiggles
+                            }, 'semanticDiag');
+                        }
                     }
-                } catch (err) {
+                } catch (err) {    
                     this.logError(err, "up-to-date check");
                 }
             };
@@ -399,18 +438,20 @@ module ts.server {
                 if (this.host.https && /\.d\.ts$/i.test(file)) { // Is this a .d.ts file?
                     if (this.dtsVersionHistory === undefined && !this.fetchingDts) { // Do we need to download the version history?
                         var filename = this.host.getTempDir() + '/dts-versions.json';
+                        var indexUrl = 'https://typescript-dts-service.azurewebsites.net/api/index/';
                         if (this.host.fileExists(filename)) {
-                            // Read index from disk
-                            this.dtsVersionHistory = JSON.parse(this.host.readFile(filename, 'utf-8'));
-                            doUpToDateCheck();
-                        } else {
-                            // Fetch from web
-                            this.fetchingDts = true;
-                            var indexUrl = 'https://typescript-dts.azurewebsites.net/index/';
                             if (this.host.getFileWriteTime) {
                                 // Use file timestamp to avoid re-downloading entire index our copy is up-to-date
                                 indexUrl = indexUrl + this.host.getFileWriteTime(filename);
                             }
+                            // Read index from disk
+                            this.dtsVersionHistory = JSON.parse(this.host.readFile(filename, 'utf-8'));
+                            doUpToDateCheck();
+                        } else {
+                            // TODO: need to actually get a new file even if it exists based on age
+                            // Fetch from web
+                            this.fetchingDts = true;
+                            
                             this.host.https(indexUrl, (err, data) => {
                                 this.fetchingDts = false;
                                 if (err) {
@@ -418,6 +459,7 @@ module ts.server {
                                     this.dtsVersionHistory = [];
                                 } else {
                                     if (data.length > 0) { // length will be 0 if we're up-to-date
+                                        //this.host.writeFile('C:\\throwaway\\rawdata.txt', data)
                                         this.host.writeFile(filename, data);
                                         this.dtsVersionHistory = JSON.parse(data);
                                     }
@@ -440,7 +482,7 @@ module ts.server {
             var fileInfo = Session.matchFileByHash(fileName, this.dtsVersionHistory, this.host);
             if (fileInfo) {
                 // Note: trailing slash is important!
-                var urlUrl = 'https://typescript-dts.azurewebsites.net/urlOf/' + fileInfo.path + '/' + fileInfo.fileName + '/';
+                var urlUrl = 'https://typescript-dts-service.azurewebsites.net/urlOf/' + fileInfo.path + '/' + fileInfo.fileName + '/';
                 this.host.https(urlUrl, (err, downloadUrl) => {
                     this.host.https(downloadUrl, (err, fileData) => {
                         this.host.writeFile(fileName, fileData || err);
