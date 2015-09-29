@@ -1434,6 +1434,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.AsExpression:
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.CaseClause:
