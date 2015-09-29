@@ -1,9 +1,12 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(10,7): error TS2339: Property 'p' does not exist on type 'Object'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(17,7): error TS2339: Property 'p' does not exist on type 'string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(24,7): error TS2339: Property 'p' does not exist on type 'number'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(31,7): error TS2339: Property 'p' does not exist on type 'boolean'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(45,7): error TS2339: Property 'p' does not exist on type 'Foo'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(52,7): error TS2339: Property 'p' does not exist on type 'Bar'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts (3 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts (6 errors) ====
     var x: any = { p: 0 };
     
     declare class Foo { }
@@ -14,6 +17,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(31,7): error
     
     if (x instanceof Object) {
         x.p; // Error, type narrowed by instanceof type guard
+          ~
+!!! error TS2339: Property 'p' does not exist on type 'Object'.
     }
     else {
         x.p; // No error, type any unaffected by instanceof type guard
@@ -55,6 +60,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(31,7): error
     
     if (isFoo(x)) {
         x.p; // Error, type narrowed by user-defined type guard
+          ~
+!!! error TS2339: Property 'p' does not exist on type 'Foo'.
     }
     else {
         x.p; // No error, type unaffected in this branch
@@ -62,6 +69,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithAny.ts(31,7): error
     
     if (isBar(x)) {
         x.p; // Error, type narrowed by user-defined type guard
+          ~
+!!! error TS2339: Property 'p' does not exist on type 'Bar'.
     }
     else {
         x.p; // No error, type unaffected in this branch
