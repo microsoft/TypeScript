@@ -128,7 +128,8 @@ namespace ts {
                 return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
 
             case SyntaxKind.ExpressionStatement:
-                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
+                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
