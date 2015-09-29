@@ -94,7 +94,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     program = _program;
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
-                    });
+                }, undefined, rootDir);
             });
 
             after(() => {

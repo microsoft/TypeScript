@@ -1,7 +1,7 @@
 // @target: es3
 // @module: amd
 // @outFile: bundleToES3AMD_bundle.js
-// @bundle: bundleToES3AMD_file1
+// @bundle: ./bundleToES3AMD_file1
 
 // @Filename: bundleToES3AMD_file0.ts
 export class Foo {
@@ -16,3 +16,5 @@ export function assert(value: boolean) {
 // @Filename: bundleToES3AMD_file1.ts
 import {Foo, assert} from "./bundleToES3AMD_file0";
 assert(Foo.CONSTANT === "Foo");
+
+export {assert} from "./bundleToES3AMD_file0";

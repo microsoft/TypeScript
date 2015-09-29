@@ -1,7 +1,7 @@
 // @target: es6
 // @module: umd
 // @outFile: bundleUMD_bundle.js
-// @bundle: bundleUMD_file1
+// @bundle: ./bundleUMD_file1
 
 // @Filename: bundleUMD_file0.ts
 export class Foo {
@@ -16,3 +16,5 @@ export function assert(value: boolean) {
 // @Filename: bundleUMD_file1.ts
 import {Foo, assert} from "./bundleUMD_file0";
 assert(Foo.CONSTANT === "Foo");
+
+export {assert} from "./bundleUMD_file0";

@@ -1,7 +1,7 @@
 // @target: es6
 // @module: es6
 // @outFile: bundleES6_bundle.js
-// @bundle: bundleES6_file1
+// @bundle: ./bundleES6_file1
 
 // @Filename: bundleES6_file0.ts
 export class Foo {
@@ -16,3 +16,5 @@ export function assert(value: boolean) {
 // @Filename: bundleES6_file1.ts
 import {Foo, assert} from "./bundleES6_file0";
 assert(Foo.CONSTANT === "Foo");
+
+export {assert} from "./bundleES6_file0";

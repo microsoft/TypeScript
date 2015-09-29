@@ -521,6 +521,7 @@ namespace ts {
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
+                resolveModuleName: (moduleName: string) => resolveModuleNamesWorker([moduleName], ts.combinePaths(host.getCurrentDirectory(), 'dummy.ts'))[0],
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
             };

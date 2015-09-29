@@ -918,7 +918,10 @@ module Harness {
 
             function getSourceFile(fn: string, languageVersion: ts.ScriptTarget) {
                 fn = ts.normalizePath(fn);
-                if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
+                if (fn === defaultLibFileName) {
+                    return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
+                }
+                else if (Object.prototype.hasOwnProperty.call(filemap, getCanonicalFileName(fn))) {
                     return filemap[getCanonicalFileName(fn)];
                 }
                 else if (currentDirectory) {
@@ -931,9 +934,6 @@ module Harness {
                     return fourslashSourceFile;
                 }
                 else {
-                    if (fn === defaultLibFileName) {
-                        return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
-                    }
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                     return undefined;
                 }

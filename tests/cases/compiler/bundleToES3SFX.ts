@@ -1,7 +1,7 @@
 // @target: es3
 // @module: none
 // @outFile: bundleToES3SFX_bundle.js
-// @bundle: bundleToES3SFX_file1
+// @bundle: ./bundleToES3SFX_file1
 
 // @Filename: bundleToES3SFX_file0.ts
 export class Foo {
@@ -16,3 +16,5 @@ export function assert(value: boolean) {
 // @Filename: bundleToES3SFX_file1.ts
 import {Foo, assert} from "./bundleToES3SFX_file0";
 assert(Foo.CONSTANT === "Foo");
+
+export {assert} from "./bundleToES3SFX_file0";
