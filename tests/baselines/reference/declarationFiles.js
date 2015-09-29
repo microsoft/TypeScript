@@ -117,19 +117,19 @@ declare class C3 {
 }
 declare class C4 {
     x1: {
-        a: C4;
+        a: this;
     };
     x2: this[];
     x3: {
-        a: C4;
+        a: this;
     }[];
     x4: () => this;
     f1(): {
-        a: C4;
+        a: this;
     };
     f2(): this[];
     f3(): {
-        a: C4;
+        a: this;
     }[];
     f4(): () => this;
 }
