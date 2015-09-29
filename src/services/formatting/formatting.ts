@@ -475,7 +475,7 @@ namespace ts.formatting {
                     }
                 },
                 getIndentation: () => indentation,
-                getDelta: (child) => getEffectiveDelta(delta, child),
+                getDelta: child => getEffectiveDelta(delta, child),
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
