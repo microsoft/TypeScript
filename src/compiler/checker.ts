@@ -6192,7 +6192,7 @@ namespace ts {
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (isTypeAny(type) || !assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (!assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
                     return type;
                 }
                 // Check that right operand is a function type with a prototype property
@@ -6251,9 +6251,6 @@ namespace ts {
             }
 
             function narrowTypeByTypePredicate(type: Type, expr: CallExpression, assumeTrue: boolean): Type {
-                if (type.flags & TypeFlags.Any) {
-                    return type;
-                }
                 let signature = getResolvedSignature(expr);
 
                 if (signature.typePredicate &&
