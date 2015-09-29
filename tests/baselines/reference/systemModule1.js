@@ -3,4 +3,12 @@
 export var x = 1;
 
 //// [systemModule1.js]
-export var x = 1;
+System.register([], function(exports_1) {
+    var x;
+    return {
+        setters:[],
+        execute: function() {
+            x = 1;
+        }
+    }
+});

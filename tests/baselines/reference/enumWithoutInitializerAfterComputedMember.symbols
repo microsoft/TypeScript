@@ -1,0 +1,14 @@
+=== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts ===
+enum E {
+>E : Symbol(E, Decl(enumWithoutInitializerAfterComputedMember.ts, 0, 0))
+
+    a,
+>a : Symbol(E.a, Decl(enumWithoutInitializerAfterComputedMember.ts, 0, 8))
+
+    b = a,
+>b : Symbol(E.b, Decl(enumWithoutInitializerAfterComputedMember.ts, 1, 6))
+>a : Symbol(E.a, Decl(enumWithoutInitializerAfterComputedMember.ts, 0, 8))
+
+    c
+>c : Symbol(E.c, Decl(enumWithoutInitializerAfterComputedMember.ts, 2, 10))
+}
