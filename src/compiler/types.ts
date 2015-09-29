@@ -1497,6 +1497,7 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -1509,7 +1510,6 @@ namespace ts {
         WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
         InElementType                   = 0x00000040,  // Writing an array or union element type
         UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        RewriteInaccessibleThis         = 0x00000100,  // Rewrite references to inaccessible "this"
     }
 
     export const enum SymbolFormatFlags {

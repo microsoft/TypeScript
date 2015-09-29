@@ -52,6 +52,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let currentSourceFile: SourceFile;
         let reportedDeclarationError = false;
+        let errorNameNode: DeclarationName;
         let emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         let emit = compilerOptions.stripInternal ? stripInternal : emitNode;
 
@@ -152,6 +153,7 @@ namespace ts {
         function createAndSetNewTextWriterWithSymbolWriter(): EmitTextWriterWithSymbolWriter {
             let writer = <EmitTextWriterWithSymbolWriter>createTextWriter(newLine);
             writer.trackSymbol = trackSymbol;
+            writer.reportInaccessibleThisError = reportInaccessibleThisError;
             writer.writeKeyword = writer.write;
             writer.writeOperator = writer.write;
             writer.writePunctuation = writer.write;
@@ -257,6 +259,13 @@ namespace ts {
             handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning));
         }
 
+        function reportInaccessibleThisError() {
+            if (errorNameNode) {
+                diagnostics.push(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode)));
+            }
+        }
+
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, type: TypeNode, getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic) {
             writer.getSymbolAccessibilityDiagnostic = getSymbolAccessibilityDiagnostic;
             write(": ");
@@ -265,7 +274,9 @@ namespace ts {
                 emitType(type);
             }
             else {
+                errorNameNode = declaration.name;
                 resolver.writeTypeOfDeclaration(declaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                errorNameNode = undefined;
             }
         }
 
@@ -277,7 +288,9 @@ namespace ts {
                 emitType(signature.type);
             }
             else {
+                errorNameNode = signature.name;
                 resolver.writeReturnTypeOfSignatureDeclaration(signature, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                errorNameNode = undefined;
             }
         }
 

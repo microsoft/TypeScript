@@ -1606,12 +1606,10 @@ namespace ts {
                             : (<IntrinsicType>type).intrinsicName);
                     }
                     else if (type.flags & TypeFlags.ThisType) {
-                        if (inObjectTypeLiteral && globalFlags & TypeFormatFlags.RewriteInaccessibleThis) {
-                            writeType((<TypeParameter>type).constraint, flags);
+                        if (inObjectTypeLiteral) {
+                            writer.reportInaccessibleThisError();
                         }
-                        else {
-                            writer.writeKeyword("this");
-                        }
+                        writer.writeKeyword("this");
                     }
                     else if (type.flags & TypeFlags.Reference) {
                         writeTypeReference(<TypeReference>type, flags);
@@ -14682,17 +14680,17 @@ namespace ts {
                 ? getTypeOfSymbol(symbol)
                 : unknownType;
 
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags | TypeFormatFlags.RewriteInaccessibleThis);
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
         function writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             let signature = getSignatureFromDeclaration(signatureDeclaration);
-            getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags | TypeFormatFlags.RewriteInaccessibleThis);
+            getSymbolDisplayBuilder().buildTypeDisplay(getReturnTypeOfSignature(signature), writer, enclosingDeclaration, flags);
         }
 
         function writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             let type = getTypeOfExpression(expr);
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags | TypeFormatFlags.RewriteInaccessibleThis);
+            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
         function hasGlobalName(name: string): boolean {
