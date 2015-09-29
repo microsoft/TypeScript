@@ -1361,9 +1361,9 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                         }
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash &&
-                                text.charCodeAt(pos + 2) !== CharacterCodes.asterisk &&
-                                languageVariant === LanguageVariant.JSX) {
+                        if (languageVariant === LanguageVariant.JSX &&
+                                text.charCodeAt(pos + 1) === CharacterCodes.slash &&
+                                text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
                             return pos += 2, token = SyntaxKind.LessThanSlashToken;
                         }
                         return pos++, token = SyntaxKind.LessThanToken;
