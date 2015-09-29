@@ -83,7 +83,7 @@ function foo() {
 }
 exports.foo = foo;
 /** This is comment for function signature*/
-function fooWithParameters(/** this is comment about a*/ a, 
+function fooWithParameters(/** this is comment about a*/ a,
     /** this is comment for b*/
     b) {
     var d = a;
@@ -129,7 +129,7 @@ exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestPa
 function nonExportedFoo() {
 }
 /** This is comment for function signature*/
-function nonExportedFooWithParameters(/** this is comment about a*/ a, 
+function nonExportedFooWithParameters(/** this is comment about a*/ a,
     /** this is comment for b*/
     b) {
     var d = a;
@@ -149,7 +149,7 @@ function nonExportedFooWithOverloads(a) {
 function globalfoo() {
 }
 /** This is comment for function signature*/
-function globalfooWithParameters(/** this is comment about a*/ a, 
+function globalfooWithParameters(/** this is comment about a*/ a,
     /** this is comment for b*/
     b) {
     var d = a;

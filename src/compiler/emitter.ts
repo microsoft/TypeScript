@@ -833,6 +833,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 for (let i = 0; i < count; i++) {
+                    let node = nodes[start + i];
+
                     if (multiLine) {
                         if (i || leadingComma) {
                             write(",");
@@ -841,10 +843,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         if (i || leadingComma) {
-                            write(", ");
+                            write(",");
+							
+							let comments = getLeadingCommentsToEmit(node);
+							
+							if (!comments || !comments[0].hasTrailingNewLine) {
+								write(" ");
+							}
                         }
                     }
-                    let node = nodes[start + i];
                     // This emitting is to make sure we emit following comment properly
                     //   ...(x, /*comment1*/ y)...
                     //         ^ => node.pos

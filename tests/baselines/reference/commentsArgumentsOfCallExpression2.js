@@ -18,6 +18,6 @@ foo(/*c3*/ function () { }, /*d2*/ function () { }, /*e2*/ a + b);
 foo(/*c3*/ function () { }, /*d3*/ function () { }, /*e3*/ (a + b));
 foo(
 /*c4*/ function () { }, 
-/*d4*/ function () { }, 
+/*d4*/ function () { },
 /*e4*/
 /*e5*/ "hello");

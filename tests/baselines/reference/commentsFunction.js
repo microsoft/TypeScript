@@ -61,7 +61,7 @@ function foo() {
 } /* trailing comment of function */
 foo();
 /** This is comment for function signature*/
-function fooWithParameters(/** this is comment about a*/ a, 
+function fooWithParameters(/** this is comment about a*/ a,
     /** this is comment for b*/
     b) {
     var d = a;
