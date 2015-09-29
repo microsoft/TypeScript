@@ -325,7 +325,7 @@ namespace ts.formatting {
 
         let lastIndentedLine: number;
         let indentationOnLastIndentedLine: number;
-        
+
         let edits: TextChange[] = [];
 
         formattingScanner.advance();
@@ -354,12 +354,12 @@ namespace ts.formatting {
           * If list element is in the range - its indentation will be equal 
           * to inherited indentation from its predecessors.
           */
-        function tryComputeIndentationForListItem(startPos: number, 
-            endPos: number, 
-            parentStartLine: number, 
-            range: TextRange, 
+        function tryComputeIndentationForListItem(startPos: number,
+            endPos: number,
+            parentStartLine: number,
+            range: TextRange,
             inheritedIndentation: number): number {
-            
+
             if (rangeOverlapsWithStartEnd(range, startPos, endPos)) {
                 if (inheritedIndentation !== Constants.Unknown) {
                     return inheritedIndentation;
@@ -376,7 +376,7 @@ namespace ts.formatting {
 
             return Constants.Unknown;
         }
-        
+
         function computeIndentation(
             node: TextRangeWithKind,
             startLine: number,
@@ -419,8 +419,8 @@ namespace ts.formatting {
                 // if node is located on the same line with the parent
                 // - inherit indentation from the parent
                 // - push children if either parent of node itself has non-zero delta
-                indentation = startLine === lastIndentedLine 
-                    ? indentationOnLastIndentedLine 
+                indentation = startLine === lastIndentedLine
+                    ? indentationOnLastIndentedLine
                     : parentDynamicIndentation.getIndentation();
                 delta = Math.min(options.IndentSize, parentDynamicIndentation.getDelta() + delta);
             }
@@ -586,7 +586,7 @@ namespace ts.formatting {
                 if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
                     return inheritedIndentation;
                 }
-                
+
                 if (child.getFullWidth() === 0) {
                     return inheritedIndentation;
                 }
@@ -624,8 +624,8 @@ namespace ts.formatting {
                 return inheritedIndentation;
             }
 
-            function processChildNodes(nodes: NodeArray<Node>, 
-                parent: Node, 
+            function processChildNodes(nodes: NodeArray<Node>,
+                parent: Node,
                 parentStartLine: number,
                 parentDynamicIndentation: DynamicIndentation): void {
 
@@ -751,7 +751,7 @@ namespace ts.formatting {
                     // indent token only if is it is in target range and does not overlap with any error ranges
                     if (tokenIndentation !== Constants.Unknown) {
                         insertIndentation(currentTokenInfo.token.pos, tokenIndentation, lineAdded);
-                        
+
                         lastIndentedLine = tokenStart.line;
                         indentationOnLastIndentedLine = tokenIndentation;
                     }
@@ -772,12 +772,12 @@ namespace ts.formatting {
             }
         }
 
-        function processRange(range: TextRangeWithKind, 
-            rangeStart: LineAndCharacter, 
-            parent: Node, 
-            contextNode: Node, 
+        function processRange(range: TextRangeWithKind,
+            rangeStart: LineAndCharacter,
+            parent: Node,
+            contextNode: Node,
             dynamicIndentation: DynamicIndentation): boolean {
-            
+
             let rangeHasError = rangeContainsError(range);
             let lineAdded: boolean;
             if (!rangeHasError && !previousRangeHasError) {
@@ -787,7 +787,7 @@ namespace ts.formatting {
                     trimTrailingWhitespacesForLines(originalStart.line, rangeStart.line);
                 }
                 else {
-                    lineAdded = 
+                    lineAdded =
                         processPair(range, rangeStart.line, parent, previousRange, previousRangeStartLine, previousParent, contextNode, dynamicIndentation)
                 }
             }
@@ -933,8 +933,8 @@ namespace ts.formatting {
                 let lineStartPosition = getStartPositionOfLine(line, sourceFile);
                 let lineEndPosition = getEndLinePosition(line, sourceFile);
 
-                // do not trim whitespaces in comments
-                if (range && isComment(range.kind) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
+                // do not trim whitespaces in comments or template expression
+                if (range && (isComment(range.kind) || isStringOrRegularExpressionOrTemplateLiteral(range.kind)) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
                     continue;
                 }
 
