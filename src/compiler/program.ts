@@ -692,6 +692,12 @@ namespace ts {
             
             let imports: LiteralExpression[];
             for (let node of file.statements) {
+                collect(node, /* allowRelativeModuleNames */ true);
+            }
+
+            file.imports = imports || emptyArray;
+            
+            function collect(node: Node, allowRelativeModuleNames: boolean): void {
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
@@ -704,7 +710,9 @@ namespace ts {
                             break;
                         }
 
-                        (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
+                            (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        }
                         break;
                     case SyntaxKind.ModuleDeclaration:
                         if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
@@ -714,23 +722,15 @@ namespace ts {
                             // The StringLiteral must specify a top - level external module name.
                             // Relative external module names are not permitted
                             forEachChild((<ModuleDeclaration>node).body, node => {
-                                if (isExternalModuleImportEqualsDeclaration(node) &&
-                                    getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
-                                    let moduleName = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
-                                    // TypeScript 1.0 spec (April 2014): 12.1.6
-                                    // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                    // only through top - level external module names. Relative external module names are not permitted.
-                                    if (moduleName) {
-                                        (imports || (imports = [])).push(moduleName);
-                                    }
-                                }
+                                // TypeScript 1.0 spec (April 2014): 12.1.6
+                                // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
+                                // only through top - level external module names. Relative external module names are not permitted.
+                                collect(node, /* allowRelativeModuleNames */ false);
                             });
                         }
                         break;
                 }
             }
-
-            file.imports = imports || emptyArray;
         }
 
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
