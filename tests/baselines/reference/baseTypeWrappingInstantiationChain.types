@@ -13,7 +13,7 @@ class C<T1> extends CBase<T1> {
 >CBaseBase : typeof CBaseBase
 >Wrapper : Wrapper<T5>
 >T1 : T1
->this : C<T1>
+>this : this
     }
     public alsoWorks() {
 >alsoWorks : () => void
@@ -22,7 +22,7 @@ class C<T1> extends CBase<T1> {
 >new CBase<T1>(this) : CBase<T1>
 >CBase : typeof CBase
 >T1 : T1
->this : C<T1>
+>this : this
     }
 
     public method(t: Wrapper<T1>) { }

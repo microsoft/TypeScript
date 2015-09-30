@@ -725,7 +725,7 @@ namespace ts {
         }
         getBaseTypes(): ObjectType[] {
             return this.flags & (TypeFlags.Class | TypeFlags.Interface)
-                ? this.checker.getBaseTypes(<TypeObject & InterfaceType>this)
+                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
     }
@@ -6252,7 +6252,8 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
+                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
         }
 
         function isNamespaceReference(node: Node): boolean {

@@ -43,7 +43,7 @@ class c {
 
         return this.b;
 >this.b : number
->this : c
+>this : this
 >b : number
     }
 
@@ -53,7 +53,7 @@ class c {
 
         return this.b;
 >this.b : number
->this : c
+>this : this
 >b : number
     }
 
@@ -65,7 +65,7 @@ class c {
         this.b = val;
 >this.b = val : number
 >this.b : number
->this : c
+>this : this
 >b : number
 >val : number
     }
