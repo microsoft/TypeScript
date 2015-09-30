@@ -3823,7 +3823,7 @@ namespace ts {
             
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
                 entries = getCompletionEntriesFromSymbols(symbols);
-                addRange(entries, getJavaScriptCompletionEntries());
+                addRange(entries, getJavaScriptCompletionEntries(sourceFile));
             }
             else {
                 if (!symbols || symbols.length === 0) {
@@ -3840,26 +3840,24 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile): CompletionEntry[] {
                 let entries: CompletionEntry[] = [];
                 let allNames: Map<string> = {};
                 let target = program.getCompilerOptions().target;
 
-                for (let sourceFile of program.getSourceFiles()) {
-                    let nameTable = getNameTable(sourceFile);
-                    for (let name in nameTable) {
-                        if (!allNames[name]) {
-                            allNames[name] = name;
-                            let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
-                            if (displayName) {
-                                let entry = {
-                                    name: displayName,
-                                    kind: ScriptElementKind.warning,
-                                    kindModifiers: "",
-                                    sortText: "1"
-                                };
-                                entries.push(entry);
-                            }
+                let nameTable = getNameTable(sourceFile);
+                for (let name in nameTable) {
+                    if (!allNames[name]) {
+                        allNames[name] = name;
+                        let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
+                        if (displayName) {
+                            let entry = {
+                                name: displayName,
+                                kind: ScriptElementKind.warning,
+                                kindModifiers: "",
+                                sortText: "1"
+                            };
+                            entries.push(entry);
                         }
                     }
                 }

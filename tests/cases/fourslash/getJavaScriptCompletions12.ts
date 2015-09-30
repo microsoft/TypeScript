@@ -33,4 +33,4 @@ verify.completionListContains("toExponential", /*displayText:*/ undefined, /*doc
 goTo.marker("4");
 verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
 goTo.marker("5");
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "warning");
+verify.completionListContains("test1", /*displayText:*/ undefined, /*documentation*/ undefined, "warning");
