@@ -17,8 +17,23 @@ namespace ts.server {
                 strBuilder += " ";
             }
             spaceCache[n] = strBuilder;
-        }  
+        }
         return spaceCache[n];
+    }
+
+    export function generateIndentString(n: number, editorOptions: EditorOptions): string {
+        if (editorOptions.ConvertTabsToSpaces) {
+            return generateSpaces(n);
+        } else {
+            var result = "";
+            for (var i = 0; i < Math.floor(n / editorOptions.TabSize); i++) {
+                result += "\t";
+            }
+            for (var i = 0; i < n % editorOptions.TabSize; i++) {
+                result += " ";
+            }
+            return result;
+        }
     }
 
     interface FileStart {
@@ -51,7 +66,7 @@ namespace ts.server {
             return 1;
         }
     }
-       
+
     function formatDiag(fileName: string, project: Project, diag: ts.Diagnostic) {
         return {
             start: project.compilerService.host.positionToLineOffset(fileName, diag.start),
@@ -104,7 +119,7 @@ namespace ts.server {
         export const Unknown = "unknown";
     }
 
-    module Errors { 
+    module Errors {
         export var NoProject = new Error("No Project.");
     }
 
@@ -121,9 +136,9 @@ namespace ts.server {
         private changeSeq = 0;
 
         constructor(
-            private host: ServerHost, 
-            private byteLength: (buf: string, encoding?: string) => number, 
-            private hrtime: (start?: number[]) => number[], 
+            private host: ServerHost,
+            private byteLength: (buf: string, encoding?: string) => number,
+            private hrtime: (start?: number[]) => number[],
             private logger: Logger
         ) {
             this.projectService =
@@ -227,7 +242,7 @@ namespace ts.server {
             this.syntacticCheck(file, project);
             this.semanticCheck(file, project);
         }
-        
+
         private reloadProjects() {
             this.projectService.reloadProjects();
         }
@@ -360,9 +375,9 @@ namespace ts.server {
 
             let { compilerService } = project;
             let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
-            
+
             let documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
-            
+
             if (!documentHighlights) {
                 return undefined;
             }
@@ -557,7 +572,7 @@ namespace ts.server {
             var compilerService = project.compilerService;
             var startPosition = compilerService.host.lineOffsetToPosition(file, line, offset);
             var endPosition = compilerService.host.lineOffsetToPosition(file, endLine, endOffset);
-            
+
             // TODO: avoid duplicate code (with formatonkey)
             var edits = compilerService.languageService.getFormattingEditsForRange(file, startPosition, endPosition,
                 this.projectService.getFormatCodeOptions(file));
@@ -607,27 +622,25 @@ namespace ts.server {
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                             };
-                            var indentPosition =
-                                compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                            var preferredIndent = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                            var hasIndent = 0;
                             for (var i = 0, len = lineText.length; i < len; i++) {
                                 if (lineText.charAt(i) == " ") {
-                                    indentPosition--;
+                                    hasIndent++;
                                 }
                                 else if (lineText.charAt(i) == "\t") {
-                                    indentPosition -= editorOptions.IndentSize;
+                                    hasIndent += editorOptions.TabSize;
                                 }
                                 else {
                                     break;
                                 }
                             }
-                            if (indentPosition > 0) {
-                                var spaces = generateSpaces(indentPosition);
-                                edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
-                            }
-                            else if (indentPosition < 0) {
+                            // i points to the first non whitespace character
+                            if (preferredIndent !== hasIndent) {
+                                var firstNoWhiteSpacePosition = lineInfo.offset + i;
                                 edits.push({
-                                    span: ts.createTextSpanFromBounds(position, position - indentPosition),
-                                    newText: ""
+                                    span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
+                                    newText: generateIndentString(preferredIndent, editorOptions)
                                 });
                             }
                         }
@@ -702,14 +715,14 @@ namespace ts.server {
             if (!project) {
                 throw Errors.NoProject;
             }
-            
+
             var compilerService = project.compilerService;
             var position = compilerService.host.lineOffsetToPosition(file, line, offset);
             var helpItems = compilerService.languageService.getSignatureHelpItems(file, position);
             if (!helpItems) {
                 return undefined;
             }
-            
+
             var span = helpItems.applicableSpan;
             var result: protocol.SignatureHelpItems = {
                 items: helpItems.items,
@@ -721,10 +734,10 @@ namespace ts.server {
                 argumentIndex: helpItems.argumentIndex,
                 argumentCount: helpItems.argumentCount,
             }
-            
+
             return result;
         }
-                
+
         private getDiagnostics(delay: number, fileNames: string[]) {
             var checkList = fileNames.reduce((accum: PendingErrorCheck[], fileName: string) => {
                 fileName = ts.normalizePath(fileName);
@@ -859,20 +872,20 @@ namespace ts.server {
 
         private getBraceMatching(line: number, offset: number, fileName: string): protocol.TextSpan[] {
             var file = ts.normalizePath(fileName);
-            
+
             var project = this.projectService.getProjectForFile(file);
             if (!project) {
                 throw Errors.NoProject;
             }
-            
+
             var compilerService = project.compilerService;
             var position = compilerService.host.lineOffsetToPosition(file, line, offset);
-            
+
             var spans = compilerService.languageService.getBraceMatchingAtPosition(file, position);
             if (!spans) {
                 return undefined;
             }
-            
+
             return spans.map(span => ({
                 start: compilerService.host.positionToLineOffset(file, span.start),
                 end: compilerService.host.positionToLineOffset(file, span.start + span.length)
@@ -1064,7 +1077,7 @@ namespace ts.server {
         public onMessage(message: string) {
             if (this.logger.isVerbose()) {
                 this.logger.info("request: " + message);
-                var start = this.hrtime();                
+                var start = this.hrtime();
             }
             try {
                 var request = <protocol.Request>JSON.parse(message);
