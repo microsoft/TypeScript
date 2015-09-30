@@ -11,6 +11,6 @@ module Foo {
 
     interface B extends A { b: string; } 
 >B : Symbol(B, Decl(reboundBaseClassSymbol.ts, 2, 14))
->A : Symbol(A, Decl(reboundBaseClassSymbol.ts, 0, 0))
+>A : Symbol(A, Decl(reboundBaseClassSymbol.ts, 2, 7))
 >b : Symbol(b, Decl(reboundBaseClassSymbol.ts, 3, 27))
 }

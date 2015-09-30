@@ -12,6 +12,6 @@ module Foo {
 
     interface B extends A { b: string; } 
 >B : B
->A : A
+>A : any
 >b : string
 }
