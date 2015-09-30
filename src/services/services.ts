@@ -725,7 +725,7 @@ namespace ts {
         }
         getBaseTypes(): ObjectType[] {
             return this.flags & (TypeFlags.Class | TypeFlags.Interface)
-                ? this.checker.getBaseTypes(<TypeObject & InterfaceType>this)
+                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
     }
@@ -3662,9 +3662,9 @@ namespace ts {
                         return containingNodeKind === SyntaxKind.Parameter;
 
                     case SyntaxKind.AsKeyword:
-                        containingNodeKind === SyntaxKind.ImportSpecifier ||
-                        containingNodeKind === SyntaxKind.ExportSpecifier ||
-                        containingNodeKind === SyntaxKind.NamespaceImport;
+                        return containingNodeKind === SyntaxKind.ImportSpecifier ||
+                            containingNodeKind === SyntaxKind.ExportSpecifier ||
+                            containingNodeKind === SyntaxKind.NamespaceImport;
 
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
@@ -6252,7 +6252,8 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
+                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -7814,6 +7815,7 @@ namespace ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:

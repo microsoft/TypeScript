@@ -1652,6 +1652,14 @@
         "category": "Error",
         "code": 2525
     },
+    "A 'this' type is available only in a non-static member of a class or interface.": {
+        "category": "Error",
+        "code": 2526
+    },
+    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2527
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600
