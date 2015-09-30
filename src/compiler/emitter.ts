@@ -469,6 +469,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
+                    else if (isExternalModule(sourceFile)) {
+                        emitConcatenatedModule(sourceFile);
+                    }
                 });
             }
 
@@ -480,6 +483,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
                 emit(sourceFile);
+            }
+
+            function emitConcatenatedModule(sourceFile: SourceFile): void {
+                currentSourceFile = sourceFile;
+                exportFunctionForFile = undefined;
+                moduleEmitDelegates[modulekind](sourceFile, 0);
             }
 
             function isUniqueName(name: string): boolean {
