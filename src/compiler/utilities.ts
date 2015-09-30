@@ -99,8 +99,8 @@ namespace ts {
         }
 
         return true;
-    }    
-   
+    }
+
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
@@ -996,7 +996,7 @@ namespace ts {
         }
         return false;
     }
-    
+
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
         // An external module name is "relative" if the first term is "." or "..".
@@ -1526,12 +1526,12 @@ namespace ts {
         function getModificationCount() {
             return modificationCount;
         }
-        
+
         function reattachFileDiagnostics(newFile: SourceFile): void {
             if (!hasProperty(fileDiagnostics, newFile.fileName)) {
                 return;
             }
-            
+
             for (let diagnostic of fileDiagnostics[newFile.fileName]) {
                 diagnostic.file = newFile;
             }
