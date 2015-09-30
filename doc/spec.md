@@ -1352,7 +1352,7 @@ var b = x.b;  // b has type number
 var c = x.c;  // Error, no property c in union type
 ```
 
-Note that 'x.a' has a union type because the type of 'a' is different in 'A' and 'B', whereas 'x.b' simply has type number because that is the type of 'b' in both 'A' and 'B'. Also note that there is no property 'x.c' because only 'A' has a property 'c'.
+Note that 'x.a' has a union type because the type of 'a' is different in 'A' and 'B', whereas 'x.b' simply has type number because that is the type of 'b' in both 'A' and 'B'. Also note that there is no property 'x.c' because only 'B' has a property 'c'.
 
 When used as a contextual type (section [4.23](#4.23)), a union type has those members that are present in any of its constituent types, with types that are unions of the respective members in the constituent types. Specifically, a union type used as a contextual type has the apparent members defined in section [3.11.1](#3.11.1), except that a particular member need only be present in one or more constituent types instead of all constituent types.
 
