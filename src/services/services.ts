@@ -3823,8 +3823,8 @@ namespace ts {
             let entries: CompletionEntry[] = [];
             
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
-                const unique = getCompletionEntriesFromSymbols(symbols, entries);
-                addRange(entries, getJavaScriptCompletionEntries(sourceFile, unique));
+                const uniqieNames = getCompletionEntriesFromSymbols(symbols, entries);
+                addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqieNames));
             }
             else {
                 if (!symbols || symbols.length === 0) {
@@ -3841,7 +3841,7 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(sourceFile: SourceFile, uniqueNames: Map<any>): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, uniqueNames: Map<string>): CompletionEntry[] {
                 let entries: CompletionEntry[] = [];
                 let target = program.getCompilerOptions().target;
 
@@ -3901,24 +3901,24 @@ namespace ts {
                 };
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<any> {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<string> {
                 let start = new Date().getTime();
-                let nameToSymbol: Map<Symbol> = {};
+                let uniqueNames: Map<string> = {};
                 if (symbols) {
                     for (let symbol of symbols) {
                         let entry = createCompletionEntry(symbol, location);
                         if (entry) {
                             let id = escapeIdentifier(entry.name);
-                            if (!lookUp(nameToSymbol, id)) {
+                            if (!lookUp(uniqueNames, id)) {
                                 entries.push(entry);
-                                nameToSymbol[id] = symbol;
+                                uniqueNames[id] = id;
                             }
                         }
                     }
                 }
 
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
-                return nameToSymbol;
+                return uniqueNames;
             }
         }
 
