@@ -22,4 +22,4 @@ goTo.definition();
 verify.caretAtMarker('dst');
 
 goTo.marker('src');
-verify.renameLocations(false, false);
+verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
