@@ -103,7 +103,7 @@ namespace ts {
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
         let output = new Date().toLocaleTimeString() + " - ";
-		
+
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
             output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
@@ -113,7 +113,7 @@ namespace ts {
 
         sys.write(output);
     }
-	
+
     function padLeft(s: string, length: number) {
         while (s.length < length) {
             s = " " + s;
@@ -275,7 +275,7 @@ namespace ts {
             let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName, removed) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -297,9 +297,15 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile) {
+        function sourceFileChanged(sourceFile: SourceFile, removed: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
+            if (removed) {
+                var index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index >= 0) {
+                    rootFileNames.splice(index, 1);
+                }
+            }
             startTimer();
         }
 
@@ -531,8 +537,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
-            let result: Map<string|number|boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            let result: Map<string | number | boolean> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (let name in options) {
