@@ -2222,7 +2222,6 @@ module FourSlash {
 
             return text.substring(startPos, endPos);
         }
-        
 
         private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string) {
             this.scenarioActions.push("<ShowCompletionList />");

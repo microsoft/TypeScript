@@ -3823,8 +3823,8 @@ namespace ts {
             let entries: CompletionEntry[] = [];
             
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
-                const uniqieNames = getCompletionEntriesFromSymbols(symbols, entries);
-                addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqieNames));
+                const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
+                addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqueNames));
             }
             else {
                 if (!symbols || symbols.length === 0) {
