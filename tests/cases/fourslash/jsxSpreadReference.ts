@@ -18,7 +18,6 @@
 //// var x = <MyClass {...[|n/*src*/n|]}></MyClass>;
 
 goTo.marker('src');
-debugger;
 goTo.definition();
 verify.caretAtMarker('dst');
 
