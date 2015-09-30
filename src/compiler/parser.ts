@@ -2365,6 +2365,7 @@ namespace ts {
                     let node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
@@ -2387,6 +2388,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:

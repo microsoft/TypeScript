@@ -36,7 +36,7 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }
 
@@ -66,6 +66,6 @@ class NumberIterator {
 >iterator : symbol
 
         return this;
->this : NumberIterator
+>this : this
     }
 }

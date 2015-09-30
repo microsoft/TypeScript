@@ -26,17 +26,17 @@ module M {
 			this.fa = new Array<Foo>(this.x * this.y);		
 >this.fa = new Array<Foo>(this.x * this.y) : Foo[]
 >this.fa : Foo[]
->this : Gar
+>this : this
 >fa : Foo[]
 >new Array<Foo>(this.x * this.y) : Foo[]
 >Array : ArrayConstructor
 >Foo : Foo
 >this.x * this.y : number
 >this.x : number
->this : Gar
+>this : this
 >x : number
 >this.y : number
->this : Gar
+>this : this
 >y : number
 		}
 	}

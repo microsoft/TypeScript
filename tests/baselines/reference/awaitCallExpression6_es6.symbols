@@ -44,6 +44,7 @@ async function func(): Promise<void> {
 >o.fn : Symbol(fn, Decl(awaitCallExpression6_es6.ts, 3, 16))
 >o : Symbol(o, Decl(awaitCallExpression6_es6.ts, 3, 11))
 >fn : Symbol(fn, Decl(awaitCallExpression6_es6.ts, 3, 16))
+>p : Symbol(p, Decl(awaitCallExpression6_es6.ts, 1, 11))
 >a : Symbol(a, Decl(awaitCallExpression6_es6.ts, 0, 11))
 >a : Symbol(a, Decl(awaitCallExpression6_es6.ts, 0, 11))
 

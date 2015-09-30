@@ -19,6 +19,7 @@ async function func(): Promise<void> {
 >o.a : Symbol(a, Decl(awaitBinaryExpression5_es6.ts, 4, 12))
 >o : Symbol(o, Decl(awaitBinaryExpression5_es6.ts, 4, 7))
 >a : Symbol(a, Decl(awaitBinaryExpression5_es6.ts, 4, 12))
+>p : Symbol(p, Decl(awaitBinaryExpression5_es6.ts, 1, 11))
 
     "after";
 }

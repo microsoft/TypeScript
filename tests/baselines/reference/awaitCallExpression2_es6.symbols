@@ -42,6 +42,7 @@ async function func(): Promise<void> {
     var b = fn(await p, a, a);
 >b : Symbol(b, Decl(awaitCallExpression2_es6.ts, 8, 7))
 >fn : Symbol(fn, Decl(awaitCallExpression2_es6.ts, 1, 32))
+>p : Symbol(p, Decl(awaitCallExpression2_es6.ts, 1, 11))
 >a : Symbol(a, Decl(awaitCallExpression2_es6.ts, 0, 11))
 >a : Symbol(a, Decl(awaitCallExpression2_es6.ts, 0, 11))
 

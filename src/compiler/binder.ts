@@ -88,6 +88,7 @@ namespace ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
+        let seenThisKeyword: boolean;
 
         let isJavaScriptFile = isSourceFileJavaScript(file);
         // In JavaScript files, we might have a CommonJS module (using 'require("name")').
@@ -403,7 +404,14 @@ namespace ts {
                 bind(node.jsDocComment);
             }
 
-            forEachChild(node, bind);
+            if (node.kind === SyntaxKind.InterfaceDeclaration) {
+                seenThisKeyword = false;
+                forEachChild(node, bind);
+                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            }
+            else {
+                forEachChild(node, bind);
+            }
 
             container = saveContainer;
             parent = saveParent;
@@ -950,6 +958,9 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+                case SyntaxKind.ThisKeyword:
+                    seenThisKeyword = true;
+                    return;
 
                 case SyntaxKind.CallExpression:
                     if (isDefineCall(<CallExpression>node)) {

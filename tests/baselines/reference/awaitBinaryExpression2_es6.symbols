@@ -13,6 +13,7 @@ async function func(): Promise<void> {
     "before";
     var b = await p && a;
 >b : Symbol(b, Decl(awaitBinaryExpression2_es6.ts, 4, 7))
+>p : Symbol(p, Decl(awaitBinaryExpression2_es6.ts, 1, 11))
 >a : Symbol(a, Decl(awaitBinaryExpression2_es6.ts, 0, 11))
 
     "after";

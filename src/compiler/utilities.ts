@@ -65,7 +65,8 @@ namespace ts {
                 increaseIndent: () => { },
                 decreaseIndent: () => { },
                 clear: () => str = "",
-                trackSymbol: () => { }
+                trackSymbol: () => { },
+                reportInaccessibleThisError: () => { }
             };
         }
 
@@ -468,13 +469,12 @@ namespace ts {
                 else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
                     node = node.parent;
                 }
-            // fall through
-            case SyntaxKind.QualifiedName:
-            case SyntaxKind.PropertyAccessExpression:
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
-
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
@@ -733,6 +733,9 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.SourceFile:
                     return node;
@@ -895,7 +898,6 @@ namespace ts {
 
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
@@ -928,6 +930,7 @@ namespace ts {
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.AwaitExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -941,6 +944,7 @@ namespace ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:

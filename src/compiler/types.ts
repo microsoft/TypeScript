@@ -377,7 +377,7 @@ namespace ts {
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
         InferredClass =     0x00080000,  // A class with no explicitly declared properties (set by binder)
-
+        ContainsThis =      0x00100000,  // Interface contains references to "this"
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
@@ -1499,6 +1499,7 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -1800,6 +1801,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ThisType                = 0x02000000,  // This type
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1845,6 +1847,7 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+        thisType: TypeParameter;                   // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
@@ -1859,10 +1862,17 @@ namespace ts {
         declaredNumberIndexType: Type;             // Declared numeric index type
     }
 
-    // Type references (TypeFlags.Reference)
+    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
+    // a "this" type, references to the class or interface are made using type references. The
+    // typeArguments property specififes the types to substitute for the type parameters of the
+    // class or interface and optionally includes an extra element that specifies the type to
+    // substitute for "this" in the resulting instantiation. When no extra argument is present,
+    // the type reference itself is substituted for "this". The typeArguments property is undefined
+    // if the class or interface has no type parameters and the reference isn't specifying an
+    // explicit "this" argument.
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments: Type[];  // Type reference type arguments
+        typeArguments: Type[];  // Type reference type arguments (undefined if none)
     }
 
     // Generic class and interface types
