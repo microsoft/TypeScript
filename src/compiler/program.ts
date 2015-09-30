@@ -569,7 +569,9 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string) {
-            return filesByName.get(fileName);
+            // first try to use file name as is to find file
+            // then try to convert relative file name to absolute and use it to retrieve source file
+            return filesByName.get(fileName) || filesByName.get(getNormalizedAbsolutePath(fileName, host.getCurrentDirectory()));
         }
 
         function getDiagnosticsHelper(
@@ -692,10 +694,13 @@ namespace ts {
             let isJavaScriptFile = isSourceFileJavaScript(file);
             
             let imports: LiteralExpression[];
+            for (let node of file.statements) {
+                collect(node, /* allowRelativeModuleNames */ true);
+            }
 
-            forEachChild(file, visit);
-
-            function visit(node: Node) {
+            file.imports = imports || emptyArray;
+            
+            function collect(node: Node, allowRelativeModuleNames: boolean): void {
                 switch (node.kind) {
                     case SyntaxKind.ImportDeclaration:
                     case SyntaxKind.ImportEqualsDeclaration:
@@ -708,7 +713,9 @@ namespace ts {
                             break;
                         }
 
-                        (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
+                            (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                        }
                         break;
                     case SyntaxKind.CallExpression:
                         if (isJavaScriptFile &&
@@ -733,27 +740,19 @@ namespace ts {
                             // The StringLiteral must specify a top - level external module name.
                             // Relative external module names are not permitted
                             forEachChild((<ModuleDeclaration>node).body, node => {
-                                if (isExternalModuleImportEqualsDeclaration(node) &&
-                                    getExternalModuleImportEqualsDeclarationExpression(node).kind === SyntaxKind.StringLiteral) {
-                                    let moduleName = <LiteralExpression>getExternalModuleImportEqualsDeclarationExpression(node);
-                                    // TypeScript 1.0 spec (April 2014): 12.1.6
-                                    // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                    // only through top - level external module names. Relative external module names are not permitted.
-                                    if (moduleName) {
-                                        (imports || (imports = [])).push(moduleName);
-                                    }
-                                }
+                                // TypeScript 1.0 spec (April 2014): 12.1.6
+                                // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
+                                // only through top - level external module names. Relative external module names are not permitted.
+                                collect(node, /* allowRelativeModuleNames */ false);
                             });
                         }
                         break;
                 }
                 
                 if (isSourceFileJavaScript(file)) {
-                    forEachChild(node, visit);
+                    forEachChild(node, node => collect(node, allowRelativeModuleNames));
                 }
             }
-
-            file.imports = imports || emptyArray;
         }
 
         function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
@@ -800,60 +799,62 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
-            let canonicalName = host.getCanonicalFileName(normalizeSlashes(fileName));
-            if (filesByName.contains(canonicalName)) {
+            if (filesByName.contains(fileName)) {
                 // We've already looked for this file, use cached result
-                return getSourceFileFromCache(fileName, canonicalName, /*useAbsolutePath*/ false);
+                return getSourceFileFromCache(fileName, /*useAbsolutePath*/ false);
             }
-            else {
-                let normalizedAbsolutePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
-                let canonicalAbsolutePath = host.getCanonicalFileName(normalizedAbsolutePath);
-                if (filesByName.contains(canonicalAbsolutePath)) {
-                    return getSourceFileFromCache(normalizedAbsolutePath, canonicalAbsolutePath, /*useAbsolutePath*/ true);
-                }
-
-                // We haven't looked for this file, do so now and cache result
-                let file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
-                    if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
-                        fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
-                            Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
-                    }
-                    else {
-                        fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
-                    }
-                });
-                filesByName.set(canonicalName, file);
-                if (file) {
-                    skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
-
-                    // Set the source file for normalized absolute path
-                    filesByName.set(canonicalAbsolutePath, file);
-                    
-                    let basePath = getDirectoryPath(fileName);
-                    if (!options.noResolve) {
-                        processReferencedFiles(file, basePath);
-                    }
-
-                    // always process imported modules to record module name resolutions
-                    processImportedModules(file, basePath);
-
-                    if (isDefaultLib) {
-                        file.isDefaultLib = true;
-                        files.unshift(file);
-                    }
-                    else {
-                        files.push(file);
-                    }
-                }
-
+            
+            let normalizedAbsolutePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
+            if (filesByName.contains(normalizedAbsolutePath)) {
+                const file = getSourceFileFromCache(normalizedAbsolutePath, /*useAbsolutePath*/ true);
+                // we don't have resolution for this relative file name but the match was found by absolute file name
+                // store resolution for relative name as well 
+                filesByName.set(fileName, file);
                 return file;
             }
 
-            function getSourceFileFromCache(fileName: string, canonicalName: string, useAbsolutePath: boolean): SourceFile {
-                let file = filesByName.get(canonicalName);
+            // We haven't looked for this file, do so now and cache result
+            let file = host.getSourceFile(fileName, options.target, hostErrorMessage => {
+                if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
+                    fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
+                        Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
+                }
+                else {
+                    fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
+                }
+            });
+            
+            filesByName.set(fileName, file);
+            if (file) {
+                skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
+
+                // Set the source file for normalized absolute path
+                filesByName.set(normalizedAbsolutePath, file);
+                
+                let basePath = getDirectoryPath(fileName);
+                if (!options.noResolve) {
+                    processReferencedFiles(file, basePath);
+                }
+
+                // always process imported modules to record module name resolutions
+                processImportedModules(file, basePath);
+
+                if (isDefaultLib) {
+                    file.isDefaultLib = true;
+                    files.unshift(file);
+                }
+                else {
+                    files.push(file);
+                }
+            }
+
+            return file;
+
+            function getSourceFileFromCache(fileName: string, useAbsolutePath: boolean): SourceFile {
+                let file = filesByName.get(fileName);
                 if (file && host.useCaseSensitiveFileNames()) {
                     let sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
-                    if (canonicalName !== sourceFileName) {
+                    if (normalizeSlashes(fileName) !== normalizeSlashes(sourceFileName)) {
                         if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
                             fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
                                 Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
