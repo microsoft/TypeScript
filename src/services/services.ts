@@ -3662,9 +3662,9 @@ namespace ts {
                         return containingNodeKind === SyntaxKind.Parameter;
 
                     case SyntaxKind.AsKeyword:
-                        containingNodeKind === SyntaxKind.ImportSpecifier ||
-                        containingNodeKind === SyntaxKind.ExportSpecifier ||
-                        containingNodeKind === SyntaxKind.NamespaceImport;
+                        return containingNodeKind === SyntaxKind.ImportSpecifier ||
+                            containingNodeKind === SyntaxKind.ExportSpecifier ||
+                            containingNodeKind === SyntaxKind.NamespaceImport;
 
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
@@ -7814,6 +7814,7 @@ namespace ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
