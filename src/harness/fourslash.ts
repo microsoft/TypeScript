@@ -591,6 +591,20 @@ module FourSlash {
                 this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
             }
         }
+        
+        public noItemsWithSameNameButDifferentKind(): void {
+            this.taoInvalidReason = "noItemsWithSameNameButDifferentKind NYI";
+            let completions = this.getCompletionListAtCaret();
+            let uniqueItems: ts.Map<string> = {};
+            for (const item of completions.entries) {
+                if (!ts.hasProperty(uniqueItems, item.name)) {
+                    uniqueItems[item.name] = item.kind;
+                }
+                else {
+                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
+                }
+            }
+        }
 
         public verifyMemberListIsEmpty(negative: boolean) {
             if (negative) {

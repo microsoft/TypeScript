@@ -3813,24 +3813,25 @@ namespace ts {
 
             let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
 
-            let entries: CompletionEntry[];
             if (isJsDocTagName) {
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
             }
 
             let sourceFile = getValidSourceFile(fileName);
+
+            let entries: CompletionEntry[] = [];
             
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
-                entries = getCompletionEntriesFromSymbols(symbols);
-                addRange(entries, getJavaScriptCompletionEntries());
+                const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
+                addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqueNames));
             }
             else {
                 if (!symbols || symbols.length === 0) {
                     return undefined;
                 }
 
-                entries = getCompletionEntriesFromSymbols(symbols);
+                getCompletionEntriesFromSymbols(symbols, entries);
             }
 
             // Add keywords if this is not a member completion list
@@ -3840,26 +3841,23 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, uniqueNames: Map<string>): CompletionEntry[] {
                 let entries: CompletionEntry[] = [];
-                let allNames: Map<string> = {};
                 let target = program.getCompilerOptions().target;
 
-                for (let sourceFile of program.getSourceFiles()) {
-                    let nameTable = getNameTable(sourceFile);
-                    for (let name in nameTable) {
-                        if (!allNames[name]) {
-                            allNames[name] = name;
-                            let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
-                            if (displayName) {
-                                let entry = {
-                                    name: displayName,
-                                    kind: ScriptElementKind.warning,
-                                    kindModifiers: "",
-                                    sortText: "1"
-                                };
-                                entries.push(entry);
-                            }
+                let nameTable = getNameTable(sourceFile);
+                for (let name in nameTable) {
+                    if (!uniqueNames[name]) {
+                        uniqueNames[name] = name;
+                        let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
+                        if (displayName) {
+                            let entry = {
+                                name: displayName,
+                                kind: ScriptElementKind.warning,
+                                kindModifiers: "",
+                                sortText: "1"
+                            };
+                            entries.push(entry);
                         }
                     }
                 }
@@ -3903,26 +3901,24 @@ namespace ts {
                 };
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<string> {
                 let start = new Date().getTime();
-                let entries: CompletionEntry[] = [];
-
+                let uniqueNames: Map<string> = {};
                 if (symbols) {
-                    let nameToSymbol: Map<Symbol> = {};
                     for (let symbol of symbols) {
                         let entry = createCompletionEntry(symbol, location);
                         if (entry) {
                             let id = escapeIdentifier(entry.name);
-                            if (!lookUp(nameToSymbol, id)) {
+                            if (!lookUp(uniqueNames, id)) {
                                 entries.push(entry);
-                                nameToSymbol[id] = symbol;
+                                uniqueNames[id] = id;
                             }
                         }
                     }
                 }
 
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
-                return entries;
+                return uniqueNames;
             }
         }
 
