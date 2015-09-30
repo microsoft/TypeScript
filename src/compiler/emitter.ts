@@ -2057,10 +2057,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
-                let constantValue = tryGetConstEnumValue(node);
-                if (constantValue !== undefined) {
-                    write(constantValue.toString());
+            function tryInlineConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
+                if (compilerOptions.isolatedModules) {
+                    return false;
+                }
+
+                let constant = getConstantInline(node);
+                if (constant) {
+                    write(constant.value.toString());
                     if (!compilerOptions.removeComments) {
                         let propertyName: string = node.kind === SyntaxKind.PropertyAccessExpression ? declarationNameToString((<PropertyAccessExpression>node).name) : getTextOfNode((<ElementAccessExpression>node).argumentExpression);
                         write(" /* " + propertyName + " */");
@@ -2069,15 +2073,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 return false;
             }
-            
-            function tryGetConstEnumValue(node: Node): number {
-                if (compilerOptions.isolatedModules) {
-                    return undefined;
+
+            function getConstantInline(node: Node): Constant {
+                if ((node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression)
+                    && !nodeIsSynthesized(node)) {
+                    let constant = resolver.getConstant(<PropertyAccessExpression | ElementAccessExpression>node);
+                    if (constant && (constant.flags & ConstantFlags.Inline)) {
+                        return constant;
+                    }
                 }
-                
-                return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression 
-                    ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                    : undefined
             }
 
             // Returns 'true' if the code was actually indented, false otherwise.
@@ -2103,7 +2107,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitPropertyAccess(node: PropertyAccessExpression) {
-                if (tryEmitConstantValue(node)) {
+                if (tryInlineConstantValue(node)) {
                     return;
                 }
 
@@ -2121,9 +2125,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         // check if constant enum value is integer
-                        let constantValue = tryGetConstEnumValue(node.expression);
-                        // isFinite handles cases when constantValue is undefined
-                        shouldEmitSpace = isFinite(constantValue) && Math.floor(constantValue) === constantValue;
+                        let constant = getConstantInline(node.expression);
+                        if (constant) {
+                            shouldEmitSpace = Math.floor(constant.value) === constant.value;
+                        }
                     }
                 }
 
@@ -2185,7 +2190,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitIndexedAccess(node: ElementAccessExpression) {
-                if (tryEmitConstantValue(node)) {
+                if (tryInlineConstantValue(node)) {
                     return;
                 }
                 emit(node.expression);
