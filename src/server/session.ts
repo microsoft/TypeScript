@@ -674,7 +674,12 @@ namespace ts.server {
                     result.push(entry);
                 }
                 return result;
-            }, []).sort((a, b) => a.name.localeCompare(b.name));
+            }, []).sort((a, b) => {
+                const sortText1 = a.sortText || a.name;
+                const sortText2 = b.sortText || b.name;
+                const result = sortText1.localeCompare(sortText2);
+                return result !== 0 ? result : a.name.localeCompare(b.name);
+            });
         }
 
         private getCompletionEntryDetails(line: number, offset: number,
