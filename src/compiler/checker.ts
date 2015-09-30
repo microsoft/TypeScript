@@ -14054,7 +14054,10 @@ namespace ts {
             }
 
             if (isHeritageClauseElementIdentifier(<EntityName>entityName)) {
-                let meaning = entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments ? SymbolFlags.Type : SymbolFlags.Namespace;
+                let meaning = entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments ?
+                    (SymbolFlags.Value | SymbolFlags.Type) :
+                    SymbolFlags.Namespace;
+
                 meaning |= SymbolFlags.Alias;
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
