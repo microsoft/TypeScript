@@ -480,7 +480,6 @@ interface Blob {
     size: number;
     type: string;
     msClose(): void;
-    msDetachStream(): any;
     slice(start?: number, end?: number, contentType?: string): Blob;
 }
 
@@ -1523,19 +1522,6 @@ declare var DataTransferItemList: {
     new(): DataTransferItemList;
 }
 
-interface DeferredPermissionRequest {
-    id: number;
-    type: string;
-    uri: string;
-    allow(): void;
-    deny(): void;
-}
-
-declare var DeferredPermissionRequest: {
-    prototype: DeferredPermissionRequest;
-    new(): DeferredPermissionRequest;
-}
-
 interface DelayNode extends AudioNode {
     delayTime: AudioParam;
 }
@@ -2190,7 +2176,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createElement(tagName: "ul"): HTMLUListElement;
     createElement(tagName: "var"): HTMLPhraseElement;
     createElement(tagName: "video"): HTMLVideoElement;
-    createElement(tagName: "x-ms-webview"): MSHTMLWebViewElement;
     createElement(tagName: "xmp"): HTMLBlockElement;
     createElement(tagName: string): HTMLElement;
     createElementNS(namespaceURI: string, qualifiedName: string): Element;
@@ -2435,7 +2420,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     getElementsByTagName(tagname: "video"): NodeListOf<HTMLVideoElement>;
     getElementsByTagName(tagname: "view"): NodeListOf<SVGViewElement>;
     getElementsByTagName(tagname: "wbr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(tagname: "xmp"): NodeListOf<HTMLBlockElement>;
     getElementsByTagName(tagname: string): NodeListOf<Element>;
     getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
@@ -2450,8 +2434,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     importNode(importedNode: Node, deep: boolean): Node;
     msElementsFromPoint(x: number, y: number): NodeList;
     msElementsFromRect(left: number, top: number, width: number, height: number): NodeList;
-    msGetPrintDocumentForNamedFlow(flowName: string): Document;
-    msSetPrintDocumentUriForNamedFlow(flowName: string, uri: string): void;
     /**
       * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
       * @param url Specifies a MIME type for the document.
@@ -2890,7 +2872,6 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByTagName(name: "video"): NodeListOf<HTMLVideoElement>;
     getElementsByTagName(name: "view"): NodeListOf<SVGViewElement>;
     getElementsByTagName(name: "wbr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
     getElementsByTagName(name: "xmp"): NodeListOf<HTMLBlockElement>;
     getElementsByTagName(name: string): NodeListOf<Element>;
     getElementsByTagNameNS(namespaceURI: string, localName: string): NodeListOf<Element>;
@@ -4039,10 +4020,6 @@ interface HTMLEmbedElement extends HTMLElement, GetSVGDocument {
       */
     msPlayToPrimary: boolean;
     /**
-      * Gets the source associated with the media element for use by the PlayToManager.
-      */
-    msPlayToSource: any;
-    /**
       * Sets or retrieves the name of the object.
       */
     name: string;
@@ -4843,10 +4820,6 @@ interface HTMLImageElement extends HTMLElement {
       */
     msPlayToPrimary: boolean;
     /**
-      * Gets the source associated with the media element for use by the PlayToManager.
-      */
-    msPlayToSource: any;
-    /**
       * Sets or retrieves the name of the object.
       */
     name: string;
@@ -4877,7 +4850,6 @@ interface HTMLImageElement extends HTMLElement {
     width: number;
     x: number;
     y: number;
-    msGetAsCastingSource(): any;
 }
 
 declare var HTMLImageElement: {
@@ -5393,14 +5365,6 @@ interface HTMLMediaElement extends HTMLElement {
       * Gets or sets a flag to specify whether playback should restart after it completes.
       */
     loop: boolean;
-    /**
-      * Specifies the purpose of the audio or video media, such as background audio or alerts.
-      */
-    msAudioCategory: string;
-    /**
-      * Specifies the output device id that the audio will be sent to.
-      */
-    msAudioDeviceType: string;
     msGraphicsTrustStatus: MSGraphicsTrust;
     /**
       * Gets the MSMediaKeys object, which is used for decrypting media data, that is associated with this media element.
@@ -5418,14 +5382,6 @@ interface HTMLMediaElement extends HTMLElement {
       * Gets or sets the primary DLNA PlayTo device.
       */
     msPlayToPrimary: boolean;
-    /**
-      * Gets the source associated with the media element for use by the PlayToManager.
-      */
-    msPlayToSource: any;
-    /**
-      * Specifies whether or not to enable low-latency playback on the media element.
-      */
-    msRealTime: boolean;
     /**
       * Gets or sets a flag that indicates whether the audio (either audio or the audio track on video media) is muted.
       */
@@ -5479,20 +5435,7 @@ interface HTMLMediaElement extends HTMLElement {
       * Fires immediately after the client loads the object.
       */
     load(): void;
-    /**
-      * Clears all effects from the media pipeline.
-      */
-    msClearEffects(): void;
-    msGetAsCastingSource(): any;
-    /**
-      * Inserts the specified audio effect into media pipeline.
-      */
-    msInsertAudioEffect(activatableClassId: string, effectRequired: boolean, config?: any): void;
     msSetMediaKeys(mediaKeys: MSMediaKeys): void;
-    /**
-      * Specifies the media protection manager for a given media pipeline.
-      */
-    msSetMediaProtectionManager(mediaProtectionManager?: any): void;
     /**
       * Pauses the current playback and sets paused to TRUE. This can be used to test whether the media is playing or paused. You can also use the pause or play events to tell whether the media is playing or not.
       */
@@ -5772,10 +5715,6 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
       * Gets or sets the primary DLNA PlayTo device.
       */
     msPlayToPrimary: boolean;
-    /**
-      * Gets the source associated with the media element for use by the PlayToManager.
-      */
-    msPlayToSource: any;
     /**
       * Sets or retrieves the name of the object.
       */
@@ -6648,15 +6587,7 @@ interface HTMLVideoElement extends HTMLMediaElement {
       * Gets or sets the height of the video element.
       */
     height: number;
-    msHorizontalMirror: boolean;
-    msIsLayoutOptimalForPlayback: boolean;
-    msIsStereo3D: boolean;
-    msStereo3DPackingMode: string;
-    msStereo3DRenderMode: string;
     msZoom: boolean;
-    onMSVideoFormatChanged: (ev: Event) => any;
-    onMSVideoFrameStepCompleted: (ev: Event) => any;
-    onMSVideoOptimalLayoutChanged: (ev: Event) => any;
     /**
       * Gets or sets a URL of an image to display, for example, like a movie poster. This can be a still frame from the video, or another image if no video data is available.
       */
@@ -6676,120 +6607,10 @@ interface HTMLVideoElement extends HTMLMediaElement {
       */
     width: number;
     getVideoPlaybackQuality(): VideoPlaybackQuality;
-    msFrameStep(forward: boolean): void;
-    msInsertVideoEffect(activatableClassId: string, effectRequired: boolean, config?: any): void;
-    msSetVideoRectangle(left: number, top: number, right: number, bottom: number): void;
     webkitEnterFullScreen(): void;
     webkitEnterFullscreen(): void;
     webkitExitFullScreen(): void;
     webkitExitFullscreen(): void;
-    addEventListener(type: "MSContentZoom", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSVideoFormatChanged", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSVideoFrameStepCompleted", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSVideoOptimalLayoutChanged", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (ev: MouseWheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "msneedkey", listener: (ev: MSMediaKeyNeededEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLVideoElement: {
@@ -7079,62 +6900,6 @@ declare var Location: {
     new(): Location;
 }
 
-interface LongRunningScriptDetectedEvent extends Event {
-    executionTime: number;
-    stopPageScriptExecution: boolean;
-}
-
-declare var LongRunningScriptDetectedEvent: {
-    prototype: LongRunningScriptDetectedEvent;
-    new(): LongRunningScriptDetectedEvent;
-}
-
-interface MSApp {
-    clearTemporaryWebDataAsync(): MSAppAsyncOperation;
-    createBlobFromRandomAccessStream(type: string, seeker: any): Blob;
-    createDataPackage(object: any): any;
-    createDataPackageFromSelection(): any;
-    createFileFromStorageFile(storageFile: any): File;
-    createStreamFromInputStream(type: string, inputStream: any): MSStream;
-    execAsyncAtPriority(asynchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): void;
-    execAtPriority(synchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): any;
-    getCurrentPriority(): string;
-    getHtmlPrintDocumentSourceAsync(htmlDoc: any): any;
-    getViewId(view: any): any;
-    isTaskScheduledAtPriorityOrHigher(priority: string): boolean;
-    pageHandlesAllApplicationActivations(enabled: boolean): void;
-    suppressSubdownloadCredentialPrompts(suppress: boolean): void;
-    terminateApp(exceptionObject: any): void;
-    CURRENT: string;
-    HIGH: string;
-    IDLE: string;
-    NORMAL: string;
-}
-declare var MSApp: MSApp;
-
-interface MSAppAsyncOperation extends EventTarget {
-    error: DOMError;
-    oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
-    readyState: number;
-    result: any;
-    start(): void;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
-    addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-}
-
-declare var MSAppAsyncOperation: {
-    prototype: MSAppAsyncOperation;
-    new(): MSAppAsyncOperation;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
-}
-
 interface MSBlobBuilder {
     append(data: any, endings?: string): void;
     getBlob(contentType?: string): Blob;
@@ -7240,58 +7005,6 @@ interface MSGraphicsTrust {
 declare var MSGraphicsTrust: {
     prototype: MSGraphicsTrust;
     new(): MSGraphicsTrust;
-}
-
-interface MSHTMLWebViewElement extends HTMLElement {
-    canGoBack: boolean;
-    canGoForward: boolean;
-    containsFullScreenElement: boolean;
-    documentTitle: string;
-    height: number;
-    settings: MSWebViewSettings;
-    src: string;
-    width: number;
-    addWebAllowedObject(name: string, applicationObject: any): void;
-    buildLocalStreamUri(contentIdentifier: string, relativePath: string): string;
-    capturePreviewToBlobAsync(): MSWebViewAsyncOperation;
-    captureSelectedContentToDataPackageAsync(): MSWebViewAsyncOperation;
-    getDeferredPermissionRequestById(id: number): DeferredPermissionRequest;
-    getDeferredPermissionRequests(): DeferredPermissionRequest[];
-    goBack(): void;
-    goForward(): void;
-    invokeScriptAsync(scriptName: string, ...args: any[]): MSWebViewAsyncOperation;
-    navigate(uri: string): void;
-    navigateToLocalStreamUri(source: string, streamResolver: any): void;
-    navigateToString(contents: string): void;
-    navigateWithHttpRequestMessage(requestMessage: any): void;
-    refresh(): void;
-    stop(): void;
-}
-
-declare var MSHTMLWebViewElement: {
-    prototype: MSHTMLWebViewElement;
-    new(): MSHTMLWebViewElement;
-}
-
-interface MSHeaderFooter {
-    URL: string;
-    dateLong: string;
-    dateShort: string;
-    font: string;
-    htmlFoot: string;
-    htmlHead: string;
-    page: number;
-    pageTotal: number;
-    textFoot: string;
-    textHead: string;
-    timeLong: string;
-    timeShort: string;
-    title: string;
-}
-
-declare var MSHeaderFooter: {
-    prototype: MSHeaderFooter;
-    new(): MSHeaderFooter;
 }
 
 interface MSInputMethodContext extends EventTarget {
@@ -7430,10 +7143,8 @@ declare var MSPluginsCollection: {
 }
 
 interface MSPointerEvent extends MouseEvent {
-    currentPoint: any;
     height: number;
     hwTimestamp: number;
-    intermediatePoints: any;
     isPrimary: boolean;
     pointerId: number;
     pointerType: any;
@@ -7442,7 +7153,6 @@ interface MSPointerEvent extends MouseEvent {
     tiltX: number;
     tiltY: number;
     width: number;
-    getCurrentPoint(element: Element): void;
     getIntermediatePoints(element: Element): void;
     initPointerEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, offsetXArg: number, offsetYArg: number, widthArg: number, heightArg: number, pressure: number, rotation: number, tiltX: number, tiltY: number, pointerIdArg: number, pointerType: any, hwTimestampArg: number, isPrimary: boolean): void;
 }
@@ -7450,24 +7160,6 @@ interface MSPointerEvent extends MouseEvent {
 declare var MSPointerEvent: {
     prototype: MSPointerEvent;
     new(typeArg: string, eventInitDict?: PointerEventInit): MSPointerEvent;
-}
-
-interface MSPrintManagerTemplatePrinter extends MSTemplatePrinter, EventTarget {
-    percentScale: number;
-    showHeaderFooter: boolean;
-    shrinkToFit: boolean;
-    drawPreviewPage(element: HTMLElement, pageNumber: number): void;
-    endPrint(): void;
-    getPrintTaskOptionValue(key: string): any;
-    invalidatePreview(): void;
-    setPageCount(pageCount: number): void;
-    startPrint(): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-}
-
-declare var MSPrintManagerTemplatePrinter: {
-    prototype: MSPrintManagerTemplatePrinter;
-    new(): MSPrintManagerTemplatePrinter;
 }
 
 interface MSRangeCollection {
@@ -7494,7 +7186,6 @@ declare var MSSiteModeEvent: {
 interface MSStream {
     type: string;
     msClose(): void;
-    msDetachStream(): any;
 }
 
 declare var MSStream: {
@@ -7515,104 +7206,6 @@ interface MSStreamReader extends EventTarget, MSBaseReader {
 declare var MSStreamReader: {
     prototype: MSStreamReader;
     new(): MSStreamReader;
-}
-
-interface MSTemplatePrinter {
-    collate: boolean;
-    copies: number;
-    currentPage: boolean;
-    currentPageAvail: boolean;
-    duplex: boolean;
-    footer: string;
-    frameActive: boolean;
-    frameActiveEnabled: boolean;
-    frameAsShown: boolean;
-    framesetDocument: boolean;
-    header: string;
-    headerFooterFont: string;
-    marginBottom: number;
-    marginLeft: number;
-    marginRight: number;
-    marginTop: number;
-    orientation: string;
-    pageFrom: number;
-    pageHeight: number;
-    pageTo: number;
-    pageWidth: number;
-    selectedPages: boolean;
-    selection: boolean;
-    selectionEnabled: boolean;
-    unprintableBottom: number;
-    unprintableLeft: number;
-    unprintableRight: number;
-    unprintableTop: number;
-    usePrinterCopyCollate: boolean;
-    createHeaderFooter(): MSHeaderFooter;
-    deviceSupports(property: string): any;
-    ensurePrintDialogDefaults(): boolean;
-    getPageMarginBottom(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginBottomImportant(pageRule: CSSPageRule): boolean;
-    getPageMarginLeft(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginLeftImportant(pageRule: CSSPageRule): boolean;
-    getPageMarginRight(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginRightImportant(pageRule: CSSPageRule): boolean;
-    getPageMarginTop(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginTopImportant(pageRule: CSSPageRule): boolean;
-    printBlankPage(): void;
-    printNonNative(document: any): boolean;
-    printNonNativeFrames(document: any, activeFrame: boolean): void;
-    printPage(element: HTMLElement): void;
-    showPageSetupDialog(): boolean;
-    showPrintDialog(): boolean;
-    startDoc(title: string): boolean;
-    stopDoc(): void;
-    updatePageStatus(status: number): void;
-}
-
-declare var MSTemplatePrinter: {
-    prototype: MSTemplatePrinter;
-    new(): MSTemplatePrinter;
-}
-
-interface MSWebViewAsyncOperation extends EventTarget {
-    error: DOMError;
-    oncomplete: (ev: Event) => any;
-    onerror: (ev: Event) => any;
-    readyState: number;
-    result: any;
-    target: MSHTMLWebViewElement;
-    type: number;
-    start(): void;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
-    TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
-    TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
-    TYPE_INVOKE_SCRIPT: number;
-    addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-}
-
-declare var MSWebViewAsyncOperation: {
-    prototype: MSWebViewAsyncOperation;
-    new(): MSWebViewAsyncOperation;
-    COMPLETED: number;
-    ERROR: number;
-    STARTED: number;
-    TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
-    TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
-    TYPE_INVOKE_SCRIPT: number;
-}
-
-interface MSWebViewSettings {
-    isIndexedDBEnabled: boolean;
-    isJavaScriptEnabled: boolean;
-}
-
-declare var MSWebViewSettings: {
-    prototype: MSWebViewSettings;
-    new(): MSWebViewSettings;
 }
 
 interface MediaElementAudioSourceNode extends AudioNode {
@@ -7856,34 +7449,6 @@ interface NamedNodeMap {
 declare var NamedNodeMap: {
     prototype: NamedNodeMap;
     new(): NamedNodeMap;
-}
-
-interface NavigationCompletedEvent extends NavigationEvent {
-    isSuccess: boolean;
-    webErrorStatus: number;
-}
-
-declare var NavigationCompletedEvent: {
-    prototype: NavigationCompletedEvent;
-    new(): NavigationCompletedEvent;
-}
-
-interface NavigationEvent extends Event {
-    uri: string;
-}
-
-declare var NavigationEvent: {
-    prototype: NavigationEvent;
-    new(): NavigationEvent;
-}
-
-interface NavigationEventWithReferrer extends NavigationEvent {
-    referer: string;
-}
-
-declare var NavigationEventWithReferrer: {
-    prototype: NavigationEventWithReferrer;
-    new(): NavigationEventWithReferrer;
 }
 
 interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorContentUtils, NavigatorStorageUtils, NavigatorGeolocation, MSNavigatorDoNotTrack, MSFileSaver {
@@ -8322,25 +7887,6 @@ declare var PeriodicWave: {
     new(): PeriodicWave;
 }
 
-interface PermissionRequest extends DeferredPermissionRequest {
-    state: string;
-    defer(): void;
-}
-
-declare var PermissionRequest: {
-    prototype: PermissionRequest;
-    new(): PermissionRequest;
-}
-
-interface PermissionRequestedEvent extends Event {
-    permissionRequest: PermissionRequest;
-}
-
-declare var PermissionRequestedEvent: {
-    prototype: PermissionRequestedEvent;
-    new(): PermissionRequestedEvent;
-}
-
 interface Plugin {
     description: string;
     filename: string;
@@ -8371,10 +7917,8 @@ declare var PluginArray: {
 }
 
 interface PointerEvent extends MouseEvent {
-    currentPoint: any;
     height: number;
     hwTimestamp: number;
-    intermediatePoints: any;
     isPrimary: boolean;
     pointerId: number;
     pointerType: any;
@@ -8383,7 +7927,6 @@ interface PointerEvent extends MouseEvent {
     tiltX: number;
     tiltY: number;
     width: number;
-    getCurrentPoint(element: Element): void;
     getIntermediatePoints(element: Element): void;
     initPointerEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget, offsetXArg: number, offsetYArg: number, widthArg: number, heightArg: number, pressure: number, rotation: number, tiltX: number, tiltY: number, pointerIdArg: number, pointerType: any, hwTimestampArg: number, isPrimary: boolean): void;
 }
@@ -10289,16 +9832,6 @@ declare var Screen: {
     new(): Screen;
 }
 
-interface ScriptNotifyEvent extends Event {
-    callingUri: string;
-    value: string;
-}
-
-declare var ScriptNotifyEvent: {
-    prototype: ScriptNotifyEvent;
-    new(): ScriptNotifyEvent;
-}
-
 interface ScriptProcessorNode extends AudioNode {
     bufferSize: number;
     onaudioprocess: (ev: AudioProcessingEvent) => any;
@@ -10779,15 +10312,6 @@ interface URL {
     revokeObjectURL(url: string): void;
 }
 declare var URL: URL;
-
-interface UnviewableContentIdentifiedEvent extends NavigationEventWithReferrer {
-    mediaType: string;
-}
-
-declare var UnviewableContentIdentifiedEvent: {
-    prototype: UnviewableContentIdentifiedEvent;
-    new(): UnviewableContentIdentifiedEvent;
-}
 
 interface ValidityState {
     badInput: boolean;
@@ -11834,7 +11358,6 @@ interface WheelEvent extends MouseEvent {
     deltaX: number;
     deltaY: number;
     deltaZ: number;
-    getCurrentPoint(element: Element): void;
     initWheelEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, buttonArg: number, relatedTargetArg: EventTarget, modifiersListArg: string, deltaXArg: number, deltaYArg: number, deltaZArg: number, deltaMode: number): void;
     DOM_DELTA_LINE: number;
     DOM_DELTA_PAGE: number;
@@ -11871,7 +11394,6 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     locationbar: BarProp;
     menubar: BarProp;
     msAnimationStartTime: number;
-    msTemplatePrinter: MSTemplatePrinter;
     name: string;
     navigator: Navigator;
     offscreenBuffering: string | boolean;
@@ -12333,7 +11855,6 @@ interface DocumentEvent {
     createEvent(eventInterface:"HashChangeEvent"): HashChangeEvent;
     createEvent(eventInterface:"IDBVersionChangeEvent"): IDBVersionChangeEvent;
     createEvent(eventInterface:"KeyboardEvent"): KeyboardEvent;
-    createEvent(eventInterface:"LongRunningScriptDetectedEvent"): LongRunningScriptDetectedEvent;
     createEvent(eventInterface:"MSGestureEvent"): MSGestureEvent;
     createEvent(eventInterface:"MSManipulationEvent"): MSManipulationEvent;
     createEvent(eventInterface:"MSMediaKeyMessageEvent"): MSMediaKeyMessageEvent;
@@ -12346,18 +11867,13 @@ interface DocumentEvent {
     createEvent(eventInterface:"MouseWheelEvent"): MouseWheelEvent;
     createEvent(eventInterface:"MutationEvent"): MutationEvent;
     createEvent(eventInterface:"MutationEvents"): MutationEvent;
-    createEvent(eventInterface:"NavigationCompletedEvent"): NavigationCompletedEvent;
-    createEvent(eventInterface:"NavigationEvent"): NavigationEvent;
-    createEvent(eventInterface:"NavigationEventWithReferrer"): NavigationEventWithReferrer;
     createEvent(eventInterface:"OfflineAudioCompletionEvent"): OfflineAudioCompletionEvent;
     createEvent(eventInterface:"PageTransitionEvent"): PageTransitionEvent;
-    createEvent(eventInterface:"PermissionRequestedEvent"): PermissionRequestedEvent;
     createEvent(eventInterface:"PointerEvent"): PointerEvent;
     createEvent(eventInterface:"PopStateEvent"): PopStateEvent;
     createEvent(eventInterface:"ProgressEvent"): ProgressEvent;
     createEvent(eventInterface:"SVGZoomEvent"): SVGZoomEvent;
     createEvent(eventInterface:"SVGZoomEvents"): SVGZoomEvent;
-    createEvent(eventInterface:"ScriptNotifyEvent"): ScriptNotifyEvent;
     createEvent(eventInterface:"StorageEvent"): StorageEvent;
     createEvent(eventInterface:"TextEvent"): TextEvent;
     createEvent(eventInterface:"TouchEvent"): TouchEvent;
@@ -12365,7 +11881,6 @@ interface DocumentEvent {
     createEvent(eventInterface:"TransitionEvent"): TransitionEvent;
     createEvent(eventInterface:"UIEvent"): UIEvent;
     createEvent(eventInterface:"UIEvents"): UIEvent;
-    createEvent(eventInterface:"UnviewableContentIdentifiedEvent"): UnviewableContentIdentifiedEvent;
     createEvent(eventInterface:"WebGLContextEvent"): WebGLContextEvent;
     createEvent(eventInterface:"WheelEvent"): WheelEvent;
     createEvent(eventInterface: string): Event;
@@ -12664,12 +12179,6 @@ interface MSLaunchUriCallback {
 interface FrameRequestCallback {
     (time: number): void;
 }
-interface MSUnsafeFunctionCallback {
-    (): any;
-}
-interface MSExecAtPriorityFunctionCallback {
-    (...args: any[]): any;
-}
 interface MutationCallback {
     (mutations: MutationRecord[], observer: MutationObserver): void;
 }
@@ -12706,7 +12215,6 @@ declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msAnimationStartTime: number;
-declare var msTemplatePrinter: MSTemplatePrinter;
 declare var name: string;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
