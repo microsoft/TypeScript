@@ -85,6 +85,7 @@ namespace ts {
             getFullyQualifiedName,
             getResolvedSignature,
             getConstantValue,
+            getConstant,
             isValidPropertyAccess,
             getSignatureFromDeclaration,
             isImplementationOfOverload,
@@ -8129,6 +8130,14 @@ namespace ts {
             if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
                 return (<LiteralExpression>indexArgumentExpression).text;
             }
+
+            if (indexArgumentExpression.kind === SyntaxKind.ElementAccessExpression || indexArgumentExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                let constant = getConstant(<ElementAccessExpression | PropertyAccessExpression>indexArgumentExpression);
+                if (constant) {
+                    return constant.value.toString();
+                }
+            }
+
             if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
                 let rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
@@ -13240,57 +13249,18 @@ namespace ts {
                         case SyntaxKind.PropertyAccessExpression:
                             let member = initializer.parent;
                             let currentType = getTypeOfSymbol(getSymbolOfNode(member.parent));
-                            let enumType: Type;
-                            let propertyName: string;
+                            let property: Symbol;
 
                             if (e.kind === SyntaxKind.Identifier) {
                                 // unqualified names can refer to member that reside in different declaration of the enum so just doing name resolution won't work.
                                 // instead pick current enum type and later try to fetch member from the type
-                                enumType = currentType;
-                                propertyName = (<Identifier>e).text;
+                                property = getPropertyOfObjectType(currentType, (<Identifier>e).text);
                             }
                             else {
-                                let expression: Expression;
-                                if (e.kind === SyntaxKind.ElementAccessExpression) {
-                                    if ((<ElementAccessExpression>e).argumentExpression === undefined ||
-                                        (<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
-                                        return undefined;
-                                    }
-                                    expression = (<ElementAccessExpression>e).expression;
-                                    propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
-                                }
-                                else {
-                                    expression = (<PropertyAccessExpression>e).expression;
-                                    propertyName = (<PropertyAccessExpression>e).name.text;
-                                }
-
-                                // expression part in ElementAccess\PropertyAccess should be either identifier or dottedName
-                                let current = expression;
-                                while (current) {
-                                    if (current.kind === SyntaxKind.Identifier) {
-                                        break;
-                                    }
-                                    else if (current.kind === SyntaxKind.PropertyAccessExpression) {
-                                        current = (<ElementAccessExpression>current).expression;
-                                    }
-                                    else {
-                                        return undefined;
-                                    }
-                                }
-
-                                enumType = checkExpression(expression);
-                                // allow references to constant members of other enums
-                                if (!(enumType.symbol && (enumType.symbol.flags & SymbolFlags.Enum))) {
-                                    return undefined;
-                                }
+                                property = resolveEnumMember(<ElementAccessExpression | PropertyAccessExpression>e);
                             }
 
-                            if (propertyName === undefined) {
-                                return undefined;
-                            }
-
-                            let property = getPropertyOfObjectType(enumType, propertyName);
-                            if (!property || !(property.flags & SymbolFlags.EnumMember)) {
+                            if (!property) {
                                 return undefined;
                             }
 
@@ -13310,6 +13280,54 @@ namespace ts {
                             return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }
+            }
+        }
+
+        function resolveEnumMember(e: ElementAccessExpression | PropertyAccessExpression) {
+            let expression: Expression;
+            let propertyName: string;
+
+            if (e.kind === SyntaxKind.ElementAccessExpression) {
+                if ((<ElementAccessExpression>e).argumentExpression === undefined ||
+                    (<ElementAccessExpression>e).argumentExpression.kind !== SyntaxKind.StringLiteral) {
+                    return undefined;
+                }
+                expression = (<ElementAccessExpression>e).expression;
+                propertyName = (<LiteralExpression>(<ElementAccessExpression>e).argumentExpression).text;
+            }
+            else if (e.kind === SyntaxKind.PropertyAccessExpression) {
+                expression = (<PropertyAccessExpression>e).expression;
+                propertyName = (<PropertyAccessExpression>e).name.text;
+            }
+
+            if (propertyName === undefined) {
+                return undefined;
+            }
+
+            // expression part in ElementAccess\PropertyAccess should be either identifier or dottedName
+            let current = expression;
+            while (current) {
+                if (current.kind === SyntaxKind.Identifier) {
+                    break;
+                }
+                else if (current.kind === SyntaxKind.PropertyAccessExpression) {
+                    current = (<ElementAccessExpression>current).expression;
+                }
+                else {
+                    return undefined;
+                }
+            }
+
+            let enumType = checkExpression(expression);
+            // allow references to constant members of other enums
+            if (!(enumType.symbol && (enumType.symbol.flags & SymbolFlags.Enum))) {
+                return undefined;
+            }
+
+            let property = getPropertyOfObjectType(enumType, propertyName);
+            if (property && (property.flags & SymbolFlags.EnumMember)) {
+                getNodeLinks(e).resolvedSymbol = property;
+                return property;
             }
         }
 
@@ -14629,24 +14647,47 @@ namespace ts {
             return getNodeLinks(node).flags;
         }
 
-        function getEnumMemberValue(node: EnumMember): number {
-            computeEnumMemberValues(<EnumDeclaration>node.parent);
-            return getNodeLinks(node).enumMemberValue;
+        function resolveEnumExpression(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): Symbol {
+            if (node.kind === SyntaxKind.EnumMember) {
+                computeEnumMemberValues(<EnumDeclaration>node.parent);
+                return node.symbol;
+            }
+            let symbol = getNodeLinks(node).resolvedSymbol || resolveEnumMember(<PropertyAccessExpression | ElementAccessExpression>node);
+            if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
+                computeEnumMemberValues(<EnumDeclaration>symbol.valueDeclaration.parent);
+                return symbol;
+            }
+            return undefined;
+        }
+
+        function getConstant(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): Constant {
+            let symbol = resolveEnumExpression(node);
+            if (symbol) {
+                let value = getNodeLinks(symbol.valueDeclaration).enumMemberValue;
+                if (value !== undefined) {
+                    return {
+                        value,
+                        flags: getConstantFlags(node, symbol)
+                    };
+                }
+            }
+            return undefined;
+        }
+
+        function getConstantFlags(node: Node, symbol: Symbol) {
+            let flags = 0;
+            // Always inline const enum member references
+            if (node !== symbol.valueDeclaration && isConstEnumDeclaration(symbol.valueDeclaration.parent)) {
+                flags |= ConstantFlags.Inline;
+            }
+            return flags;
         }
 
         function getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number {
-            if (node.kind === SyntaxKind.EnumMember) {
-                return getEnumMemberValue(<EnumMember>node);
+            let symbol = resolveEnumExpression(node);
+            if (symbol) {
+                return getNodeLinks(symbol.valueDeclaration).enumMemberValue;
             }
-
-            let symbol = getNodeLinks(node).resolvedSymbol;
-            if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
-                // inline property\index accesses only for const enums
-                if (isConstEnumDeclaration(symbol.valueDeclaration.parent)) {
-                    return getEnumMemberValue(<EnumMember>symbol.valueDeclaration);
-                }
-            }
-
             return undefined;
         }
 
@@ -14798,6 +14839,7 @@ namespace ts {
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue,
+                getConstant,
                 collectLinkedAliases,
                 getBlockScopedVariableId,
                 getReferencedValueDeclaration,
