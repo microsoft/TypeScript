@@ -29,6 +29,7 @@ interface Blob {
     size: number;
     type: string;
     msClose(): void;
+    msDetachStream(): any;
     slice(start?: number, end?: number, contentType?: string): Blob;
 }
 
@@ -472,6 +473,52 @@ interface ImageDataConstructor {
 
 declare var ImageData: ImageDataConstructor; 
 
+interface MSApp {
+    clearTemporaryWebDataAsync(): MSAppAsyncOperation;
+    createBlobFromRandomAccessStream(type: string, seeker: any): Blob;
+    createDataPackage(object: any): any;
+    createDataPackageFromSelection(): any;
+    createFileFromStorageFile(storageFile: any): File;
+    createStreamFromInputStream(type: string, inputStream: any): MSStream;
+    execAsyncAtPriority(asynchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): void;
+    execAtPriority(synchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): any;
+    getCurrentPriority(): string;
+    getHtmlPrintDocumentSourceAsync(htmlDoc: any): any;
+    getViewId(view: any): any;
+    isTaskScheduledAtPriorityOrHigher(priority: string): boolean;
+    pageHandlesAllApplicationActivations(enabled: boolean): void;
+    suppressSubdownloadCredentialPrompts(suppress: boolean): void;
+    terminateApp(exceptionObject: any): void;
+    CURRENT: string;
+    HIGH: string;
+    IDLE: string;
+    NORMAL: string;
+}
+declare var MSApp: MSApp;
+
+interface MSAppAsyncOperation extends EventTarget {
+    error: DOMError;
+    oncomplete: (ev: Event) => any;
+    onerror: (ev: Event) => any;
+    readyState: number;
+    result: any;
+    start(): void;
+    COMPLETED: number;
+    ERROR: number;
+    STARTED: number;
+    addEventListener(type: "complete", listener: (ev: Event) => any, useCapture?: boolean): void;
+    addEventListener(type: "error", listener: (ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var MSAppAsyncOperation: {
+    prototype: MSAppAsyncOperation;
+    new(): MSAppAsyncOperation;
+    COMPLETED: number;
+    ERROR: number;
+    STARTED: number;
+}
+
 interface MSBlobBuilder {
     append(data: any, endings?: string): void;
     getBlob(contentType?: string): Blob;
@@ -485,6 +532,7 @@ declare var MSBlobBuilder: {
 interface MSStream {
     type: string;
     msClose(): void;
+    msDetachStream(): any;
 }
 
 declare var MSStream: {
