@@ -159,13 +159,11 @@ var n2;
 (function (n2) {
     // The following (regardless of errors) should come back typed
     // as "Hello" (or "Hello" | "Hello").
-    n2.a = fun1 < "Hello" > ("Hello", "Hello");
-    n2.b = fun1 < "Hello" > ("Hello", "World");
-    n2.c = fun2 < "Hello";
-    "Hello" > ("Hello", "Hello");
-    n2.d = fun2 < "Hello";
-    "Hello" > ("Hello", "World");
-    n2.e = fun3 < "Hello" > ("Hello", "World");
+    n2.a = fun1("Hello", "Hello");
+    n2.b = fun1("Hello", "World");
+    n2.c = fun2("Hello", "Hello");
+    n2.d = fun2("Hello", "World");
+    n2.e = fun3("Hello", "World");
     // Assignment from the returned value should cause an error.
     n2.a = takeReturnString(n2.a);
     n2.b = takeReturnString(n2.b);
@@ -189,15 +187,11 @@ var n3;
 (function (n3) {
     // The following (regardless of errors) should come back typed
     // as "Hello" | "World" (or "World" | "Hello").
-    n3.a = fun2 < "Hello";
-    "World" > ("Hello", "World");
-    n3.b = fun2 < "Hello";
-    "World" > ("World", "Hello");
-    n3.c = fun2 < "World";
-    "Hello" > ("Hello", "Hello");
-    n3.d = fun2 < "World";
-    "Hello" > ("World", "World");
-    n3.e = fun3 < "Hello" | "World" > ("Hello", "World");
+    n3.a = fun2("Hello", "World");
+    n3.b = fun2("World", "Hello");
+    n3.c = fun2("Hello", "Hello");
+    n3.d = fun2("World", "World");
+    n3.e = fun3("Hello", "World");
     // Assignment from the returned value should cause an error.
     n3.a = takeReturnString(n3.a);
     n3.b = takeReturnString(n3.b);
@@ -235,16 +229,16 @@ declare namespace n1 {
     let e: string;
 }
 declare namespace n2 {
-    let a: boolean;
-    let b: boolean;
-    let c: boolean;
-    let d: boolean;
-    let e: boolean;
+    let a: "Hello";
+    let b: any;
+    let c: "Hello";
+    let d: any;
+    let e: any;
 }
 declare namespace n3 {
-    let a: boolean;
-    let b: boolean;
-    let c: boolean;
-    let d: boolean;
-    let e: number;
+    let a: "Hello" | "World";
+    let b: any;
+    let c: any;
+    let d: any;
+    let e: "Hello" | "World";
 }
