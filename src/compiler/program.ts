@@ -1023,7 +1023,7 @@ namespace ts {
             else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && !options.module) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 let span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided));
+                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided_Consider_setting_the_module_compiler_option_in_a_tsconfig_json_file));
             }
 
             // Cannot specify module gen target of es6 when below es6

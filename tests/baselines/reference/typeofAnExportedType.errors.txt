@@ -1,11 +1,11 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
 
 
 ==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts (2 errors) ====
     export var x = 1;
     ~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     export var r1: typeof x;
     export var y = { foo: '' };
     export var r2: typeof y;
