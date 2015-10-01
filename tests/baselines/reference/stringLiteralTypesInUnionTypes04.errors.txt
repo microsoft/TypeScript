@@ -1,23 +1,21 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,9): error TS4081: Exported type alias 'T' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,10): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(4,5): error TS2322: Type 'string' is not assignable to type '"" | "foo"'.
+  Type 'string' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(5,5): error TS2322: Type 'string' is not assignable to type '"" | "foo"'.
+  Type 'string' is not assignable to type '"foo"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts (4 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts (2 errors) ====
     
     type T = "" | "foo";
-            
-!!! error TS4081: Exported type alias 'T' has or is using private name ''.
-             ~~
-!!! error TS1110: Type expected.
-             ~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-                  ~~~~~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     let x: T = "";
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"" | "foo"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"foo"'.
     let y: T = "foo";
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"" | "foo"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"foo"'.
     
     if (x === "") {
         let a = x;

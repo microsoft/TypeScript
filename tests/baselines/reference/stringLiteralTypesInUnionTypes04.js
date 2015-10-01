@@ -38,7 +38,6 @@ if (!!!x) {
 }
 
 //// [stringLiteralTypesInUnionTypes04.js]
-"" | "foo";
 var x = "";
 var y = "foo";
 if (x === "") {
@@ -65,3 +64,9 @@ if (!!x) {
 if (!!!x) {
     var h = x;
 }
+
+
+//// [stringLiteralTypesInUnionTypes04.d.ts]
+declare type T = "" | "foo";
+declare let x: T;
+declare let y: T;

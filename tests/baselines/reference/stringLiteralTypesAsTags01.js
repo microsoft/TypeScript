@@ -43,7 +43,6 @@ else {
 }
 
 //// [stringLiteralTypesAsTags01.js]
-"A" | "B";
 function hasKind(entity, kind) {
     return kind === is;
 }
@@ -63,3 +62,22 @@ if (!hasKind(x, "B")) {
 else {
     var d = x;
 }
+
+
+//// [stringLiteralTypesAsTags01.d.ts]
+declare type Kind = "A" | "B";
+interface Entity {
+    kind: Kind;
+}
+interface A extends Entity {
+    kind: "A";
+    a: number;
+}
+interface B extends Entity {
+    kind: "B";
+    b: string;
+}
+declare function hasKind(entity: Entity, kind: "A"): entity is A;
+declare function hasKind(entity: Entity, kind: "B"): entity is B;
+declare function hasKind(entity: Entity, kind: Kind): entity is Entity;
+declare let x: A;

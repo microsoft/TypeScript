@@ -19,17 +19,28 @@ f = "foo";
 g = "bar";
 
 //// [stringLiteralTypesInVariableDeclarations01.js]
-var a = "";
-var b = "foo";
-var c = "bar";
-var d = "baz";
+var a;
+var b;
+var c;
+var d;
 a = "";
 b = "foo";
 c = "bar";
-var e = "" = "";
-var f = "foo" = "foo";
-var g = "bar" = "bar";
-var h = "baz" = "baz";
+var e = "";
+var f = "foo";
+var g = "bar";
+var h = "baz";
 e = "";
 f = "foo";
 g = "bar";
+
+
+//// [stringLiteralTypesInVariableDeclarations01.d.ts]
+declare let a: "";
+declare var b: "foo";
+declare let c: "bar";
+declare const d: "baz";
+declare let e: "";
+declare var f: "foo";
+declare let g: "bar";
+declare const h: "baz";

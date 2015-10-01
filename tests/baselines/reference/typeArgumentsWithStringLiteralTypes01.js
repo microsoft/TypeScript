@@ -113,8 +113,6 @@ namespace n3 {
 }
 
 //// [typeArgumentsWithStringLiteralTypes01.js]
-"Hello";
-"Hello" | "World";
 function fun1(x, y) {
     return randBool() ? x : y;
 }
@@ -219,3 +217,34 @@ var n3;
     n3.d = takeReturnHelloWorld(n3.d);
     n3.e = takeReturnHelloWorld(n3.e);
 })(n3 || (n3 = {}));
+
+
+//// [typeArgumentsWithStringLiteralTypes01.d.ts]
+declare function randBool(): boolean;
+declare function takeReturnString(str: string): string;
+declare function takeReturnHello(str: "Hello"): "Hello";
+declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World";
+declare function fun1<T>(x: T, y: T): T;
+declare function fun2<T, U>(x: T, y: U): T | U;
+declare function fun3<T>(...args: T[]): T;
+declare namespace n1 {
+    let a: string;
+    let b: string;
+    let c: string;
+    let d: string;
+    let e: string;
+}
+declare namespace n2 {
+    let a: boolean;
+    let b: boolean;
+    let c: boolean;
+    let d: boolean;
+    let e: boolean;
+}
+declare namespace n3 {
+    let a: boolean;
+    let b: boolean;
+    let c: boolean;
+    let d: boolean;
+    let e: number;
+}

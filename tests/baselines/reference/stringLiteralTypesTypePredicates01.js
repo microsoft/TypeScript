@@ -25,9 +25,6 @@ else {
 }
 
 //// [stringLiteralTypesTypePredicates01.js]
-"A" | "B";
-"A";
-"B";
 function kindIs(kind, is) {
     return kind === is;
 }
@@ -44,3 +41,10 @@ if (!kindIs(x, "B")) {
 else {
     var d = x;
 }
+
+
+//// [stringLiteralTypesTypePredicates01.d.ts]
+declare type Kind = "A" | "B";
+declare function kindIs(kind: Kind, is: "A"): kind is "A";
+declare function kindIs(kind: Kind, is: "B"): kind is "B";
+declare var x: Kind;

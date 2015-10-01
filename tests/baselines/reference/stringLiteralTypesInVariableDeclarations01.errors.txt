@@ -1,81 +1,54 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(2,7): error TS4025: Exported variable 'a' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(2,8): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(3,7): error TS4025: Exported variable 'b' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(3,8): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(4,7): error TS4025: Exported variable 'c' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(4,8): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,9): error TS4025: Exported variable 'd' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,10): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,7): error TS4025: Exported variable 'e' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,8): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,8): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,7): error TS4025: Exported variable 'f' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,8): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,8): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,7): error TS4025: Exported variable 'g' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,8): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,8): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,9): error TS4025: Exported variable 'h' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,10): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,10): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,7): error TS1155: 'const' declarations must be initialized
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(7,1): error TS2322: Type 'string' is not assignable to type '""'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(8,1): error TS2322: Type 'string' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(9,1): error TS2322: Type 'string' is not assignable to type '"bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,5): error TS2322: Type 'string' is not assignable to type '""'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,5): error TS2322: Type 'string' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,5): error TS2322: Type 'string' is not assignable to type '"bar"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,7): error TS2322: Type 'string' is not assignable to type '"baz"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(16,1): error TS2322: Type 'string' is not assignable to type '""'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(17,1): error TS2322: Type 'string' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(18,1): error TS2322: Type 'string' is not assignable to type '"bar"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts (20 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts (11 errors) ====
     
     let a: "";
-          
-!!! error TS4025: Exported variable 'a' has or is using private name ''.
-           ~~
-!!! error TS1110: Type expected.
     var b: "foo";
-          
-!!! error TS4025: Exported variable 'b' has or is using private name ''.
-           ~~~~~
-!!! error TS1110: Type expected.
     let c: "bar";
-          
-!!! error TS4025: Exported variable 'c' has or is using private name ''.
-           ~~~~~
-!!! error TS1110: Type expected.
     const d: "baz";
-            
-!!! error TS4025: Exported variable 'd' has or is using private name ''.
-             ~~~~~
-!!! error TS1110: Type expected.
+          ~
+!!! error TS1155: 'const' declarations must be initialized
     
     a = "";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type '""'.
     b = "foo";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
     c = "bar";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type '"bar"'.
     
     let e: "" = "";
-          
-!!! error TS4025: Exported variable 'e' has or is using private name ''.
-           ~~
-!!! error TS1110: Type expected.
-           ~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '""'.
     var f: "foo" = "foo";
-          
-!!! error TS4025: Exported variable 'f' has or is using private name ''.
-           ~~~~~
-!!! error TS1110: Type expected.
-           ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
     let g: "bar" = "bar";
-          
-!!! error TS4025: Exported variable 'g' has or is using private name ''.
-           ~~~~~
-!!! error TS1110: Type expected.
-           ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"bar"'.
     const h: "baz" = "baz";
-            
-!!! error TS4025: Exported variable 'h' has or is using private name ''.
-             ~~~~~
-!!! error TS1110: Type expected.
-             ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+          ~
+!!! error TS2322: Type 'string' is not assignable to type '"baz"'.
     
     e = "";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type '""'.
     f = "foo";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
     g = "bar";
+    ~
+!!! error TS2322: Type 'string' is not assignable to type '"bar"'.

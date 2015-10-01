@@ -21,9 +21,7 @@ x = y;
 y = x;
 
 //// [stringLiteralTypesInUnionTypes02.js]
-"foo" | "bar" | "baz";
-var x = "foo" | "bar" | "baz" | string;
-"foo";
+var x = "foo";
 var y = "bar";
 if (x === "foo") {
     var a = x;
@@ -38,3 +36,9 @@ else {
 }
 x = y;
 y = x;
+
+
+//// [stringLiteralTypesInUnionTypes02.d.ts]
+declare type T = string | "foo" | "bar" | "baz";
+declare var x: "foo" | "bar" | "baz" | string;
+declare var y: T;

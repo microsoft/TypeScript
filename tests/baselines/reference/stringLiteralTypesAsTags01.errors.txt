@@ -1,30 +1,15 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,12): error TS4081: Exported type alias 'Kind' has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,13): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(9,10): error TS4033: Property 'kind' of exported interface has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(9,11): error TS1110: Type expected.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(14,10): error TS4033: Property 'kind' of exported interface has or is using private name ''.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(14,11): error TS1110: Type expected.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(18,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(19,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(20,10): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(22,21): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(25,5): error TS2322: Type '{ kind: string; a: number; }' is not assignable to type 'A'.
-  Property '"A"' is missing in type '{ kind: string; a: number; }'.
+  Types of property 'kind' are incompatible.
+    Type 'string' is not assignable to type '"A"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (13 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (5 errors) ====
     
     type Kind = "A" | "B"
-               
-!!! error TS4081: Exported type alias 'Kind' has or is using private name ''.
-                ~~~
-!!! error TS1110: Type expected.
-                ~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-                      ~~~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     
     interface Entity {
         kind: Kind;
@@ -32,19 +17,11 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(25,5):
     
     interface A extends Entity {
         kind: "A";
-             
-!!! error TS4033: Property 'kind' of exported interface has or is using private name ''.
-              ~~~
-!!! error TS1110: Type expected.
         a: number;
     }
     
     interface B extends Entity {
         kind: "B";
-             
-!!! error TS4033: Property 'kind' of exported interface has or is using private name ''.
-              ~~~
-!!! error TS1110: Type expected.
         b: string;
     }
     
@@ -66,7 +43,8 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(25,5):
     let x: A = {
         ~
 !!! error TS2322: Type '{ kind: string; a: number; }' is not assignable to type 'A'.
-!!! error TS2322:   Property '"A"' is missing in type '{ kind: string; a: number; }'.
+!!! error TS2322:   Types of property 'kind' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"A"'.
         kind: "A",
         a: 100,
     }
