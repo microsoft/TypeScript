@@ -1,0 +1,146 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(2,21): error TS4081: Exported type alias 'PrimitiveName' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(2,22): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(2,22): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(2,33): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(2,44): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(4,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(5,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(6,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(7,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(7,28): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(7,41): error TS1005: '=' expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(8,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(8,28): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(8,41): error TS1005: '=' expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(9,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(9,28): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(9,40): error TS1005: '=' expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(10,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(10,28): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(10,40): error TS1005: '=' expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(11,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(32,14): error TS4025: Exported variable 'string' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(32,15): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(32,15): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(33,14): error TS4025: Exported variable 'number' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(33,15): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(33,15): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(34,15): error TS4025: Exported variable 'boolean' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(34,16): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(34,16): error TS2364: Invalid left-hand side of assignment expression.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts (30 errors) ====
+    
+    type PrimitiveName = 'string' | 'number' | 'boolean';
+                        
+!!! error TS4081: Exported type alias 'PrimitiveName' has or is using private name ''.
+                         ~~~~~~~~
+!!! error TS1110: Type expected.
+                         ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                    ~~~~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                               ~~~~~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    function getFalsyPrimitive(x: "string"): string;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function getFalsyPrimitive(x: "number"): number;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function getFalsyPrimitive(x: "boolean"): boolean;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+                               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                                            ~
+!!! error TS1005: '=' expected.
+    function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+                               ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                                            ~
+!!! error TS1005: '=' expected.
+    function getFalsyPrimitive(x: "number" | "string"): number | string;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+                               ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                                           ~
+!!! error TS1005: '=' expected.
+    function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                                           ~
+!!! error TS1005: '=' expected.
+    function getFalsyPrimitive(x: PrimitiveName) {
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2354: No best common type exists among return expressions.
+        if (x === "string") {
+            return "";
+        }
+        if (x === "number") {
+            return 0;
+        }
+        if (x === "boolean") {
+            return false;
+        }
+    
+        // Should be unreachable.
+        throw "Invalid value";
+    }
+    
+    namespace Consts1 {
+        const EMPTY_STRING = getFalsyPrimitive("string");
+        const ZERO = getFalsyPrimitive('number');
+        const FALSE = getFalsyPrimitive("boolean");
+    }
+    
+    const string: "string" = "string"
+                 
+!!! error TS4025: Exported variable 'string' has or is using private name ''.
+                  ~~~~~~~~
+!!! error TS1110: Type expected.
+                  ~~~~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    const number: "number" = "number"
+                 
+!!! error TS4025: Exported variable 'number' has or is using private name ''.
+                  ~~~~~~~~
+!!! error TS1110: Type expected.
+                  ~~~~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    const boolean: "boolean" = "boolean"
+                  
+!!! error TS4025: Exported variable 'boolean' has or is using private name ''.
+                   ~~~~~~~~~
+!!! error TS1110: Type expected.
+                   ~~~~~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    
+    const stringOrNumber = string || number;
+    const stringOrBoolean = string || boolean;
+    const booleanOrNumber = number || boolean;
+    const stringOrBooleanOrNumber = stringOrBoolean || number;
+    
+    namespace Consts2 {
+        const EMPTY_STRING = getFalsyPrimitive(string);
+        const ZERO = getFalsyPrimitive(number);
+        const FALSE = getFalsyPrimitive(boolean);
+    
+        const a = getFalsyPrimitive(stringOrNumber);
+        const b = getFalsyPrimitive(stringOrBoolean);
+        const c = getFalsyPrimitive(booleanOrNumber);
+        const d = getFalsyPrimitive(stringOrBooleanOrNumber);
+    }
+    
+    
+    

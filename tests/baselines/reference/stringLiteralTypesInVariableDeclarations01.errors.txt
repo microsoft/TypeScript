@@ -1,0 +1,81 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(2,7): error TS4025: Exported variable 'a' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(2,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(3,7): error TS4025: Exported variable 'b' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(3,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(4,7): error TS4025: Exported variable 'c' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(4,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,9): error TS4025: Exported variable 'd' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,10): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,7): error TS4025: Exported variable 'e' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,8): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,7): error TS4025: Exported variable 'f' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,8): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,7): error TS4025: Exported variable 'g' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,8): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,9): error TS4025: Exported variable 'h' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,10): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,10): error TS2364: Invalid left-hand side of assignment expression.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts (20 errors) ====
+    
+    let a: "";
+          
+!!! error TS4025: Exported variable 'a' has or is using private name ''.
+           ~~
+!!! error TS1110: Type expected.
+    var b: "foo";
+          
+!!! error TS4025: Exported variable 'b' has or is using private name ''.
+           ~~~~~
+!!! error TS1110: Type expected.
+    let c: "bar";
+          
+!!! error TS4025: Exported variable 'c' has or is using private name ''.
+           ~~~~~
+!!! error TS1110: Type expected.
+    const d: "baz";
+            
+!!! error TS4025: Exported variable 'd' has or is using private name ''.
+             ~~~~~
+!!! error TS1110: Type expected.
+    
+    a = "";
+    b = "foo";
+    c = "bar";
+    
+    let e: "" = "";
+          
+!!! error TS4025: Exported variable 'e' has or is using private name ''.
+           ~~
+!!! error TS1110: Type expected.
+           ~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    var f: "foo" = "foo";
+          
+!!! error TS4025: Exported variable 'f' has or is using private name ''.
+           ~~~~~
+!!! error TS1110: Type expected.
+           ~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    let g: "bar" = "bar";
+          
+!!! error TS4025: Exported variable 'g' has or is using private name ''.
+           ~~~~~
+!!! error TS1110: Type expected.
+           ~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    const h: "baz" = "baz";
+            
+!!! error TS4025: Exported variable 'h' has or is using private name ''.
+             ~~~~~
+!!! error TS1110: Type expected.
+             ~~~~~
+!!! error TS2364: Invalid left-hand side of assignment expression.
+    
+    e = "";
+    f = "foo";
+    g = "bar";

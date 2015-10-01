@@ -1,0 +1,52 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,9): error TS4081: Exported type alias 'T' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,10): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts(2,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts (4 errors) ====
+    
+    type T = "" | "foo";
+            
+!!! error TS4081: Exported type alias 'T' has or is using private name ''.
+             ~~
+!!! error TS1110: Type expected.
+             ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    let x: T = "";
+    let y: T = "foo";
+    
+    if (x === "") {
+        let a = x;
+    }
+    
+    if (x !== "") {
+        let b = x;
+    }
+    
+    if (x == "") {
+        let c = x;
+    }
+    
+    if (x != "") {
+        let d = x;
+    }
+    
+    if (x) {
+        let e = x;
+    }
+    
+    if (!x) {
+        let f = x;
+    }
+    
+    if (!!x) {
+        let g = x;
+    }
+    
+    if (!!!x) {
+        let h = x;
+    }

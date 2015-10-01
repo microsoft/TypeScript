@@ -1,0 +1,57 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(2,12): error TS4081: Exported type alias 'Kind' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(2,13): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(2,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(2,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(4,46): error TS4060: Return type of exported function has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(4,47): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(5,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(5,46): error TS4060: Return type of exported function has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(5,47): error TS1110: Type expected.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts (10 errors) ====
+    
+    type Kind = "A" | "B"
+               
+!!! error TS4081: Exported type alias 'Kind' has or is using private name ''.
+                ~~~
+!!! error TS1110: Type expected.
+                ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                      ~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    function kindIs(kind: Kind, is: "A"): kind is "A";
+             ~~~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+                                                 
+!!! error TS4060: Return type of exported function has or is using private name ''.
+                                                  ~~~
+!!! error TS1110: Type expected.
+    function kindIs(kind: Kind, is: "B"): kind is "B";
+             ~~~~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+                                                 
+!!! error TS4060: Return type of exported function has or is using private name ''.
+                                                  ~~~
+!!! error TS1110: Type expected.
+    function kindIs(kind: Kind, is: Kind): boolean {
+        return kind === is;
+    }
+    
+    var x: Kind = "A";
+    
+    if (kindIs(x, "A")) {
+        let a = x;
+    }
+    else {
+        let b = x;
+    }
+    
+    if (!kindIs(x, "B")) {
+        let c = x;
+    }
+    else {
+        let d = x;
+    }

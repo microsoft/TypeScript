@@ -1,0 +1,62 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(2,18): error TS4081: Exported type alias 'T' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(2,19): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(2,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(2,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(2,35): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,7): error TS4025: Exported variable 'x' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,8): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,32): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,39): error TS1005: ',' expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts(4,41): error TS1134: Variable declaration expected.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts (13 errors) ====
+    
+    type T = string | "foo" | "bar" | "baz";
+                     
+!!! error TS4081: Exported type alias 'T' has or is using private name ''.
+                      ~~~~~
+!!! error TS1110: Type expected.
+                      ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                              ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                      ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    var x: "foo" | "bar" | "baz" | string = "foo";
+          
+!!! error TS4025: Exported variable 'x' has or is using private name ''.
+           ~~~~~
+!!! error TS1110: Type expected.
+           ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                   ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                   ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+                                          ~
+!!! error TS1005: ',' expected.
+                                            ~~~~~
+!!! error TS1134: Variable declaration expected.
+    var y: T = "bar";
+    
+    if (x === "foo") {
+        let a = x;
+    }
+    else if (x !== "bar") {
+        let b = x || y;
+    }
+    else {
+        let c = x;
+        let d = y;
+        let e: (typeof x) | (typeof y) = c || d;
+    }
+    
+    x = y;
+    y = x;

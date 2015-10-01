@@ -1,0 +1,86 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,12): error TS4081: Exported type alias 'Kind' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,13): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,13): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(2,19): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(9,10): error TS4033: Property 'kind' of exported interface has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(9,11): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(14,10): error TS4033: Property 'kind' of exported interface has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(14,11): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(18,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(19,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(20,10): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(22,21): error TS2304: Cannot find name 'is'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(25,5): error TS2322: Type '{ kind: string; a: number; }' is not assignable to type 'A'.
+  Property '"A"' is missing in type '{ kind: string; a: number; }'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (13 errors) ====
+    
+    type Kind = "A" | "B"
+               
+!!! error TS4081: Exported type alias 'Kind' has or is using private name ''.
+                ~~~
+!!! error TS1110: Type expected.
+                ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                      ~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    interface Entity {
+        kind: Kind;
+    }
+    
+    interface A extends Entity {
+        kind: "A";
+             
+!!! error TS4033: Property 'kind' of exported interface has or is using private name ''.
+              ~~~
+!!! error TS1110: Type expected.
+        a: number;
+    }
+    
+    interface B extends Entity {
+        kind: "B";
+             
+!!! error TS4033: Property 'kind' of exported interface has or is using private name ''.
+              ~~~
+!!! error TS1110: Type expected.
+        b: string;
+    }
+    
+    function hasKind(entity: Entity, kind: "A"): entity is A;
+             ~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function hasKind(entity: Entity, kind: "B"): entity is B;
+             ~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function hasKind(entity: Entity, kind: Kind): entity is Entity;
+             ~~~~~~~
+!!! error TS2394: Overload signature is not compatible with function implementation.
+    function hasKind(entity: Entity, kind: Kind): boolean {
+        return kind === is;
+                        ~~
+!!! error TS2304: Cannot find name 'is'.
+    }
+    
+    let x: A = {
+        ~
+!!! error TS2322: Type '{ kind: string; a: number; }' is not assignable to type 'A'.
+!!! error TS2322:   Property '"A"' is missing in type '{ kind: string; a: number; }'.
+        kind: "A",
+        a: 100,
+    }
+    
+    if (hasKind(x, "A")) {
+        let a = x;
+    }
+    else {
+        let b = x;
+    }
+    
+    if (!hasKind(x, "B")) {
+        let c = x;
+    }
+    else {
+        let d = x;
+    }

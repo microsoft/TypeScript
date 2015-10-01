@@ -1,0 +1,50 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(2,18): error TS4081: Exported type alias 'T' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(2,19): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(2,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(2,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(4,7): error TS4025: Exported variable 'x' has or is using private name ''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(4,8): error TS1110: Type expected.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(4,8): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(4,16): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(4,24): error TS2304: Cannot find name 'number'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts (9 errors) ====
+    
+    type T = number | "foo" | "bar";
+                     
+!!! error TS4081: Exported type alias 'T' has or is using private name ''.
+                      ~~~~~
+!!! error TS1110: Type expected.
+                      ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                              ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    
+    var x: "foo" | "bar" | number;
+          
+!!! error TS4025: Exported variable 'x' has or is using private name ''.
+           ~~~~~
+!!! error TS1110: Type expected.
+           ~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                   ~~~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~~~~~
+!!! error TS2304: Cannot find name 'number'.
+    var y: T = "bar";
+    
+    if (x === "foo") {
+        let a = x;
+    }
+    else if (x !== "bar") {
+        let b = x || y;
+    }
+    else {
+        let c = x;
+        let d = y;
+        let e: (typeof x) | (typeof y) = c || d;
+    }
+    
+    x = y;
+    y = x;
