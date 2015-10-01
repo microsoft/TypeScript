@@ -224,7 +224,7 @@ namespace ts {
         }
 
         // Perform binary search in one of the Unicode range maps
-        let lo: number = 0;
+        let lo = 0;
         let hi: number = map.length;
         let mid: number;
 
@@ -657,7 +657,7 @@ namespace ts {
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
-    
+
     /** Optionally, get the shebang */
     export function getShebang(text: string): string {
         return shebangTriviaRegex.test(text)
