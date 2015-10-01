@@ -522,6 +522,12 @@ namespace ts {
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
+                resolveModuleName: (name: string, containingFile?: string) => {
+                    let resolvedModule = resolveModuleNamesWorker([name], containingFile || "dummy.ts")[0];
+                    if (!resolvedModule)
+                        return;
+                    return resolvedModule.resolvedFileName;
+                },
             };
         }
 

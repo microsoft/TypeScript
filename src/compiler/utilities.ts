@@ -40,6 +40,7 @@ namespace ts {
         getNewLine(): string;
 
         writeFile: WriteFileCallback;
+        resolveModuleName(path: string, containingFile?: string): string;
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -1619,19 +1620,46 @@ namespace ts {
         "\u0085": "\\u0085"  // nextLine
     };
 
+    let singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    let singleQuoteEscapedCharsMap: Map<string> = {
+        "\0": "\\0",
+        "\t": "\\t",
+        "\v": "\\v",
+        "\f": "\\f",
+        "\b": "\\b",
+        "\r": "\\r",
+        "\n": "\\n",
+        "\\": "\\\\",
+        "\'": "\\\'",
+        "\u2028": "\\u2028", // lineSeparator
+        "\u2029": "\\u2029", // paragraphSeparator
+        "\u0085": "\\u0085"  // nextLine
+    };
+
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
      * Note that this doesn't actually wrap the input in double quotes.
      */
     export function escapeString(s: string): string {
-        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
+        return escapeStringByQuote(s, "\"");
+    }
+
+    export function escapeStringByQuote(s: string, quotemark: string): string {
+        let regex = quotemark === "'" ? singleQuoteEscapedCharsRegExp : escapedCharsRegExp;
+        let replacementMap = quotemark === "'" ? singleQuoteEscapedCharsMap : escapedCharsMap;
+
+        s = regex.test(s) ? s.replace(regex, getReplacement) : s;
 
         return s;
 
         function getReplacement(c: string) {
-            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return replacementMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
+    }
+
+    export function quoteString(s: string, quotemark: string): string {
+        return quotemark + escapeStringByQuote(s, quotemark) + quotemark;
     }
 
     export function isIntrinsicJsxName(name: string) {

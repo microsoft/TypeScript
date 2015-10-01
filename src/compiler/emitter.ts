@@ -448,12 +448,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** If removeComments is true, no leading-comments needed to be emitted **/
             let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
 
-            let moduleEmitDelegates: Map<(node: SourceFile, startIndex: number) => void> = {
+            let moduleEmitDelegates: Map<(node: SourceFile, startIndex: number, resolvePath?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]: emitUMDModule,
                 [ModuleKind.CommonJS]: emitCommonJSModule,
+            };
+
+            let bundleEmitDelegates: Map<(node: SourceFile, startIndex: number, resolvePath?: boolean) => void> = {
+                [ModuleKind.ES6]: () => {},
+                [ModuleKind.AMD]: emitAMDModule,
+                [ModuleKind.System]: emitSystemModule,
+                [ModuleKind.UMD]: emitUMDModule,
+                [ModuleKind.CommonJS]: () => {},
             };
 
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
@@ -465,6 +473,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSourceFile(root);
             }
             else {
+                forEach(host.getSourceFiles(), emitEmitHelpers);
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
@@ -488,7 +497,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitConcatenatedModule(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
-                moduleEmitDelegates[modulekind](sourceFile, 0);
+                let canonicalName = resolveToSemiabsolutePath(sourceFile.fileName);
+                sourceFile.moduleName = sourceFile.moduleName || canonicalName;
+                bundleEmitDelegates[modulekind](sourceFile, 0, /*resolvePath*/true);
+            }
+
+            function resolveToSemiabsolutePath(path: string): string {
+                let dir = host.getCurrentDirectory();
+                return removeFileExtension(
+                    getRelativePathToDirectoryOrUrl(dir, path, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/false)
+                );
             }
 
             function isUniqueName(name: string): boolean {
@@ -6620,7 +6638,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function emitSystemModule(node: SourceFile, startIndex: number): void {
+            function emitSystemModule(node: SourceFile, startIndex: number, resolvePath?: boolean): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -6660,6 +6678,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
+                    if (resolvePath) {
+                        text = makeModulePathSemiabsolute(text);
+                    }
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
@@ -6679,7 +6700,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 importAliasNames: string[];
             }
 
-            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean): AMDDependencyNames {
+            function makeModulePathSemiabsolute(externalModuleName: string): string {
+                let quotemark = externalModuleName.charAt(0);
+                let unquotedModuleName = externalModuleName.substring(1, externalModuleName.length - 1);
+                let resolvedFileName = host.resolveModuleName(unquotedModuleName, currentSourceFile.fileName);
+                if (resolvedFileName) {
+                    let semiabsoluteName = resolveToSemiabsolutePath(resolvedFileName);
+                    externalModuleName = quoteString(semiabsoluteName, quotemark);
+                }
+                return externalModuleName;
+            }
+
+            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean, resolvePath?: boolean): AMDDependencyNames {
                 // names of modules with corresponding parameter in the factory function
                 let aliasedModuleNames: string[] = [];
                 // names of modules with no corresponding parameters in factory function
@@ -6703,6 +6735,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Find the name of the external module
                     let externalModuleName = getExternalModuleNameText(importNode);
 
+                    if (resolvePath) {
+                        externalModuleName = makeModulePathSemiabsolute(externalModuleName);
+                    }
+
                     // Find the name of the module alias, if there is one
                     let importAliasName = getLocalNameForExternalImport(importNode);
                     if (includeNonAmdDependencies && importAliasName) {
@@ -6717,7 +6753,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
             }
 
-            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean, resolvePath?: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
                 //
@@ -6730,7 +6766,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
 
-                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies);
+                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies, resolvePath);
                 emitAMDDependencyList(dependencyNames);
                 write(", ");
                 emitAMDFactoryHeader(dependencyNames);
@@ -6758,7 +6794,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(") {");
             }
 
-            function emitAMDModule(node: SourceFile, startIndex: number) {
+            function emitAMDModule(node: SourceFile, startIndex: number, resolvePath?: boolean) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
@@ -6767,7 +6803,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node.moduleName) {
                     write("\"" + node.moduleName + "\", ");
                 }
-                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
+                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, resolvePath);
                 increaseIndent();
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
@@ -6789,11 +6825,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitExportEquals(/*emitAsReturn*/ false);
             }
 
-            function emitUMDModule(node: SourceFile, startIndex: number) {
+            function emitUMDModule(node: SourceFile, startIndex: number, resolvePath?: boolean) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
-                let dependencyNames = getAMDDependencyNames(node, /*includeNonAmdDependencies*/ false);
+                let dependencyNames = getAMDDependencyNames(node, /*includeNonAmdDependencies*/ false, resolvePath);
 
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
                 writeLines(`(function (factory) {
