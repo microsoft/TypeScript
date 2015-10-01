@@ -9,6 +9,7 @@ namespace ts {
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: (path: string) => void): FileWatcher;
+        watchDirectory?(path: string, callback: (path: string) => void): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -191,6 +192,12 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
+            const _process = require("process");
+            
+
+            function isNode4OrLater(): Boolean {
+                return parseInt(_process.version.charAt(1)) >= 4;
+            }
 
             const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -284,6 +291,15 @@ namespace ts {
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
+
+                    // Node 4.0 stablized the `fs.watch` function which avoids polling
+                    // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
+                    // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
+                    // if the current node.js version is newer than 4, use `fs.watch` instead.
+                    if (isNode4OrLater()) {
+                        return _fs.watch(fileName, (eventName: string, path: string) => callback(path));
+                    }
+
                     // watchFile polls a file every 250ms, picking up file notifications.
                     _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
 
