@@ -180,9 +180,11 @@ namespace ts {
                 let nodeToCheck: Node;
                 if (declaration.kind === SyntaxKind.VariableDeclaration) {
                     nodeToCheck = declaration.parent.parent;
-                } else if (declaration.kind === SyntaxKind.NamedImports || declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause) {
+                }
+                else if (declaration.kind === SyntaxKind.NamedImports || declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ImportClause) {
                     Debug.fail("We should be getting ImportDeclaration instead to write");
-                } else {
+                }
+                else {
                     nodeToCheck = declaration;
                 }
 
@@ -1082,7 +1084,7 @@ namespace ts {
                 //      emitted: declare var c: number; // instead of declare var c:number, ;
                 let elements: Node[] = [];
                 for (let element of bindingPattern.elements) {
-                    if (element.kind !== SyntaxKind.OmittedExpression){
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
                         elements.push(element);
                     }
                 }
