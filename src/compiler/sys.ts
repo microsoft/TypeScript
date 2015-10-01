@@ -198,12 +198,11 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _process = require("process");
 
             class WatchedFileSet {
                 private watchedFiles: WatchedFile[] = [];
                 private nextFileToCheck = 0;
-                private watchTimer: NodeJS.Timer;
+                private watchTimer: any;
 
                 // average async stat takes about 30 microseconds
                 // set chunk size to do 30 files in < 1 millisecond
@@ -299,7 +298,7 @@ namespace ts {
             var watchedFileSet = new WatchedFileSet();
 
             function isNode4OrLater(): Boolean {
-                return parseInt(_process.version.charAt(1)) >= 4;
+                return parseInt(process.version.charAt(1)) >= 4;
             }
 
             const platform: string = _os.platform();
