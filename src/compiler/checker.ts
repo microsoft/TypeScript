@@ -13452,7 +13452,7 @@ namespace ts {
                 // Checks for ambient external modules.
                 if (isAmbientExternalModule) {
                     if (!isGlobalSourceFile(node.parent)) {
-                        error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules);
+                        error(node.name, Diagnostics.Ambient_modules_cannot_be_nested_in_other_modules_or_namespaces);
                     }
                     if (isExternalModuleNameRelative(node.name.text)) {
                         error(node.name, Diagnostics.Ambient_module_declaration_cannot_specify_relative_module_name);
