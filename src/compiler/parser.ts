@@ -1969,9 +1969,7 @@ namespace ts {
 
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
-                return token === SyntaxKind.StringLiteral
-                    ? <StringLiteral>parseLiteralNode(/*internName*/ true)
-                    : parseType();
+                return parseType();
             }
 
             return undefined;
@@ -2359,6 +2357,8 @@ namespace ts {
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     let node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
+                case SyntaxKind.StringLiteral:
+                    return <StringLiteral>parseLiteralNode(/*internName*/ true)
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
