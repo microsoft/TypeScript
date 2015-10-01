@@ -207,6 +207,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.noItemsWithSameNameButDifferentKind();
         }
 
+        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
+            FourSlash.currentTestState.verifyCompletionListStartsWithItemsInOrder(items);
+        }
+
         // Verifies the completion list items count to be greater than the specified amount. The
         // completion list is brought up if necessary
         public completionListItemsCountIsGreaterThan(count: number) {
