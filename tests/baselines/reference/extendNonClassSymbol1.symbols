@@ -9,4 +9,5 @@ var x = A;
 
 class C extends x { } // error, could not find symbol xs
 >C : Symbol(C, Decl(extendNonClassSymbol1.ts, 1, 10))
+>x : Symbol(x, Decl(extendNonClassSymbol1.ts, 1, 3))
 

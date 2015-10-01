@@ -7,7 +7,7 @@ export function bar() { }
 export interface Buzz { }
 
 //// [index.ts]
-import {foo, bar, Buzz} from "utils";
+import {foo, bar, Buzz} from "./utils";
 
 foo();
 let obj: Buzz;
@@ -19,7 +19,7 @@ exports.foo = foo;
 function bar() { }
 exports.bar = bar;
 //// [index.js]
-var utils_1 = require("utils");
+var utils_1 = require("./utils");
 exports.bar = utils_1.bar;
 utils_1.foo();
 var obj;
@@ -31,5 +31,5 @@ export declare function bar(): void;
 export interface Buzz {
 }
 //// [index.d.ts]
-import { bar } from "utils";
+import { bar } from "./utils";
 export { bar };

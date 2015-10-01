@@ -86,7 +86,6 @@ namespace ts {
 
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-
             output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
@@ -100,6 +99,19 @@ namespace ts {
         for (let i = 0; i < diagnostics.length; i++) {
             reportDiagnostic(diagnostics[i]);
         }
+    }
+
+    function reportWatchDiagnostic(diagnostic: Diagnostic) {
+        let output = new Date().toLocaleTimeString() + " - ";
+
+        if (diagnostic.file) {
+            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+        }
+
+        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+
+        sys.write(output);
     }
 
     function padLeft(s: string, length: number) {
@@ -218,7 +230,7 @@ namespace ts {
 
                     let result = readConfigFile(configFileName, sys.readFile);
                     if (result.error) {
-                        reportDiagnostic(result.error);
+                        reportWatchDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
 
@@ -247,7 +259,7 @@ namespace ts {
             }
 
             setCachedProgram(compileResult.program);
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -263,7 +275,7 @@ namespace ts {
             let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName, removed) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -285,9 +297,15 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile) {
+        function sourceFileChanged(sourceFile: SourceFile, removed: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
+            if (removed) {
+                var index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index >= 0) {
+                    rootFileNames.splice(index, 1);
+                }
+            }
             startTimer();
         }
 
@@ -309,7 +327,7 @@ namespace ts {
 
         function recompile() {
             timerHandle = undefined;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
     }
@@ -361,7 +379,7 @@ namespace ts {
 
         function compileProgram(): ExitStatus {
             let diagnostics: Diagnostic[];
-            
+
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
@@ -497,7 +515,7 @@ namespace ts {
 
     function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
         let currentDirectory = sys.getCurrentDirectory();
-        let file = combinePaths(currentDirectory, 'tsconfig.json');
+        let file = combinePaths(currentDirectory, "tsconfig.json");
         if (sys.fileExists(file)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
         }
@@ -519,8 +537,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
-            let result: Map<string|number|boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            let result: Map<string | number | boolean> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (let name in options) {

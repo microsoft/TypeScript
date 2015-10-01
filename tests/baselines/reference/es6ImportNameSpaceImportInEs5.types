@@ -5,7 +5,7 @@ export var a = 10;
 >10 : number
 
 === tests/cases/compiler/es6ImportNameSpaceImportInEs5_1.ts ===
-import * as nameSpaceBinding from "es6ImportNameSpaceImportInEs5_0";
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportInEs5_0";
 >nameSpaceBinding : typeof nameSpaceBinding
 
 var x = nameSpaceBinding.a;
@@ -14,6 +14,6 @@ var x = nameSpaceBinding.a;
 >nameSpaceBinding : typeof nameSpaceBinding
 >a : number
 
-import * as nameSpaceBinding2 from "es6ImportNameSpaceImportInEs5_0"; // elide this
+import * as nameSpaceBinding2 from "./es6ImportNameSpaceImportInEs5_0"; // elide this
 >nameSpaceBinding2 : typeof nameSpaceBinding
 

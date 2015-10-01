@@ -1,0 +1,17 @@
+tests/cases/compiler/node_modules/a.d.ts(1,1): error TS2654: Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.
+
+
+==== tests/cases/compiler/b.ts (0 errors) ====
+    import y = require("a"); 
+    
+==== tests/cases/compiler/node_modules/ref.ts (0 errors) ====
+    
+    var x = 1;
+    
+==== tests/cases/compiler/node_modules/a.d.ts (1 errors) ====
+    /// <reference path="ref.ts"/>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2654: Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.
+    export declare var y;
+    
+    

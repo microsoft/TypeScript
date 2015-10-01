@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsx/tsxParseTests2.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(tsxParseTests2.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(tsxParseTests2.tsx, 0, 20))
+
+	interface IntrinsicElements { div; span; }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxParseTests2.tsx, 1, 22))
+>div : Symbol(div, Decl(tsxParseTests2.tsx, 2, 30))
+>span : Symbol(span, Decl(tsxParseTests2.tsx, 2, 35))
+}
+
+var x = </**/div></div>;
+>x : Symbol(x, Decl(tsxParseTests2.tsx, 5, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests2.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(tsxParseTests2.tsx, 2, 30))
+

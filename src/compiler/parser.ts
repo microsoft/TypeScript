@@ -425,7 +425,7 @@ namespace ts {
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
     // files.
-    module Parser {
+    namespace Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -518,7 +518,7 @@ namespace ts {
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        let parseErrorBeforeNextFinishedNode: boolean = false;
+        let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
@@ -1058,11 +1058,11 @@ namespace ts {
         }
 
         function parseIdentifierName(): Identifier {
-            return createIdentifier(isIdentifierOrKeyword());
+            return createIdentifier(tokenIsIdentifierOrKeyword(token));
         }
 
         function isLiteralPropertyName(): boolean {
-            return isIdentifierOrKeyword() ||
+            return tokenIsIdentifierOrKeyword(token) ||
                 token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.NumericLiteral;
         }
@@ -1086,7 +1086,7 @@ namespace ts {
         }
 
         function isSimplePropertyName() {
-            return token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || isIdentifierOrKeyword();
+            return token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral || tokenIsIdentifierOrKeyword(token);
         }
 
         function parseComputedPropertyName(): ComputedPropertyName {
@@ -1213,9 +1213,9 @@ namespace ts {
                 case ParsingContext.HeritageClauses:
                     return isHeritageClause();
                 case ParsingContext.ImportOrExportSpecifiers:
-                    return isIdentifierOrKeyword();
+                    return tokenIsIdentifierOrKeyword(token);
                 case ParsingContext.JsxAttributes:
-                    return isIdentifierOrKeyword() || token === SyntaxKind.OpenBraceToken;
+                    return tokenIsIdentifierOrKeyword(token) || token === SyntaxKind.OpenBraceToken;
                 case ParsingContext.JsxChildren:
                     return true;
                 case ParsingContext.JSDocFunctionParameters:
@@ -1254,7 +1254,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOrKeyword() {
             nextToken();
-            return isIdentifierOrKeyword();
+            return tokenIsIdentifierOrKeyword(token);
         }
 
         function isHeritageClauseExtendsOrImplementsKeyword(): boolean {
@@ -1824,7 +1824,7 @@ namespace ts {
             // the code would be implicitly: "name.identifierOrKeyword; identifierNameOrKeyword".
             // In the first case though, ASI will not take effect because there is not a
             // line terminator after the identifier or keyword.
-            if (scanner.hasPrecedingLineBreak() && isIdentifierOrKeyword()) {
+            if (scanner.hasPrecedingLineBreak() && tokenIsIdentifierOrKeyword(token)) {
                 let matchesPattern = lookAhead(nextTokenIsIdentifierOrKeywordOnSameLine);
 
                 if (matchesPattern) {
@@ -2282,7 +2282,7 @@ namespace ts {
                         }
                     }
 
-                    if (isIdentifierOrKeyword()) {
+                    if (tokenIsIdentifierOrKeyword(token)) {
                         return parsePropertyOrMethodSignature();
                     }
             }
@@ -2360,6 +2360,7 @@ namespace ts {
                     let node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
@@ -2382,6 +2383,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
@@ -3938,7 +3940,8 @@ namespace ts {
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forOfStatement;
-            } else {
+            }
+            else {
                 let forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
@@ -4101,13 +4104,9 @@ namespace ts {
             }
         }
 
-        function isIdentifierOrKeyword() {
-            return token >= SyntaxKind.Identifier;
-        }
-
         function nextTokenIsIdentifierOrKeywordOnSameLine() {
             nextToken();
-            return isIdentifierOrKeyword() && !scanner.hasPrecedingLineBreak();
+            return tokenIsIdentifierOrKeyword(token) && !scanner.hasPrecedingLineBreak();
         }
 
         function nextTokenIsFunctionKeywordOnSameLine() {
@@ -4117,7 +4116,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOrKeywordOrNumberOnSameLine() {
             nextToken();
-            return (isIdentifierOrKeyword() || token === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
+            return (tokenIsIdentifierOrKeyword(token) || token === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
         }
 
         function isDeclaration(): boolean {
@@ -4170,7 +4169,7 @@ namespace ts {
                     case SyntaxKind.ImportKeyword:
                         nextToken();
                         return token === SyntaxKind.StringLiteral || token === SyntaxKind.AsteriskToken ||
-                            token === SyntaxKind.OpenBraceToken || isIdentifierOrKeyword();
+                            token === SyntaxKind.OpenBraceToken || tokenIsIdentifierOrKeyword(token);
                     case SyntaxKind.ExportKeyword:
                         nextToken();
                         if (token === SyntaxKind.EqualsToken || token === SyntaxKind.AsteriskToken ||
@@ -4777,7 +4776,7 @@ namespace ts {
 
             // It is very important that we check this *after* checking indexers because
             // the [ token can start an index signature or a computed property name
-            if (isIdentifierOrKeyword() ||
+            if (tokenIsIdentifierOrKeyword(token) ||
                 token === SyntaxKind.StringLiteral ||
                 token === SyntaxKind.NumericLiteral ||
                 token === SyntaxKind.AsteriskToken ||
@@ -4813,7 +4812,7 @@ namespace ts {
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.ClassKeyword);
-            node.name = parseOptionalIdentifier();
+            node.name = parseNameOfClassDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
 
@@ -4828,6 +4827,21 @@ namespace ts {
             }
 
             return finishNode(node);
+        }
+
+        function parseNameOfClassDeclarationOrExpression(): Identifier {
+            // implements is a future reserved word so
+            // 'class implements' might mean either
+            // - class expression with omitted name, 'implements' starts heritage clause
+            // - class with name 'implements' 
+            // 'isImplementsClause' helps to disambiguate between these two cases 
+            return isIdentifier() && !isImplementsClause()
+                ? parseIdentifier()
+                : undefined;
+        }
+
+        function isImplementsClause() {
+            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword);
         }
 
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
@@ -5304,7 +5318,7 @@ namespace ts {
             Unknown
         }
 
-        export module JSDocParser {
+        export namespace JSDocParser {
             export function isJSDocType() {
                 switch (token) {
                     case SyntaxKind.AsteriskToken:
@@ -5320,7 +5334,7 @@ namespace ts {
                         return true;
                 }
 
-                return isIdentifierOrKeyword();
+                return tokenIsIdentifierOrKeyword(token);
             }
 
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
@@ -5949,7 +5963,7 @@ namespace ts {
         }
     }
 
-    module IncrementalParser {
+    namespace IncrementalParser {
         export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
             aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 

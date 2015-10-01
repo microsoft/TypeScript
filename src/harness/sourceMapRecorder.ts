@@ -15,14 +15,14 @@
 
 ///<reference path="harness.ts"/>
 
-module Harness.SourceMapRecoder {
+namespace Harness.SourceMapRecoder {
 
     interface SourceMapSpanWithDecodeErrors {
         sourceMapSpan: ts.SourceMapSpan;
         decodeErrors: string[];
     }
 
-    module SourceMapDecoder {
+    namespace SourceMapDecoder {
         let sourceMapMappings: string;
         let sourceMapNames: string[];
         let decodingIndex: number;
@@ -202,7 +202,7 @@ module Harness.SourceMapRecoder {
         }
     }
 
-    module SourceMapSpanWriter {
+    namespace SourceMapSpanWriter {
         let sourceMapRecoder: Compiler.WriterAggregator;
         let sourceMapSources: string[];
         let sourceMapNames: string[];
@@ -442,7 +442,7 @@ module Harness.SourceMapRecoder {
 
         for (let i = 0; i < sourceMapDataList.length; i++) {
             let sourceMapData = sourceMapDataList[i];
-            let prevSourceFile: ts.SourceFile = null;
+            let prevSourceFile: ts.SourceFile;
 
             SourceMapSpanWriter.intializeSourceMapSpanWriter(sourceMapRecoder, sourceMapData, jsFiles[i]);
             for (let j = 0; j < sourceMapData.sourceMapDecodedMappings.length; j++) {

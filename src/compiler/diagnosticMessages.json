@@ -195,7 +195,7 @@
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum elements can only have integer literal initializers.": {
+    "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
     },
@@ -549,7 +549,7 @@
     },
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
-        "code": 1184
+        "code": 1183
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -619,15 +619,15 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
+    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
     },
@@ -743,24 +743,6 @@
         "category": "Error",
         "code": 1235
     },
-    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
-        "category": "Error",
-        "code": 1236
-    },
-
-
-    "'with' statements are not allowed in an async function block.": {
-        "category": "Error",
-        "code": 1300
-    },
-    "'await' expression is only allowed within an async function.": {
-        "category": "Error",
-        "code": 1308
-    },
-    "Async functions are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1311
-    },
     "The return type of a property decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1236
@@ -800,6 +782,23 @@
     "Method '{0}' cannot have an implementation because it is marked abstract.": {
         "category": "Error",
         "code": 1245
+    },
+    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
+        "category": "Error",
+        "code": 1246
+    },
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'await' expression is only allowed within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1297,7 +1296,7 @@
         "category": "Error",
         "code": 2434
     },
-    "Ambient modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules or namespaces.": {
         "category": "Error",
         "code": 2435
     },
@@ -1645,6 +1644,18 @@
         "category": "Error",
         "code": 2524
     },
+    "Initializer provides no value for this binding element and the binding element has no default value.": {
+        "category": "Error",
+        "code": 2525
+    },
+    "A 'this' type is available only in a non-static member of a class or interface.": {
+        "category": "Error",
+        "code": 2526
+    },
+    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2527
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600
@@ -1697,7 +1708,18 @@
         "category": "Error",
         "code": 2653
     },
-
+    "Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Exported external package typings can only be in '.d.ts' files. Please contact the package author to update the package definition.": {
+        "category": "Error",
+        "code": 2655
+    },
+    "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
+        "category": "Error",
+        "code": 2656
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2036,7 +2058,7 @@
     },
     "A 'tsconfig.json' file is already defined at: '{0}'.": {
         "category": "Error",
-        "code": 5053
+        "code": 5054
     },
 
     "Concatenate and emit output to single file.": {
@@ -2083,7 +2105,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
         "category": "Message",
         "code": 6016
     },
@@ -2167,7 +2189,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
         "category": "Error",
         "code": 6046
     },
@@ -2231,6 +2253,11 @@
         "category": "Error",
         "code": 6062
     },
+    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
+        "category": "Error",
+        "code": 6063
+    },
+
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
@@ -2255,7 +2282,7 @@
         "category": "Message",
         "code": 6068
     },
-    "Specifies module resolution strategy: 'node' (Node) or 'classic' (TypeScript pre 1.6) .": {
+    "Specifies module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
         "code": 6069
     },

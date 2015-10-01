@@ -4,7 +4,7 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Symbol(p, Decl(awaitCallExpression2_es6.ts, 1, 11))
->Promise : Symbol(Promise, Decl(lib.d.ts, 5041, 1), Decl(lib.d.ts, 5127, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 
 declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 >fn : Symbol(fn, Decl(awaitCallExpression2_es6.ts, 1, 32))
@@ -21,14 +21,14 @@ declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
 
 declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >pfn : Symbol(pfn, Decl(awaitCallExpression2_es6.ts, 4, 11))
->Promise : Symbol(Promise, Decl(lib.d.ts, 5041, 1), Decl(lib.d.ts, 5127, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 >arg0 : Symbol(arg0, Decl(awaitCallExpression2_es6.ts, 4, 28))
 >arg1 : Symbol(arg1, Decl(awaitCallExpression2_es6.ts, 4, 42))
 >arg2 : Symbol(arg2, Decl(awaitCallExpression2_es6.ts, 4, 57))
 
 declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >po : Symbol(po, Decl(awaitCallExpression2_es6.ts, 5, 11))
->Promise : Symbol(Promise, Decl(lib.d.ts, 5041, 1), Decl(lib.d.ts, 5127, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 >fn : Symbol(fn, Decl(awaitCallExpression2_es6.ts, 5, 25))
 >arg0 : Symbol(arg0, Decl(awaitCallExpression2_es6.ts, 5, 29))
 >arg1 : Symbol(arg1, Decl(awaitCallExpression2_es6.ts, 5, 43))
@@ -36,12 +36,13 @@ declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 
 async function func(): Promise<void> {
 >func : Symbol(func, Decl(awaitCallExpression2_es6.ts, 5, 84))
->Promise : Symbol(Promise, Decl(lib.d.ts, 5041, 1), Decl(lib.d.ts, 5127, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 
     "before";
     var b = fn(await p, a, a);
 >b : Symbol(b, Decl(awaitCallExpression2_es6.ts, 8, 7))
 >fn : Symbol(fn, Decl(awaitCallExpression2_es6.ts, 1, 32))
+>p : Symbol(p, Decl(awaitCallExpression2_es6.ts, 1, 11))
 >a : Symbol(a, Decl(awaitCallExpression2_es6.ts, 0, 11))
 >a : Symbol(a, Decl(awaitCallExpression2_es6.ts, 0, 11))
 
