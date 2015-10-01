@@ -14224,7 +14224,21 @@ namespace ts {
             }
 
             if (isHeritageClauseElementIdentifier(<EntityName>entityName)) {
-                let meaning = entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments ? SymbolFlags.Type : SymbolFlags.Namespace;
+                let meaning = SymbolFlags.None;
+
+                // In an interface or class, we're definitely interested in a type.
+                if (entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                    meaning = SymbolFlags.Type;
+
+                    // In a class 'extends' clause we are also looking for a value.
+                    if (isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent)) {
+                        meaning |= SymbolFlags.Value;
+                    }
+                }
+                else {
+                    meaning = SymbolFlags.Namespace;
+                }
+
                 meaning |= SymbolFlags.Alias;
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
