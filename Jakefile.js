@@ -869,6 +869,7 @@ task("lint", ["build-rules"], function() {
         var result = lintFile(lintOptions, lintTargets[i]);
         if (result.failureCount > 0) {
             console.log(result.output);
+            fail('Linter errors.', result.failureCount);
         }
     }
 });
