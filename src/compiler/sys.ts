@@ -21,6 +21,12 @@ namespace ts {
         exit(exitCode?: number): void;
     }
 
+    interface WatchedFile {
+        fileName: string;
+        callback: (fileName: string) => void;
+        mtime: Date;
+    }
+
     export interface FileWatcher {
         close(): void;
     }
@@ -193,7 +199,104 @@ namespace ts {
             const _path = require("path");
             const _os = require("os");
             const _process = require("process");
-            
+
+            class WatchedFileSet {
+                private watchedFiles: WatchedFile[] = [];
+                private nextFileToCheck = 0;
+                private watchTimer: NodeJS.Timer;
+
+                // average async stat takes about 30 microseconds
+                // set chunk size to do 30 files in < 1 millisecond
+                constructor(public interval = 2500, public chunkSize = 30) {
+                }
+
+                private static copyListRemovingItem<T>(item: T, list: T[]) {
+                    var copiedList: T[] = [];
+                    for (var i = 0, len = list.length; i < len; i++) {
+                        if (list[i] != item) {
+                            copiedList.push(list[i]);
+                        }
+                    }
+                    return copiedList;
+                }
+
+                private static getModifiedTime(fileName: string): Date {
+                    return _fs.statSync(fileName).mtime;
+                }
+
+                private poll(checkedIndex: number) {
+                    var watchedFile = this.watchedFiles[checkedIndex];
+                    if (!watchedFile) {
+                        return;
+                    }
+
+                    _fs.stat(watchedFile.fileName, (err: any, stats: any) => {
+                        if (err) {
+                            watchedFile.callback(watchedFile.fileName);
+                        }
+                        else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
+                            watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
+                            watchedFile.callback(watchedFile.fileName);
+                        }
+                    });
+                }
+
+                // this implementation uses polling and
+                // stat due to inconsistencies of fs.watch
+                // and efficiency of stat on modern filesystems
+                private startWatchTimer() {
+                    this.watchTimer = setInterval(() => {
+                        var count = 0;
+                        var nextToCheck = this.nextFileToCheck;
+                        var firstCheck = -1;
+                        while ((count < this.chunkSize) && (nextToCheck !== firstCheck)) {
+                            this.poll(nextToCheck);
+                            if (firstCheck < 0) {
+                                firstCheck = nextToCheck;
+                            }
+                            nextToCheck++;
+                            if (nextToCheck === this.watchedFiles.length) {
+                                nextToCheck = 0;
+                            }
+                            count++;
+                        }
+                        this.nextFileToCheck = nextToCheck;
+                    }, this.interval);
+                }
+
+                addFile(fileName: string, callback: (fileName: string) => void): WatchedFile {
+                    var file: WatchedFile = {
+                        fileName,
+                        callback,
+                        mtime: WatchedFileSet.getModifiedTime(fileName)
+                    };
+
+                    this.watchedFiles.push(file);
+                    if (this.watchedFiles.length === 1) {
+                        this.startWatchTimer();
+                    }
+                    return file;
+                }
+
+                removeFile(file: WatchedFile) {
+                    this.watchedFiles = WatchedFileSet.copyListRemovingItem(file, this.watchedFiles);
+                }
+            }
+
+            // REVIEW: for now this implementation uses polling.
+            // The advantage of polling is that it works reliably
+            // on all os and with network mounted files.
+            // For 90 referenced files, the average time to detect 
+            // changes is 2*msInterval (by default 5 seconds).
+            // The overhead of this is .04 percent (1/2500) with
+            // average pause of < 1 millisecond (and max
+            // pause less than 1.5 milliseconds); question is
+            // do we anticipate reference sets in the 100s and
+            // do we care about waiting 10-20 seconds to detect
+            // changes for large reference sets? If so, do we want
+            // to increase the chunk size or decrease the interval
+            // time dynamically to match the large reference set?
+            var watchedFileSet = new WatchedFileSet();
 
             function isNode4OrLater(): Boolean {
                 return parseInt(_process.version.charAt(1)) >= 4;
@@ -291,8 +394,7 @@ namespace ts {
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {
-
-                    // Node 4.0 stablized the `fs.watch` function which avoids polling
+                    // Node 4.0 stablized the `fs.watch` function on Windows which avoids polling
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
@@ -300,19 +402,9 @@ namespace ts {
                         return _fs.watch(fileName, (eventName: string, path: string) => callback(path));
                     }
 
-                    // watchFile polls a file every 250ms, picking up file notifications.
-                    _fs.watchFile(fileName, { persistent: true, interval: 250 }, fileChanged);
-
+                    var watchedFile = watchedFileSet.addFile(fileName, callback);
                     return {
-                        close() { _fs.unwatchFile(fileName, fileChanged); }
-                    };
-
-                    function fileChanged(curr: any, prev: any) {
-                        if (+curr.mtime <= +prev.mtime) {
-                            return;
-                        }
-
-                        callback(fileName);
+                        close: () => watchedFileSet.removeFile(watchedFile)
                     }
                 },
                 resolvePath: function (path: string): string {
