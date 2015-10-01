@@ -604,7 +604,7 @@ namespace FourSlash {
             if (items.length === 0) {
                 return;
             }
-            
+
             const entries = this.getCompletionListAtCaret().entries;
             assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
             for (let i = 0; i < items.length; ++i) {

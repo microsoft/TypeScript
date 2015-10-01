@@ -194,14 +194,14 @@ namespace ts {
                         return getAnonymousModuleName(node);
                     }
                     else {
-                        Debug.fail('Unknown binder BinaryExpression kind');
+                        Debug.fail("Unknown binder BinaryExpression kind");
                     }
 
                 case SyntaxKind.CallExpression:
                     Debug.assert(isDefineCall(<CallExpression>node));
                     if ((<CallExpression>node).arguments[0].kind === SyntaxKind.StringLiteral) {
                         let moduleName = (<StringLiteral>(<CallExpression>node).arguments[0]).text;
-                        return '"' + moduleName + '"';
+                        return `"` + moduleName + `"`;
                     }
                     else {
                         return getAnonymousModuleName(node);
@@ -225,7 +225,7 @@ namespace ts {
             if (node.kind === SyntaxKind.CallExpression) {
                 let call = <CallExpression>node;
                 if (call.expression.kind === SyntaxKind.Identifier &&
-                    (<Identifier>call.expression).text === 'require' &&
+                    (<Identifier>call.expression).text === "require" &&
                     call.arguments.length === 1) {
 
                     return node;
@@ -237,7 +237,7 @@ namespace ts {
 
         function getAnonymousModuleName(node: Node) {
             let sourceFileName = removeFileExtension(file.fileName);
-            return '"' + sourceFileName + '"';
+            return `"` + sourceFileName + `"`;
         }
 
         function getDisplayName(node: Declaration): string {
@@ -984,7 +984,7 @@ namespace ts {
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
-                
+
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -1020,7 +1020,7 @@ namespace ts {
                     checkStrictModeFunctionName(<FunctionExpression>node);
                     let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
-                
+
                 // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
@@ -1033,7 +1033,7 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
-                
+
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:

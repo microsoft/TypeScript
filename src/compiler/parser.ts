@@ -525,7 +525,7 @@ namespace ts {
             initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
 
             let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
-            
+
             clearState();
 
             return result;

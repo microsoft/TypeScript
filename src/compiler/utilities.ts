@@ -1021,7 +1021,7 @@ namespace ts {
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
-    
+
     export function isSourceFileJavaScript(file: SourceFile): boolean {
         return isInJavaScriptFile(file);
     }
@@ -1044,7 +1044,7 @@ namespace ts {
             expression.kind === SyntaxKind.CallExpression &&
             expression.arguments.length > 0 &&
             isInJavaScriptFile(expression) &&
-            isCalledToNamedFunction(expression, 'define');
+            isCalledToNamedFunction(expression, "define");
     }
 
     export function isAnonymousDefineCall(expression: Node): boolean;
@@ -1057,7 +1057,7 @@ namespace ts {
     export function isAmdRequireCall(expression: Node): boolean;
     export function isAmdRequireCall(expression: CallExpression): boolean {
         // of the form 'require("name")' or 'require(arg1, arg2, ...)'
-        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, 'require') && expression.arguments.length >= 1;
+        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, "require") && expression.arguments.length >= 1;
     }
 
     export function isAmdExportAssignment(expression: Node): boolean;
@@ -1069,7 +1069,7 @@ namespace ts {
             (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
             (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
             ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'exports');
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === "exports");
     }
 
     export function isCommonJsExportsAssignment(expression: Node): boolean;
@@ -1081,8 +1081,8 @@ namespace ts {
             (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
             (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
             ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === 'module') &&
-            ((<PropertyAccessExpression>expression.left).name.text === 'exports');
+            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === "module") &&
+            ((<PropertyAccessExpression>expression.left).name.text === "exports");
     }
 
     export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
@@ -1097,7 +1097,7 @@ namespace ts {
             }
         }
 
-        if(isAmdRequireCall(callExpr)) {
+        if (isAmdRequireCall(callExpr)) {
             return callExpr.arguments;
         }
 
@@ -1146,12 +1146,12 @@ namespace ts {
         if (!node) {
             return undefined;
         }
-        
+
         const jsDocComment = getJSDocComment(node, checkParentVariableStatement);
         if (!jsDocComment) {
             return undefined;
         }
-        
+
         for (let tag of jsDocComment.tags) {
             if (tag.kind === kind) {
                 return tag;
@@ -1170,15 +1170,15 @@ namespace ts {
         //   */
         // var x = function(name) { return name.length; }
         if (checkParentVariableStatement) {
-            const isInitializerOfVariableDeclarationInStatement = 
-                node.parent.kind === SyntaxKind.VariableDeclaration && 
+            const isInitializerOfVariableDeclarationInStatement =
+                node.parent.kind === SyntaxKind.VariableDeclaration &&
                 (<VariableDeclaration>node.parent).initializer === node &&
-                node.parent.parent.parent.kind === SyntaxKind.VariableStatement
-                
+                node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
+
             const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
             return variableStatementNode && variableStatementNode.jsDocComment;
         }
-        
+
         return undefined;
     }
 
@@ -1216,7 +1216,7 @@ namespace ts {
 
         return undefined;
     }
-    
+
     export function hasRestParameter(s: SignatureDeclaration): boolean {
         return isRestParameter(lastOrUndefined(s.parameters));
     }

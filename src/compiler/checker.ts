@@ -971,8 +971,8 @@ namespace ts {
                 return;
             }
 
-            if(moduleName.indexOf('!') >= 0) {
-                moduleName = moduleName.substr(0, moduleName.indexOf('!'));
+            if (moduleName.indexOf("!") >= 0) {
+                moduleName = moduleName.substr(0, moduleName.indexOf("!"));
             }
 
             let isRelative = isExternalModuleNameRelative(moduleName);
@@ -2469,7 +2469,7 @@ namespace ts {
                 if (func.kind === SyntaxKind.FunctionExpression &&
                     func.parent &&
                     func.parent.kind === SyntaxKind.CallExpression) {
-                    
+
                     if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
                         assignDefineOrRequireCallParameterTypes(<FunctionExpression>func);
                         let links = getSymbolLinks(declaration.symbol);
@@ -2776,22 +2776,22 @@ namespace ts {
         */
         function resolveDefineModule(symbol: Symbol): Type {
             // Can't meaningfully define the same module more than once
-            if(symbol.declarations.length !== 1) {
+            if (symbol.declarations.length !== 1) {
                 return unknownType;
             }
 
             // If the invocation of 'define' has zero args ('define()')... we
             // shouldn't really be here, but it's meaninguless
             let callExpr = <CallExpression>symbol.declarations[0];
-            if(callExpr.arguments.length === 0) {
-                Debug.fail('Should not have a zero-arg define call');
+            if (callExpr.arguments.length === 0) {
+                Debug.fail("Should not have a zero-arg define call");
                 return unknownType;
             }
 
             // If the last arg isn't a function expr, just resolve
             // its type and define that as the shape of the module
             let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
-            if(!isFunctionLike(lastArg)) {
+            if (!isFunctionLike(lastArg)) {
                 let resultType = getTypeOfExpression(lastArg);
                 // If this type is a function type, we want to use its return type since
                 // it's going to get invoked anyway
@@ -2815,7 +2815,7 @@ namespace ts {
             let assignedModuleType: Type = undefined;
             let exportAssignedProperties: Symbol[] = [];
             let exportAssignedPropTable: SymbolTable = {};
-            
+
             if (cjsModuleType === undefined || cjsExportsType === undefined) {
                 return unknownType;
             }
@@ -2841,14 +2841,14 @@ namespace ts {
             return emptyObjectType;
 
             function traverse(node: Node) {
-                if(node.kind === SyntaxKind.BinaryExpression &&
+                if (node.kind === SyntaxKind.BinaryExpression &&
                    (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
                     let lhs = (<BinaryExpression>node).left;
-                    if(lhs.kind === SyntaxKind.PropertyAccessExpression) {
+                    if (lhs.kind === SyntaxKind.PropertyAccessExpression) {
                         // e.g. module.exports = foo;
                         let propertyName = (<PropertyAccessExpression>lhs).name.text;
                         let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
-                        if (operandType === cjsModuleType && propertyName === 'exports') {
+                        if (operandType === cjsModuleType && propertyName === "exports") {
                             assignedModuleType = getTypeOfNode((<BinaryExpression>node).right);
                         }
                         else if (operandType === cjsExportsType) {
@@ -9745,9 +9745,9 @@ namespace ts {
             }
 
             let exprType = getTypeOfExpression(node.expression);
-            if((exprType === cjsRequireType) ||
+            if ((exprType === cjsRequireType) ||
                (exprType === amdRequireType)) {
-                if(node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                if (node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
                     return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
                 }
             }
@@ -9781,19 +9781,19 @@ namespace ts {
         // 1 parameter named 'require', two parameters named 'require' and 'exports',
         // or 3 parameters named 'require', 'exports', and 'module' in that exact order
         function isCommonJsWrapper(expression: FunctionExpression|ArrowFunction): boolean {
-           switch(expression.parameters.length) {
+           switch (expression.parameters.length) {
                 case 3:
-                    if((<Identifier>expression.parameters[2].name).text !== 'module') {
+                    if ((<Identifier>expression.parameters[2].name).text !== "module") {
                         return false;
                     }
                     // fall-through
                 case 2:
-                    if((<Identifier>expression.parameters[1].name).text !== 'exports') {
+                    if ((<Identifier>expression.parameters[1].name).text !== "exports") {
                         return false;
                     }
                     // fall-through
                 case 1:
-                    if ((<Identifier>expression.parameters[0].name).text !== 'require') {
+                    if ((<Identifier>expression.parameters[0].name).text !== "require") {
                         return false;
                     }
                     return true;
@@ -9811,7 +9811,7 @@ namespace ts {
             if (!hasDependencyArray && isCommonJsWrapper(funcExpr)) {
                 // CommonJS wrapper
                 // Fall-throughs here are intentional
-                switch(funcExpr.parameters.length) {
+                switch (funcExpr.parameters.length) {
                     case 3:
                         getSymbolLinks(funcExpr.parameters[2].symbol).type = cjsModuleType;
                     case 2:
@@ -9837,13 +9837,13 @@ namespace ts {
                         let moduleName = getTextOfNode(moduleNames.elements[i]);
 
                         let unquotedName = moduleName.substr(1, moduleName.length - 2);
-                        if (unquotedName === 'require') {
+                        if (unquotedName === "require") {
                             links.type = cjsRequireType;
                         }
-                        else if (unquotedName === 'exports') {
+                        else if (unquotedName === "exports") {
                             links.type = cjsExportsType;
                         }
-                        else if (unquotedName === 'module') {
+                        else if (unquotedName === "module") {
                             links.type = cjsModuleType;
                         }
                         else {
@@ -15396,14 +15396,14 @@ namespace ts {
 
             // Initialize special symbols
             if (compilerOptions.allowNonTsExtensions) {
-                let req = getExportedSymbolFromNamespace('AMD', 'require');
+                let req = getExportedSymbolFromNamespace("AMD", "require");
                 if (req) {
-                    globals['require'] = req;
+                    globals["require"] = req;
                 }
-                
-                let def = getExportedSymbolFromNamespace('AMD', 'define');
+
+                let def = getExportedSymbolFromNamespace("AMD", "define");
                 if (def) {
-                    globals['define'] = def;
+                    globals["define"] = def;
                 }
             }
 
@@ -15434,10 +15434,10 @@ namespace ts {
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
 
-            cjsModuleType = getExportedTypeFromNamespace('CommonJS', 'Module');
-            cjsExportsType = getExportedTypeFromNamespace('CommonJS', 'Exports');
-            cjsRequireType = getExportedTypeFromNamespace('CommonJS', 'Require');
-            amdRequireType = getExportedTypeFromNamespace('AMD', 'Require');
+            cjsModuleType = getExportedTypeFromNamespace("CommonJS", "Module");
+            cjsExportsType = getExportedTypeFromNamespace("CommonJS", "Exports");
+            cjsRequireType = getExportedTypeFromNamespace("CommonJS", "Require");
+            amdRequireType = getExportedTypeFromNamespace("AMD", "Require");
 
 
             // If we're in ES6 mode, load the TemplateStringsArray.

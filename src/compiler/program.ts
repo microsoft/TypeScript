@@ -691,7 +691,7 @@ namespace ts {
             }
 
             let isJavaScriptFile = isSourceFileJavaScript(file);
-            
+
             let imports: LiteralExpression[];
             for (let node of file.statements) {
                 collect(node, /* allowRelativeModuleNames */ true);
@@ -747,7 +747,7 @@ namespace ts {
                         }
                         break;
                 }
-                
+
                 if (isSourceFileJavaScript(file)) {
                     forEachChild(node, node => collect(node, allowRelativeModuleNames));
                 }

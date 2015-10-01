@@ -188,13 +188,13 @@ namespace ts {
             };
         }
         function getNodeSystem(): System {
-            var _fs = require("fs");
-            var _path = require("path");
-            var _os = require('os');
+            let _fs = require("fs");
+            let _path = require("path");
+            let _os = require("os");
 
-            var platform: string = _os.platform();
+            let platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            var useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            let useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!_fs.existsSync(fileName)) {
@@ -228,7 +228,7 @@ namespace ts {
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
-                    data = '\uFEFF' + data;
+                    data = "\uFEFF" + data;
                 }
 
                 _fs.writeFileSync(fileName, data, "utf8");
