@@ -1300,7 +1300,7 @@
         "category": "Error",
         "code": 2434
     },
-    "Ambient modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules or namespaces.": {
         "category": "Error",
         "code": 2435
     },

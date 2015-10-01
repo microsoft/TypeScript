@@ -425,7 +425,7 @@ namespace ts {
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
     // files.
-    module Parser {
+    namespace Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -518,7 +518,7 @@ namespace ts {
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        let parseErrorBeforeNextFinishedNode: boolean = false;
+        let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0;
@@ -3947,7 +3947,8 @@ namespace ts {
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forOfStatement;
-            } else {
+            }
+            else {
                 let forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
@@ -4834,7 +4835,7 @@ namespace ts {
 
             return finishNode(node);
         }
-        
+
         function parseNameOfClassDeclarationOrExpression(): Identifier {
             // implements is a future reserved word so
             // 'class implements' might mean either
@@ -4845,11 +4846,11 @@ namespace ts {
                 ? parseIdentifier()
                 : undefined;
         }
-        
+
         function isImplementsClause() {
-            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword)
+            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword);
         }
-        
+
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
@@ -5326,7 +5327,7 @@ namespace ts {
             Unknown
         }
 
-        export module JSDocParser {
+        export namespace JSDocParser {
             export function isJSDocType() {
                 switch (token) {
                     case SyntaxKind.AsteriskToken:
@@ -5971,7 +5972,7 @@ namespace ts {
         }
     }
 
-    module IncrementalParser {
+    namespace IncrementalParser {
         export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
             aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 

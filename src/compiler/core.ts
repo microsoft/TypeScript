@@ -52,7 +52,7 @@ namespace ts {
         function normalizeKey(key: string) {
             return getCanonicalFileName(normalizeSlashes(key));
         }
-        
+
         function clear() {
             files = {};
         }
@@ -117,7 +117,7 @@ namespace ts {
         return count;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[]{
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
@@ -130,7 +130,7 @@ namespace ts {
         return result;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[]{
+    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
@@ -148,7 +148,7 @@ namespace ts {
         return array1.concat(array2);
     }
 
-    export function deduplicate<T>(array: T[]): T[]{
+    export function deduplicate<T>(array: T[]): T[] {
         let result: T[];
         if (array) {
             result = [];
@@ -486,7 +486,7 @@ namespace ts {
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[]{
+    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
         return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
     }
 
@@ -797,7 +797,7 @@ namespace ts {
         VeryAggressive = 3,
     }
 
-    export module Debug {
+    export namespace Debug {
         let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {

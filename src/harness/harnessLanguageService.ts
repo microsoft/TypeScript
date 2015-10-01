@@ -3,11 +3,11 @@
 /// <reference path="..\server\client.ts" />
 /// <reference path="harness.ts" />
 
-module Harness.LanguageService {
+namespace Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
-        public lineMap: number[] = null;
+        public lineMap: number[] = undefined;
 
         constructor(public fileName: string, public content: string) {
             this.setContent(content);
@@ -95,8 +95,8 @@ module Harness.LanguageService {
             let oldShim = <ScriptSnapshotProxy>oldScript;
 
             let range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
-            if (range === null) {
-                return null;
+            if (range === undefined) {
+                return undefined;
             }
 
             return JSON.stringify({ span: { start: range.span.start, length: range.span.length }, newLength: range.newLength });
@@ -118,11 +118,11 @@ module Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo;
     }
 
-    export class LanguageServiceAdapterHost  {
+    export class LanguageServiceAdapterHost {
         protected fileNameToScript: ts.Map<ScriptInfo> = {};
-        
+
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
-                    protected settings = ts.getDefaultCompilerOptions()) { 
+                    protected settings = ts.getDefaultCompilerOptions()) {
         }
 
         public getNewLine(): string {
@@ -145,7 +145,7 @@ module Harness.LanguageService {
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
             let script = this.getScriptInfo(fileName);
-            if (script !== null) {
+            if (script !== undefined) {
                 script.editContent(start, end, newText);
                 return;
             }
@@ -169,7 +169,7 @@ module Harness.LanguageService {
     }
 
     /// Native adapter
-    class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost { 
+    class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
         getCurrentDirectory(): string { return ""; }
@@ -191,7 +191,7 @@ module Harness.LanguageService {
 
     export class NativeLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: NativeLanguageServiceHost;
-        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) { 
+        constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             this.host = new NativeLanguageServiceHost(cancellationToken, options);
         }
         getHost() { return this.host; }
@@ -204,14 +204,14 @@ module Harness.LanguageService {
     class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
 
-        public getModuleResolutionsForFile: (fileName: string)=> string;
+        public getModuleResolutionsForFile: (fileName: string) => string;
 
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
 
             if (preprocessToResolve) {
-                let compilerOptions = this.nativeHost.getCompilationSettings()
+                let compilerOptions = this.nativeHost.getCompilationSettings();
                 let moduleResolutionHost: ts.ModuleResolutionHost = {
                     fileExists: fileName => this.getScriptInfo(fileName) !== undefined,
                     readFile: fileName => {
@@ -230,7 +230,7 @@ module Harness.LanguageService {
                         }
                     }
                     return JSON.stringify(imports);
-                }
+                };
             }
         }
 
@@ -247,7 +247,7 @@ module Harness.LanguageService {
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
             let nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
-            return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot); 
+            return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
         getLocalizedDiagnosticMessages(): string { return JSON.stringify({}); }
@@ -255,17 +255,17 @@ module Harness.LanguageService {
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
         }
-        fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }        
-        readFile(fileName: string) { 
+        fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+        readFile(fileName: string) {
             let snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
-        }        
+        }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
         error(s: string): void { this.nativeHost.error(s); }
     }
 
-    class ClassifierShimProxy implements ts.Classifier { 
+    class ClassifierShimProxy implements ts.Classifier {
         constructor(private shim: ts.ClassifierShim) {
         }
         getEncodedLexicalClassifications(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.Classifications {
@@ -302,7 +302,7 @@ module Harness.LanguageService {
         if (parsedResult.error) {
             throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
         }
-        else if (parsedResult.canceled) { 
+        else if (parsedResult.canceled) {
             throw new ts.OperationCanceledException();
         }
         return parsedResult.result;
@@ -369,7 +369,7 @@ module Harness.LanguageService {
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
         }
-        getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[]{
+        getTypeDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getTypeDefinitionAtPosition(fileName, position));
         }
         getReferencesAtPosition(fileName: string, position: number): ts.ReferenceEntry[] {
@@ -474,19 +474,19 @@ module Harness.LanguageService {
     }
 
     // Server adapter
-    class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost { 
+    class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
         private client: ts.server.SessionClient;
 
         constructor(cancellationToken: ts.HostCancellationToken, settings: ts.CompilerOptions) {
             super(cancellationToken, settings);
         }
 
-        onMessage(message: string): void { 
-        
+        onMessage(message: string): void {
+
         }
 
-        writeMessage(message: string): void { 
-        
+        writeMessage(message: string): void {
+
         }
 
         setClient(client: ts.server.SessionClient) {
@@ -504,7 +504,7 @@ module Harness.LanguageService {
         }
     }
 
-    class SessionServerHost implements ts.server.ServerHost, ts.server.Logger { 
+    class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         args: string[] = [];
         newLine: string;
         useCaseSensitiveFileNames: boolean = false;
@@ -513,23 +513,23 @@ module Harness.LanguageService {
             this.newLine = this.host.getNewLine();
         }
 
-        onMessage(message: string): void { 
-        
+        onMessage(message: string): void {
+
         }
 
         writeMessage(message: string): void {
         }
 
-        write(message: string): void { 
+        write(message: string): void {
             this.writeMessage(message);
         }
 
 
         readFile(fileName: string): string {
-            if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) { 
+            if (fileName.indexOf(Harness.Compiler.defaultLibFileName) >= 0) {
                 fileName = Harness.Compiler.defaultLibFileName;
             }
-             
+
             let snapshot = this.host.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
@@ -567,8 +567,8 @@ module Harness.LanguageService {
         readDirectory(path: string, extension?: string): string[] {
             throw new Error("Not implemented Yet.");
         }
-        
-        watchFile(fileName: string, callback: (fileName: string) => void): ts.FileWatcher { 
+
+        watchFile(fileName: string, callback: (fileName: string) => void): ts.FileWatcher {
             return { close() { } };
         }
 
@@ -582,7 +582,7 @@ module Harness.LanguageService {
         msg(message: string) {
             return this.host.log(message);
         }
-        
+
         loggingEnabled() {
             return true;
         }
@@ -602,7 +602,7 @@ module Harness.LanguageService {
         startGroup(): void {
         }
     }
-    
+
     export class ServerLanugageServiceAdapter implements LanguageServiceAdapter {
         private host: SessionClientHost;
         private client: ts.server.SessionClient;

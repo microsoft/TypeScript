@@ -29,6 +29,9 @@ namespace ts {
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
+    declare var Buffer: {
+        new (str: string, encoding?: string): any;
+    };
 
     declare class Enumerator {
         public atEnd(): boolean;
@@ -113,7 +116,7 @@ namespace ts {
                 return path.toLowerCase();
             }
 
-            function getNames(collection: any): string[]{
+            function getNames(collection: any): string[] {
                 let result: string[] = [];
                 for (let e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
                     result.push(e.item().Name);
@@ -268,8 +271,15 @@ namespace ts {
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {
+                    const buffer = new Buffer(s, "utf8");
+                    let offset = 0;
+                    let toWrite: number = buffer.length;
+                    let written = 0;
                     // 1 is a standard descriptor for stdout
-                    _fs.writeSync(1, s);
+                    while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
+                        offset += written;
+                        toWrite -= written;
+                    }
                 },
                 readFile,
                 writeFile,
