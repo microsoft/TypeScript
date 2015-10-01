@@ -8,6 +8,7 @@
 ////}
 ////var x = 1;
 ////x./*1*/
-
 goTo.marker("1");
-verify.verifyCompletionListStartsWithItemsInOrder(["toExponential", "fractionDigits", "Number", "x"]); // first - members from type then identifiers from the current file
+let itemsFromType = ["toExponential"];
+let identifiersFromCurrentFile = ["fractionDigits", "Number", "x"].sort((a, b) => a.localeCompare(b));
+verify.verifyCompletionListStartsWithItemsInOrder(itemsFromType.concat(identifiersFromCurrentFile));
