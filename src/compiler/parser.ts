@@ -2387,6 +2387,7 @@ namespace ts {
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
+                case SyntaxKind.StringLiteral:
                     return true;
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
@@ -5446,6 +5447,7 @@ namespace ts {
                         return parseTokenNode<JSDocType>();
                 }
 
+                // TODO (drosen): Parse string literal types in JSDoc as well.
                 return parseJSDocTypeReference();
             }
 
