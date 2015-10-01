@@ -6,7 +6,7 @@ class X {
         this['__proto__'] = null; // used to cause ICE
 >this['__proto__'] = null : null
 >this['__proto__'] : any
->this : X
+>this : this
 >'__proto__' : string
 >null : null
     }

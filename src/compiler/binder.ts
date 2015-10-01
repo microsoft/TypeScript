@@ -103,6 +103,7 @@ namespace ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
+        let seenThisKeyword: boolean;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -351,7 +352,14 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
-            bindWithReachabilityChecks(node);
+            if (node.kind === SyntaxKind.InterfaceDeclaration) {
+                seenThisKeyword = false;
+                bindWithReachabilityChecks(node);
+                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            }
+            else {
+                bindWithReachabilityChecks(node);
+            }
 
             container = saveContainer;
             parent = saveParent;
@@ -1135,6 +1143,9 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+                case SyntaxKind.ThisKeyword:
+                    seenThisKeyword = true;
+                    return;
 
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);

@@ -359,25 +359,26 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        Export =            0x00000001,  // Declarations
-        Ambient =           0x00000002,  // Declarations
-        Public =            0x00000010,  // Property/Method
-        Private =           0x00000020,  // Property/Method
-        Protected =         0x00000040,  // Property/Method
-        Static =            0x00000080,  // Property/Method
-        Abstract =          0x00000100,  // Class/Method/ConstructSignature
-        Async =             0x00000200,  // Property/Method/Function
-        Default =           0x00000400,  // Function/Class (export default declaration)
-        MultiLine =         0x00000800,  // Multi-line array or object literal
-        Synthetic =         0x00001000,  // Synthetic node (for full fidelity)
-        DeclarationFile =   0x00002000,  // Node is a .d.ts file
-        Let =               0x00004000,  // Variable declaration
-        Const =             0x00008000,  // Variable declaration
-        OctalLiteral =      0x00010000,  // Octal numeric literal
-        Namespace =         0x00020000,  // Namespace declaration
-        ExportContext =     0x00040000,  // Export context (initialized by binding)
-        HasImplicitReturn =     0x00080000,  // If function implicitly returns on one of codepaths (initialized by binding)
-        HasExplicitReturn =     0x00100000,  // If function has explicit reachable return on one of codepaths (initialized by binding)
+        Export =            1 << 1,  // Declarations
+        Ambient =           1 << 2,  // Declarations
+        Public =            1 << 3,  // Property/Method
+        Private =           1 << 4,  // Property/Method
+        Protected =         1 << 5,  // Property/Method
+        Static =            1 << 6,  // Property/Method
+        Abstract =          1 << 7,  // Class/Method/ConstructSignature
+        Async =             1 << 8,  // Property/Method/Function
+        Default =           1 << 9,  // Function/Class (export default declaration)
+        MultiLine =         1 << 10,  // Multi-line array or object literal
+        Synthetic =         1 << 11,  // Synthetic node (for full fidelity)
+        DeclarationFile =   1 << 12,  // Node is a .d.ts file
+        Let =               1 << 13,  // Variable declaration
+        Const =             1 << 14,  // Variable declaration
+        OctalLiteral =      1 << 15,  // Octal numeric literal
+        Namespace =         1 << 16,  // Namespace declaration
+        ExportContext =     1 << 17,  // Export context (initialized by binding)
+        ContainsThis =      1 << 18,  // Interface contains references to "this"
+        HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
+        HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -1246,7 +1247,7 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
-        
+
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
         renamedDependencies?: Map<string>;
@@ -1314,12 +1315,12 @@ namespace ts {
     }
 
     export interface Program extends ScriptReferenceHost {
-        
+
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
-        getRootFileNames(): string[]
-        
+        getRootFileNames(): string[];
+
         /**
          * Get a list of files in the program
          */
@@ -1498,6 +1499,7 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -1600,7 +1602,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
@@ -1799,6 +1801,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ThisType                = 0x02000000,  // This type
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1844,6 +1847,7 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+        thisType: TypeParameter;                   // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
@@ -1858,10 +1862,17 @@ namespace ts {
         declaredNumberIndexType: Type;             // Declared numeric index type
     }
 
-    // Type references (TypeFlags.Reference)
+    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
+    // a "this" type, references to the class or interface are made using type references. The
+    // typeArguments property specififes the types to substitute for the type parameters of the
+    // class or interface and optionally includes an extra element that specifies the type to
+    // substitute for "this" in the resulting instantiation. When no extra argument is present,
+    // the type reference itself is substituted for "this". The typeArguments property is undefined
+    // if the class or interface has no type parameters and the reference isn't specifying an
+    // explicit "this" argument.
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments: Type[];  // Type reference type arguments
+        typeArguments: Type[];  // Type reference type arguments (undefined if none)
     }
 
     // Generic class and interface types
@@ -2016,12 +2027,12 @@ namespace ts {
         Error,
         Message,
     }
-    
+
     export const enum ModuleResolutionKind {
         Classic  = 1,
         NodeJs  = 2
     }
-    
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2282,15 +2293,15 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
-    }   
-    
+    }
+
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module 
         readFile(fileName: string): string;
     }
-    
+
     export interface ResolvedModule {
         resolvedFileName: string;
         /*
@@ -2301,12 +2312,12 @@ namespace ts {
          */
         isExternalLibraryImport?: boolean;
     }
-    
+
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
     }
-    
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
@@ -2316,7 +2327,7 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        
+
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
          * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
@@ -2355,7 +2366,7 @@ namespace ts {
         // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
-        
+
         /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
     }
 }
