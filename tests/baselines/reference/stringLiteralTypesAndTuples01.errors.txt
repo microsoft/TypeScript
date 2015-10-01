@@ -1,0 +1,32 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndTuples01.ts(6,5): error TS2322: Type '[string, string, string]' is not assignable to type '["I'm", "a", any]'.
+  Types of property '0' are incompatible.
+    Type 'string' is not assignable to type '"I'm"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndTuples01.ts(6,37): error TS2304: Cannot find name 'Dinosaur'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndTuples01.ts (2 errors) ====
+    
+    // Should all be strings.
+    let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
+    
+    type RexOrRaptor = "t-rex" | "raptor"
+    let [im, a, dinosaur]: ["I'm", "a", Dinosaur] = ['I\'m', 'a', 't-rex'];
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '[string, string, string]' is not assignable to type '["I'm", "a", any]'.
+!!! error TS2322:   Types of property '0' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"I'm"'.
+                                        ~~~~~~~~
+!!! error TS2304: Cannot find name 'Dinosaur'.
+    
+    rawr(dinosaur);
+    
+    function rawr(dino: RexOrRaptor) {
+        if (dino === "t-rex") {
+            return "ROAAAAR!";
+        }
+        if (dino === "raptor") {
+            return "yip yip!";
+        }
+    
+        throw "Unexpected " + dino;
+    }
