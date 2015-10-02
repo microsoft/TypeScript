@@ -473,12 +473,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSourceFile(root);
             }
             else {
-                forEach(host.getSourceFiles(), emitEmitHelpers);
+                if (modulekind) {
+                    forEach(host.getSourceFiles(), emitEmitHelpers);
+                }
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
-                    else if (isExternalModule(sourceFile)) {
+                    else if (modulekind && isExternalModule(sourceFile)) {
                         emitConcatenatedModule(sourceFile);
                     }
                 });
@@ -499,7 +501,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportFunctionForFile = undefined;
                 let canonicalName = resolveToSemiabsolutePath(sourceFile.fileName);
                 sourceFile.moduleName = sourceFile.moduleName || canonicalName;
-                bundleEmitDelegates[modulekind](sourceFile, 0, /*resolvePath*/true);
+                emit(sourceFile);
             }
 
             function resolveToSemiabsolutePath(path: string): string {
@@ -7051,8 +7053,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
-                    emitModule(node, startIndex);
+                    if (root) {
+                        let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
+                        emitModule(node, startIndex);
+                    }
+                    else {
+                        bundleEmitDelegates[modulekind](node, startIndex, /*resolvePath*/true);
+                    }
                 }
                 else {
                     externalImports = undefined;

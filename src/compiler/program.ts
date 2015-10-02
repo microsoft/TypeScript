@@ -377,6 +377,29 @@ namespace ts {
             }
         }
 
+        // there has to be common source directory if user specified --outdir || --sourceRoot
+        // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
+        if (options.outDir || // there is --outDir specified
+            options.sourceRoot || // there is --sourceRoot specified
+            options.mapRoot) { // there is --mapRoot specified
+
+            if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+            }
+            else {
+                // Compute the commonSourceDirectory from the input files
+                commonSourceDirectory = computeCommonSourceDirectory(files);
+            }
+
+            if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+                // Make sure directory path ends with directory separator so this string can directly
+                // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                // start with / making it rooted path
+                commonSourceDirectory += directorySeparator;
+            }
+        }
+
         verifyCompilerOptions();
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -934,6 +957,10 @@ namespace ts {
                 }
             });
 
+            if (!commonPathComponents) { // Can happen when all input files are .d.ts files
+                return currentDirectory;
+            }
+
             return getNormalizedPathFromPathComponents(commonPathComponents);
         }
 
@@ -1034,30 +1061,6 @@ namespace ts {
             // Cannot specify module gen target of es6 when below es6
             if (options.module === ModuleKind.ES6 && languageVersion < ScriptTarget.ES6) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es6_when_targeting_ES5_or_lower));
-            }
-
-            // there has to be common source directory if user specified --outdir || --sourceRoot
-            // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
-            if (options.outDir || // there is --outDir specified
-                options.sourceRoot || // there is --sourceRoot specified
-                (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
-                    (!outFile || firstExternalModuleSourceFile !== undefined))) {
-
-                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
-                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
-                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
-                }
-                else {
-                    // Compute the commonSourceDirectory from the input files
-                    commonSourceDirectory = computeCommonSourceDirectory(files);
-                }
-
-                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
-                    // Make sure directory path ends with directory separator so this string can directly
-                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                    // start with / making it rooted path
-                    commonSourceDirectory += directorySeparator;
-                }
             }
 
             if (options.noEmit) {
