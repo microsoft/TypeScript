@@ -655,7 +655,14 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = host + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd, deleteTemporaryProjectOutput);
+    exec(cmd, function() {
+        deleteTemporaryProjectOutput();
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    });
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
