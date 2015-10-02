@@ -80,7 +80,7 @@ namespace ts {
             symbolToString,
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType,
+            getContextualType: getApparentTypeOfContextualType,
             getFullyQualifiedName,
             getResolvedSignature,
             getConstantValue,
@@ -6716,7 +6716,7 @@ namespace ts {
             else if (operator === SyntaxKind.BarBarToken) {
                 // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                 // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                let type = getContextualType(binaryExpression);
+                let type = getApparentTypeOfContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
                     type = checkExpression(binaryExpression.left);
                 }
@@ -6788,7 +6788,7 @@ namespace ts {
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElement) {
             let objectLiteral = <ObjectLiteralExpression>element.parent;
-            let type = getContextualType(objectLiteral);
+            let type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
                 if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
@@ -6814,7 +6814,7 @@ namespace ts {
         // type of T.
         function getContextualTypeForElementExpression(node: Expression): Type {
             let arrayLiteral = <ArrayLiteralExpression>node.parent;
-            let type = getContextualType(arrayLiteral);
+            let type = getApparentTypeOfContextualType(arrayLiteral);
             if (type) {
                 let index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
@@ -6827,7 +6827,7 @@ namespace ts {
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
         function getContextualTypeForConditionalOperand(node: Expression): Type {
             let conditional = <ConditionalExpression>node.parent;
-            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
+            return node === conditional.whenTrue || node === conditional.whenFalse ? getApparentTypeOfContextualType(conditional) : undefined;
         }
 
         function getContextualTypeForJsxExpression(expr: JsxExpression|JsxSpreadAttribute): Type {
@@ -6852,12 +6852,22 @@ namespace ts {
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
-        function getContextualType(node: Expression): Type {
-            let type = getContextualTypeWorker(node);
+        function getApparentTypeOfContextualType(node: Expression): Type {
+            let type = getContextualType(node);
             return type && getApparentType(type);
         }
 
-        function getContextualTypeWorker(node: Expression): Type {
+        /**
+         * Woah! Do you really want to use this function?
+         *
+         * Unless you're trying to get the *non-apparent* type for a value-literal type,
+         * you probably meant to use 'getApparentTypeOfContextualType'.
+         * Otherwise this is slightly less useful.
+         *
+         * @param node the expression whose contextual type will be returned.
+         * @returns the contextual type of an expression.
+         */
+        function getContextualType(node: Expression): Type {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -6896,7 +6906,7 @@ namespace ts {
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return getContextualType(<ParenthesizedExpression>parent);
+                    return getApparentTypeOfContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
@@ -6936,7 +6946,7 @@ namespace ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             let type = isObjectLiteralMethod(node)
                 ? getContextualTypeForObjectLiteralMethod(node)
-                : getContextualType(node);
+                : getApparentTypeOfContextualType(node);
             if (!type) {
                 return undefined;
             }
@@ -7066,7 +7076,7 @@ namespace ts {
                     type.pattern = node;
                     return type;
                 }
-                let contextualType = getContextualType(node);
+                let contextualType = getApparentTypeOfContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
                     let pattern = contextualType.pattern;
                     // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
@@ -7157,7 +7167,7 @@ namespace ts {
 
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
-            let contextualType = getContextualType(node);
+            let contextualType = getApparentTypeOfContextualType(node);
             let contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             let inDestructuringPattern = isAssignmentTarget(node);
@@ -10116,9 +10126,6 @@ namespace ts {
                     }
                 }
                 else if (contextualType.flags & TypeFlags.StringLiteral && (<StringLiteralType>contextualType).text === node.text) {
-                    // NOTE: This doesn't work because the contextual type of a string literal
-                    //       always gets its apparent type.
-                    //       Thus you'll always end up with 'String' instead of the literal.
                     return contextualType;
                 }
             }
@@ -10184,7 +10191,7 @@ namespace ts {
             if (isInferentialContext(contextualMapper)) {
                 let signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
-                    let contextualType = getContextualType(<Expression>node);
+                    let contextualType = getApparentTypeOfContextualType(<Expression>node);
                     if (contextualType) {
                         let contextualSignature = getSingleCallSignature(contextualType);
                         if (contextualSignature && !contextualSignature.typeParameters) {
