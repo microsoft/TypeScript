@@ -4736,36 +4736,58 @@ namespace ts {
 
         function getTypeFromJSDocFunctionType(node: JSDocFunctionType): Type {
             Debug.assert(!!node.symbol);
-            return createObjectType(TypeFlags.Anonymous, node.symbol);
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
+            }
+            return links.resolvedType;
         }
 
         function getTypeFromJSDocRecordType(node: JSDocRecordType): Type {
-            return createObjectType(TypeFlags.Anonymous, node.symbol);
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
+            }
+            return links.resolvedType;
         }
 
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
-            let type = getTypeFromTypeNode(node.type);
-            if (type) {
-                return createArrayType(type);
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                let type = getTypeFromTypeNode(node.type);
+                links.resolvedType = type ? createArrayType(type) : unknownType;
             }
+            return links.resolvedType;
         }
 
-        function getTypeForJSDocTypeReference(node: JSDocTypeReference): Type {
+        function getTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
             return getTypeFromTypeReference(node);
         }
 
         function getTypeFromJSDocArrayType(node: JSDocArrayType): Type {
-            return createArrayType(getTypeFromTypeNode(node.elementType));
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
+            }
+            return links.resolvedType;
         }
 
         function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
-            let types = map(node.types, getTypeFromTypeNode);
-            return getUnionType(types, /*noSubtypeReduction*/ true);
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                let types = map(node.types, getTypeFromTypeNode);
+                links.resolvedType = getUnionType(types, /*noSubtypeReduction*/ true);
+            }
+            return links.resolvedType;
         }
 
         function getTypeFromJSDocTupleType(node: JSDocTupleType): Type {
-            let types = map(node.types, getTypeFromTypeNode);
-            return createTupleType(types);
+            let links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                let types = map(node.types, getTypeFromTypeNode);
+                links.resolvedType = createTupleType(types);
+            }
+            return links.resolvedType;
         }
 
         function getThisType(node: TypeNode): Type {
@@ -4849,7 +4871,7 @@ namespace ts {
                 case SyntaxKind.JSDocNonNullableType:
                     return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
                 case SyntaxKind.JSDocTypeReference:
-                    return getTypeForJSDocTypeReference(<JSDocTypeReference>node);
+                    return getTypeFromJSDocTypeReference(<JSDocTypeReference>node);
                 case SyntaxKind.JSDocOptionalType:
                     return getTypeFromTypeNode((<JSDocOptionalType>node).type);
                 case SyntaxKind.JSDocFunctionType:

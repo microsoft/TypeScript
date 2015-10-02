@@ -944,7 +944,6 @@ namespace ts {
                         bindPropertyOrMethodOrAccessor(<Declaration><Node>(<BinaryExpression>node).left, SymbolFlags.Property, SymbolFlags.None);
                         container = saveContainer;
                     }
-                case SyntaxKind.BinaryExpression:
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -1095,9 +1094,8 @@ namespace ts {
         }
 
         function bindAmdModuleExportsAssignment(node: BinaryExpression) {
-            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
             // This file is an external module
-            getSourceFileOfNode(node).symbol = symbol;
+            file.symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
         }
 
         function bindDefineCall(node: CallExpression) {
@@ -1105,11 +1103,7 @@ namespace ts {
 
             // If this was a file-level module, hook up the file symbol to this module
             if (isAnonymousDefineCall(node)) {
-                let parent = node.parent;
-                while (parent && parent.kind !== SyntaxKind.SourceFile) {
-                    parent = parent.parent;
-                }
-                parent.symbol = symbol;
+                file.symbol = symbol;
             }
         }
 

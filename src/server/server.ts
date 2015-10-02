@@ -105,7 +105,7 @@ namespace ts.server {
         isVerbose() {
             return this.loggingEnabled() && (this.level == "verbose");
         }
-        
+
 
         msg(s: string, type = "Err") {
             if (this.fd < 0) {
@@ -132,7 +132,7 @@ namespace ts.server {
 
     interface WatchedFile {
         fileName: string;
-        callback: (fileName: string) => void;
+        callback: (fileName: string, removed: boolean) => void;
         mtime: Date;
     }
 
@@ -168,11 +168,11 @@ namespace ts.server {
 
             fs.stat(watchedFile.fileName,(err, stats) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName);
+                    watchedFile.callback(watchedFile.fileName, /* removed */ false);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
-                    watchedFile.callback(watchedFile.fileName);
+                    watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
                 }
             });
         }
@@ -200,7 +200,7 @@ namespace ts.server {
             }, this.interval);
         }
 
-        addFile(fileName: string, callback: (fileName: string) => void ): WatchedFile {
+        addFile(fileName: string, callback: (fileName: string, removed: boolean) => void ): WatchedFile {
             var file: WatchedFile = {
                 fileName,
                 callback,
@@ -290,11 +290,11 @@ namespace ts.server {
     // TODO: check that this location is writable
 
     var logger = createLoggerFromEnv();
-    
+
     // REVIEW: for now this implementation uses polling.
     // The advantage of polling is that it works reliably
     // on all os and with network mounted files.
-    // For 90 referenced files, the average time to detect 
+    // For 90 referenced files, the average time to detect
     // changes is 2*msInterval (by default 5 seconds).
     // The overhead of this is .04 percent (1/2500) with
     // average pause of < 1 millisecond (and max
