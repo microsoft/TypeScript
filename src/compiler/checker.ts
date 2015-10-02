@@ -1620,7 +1620,7 @@ namespace ts {
                         writeAnonymousType(<ObjectType>type, flags);
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
-                        writer.writeStringLiteral((<StringLiteralType>type).text);
+                        writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
                     }
                     else {
                         // Should never get here
@@ -4213,12 +4213,13 @@ namespace ts {
         }
 
         function getStringLiteralType(node: StringLiteral): StringLiteralType {
-            if (hasProperty(stringLiteralTypes, node.text)) {
-                return stringLiteralTypes[node.text];
+            const text = node.text;
+            if (hasProperty(stringLiteralTypes, text)) {
+                return stringLiteralTypes[text];
             }
 
-            let type = stringLiteralTypes[node.text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
-            type.text = getTextOfNode(node);
+            let type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
+            type.text = text;
             return type;
         }
 
