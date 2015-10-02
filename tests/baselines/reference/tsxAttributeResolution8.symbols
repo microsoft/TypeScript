@@ -20,4 +20,5 @@ var x: any;
 // Should be OK
 <test1 {...x} />
 >test1 : Symbol(JSX.IntrinsicElements.test1, Decl(tsxAttributeResolution8.tsx, 2, 30))
+>x : Symbol(x, Decl(tsxAttributeResolution8.tsx, 7, 3))
 
