@@ -2074,11 +2074,11 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
-        moduleResolution?: ModuleResolutionKind,
-        noUnusedLabels?: boolean,
-        noImplicitReturns?: boolean,
-        noFallthroughCasesInSwitch?: boolean,
-        noUnreachableCode?: boolean,
+        moduleResolution?: ModuleResolutionKind;
+        noUnusedLabels?: boolean;
+        noImplicitReturns?: boolean;
+        noFallthroughCasesInSwitch?: boolean;
+        noUnreachableCode?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

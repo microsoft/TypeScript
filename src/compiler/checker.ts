@@ -9553,7 +9553,7 @@ namespace ts {
             if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !(func.flags & NodeFlags.HasImplicitReturn)) {
                 return;
             }
-            
+
             if (func.flags & NodeFlags.HasExplicitReturn) {
                 if (compilerOptions.noImplicitReturns) {
                     error(func.type, Diagnostics.Not_all_code_paths_return_a_value);
