@@ -2464,21 +2464,6 @@ namespace ts {
                     }
                 }
 
-                // In a JS file, we might need to add types to parameters of a function expression that is
-                // an argument to 'define'
-                if (func.kind === SyntaxKind.FunctionExpression &&
-                    func.parent &&
-                    func.parent.kind === SyntaxKind.CallExpression) {
-
-                    if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
-                        assignDefineOrRequireCallParameterTypes(<FunctionExpression>func);
-                        let links = getSymbolLinks(declaration.symbol);
-                        if (links.type) {
-                            return links.type;
-                        }
-                    }
-                }
-
                 // Use contextual parameter type if one is available
                 let type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                 if (type) {
@@ -2624,6 +2609,7 @@ namespace ts {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
                 }
+
                 let type = getWidenedTypeForVariableLikeDeclaration(<VariableLikeDeclaration>declaration, /*reportErrors*/ true);
                 if (!popTypeResolution()) {
                     if ((<VariableLikeDeclaration>symbol.valueDeclaration).type) {
@@ -2747,15 +2733,7 @@ namespace ts {
         }
 
         function resolveAmdExportAssignment(symbol: Symbol): Type {
-            let seenTypes: Type[] = [];
-
-            for (var i = 0; i < symbol.declarations.length; i++) {
-                let decl = symbol.declarations[i];
-                Debug.assert(isAmdExportAssignment(decl));
-                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
-            }
-
-            return getUnionType(seenTypes);
+            return getUnionType(map(symbol.declarations, decl => getTypeOfExpression((<BinaryExpression>decl).right)));
         }
 
         function resolveCommonJsModuleExportsAssignment(symbol: Symbol): Type {
@@ -2847,14 +2825,14 @@ namespace ts {
                     if (lhs.kind === SyntaxKind.PropertyAccessExpression) {
                         // e.g. module.exports = foo;
                         let propertyName = (<PropertyAccessExpression>lhs).name.text;
-                        let operandType = getTypeOfNode((<PropertyAccessExpression>lhs).expression);
+                        let operandType = checkExpression((<PropertyAccessExpression>lhs).expression);
                         if (operandType === cjsModuleType && propertyName === "exports") {
-                            assignedModuleType = getTypeOfNode((<BinaryExpression>node).right);
+                            assignedModuleType = checkExpression((<BinaryExpression>node).right);
                         }
                         else if (operandType === cjsExportsType) {
                             // e.g. exports = bar;
                             let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propertyName);
-                            prop.type = getTypeOfNode((<BinaryExpression>node).right);
+                            prop.type = checkExpression((<BinaryExpression>node).right);
                             exportAssignedProperties.push(prop);
                             exportAssignedPropTable[propertyName] = prop;
                         }
@@ -2871,7 +2849,12 @@ namespace ts {
                     return unknownType;
                 }
 
-                links.type = resolveDefineModule(symbol);
+                let type = resolveDefineModule(symbol);
+                if (!popTypeResolution()) {
+                    // Circularly-defined module
+                    type = anyType;
+                }
+                links.type = type;
             }
             return links.type;
         }
@@ -2883,7 +2866,12 @@ namespace ts {
                     return unknownType;
                 }
 
-                links.type = resolveAmdExportAssignment(symbol);
+                let type = resolveAmdExportAssignment(symbol);
+                if (!popTypeResolution()) {
+                    // Circularly-defined module
+                    type = anyType;
+                }
+                links.type = type;
             }
             return links.type;
         }
@@ -2895,7 +2883,12 @@ namespace ts {
                     return unknownType;
                 }
 
-                links.type = resolveCommonJsModuleExportsAssignment(symbol);
+                let type = resolveCommonJsModuleExportsAssignment(symbol);
+                if (!popTypeResolution()) {
+                    // Circularly-defined module
+                    type = anyType;
+                }
+                links.type = type;
             }
             return links.type;
         }
@@ -7219,9 +7212,18 @@ namespace ts {
             let func = parameter.parent;
             if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
                 if (isContextSensitive(func)) {
+                    // In a JS file, get types to parameters of a function 
+                    // expression that is an argument to 'define'/'require'
+                    if (func.parent) {
+                        if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
+                            let indexOfParameter = indexOf(func.parameters, parameter);
+
+                            return getDefineOrRequireCallParameterType(<FunctionExpression>func, indexOfParameter);
+                        }
+                    }
+
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
-
                         let funcHasRestParameters = hasRestParameter(func);
                         let len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
                         let indexOfParameter = indexOf(func.parameters, parameter);
@@ -7322,6 +7324,20 @@ namespace ts {
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
             let args = getEffectiveCallArguments(callTarget);
             let argIndex = indexOf(args, arg);
+
+            if (isDefineCall(callTarget) && argIndex === args.length - 1) {
+                // Synthesize a type with a call signature for the 'define'/'require' invocation
+                let symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient, '__define_call');
+                let params: Symbol[] = [];
+                for (let i = 0; i < args.length; i++) {
+                    let paramSym = <TransientSymbol>createSymbol(SymbolFlags.Transient, '__define_call_' + i);
+                    paramSym.type = getDefineOrRequireCallParameterType(<FunctionExpression>arg, i);
+                    params.push(paramSym);
+                }
+                let callSignature = createSignature(undefined, emptyArray, params, voidType, undefined, params.length, false, false);
+                return createAnonymousType(symbol, {}, [callSignature], emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+            }
+
             if (argIndex >= 0) {
                 let signature = getResolvedSignature(callTarget);
                 return getTypeAtPosition(signature, argIndex);
@@ -9803,7 +9819,7 @@ namespace ts {
         // 1 parameter named 'require', two parameters named 'require' and 'exports',
         // or 3 parameters named 'require', 'exports', and 'module' in that exact order
         function isCommonJsWrapper(expression: FunctionExpression|ArrowFunction): boolean {
-           switch (expression.parameters.length) {
+           switch (expression.parameters && expression.parameters.length) {
                 case 3:
                     if ((<Identifier>expression.parameters[2].name).text !== "module") {
                         return false;
@@ -9824,7 +9840,7 @@ namespace ts {
             }
         }
 
-        function assignDefineOrRequireCallParameterTypes(funcExpr: FunctionExpression|ArrowFunction) {
+        function getDefineOrRequireCallParameterType(funcExpr: FunctionExpression|ArrowFunction, paramIndex: number) {
             let callExpr = <CallExpression>funcExpr.parent;
 
             let moduleNames = <ArrayLiteralExpression>callExpr.arguments[callExpr.arguments.indexOf(funcExpr) - 1];
@@ -9833,50 +9849,46 @@ namespace ts {
             if (!hasDependencyArray && isCommonJsWrapper(funcExpr)) {
                 // CommonJS wrapper
                 // Fall-throughs here are intentional
-                switch (funcExpr.parameters.length) {
-                    case 3:
-                        getSymbolLinks(funcExpr.parameters[2].symbol).type = cjsModuleType;
-                    case 2:
-                        getSymbolLinks(funcExpr.parameters[1].symbol).type = cjsExportsType;
+                switch (paramIndex) {
+                    case 0:
+                        return cjsRequireType;
                     case 1:
-                        getSymbolLinks(funcExpr.parameters[0].symbol).type = cjsRequireType;
+                        return cjsExportsType;
+                    case 2:
+                        return cjsModuleType;
+                    default:
+                        Debug.fail('CommonJS wrapper function expression cannot have more than three parameters');
                 }
-
-                return;
             }
 
             // Example: define(['my', 'dependency', 'array'], function(m, d, a) { ... } )
             if (hasDependencyArray) {
-                // Note that you might require more modules than you accept as parameters; this is fine
-                for (let i = 0; i < funcExpr.parameters.length; i++) {
-                    if (moduleNames.elements.length === i) {
-                        // We exhausted the list of modules. TODO: Issue an error; this is bad.
-                        break;
+                if (paramIndex >= moduleNames.elements.length) {
+                    // Exhausted the list of modules. If this were TypeScript code, we would issue an error here
+                    return anyType;
+                }
+
+                if (moduleNames.elements[paramIndex].kind === SyntaxKind.StringLiteral) {
+                    let moduleName = getTextOfNode(moduleNames.elements[paramIndex]);
+                    let unquotedName = moduleName.substr(1, moduleName.length - 2);
+                    if (unquotedName === "require") {
+                        return cjsRequireType;
                     }
-
-                    let links = getSymbolLinks(funcExpr.parameters[i].symbol);
-                    if (moduleNames.elements[i].kind === SyntaxKind.StringLiteral) {
-                        let moduleName = getTextOfNode(moduleNames.elements[i]);
-
-                        let unquotedName = moduleName.substr(1, moduleName.length - 2);
-                        if (unquotedName === "require") {
-                            links.type = cjsRequireType;
-                        }
-                        else if (unquotedName === "exports") {
-                            links.type = cjsExportsType;
-                        }
-                        else if (unquotedName === "module") {
-                            links.type = cjsModuleType;
-                        }
-                        else {
-                            links.type = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[i]);
-                        }
+                    else if (unquotedName === "exports") {
+                        return cjsExportsType;
+                    }
+                    else if (unquotedName === "module") {
+                        return cjsModuleType;
                     }
                     else {
-                        links.type = anyType;
+                        let moduleType = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[paramIndex]);;
+                        return moduleType;
                     }
                 }
             }
+
+            // Failed to resolve anything
+            return anyType;
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper) {
@@ -10208,11 +10220,6 @@ namespace ts {
                         checkSignatureDeclaration(node);
                     }
                 }
-            }
-
-            // Handle 'define' calls
-            if (node.parent.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>node.parent)) {
-                assignDefineOrRequireCallParameterTypes(<FunctionExpression>node);
             }
 
             if (produceDiagnostics && node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {

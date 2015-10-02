@@ -924,25 +924,27 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
-                    if (isAmdExportAssignment(node)) {
-                        bindAmdExportAssignment(<BinaryExpression>node);
-                    }
-                    else if (isCommonJsExportsAssignment(node)) {
-                        bindAmdModuleExportsAssignment(<BinaryExpression>node);
-                    }
-                    else if (container &&
-                        isJavaScriptFile &&
-                        container.kind === SyntaxKind.Constructor &&
-                        container.parent &&
-                        (container.parent.flags & NodeFlags.InferredClass) &&
-                        (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
-                        // Inference in JS for this.name = expr; in class constructor bodies
+                    if (isJavaScriptFile) {
+                        if (isAmdExportAssignment(node)) {
+                            bindAmdExportAssignment(<BinaryExpression>node);
+                        }
+                        else if (isCommonJsExportsAssignment(node)) {
+                            bindAmdModuleExportsAssignment(<BinaryExpression>node);
+                        }
+                        else if (container &&
+                            isJavaScriptFile &&
+                            container.kind === SyntaxKind.Constructor &&
+                            container.parent &&
+                            (container.parent.flags & NodeFlags.InferredClass) &&
+                            (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
+                            // Inference in JS for this.name = expr; in class constructor bodies
 
-                        // Temporarily change the container to the class (otherwise we'd bind this member to the constructor)
-                        let saveContainer = container;
-                        container = container.parent;
-                        bindPropertyOrMethodOrAccessor(<Declaration><Node>(<BinaryExpression>node).left, SymbolFlags.Property, SymbolFlags.None);
-                        container = saveContainer;
+                            // Temporarily change the container to the class (otherwise we'd bind this member to the constructor)
+                            let saveContainer = container;
+                            container = container.parent;
+                            bindPropertyOrMethodOrAccessor(<Declaration><Node>(<BinaryExpression>node).left, SymbolFlags.Property, SymbolFlags.None);
+                            container = saveContainer;
+                        }
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
