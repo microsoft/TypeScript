@@ -4,7 +4,7 @@
 let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 
 type RexOrRaptor = "t-rex" | "raptor"
-let [im, a, dinosaur]: ["I'm", "a", Dinosaur] = ['I\'m', 'a', 't-rex'];
+let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 
 rawr(dinosaur);
 
