@@ -7053,7 +7053,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    if (root) {
+                    if (root || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
                         let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
                         emitModule(node, startIndex);
                     }

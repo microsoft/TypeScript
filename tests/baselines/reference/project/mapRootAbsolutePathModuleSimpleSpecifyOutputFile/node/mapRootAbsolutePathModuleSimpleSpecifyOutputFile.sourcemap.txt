@@ -394,6 +394,6 @@ sourceFile:../test.ts
 JsFile: test.js
 mapUrl: /tests/cases/projects/outputdir_module_simple/mapFiles/test.js.map
 sourceRoot: 
-sources: 
+sources: ../m1.ts,../test.ts
 ===================================================================
 >>>//# sourceMappingURL=/tests/cases/projects/outputdir_module_simple/mapFiles/test.js.map

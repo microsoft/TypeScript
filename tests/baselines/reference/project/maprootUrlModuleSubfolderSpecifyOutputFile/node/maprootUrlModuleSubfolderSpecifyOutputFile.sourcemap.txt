@@ -394,6 +394,6 @@ sourceFile:file:///tests/cases/projects/outputdir_module_subfolder/test.ts
 JsFile: test.js
 mapUrl: http://www.typescriptlang.org/test.js.map
 sourceRoot: 
-sources: 
+sources: file:///tests/cases/projects/outputdir_module_subfolder/ref/m1.ts,file:///tests/cases/projects/outputdir_module_subfolder/test.ts
 ===================================================================
 >>>//# sourceMappingURL=http://www.typescriptlang.org/test.js.map
