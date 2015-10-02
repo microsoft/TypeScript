@@ -2338,11 +2338,27 @@ namespace ts {
                 
                 // skip open bracket
                 token = scanner.scan();
+                let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
                     // record string literals as module names
                     if (token === SyntaxKind.StringLiteral) {
-                        recordModuleName();
+                        const moduleName = scanner.getTokenValue();
+                        // record first item in the list only if its name is not "require"
+                        // record second item in the list only if its name is not "exports"
+                        // record third item in the list only if its name is not "module"
+                        // record all other items in the list unconditionally
+                        const shouldRecordName =
+                            i === 0
+                                ? moduleName !== "require"
+                                : i === 1
+                                    ? moduleName !== "exports"
+                                    : i !== 2 || moduleName !== "module";
+                              
+                        if (shouldRecordName) {
+                            recordModuleName();
+                        }
+                        i++;
                     }
 
                     token = scanner.scan();

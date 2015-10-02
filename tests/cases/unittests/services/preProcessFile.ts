@@ -262,6 +262,54 @@ describe('PreProcessFile:', function () {
                     isLibFile: false
                 })
         });
+        it("Excludes require/exports/module names from dependency lists in define(modName, [deplist]) calls in JavaScript files", function () {
+            test(`
+            define(["require", "exports", "module", "mod1", "mod2"], (m1, m2) => {
+            });
+            `,
+                /* readImports */true,
+                /* detectJavaScriptImports */ true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "mod1", pos: 53, end: 57 },
+                        { fileName: "mod2", pos: 61, end: 65 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                });
+
+            test(`
+            define(["require", "exports", "mod1", "module"], (m1, m2) => {
+            });
+            `,
+                /* readImports */true,
+                /* detectJavaScriptImports */ true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "mod1", pos: 43, end: 47 },
+                        { fileName: "module", pos: 51, end: 57 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                });
+            test(`
+            define(["require", "require", "exports"], (m1, m2) => {
+            });
+            `,
+                /* readImports */true,
+                /* detectJavaScriptImports */ true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "require", pos: 32, end: 39 },
+                        { fileName: "exports", pos: 43, end: 50 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                });
+        });
     });
 });
 
