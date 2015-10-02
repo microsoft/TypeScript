@@ -8564,6 +8564,12 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                         // A method or accessor declaration decorator will have two or three arguments (see
                         // `PropertyDecorator` and `MethodDecorator` in core.d.ts)
+
+                        // If we are emitting decorators for ES3, we will only pass two arguments. 
+                        if (languageVersion === ScriptTarget.ES3) {
+                            return 2;
+                        }
+
                         // If the method decorator signature only accepts a target and a key, we will only
                         // type check those arguments.
                         return signature.parameters.length >= 3 ? 3 : 2;
@@ -14916,9 +14922,6 @@ namespace ts {
             }
             if (!nodeCanBeDecorated(node)) {
                 return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
-            }
-            else if (languageVersion < ScriptTarget.ES5) {
-                return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_only_available_when_targeting_ECMAScript_5_and_higher);
             }
             else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
                 let accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);
