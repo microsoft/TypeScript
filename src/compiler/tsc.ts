@@ -301,7 +301,7 @@ namespace ts {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
-                var index = rootFileNames.indexOf(sourceFile.fileName);
+                let index = rootFileNames.indexOf(sourceFile.fileName);
                 if (index >= 0) {
                     rootFileNames.splice(index, 1);
                 }

@@ -8564,12 +8564,12 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                         // A method or accessor declaration decorator will have two or three arguments (see
                         // `PropertyDecorator` and `MethodDecorator` in core.d.ts)
-                        
+
                         // If we are emitting decorators for ES3, we will only pass two arguments. 
                         if (languageVersion === ScriptTarget.ES3) {
                             return 2;
                         }
-                        
+
                         // If the method decorator signature only accepts a target and a key, we will only
                         // type check those arguments.
                         return signature.parameters.length >= 3 ? 3 : 2;
