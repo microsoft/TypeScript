@@ -125,7 +125,7 @@ var r1: Derived1 = c.foo('hi');
 >c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >c : C
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
->'hi' : string
+>'hi' : "hi"
 
 var r2: Derived2 = c.foo('bye');
 >r2 : Derived2
@@ -134,7 +134,7 @@ var r2: Derived2 = c.foo('bye');
 >c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >c : C
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
->'bye' : string
+>'bye' : "bye"
 
 var r3: Base = c.foo('hm');
 >r3 : Base

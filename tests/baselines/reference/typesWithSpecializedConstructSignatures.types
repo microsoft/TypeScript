@@ -100,14 +100,14 @@ var r1 = new C('hi');
 >r1 : C
 >new C('hi') : C
 >C : typeof C
->'hi' : string
+>'hi' : "hi"
 
 var r2: Derived2 = new i('bye');
 >r2 : Derived2
 >Derived2 : Derived2
 >new i('bye') : Derived2
 >i : I
->'bye' : string
+>'bye' : "bye"
 
 var r3: Base = new a('hm');
 >r3 : Base

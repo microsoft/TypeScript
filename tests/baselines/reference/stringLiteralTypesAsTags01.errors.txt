@@ -2,12 +2,9 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(18,10)
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(19,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(20,10): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(22,21): error TS2304: Cannot find name 'is'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(25,5): error TS2322: Type '{ kind: string; a: number; }' is not assignable to type 'A'.
-  Types of property 'kind' are incompatible.
-    Type 'string' is not assignable to type '"A"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (5 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (4 errors) ====
     
     type Kind = "A" | "B"
     
@@ -41,10 +38,6 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(25,5):
     }
     
     let x: A = {
-        ~
-!!! error TS2322: Type '{ kind: string; a: number; }' is not assignable to type 'A'.
-!!! error TS2322:   Types of property 'kind' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type '"A"'.
         kind: "A",
         a: 100,
     }

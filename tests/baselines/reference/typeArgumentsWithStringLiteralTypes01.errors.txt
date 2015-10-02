@@ -14,9 +14,9 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
   Type 'string' is not assignable to type '"World"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(48,30): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello" | "World"'.
   Type 'string' is not assignable to type '"World"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(55,34): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(57,43): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(58,34): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(55,43): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(57,52): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(58,43): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(61,5): error TS2322: Type 'string' is not assignable to type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(63,5): error TS2322: Type 'string' is not assignable to type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(75,5): error TS2322: Type '"Hello" | "World"' is not assignable to type '"Hello"'.
@@ -25,7 +25,7 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
   Type '"World"' is not assignable to type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(87,43): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(88,43): error TS2345: Argument of type 'string' is not assignable to parameter of type '"World"'.
-tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(89,43): error TS2345: Argument of type 'string' is not assignable to parameter of type '"World"'.
+tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(89,52): error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(93,5): error TS2322: Type 'string' is not assignable to type '"Hello" | "World"'.
   Type 'string' is not assignable to type '"World"'.
 tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes01.ts(97,5): error TS2322: Type 'string' is not assignable to type '"Hello" | "World"'.
@@ -119,14 +119,14 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
         // as "Hello" (or "Hello" | "Hello").
         export let a = fun1<"Hello">("Hello", "Hello");
         export let b = fun1<"Hello">("Hello", "World");
-                                     ~~~~~~~
+                                              ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
         export let c = fun2<"Hello", "Hello">("Hello", "Hello");
         export let d = fun2<"Hello", "Hello">("Hello", "World");
-                                              ~~~~~~~
+                                                       ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
         export let e = fun3<"Hello">("Hello", "World");
-                                     ~~~~~~~
+                                              ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
     
         // Assignment from the returned value should cause an error.
@@ -173,8 +173,8 @@ tests/cases/conformance/types/stringLiteral/typeArgumentsWithStringLiteralTypes0
                                               ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"World"'.
         export let d = fun2<"World", "Hello">("World", "World");
-                                              ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"World"'.
+                                                       ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"Hello"'.
         export let e = fun3<"Hello" | "World">("Hello", "World");
     
         // Assignment from the returned value should cause an error.

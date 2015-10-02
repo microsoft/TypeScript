@@ -1,17 +1,7 @@
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(5,7): error TS1155: 'const' declarations must be initialized
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(7,1): error TS2322: Type 'string' is not assignable to type '""'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(8,1): error TS2322: Type 'string' is not assignable to type '"foo"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(9,1): error TS2322: Type 'string' is not assignable to type '"bar"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(11,5): error TS2322: Type 'string' is not assignable to type '""'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(12,5): error TS2322: Type 'string' is not assignable to type '"foo"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(13,5): error TS2322: Type 'string' is not assignable to type '"bar"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(14,7): error TS2322: Type 'string' is not assignable to type '"baz"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(16,1): error TS2322: Type 'string' is not assignable to type '""'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(17,1): error TS2322: Type 'string' is not assignable to type '"foo"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts(18,1): error TS2322: Type 'string' is not assignable to type '"bar"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts (11 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarations01.ts (1 errors) ====
     
     let a: "";
     var b: "foo";
@@ -21,34 +11,14 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesInVariableDeclarat
 !!! error TS1155: 'const' declarations must be initialized
     
     a = "";
-    ~
-!!! error TS2322: Type 'string' is not assignable to type '""'.
     b = "foo";
-    ~
-!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
     c = "bar";
-    ~
-!!! error TS2322: Type 'string' is not assignable to type '"bar"'.
     
     let e: "" = "";
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '""'.
     var f: "foo" = "foo";
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
     let g: "bar" = "bar";
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"bar"'.
     const h: "baz" = "baz";
-          ~
-!!! error TS2322: Type 'string' is not assignable to type '"baz"'.
     
     e = "";
-    ~
-!!! error TS2322: Type 'string' is not assignable to type '""'.
     f = "foo";
-    ~
-!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
     g = "bar";
-    ~
-!!! error TS2322: Type 'string' is not assignable to type '"bar"'.
