@@ -3,13 +3,13 @@ interface Foo {
 >Foo : Foo
 
     (x: 'a'): number;
->x : 'a'
+>x : "a"
 
     (x: string): any;
 >x : string
 
     new (x: 'a'): any;
->x : 'a'
+>x : "a"
 
     new (x: string): Object;
 >x : string

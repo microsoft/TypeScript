@@ -1,6 +1,6 @@
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(11,10): error TS2354: No best common type exists among return expressions.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(32,7): error TS2322: Type 'string' is not assignable to type '"string"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(33,7): error TS2322: Type 'string' is not assignable to type ''number''.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(33,7): error TS2322: Type 'string' is not assignable to type '"number"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(34,7): error TS2322: Type 'string' is not assignable to type '"boolean"'.
 
 
@@ -43,7 +43,7 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(34,
 !!! error TS2322: Type 'string' is not assignable to type '"string"'.
     const number: "number" = "number"
           ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type ''number''.
+!!! error TS2322: Type 'string' is not assignable to type '"number"'.
     const boolean: "boolean" = "boolean"
           ~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type '"boolean"'.
