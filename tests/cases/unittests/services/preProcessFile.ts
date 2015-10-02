@@ -2,8 +2,8 @@
 /// <reference path="..\..\..\..\src\harness\harnessLanguageService.ts" />
 
 describe('PreProcessFile:', function () {
-    function test(sourceText: string, readImportFile: boolean, isJavaScript: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
-        var resultPreProcess = ts.preProcessFile(sourceText, readImportFile, isJavaScript);
+    function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
+        var resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
 
         var resultIsLibFile = resultPreProcess.isLibFile;
         var resultImportedFiles = resultPreProcess.importedFiles;
@@ -47,7 +47,7 @@ describe('PreProcessFile:', function () {
         it("Correctly return referenced files from triple slash", function () {
             test("///<reference path = \"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "///<reference path=\"refFile3.ts\" />" + "\n" + "///<reference path= \"..\\refFile4d.ts\" />", 
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 37 }, { fileName: "refFile2.ts", pos: 38, end: 73 },
                         { fileName: "refFile3.ts", pos: 74, end: 109 }, { fileName: "..\\refFile4d.ts", pos: 110, end: 150 }],
@@ -60,7 +60,7 @@ describe('PreProcessFile:', function () {
         it("Do not return reference path because of invalid triple-slash syntax", function () {
             test("///<reference path\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\">" + "\n" + "///<referencepath=\"refFile3.ts\" />" + "\n" + "///<reference pat= \"refFile4d.ts\" />",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
@@ -72,7 +72,7 @@ describe('PreProcessFile:', function () {
         it("Correctly return imported files", function () {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
@@ -85,7 +85,7 @@ describe('PreProcessFile:', function () {
         it("Do not return imported files if readImportFiles argument is false", function () {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
                 /* readImports */ false,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
@@ -97,7 +97,7 @@ describe('PreProcessFile:', function () {
         it("Do not return import path because of invalid import syntax", function () {
             test("import i1 require(\"r1.ts\"); import = require(\"r2.ts\") import i3= require(\"r3.ts\"); import i5",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
@@ -109,7 +109,7 @@ describe('PreProcessFile:', function () {
         it("Correctly return referenced files and import files", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }, { fileName: "refFile2.ts", pos: 36, end: 71 }],
                     importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],
@@ -121,7 +121,7 @@ describe('PreProcessFile:', function () {
         it("Correctly return referenced files and import files even with some invalid syntax", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path \"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import = require(\"r2.ts\"); import i2 = require(\"r3.ts\");",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }],
                     importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
@@ -139,7 +139,7 @@ describe('PreProcessFile:', function () {
                 "import {a as A, b, c as C} from \"m6\";" + "\n" +
                 "import def , {a, b, c as C} from \"m7\";" + "\n",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [],
                     importedFiles: [
@@ -162,7 +162,7 @@ describe('PreProcessFile:', function () {
                 "export {a as A} from \"m3\";" + "\n" +
                 "export {a as A, b, c as C} from \"m4\";" + "\n",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [],
                     importedFiles: [
@@ -184,7 +184,7 @@ describe('PreProcessFile:', function () {
                }
                `, 
                 /* readImports */ false,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
  
                {
                    referencedFiles: [],
@@ -197,7 +197,7 @@ describe('PreProcessFile:', function () {
         it("Correctly handles export import declarations", function () {
             test("export import a = require(\"m1\");",
                 /* readImports */true,
-                /* isJavaScript */ false,
+                /* detectJavaScriptImports */ false,
                 {
                     referencedFiles: [],
                     importedFiles: [
@@ -215,7 +215,7 @@ describe('PreProcessFile:', function () {
             var z = { f: require('m4') }
             `,
                 /* readImports */true,
-                /* isJavaScript */ true,
+                /* detectJavaScriptImports */ true,
                 {
                     referencedFiles: [],
                     importedFiles: [
@@ -223,6 +223,40 @@ describe('PreProcessFile:', function () {
                         { fileName: "m2", pos: 74, end: 76 },
                         { fileName: "m3", pos: 105, end: 107 },
                         { fileName: "m4", pos: 146, end: 148 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                })
+        });
+        it("Correctly handles dependency lists in define([deplist]) calls in JavaScript files", function () {
+            test(`
+            define(["mod1", "mod2"], (m1, m2) => {
+            });
+            `,
+                /* readImports */true,
+                /* detectJavaScriptImports */ true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "mod1", pos: 21, end: 25 },
+                        { fileName: "mod2", pos: 29, end: 33 },
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                })
+        });
+        it("Correctly handles dependency lists in define(modName, [deplist]) calls in JavaScript files", function () {
+            test(`
+            define("mod", ["mod1", "mod2"], (m1, m2) => {
+            });
+            `,
+                /* readImports */true,
+                /* detectJavaScriptImports */ true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "mod1", pos: 28, end: 32 },
+                        { fileName: "mod2", pos: 36, end: 40 },
                     ],
                     ambientExternalModules: undefined,
                     isLibFile: false

@@ -2101,7 +2101,7 @@ namespace ts {
         };
     }
 
-    export function preProcessFile(sourceText: string, readImportFiles = true, isJavaScript = false): PreProcessedFileInfo {
+    export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         let referencedFiles: FileReference[] = [];
         let importedFiles: FileReference[] = [];
         let ambientExternalModules: string[];
@@ -2200,7 +2200,8 @@ namespace ts {
                     if (token === SyntaxKind.OpenBraceToken) {
                         token = scanner.scan();
                         // consume "{ a as B, c, d as D}" clauses
-                        while (token !== SyntaxKind.CloseBraceToken) {
+                        // make sure that it stops on EOF
+                        while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
                             token = scanner.scan();
                         }
 
@@ -2248,7 +2249,8 @@ namespace ts {
                 if (token === SyntaxKind.OpenBraceToken) {
                     token = scanner.scan();
                     // consume "{ a as B, c, d as D}" clauses
-                    while (token !== SyntaxKind.CloseBraceToken) {
+                    // make sure it stops on EOF
+                    while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
                         token = scanner.scan();
                     }
 
@@ -2299,11 +2301,54 @@ namespace ts {
                 if (token === SyntaxKind.OpenParenToken) {
                     token = scanner.scan();
                     if (token === SyntaxKind.StringLiteral) {
-                        //  import i = require("mod");
+                        //  require("mod");
                         recordModuleName();
                     }
                 }
                 return true;
+            }
+            return false;
+        }
+        
+        function tryConsumeDefine(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
+                token = scanner.scan();
+                if (token !== SyntaxKind.OpenParenToken) {
+                    return true;
+                }
+
+                token = scanner.scan();
+                if (token === SyntaxKind.StringLiteral) {
+                    // looks like define ("modname", ... - skip string literal and comma
+                    token = scanner.scan();
+                    if (token === SyntaxKind.CommaToken) {
+                        token = scanner.scan();
+                    }
+                    else {
+                        // unexpected token
+                        return true;
+                    }
+                }
+
+                // should be start of dependency list
+                if (token !== SyntaxKind.OpenBracketToken)  {
+                    return true;
+                }
+                
+                // skip open bracket
+                token = scanner.scan();
+                // scan until ']' or EOF
+                while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
+                    // record string literals as module names
+                    if (token === SyntaxKind.StringLiteral) {
+                        recordModuleName();
+                    }
+
+                    token = scanner.scan();
+                }
+                return true;
+                
             }
             return false;
         }
@@ -2333,7 +2378,7 @@ namespace ts {
                 if (tryConsumeDeclare() ||
                     tryConsumeImport() ||
                     tryConsumeExport() ||
-                    (isJavaScript && tryConsumeRequireCall(/* skipCurrentToken */ false))) {
+                    (detectJavaScriptImports && (tryConsumeRequireCall(/* skipCurrentToken */ false) || tryConsumeDefine()))) {
                     continue;
                 }
                 else {

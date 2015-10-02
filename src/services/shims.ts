@@ -958,7 +958,7 @@ namespace ts {
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     // for now treat files as JavaScript 
-                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* isJavaScript */ true);
+                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
