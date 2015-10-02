@@ -2605,6 +2605,14 @@ namespace ts {
                     let types = symbol.declarations.map((decl: VariableLikeDeclaration) => getWidenedTypeForVariableLikeDeclaration(decl, /*reportErrors*/ true));
                     return getUnionType(types);
                 }
+                // Handle JS module inferences
+                if (isAmdExportAssignment(symbol.valueDeclaration)) {
+                    return getTypeOfAmdExportAssignment(symbol);
+                }
+                else if (isCommonJsExportsAssignment(symbol.valueDeclaration)) {
+                    return getTypeOfCommonJsModuleExportsAssignment(symbol);
+                }
+
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
@@ -2694,7 +2702,14 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                links.type = createObjectType(TypeFlags.Anonymous, symbol);
+                if (isDefineCall(symbol.valueDeclaration)) {
+                    links.type = getTypeOfDefineModule(symbol);
+                } else if(isCommonJsExportsAssignment(symbol.valueDeclaration)) {
+                    links.type = getTypeOfCommonJsModuleExportsAssignment(symbol);
+                }
+                else {
+                    links.type = createObjectType(TypeFlags.Anonymous, symbol);
+                }
             }
             return links.type;
         }
@@ -2733,19 +2748,11 @@ namespace ts {
         }
 
         function resolveAmdExportAssignment(symbol: Symbol): Type {
-            return getUnionType(map(symbol.declarations, decl => getTypeOfExpression((<BinaryExpression>decl).right)));
+            return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl).right)));
         }
 
         function resolveCommonJsModuleExportsAssignment(symbol: Symbol): Type {
-            let seenTypes: Type[] = [];
-
-            for (var i = 0; i < symbol.declarations.length; i++) {
-                let decl = symbol.declarations[i];
-                Debug.assert(isCommonJsExportsAssignment(decl));
-                seenTypes.push(getTypeOfExpression((<BinaryExpression>symbol.declarations[i]).right));
-            }
-
-            return getUnionType(seenTypes);
+            return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl).right)));
         }
 
         /*
@@ -2759,7 +2766,7 @@ namespace ts {
             }
 
             // If the invocation of 'define' has zero args ('define()')... we
-            // shouldn't really be here, but it's meaninguless
+            // shouldn't really be here, but it's meaningless
             let callExpr = <CallExpression>symbol.declarations[0];
             if (callExpr.arguments.length === 0) {
                 Debug.fail("Should not have a zero-arg define call");
@@ -2770,7 +2777,7 @@ namespace ts {
             // its type and define that as the shape of the module
             let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
             if (!isFunctionLike(lastArg)) {
-                let resultType = getTypeOfExpression(lastArg);
+                let resultType = checkExpression(lastArg);
                 // If this type is a function type, we want to use its return type since
                 // it's going to get invoked anyway
                 let signatures = getSignaturesOfType(resultType, SignatureKind.Call);
@@ -2894,15 +2901,6 @@ namespace ts {
         }
 
         function getTypeOfSymbol(symbol: Symbol): Type {
-            if (symbol.declarations && forEach(symbol.declarations, isDefineCall)) {
-                return getTypeOfDefineModule(symbol);
-            }
-            if (symbol.declarations && forEach(symbol.declarations, isAmdExportAssignment)) {
-                return getTypeOfAmdExportAssignment(symbol);
-            }
-            if (symbol.declarations && forEach(symbol.declarations, isCommonJsExportsAssignment)) {
-                return getTypeOfCommonJsModuleExportsAssignment(symbol);
-            }
             if (symbol.flags & SymbolFlags.Instantiated) {
                 return getTypeOfInstantiatedSymbol(symbol);
             }
@@ -9782,7 +9780,7 @@ namespace ts {
                 }
             }
 
-            let exprType = getTypeOfExpression(node.expression);
+            let exprType = checkExpression(node.expression);
             if ((exprType === cjsRequireType) ||
                (exprType === amdRequireType)) {
                 if (node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
