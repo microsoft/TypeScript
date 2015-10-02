@@ -78,19 +78,19 @@ namespace ts.server {
             return this.snap().getChangeRange(oldSnapshot);
         }
     }
-    
+
     interface TimestampedResolvedModule extends ResolvedModuleWithFailedLookupLocations {
-        lastCheckTime: number; 
+        lastCheckTime: number;
     }
-    
+
     export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
         filenameToScript: ts.Map<ScriptInfo> = {};
         roots: ScriptInfo[] = [];
-        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;        
+        private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
-        
+
         constructor(public host: ServerHost, public project: Project) {
             this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
             this.moduleResolutionHost = {
@@ -98,15 +98,15 @@ namespace ts.server {
                 readFile: fileName => this.host.readFile(fileName)
             }
         }
-        
+
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
             let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
-            
+
             let newResolutions: Map<TimestampedResolvedModule> = {};
             let resolvedModules: ResolvedModule[] = [];
-            
+
             let compilerOptions = this.getCompilationSettings();
-                        
+
             for (let moduleName of moduleNames) {
                 // check if this is a duplicate entry in the list
                 let resolution = lookUp(newResolutions, moduleName);
@@ -122,21 +122,21 @@ namespace ts.server {
                         newResolutions[moduleName] = resolution;
                     }
                 }
-                
+
                 ts.Debug.assert(resolution !== undefined);
-                
+
                 resolvedModules.push(resolution.resolvedModule);
             }
             
             // replace old results with a new one
             this.resolvedModuleNames.set(containingFile, newResolutions);
             return resolvedModules;
-            
+
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
                 if (!resolution) {
                     return false;
                 }
-                
+
                 if (resolution.resolvedModule) {
                     // TODO: consider checking failedLookupLocations  
                     // TODO: use lastCheckTime to track expiration for module name resolution 
@@ -147,7 +147,7 @@ namespace ts.server {
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
             }
-        }        
+        }
 
         getDefaultLibFileName() {
             var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
@@ -224,7 +224,7 @@ namespace ts.server {
                 this.roots.push(info);
             }
         }
-        
+
         removeRoot(info: ScriptInfo) {
             var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
             if (scriptInfo) {
@@ -354,6 +354,11 @@ namespace ts.server {
         compilerService: CompilerService;
         projectFilename: string;
         projectFileWatcher: FileWatcher;
+        // Inferred projects have a collection of non-recursive directory watchers starting
+        // from the root path (e.g. "C:\" or "/") to the current path; 
+        // while configured projects whose tsconfig files don't have a "files" array have one 
+        // recursive directory watcher starting from the current path
+        directoryWatchers: FileWatcher[] = [];
         program: ts.Program;
         filenameToSourceFile: ts.Map<ts.SourceFile> = {};
         updateGraphSeq = 0;
@@ -532,6 +537,41 @@ namespace ts.server {
             }
         }
 
+        /**
+         * This is the callback function when the directory that an inferred project belongs
+         * to changed. The function looks for newly added tsconfig.json files; if it found one,
+         * and the tsconfig.json file contains the root file of the current inferred project,
+         * it will update the project structure.
+         */
+        watchedDirectoryChanged(project: Project, path: string) {
+            if (project.isConfiguredProject()) {
+                return;
+            }
+
+            let configFileName = ts.combinePaths(path, "tsconfig.json");
+            if (sys.fileExists(configFileName)) {
+                let {succeeded, projectOptions, error} = this.configFileToProjectOptions(configFileName);
+                if (!succeeded) {
+                    return;
+                }
+
+                let newProjectFileNames = projectOptions.files.map(f => this.getCanonicalFileName(f));
+                let rootFiles = project.getRootFiles().map(f => this.getCanonicalFileName(f));
+                for (let rootFile of rootFiles) {
+                    if (newProjectFileNames.indexOf(rootFile) >= 0) {
+                        this.reloadProjects();
+                        return;
+                    }
+                }
+
+            }
+        }
+
+        getCanonicalFileName(fileName: string) {
+            let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            return ts.normalizePath(name);
+        }
+
         watchedProjectConfigFileChanged(project: Project) {
             this.log("Config File Changed: " + project.projectFilename);
             this.updateConfiguredProject(project);
@@ -567,11 +607,19 @@ namespace ts.server {
         }
 
         createInferredProject(root: ScriptInfo) {
-            var iproj = new Project(this);
-            iproj.addRoot(root);
-            iproj.finishGraph();
-            this.inferredProjects.push(iproj);
-            return iproj;
+            var project = new Project(this);
+            project.addRoot(root);
+
+            let currentPath = ts.getDirectoryPath(root.fileName);
+            let parentPath = ts.getDirectoryPath(currentPath);
+            while (currentPath != parentPath) {
+                // To finish
+                let directoryWatcher = this.host.watchDirectory(currentPath, p => this.);;
+            }
+
+            project.finishGraph();
+            this.inferredProjects.push(project);
+            return project;
         }
 
         fileDeletedInFilesystem(info: ScriptInfo) {
@@ -1217,9 +1265,9 @@ namespace ts.server {
         goSubtree: boolean;
         done: boolean;
         leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
-        pre? (relativeStart: number, relativeLength: number, lineCollection: LineCollection,
+        pre?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
             parent: LineNode, nodeType: CharRangeSection): LineCollection;
-        post? (relativeStart: number, relativeLength: number, lineCollection: LineCollection,
+        post?(relativeStart: number, relativeLength: number, lineCollection: LineCollection,
             parent: LineNode, nodeType: CharRangeSection): LineCollection;
     }
 

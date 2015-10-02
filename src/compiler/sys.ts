@@ -9,7 +9,7 @@ namespace ts {
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: (path: string) => void): FileWatcher;
-        watchDirectory?(path: string, callback: (path: string) => void): FileWatcher;
+        watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -402,6 +402,20 @@ namespace ts {
                     }
 
                     var watchedFile = watchedFileSet.addFile(fileName, callback);
+                    return {
+                        close: () => watchedFileSet.removeFile(watchedFile)
+                    }
+                },
+                watchDirectory: (path, callback, recursive) => {
+                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
+                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+                    // therefore if the current node.js version is newer than 4, use `fs.watch` instead.
+                    if (isNode4OrLater()) {
+                        return _fs.watch(path, { persisten: true, recursive: !!recursive }, (eventName: string, modifiedPath: string) => callback(modifiedPath));
+                    }
+
+                    // If Node version is older than 4.0, the "recursive" parameter will be ignored
+                    var watchedFile = watchedFileSet.addFile(path, callback);
                     return {
                         close: () => watchedFileSet.removeFile(watchedFile)
                     }
