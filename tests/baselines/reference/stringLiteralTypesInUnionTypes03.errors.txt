@@ -1,18 +1,13 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(5,5): error TS2322: Type 'string' is not assignable to type 'number | "foo" | "bar"'.
-  Type 'string' is not assignable to type '"bar"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(7,5): error TS2365: Operator '===' cannot be applied to types '"foo" | "bar" | number' and 'string'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts(10,10): error TS2365: Operator '!==' cannot be applied to types '"foo" | "bar" | number' and 'string'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts (3 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts (2 errors) ====
     
     type T = number | "foo" | "bar";
     
     var x: "foo" | "bar" | number;
     var y: T = "bar";
-        ~
-!!! error TS2322: Type 'string' is not assignable to type 'number | "foo" | "bar"'.
-!!! error TS2322:   Type 'string' is not assignable to type '"bar"'.
     
     if (x === "foo") {
         ~~~~~~~~~~~

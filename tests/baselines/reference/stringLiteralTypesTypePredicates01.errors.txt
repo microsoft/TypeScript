@@ -1,10 +1,8 @@
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(4,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(5,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(10,5): error TS2322: Type 'string' is not assignable to type '"A" | "B"'.
-  Type 'string' is not assignable to type '"B"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts (3 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts (2 errors) ====
     
     type Kind = "A" | "B"
     
@@ -19,9 +17,6 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.t
     }
     
     var x: Kind = "A";
-        ~
-!!! error TS2322: Type 'string' is not assignable to type '"A" | "B"'.
-!!! error TS2322:   Type 'string' is not assignable to type '"B"'.
     
     if (kindIs(x, "A")) {
         let a = x;
