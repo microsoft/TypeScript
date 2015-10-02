@@ -4738,7 +4738,7 @@ namespace ts {
             Debug.assert(!!node.symbol);
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol); 
+                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
             }
             return links.resolvedType;
         }
@@ -4746,7 +4746,7 @@ namespace ts {
         function getTypeFromJSDocRecordType(node: JSDocRecordType): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol); 
+                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
             }
             return links.resolvedType;
         }
@@ -4757,7 +4757,7 @@ namespace ts {
                 let type = getTypeFromTypeNode(node.type);
                 links.resolvedType = type ? createArrayType(type) : unknownType;
             }
-            return links.resolvedType;            
+            return links.resolvedType;
         }
 
         function getTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
@@ -4767,7 +4767,7 @@ namespace ts {
         function getTypeFromJSDocArrayType(node: JSDocArrayType): Type {
             let links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType)); 
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
             }
             return links.resolvedType;
         }
