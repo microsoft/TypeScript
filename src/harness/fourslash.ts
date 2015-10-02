@@ -225,12 +225,12 @@ namespace FourSlash {
             let inputFiles = this.inputFiles;
             let languageServiceAdapterHost = this.languageServiceAdapterHost;
             if (!extensions) {
-                tryAdd(referenceFilePath)
+                tryAdd(referenceFilePath);
             }
             else {
                 tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
             }
-            
+
             function tryAdd(path: string) {
                 let inputFile = inputFiles[path];
                 if (inputFile && !Harness.isLibraryFile(path)) {
