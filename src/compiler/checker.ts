@@ -10103,6 +10103,28 @@ namespace ts {
             return getUnionType([type1, type2]);
         }
 
+        function checkStringLiteralExpression(node: LiteralExpression) {
+            // TODO (drosen): Do we want to apply the same approach to no-sub template literals?
+            
+            let contextualType = getContextualType(node);
+            if (contextualType) {
+                if (contextualType.flags & TypeFlags.Union) {
+                    for (const type of (<UnionType>contextualType).types) {
+                        if (type.flags & TypeFlags.StringLiteral && (<StringLiteralType>type).text === node.text) {
+                            return contextualType;
+                        }
+                    }
+                }
+                else if (contextualType.flags & TypeFlags.StringLiteral && (<StringLiteralType>contextualType).text === node.text) {
+                    // NOTE: This doesn't work because the contextual type of a string literal
+                    //       always gets its apparent type.
+                    //       Thus you'll always end up with 'String' instead of the literal.
+                    return contextualType;
+                }
+            }
+            return stringType;
+        }
+
         function checkTemplateExpression(node: TemplateExpression): Type {
             // We just want to check each expressions, but we are unconcerned with
             // the type of each expression, as any value may be coerced into a string.
@@ -10233,8 +10255,9 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
+                    return checkStringLiteralExpression(<LiteralExpression>node);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return stringType;
+                    return stringType
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
