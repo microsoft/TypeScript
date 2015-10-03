@@ -836,6 +836,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     let node = nodes[start + i];
+                    let leadcomment = getLeadingCommentsToEmit(node);
+                    let trailcomment = getTrailingCommentRanges(currentSourceFile.text, node.pos);
                     // This emitting is to make sure we emit following comment properly
                     //   ...(x, /*comment1*/ y)...
                     //         ^ => node.pos
@@ -2505,6 +2507,70 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            /**
+             * Emit exponentiation operator down-level using Math.pow
+             * @param node {BinaryExpression} a binary expression node containing exponentiationOperator (**, **=) 
+             */
+            function emitExponentiationOperator(node: BinaryExpression) {
+                let leftHandSideExpression = node.left;
+                if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                    let synthesizedLHS: ElementAccessExpression | PropertyAccessExpression;
+                    // TODO (yuisu) : comment
+                    let shouldEmitParenthesis = node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BinaryExpression;
+
+                    if (isElementAccessExpression(leftHandSideExpression)) {
+                        if (shouldEmitParenthesis) {
+                            write("(");
+                        }
+                        synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
+                        let tempExpression = createAndRecordTempVariable(TempFlags.Auto);
+                        emitAssignment(tempExpression, leftHandSideExpression.expression, /*shouldEmitCommaBeforeAssignment*/ false);
+                        synthesizedLHS.expression = tempExpression
+
+                        if (leftHandSideExpression.argumentExpression.kind !== SyntaxKind.NumericLiteral &&
+                            leftHandSideExpression.argumentExpression.kind !== SyntaxKind.StringLiteral) {
+                            let tempArgumentExpression = createAndRecordTempVariable(TempFlags._i);
+                            (<ElementAccessExpression>synthesizedLHS).argumentExpression = tempArgumentExpression;
+                            emitAssignment(tempArgumentExpression, leftHandSideExpression.argumentExpression, /*shouldEmitCommaBeforeAssignment*/ true);
+                        }
+                        else {
+                            (<ElementAccessExpression>synthesizedLHS).argumentExpression = leftHandSideExpression.argumentExpression;
+                        }
+                        write(", ");
+                    }
+                    else if (isPropertyAccessExpression(leftHandSideExpression)) {
+                        if (shouldEmitParenthesis) {
+                            write("(");
+                        }
+                        synthesizedLHS = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression, /*startsOnNewLine*/ false);
+                        let tempExpression = createAndRecordTempVariable(TempFlags.Auto);
+                        synthesizedLHS.expression = tempExpression
+                        emitAssignment(tempExpression, leftHandSideExpression.expression,  /*shouldEmitCommaBeforeAssignment*/ false);
+                        (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
+                        (<PropertyAccessExpression>synthesizedLHS).name = leftHandSideExpression.name;
+                        write(", ");
+                    }
+
+                    emit(synthesizedLHS || leftHandSideExpression);
+                    write(" = ");
+                    write("Math.pow(");
+                    emit(synthesizedLHS || leftHandSideExpression);
+                    write(", ");
+                    emit(node.right);
+                    write(")");
+                    if (shouldEmitParenthesis) {
+                        write(")");
+                    }
+                }
+                else {
+                    write("Math.pow(");
+                    emit(leftHandSideExpression);
+                    write(", ");
+                    emit(node.right);
+                    write(")");
+                }
+            }
+
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -2523,17 +2589,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`", `);
                     }
 
-                    if (languageVersion < ScriptTarget.ES7 &&
-                        (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken)) {
-                        if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
-                            emit(node.left);
-                            write(" = ");
-                        }
-                        write("Math.pow(");
-                        emit(node.left);
-                        write(", ");
-                        emit(node.right);
-                        write(")");
+                    if (languageVersion < ScriptTarget.ES7 && (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken)) {
+                        emitExponentiationOperator(node);
                     }
                     else {
                         emit(node.left);
@@ -3180,6 +3237,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(";");
             }
 
+            function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean) {
+                if (shouldEmitCommaBeforeAssignment) {
+                    write(", ");
+                }
+
+                const isVariableDeclarationOrBindingElement =
+                    name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
+
+                let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
+
+                if (exportChanged) {
+                    write(`${exportFunctionForFile}("`);
+                    emitNodeWithCommentsAndWithoutSourcemap(name);
+                    write(`", `);
+                }
+
+                if (isVariableDeclarationOrBindingElement) {
+                    emitModuleMemberName(<Declaration>name.parent);
+                }
+                else {
+                    emit(name);
+                }
+
+                write(" = ");
+                emit(value);
+
+                if (exportChanged) {
+                    write(")");
+                }
+            }
+
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
                 let emitCount = 0;
 
@@ -3205,36 +3293,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitBindingElement(<BindingElement>root, value);
                 }
 
-                function emitAssignment(name: Identifier, value: Expression) {
-                    if (emitCount++) {
-                        write(", ");
-                    }
-
-                    const isVariableDeclarationOrBindingElement =
-                        name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
-
-                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
-
-                    if (exportChanged) {
-                        write(`${exportFunctionForFile}("`);
-                        emitNodeWithCommentsAndWithoutSourcemap(name);
-                        write(`", `);
-                    }
-
-                    if (isVariableDeclarationOrBindingElement) {
-                        emitModuleMemberName(<Declaration>name.parent);
-                    }
-                    else {
-                        emit(name);
-                    }
-
-                    write(" = ");
-                    emit(value);
-
-                    if (exportChanged) {
-                        write(")");
-                    }
-                }
 
                 /**
                  * Ensures that there exists a declared identifier whose value holds the given expression.
@@ -3254,7 +3312,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (!canDefineTempVariablesInPlace) {
                         recordTempDeclaration(identifier);
                     }
-                    emitAssignment(identifier, expr);
+                    emitAssignment(identifier, expr, /*shouldEmitCommaBeforeAssignment*/ emitCount++ > 0);
                     return identifier;
                 }
 
@@ -3354,7 +3412,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value);
                     }
                     else {
-                        emitAssignment(<Identifier>target, value);
+                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount++ > 0);
                     }
                 }
 
@@ -3423,7 +3481,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        emitAssignment(<Identifier>target.name, value);
+                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount++ > 0);
                     }
                 }
             }
