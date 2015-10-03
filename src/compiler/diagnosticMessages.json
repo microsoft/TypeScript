@@ -2262,14 +2262,6 @@
         "code": 6063
     },
 
-    "Specify JSX code generation: 'preserve' or 'react'": {
-        "category": "Message",
-        "code": 6080
-    },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
-    },
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
@@ -2301,6 +2293,18 @@
     "Suppress excess property checks for object literals.": {
         "category": "Message",
         "code": 6072
+    },
+    "Specify JSX code generation: 'preserve' or 'react'": {
+        "category": "Message",
+        "code": 6080
+    },
+    "Argument for '--jsx' must be 'preserve' or 'react'.": {
+        "category": "Message",
+        "code": 6081
+    },
+    "Only 'amd', 'umd', and 'system' modules are supported alongside --{0}.": {
+        "category": "Error",
+        "code": 6082
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

@@ -457,11 +457,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             };
 
             let bundleEmitDelegates: Map<(node: SourceFile, startIndex: number, resolvePath?: boolean) => void> = {
-                [ModuleKind.ES6]: () => {},
+                [ModuleKind.ES6]() { },
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]: emitUMDModule,
-                [ModuleKind.CommonJS]: () => {},
+                [ModuleKind.CommonJS]() { },
             };
 
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
