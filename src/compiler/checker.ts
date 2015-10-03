@@ -2704,7 +2704,8 @@ namespace ts {
             if (!links.type) {
                 if (isDefineCall(symbol.valueDeclaration)) {
                     links.type = getTypeOfDefineModule(symbol);
-                } else if(isCommonJsExportsAssignment(symbol.valueDeclaration)) {
+                }
+                else if (isCommonJsExportsAssignment(symbol.valueDeclaration)) {
                     links.type = getTypeOfCommonJsModuleExportsAssignment(symbol);
                 }
                 else {
@@ -7325,10 +7326,10 @@ namespace ts {
 
             if (isDefineCall(callTarget) && argIndex === args.length - 1) {
                 // Synthesize a type with a call signature for the 'define'/'require' invocation
-                let symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient, '__define_call');
+                let symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call");
                 let params: Symbol[] = [];
                 for (let i = 0; i < args.length; i++) {
-                    let paramSym = <TransientSymbol>createSymbol(SymbolFlags.Transient, '__define_call_' + i);
+                    let paramSym = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call_" + i);
                     paramSym.type = getDefineOrRequireCallParameterType(<FunctionExpression>arg, i);
                     params.push(paramSym);
                 }
@@ -9855,7 +9856,7 @@ namespace ts {
                     case 2:
                         return cjsModuleType;
                     default:
-                        Debug.fail('CommonJS wrapper function expression cannot have more than three parameters');
+                        Debug.fail("CommonJS wrapper function expression cannot have more than three parameters");
                 }
             }
 
@@ -9879,7 +9880,7 @@ namespace ts {
                         return cjsModuleType;
                     }
                     else {
-                        let moduleType = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[paramIndex]);;
+                        let moduleType = resolveExternalModuleTypeByLiteral(<StringLiteral>moduleNames.elements[paramIndex]);
                         return moduleType;
                     }
                 }
