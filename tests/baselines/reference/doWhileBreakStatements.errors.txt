@@ -1,0 +1,50 @@
+tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts(11,1): error TS7028: Unused label.
+tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts(19,5): error TS7028: Unused label.
+tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts(30,1): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts (3 errors) ====
+    do {
+        break;
+    } while(true)
+    
+    ONE:
+    do {
+        break ONE;
+    }
+    while (true)
+    
+    TWO:
+    ~~~
+!!! error TS7028: Unused label.
+    THREE:
+    do {
+        break THREE;
+    }while (true)
+    
+    FOUR:
+    do {
+        FIVE:
+        ~~~~
+!!! error TS7028: Unused label.
+        do {
+            break FOUR;
+        }while (true)
+    }while (true)
+    
+    do {
+        SIX:
+        do break SIX; while(true)
+    }while (true)
+    
+    SEVEN:
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+    do do do break SEVEN; while (true) while (true)  while (true)
+    
+    EIGHT:
+    do{
+        var fn = function () { }
+        break EIGHT;
+    }while(true)
+    

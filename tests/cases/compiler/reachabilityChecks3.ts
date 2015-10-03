@@ -1,4 +1,4 @@
-// @noUnusedLabels: true
+// @allowUnusedLabels: false
 
 let x = 1;
 loop: while (true) {
@@ -9,3 +9,8 @@ loop: while (true) {
         x++;
     }
 }
+{
+    x: 100
+}
+
+var y = () => { f: 1 }

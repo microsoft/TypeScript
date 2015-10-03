@@ -9,6 +9,11 @@ loop: while (true) {
         x++;
     }
 }
+{
+    x: 100
+}
+
+var y = () => { f: 1 }
 
 //// [reachabilityChecks3.js]
 var x = 1;
@@ -20,3 +25,7 @@ loop: while (true) {
         x++;
     }
 }
+{
+    x: 100;
+}
+var y = function () { f: 1; };

@@ -1,8 +1,9 @@
 tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts(1,6): error TS1109: Expression expected.
 tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts(3,8): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts (2 errors) ====
+==== tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts (3 errors) ====
     throw; 
          ~
 !!! error TS1109: Expression expected.
@@ -10,4 +11,6 @@ tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts(3,1)
     export throw null;
     ~~~~~~
 !!! error TS1128: Declaration or statement expected.
+           ~~~~~
+!!! error TS7027: Unreachable code detected.
     

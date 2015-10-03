@@ -1,10 +1,11 @@
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(11,5): error TS2411: Property 'a' of type '{ toString: () => {}; }' is not assignable to string index type 'Object'.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(13,13): error TS1131: Property or signature expected.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(14,9): error TS1128: Declaration or statement expected.
+tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(14,10): error TS7027: Unreachable code detected.
 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts(15,5): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts (4 errors) ====
+==== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts (5 errors) ====
     class Foo {
         x: string;
         y() { }
@@ -26,6 +27,8 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
             };
             ~
 !!! error TS1128: Declaration or statement expected.
+             ~
+!!! error TS7027: Unreachable code detected.
         }
         ~
 !!! error TS1128: Declaration or statement expected.

@@ -1,0 +1,11 @@
+tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget4.ts(1,1): error TS7028: Unused label.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueTarget4.ts (1 errors) ====
+    target1:
+    ~~~~~~~
+!!! error TS7028: Unused label.
+    target2:
+    while (true) {
+      continue target2;
+    }

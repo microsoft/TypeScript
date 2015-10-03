@@ -1,7 +1,9 @@
 tests/cases/compiler/reachabilityChecks3.ts(3,1): error TS7028: Unused label.
+tests/cases/compiler/reachabilityChecks3.ts(12,5): error TS7028: Unused label.
+tests/cases/compiler/reachabilityChecks3.ts(15,17): error TS7028: Unused label.
 
 
-==== tests/cases/compiler/reachabilityChecks3.ts (1 errors) ====
+==== tests/cases/compiler/reachabilityChecks3.ts (3 errors) ====
     
     let x = 1;
     loop: while (true) {
@@ -14,3 +16,12 @@ tests/cases/compiler/reachabilityChecks3.ts(3,1): error TS7028: Unused label.
             x++;
         }
     }
+    {
+        x: 100
+        ~
+!!! error TS7028: Unused label.
+    }
+    
+    var y = () => { f: 1 }
+                    ~
+!!! error TS7028: Unused label.

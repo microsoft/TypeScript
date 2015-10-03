@@ -17,11 +17,12 @@ tests/cases/compiler/letAndVarRedeclaration.ts(38,5): error TS2451: Cannot redec
 tests/cases/compiler/letAndVarRedeclaration.ts(39,10): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 tests/cases/compiler/letAndVarRedeclaration.ts(43,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 tests/cases/compiler/letAndVarRedeclaration.ts(44,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
+tests/cases/compiler/letAndVarRedeclaration.ts(48,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/letAndVarRedeclaration.ts(49,9): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 tests/cases/compiler/letAndVarRedeclaration.ts(50,14): error TS2451: Cannot redeclare block-scoped variable 'x11'.
 
 
-==== tests/cases/compiler/letAndVarRedeclaration.ts (21 errors) ====
+==== tests/cases/compiler/letAndVarRedeclaration.ts (22 errors) ====
     
     let e0
         ~~
@@ -108,6 +109,8 @@ tests/cases/compiler/letAndVarRedeclaration.ts(50,14): error TS2451: Cannot rede
     }
     
     module M2 {
+    ~~~~~~
+!!! error TS7027: Unreachable code detected.
         let x11;
             ~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'x11'.

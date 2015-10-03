@@ -1,0 +1,8 @@
+tests/cases/conformance/parser/ecmascript5/Fuzz/parser768531.ts(1,2): error TS7028: Unused label.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser768531.ts (1 errors) ====
+    {a: 3}
+     ~
+!!! error TS7028: Unused label.
+    /x/

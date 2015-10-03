@@ -1,23 +1,23 @@
 tests/cases/compiler/reachabilityChecks1.ts(3,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/reachabilityChecks1.ts(7,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(19,12): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(31,12): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(48,11): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(61,10): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks1.ts(70,16): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(19,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(31,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(48,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(61,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(70,5): error TS7027: Unreachable code detected.
 
 
 ==== tests/cases/compiler/reachabilityChecks1.ts (7 errors) ====
     
     while (true);
     var x = 1;
-    ~~~~~~~~~~
+    ~~~
 !!! error TS7027: Unreachable code detected.
     
     module A {
         while (true);
         let x;
-        ~~~~~~
+        ~~~
 !!! error TS7027: Unreachable code detected.
     }
     
@@ -31,7 +31,7 @@ tests/cases/compiler/reachabilityChecks1.ts(70,16): error TS7027: Unreachable co
     module A2 {
         while (true);
         module A {
-               ~
+        ~~~~~~
 !!! error TS7027: Unreachable code detected.
             var x = 1;
         }
@@ -45,7 +45,7 @@ tests/cases/compiler/reachabilityChecks1.ts(70,16): error TS7027: Unreachable co
     module A4 {
         while (true);
         module A {
-               ~
+        ~~~~~~
 !!! error TS7027: Unreachable code detected.
             const enum E { X }
         }
@@ -64,7 +64,7 @@ tests/cases/compiler/reachabilityChecks1.ts(70,16): error TS7027: Unreachable co
     function f2() {
         return;
         class A {
-              ~
+        ~~~~~
 !!! error TS7027: Unreachable code detected.
         }
     }
@@ -79,7 +79,7 @@ tests/cases/compiler/reachabilityChecks1.ts(70,16): error TS7027: Unreachable co
         do {
         } while (true);
         enum E {
-             ~
+        ~~~~
 !!! error TS7027: Unreachable code detected.
             X = 1
         }
@@ -90,7 +90,7 @@ tests/cases/compiler/reachabilityChecks1.ts(70,16): error TS7027: Unreachable co
             throw new Error();
         }
         const enum E {
-                   ~
+        ~~~~~
 !!! error TS7027: Unreachable code detected.
             X = 1
         }

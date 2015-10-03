@@ -1,12 +1,17 @@
 tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(4,1): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(7,1): error TS7028: Unused label.
 tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(8,19): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(11,1): error TS7028: Unused label.
 tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(18,1): error TS7028: Unused label.
 tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
 tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(27,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(28,5): error TS7028: Unused label.
+tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(33,1): error TS7028: Unused label.
 tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts(37,5): error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
 
 
-==== tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts (6 errors) ====
+==== tests/cases/conformance/statements/continueStatements/invalidForInContinueStatements.ts (11 errors) ====
     // All errors
     
     // naked continue not allowed
@@ -16,12 +21,16 @@ tests/cases/conformance/statements/continueStatements/invalidForInContinueStatem
     
     // non-existent label
     ONE:
+    ~~~
+!!! error TS7028: Unused label.
     for (var x in {}) continue TWO;
                       ~~~~~~~~~~~~~
 !!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
     
     // continue from inside function
     TWO:
+    ~~~
+!!! error TS7028: Unused label.
     for (var x in {}) {
         var fn = () => {
             continue TWO;
@@ -31,6 +40,8 @@ tests/cases/conformance/statements/continueStatements/invalidForInContinueStatem
     }
     
     THREE:
+    ~~~~~
+!!! error TS7028: Unused label.
     for (var x in {}) {
         var fn = function () {
             continue THREE;
@@ -45,11 +56,15 @@ tests/cases/conformance/statements/continueStatements/invalidForInContinueStatem
         ~~~~~~~~~~~~~~
 !!! error TS1115: A 'continue' statement can only jump to a label of an enclosing iteration statement.
         FIVE:
+        ~~~~
+!!! error TS7028: Unused label.
         for (var x in {}) { }
     }
     
     // label on non-loop statement
     NINE:
+    ~~~~
+!!! error TS7028: Unused label.
     var y = 12;
     
     for (var x in {}) {

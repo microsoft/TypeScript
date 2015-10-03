@@ -1,12 +1,17 @@
 tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(4,1): error TS1105: A 'break' statement can only be used within an enclosing iteration or switch statement.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(7,1): error TS7028: Unused label.
 tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(8,19): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(11,1): error TS7028: Unused label.
 tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(18,1): error TS7028: Unused label.
 tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
 tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(28,5): error TS7028: Unused label.
+tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(33,1): error TS7028: Unused label.
 tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts(37,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
 
-==== tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts (6 errors) ====
+==== tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.ts (11 errors) ====
     // All errors
     
     // naked break not allowed
@@ -16,12 +21,16 @@ tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.t
     
     // non-existent label
     ONE:
+    ~~~
+!!! error TS7028: Unused label.
     for (var x in {}) break TWO;
                       ~~~~~~~~~~
 !!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
     
     // break from inside function
     TWO:
+    ~~~
+!!! error TS7028: Unused label.
     for (var x in {}) {
         var fn = () => {
             break TWO;
@@ -31,6 +40,8 @@ tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.t
     }
     
     THREE:
+    ~~~~~
+!!! error TS7028: Unused label.
     for (var x in {}) {
         var fn = function () {
             break THREE;
@@ -45,11 +56,15 @@ tests/cases/conformance/statements/breakStatements/invalidForInBreakStatements.t
         ~~~~~~~~~~~
 !!! error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
         FIVE:
+        ~~~~
+!!! error TS7028: Unused label.
         for (var x in {}) { }
     }
     
     // label on non-loop statement
     NINE:
+    ~~~~
+!!! error TS7028: Unused label.
     var y = 12;
     
     for (var x in {}) {

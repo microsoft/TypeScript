@@ -1,7 +1,13 @@
+tests/cases/compiler/letDeclarations-validContexts.ts(8,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/letDeclarations-validContexts.ts(15,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/letDeclarations-validContexts.ts(20,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/letDeclarations-validContexts.ts(132,5): error TS7028: Unused label.
+tests/cases/compiler/letDeclarations-validContexts.ts(134,9): error TS7028: Unused label.
+tests/cases/compiler/letDeclarations-validContexts.ts(139,5): error TS7028: Unused label.
+tests/cases/compiler/letDeclarations-validContexts.ts(141,9): error TS7028: Unused label.
 
 
-==== tests/cases/compiler/letDeclarations-validContexts.ts (1 errors) ====
+==== tests/cases/compiler/letDeclarations-validContexts.ts (7 errors) ====
     
     
     // Control flow statements with blocks
@@ -10,6 +16,8 @@ tests/cases/compiler/letDeclarations-validContexts.ts(20,7): error TS2410: All s
     }
     else { 
         let l2 = 0;
+        ~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     while (true) { 
@@ -17,6 +25,8 @@ tests/cases/compiler/letDeclarations-validContexts.ts(20,7): error TS2410: All s
     }
     
     do { 
+    ~~
+!!! error TS7027: Unreachable code detected.
         let l4 = 0;
     } while (true);
     
@@ -136,14 +146,22 @@ tests/cases/compiler/letDeclarations-validContexts.ts(20,7): error TS2410: All s
     
     function f3() {
         label: let l32 = 0;
+        ~~~~~
+!!! error TS7028: Unused label.
         {
             label2: let l33 = 0;
+            ~~~~~~
+!!! error TS7028: Unused label.
         }
     }
     
     module m3 {
         label: let l34 = 0;
+        ~~~~~
+!!! error TS7028: Unused label.
         {
             label2: let l35 = 0;
+            ~~~~~~
+!!! error TS7028: Unused label.
         }
     }

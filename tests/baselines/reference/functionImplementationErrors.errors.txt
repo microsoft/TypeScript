@@ -1,31 +1,46 @@
 tests/cases/conformance/functions/functionImplementationErrors.ts(2,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(4,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(6,19): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(8,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(10,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(12,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(16,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(20,9): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
 tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(42,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(49,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(51,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(53,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(55,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(57,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(59,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(61,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(63,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(65,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(67,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(71,5): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/conformance/functions/functionImplementationErrors.ts (13 errors) ====
+==== tests/cases/conformance/functions/functionImplementationErrors.ts (24 errors) ====
     // FunctionExpression with no return type annotation with multiple return statements with unrelated types
     var f1 = function () {
              ~~~~~~~~
 !!! error TS2354: No best common type exists among return expressions.
         return '';
         return 3;
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     var f2 = function x() {
                       ~
 !!! error TS2354: No best common type exists among return expressions.
         return '';
         return 3;
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     var f3 = () => {
              ~~~~~~~
@@ -33,6 +48,8 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
     ~~~~~~~~~~~~~~
         return 3;
     ~~~~~~~~~~~~~
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     ~
 !!! error TS2354: No best common type exists among return expressions.
@@ -45,6 +62,8 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
             return [''];
         } else {
             return [1];
+            ~~~~~~
+!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -73,6 +92,8 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
     undefined === function (): number {
         throw undefined;
         var x = 4;
+        ~~~
+!!! error TS7027: Unreachable code detected.
     };
     
     class Base { private x; }
@@ -84,12 +105,16 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
 !!! error TS2354: No best common type exists among return expressions.
         return new Derived1();
         return new Derived2();    
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     var f9 = function () {
              ~~~~~~~~
 !!! error TS2354: No best common type exists among return expressions.
         return new Derived1();
         return new Derived2();
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     var f10 = () => {
               ~~~~~~~
@@ -97,6 +122,8 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
         return new Derived2();
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     ~
 !!! error TS2354: No best common type exists among return expressions.
@@ -105,12 +132,16 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
 !!! error TS2354: No best common type exists among return expressions.
         return new Base();
         return new AnotherClass();
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     var f12 = function () {
               ~~~~~~~~
 !!! error TS2354: No best common type exists among return expressions.
         return new Base();
         return new AnotherClass();
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     var f13 = () => {
               ~~~~~~~
@@ -118,6 +149,8 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
     ~~~~~~~~~~~~~~~~~~~~~~
         return new AnotherClass();
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     ~
 !!! error TS2354: No best common type exists among return expressions.

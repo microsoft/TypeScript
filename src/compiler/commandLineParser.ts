@@ -248,9 +248,9 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
-            name: "noUnusedLabels",
+            name: "allowUnusedLabels",
             type: "boolean",
-            description: Diagnostics.Report_error_on_unused_labels
+            description: Diagnostics.Do_not_report_errors_on_unused_labels
         },
         {
             name: "noImplicitReturns",
@@ -263,9 +263,9 @@ namespace ts {
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
         {
-            name: "noUnreachableCode",
+            name: "allowUnreachableCode",
             type: "boolean",
-            description: Diagnostics.Report_errors_on_unreachable_code
+            description: Diagnostics.Do_not_report_errors_on_unreachable_code
         }
     ];
 

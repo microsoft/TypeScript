@@ -1,7 +1,8 @@
 tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts(1,10): error TS2354: No best common type exists among return expressions.
+tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts(6,9): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts (1 errors) ====
+==== tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts (2 errors) ====
     function foo() {
              ~~~
 !!! error TS2354: No best common type exists among return expressions.
@@ -10,6 +11,8 @@ tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts(1,10): error TS235
         }
         else {
             return "42";
+            ~~~~~~
+!!! error TS7027: Unreachable code detected.
         }
     };
     

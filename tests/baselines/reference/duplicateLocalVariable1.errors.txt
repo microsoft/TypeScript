@@ -1,7 +1,9 @@
+tests/cases/compiler/duplicateLocalVariable1.ts(64,92): error TS7027: Unreachable code detected.
+tests/cases/compiler/duplicateLocalVariable1.ts(65,122): error TS7027: Unreachable code detected.
 tests/cases/compiler/duplicateLocalVariable1.ts(185,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 
 
-==== tests/cases/compiler/duplicateLocalVariable1.ts (1 errors) ====
+==== tests/cases/compiler/duplicateLocalVariable1.ts (3 errors) ====
     
     //import FileManager = require('filemanager');
     //import App = require('app');
@@ -66,7 +68,11 @@ tests/cases/compiler/duplicateLocalVariable1.ts(185,22): error TS2403: Subsequen
         // First 3 are for simple harness validation
         testRunner.addTest(new TestCase("Basic test", function () { return true; }));
         testRunner.addTest(new TestCase("Test for any error", function () { throw new Error(); return false; }, ""));
+                                                                                               ~~~~~~
+!!! error TS7027: Unreachable code detected.
         testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
+                                                                                                                             ~~~~~~
+!!! error TS7027: Unreachable code detected.
         testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
         testRunner.addTest(new TestCase("Test array compare false", function () { return !TestRunner.arrayCompare([3, 2, 3], [1, 2, 3]); }));
     

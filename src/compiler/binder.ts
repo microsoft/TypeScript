@@ -557,14 +557,11 @@ namespace ts {
         function bindBreakOrContinueStatement(n: BreakOrContinueStatement): boolean {
             // call bind on label (don't affect reachability)
             bind(n.label);
-            if (n.kind === SyntaxKind.BreakStatement) {
-                jumpToLabel(n.label, currentReachabilityState);
+            // for continue case touch label so it will be marked a used
+            const isValidJump = jumpToLabel(n.label, n.kind === SyntaxKind.BreakStatement ? currentReachabilityState : Reachability.Unreachable);
+            if (isValidJump) {
+                currentReachabilityState = Reachability.Unreachable;
             }
-            else {
-                jumpToLabel(n.label, Reachability.Unreachable);  // touch label so it will be marked a used
-            }
-            currentReachabilityState = Reachability.Unreachable;
-
             return true;
         }
 
@@ -1406,7 +1403,7 @@ namespace ts {
             initializeReachabilityStateIfNecessary();
 
             if (innerMergedState === Reachability.Unintialized) {
-                if (label && options.noUnusedLabels) {
+                if (label && !options.allowUnusedLabels) {
                     file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
                 }
                 currentReachabilityState = outerState;
@@ -1416,17 +1413,18 @@ namespace ts {
             }
         }
 
-        function jumpToLabel(label: Identifier, outerState: Reachability): void {
+        function jumpToLabel(label: Identifier, outerState: Reachability): boolean {
             initializeReachabilityStateIfNecessary();
 
             const index = label ? labelIndexMap[label.text] : lastOrUndefined(implicitLabels);
             if (index === undefined) {
                 // reference to unknown label or
                 // break/continue used outside of loops
-                return;
+                return false;
             }
             const stateAtLabel = labelStack[index];
             labelStack[index] = stateAtLabel === Reachability.Unintialized ? outerState : or(stateAtLabel, outerState);
+            return true;
         }
 
         function checkUnreachable(node: Node): boolean {
@@ -1455,7 +1453,7 @@ namespace ts {
                         //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
                         //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
                         const reportUnreachableCode =
-                            options.noUnreachableCode &&
+                            !options.allowUnreachableCode &&
                             !isInAmbientContext(node) &&
                             (
                                 node.kind !== SyntaxKind.VariableStatement ||
@@ -1464,7 +1462,7 @@ namespace ts {
                             );
 
                         if (reportUnreachableCode) {
-                            file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Unreachable_code_detected));
+                            errorOnFirstToken(node, Diagnostics.Unreachable_code_detected);
                         }
                     }
                 case Reachability.ReportedUnreachable:

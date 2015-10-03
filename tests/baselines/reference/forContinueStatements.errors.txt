@@ -1,0 +1,43 @@
+tests/cases/conformance/statements/continueStatements/forContinueStatements.ts(5,1): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/conformance/statements/continueStatements/forContinueStatements.ts (1 errors) ====
+    for (; ;) {
+        continue;
+    }
+    
+    ONE:
+    ~~~
+!!! error TS7027: Unreachable code detected.
+    for (; ;) {
+        continue ONE;
+    }
+    
+    TWO:
+    THREE:
+    for (; ;) {
+        continue THREE;
+    }
+    
+    FOUR:
+    for (; ;) {
+        FIVE:
+        for (; ;) {
+            continue FOUR;
+        }
+    }
+    
+    for (; ;) {
+        SIX:
+        for (; ;) continue SIX;
+    }
+    
+    SEVEN:
+    for (; ;) for (; ;) for (; ;) continue SEVEN;
+    
+    EIGHT:
+    for (; ;) {
+        var fn = function () { }
+        continue EIGHT;
+    }
+    

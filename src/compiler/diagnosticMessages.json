@@ -2302,7 +2302,7 @@
         "category": "Message",
         "code": 6072
     },
-    "Report error on unused labels.": {
+    "Do not report errors on unused labels.": {
         "category": "Message",
         "code": 6073
     },
@@ -2314,7 +2314,7 @@
         "category": "Message",
         "code": 6075
     },
-    "Report errors on unreachable code.": {
+    "Do not report errors on unreachable code.": {
         "category": "Message",
         "code": 6076
     },

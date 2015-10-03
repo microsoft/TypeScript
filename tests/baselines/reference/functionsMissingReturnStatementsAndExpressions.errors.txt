@@ -1,9 +1,12 @@
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(2,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(68,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(74,5): error TS7027: Unreachable code detected.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(94,16): error TS2378: A 'get' accessor must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(116,9): error TS7027: Unreachable code detected.
 tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (3 errors) ====
+==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (6 errors) ====
     
     function f1(): string {
                    ~~~~~~
@@ -74,12 +77,16 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): e
         // if no return statements are present but we are annotated.
         throw undefined;
         throw null;
+        ~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     function f15(): number {
         // Fine, since we have a return statement somewhere.
         throw undefined;
         throw null;
+        ~~~~~
+!!! error TS7027: Unreachable code detected.
         return;
     }
     
@@ -124,6 +131,8 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): e
             // if no return statements are present but we are a get accessor.
             throw null;
             throw undefined.
+            ~~~~~
+!!! error TS7027: Unreachable code detected.
         }
         ~
 !!! error TS1003: Identifier expected.

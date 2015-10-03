@@ -28,6 +28,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(53,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(54,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(55,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(58,3): error TS7028: Unused label.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(58,9): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(59,9): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(62,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -74,7 +75,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(122,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (74 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (75 errors) ====
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value;
     
@@ -193,6 +194,8 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     
     // object literals
     { a: 0} *= value;
+      ~
+!!! error TS7028: Unused label.
             ~~
 !!! error TS1128: Declaration or statement expected.
     { a: 0} += value;

@@ -1,4 +1,4 @@
-// @noUnreachableCode: true
+// @allowUnreachableCode: false
 // @preserveConstEnums: false
 
 while (true) { }

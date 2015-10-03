@@ -1,0 +1,16 @@
+tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel4.ts(1,1): error TS7028: Unused label.
+tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel4.ts(5,1): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel4.ts (2 errors) ====
+    target:
+    ~~~~~~
+!!! error TS7028: Unused label.
+    while (true) {
+    }
+    
+    target: 
+    ~~~~~~
+!!! error TS7027: Unreachable code detected.
+    while (true) {
+    }

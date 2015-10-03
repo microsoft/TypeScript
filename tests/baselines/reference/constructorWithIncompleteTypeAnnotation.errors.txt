@@ -9,6 +9,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,26): error TS2304: Cannot find name 'bfs'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(28,30): error TS1005: '=' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS1109: Expression expected.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(31,18): error TS7027: Unreachable code detected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,26): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(34,28): error TS2304: Cannot find name 'bfs'.
@@ -52,6 +53,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,28): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(235,36): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,9): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,16): error TS2304: Cannot find name 'method2'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,16): error TS7027: Unreachable code detected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(238,26): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(241,5): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(246,25): error TS2339: Property 'method1' does not exist on type 'B'.
@@ -83,7 +85,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (83 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (85 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -140,6 +142,8 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                      ^ 
                      ~
 !!! error TS1109: Expression expected.
+                     ~
+!!! error TS7027: Unreachable code detected.
     
     
                     retValue = bfs.TYPES();
@@ -433,6 +437,8 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
 !!! error TS1128: Declaration or statement expected.
                    ~~~~~~~
 !!! error TS2304: Cannot find name 'method2'.
+                   ~~~~~~~
+!!! error TS7027: Unreachable code detected.
                              ~
 !!! error TS1005: ';' expected.
                 return 2 * this.method1(2);

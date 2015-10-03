@@ -1,12 +1,15 @@
 tests/cases/compiler/functionWithNoBestCommonType2.ts(1,9): error TS2354: No best common type exists among return expressions.
+tests/cases/compiler/functionWithNoBestCommonType2.ts(3,4): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/functionWithNoBestCommonType2.ts (1 errors) ====
+==== tests/cases/compiler/functionWithNoBestCommonType2.ts (2 errors) ====
     var v = function () {
             ~~~~~~~~
 !!! error TS2354: No best common type exists among return expressions.
        return true;
        return bar();
+       ~~~~~~
+!!! error TS7027: Unreachable code detected.
     };
     
     function bar(): void {

@@ -1,0 +1,10 @@
+tests/cases/compiler/commentsAtEndOfFile1.ts(1,1): error TS7028: Unused label.
+
+
+==== tests/cases/compiler/commentsAtEndOfFile1.ts (1 errors) ====
+    Input:
+    ~~~~~
+!!! error TS7028: Unused label.
+    ;
+    //Testing two
+    

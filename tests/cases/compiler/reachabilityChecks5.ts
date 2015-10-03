@@ -1,4 +1,4 @@
-// @noUnreachableCode: true
+// @allowUnreachableCode: false
 // @noImplicitReturns: true
 
 function f0(x): number {
