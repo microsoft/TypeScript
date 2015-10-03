@@ -3141,7 +3141,7 @@ namespace ts {
             let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
             node.operator = token;
             nextToken();
-            node.operand = parseUnaryExpressionOrHigher();
+            node.operand = parseSimpleUnaryExpression();
 
             return finishNode(node);
         }
@@ -3149,21 +3149,21 @@ namespace ts {
         function parseDeleteExpression() {
             let node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
         function parseTypeOfExpression() {
             let node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
         function parseVoidExpression() {
             let node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
@@ -3183,12 +3183,46 @@ namespace ts {
         function parseAwaitExpression() {
             const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
         /**
-         *  Parse UnaryExpression or higher:
+         * Comment
+         * @param node
+         */
+        function isIncrementExpression(node: UnaryExpression): node is IncrementExpression {
+            if (node.kind === SyntaxKind.DeleteExpression || node.kind === SyntaxKind.TypeOfExpression ||
+                node.kind === SyntaxKind.VoidExpression || node.kind === SyntaxKind.TypeAssertionExpression ||
+                node.kind === SyntaxKind.JsxExpression) {
+                return false;
+            }
+            else if (node.kind === SyntaxKind.PrefixUnaryExpression && ((<PrefixUnaryExpression>node).operator === SyntaxKind.PlusToken ||
+                (<PrefixUnaryExpression>node).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>node).operator === SyntaxKind.TildeToken ||
+                (<PrefixUnaryExpression>node).operator === SyntaxKind.ExclamationToken)) {
+                return false;
+            }
+            return true;
+        }
+
+        function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
+            let tryParseIncrementExpression = parseSimpleUnaryExpression();
+            if (token === SyntaxKind.AsteriskAsteriskToken) {
+                if (isIncrementExpression(tryParseIncrementExpression)) {
+                    return <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), tryParseIncrementExpression);
+                }
+                else {
+                    parseErrorAtCurrentToken(Diagnostics.Only_incrementExpression_is_allowed_as_left_operand_of_Asterisk_Asterisk);
+                    return tryParseIncrementExpression;
+                }
+            }
+            else {
+                return tryParseIncrementExpression;
+            }
+        }
+
+        /**
+         *  Parse SimpleUnaryExpression or higher:
          *  In ES7 grammar,
          *      UnaryExpression:
          *          1) IncrementExpression[?yield]
@@ -3201,7 +3235,7 @@ namespace ts {
          *          8) ! UnaryExpression[?yield]
          *          9) IncrementExpression[?yield] ** UnaryExpression[?yield]
          */
-        function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
+        function parseSimpleUnaryExpression(): UnaryExpression {
             if (isAwaitExpression()) {
                 return parseAwaitExpression();
             }
@@ -3230,10 +3264,7 @@ namespace ts {
                     }
                     // Fall through
                 default:
-                    let tryParseUnaryExpression = parseIncrementExpression();
-                    return token === SyntaxKind.AsteriskAsteriskToken ?
-                        <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), tryParseUnaryExpression) :
-                        tryParseUnaryExpression;
+                    return parseIncrementExpression();
             }
         }
 
