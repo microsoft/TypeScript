@@ -866,8 +866,6 @@ function lintFileAsync(options, path, cb) {
 
 var lintTargets = compilerSources.concat(harnessCoreSources);
 
-// if the codebase were free of linter errors we could make jake runtests
-// run this task automatically
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
