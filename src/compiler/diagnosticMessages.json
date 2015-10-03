@@ -2302,7 +2302,7 @@
         "category": "Message",
         "code": 6081
     },
-    "Only 'amd', 'umd', and 'system' modules are supported alongside --{0}.": {
+    "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
         "code": 6082
     },

@@ -457,11 +457,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             };
 
             let bundleEmitDelegates: Map<(node: SourceFile, startIndex: number, resolvePath?: boolean) => void> = {
-                [ModuleKind.ES6]() { },
+                [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
-                [ModuleKind.UMD]: emitUMDModule,
-                [ModuleKind.CommonJS]() { },
+                [ModuleKind.UMD]() {},
+                [ModuleKind.CommonJS]() {},
             };
 
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
@@ -6827,11 +6827,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitExportEquals(/*emitAsReturn*/ false);
             }
 
-            function emitUMDModule(node: SourceFile, startIndex: number, resolvePath?: boolean) {
+            function emitUMDModule(node: SourceFile, startIndex: number) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
-                let dependencyNames = getAMDDependencyNames(node, /*includeNonAmdDependencies*/ false, resolvePath);
+                let dependencyNames = getAMDDependencyNames(node, /*includeNonAmdDependencies*/ false);
 
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
                 writeLines(`(function (factory) {
