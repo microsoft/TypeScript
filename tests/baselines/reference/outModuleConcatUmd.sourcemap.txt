@@ -1,0 +1,237 @@
+===================================================================
+JsFile: a.js
+mapUrl: a.js.map
+sourceRoot: 
+sources: a.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/ref/a.js
+sourceFile:a.ts
+-------------------------------------------------------------------
+>>>// This should error
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^
+3 >                    ^^->
+1 >
+  >
+2 >// This should error
+1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(1, 21) Source(2, 21) + SourceIndex(0)
+---
+>>>(function (factory) {
+>>>    if (typeof module === 'object' && typeof module.exports === 'object') {
+>>>        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+>>>    }
+>>>    else if (typeof define === 'function' && define.amd) {
+>>>        define(["require", "exports"], factory);
+>>>    }
+>>>})(function (require, exports) {
+>>>    var A = (function () {
+1->^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+1->Emitted(10, 5) Source(4, 1) + SourceIndex(0)
+---
+>>>        function A() {
+1->^^^^^^^^
+2 >        ^^->
+1->
+1->Emitted(11, 9) Source(4, 1) + SourceIndex(0) name (A)
+---
+>>>        }
+1->^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
+1->export class A { 
+2 >        }
+1->Emitted(12, 9) Source(4, 18) + SourceIndex(0) name (A.constructor)
+2 >Emitted(12, 10) Source(4, 19) + SourceIndex(0) name (A.constructor)
+---
+>>>        return A;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+1->
+2 >        }
+1->Emitted(13, 9) Source(4, 18) + SourceIndex(0) name (A)
+2 >Emitted(13, 17) Source(4, 19) + SourceIndex(0) name (A)
+---
+>>>    })();
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^^^^
+5 >         ^^^^^^^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class A { }
+1 >Emitted(14, 5) Source(4, 18) + SourceIndex(0) name (A)
+2 >Emitted(14, 6) Source(4, 19) + SourceIndex(0) name (A)
+3 >Emitted(14, 6) Source(4, 1) + SourceIndex(0)
+4 >Emitted(14, 10) Source(4, 19) + SourceIndex(0)
+---
+>>>    exports.A = A;
+1->^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^
+4 >                 ^
+1->
+2 >    A
+3 >              { }
+4 >                 
+1->Emitted(15, 5) Source(4, 14) + SourceIndex(0)
+2 >Emitted(15, 14) Source(4, 15) + SourceIndex(0)
+3 >Emitted(15, 18) Source(4, 19) + SourceIndex(0)
+4 >Emitted(15, 19) Source(4, 19) + SourceIndex(0)
+---
+>>>});
+>>>//# sourceMappingURL=a.js.map===================================================================
+JsFile: b.js
+mapUrl: b.js.map
+sourceRoot: 
+sources: b.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/b.js
+sourceFile:b.ts
+-------------------------------------------------------------------
+>>>var __extends = (this && this.__extends) || function (d, b) {
+>>>    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+>>>    function __() { this.constructor = d; }
+>>>    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+>>>};
+>>>(function (factory) {
+>>>    if (typeof module === 'object' && typeof module.exports === 'object') {
+>>>        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+>>>    }
+>>>    else if (typeof define === 'function' && define.amd) {
+>>>        define(["require", "exports", "./ref/a"], factory);
+>>>    }
+>>>})(function (require, exports) {
+>>>    var a_1 = require("./ref/a");
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^^^^^^^^
+4 >                               ^
+5 >                                ^
+1 >
+2 >    import {A} from 
+3 >                      "./ref/a"
+4 >                               ;
+5 >                                
+1 >Emitted(14, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(14, 23) Source(1, 17) + SourceIndex(0)
+3 >Emitted(14, 32) Source(1, 26) + SourceIndex(0)
+4 >Emitted(14, 33) Source(1, 27) + SourceIndex(0)
+5 >Emitted(14, 34) Source(1, 27) + SourceIndex(0)
+---
+>>>    var B = (function (_super) {
+1 >^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+1 >Emitted(15, 5) Source(2, 1) + SourceIndex(0)
+---
+>>>        __extends(B, _super);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+1->export class B extends 
+2 >        A
+1->Emitted(16, 9) Source(2, 24) + SourceIndex(0) name (B)
+2 >Emitted(16, 30) Source(2, 25) + SourceIndex(0) name (B)
+---
+>>>        function B() {
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(17, 9) Source(2, 1) + SourceIndex(0) name (B)
+---
+>>>            _super.apply(this, arguments);
+1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->export class B extends 
+2 >            A
+1->Emitted(18, 13) Source(2, 24) + SourceIndex(0) name (B.constructor)
+2 >Emitted(18, 43) Source(2, 25) + SourceIndex(0) name (B.constructor)
+---
+>>>        }
+1 >^^^^^^^^
+2 >        ^
+3 >         ^^^^^^^^^->
+1 > { 
+2 >        }
+1 >Emitted(19, 9) Source(2, 28) + SourceIndex(0) name (B.constructor)
+2 >Emitted(19, 10) Source(2, 29) + SourceIndex(0) name (B.constructor)
+---
+>>>        return B;
+1->^^^^^^^^
+2 >        ^^^^^^^^
+1->
+2 >        }
+1->Emitted(20, 9) Source(2, 28) + SourceIndex(0) name (B)
+2 >Emitted(20, 17) Source(2, 29) + SourceIndex(0) name (B)
+---
+>>>    })(a_1.A);
+1 >^^^^
+2 >    ^
+3 >     
+4 >     ^^
+5 >       ^^^^^
+6 >            ^^
+7 >              ^^^^^->
+1 >
+2 >    }
+3 >     
+4 >     export class B extends 
+5 >       A
+6 >             { }
+1 >Emitted(21, 5) Source(2, 28) + SourceIndex(0) name (B)
+2 >Emitted(21, 6) Source(2, 29) + SourceIndex(0) name (B)
+3 >Emitted(21, 6) Source(2, 1) + SourceIndex(0)
+4 >Emitted(21, 8) Source(2, 24) + SourceIndex(0)
+5 >Emitted(21, 13) Source(2, 25) + SourceIndex(0)
+6 >Emitted(21, 15) Source(2, 29) + SourceIndex(0)
+---
+>>>    exports.B = B;
+1->^^^^
+2 >    ^^^^^^^^^
+3 >             ^^^^
+4 >                 ^
+1->
+2 >    B
+3 >              extends A { }
+4 >                 
+1->Emitted(22, 5) Source(2, 14) + SourceIndex(0)
+2 >Emitted(22, 14) Source(2, 15) + SourceIndex(0)
+3 >Emitted(22, 18) Source(2, 29) + SourceIndex(0)
+4 >Emitted(22, 19) Source(2, 29) + SourceIndex(0)
+---
+>>>});
+>>>//# sourceMappingURL=b.js.map===================================================================
+JsFile: all.js
+mapUrl: all.js.map
+sourceRoot: 
+sources: tests/cases/compiler/ref/a.ts,tests/cases/compiler/b.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:all.js
+sourceFile:tests/cases/compiler/ref/a.ts
+-------------------------------------------------------------------
+>>>var __extends = (this && this.__extends) || function (d, b) {
+>>>    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+>>>    function __() { this.constructor = d; }
+>>>    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+>>>};
+>>>// This should error
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^
+3 >                    ^^^^^^^^^^->
+1 >
+  >
+2 >// This should error
+1 >Emitted(6, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(6, 21) Source(2, 21) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=all.js.map
