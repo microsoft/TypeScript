@@ -1,4 +1,5 @@
-﻿var temp: any;
+﻿// @target: es5
+var temp: any;
 
 delete --temp ** 3;
 delete ++temp ** 3;

@@ -1,28 +1,46 @@
-﻿var t1 = 10;
+﻿// @target: es5
+
+var t1 = 10;
 var t2 = 10;
 var s;
-`Exp: ${t1 ** t2} abc`;
-`Exp: ${t1 ** t2 ** t1} abc`;
-`Exp: ${t1 + t2 ** t1} abc`;
-`Exp: ${t1 - t2 ** t1} abc`;
-`Exp: ${t1 ** t2 + t1} abc`;
-`Exp: ${t1 ** t2 - t1} abc`;
-`Exp: ${t1 + t2 ** t2 + t1} abc`;
-`Exp: ${t1 - t2 ** t2 - t1} abc`;
-`Exp: ${-t1 ** t2 - t1} abc`;
-`Exp: ${+t1 ** t2 - t1} abc`;
-`Exp: ${-++t1 ** t2 - t1} abc`;
-`Exp: ${+--t1 ** t2 - t1} abc`;
-`Exp: ${-t1++ ** t2 - t1} abc`;
-`Exp: ${-t1-- ** t2 - t1} abc`;
-`Exp: ${+t1++ ** t2 - t1} abc`;
-`Exp: ${+t1-- ** t2 - t1} abc`;
-`Exp: ${typeof t1 ** t2 ** t1} abc`;
-`Exp: ${typeof t1 ** t2 + t1} abc`;
-`Exp: ${typeof t1 ** (t2 - t1)} abc`;
-`Exp: ${1 + typeof t1 ** t2 ** t1} abc`;
-`Exp: ${2 + typeof t1 ** t2 ** ++t1} abc`;
-`Exp: ${3 + typeof t1 ** t2 ** --t1} abc`;
-`Exp: ${!t1 ** t2 ** t1} abc`;
-`Exp: ${!t1 ** t2 ** ++t1} abc`;
-`Exp: ${!t1 ** t2 ** --t1} abc`;
+
+// TempateHead & TemplateTail are empty
+`${t1 ** t2}`;
+`${t1 ** t2 ** t1}`;
+`${t1 + t2 ** t1}`;
+`${t1 ** t2 + t1}`;
+`${t1 + t2 ** t2 + t1 }`;
+`${-t1 ** t2 - t1}`;
+`${-++t1 ** t2 - t1}`;
+`${-t1++ ** t2 - t1}`;
+`${!t1 ** t2 ** --t1 }`;
+`${typeof t1 ** t2 ** t1}`;
+`${typeof (t1 ** t2 ** t1) }`;
+`${1 + typeof t1 ** t2 ** t1}`;
+`${1 + typeof (t1 ** t2 ** t1) }`;
+
+`${t1 ** t2}${t1 ** t2}`;
+`${t1 ** t2 ** t1}${t1 ** t2 ** t1}`;
+`${t1 + t2 ** t1}${t1 + t2 ** t1}`;
+`${t1 ** t2 + t1}${t1 ** t2 + t1}`;
+`${t1 + t2 ** t2 + t1}${t1 + t2 ** t2 + t1}`;
+`${-t1 ** t2 - t1}${-t1 ** t2 - t1}`;
+`${-++t1 ** t2 - t1}${-++t1 ** t2 - t1}`;
+`${-t1++ ** t2 - t1}${-t1++ ** t2 - t1}`;
+`${!t1 ** t2 ** --t1 }${!t1 ** t2 ** --t1 }`;
+`${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1}`;
+`${typeof (t1 ** t2 ** t1)}${typeof (t1 ** t2 ** t1)}`;
+`${1 + typeof t1 ** t2 ** t1}${1 + typeof t1 ** t2 ** t1}`;
+
+`${t1 ** t2} hello world ${t1 ** t2}`;
+`${t1 ** t2 ** t1} hello world ${t1 ** t2 ** t1}`;
+`${t1 + t2 ** t1} hello world ${t1 + t2 ** t1}`;
+`${t1 ** t2 + t1} hello world ${t1 ** t2 + t1}`;
+`${t1 + t2 ** t2 + t1} hello world ${t1 + t2 ** t2 + t1}`;
+`${-t1 ** t2 - t1} hello world ${-t1 ** t2 - t1}`;
+`${-++t1 ** t2 - t1} hello world ${-++t1 ** t2 - t1}`;
+`${-t1++ ** t2 - t1} hello world ${-t1++ ** t2 - t1}`;
+`${!t1 ** t2 ** --t1 } hello world ${!t1 ** t2 ** --t1 }`;
+`${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1}`;
+`${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }`;
+`${1 + typeof t1 ** t2 ** t1} hello world ${1 + typeof t1 ** t2 ** t1}`;
