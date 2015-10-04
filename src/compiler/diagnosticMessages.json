@@ -195,7 +195,7 @@
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum elements can only have integer literal initializers.": {
+    "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
     },
@@ -619,15 +619,15 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
+    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
     },
@@ -2109,7 +2109,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
         "category": "Message",
         "code": 6016
     },
@@ -2193,7 +2193,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
         "category": "Error",
         "code": 6046
     },

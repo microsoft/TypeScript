@@ -44,6 +44,7 @@ namespace ts {
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
 
         let emitResolver = createResolver();
 
@@ -2293,10 +2294,17 @@ namespace ts {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
 
+        // Return the type of a binding element parent. We check SymbolLinks first to see if a type has been
+        // assigned by contextual typing.
+        function getTypeForBindingElementParent(node: VariableLikeDeclaration) {
+            let symbol = getSymbolOfNode(node);
+            return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node);
+        }
+
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             let pattern = <BindingPattern>declaration.parent;
-            let parentType = getTypeForVariableLikeDeclaration(<VariableLikeDeclaration>pattern.parent);
+            let parentType = getTypeForBindingElementParent(<VariableLikeDeclaration>pattern.parent);
             // If parent has the unknown (error) type, then so does this binding element
             if (parentType === unknownType) {
                 return unknownType;
@@ -9162,10 +9170,24 @@ namespace ts {
             }
         }
 
+        // When contextual typing assigns a type to a parameter that contains a binding pattern, we also need to push
+        // the destructured type into the contained binding elements.
+        function assignBindingElementTypes(node: VariableLikeDeclaration) {
+            if (isBindingPattern(node.name)) {
+                for (let element of (<BindingPattern>node.name).elements) {
+                    if (element.kind !== SyntaxKind.OmittedExpression) {
+                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        assignBindingElementTypes(element);
+                    }
+                }
+            }
+        }
+
         function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper) {
             let links = getSymbolLinks(parameter);
             if (!links.type) {
                 links.type = instantiateType(contextualType, mapper);
+                assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
             }
             else if (isInferentialContext(mapper)) {
                 // Even if the parameter already has a type, it might be because it was given a type while
@@ -12940,26 +12962,41 @@ namespace ts {
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
                 let enumSymbol = getSymbolOfNode(node);
                 let enumType = getDeclaredTypeOfSymbol(enumSymbol);
-                let autoValue = 0;
+                let autoValue = 0; // set to undefined when enum member is non-constant
                 let ambient = isInAmbientContext(node);
                 let enumIsConst = isConst(node);
 
-                forEach(node.members, member => {
-                    if (member.name.kind !== SyntaxKind.ComputedPropertyName && isNumericLiteralName((<Identifier>member.name).text)) {
+                for (const member of node.members) {
+                    if (member.name.kind === SyntaxKind.ComputedPropertyName) {
+                        error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
+                    }
+                    else if (isNumericLiteralName((<Identifier>member.name).text)) {
                         error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
                     }
+
+                    const previousEnumMemberIsNonConstant = autoValue === undefined;
+                    
                     let initializer = member.initializer;
                     if (initializer) {
                         autoValue = computeConstantValueForEnumMemberInitializer(initializer, enumType, enumIsConst, ambient);
                     }
                     else if (ambient && !enumIsConst) {
+                        // In ambient enum declarations that specify no const modifier, enum member declarations 
+                        // that omit a value are considered computed members (as opposed to having auto-incremented values assigned).
                         autoValue = undefined;
+                    }
+                    else if (previousEnumMemberIsNonConstant) {
+                        // If the member declaration specifies no value, the member is considered a constant enum member. 
+                        // If the member is the first member in the enum declaration, it is assigned the value zero. 
+                        // Otherwise, it is assigned the value of the immediately preceding member plus one,
+                        // and an error occurs if the immediately preceding member is not a constant enum member
+                        error(member.name, Diagnostics.Enum_member_must_have_initializer);
                     }
 
                     if (autoValue !== undefined) {
                         getNodeLinks(member).enumMemberValue = autoValue++;
                     }
-                });
+                }
 
                 nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
@@ -12975,11 +13012,11 @@ namespace ts {
                         if (enumIsConst) {
                             error(initializer, Diagnostics.In_const_enum_declarations_member_initializer_must_be_constant_expression);
                         }
-                        else if (!ambient) {
+                        else if (ambient) {
+                            error(initializer, Diagnostics.In_ambient_enum_declarations_member_initializer_must_be_constant_expression);
+                        } 
+                        else {
                             // Only here do we need to check that the initializer is assignable to the enum type.
-                            // If it is a constant value (not undefined), it is syntactically constrained to be a number.
-                            // Also, we do not need to check this for ambients because there is already
-                            // a syntax error if it is not a constant.
                             checkTypeAssignableTo(checkExpression(initializer), enumType, initializer, /*headMessage*/ undefined);
                         }
                     }
@@ -13119,7 +13156,7 @@ namespace ts {
             }
 
             // Grammar checking
-            checkGrammarDecorators(node) || checkGrammarModifiers(node) || checkGrammarEnumDeclaration(node);
+            checkGrammarDecorators(node) || checkGrammarModifiers(node);
 
             checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
             checkCollisionWithCapturedThisVariable(node, node.name);
@@ -13379,9 +13416,9 @@ namespace ts {
                     }
                 }
                 else {
-                    if (languageVersion >= ScriptTarget.ES6 && !isInAmbientContext(node)) {
+                    if (modulekind === ModuleKind.ES6 && !isInAmbientContext(node)) {
                         // Import equals declaration is deprecated in es6 or above
-                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_or_import_d_from_mod_instead);
+                        grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
                 }
             }
@@ -13456,11 +13493,11 @@ namespace ts {
             checkExternalModuleExports(<SourceFile | ModuleDeclaration>container);
 
             if (node.isExportEquals && !isInAmbientContext(node)) {
-                if (languageVersion >= ScriptTarget.ES6) {
-                    // export assignment is deprecated in es6 or above
-                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_or_higher_Consider_using_export_default_instead);
+                if (modulekind === ModuleKind.ES6) {
+                    // export assignment is not supported in es6 modules
+                    grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_6_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
-                else if (compilerOptions.module === ModuleKind.System) {
+                else if (modulekind === ModuleKind.System) {
                     // system modules does not support export assignment
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
                 }
@@ -15617,40 +15654,6 @@ namespace ts {
             }
 
             return false;
-        }
-
-        function checkGrammarEnumDeclaration(enumDecl: EnumDeclaration): boolean {
-            let enumIsConst = (enumDecl.flags & NodeFlags.Const) !== 0;
-
-            let hasError = false;
-
-            // skip checks below for const enums  - they allow arbitrary initializers as long as they can be evaluated to constant expressions.
-            // since all values are known in compile time - it is not necessary to check that constant enum section precedes computed enum members.
-            if (!enumIsConst) {
-                let inConstantEnumMemberSection = true;
-                let inAmbientContext = isInAmbientContext(enumDecl);
-                for (let node of enumDecl.members) {
-                    // Do not use hasDynamicName here, because that returns false for well known symbols.
-                    // We want to perform checkComputedPropertyName for all computed properties, including
-                    // well known symbols.
-                    if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                        hasError = grammarErrorOnNode(node.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
-                    }
-                    else if (inAmbientContext) {
-                        if (node.initializer && !isIntegerLiteral(node.initializer)) {
-                            hasError = grammarErrorOnNode(node.name, Diagnostics.Ambient_enum_elements_can_only_have_integer_literal_initializers) || hasError;
-                        }
-                    }
-                    else if (node.initializer) {
-                        inConstantEnumMemberSection = isIntegerLiteral(node.initializer);
-                    }
-                    else if (!inConstantEnumMemberSection) {
-                        hasError = grammarErrorOnNode(node.name, Diagnostics.Enum_member_must_have_initializer) || hasError;
-                    }
-                }
-            }
-
-            return hasError;
         }
 
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
