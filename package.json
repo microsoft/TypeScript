@@ -40,7 +40,7 @@
     },
     "scripts": {
         "pretest": "jake tests",
-        "test": "jake runtests && npm run lint",
+        "test": "jake runtests",
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "jake local",
         "build:tests": "jake tests",

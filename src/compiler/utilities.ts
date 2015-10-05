@@ -986,6 +986,7 @@ namespace ts {
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
                     case SyntaxKind.JsxExpression:
+                    case SyntaxKind.JsxSpreadAttribute:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
