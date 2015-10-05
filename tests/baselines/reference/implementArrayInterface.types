@@ -46,8 +46,11 @@ declare class MyArray<T> implements Array<T> {
 >shift : () => T
 >T : T
 
+    slice(): this;
+>slice : { (): this; (start?: number, end?: number): T[]; }
+
     slice(start?: number, end?: number): T[];
->slice : (start?: number, end?: number) => T[]
+>slice : { (): this; (start?: number, end?: number): T[]; }
 >start : number
 >end : number
 >T : T
