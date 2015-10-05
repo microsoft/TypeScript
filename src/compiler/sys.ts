@@ -8,7 +8,7 @@ namespace ts {
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
+        watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
         watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
@@ -23,7 +23,7 @@ namespace ts {
 
     interface WatchedFile {
         fileName: string;
-        callback: (fileName: string) => void;
+        callback: (fileName: string, removed?: boolean) => void;
         mtime: Date;
     }
 
@@ -235,7 +235,7 @@ namespace ts {
                         }
                         else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                             watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
-                            watchedFile.callback(watchedFile.fileName);
+                            watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
                         }
                     });
                 }
@@ -263,7 +263,7 @@ namespace ts {
                     }, this.interval);
                 }
 
-                addFile(fileName: string, callback: (fileName: string) => void): WatchedFile {
+                addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
                     var file: WatchedFile = {
                         fileName,
                         callback,

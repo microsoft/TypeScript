@@ -291,7 +291,7 @@ namespace ts {
             let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -313,9 +313,15 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile) {
+        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
+            if (removed) {
+                var index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index !== -1) {
+                    rootFileNames.splice(index, 1);
+                }
+            }
             startTimer();
         }
 
