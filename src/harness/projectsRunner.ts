@@ -195,7 +195,7 @@ class ProjectRunner extends RunnerBase {
                 assert(!inputFiles || inputFiles.length === 0, "cannot specify input files and project option together");
             }
             else if (!inputFiles || inputFiles.length === 0) {
-                configFileName = ts.findConfigFile("", { fileExists, readFile: getSourceFileText });
+                configFileName = ts.findConfigFile("", fileExists);
             }
 
             if (configFileName) {

@@ -375,9 +375,14 @@ namespace ts {
         }
     }
 
+    /**
+     * Parses non quoted strings separated by comma e.g. "a,b" would result in string array ["a", "b"]
+     * @param s
+     * @param existingValue
+     */
     function parseMultiValueStringArray(s: string, existingValue: string[]) {
         let value: string[] = existingValue || [];
-        let hasError: boolean;
+        let hasError = false;
         let currentString = "";
         if (s) {
             for (let i = 0; i < s.length; i++) {
@@ -480,8 +485,7 @@ namespace ts {
         }
         // Check if the value asked was string[] and value provided was not string[]
         else if (expectedType !== "string[]" ||
-            typeof jsonValue !== "object" ||
-            typeof jsonValue.length !== "number" ||
+            !(jsonValue instanceof Array) ||
             forEach(<string[]>jsonValue, individualValue => typeof individualValue !== "string")) {
             // Not expectedType
             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, opt.name, expectedType));

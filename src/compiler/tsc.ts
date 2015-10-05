@@ -188,7 +188,7 @@ namespace ts {
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
             let searchPath = normalizePath(sys.getCurrentDirectory());
-            configFileName = findConfigFile(searchPath, sys);
+            configFileName = findConfigFile(searchPath, sys.fileExists);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
