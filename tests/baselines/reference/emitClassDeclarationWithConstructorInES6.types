@@ -38,7 +38,7 @@ class B {
         this.y = 10;
 >this.y = 10 : number
 >this.y : number
->this : B
+>this : this
 >y : number
 >10 : number
     }
@@ -53,7 +53,7 @@ class B {
 
         return this._bar;
 >this._bar : string
->this : B
+>this : this
 >_bar : string
     } 
 }

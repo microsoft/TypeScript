@@ -1,5 +1,5 @@
-tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules.
-tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(22,27): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyGloImportParseErrors.ts(30,20): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(49,29): error TS4000: Import declaration 'm1_im2_private' is using private name 'm1_M2_private'.
 tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(59,37): error TS2307: Cannot find module 'm1_M3_public'.
@@ -11,9 +11,9 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(82,43): error TS1147: Import
 tests/cases/compiler/privacyGloImportParseErrors.ts(121,38): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(125,45): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(133,9): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-tests/cases/compiler/privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient modules cannot be nested in other modules.
-tests/cases/compiler/privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient modules cannot be nested in other modules.
-tests/cases/compiler/privacyGloImportParseErrors.ts(141,12): error TS2435: Ambient modules cannot be nested in other modules.
+tests/cases/compiler/privacyGloImportParseErrors.ts(133,24): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyGloImportParseErrors.ts(138,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
+tests/cases/compiler/privacyGloImportParseErrors.ts(141,12): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/privacyGloImportParseErrors.ts(146,25): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Import declarations in a namespace cannot reference a module.
 
@@ -42,7 +42,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
     
         export declare module "m1_M3_public" {
                               ~~~~~~~~~~~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules.
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
             export function f1();
             export class c1 {
             }
@@ -52,7 +52,7 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
     
         declare module "m1_M4_private" {
                        ~~~~~~~~~~~~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules.
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
             export function f1();
             export class c1 {
             }
@@ -179,19 +179,19 @@ tests/cases/compiler/privacyGloImportParseErrors.ts(149,29): error TS1147: Impor
             ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
                            ~~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules.
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
             }
         }
     
         module m2 {
             module "abc2" {
                    ~~~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules.
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
             }
         }
         module "abc3" {
                ~~~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules.
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
         }
     }
     

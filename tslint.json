@@ -11,8 +11,6 @@
             "check-open-brace",
             "check-whitespace"
         ],
-        "no-unreachable": true,
-        "no-use-before-declare": true,
         "no-var-keyword": true,
         "quotemark": [true,
             "double"

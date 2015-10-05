@@ -40,5 +40,6 @@ scripts/typings/
 coverage/
 internal/
 **/.DS_Store
-.settings/*
-!.settings/tasks.json
+.settings
+.vscode/*
+!.vscode/tasks.json

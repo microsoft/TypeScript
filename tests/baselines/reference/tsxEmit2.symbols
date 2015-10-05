@@ -21,12 +21,14 @@ var p1, p2, p3;
 var spreads1 = <div {...p1}>{p2}</div>;
 >spreads1 : Symbol(spreads1, Decl(file.tsx, 8, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>p1 : Symbol(p1, Decl(file.tsx, 7, 3))
 >p2 : Symbol(p2, Decl(file.tsx, 7, 7))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
 var spreads2 = <div {...p1}>{p2}</div>;
 >spreads2 : Symbol(spreads2, Decl(file.tsx, 9, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>p1 : Symbol(p1, Decl(file.tsx, 7, 3))
 >p2 : Symbol(p2, Decl(file.tsx, 7, 7))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
@@ -35,12 +37,14 @@ var spreads3 = <div x={p3} {...p1}>{p2}</div>;
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 >x : Symbol(unknown)
 >p3 : Symbol(p3, Decl(file.tsx, 7, 11))
+>p1 : Symbol(p1, Decl(file.tsx, 7, 3))
 >p2 : Symbol(p2, Decl(file.tsx, 7, 7))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
 var spreads4 = <div {...p1} x={p3} >{p2}</div>;
 >spreads4 : Symbol(spreads4, Decl(file.tsx, 11, 3))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>p1 : Symbol(p1, Decl(file.tsx, 7, 3))
 >x : Symbol(unknown)
 >p3 : Symbol(p3, Decl(file.tsx, 7, 11))
 >p2 : Symbol(p2, Decl(file.tsx, 7, 7))
@@ -51,6 +55,7 @@ var spreads5 = <div x={p2} {...p1} y={p3}>{p2}</div>;
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 >x : Symbol(unknown)
 >p2 : Symbol(p2, Decl(file.tsx, 7, 7))
+>p1 : Symbol(p1, Decl(file.tsx, 7, 3))
 >y : Symbol(unknown)
 >p3 : Symbol(p3, Decl(file.tsx, 7, 11))
 >p2 : Symbol(p2, Decl(file.tsx, 7, 7))

@@ -425,7 +425,7 @@ namespace ts {
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
     // files.
-    module Parser {
+    namespace Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -518,7 +518,7 @@ namespace ts {
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        let parseErrorBeforeNextFinishedNode: boolean = false;
+        let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
@@ -860,7 +860,7 @@ namespace ts {
             let saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
-            // because the saving/restorating of these flags happens naturally through the recursive
+            // because the saving/restoring of these flags happens naturally through the recursive
             // descent nature of our parser.  However, we still store this here just so we can
             // assert that that invariant holds.
             let saveContextFlags = contextFlags;
@@ -1128,7 +1128,15 @@ namespace ts {
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
             }
+            if (token === SyntaxKind.StaticKeyword) {
+                nextToken();
+                return canFollowModifier();
+            }
+
             nextToken();
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
+            }
             return canFollowModifier();
         }
 
@@ -2364,6 +2372,7 @@ namespace ts {
                     let node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
@@ -2386,6 +2395,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
@@ -3942,7 +3952,8 @@ namespace ts {
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forOfStatement;
-            } else {
+            }
+            else {
                 let forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
@@ -4158,8 +4169,12 @@ namespace ts {
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
                         return nextTokenIsIdentifierOrStringLiteralOnSameLine();
+                    case SyntaxKind.AbstractKeyword:
                     case SyntaxKind.AsyncKeyword:
                     case SyntaxKind.DeclareKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.PublicKeyword:
                         nextToken();
                         // ASI takes effect for this modifier.
                         if (scanner.hasPrecedingLineBreak()) {
@@ -4179,11 +4194,7 @@ namespace ts {
                         }
                         continue;
 
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                    case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.StaticKeyword:
-                    case SyntaxKind.AbstractKeyword:
                         nextToken();
                         continue;
                     default:
@@ -4829,7 +4840,7 @@ namespace ts {
 
             return finishNode(node);
         }
-        
+
         function parseNameOfClassDeclarationOrExpression(): Identifier {
             // implements is a future reserved word so
             // 'class implements' might mean either
@@ -4840,11 +4851,11 @@ namespace ts {
                 ? parseIdentifier()
                 : undefined;
         }
-        
+
         function isImplementsClause() {
-            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword)
+            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword);
         }
-        
+
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
@@ -5319,7 +5330,7 @@ namespace ts {
             Unknown
         }
 
-        export module JSDocParser {
+        export namespace JSDocParser {
             export function isJSDocType() {
                 switch (token) {
                     case SyntaxKind.AsteriskToken:
@@ -5964,7 +5975,7 @@ namespace ts {
         }
     }
 
-    module IncrementalParser {
+    namespace IncrementalParser {
         export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
             aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 

@@ -145,6 +145,7 @@ var x =
 
 <Component { ... x } y
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 >y : Symbol(unknown)
 
 ={2 } z />;
@@ -167,25 +168,31 @@ var x =
 
 <Component {...x} />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 
 <Component { ...x } y={2} />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 >y : Symbol(unknown)
 
 <Component { ... x } y={2} z />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
+>x : Symbol(x, Decl(jsxReactTestSuite.tsx, 10, 11), Decl(jsxReactTestSuite.tsx, 35, 3))
 >y : Symbol(unknown)
 >z : Symbol(unknown)
 
 <Component x={1} {...y} />;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
+>y : Symbol(y, Decl(jsxReactTestSuite.tsx, 9, 11))
 
 
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 >x : Symbol(unknown)
 >y : Symbol(unknown)
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
+>z : Symbol(z, Decl(jsxReactTestSuite.tsx, 11, 11))
 >Child : Symbol(Child, Decl(jsxReactTestSuite.tsx, 5, 11))
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 2, 11))
 

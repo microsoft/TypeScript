@@ -1,5 +1,6 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
+/* tslint:disable:no-null */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase extends ts.CompilerOptions{
@@ -26,7 +27,7 @@ interface BatchCompileProjectTestCaseEmittedFile extends Harness.Compiler.Genera
 interface CompileProjectFilesResult {
     moduleKind: ts.ModuleKind;
     program?: ts.Program;
-    compilerOptions?: ts.CompilerOptions,
+    compilerOptions?: ts.CompilerOptions;
     errors: ts.Diagnostic[];
     sourceMapData?: ts.SourceMapData[];
 }
@@ -177,16 +178,18 @@ class ProjectRunner extends RunnerBase {
             }
         }
 
-        function batchCompilerProjectTestCase(moduleKind: ts.ModuleKind): BatchCompileProjectTestCaseResult{
+        function batchCompilerProjectTestCase(moduleKind: ts.ModuleKind): BatchCompileProjectTestCaseResult {
             let nonSubfolderDiskFiles = 0;
 
             let outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
             let inputFiles = testCase.inputFiles;
             let { errors, compilerOptions } = createCompilerOptions();
             if (errors.length) {
-                moduleKind,
-                errors
-            };
+                return {
+                    moduleKind,
+                    errors
+                };
+            }
 
             let configFileName: string;
             if (compilerOptions.project) {
@@ -255,7 +258,7 @@ class ProjectRunner extends RunnerBase {
 
                 return { errors, compilerOptions };
             }
-            
+
             function getFileNameInTheProjectTest(fileName: string): string {
                 return ts.isRootedDiskPath(fileName)
                     ? fileName
@@ -363,7 +366,7 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
                 }
                 else {
-                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile|| compilerOptions.out) + ".d.ts";
+                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
                     let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
@@ -393,7 +396,7 @@ class ProjectRunner extends RunnerBase {
                 sourceFile => sourceFile.fileName !== "lib.d.ts"),
                 sourceFile => {
                     return { unitName: sourceFile.fileName, content: sourceFile.text };
-                }): [];
+                }) : [];
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }
