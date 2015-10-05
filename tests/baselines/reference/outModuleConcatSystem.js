@@ -99,3 +99,12 @@ import { A } from "./ref/a";
 export declare class B extends A {
 }
 //// [all.d.ts]
+declare module "tests/cases/compiler/ref/a" {
+    export class A {
+    }
+}
+declare module "tests/cases/compiler/b" {
+    import { A } from "tests/cases/compiler/ref/a";
+    export class B extends A {
+    }
+}

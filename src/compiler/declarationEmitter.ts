@@ -55,6 +55,7 @@ namespace ts {
         let errorNameNode: DeclarationName;
         let emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         let emit = compilerOptions.stripInternal ? stripInternal : emitNode;
+        let noDeclare = !root;
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -107,6 +108,7 @@ namespace ts {
             let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
             forEach(host.getSourceFiles(), sourceFile => {
                 if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    noDeclare = false;
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {
@@ -125,19 +127,14 @@ namespace ts {
                     emitSourceFile(sourceFile);
                 }
                 else if (isExternalModule(sourceFile)) {
-                    currentSourceFile = sourceFile;
-                    write(`declare module "${sourceFile.moduleName}"`);
-
-                    let prevEnclosingDeclaration = enclosingDeclaration;
-                    enclosingDeclaration = sourceFile;
-                    write(" {");
+                    noDeclare = true;
+                    write(`declare module "${sourceFile.moduleName}" {`);
                     writeLine();
                     increaseIndent();
-                    emitLines(sourceFile.statements);
+                    emitSourceFile(sourceFile)
                     decreaseIndent();
                     write("}");
                     writeLine();
-                    enclosingDeclaration = prevEnclosingDeclaration;
 
                     // create asynchronous output for the importDeclarations
                     if (moduleElementDeclarationEmitInfo.length) {
@@ -637,7 +634,7 @@ namespace ts {
                 if (node.flags & NodeFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration && root) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
                     write("declare ");
                 }
             }
