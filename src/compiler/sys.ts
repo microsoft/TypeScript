@@ -423,7 +423,7 @@ namespace ts {
                             (eventName: string, relativeFileName: string) => {
                                 if (eventName == "rename") {
                                     // when deleting a file, the passed baseFileName is null
-                                    callback(relativeFileName == null ? null : ts.combinePaths(path, ts.normalizeSlashes(relativeFileName)))
+                                    callback(relativeFileName == null ? null : normalizePath(ts.combinePaths(path, relativeFileName)))
                                 };
                             }
                         );

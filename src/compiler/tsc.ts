@@ -149,6 +149,7 @@ namespace ts {
         let commandLine = parseCommandLine(args);
         let configFileName: string;                 // Configuration file name (if any)
         let configFileWatcher: FileWatcher;         // Configuration file watcher
+        let directoryWatcher: FileWatcher;          // Directory watcher to monitor source file addition/removal
         let cachedProgram: Program;                 // Program cached from last compilation
         let rootFileNames: string[];                // Root fileNames for compilation
         let compilerOptions: CompilerOptions;       // Compiler options for compilation
@@ -218,28 +219,43 @@ namespace ts {
             if (configFileName) {
                 configFileWatcher = sys.watchFile(configFileName, configFileChanged);
             }
+            if (sys.watchDirectory && configFileName) {
+                let directory = ts.getDirectoryPath(configFileName);
+                directoryWatcher = sys.watchDirectory(
+                    // When the configFileName is just "tsconfig.json", the watched directory should be 
+                    // the current direcotry; if there is a given "project" parameter, then the configFileName
+                    // is an absolute file name.
+                    directory == "" ? "." : directory,
+                    watchedDirectoryChanged, /*recursive*/ true);
+            }
         }
 
         performCompilation();
+
+        function configFileToParsedCommandLine(configFilename: string): ParsedCommandLine {
+            let result = readConfigFile(configFileName, sys.readFile);
+            if (result.error) {
+                reportWatchDiagnostic(result.error);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
+
+            let configObject = result.config;
+            let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
+            if (configParseResult.errors.length > 0) {
+                reportDiagnostics(configParseResult.errors);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
+            return configParseResult;
+        }
 
         // Invoked to perform initial compilation or re-compilation in watch mode
         function performCompilation() {
 
             if (!cachedProgram) {
                 if (configFileName) {
-
-                    let result = readConfigFile(configFileName, sys.readFile);
-                    if (result.error) {
-                        reportWatchDiagnostic(result.error);
-                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    }
-
-                    let configObject = result.config;
-                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
-                    if (configParseResult.errors.length > 0) {
-                        reportDiagnostics(configParseResult.errors);
-                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    }
+                    let configParseResult = configFileToParsedCommandLine(configFileName);
                     rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
@@ -307,6 +323,21 @@ namespace ts {
         function configFileChanged() {
             setCachedProgram(undefined);
             startTimer();
+        }
+
+        function watchedDirectoryChanged(fileName: string) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+                return;
+            }
+
+            let parsedCommandLine = configFileToParsedCommandLine(configFileName);
+            let newFileNames = parsedCommandLine.fileNames.map(compilerHost.getCanonicalFileName);
+            let canonicalRootFileNames = rootFileNames.map(compilerHost.getCanonicalFileName);
+
+            if (!doTwoArraysHaveTheSameElements(newFileNames, canonicalRootFileNames)) {
+                setCachedProgram(undefined);
+                startTimer();
+            }
         }
 
         // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
