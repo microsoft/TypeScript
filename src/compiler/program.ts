@@ -114,10 +114,9 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        let root = combinePaths(candidate, "index");
-        let result = loadNodeModuleFromFile(root, loadOnlyDts, failedLookupLocation, host);
+        let result = loadNodeModuleFromFile(combinePaths(candidate, "index"), loadOnlyDts, failedLookupLocation, host);
         if (result) {
-            return { resolvedFileName: result, packageRoot: mustBePackage ? root : undefined };
+            return { resolvedFileName: result, packageRoot: mustBePackage ? result : undefined };
         }
     }
 
