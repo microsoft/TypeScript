@@ -131,7 +131,7 @@ namespace ts {
                     write(`declare module "${sourceFile.moduleName}" {`);
                     writeLine();
                     increaseIndent();
-                    emitSourceFile(sourceFile)
+                    emitSourceFile(sourceFile);
                     decreaseIndent();
                     write("}");
                     writeLine();
