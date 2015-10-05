@@ -117,7 +117,7 @@ namespace ts {
         let root = combinePaths(candidate, "index");
         let result = loadNodeModuleFromFile(root, loadOnlyDts, failedLookupLocation, host);
         if (result) {
-            return { resolvedFileName: result, packageRoot: root };
+            return { resolvedFileName: result, packageRoot: mustBePackage ? root : undefined };
         }
     }
 

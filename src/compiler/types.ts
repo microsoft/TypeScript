@@ -1232,7 +1232,7 @@ namespace ts {
         postParameterName?: Identifier;
         isBracketed: boolean;
     }
-    
+
     export interface PackageDescriptor extends Scope {
         packageFile: string;
     }
@@ -1591,7 +1591,7 @@ namespace ts {
     /* @internal */
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
-        hasPackageInternalName(node:SourceFile, name: string): boolean;
+        hasPackageInternalName(node: SourceFile, name: string): boolean;
         getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedNestedRedeclaration(node: Identifier): Declaration;
