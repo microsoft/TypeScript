@@ -354,11 +354,9 @@ namespace ts.server {
         compilerService: CompilerService;
         projectFilename: string;
         projectFileWatcher: FileWatcher;
-        // Inferred projects have a collection of non-recursive directory watchers starting
-        // from the root path (e.g. "C:\" or "/") to the current path; 
-        // while configured projects whose tsconfig files don't have a "files" array have one 
-        // recursive directory watcher starting from the current path
-        directoryWatchers: FileWatcher[] = [];
+        directoryWatcher: FileWatcher;
+        // Used to keep track of what directories are watched for this project
+        directoriesWatchedForTsconfig: string[] = [];
         program: ts.Program;
         filenameToSourceFile: ts.Map<ts.SourceFile> = {};
         updateGraphSeq = 0;
@@ -380,6 +378,10 @@ namespace ts.server {
 
         openReferencedFile(filename: string) {
             return this.projectService.openFile(filename, false);
+        }
+
+        getRootFiles() {
+            return this.compilerService.host.roots.map(info => info.fileName);
         }
 
         getFileNames() {
@@ -434,13 +436,11 @@ namespace ts.server {
 
         // add a root file to project
         addRoot(info: ScriptInfo) {
-            info.defaultProject = this;
             this.compilerService.host.addRoot(info);
         }
         
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
-            info.defaultProject = undefined;
             this.compilerService.host.removeRoot(info);
         }
 
@@ -496,6 +496,11 @@ namespace ts.server {
         openFilesReferenced: ScriptInfo[] = [];
         // open files that are roots of a configured project
         openFileRootsConfigured: ScriptInfo[] = [];
+        // a path to directory watcher map that detects added tsconfig files
+        directoryWatchersForTsconfig: ts.Map<FileWatcher> = {};
+        // count of how many projects are using the directory watcher. If the 
+        // number becomes 0 for a watcher, then we should close it.
+        directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
@@ -538,32 +543,53 @@ namespace ts.server {
         }
 
         /**
-         * This is the callback function when the directory that an inferred project belongs
-         * to changed. The function looks for newly added tsconfig.json files; if it found one,
-         * and the tsconfig.json file contains the root file of the current inferred project,
-         * it will update the project structure.
+         * This is the callback function when a watched directory has added or removed files.
+         * @param project the project that associates with this directory watcher
+         * @param fileName the absolute file name that changed in watched directory
          */
-        watchedDirectoryChanged(project: Project, path: string) {
-            if (project.isConfiguredProject()) {
+        directoryWatchedForSourceFilesChanged(project: Project, fileName: string) {
+            // If a change was made inside "folder/file", node will trigger the callback twice:
+            // one with the fileName being "folder/file", and the other one with "folder".
+            // We don't respond to the second one.
+            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
                 return;
             }
 
-            let configFileName = ts.combinePaths(path, "tsconfig.json");
-            if (sys.fileExists(configFileName)) {
-                let {succeeded, projectOptions, error} = this.configFileToProjectOptions(configFileName);
-                if (!succeeded) {
+            this.log("Detected source file changes: " + fileName);
+
+            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+            let newRootFiles = projectOptions.files.map(f => this.getCanonicalFileName(f));
+            let currentRootFiles = project.getRootFiles().map(f => this.getCanonicalFileName(f));
+
+            if (!doTwoArraysHaveTheSameElements(currentRootFiles, newRootFiles)) {
+                // For configured projects, the change is made outside the tsconfig file, and
+                // it is not likely to affect the project for other files opened by the client. We can 
+                // just update the current project.
+                this.updateConfiguredProject(project);
+
+                // Call updateProjectStructure to clean up inferred projects we may have created for the
+                // new files
+                this.updateProjectStructure();
+            }
+        }
+
+        directoryWatchedForTsconfigChanged(fileName: string) {
+            if (ts.getBaseFileName(fileName) != "tsconfig.json") {
+                this.log(fileName + " is not tsconfig.json");
+                return;
+            }
+
+            this.log("Detected newly added tsconfig file: " + fileName);
+
+            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(fileName);
+            let rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
+            let openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
+
+            for (let openFileRoot of openFileRoots) {
+                if (rootFilesInTsconfig.indexOf(openFileRoot) >= 0) {
+                    this.reloadProjects();
                     return;
                 }
-
-                let newProjectFileNames = projectOptions.files.map(f => this.getCanonicalFileName(f));
-                let rootFiles = project.getRootFiles().map(f => this.getCanonicalFileName(f));
-                for (let rootFile of rootFiles) {
-                    if (newProjectFileNames.indexOf(rootFile) >= 0) {
-                        this.reloadProjects();
-                        return;
-                    }
-                }
-
             }
         }
 
@@ -573,7 +599,7 @@ namespace ts.server {
         }
 
         watchedProjectConfigFileChanged(project: Project) {
-            this.log("Config File Changed: " + project.projectFilename);
+            this.log("Config file changed: " + project.projectFilename);
             this.updateConfiguredProject(project);
             this.updateProjectStructure();
         }
@@ -613,8 +639,18 @@ namespace ts.server {
             let currentPath = ts.getDirectoryPath(root.fileName);
             let parentPath = ts.getDirectoryPath(currentPath);
             while (currentPath != parentPath) {
-                // To finish
-                let directoryWatcher = this.host.watchDirectory(currentPath, p => this.);;
+                if (!project.projectService.directoryWatchersForTsconfig[currentPath]) {
+                    this.log("Add watcher for: " + currentPath);
+                    project.projectService.directoryWatchersForTsconfig[currentPath] =
+                        this.host.watchDirectory(currentPath, fileName => this.directoryWatchedForTsconfigChanged(fileName));
+                    project.projectService.directoryWatchersRefCount[currentPath] = 1;
+                }
+                else {
+                    project.projectService.directoryWatchersRefCount[currentPath] += 1;
+                }
+                project.directoriesWatchedForTsconfig.push(currentPath);
+                currentPath = parentPath;
+                parentPath = ts.getDirectoryPath(parentPath);
             }
 
             project.finishGraph();
@@ -663,9 +699,23 @@ namespace ts.server {
             this.configuredProjects = configuredProjects;
         }
 
-        removeConfiguredProject(project: Project) {
-            project.projectFileWatcher.close();
-            this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+        removeProject(project: Project) {
+            this.log("remove project: " + project.getRootFiles().toString());
+            if (project.isConfiguredProject()) {
+                project.projectFileWatcher.close();
+                project.directoryWatcher.close();
+                this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
+            }
+            else {
+                for (let directory of project.directoriesWatchedForTsconfig) {
+                    if (!(--project.projectService.directoryWatchersRefCount[directory])) {
+                        this.log("Close directory watcher for: " + directory);
+                        project.projectService.directoryWatchersForTsconfig[directory].close();
+                        project.projectService.directoryWatchersForTsconfig[directory] = undefined;
+                    }
+                }
+                this.inferredProjects = copyListRemovingItem(project, this.inferredProjects);
+            }
 
             let fileNames = project.getFileNames();
             for (let fileName of fileNames) {
@@ -707,8 +757,7 @@ namespace ts.server {
                         // if r referenced by the new project
                         if (info.defaultProject.getSourceFile(r)) {
                             // remove project rooted at r
-                            this.inferredProjects =
-                            copyListRemovingItem(r.defaultProject, this.inferredProjects);
+                            this.removeProject(r.defaultProject);
                             // put r in referenced open file list
                             this.openFilesReferenced.push(r);
                             // set default project of r to the new project
@@ -761,19 +810,14 @@ namespace ts.server {
                 this.openFileRootsConfigured = openFileRootsConfigured;
             }
             if (removedProject) {
-                if (removedProject.isConfiguredProject()) {
-                    this.configuredProjects = copyListRemovingItem(removedProject, this.configuredProjects);
-                }
-                else {
-                    this.inferredProjects = copyListRemovingItem(removedProject, this.inferredProjects);
-                }
+                this.removeProject(removedProject);
                 var openFilesReferenced: ScriptInfo[] = [];
                 var orphanFiles: ScriptInfo[] = [];
                 // for all open, referenced files f
                 for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
                     var f = this.openFilesReferenced[i];
                     // if f was referenced by the removed project, remember it
-                    if (f.defaultProject === removedProject) {
+                    if (f.defaultProject === removedProject || !f.defaultProject) {
                         f.defaultProject = undefined;
                         orphanFiles.push(f);
                     }
@@ -817,7 +861,11 @@ namespace ts.server {
             return referencingProjects;
         }
 
+        /**
+         * This function rebuilds the project for every file opened by the client
+         */
         reloadProjects() {
+            this.log("reload projects.");
             // First check if there is new tsconfig file added for inferred project roots
             for (let info of this.openFileRoots) {
                 this.openOrUpdateConfiguredProjectForFile(info.fileName);
@@ -878,14 +926,25 @@ namespace ts.server {
                 var rootFile = this.openFileRoots[i];
                 var rootedProject = rootFile.defaultProject;
                 var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
-                if (referencingProjects.length === 0) {
-                    rootFile.defaultProject = rootedProject;
-                    openFileRoots.push(rootFile);
+
+                if (rootFile.defaultProject.isConfiguredProject()) {
+                    // If the root file has already been added into a configured project,
+                    // meaning the original inferred project is gone already. 
+                    if (!rootedProject.isConfiguredProject()) {
+                        this.removeProject(rootedProject);
+                    }
+                    this.openFileRootsConfigured.push(rootFile);
                 }
                 else {
-                    // remove project from inferred projects list because root captured
-                    this.inferredProjects = copyListRemovingItem(rootedProject, this.inferredProjects);
-                    this.openFilesReferenced.push(rootFile);
+                    if (referencingProjects.length === 0) {
+                        rootFile.defaultProject = rootedProject;
+                        openFileRoots.push(rootFile);
+                    }
+                    else {
+                        // remove project from inferred projects list because root captured
+                        this.removeProject(rootedProject);
+                        this.openFilesReferenced.push(rootFile);
+                    }
                 }
             }
             this.openFileRoots = openFileRoots;
@@ -897,6 +956,9 @@ namespace ts.server {
                 this.addOpenFile(unattachedOpenFiles[i]);
             }
             this.printProjects();
+
+            this.log("Current openFileRoots: " + this.openFileRoots.map(s => s.fileName).toString());
+            this.log("Current openFileRootsConfigured: " + this.openFileRootsConfigured.map(s => s.fileName).toString());
         }
 
         getScriptInfo(filename: string) {
@@ -970,6 +1032,11 @@ namespace ts.server {
             return info;
         }
 
+        /**
+         * This function tries to search for a tsconfig.json for the given file. If we found it, 
+         * we first detect if there is already a configured project created for it: if so, we re-read
+         * the tsconfig file content and update the project; otherwise we create a new one. 
+         */
         openOrUpdateConfiguredProjectForFile(fileName: string) {
             let searchPath = ts.normalizePath(getDirectoryPath(fileName));
             this.log("Search path: " + searchPath, "Info");
@@ -1099,7 +1166,7 @@ namespace ts.server {
                     return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
                 }
                 else if (parsedCommandLine.fileNames == null) {
-                    return { succeeded: false, error: { errorMsg: "no files found" } }
+                    return { succeeded: false, error: { errorMsg: "no files found" } };
                 }
                 else {
                     var projectOptions: ProjectOptions = {
@@ -1118,27 +1185,32 @@ namespace ts.server {
                 return error;
             }
             else {
-                let proj = this.createProject(configFilename, projectOptions);
-                for (let i = 0, len = projectOptions.files.length; i < len; i++) {
-                    let rootFilename = projectOptions.files[i];
+                let project = this.createProject(configFilename, projectOptions);
+                for (let rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
                         let info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
-                        proj.addRoot(info);
+                        project.addRoot(info);
                     }
                     else {
                         return { errorMsg: "specified file " + rootFilename + " not found" };
                     }
                 }
-                proj.finishGraph();
-                proj.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(proj));
-                return { success: true, project: proj };
+                project.finishGraph();
+                project.projectFileWatcher = this.host.watchFile(configFilename, _ => this.watchedProjectConfigFileChanged(project));
+                this.log("Add recursive watcher for: " + ts.getDirectoryPath(configFilename));
+                project.directoryWatcher = this.host.watchDirectory(
+                    ts.getDirectoryPath(configFilename),
+                    path => this.directoryWatchedForSourceFilesChanged(project, path),
+                    /*recursive*/ true
+                );
+                return { success: true, project: project };
             }
         }
 
         updateConfiguredProject(project: Project) {
             if (!this.host.fileExists(project.projectFilename)) {
                 this.log("Config file deleted");
-                this.removeConfiguredProject(project);
+                this.removeProject(project);
             }
             else {
                 let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);

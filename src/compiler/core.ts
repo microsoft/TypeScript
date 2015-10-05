@@ -700,6 +700,9 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
+        if (!path) {
+            return undefined;
+        }
         let i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
@@ -722,6 +725,18 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
+
+    export function isSupportedSourceFileName(fileName: string) {
+        if (!fileName) { return false; }
+
+        let dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex < 0) {
+            return false;
+        }
+
+        let extension = fileName.slice(dotIndex, fileName.length);
+        return supportedExtensions.indexOf(extension) >= 0;
+    }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
@@ -816,5 +831,26 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(false, message);
         }
+    }
+
+    export function doTwoArraysHaveTheSameElements<T>(array1: Array<T>, array2: Array<T>): Boolean {
+        if (!array1 || !array2) {
+            return false;
+        }
+
+        if (array1.length != array2.length) {
+            return false;
+        }
+
+        array1 = array1.sort();
+        array2 = array2.sort();
+
+        for (let i = 0; i < array1.length; i++) {
+            if (array1[i] != array2[i]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

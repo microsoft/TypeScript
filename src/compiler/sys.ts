@@ -398,7 +398,8 @@ namespace ts {
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
                     if (isNode4OrLater()) {
-                        return _fs.watch(fileName, (eventName: string, path: string) => callback(path));
+                        // Note: in node the callback of fs.watch is given only the base file name as a parameter
+                        return _fs.watch(fileName, (eventName: string, baseFileName: string) => callback(fileName));
                     }
 
                     var watchedFile = watchedFileSet.addFile(fileName, callback);
@@ -410,8 +411,22 @@ namespace ts {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     // therefore if the current node.js version is newer than 4, use `fs.watch` instead.
+
+                    // In watchDirectory we only care about adding and removing files (when event name is
+                    // "rename"); changes made within files are handled by corresponding fileWatchers (when
+                    // event name is "change")
+
                     if (isNode4OrLater()) {
-                        return _fs.watch(path, { persisten: true, recursive: !!recursive }, (eventName: string, modifiedPath: string) => callback(modifiedPath));
+                        return _fs.watch(
+                            path,
+                            { persisten: true, recursive: !!recursive },
+                            (eventName: string, relativeFileName: string) => {
+                                if (eventName == "rename") {
+                                    // when deleting a file, the passed baseFileName is null
+                                    callback(relativeFileName == null ? null : ts.combinePaths(path, ts.normalizeSlashes(relativeFileName)))
+                                };
+                            }
+                        );
                     }
 
                     // If Node version is older than 4.0, the "recursive" parameter will be ignored
