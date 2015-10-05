@@ -3,6 +3,7 @@ doc
 scripts
 src
 tests
+internal
 tslint.json
 Jakefile.js
 .editorconfig
