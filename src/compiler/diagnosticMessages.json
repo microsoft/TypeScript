@@ -2466,5 +2466,9 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.": {
+      "category": "Error",
+      "code": 17006
     }
 }

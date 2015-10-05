@@ -3191,34 +3191,36 @@ namespace ts {
          * Comment
          * @param node
          */
-        function isIncrementExpression(node: UnaryExpression): node is IncrementExpression {
-            if (node.kind === SyntaxKind.DeleteExpression || node.kind === SyntaxKind.TypeOfExpression ||
-                node.kind === SyntaxKind.VoidExpression || node.kind === SyntaxKind.TypeAssertionExpression ||
-                node.kind === SyntaxKind.JsxExpression) {
-                return false;
+        function isIncrementExpression(): boolean{
+            // TODO(yuisu): Comment why we have to do what are we doing here
+             switch (token) {
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.TildeToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.DeleteKeyword:
+                case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.LessThanToken:
+                    return false;
+                default:
+                    return true;
             }
-            else if (node.kind === SyntaxKind.PrefixUnaryExpression && ((<PrefixUnaryExpression>node).operator === SyntaxKind.PlusToken ||
-                (<PrefixUnaryExpression>node).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>node).operator === SyntaxKind.TildeToken ||
-                (<PrefixUnaryExpression>node).operator === SyntaxKind.ExclamationToken)) {
-                return false;
-            }
-            return true;
         }
 
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
-            let tryParseIncrementExpression = parseSimpleUnaryExpression();
+            if (isIncrementExpression()) {
+                let incrementExpression = parseIncrementExpression();
+                return token === SyntaxKind.AsteriskAsteriskToken ?
+                    <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), incrementExpression) :
+                    incrementExpression;
+            }
+            
+            let simpleUnaryExpression = parseSimpleUnaryExpression();
             if (token === SyntaxKind.AsteriskAsteriskToken) {
-                if (isIncrementExpression(tryParseIncrementExpression)) {
-                    return <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), tryParseIncrementExpression);
-                }
-                else {
-                    parseErrorAtCurrentToken(Diagnostics.Only_incrementExpression_is_allowed_as_left_operand_of_Asterisk_Asterisk);
-                    return tryParseIncrementExpression;
-                }
+                parseErrorAtCurrentToken(Diagnostics.Left_hand_side_of_Asterisk_Asterisk_cannot_be_a_simple_unary_expression_Consider_parenthesize_the_expression)
             }
-            else {
-                return tryParseIncrementExpression;
-            }
+            return simpleUnaryExpression;
         }
 
         /**
