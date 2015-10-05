@@ -14507,8 +14507,8 @@ namespace ts {
             if (symbolLinks.exportsSomeValue == undefined) {
                 // for export assignments - check if resolved symbol for RHS is itself a value
                 // otherwise - check if at least one export is value
-                symbolLinks.exportsSomeValue = hasExportAssignment 
-                    ? !!(moduleSymbol.flags & SymbolFlags.Value) 
+                symbolLinks.exportsSomeValue = hasExportAssignment
+                    ? !!(moduleSymbol.flags & SymbolFlags.Value)
                     : forEachValue(getExportsOfModule(moduleSymbol), isValue);
             }
 
@@ -14519,7 +14519,7 @@ namespace ts {
                 return s && !!(s.flags & SymbolFlags.Value);
             }
         }
-        
+
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
