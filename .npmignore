@@ -3,7 +3,10 @@ doc
 scripts
 src
 tests
+tslint.json
 Jakefile.js
-.travis.yml
+.editorconfig
+.gitattributes
 .settings/
+.travis.yml
 .vscode/
