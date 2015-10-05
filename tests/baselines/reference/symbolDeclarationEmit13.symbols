@@ -3,13 +3,13 @@ class C {
 >C : Symbol(C, Decl(symbolDeclarationEmit13.ts, 0, 0))
 
     get [Symbol.toPrimitive]() { return ""; }
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3932, 18))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3932, 18))
 
     set [Symbol.toStringTag](x) { }
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3938, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3938, 24))
 >x : Symbol(x, Decl(symbolDeclarationEmit13.ts, 2, 29))
 }

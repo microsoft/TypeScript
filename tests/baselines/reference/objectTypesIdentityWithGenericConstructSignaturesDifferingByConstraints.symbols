@@ -6,7 +6,7 @@
 class B<T extends Array<number>> {
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 4, 8))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
     constructor(x: T) { return null; }
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 5, 16))
@@ -46,7 +46,7 @@ interface I2 {
 var a: { new<T extends Array<string>>(x: T): string }
 >a : Symbol(a, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 20, 3))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 20, 13))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 20, 38))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 20, 13))
 
@@ -62,13 +62,13 @@ function foo1b(x: B<Array<number>>);
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 55), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 23, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 24, 36))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 23, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 function foo1b(x: B<Array<number>>); // error
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 55), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 23, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 24, 36))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 24, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 function foo1b(x: any) { }
 >foo1b : Symbol(foo1b, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 21, 55), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 23, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 24, 36))
@@ -138,7 +138,7 @@ function foo8(x: B<Array<number>>);
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 41, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 43, 35), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 44, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 43, 14))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 function foo8(x: I<Number>); // ok
 >foo8 : Symbol(foo8, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 41, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 43, 35), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 44, 28))
@@ -154,7 +154,7 @@ function foo9(x: B<Array<number>>);
 >foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 45, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 47, 35), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 48, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 47, 14))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 function foo9(x: C<String>); // error, types are structurally equal
 >foo9 : Symbol(foo9, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 45, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 47, 35), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 48, 28))
@@ -170,7 +170,7 @@ function foo10(x: B<Array<number>>);
 >foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 49, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 51, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 52, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 51, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 function foo10(x: typeof a); // ok
 >foo10 : Symbol(foo10, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 49, 25), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 51, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 52, 28))
@@ -185,7 +185,7 @@ function foo11(x: B<Array<number>>);
 >foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 53, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 55, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 56, 28))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 55, 15))
 >B : Symbol(B, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 function foo11(x: typeof b); // ok
 >foo11 : Symbol(foo11, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 53, 26), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 55, 36), Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByConstraints.ts, 56, 28))

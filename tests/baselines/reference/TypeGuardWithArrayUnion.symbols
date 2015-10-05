@@ -14,7 +14,7 @@ function saySize(message: Message | Message[]) {
 
     if (message instanceof Array) {
 >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
         return message.length;  // Should have type Message[] here
 >message.length : Symbol(Array.length, Decl(lib.d.ts, 1007, 20))

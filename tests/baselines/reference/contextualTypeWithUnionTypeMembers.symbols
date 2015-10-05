@@ -164,7 +164,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 
 var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >arrayI1OrI2 : Symbol(arrayI1OrI2, Decl(contextualTypeWithUnionTypeMembers.ts, 51, 3))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
 >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
 >i1 : Symbol(i1, Decl(contextualTypeWithUnionTypeMembers.ts, 21, 3))
@@ -342,7 +342,7 @@ var i11Ori21: I11 | I21 = {
 };
 var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, { 
 >arrayOrI11OrI21 : Symbol(arrayOrI11OrI21, Decl(contextualTypeWithUnionTypeMembers.ts, 104, 3))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
 >I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
 >i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))

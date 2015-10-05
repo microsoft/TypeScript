@@ -4,9 +4,9 @@ var maybeArray: number | number[];
 
 
 if (Array.isArray(maybeArray)) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.d.ts, 1166, 28))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.d.ts, 1166, 28))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.d.ts, 1172, 28))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.d.ts, 1172, 28))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 
     maybeArray.length; // OK

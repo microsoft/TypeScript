@@ -80,12 +80,12 @@ var temp4 = [];
 
 interface myArray extends Array<Number> { }
 >myArray : Symbol(myArray, Decl(arrayLiterals2ES5.ts, 42, 15))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >Number : Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
 
 interface myArray2 extends Array<Number|String> { }
 >myArray2 : Symbol(myArray2, Decl(arrayLiterals2ES5.ts, 44, 43))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >Number : Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
 >String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
 

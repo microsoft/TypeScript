@@ -3,39 +3,39 @@ var i = {
 >i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
 
     [Symbol.iterator]: 0,
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3896, 31))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3896, 31))
 
     [Symbol.toStringTag]() { return "" },
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3938, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3938, 24))
 
     set [Symbol.toPrimitive](p: boolean) { }
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3932, 18))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3932, 18))
 >p : Symbol(p, Decl(symbolProperty18.ts, 3, 29))
 }
 
 var it = i[Symbol.iterator];
 >it : Symbol(it, Decl(symbolProperty18.ts, 6, 3))
 >i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3896, 31))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3896, 31))
 
 var str = i[Symbol.toStringTag]();
 >str : Symbol(str, Decl(symbolProperty18.ts, 7, 3))
 >i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3932, 24))
+>Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3938, 24))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.d.ts, 3938, 24))
 
 i[Symbol.toPrimitive] = false;
 >i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3932, 18))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3932, 18))
 

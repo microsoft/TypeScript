@@ -1008,7 +1008,7 @@ interface Tuple2<T0, T1> extends Array<any> {
 >Tuple2 : Symbol(Tuple2, Decl(underscoreTest1_underscore.ts, 10, 1))
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 12, 17))
 >T1 : Symbol(T1, Decl(underscoreTest1_underscore.ts, 12, 20))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
     0: T0;
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 12, 17))
@@ -1022,7 +1022,7 @@ interface Tuple3<T0, T1, T2> extends Array<any> {
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 17, 17))
 >T1 : Symbol(T1, Decl(underscoreTest1_underscore.ts, 17, 20))
 >T2 : Symbol(T2, Decl(underscoreTest1_underscore.ts, 17, 24))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
     0: T0;
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 17, 17))
@@ -1040,7 +1040,7 @@ interface Tuple4<T0, T1, T2, T3> extends Array<any> {
 >T1 : Symbol(T1, Decl(underscoreTest1_underscore.ts, 23, 20))
 >T2 : Symbol(T2, Decl(underscoreTest1_underscore.ts, 23, 24))
 >T3 : Symbol(T3, Decl(underscoreTest1_underscore.ts, 23, 28))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
     0: T0;
 >T0 : Symbol(T0, Decl(underscoreTest1_underscore.ts, 23, 17))
@@ -1247,7 +1247,7 @@ module Underscore {
 >WrappedArray : Symbol(WrappedArray, Decl(underscoreTest1_underscore.ts, 77, 5))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 79, 34))
 >WrappedObject : Symbol(WrappedObject, Decl(underscoreTest1_underscore.ts, 30, 19))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 79, 34))
 
         each(iterator: Iterator<T, void>, context?: any): void;
@@ -2251,7 +2251,7 @@ module Underscore {
 >ChainedArray : Symbol(ChainedArray, Decl(underscoreTest1_underscore.ts, 236, 5))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 238, 34))
 >ChainedObject : Symbol(ChainedObject, Decl(underscoreTest1_underscore.ts, 203, 5))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >T : Symbol(T, Decl(underscoreTest1_underscore.ts, 238, 34))
 
         each(iterator: Iterator<T, void>, context?: any): ChainedObject<void>;

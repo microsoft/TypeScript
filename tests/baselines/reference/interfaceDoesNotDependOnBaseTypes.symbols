@@ -23,6 +23,6 @@ type StringTree = string | StringTreeArray;
 
 interface StringTreeArray extends Array<StringTree> { }
 >StringTreeArray : Symbol(StringTreeArray, Decl(interfaceDoesNotDependOnBaseTypes.ts, 6, 43))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 >StringTree : Symbol(StringTree, Decl(interfaceDoesNotDependOnBaseTypes.ts, 4, 1))
 

@@ -5,7 +5,7 @@ function f() {
 
     if (Math.random()) {
 >Math.random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11), Decl(lib.d.ts, 4419, 60))
+>Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11), Decl(lib.d.ts, 4425, 60))
 >random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
 
         let arguments = 100;

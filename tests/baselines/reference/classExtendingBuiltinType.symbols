@@ -33,9 +33,9 @@ class C8 extends Error { }
 
 class C9 extends Array { }
 >C9 : Symbol(C9, Decl(classExtendingBuiltinType.ts, 7, 26))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 class C10 extends Array<number> { }
 >C10 : Symbol(C10, Decl(classExtendingBuiltinType.ts, 8, 26))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 

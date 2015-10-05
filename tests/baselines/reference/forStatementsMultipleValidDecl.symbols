@@ -102,7 +102,7 @@ for (var a: string[] = []; ;) { }
 
 for (var a = new Array<string>(); ;) { }
 >a : Symbol(a, Decl(forStatementsMultipleValidDecl.ts, 27, 8), Decl(forStatementsMultipleValidDecl.ts, 28, 8), Decl(forStatementsMultipleValidDecl.ts, 29, 8), Decl(forStatementsMultipleValidDecl.ts, 30, 8), Decl(forStatementsMultipleValidDecl.ts, 31, 8), Decl(forStatementsMultipleValidDecl.ts, 32, 8))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1177, 11))
 
 for (var a: typeof a; ;) { }
 >a : Symbol(a, Decl(forStatementsMultipleValidDecl.ts, 27, 8), Decl(forStatementsMultipleValidDecl.ts, 28, 8), Decl(forStatementsMultipleValidDecl.ts, 29, 8), Decl(forStatementsMultipleValidDecl.ts, 30, 8), Decl(forStatementsMultipleValidDecl.ts, 31, 8), Decl(forStatementsMultipleValidDecl.ts, 32, 8))

@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/Symbols/symbolType11.ts ===
 var s = Symbol.for("logical");
 >s : Symbol(s, Decl(symbolType11.ts, 0, 3))
->Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, 3862, 42))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, 3862, 42))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, 3868, 42))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
+>for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, 3868, 42))
 
 s && s;
 >s : Symbol(s, Decl(symbolType11.ts, 0, 3))
