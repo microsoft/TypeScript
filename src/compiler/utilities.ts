@@ -1775,6 +1775,24 @@ namespace ts {
         };
     }
 
+    export function makeModulePathSemiabsolute(host: EmitHost, currentSourceFile: SourceFile, externalModuleName: string): string {
+        let quotemark = externalModuleName.charAt(0);
+        let unquotedModuleName = externalModuleName.substring(1, externalModuleName.length - 1);
+        let resolvedFileName = host.resolveModuleName(unquotedModuleName, currentSourceFile.fileName);
+        if (resolvedFileName) {
+            let semiabsoluteName = resolveToSemiabsolutePath(host, resolvedFileName);
+            externalModuleName = quoteString(semiabsoluteName, quotemark);
+        }
+        return externalModuleName;
+    }
+
+    export function resolveToSemiabsolutePath(host: EmitHost, path: string): string {
+        let dir = host.getCurrentDirectory();
+        return removeFileExtension(
+            getRelativePathToDirectoryOrUrl(dir, path, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/false)
+        );
+    }
+
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
         let compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;

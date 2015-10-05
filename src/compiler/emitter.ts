@@ -499,16 +499,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitConcatenatedModule(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
-                let canonicalName = resolveToSemiabsolutePath(sourceFile.fileName);
+                let canonicalName = resolveToSemiabsolutePath(host, sourceFile.fileName);
                 sourceFile.moduleName = sourceFile.moduleName || canonicalName;
                 emit(sourceFile);
-            }
-
-            function resolveToSemiabsolutePath(path: string): string {
-                let dir = host.getCurrentDirectory();
-                return removeFileExtension(
-                    getRelativePathToDirectoryOrUrl(dir, path, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/false)
-                );
             }
 
             function isUniqueName(name: string): boolean {
@@ -6681,7 +6674,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (resolvePath) {
-                        text = makeModulePathSemiabsolute(text);
+                        text = makeModulePathSemiabsolute(host, currentSourceFile, text);
                     }
                     write(text);
                 }
@@ -6700,17 +6693,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 aliasedModuleNames: string[];
                 unaliasedModuleNames: string[];
                 importAliasNames: string[];
-            }
-
-            function makeModulePathSemiabsolute(externalModuleName: string): string {
-                let quotemark = externalModuleName.charAt(0);
-                let unquotedModuleName = externalModuleName.substring(1, externalModuleName.length - 1);
-                let resolvedFileName = host.resolveModuleName(unquotedModuleName, currentSourceFile.fileName);
-                if (resolvedFileName) {
-                    let semiabsoluteName = resolveToSemiabsolutePath(resolvedFileName);
-                    externalModuleName = quoteString(semiabsoluteName, quotemark);
-                }
-                return externalModuleName;
             }
 
             function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean, resolvePath?: boolean): AMDDependencyNames {
@@ -6738,7 +6720,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let externalModuleName = getExternalModuleNameText(importNode);
 
                     if (resolvePath) {
-                        externalModuleName = makeModulePathSemiabsolute(externalModuleName);
+                        externalModuleName = makeModulePathSemiabsolute(host, currentSourceFile, externalModuleName);
                     }
 
                     // Find the name of the module alias, if there is one

@@ -104,6 +104,7 @@ namespace ts {
         else {
             // Emit references corresponding to this file
             let emittedReferencedFiles: SourceFile[] = [];
+            let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
             forEach(host.getSourceFiles(), sourceFile => {
                 if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                     // Check what references need to be added
@@ -123,7 +124,42 @@ namespace ts {
 
                     emitSourceFile(sourceFile);
                 }
+                else if (isExternalModule(sourceFile)) {
+                    currentSourceFile = sourceFile;
+                    write(`declare module "${sourceFile.moduleName}"`);
+
+                    let prevEnclosingDeclaration = enclosingDeclaration;
+                    enclosingDeclaration = sourceFile;
+                    write(" {");
+                    writeLine();
+                    increaseIndent();
+                    emitLines(sourceFile.statements);
+                    decreaseIndent();
+                    write("}");
+                    writeLine();
+                    enclosingDeclaration = prevEnclosingDeclaration;
+
+                    // create asynchronous output for the importDeclarations
+                    if (moduleElementDeclarationEmitInfo.length) {
+                        let oldWriter = writer;
+                        forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                            if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
+                                Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
+                                createAndSetNewTextWriterWithSymbolWriter();
+                                Debug.assert(aliasEmitInfo.indent === 1);
+                                increaseIndent();
+                                writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
+                                aliasEmitInfo.asynchronousOutput = writer.getText();
+                                decreaseIndent();
+                            }
+                        });
+                        setWriter(oldWriter);
+                    }
+                    prevModuleElementDeclarationEmitInfo = prevModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                    moduleElementDeclarationEmitInfo = [];
+                }
             });
+            moduleElementDeclarationEmitInfo = moduleElementDeclarationEmitInfo.concat(prevModuleElementDeclarationEmitInfo);
         }
 
         return {
@@ -601,7 +637,7 @@ namespace ts {
                 if (node.flags & NodeFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && root) {
                     write("declare ");
                 }
             }
@@ -696,7 +732,13 @@ namespace ts {
                 }
                 write(" from ");
             }
-            writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            let match: RegExpMatchArray;
+            if ((!root) && node.moduleSpecifier.kind === SyntaxKind.StringLiteral && (match = getTextOfNode(node.moduleSpecifier).match(/('|")(\.\/|\.\.\/)/))) {
+                write(makeModulePathSemiabsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            }
             write(";");
             writer.writeLine();
         }
@@ -732,7 +774,13 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                let match: RegExpMatchArray;
+                if ((!root) && node.moduleSpecifier.kind === SyntaxKind.StringLiteral && (match = getTextOfNode(node.moduleSpecifier).match(/('|")(\.\/|\.\.\/)/))) {
+                    write(makeModulePathSemiabsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                }
             }
             write(";");
             writer.writeLine();
