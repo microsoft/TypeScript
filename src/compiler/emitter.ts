@@ -7,6 +7,264 @@ namespace ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
+    type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
+
+    let entities: Map<number> = {
+        "quot": 0x0022,
+        "amp": 0x0026,
+        "apos": 0x0027,
+        "lt": 0x003C,
+        "gt": 0x003E,
+        "nbsp": 0x00A0,
+        "iexcl": 0x00A1,
+        "cent": 0x00A2,
+        "pound": 0x00A3,
+        "curren": 0x00A4,
+        "yen": 0x00A5,
+        "brvbar": 0x00A6,
+        "sect": 0x00A7,
+        "uml": 0x00A8,
+        "copy": 0x00A9,
+        "ordf": 0x00AA,
+        "laquo": 0x00AB,
+        "not": 0x00AC,
+        "shy": 0x00AD,
+        "reg": 0x00AE,
+        "macr": 0x00AF,
+        "deg": 0x00B0,
+        "plusmn": 0x00B1,
+        "sup2": 0x00B2,
+        "sup3": 0x00B3,
+        "acute": 0x00B4,
+        "micro": 0x00B5,
+        "para": 0x00B6,
+        "middot": 0x00B7,
+        "cedil": 0x00B8,
+        "sup1": 0x00B9,
+        "ordm": 0x00BA,
+        "raquo": 0x00BB,
+        "frac14": 0x00BC,
+        "frac12": 0x00BD,
+        "frac34": 0x00BE,
+        "iquest": 0x00BF,
+        "Agrave": 0x00C0,
+        "Aacute": 0x00C1,
+        "Acirc": 0x00C2,
+        "Atilde": 0x00C3,
+        "Auml": 0x00C4,
+        "Aring": 0x00C5,
+        "AElig": 0x00C6,
+        "Ccedil": 0x00C7,
+        "Egrave": 0x00C8,
+        "Eacute": 0x00C9,
+        "Ecirc": 0x00CA,
+        "Euml": 0x00CB,
+        "Igrave": 0x00CC,
+        "Iacute": 0x00CD,
+        "Icirc": 0x00CE,
+        "Iuml": 0x00CF,
+        "ETH": 0x00D0,
+        "Ntilde": 0x00D1,
+        "Ograve": 0x00D2,
+        "Oacute": 0x00D3,
+        "Ocirc": 0x00D4,
+        "Otilde": 0x00D5,
+        "Ouml": 0x00D6,
+        "times": 0x00D7,
+        "Oslash": 0x00D8,
+        "Ugrave": 0x00D9,
+        "Uacute": 0x00DA,
+        "Ucirc": 0x00DB,
+        "Uuml": 0x00DC,
+        "Yacute": 0x00DD,
+        "THORN": 0x00DE,
+        "szlig": 0x00DF,
+        "agrave": 0x00E0,
+        "aacute": 0x00E1,
+        "acirc": 0x00E2,
+        "atilde": 0x00E3,
+        "auml": 0x00E4,
+        "aring": 0x00E5,
+        "aelig": 0x00E6,
+        "ccedil": 0x00E7,
+        "egrave": 0x00E8,
+        "eacute": 0x00E9,
+        "ecirc": 0x00EA,
+        "euml": 0x00EB,
+        "igrave": 0x00EC,
+        "iacute": 0x00ED,
+        "icirc": 0x00EE,
+        "iuml": 0x00EF,
+        "eth": 0x00F0,
+        "ntilde": 0x00F1,
+        "ograve": 0x00F2,
+        "oacute": 0x00F3,
+        "ocirc": 0x00F4,
+        "otilde": 0x00F5,
+        "ouml": 0x00F6,
+        "divide": 0x00F7,
+        "oslash": 0x00F8,
+        "ugrave": 0x00F9,
+        "uacute": 0x00FA,
+        "ucirc": 0x00FB,
+        "uuml": 0x00FC,
+        "yacute": 0x00FD,
+        "thorn": 0x00FE,
+        "yuml": 0x00FF,
+        "OElig": 0x0152,
+        "oelig": 0x0153,
+        "Scaron": 0x0160,
+        "scaron": 0x0161,
+        "Yuml": 0x0178,
+        "fnof": 0x0192,
+        "circ": 0x02C6,
+        "tilde": 0x02DC,
+        "Alpha": 0x0391,
+        "Beta": 0x0392,
+        "Gamma": 0x0393,
+        "Delta": 0x0394,
+        "Epsilon": 0x0395,
+        "Zeta": 0x0396,
+        "Eta": 0x0397,
+        "Theta": 0x0398,
+        "Iota": 0x0399,
+        "Kappa": 0x039A,
+        "Lambda": 0x039B,
+        "Mu": 0x039C,
+        "Nu": 0x039D,
+        "Xi": 0x039E,
+        "Omicron": 0x039F,
+        "Pi": 0x03A0,
+        "Rho": 0x03A1,
+        "Sigma": 0x03A3,
+        "Tau": 0x03A4,
+        "Upsilon": 0x03A5,
+        "Phi": 0x03A6,
+        "Chi": 0x03A7,
+        "Psi": 0x03A8,
+        "Omega": 0x03A9,
+        "alpha": 0x03B1,
+        "beta": 0x03B2,
+        "gamma": 0x03B3,
+        "delta": 0x03B4,
+        "epsilon": 0x03B5,
+        "zeta": 0x03B6,
+        "eta": 0x03B7,
+        "theta": 0x03B8,
+        "iota": 0x03B9,
+        "kappa": 0x03BA,
+        "lambda": 0x03BB,
+        "mu": 0x03BC,
+        "nu": 0x03BD,
+        "xi": 0x03BE,
+        "omicron": 0x03BF,
+        "pi": 0x03C0,
+        "rho": 0x03C1,
+        "sigmaf": 0x03C2,
+        "sigma": 0x03C3,
+        "tau": 0x03C4,
+        "upsilon": 0x03C5,
+        "phi": 0x03C6,
+        "chi": 0x03C7,
+        "psi": 0x03C8,
+        "omega": 0x03C9,
+        "thetasym": 0x03D1,
+        "upsih": 0x03D2,
+        "piv": 0x03D6,
+        "ensp": 0x2002,
+        "emsp": 0x2003,
+        "thinsp": 0x2009,
+        "zwnj": 0x200C,
+        "zwj": 0x200D,
+        "lrm": 0x200E,
+        "rlm": 0x200F,
+        "ndash": 0x2013,
+        "mdash": 0x2014,
+        "lsquo": 0x2018,
+        "rsquo": 0x2019,
+        "sbquo": 0x201A,
+        "ldquo": 0x201C,
+        "rdquo": 0x201D,
+        "bdquo": 0x201E,
+        "dagger": 0x2020,
+        "Dagger": 0x2021,
+        "bull": 0x2022,
+        "hellip": 0x2026,
+        "permil": 0x2030,
+        "prime": 0x2032,
+        "Prime": 0x2033,
+        "lsaquo": 0x2039,
+        "rsaquo": 0x203A,
+        "oline": 0x203E,
+        "frasl": 0x2044,
+        "euro": 0x20AC,
+        "image": 0x2111,
+        "weierp": 0x2118,
+        "real": 0x211C,
+        "trade": 0x2122,
+        "alefsym": 0x2135,
+        "larr": 0x2190,
+        "uarr": 0x2191,
+        "rarr": 0x2192,
+        "darr": 0x2193,
+        "harr": 0x2194,
+        "crarr": 0x21B5,
+        "lArr": 0x21D0,
+        "uArr": 0x21D1,
+        "rArr": 0x21D2,
+        "dArr": 0x21D3,
+        "hArr": 0x21D4,
+        "forall": 0x2200,
+        "part": 0x2202,
+        "exist": 0x2203,
+        "empty": 0x2205,
+        "nabla": 0x2207,
+        "isin": 0x2208,
+        "notin": 0x2209,
+        "ni": 0x220B,
+        "prod": 0x220F,
+        "sum": 0x2211,
+        "minus": 0x2212,
+        "lowast": 0x2217,
+        "radic": 0x221A,
+        "prop": 0x221D,
+        "infin": 0x221E,
+        "ang": 0x2220,
+        "and": 0x2227,
+        "or": 0x2228,
+        "cap": 0x2229,
+        "cup": 0x222A,
+        "int": 0x222B,
+        "there4": 0x2234,
+        "sim": 0x223C,
+        "cong": 0x2245,
+        "asymp": 0x2248,
+        "ne": 0x2260,
+        "equiv": 0x2261,
+        "le": 0x2264,
+        "ge": 0x2265,
+        "sub": 0x2282,
+        "sup": 0x2283,
+        "nsub": 0x2284,
+        "sube": 0x2286,
+        "supe": 0x2287,
+        "oplus": 0x2295,
+        "otimes": 0x2297,
+        "perp": 0x22A5,
+        "sdot": 0x22C5,
+        "lceil": 0x2308,
+        "rceil": 0x2309,
+        "lfloor": 0x230A,
+        "rfloor": 0x230B,
+        "lang": 0x2329,
+        "rang": 0x232A,
+        "loz": 0x25CA,
+        "spades": 0x2660,
+        "clubs": 0x2663,
+        "hearts": 0x2665,
+        "diams": 0x2666
+    };
+
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
         Auto      = 0x00000000,  // No preferred name
@@ -27,12 +285,10 @@ var __extends = (this && this.__extends) || function (d, b) {
         // emit output for the __decorate helper function
         const decorateHelper = `
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };`;
 
         // emit output for the __metadata helper function
@@ -64,6 +320,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
@@ -188,6 +445,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /** If removeComments is true, no leading-comments needed to be emitted **/
             let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
+
+            let moduleEmitDelegates: Map<(node: SourceFile) => void> = {
+                [ModuleKind.ES6]: emitES6Module,
+                [ModuleKind.AMD]: emitAMDModule,
+                [ModuleKind.System]: emitSystemModule,
+                [ModuleKind.UMD]: emitUMDModule,
+                [ModuleKind.CommonJS]: emitCommonJSModule,
+            };
 
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 initializeEmitterWithSourceMaps();
@@ -687,7 +952,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                 }
-                
+
                 function emitNodeWithCommentsAndWithSourcemap(node: Node) {
                     emitNodeConsideringCommentsOption(node, emitNodeWithSourceMap);
                 }
@@ -1182,7 +1447,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     let syntheticReactRef = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                    syntheticReactRef.text = 'React';
+                    syntheticReactRef.text = "React";
                     syntheticReactRef.parent = openingNode;
 
                     // Call React.createElement(tag, ...
@@ -1386,7 +1651,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //
                     // The emit for the decorated computed property decorator is:
                     //
-                    //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
+                    //   __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a));
                     //
                     if (nodeIsDecorated(node.parent)) {
                         if (!computedPropertyNamesToGeneratedNames) {
@@ -1426,6 +1691,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.ArrayLiteralExpression:
+                    case SyntaxKind.AsExpression:
                     case SyntaxKind.BinaryExpression:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.CaseClause:
@@ -1494,7 +1760,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
                         // Identifier references module export
-                        if (languageVersion < ScriptTarget.ES6 && compilerOptions.module !== ModuleKind.System) {
+                        if (modulekind !== ModuleKind.ES6 && modulekind !== ModuleKind.System) {
                             write("exports.");
                         }
                     }
@@ -1504,7 +1770,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(".");
                     }
                 }
-                else if (languageVersion < ScriptTarget.ES6) {
+                else if (modulekind !== ModuleKind.ES6) {
                     let declaration = resolver.getReferencedImportDeclaration(node);
                     if (declaration) {
                         if (declaration.kind === SyntaxKind.ImportClause) {
@@ -1516,8 +1782,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         else if (declaration.kind === SyntaxKind.ImportSpecifier) {
                             // Identifier references named import
                             write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
-                            var name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
-                            var identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
+                            let name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
+                            let identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
                             if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
                                 write(`["default"]`);
                             }
@@ -2060,15 +2326,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 return false;
             }
-            
+
             function tryGetConstEnumValue(node: Node): number {
                 if (compilerOptions.isolatedModules) {
                     return undefined;
                 }
-                
-                return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression 
+
+                return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression
                     ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                    : undefined
+                    : undefined;
             }
 
             // Returns 'true' if the code was actually indented, false otherwise.
@@ -3057,7 +3323,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(getGeneratedNameForNode(container));
                         write(".");
                     }
-                    else if (languageVersion < ScriptTarget.ES6 && compilerOptions.module !== ModuleKind.System) {
+                    else if (modulekind !== ModuleKind.ES6 && modulekind !== ModuleKind.System) {
                         write("exports.");
                     }
                 }
@@ -3077,7 +3343,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node.parent.kind === SyntaxKind.SourceFile) {
                     Debug.assert(!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
                     // only allow export default at a source file level
-                    if (compilerOptions.module === ModuleKind.CommonJS || compilerOptions.module === ModuleKind.AMD || compilerOptions.module === ModuleKind.UMD) {
+                    if (modulekind === ModuleKind.CommonJS || modulekind === ModuleKind.AMD || modulekind === ModuleKind.UMD) {
                         if (!currentSourceFile.symbol.exports["___esModule"]) {
                             if (languageVersion === ScriptTarget.ES5) {
                                 // default value of configurable, enumerable, writable are `false`.
@@ -3099,7 +3365,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitStart(node);
 
                     // emit call to exporter only for top level nodes
-                    if (compilerOptions.module === ModuleKind.System && node.parent === currentSourceFile) {
+                    if (modulekind === ModuleKind.System && node.parent === currentSourceFile) {
                         // emit export default <smth> as
                         // export("default", <smth>)
                         write(`${exportFunctionForFile}("`);
@@ -3135,10 +3401,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExportMemberAssignments(name: Identifier) {
-                if (compilerOptions.module === ModuleKind.System) {
+                if (modulekind === ModuleKind.System) {
                     return;
                 }
-                
+
                 if (!exportEquals && exportSpecifiers && hasProperty(exportSpecifiers, name.text)) {
                     for (let specifier of exportSpecifiers[name.text]) {
                         writeLine();
@@ -3153,14 +3419,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
             }
-            
+
             function emitExportSpecifierInSystemModule(specifier: ExportSpecifier): void {
-                Debug.assert(compilerOptions.module === ModuleKind.System);
+                Debug.assert(modulekind === ModuleKind.System);
 
                 if (!resolver.getReferencedValueDeclaration(specifier.propertyName || specifier.name) && !resolver.isValueAliasDeclaration(specifier) ) {
                     return;
                 }
-                
+
                 writeLine();
                 emitStart(specifier.name);
                 write(`${exportFunctionForFile}("`);
@@ -3492,7 +3758,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function isES6ExportedDeclaration(node: Node) {
                 return !!(node.flags & NodeFlags.Export) &&
-                    languageVersion >= ScriptTarget.ES6 &&
+                    modulekind === ModuleKind.ES6 &&
                     node.parent.kind === SyntaxKind.SourceFile;
             }
 
@@ -4440,7 +4706,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //
                         //     let C = class {
                         //     };
-                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
                         //     C = __decorate([dec], C);
                         //
                         // * For an exported class declaration:
@@ -4452,7 +4717,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //
                         //     export let C = class {
                         //     };
-                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
                         //     C = __decorate([dec], C);
                         //
                         // * For a default export of a class declaration with a name:
@@ -4464,7 +4728,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //
                         //     let C = class {
                         //     }
-                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
                         //     C = __decorate([dec], C);
                         //     export default C;
                         //
@@ -4521,8 +4784,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 write("class");
 
-                // check if this is an "export default class" as it may not have a name. Do not emit the name if the class is decorated.
-                if ((node.name || !(node.flags & NodeFlags.Default)) && !thisNodeIsDecorated) {
+                // emit name if
+                // - node has a name
+                // - this is default export and target is not ES6 (for ES6 `export default` does not need to be compiled downlevel)                
+                if ((node.name || (node.flags & NodeFlags.Default && languageVersion < ScriptTarget.ES6)) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
                 }
@@ -4790,21 +5055,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //
                     // The emit for a method is:
                     //
-                    //   Object.defineProperty(C.prototype, "method",
-                    //       __decorate([
-                    //           dec,
-                    //           __param(0, dec2),
-                    //           __metadata("design:type", Function),
-                    //           __metadata("design:paramtypes", [Object]),
-                    //           __metadata("design:returntype", void 0)
-                    //       ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+                    //   __decorate([
+                    //       dec,
+                    //       __param(0, dec2),
+                    //       __metadata("design:type", Function),
+                    //       __metadata("design:paramtypes", [Object]),
+                    //       __metadata("design:returntype", void 0)
+                    //   ], C.prototype, "method", undefined);
                     //
                     // The emit for an accessor is:
                     //
-                    //   Object.defineProperty(C.prototype, "accessor",
-                    //       __decorate([
-                    //           dec
-                    //       ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+                    //   __decorate([
+                    //       dec
+                    //   ], C.prototype, "accessor", undefined);
                     //
                     // The emit for a property is:
                     //
@@ -4815,18 +5078,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     writeLine();
                     emitStart(member);
-                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
-                        write("Object.defineProperty(");
-                        emitStart(member.name);
-                        emitClassMemberPrefix(node, member);
-                        write(", ");
-                        emitExpressionForPropertyName(member.name);
-                        emitEnd(member.name);
-                        write(",");
-                        increaseIndent();
-                        writeLine();
-                    }
-
                     write("__decorate([");
                     increaseIndent();
                     writeLine();
@@ -4850,15 +5101,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitExpressionForPropertyName(member.name);
                     emitEnd(member.name);
 
-                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
-                        write(", Object.getOwnPropertyDescriptor(");
-                        emitStart(member.name);
-                        emitClassMemberPrefix(node, member);
-                        write(", ");
-                        emitExpressionForPropertyName(member.name);
-                        emitEnd(member.name);
-                        write("))");
-                        decreaseIndent();
+                    if (languageVersion > ScriptTarget.ES3) {
+                        if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                            // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
+                            // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
+                            write(", null");
+                        }
+                        else {
+                            // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
+                            // should not invoke `Object.getOwnPropertyDescriptor`.
+                            write(", void 0");
+                        }
                     }
 
                     write(");");
@@ -5258,7 +5511,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(";");
                 }
                 if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
-                    if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
+                    if (modulekind === ModuleKind.System && (node.flags & NodeFlags.Export)) {
                         // write the call to exporter for enum
                         writeLine();
                         write(`${exportFunctionForFile}("`);
@@ -5380,7 +5633,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(" = {}));");
                 emitEnd(node);
                 if (!isES6ExportedDeclaration(node) && node.name.kind === SyntaxKind.Identifier && node.parent === currentSourceFile) {
-                    if (compilerOptions.module === ModuleKind.System && (node.flags & NodeFlags.Export)) {
+                    if (modulekind === ModuleKind.System && (node.flags & NodeFlags.Export)) {
                         writeLine();
                         write(`${exportFunctionForFile}("`);
                         emitDeclarationName(node);
@@ -5391,14 +5644,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitExportMemberAssignments(<Identifier>node.name);
                 }
             }
-            
+
             /*
              * Some bundlers (SystemJS builder) sometimes want to rename dependencies. 
              * Here we check if alternative name was provided for a given moduleName and return it if possible. 
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
                 if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
-                    return `"${currentSourceFile.renamedDependencies[moduleName.text]}"`
+                    return `"${currentSourceFile.renamedDependencies[moduleName.text]}"`;
                 }
                 return undefined;
             }
@@ -5444,7 +5697,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitImportDeclaration(node: ImportDeclaration) {
-                if (languageVersion < ScriptTarget.ES6) {
+                if (modulekind !== ModuleKind.ES6) {
                     return emitExternalImportDeclaration(node);
                 }
 
@@ -5495,7 +5748,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let isExportedImport = node.kind === SyntaxKind.ImportEqualsDeclaration && (node.flags & NodeFlags.Export) !== 0;
                     let namespaceDeclaration = getNamespaceDeclarationNode(node);
 
-                    if (compilerOptions.module !== ModuleKind.AMD) {
+                    if (modulekind !== ModuleKind.AMD) {
                         emitLeadingComments(node);
                         emitStart(node);
                         if (namespaceDeclaration && !isDefaultImport(node)) {
@@ -5607,15 +5860,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExportDeclaration(node: ExportDeclaration) {
-                Debug.assert(compilerOptions.module !== ModuleKind.System);
+                Debug.assert(modulekind !== ModuleKind.System);
 
-                if (languageVersion < ScriptTarget.ES6) {
+                if (modulekind !== ModuleKind.ES6) {
                     if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
                         emitStart(node);
                         let generatedName = getGeneratedNameForNode(node);
                         if (node.exportClause) {
                             // export { x, y, ... } from "foo"
-                            if (compilerOptions.module !== ModuleKind.AMD) {
+                            if (modulekind !== ModuleKind.AMD) {
                                 write("var ");
                                 write(generatedName);
                                 write(" = ");
@@ -5642,7 +5895,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // export * from "foo"
                             writeLine();
                             write("__export(");
-                            if (compilerOptions.module !== ModuleKind.AMD) {
+                            if (modulekind !== ModuleKind.AMD) {
                                 emitRequire(getExternalModuleName(node));
                             }
                             else {
@@ -5675,7 +5928,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExportOrImportSpecifierList(specifiers: ImportOrExportSpecifier[], shouldEmit: (node: Node) => boolean) {
-                Debug.assert(languageVersion >= ScriptTarget.ES6);
+                Debug.assert(modulekind === ModuleKind.ES6);
 
                 let needsComma = false;
                 for (let specifier of specifiers) {
@@ -5695,7 +5948,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitExportAssignment(node: ExportAssignment) {
                 if (!node.isExportEquals && resolver.isValueAliasDeclaration(node)) {
-                    if (languageVersion >= ScriptTarget.ES6) {
+                    if (modulekind === ModuleKind.ES6) {
                         writeLine();
                         emitStart(node);
                         write("export default ");
@@ -5710,7 +5963,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         writeLine();
                         emitStart(node);
-                        if (compilerOptions.module === ModuleKind.System) {
+                        if (modulekind === ModuleKind.System) {
                             write(`${exportFunctionForFile}("default",`);
                             emit(node.expression);
                             write(")");
@@ -5720,7 +5973,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emitContainingModuleName(node);
                             if (languageVersion === ScriptTarget.ES3) {
                                 write("[\"default\"] = ");
-                            } else {
+                            }
+                            else {
                                 write(".default = ");
                             }
                             emit(node.expression);
@@ -5813,7 +6067,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
                 let moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
-                    return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName); 
+                    return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName);
                 }
 
                 return undefined;
@@ -6156,7 +6410,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function isCurrentFileSystemExternalModule() {
-                return compilerOptions.module === ModuleKind.System && isExternalModule(currentSourceFile);
+                return modulekind === ModuleKind.System && isExternalModule(currentSourceFile);
             }
 
             function emitSystemModuleBody(node: SourceFile, dependencyGroups: DependencyGroup[], startIndex: number): void {
@@ -6215,7 +6469,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitSetters(exportStarFunction: string, dependencyGroups: DependencyGroup[]) {
                 write("setters:[");
-                
+
                 for (let i = 0; i < dependencyGroups.length; ++i) {
                     if (i !== 0) {
                         write(",");
@@ -6223,17 +6477,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     writeLine();
                     increaseIndent();
-                    
+
                     let group = dependencyGroups[i];
-                    
+
                     // derive a unique name for parameter from the first named entry in the group
                     let parameterName = makeUniqueName(forEach(group, getLocalNameForExternalImport) || "");
                     write(`function (${parameterName}) {`);
                     increaseIndent();
-                    
-                    for(let entry of group) {
+
+                    for (let entry of group) {
                         let importVariableName = getLocalNameForExternalImport(entry) || "";
-                        
+
                         switch (entry.kind) {
                             case SyntaxKind.ImportDeclaration:
                                 if (!(<ImportDeclaration>entry).importClause) {
@@ -6269,7 +6523,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                             write(",");
                                             writeLine();
                                         }
-                                        
+
                                         let e = (<ExportDeclaration>entry).exportClause.elements[i];
                                         write(`"`);
                                         emitNodeWithCommentsAndWithoutSourcemap(e.name);
@@ -6279,7 +6533,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     }
                                     decreaseIndent();
                                     writeLine();
-                                    write("});")
+                                    write("});");
                                 }
                                 else {
                                     writeLine();
@@ -6314,7 +6568,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // - import declarations are not emitted since they are already handled in setters
                         // - export declarations with module specifiers are not emitted since they were already written in setters
                         // - export declarations without module specifiers are emitted preserving the order
-                        case SyntaxKind.FunctionDeclaration:                        
+                        case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ImportDeclaration:
                             continue;
                         case SyntaxKind.ExportDeclaration:
@@ -6334,16 +6588,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         default:
                             writeLine();
                             emit(statement);
-                    }                    
+                    }
                 }
                 decreaseIndent();
                 writeLine();
                 write("}"); // execute
             }
-            
-            type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
-            
-            function emitSystemModule(node: SourceFile, startIndex: number): void {
+
+            function emitSystemModule(node: SourceFile): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -6362,7 +6614,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(`"${node.moduleName}", `);
                 }
                 write("[");
-                
+
                 let groupIndices: Map<number> = {};
                 let dependencyGroups: DependencyGroup[] = [];
 
@@ -6382,12 +6634,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (i !== 0) {
                         write(", ");
                     }
-                    
+
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
@@ -6396,19 +6649,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
-                // An AMD define function has the following shape:
-                //     define(id?, dependencies?, factory);
-                //
-                // This has the shape of
-                //     define(name, ["module1", "module2"], function (module1Alias) {
-                // The location of the alias in the parameter list in the factory function needs to
-                // match the position of the module name in the dependency list.
-                //
-                // To ensure this is true in cases of modules with no aliases, e.g.:
-                // `import "module"` or `<amd-dependency path= "a.css" />`
-                // we need to add modules without alias names to the end of the dependencies list
+            interface AMDDependencyNames {
+                aliasedModuleNames: string[];
+                unaliasedModuleNames: string[];
+                importAliasNames: string[];
+            }
 
+            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean): AMDDependencyNames {
                 // names of modules with corresponding parameter in the factory function
                 let aliasedModuleNames: string[] = [];
                 // names of modules with no corresponding parameters in factory function
@@ -6443,6 +6690,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
+                return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
+            }
+
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
+                // An AMD define function has the following shape:
+                //     define(id?, dependencies?, factory);
+                //
+                // This has the shape of
+                //     define(name, ["module1", "module2"], function (module1Alias) {
+                // The location of the alias in the parameter list in the factory function needs to
+                // match the position of the module name in the dependency list.
+                //
+                // To ensure this is true in cases of modules with no aliases, e.g.:
+                // `import "module"` or `<amd-dependency path= "a.css" />`
+                // we need to add modules without alias names to the end of the dependencies list
+
+                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies);
+                emitAMDDependencyList(dependencyNames);
+                write(", ");
+                emitAMDFactoryHeader(dependencyNames);
+            }
+
+            function emitAMDDependencyList({ aliasedModuleNames, unaliasedModuleNames }: AMDDependencyNames) {
                 write("[\"require\", \"exports\"");
                 if (aliasedModuleNames.length) {
                     write(", ");
@@ -6452,14 +6722,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(", ");
                     write(unaliasedModuleNames.join(", "));
                 }
-                write("], function (require, exports");
+                write("]");
+            }
+
+            function emitAMDFactoryHeader({ importAliasNames }: AMDDependencyNames) {
+                write("function (require, exports");
                 if (importAliasNames.length) {
                     write(", ");
                     write(importAliasNames.join(", "));
                 }
+                write(") {");
             }
 
-            function emitAMDModule(node: SourceFile, startIndex: number) {
+            function emitAMDModule(node: SourceFile) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
@@ -6469,8 +6744,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("\"" + node.moduleName + "\", ");
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
-                write(") {");
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6481,7 +6756,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitCommonJSModule(node: SourceFile, startIndex: number) {
+            function emitCommonJSModule(node: SourceFile) {
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
@@ -6491,22 +6767,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitExportEquals(/*emitAsReturn*/ false);
             }
 
-            function emitUMDModule(node: SourceFile, startIndex: number) {
+            function emitUMDModule(node: SourceFile) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
+                let dependencyNames = getAMDDependencyNames(node, /*includeNonAmdDependencies*/ false);
+
                 // Module is detected first to support Browserify users that load into a browser with an AMD loader
-                writeLines(`(function (deps, factory) {
+                writeLines(`(function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
-    }
+        define(`);
+                emitAMDDependencyList(dependencyNames);
+                write(", factory);");
+                writeLines(`    }
 })(`);
-                emitAMDDependencies(node, false);
-                write(") {");
+                emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6517,11 +6797,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitES6Module(node: SourceFile, startIndex: number) {
+            function emitES6Module(node: SourceFile) {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
                 hasExportStars = false;
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6710,27 +6991,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitShebang();
                 emitDetachedComments(node);
 
-                // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    if (languageVersion >= ScriptTarget.ES6) {
-                        emitES6Module(node, startIndex);
-                    }
-                    else if (compilerOptions.module === ModuleKind.AMD) {
-                        emitAMDModule(node, startIndex);
-                    }
-                    else if (compilerOptions.module === ModuleKind.System) {
-                        emitSystemModule(node, startIndex);
-                    }
-                    else if (compilerOptions.module === ModuleKind.UMD) {
-                        emitUMDModule(node, startIndex);
-                    }
-                    else {
-                        emitCommonJSModule(node, startIndex);
-                    }
+                    let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
+                    emitModule(node);
                 }
                 else {
+                    // emit prologue directives prior to __extends
+                    let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                     externalImports = undefined;
                     exportSpecifiers = undefined;
                     exportEquals = undefined;
@@ -7082,7 +7349,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (compilerOptions.removeComments) {
                     return;
                 }
-            
+
                 let leadingComments: CommentRange[];
                 if (isEmittedNode) {
                     leadingComments = getLeadingCommentsToEmit(node);
@@ -7215,7 +7482,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
             }
-            
+
             function emitShebang() {
                 let shebang = getShebang(currentSourceFile.text);
                 if (shebang) {
@@ -7231,261 +7498,5 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
             }
         }
-    }
-
-    var entities: Map<number> = {
-        "quot": 0x0022,
-        "amp": 0x0026,
-        "apos": 0x0027,
-        "lt": 0x003C,
-        "gt": 0x003E,
-        "nbsp": 0x00A0,
-        "iexcl": 0x00A1,
-        "cent": 0x00A2,
-        "pound": 0x00A3,
-        "curren": 0x00A4,
-        "yen": 0x00A5,
-        "brvbar": 0x00A6,
-        "sect": 0x00A7,
-        "uml": 0x00A8,
-        "copy": 0x00A9,
-        "ordf": 0x00AA,
-        "laquo": 0x00AB,
-        "not": 0x00AC,
-        "shy": 0x00AD,
-        "reg": 0x00AE,
-        "macr": 0x00AF,
-        "deg": 0x00B0,
-        "plusmn": 0x00B1,
-        "sup2": 0x00B2,
-        "sup3": 0x00B3,
-        "acute": 0x00B4,
-        "micro": 0x00B5,
-        "para": 0x00B6,
-        "middot": 0x00B7,
-        "cedil": 0x00B8,
-        "sup1": 0x00B9,
-        "ordm": 0x00BA,
-        "raquo": 0x00BB,
-        "frac14": 0x00BC,
-        "frac12": 0x00BD,
-        "frac34": 0x00BE,
-        "iquest": 0x00BF,
-        "Agrave": 0x00C0,
-        "Aacute": 0x00C1,
-        "Acirc": 0x00C2,
-        "Atilde": 0x00C3,
-        "Auml": 0x00C4,
-        "Aring": 0x00C5,
-        "AElig": 0x00C6,
-        "Ccedil": 0x00C7,
-        "Egrave": 0x00C8,
-        "Eacute": 0x00C9,
-        "Ecirc": 0x00CA,
-        "Euml": 0x00CB,
-        "Igrave": 0x00CC,
-        "Iacute": 0x00CD,
-        "Icirc": 0x00CE,
-        "Iuml": 0x00CF,
-        "ETH": 0x00D0,
-        "Ntilde": 0x00D1,
-        "Ograve": 0x00D2,
-        "Oacute": 0x00D3,
-        "Ocirc": 0x00D4,
-        "Otilde": 0x00D5,
-        "Ouml": 0x00D6,
-        "times": 0x00D7,
-        "Oslash": 0x00D8,
-        "Ugrave": 0x00D9,
-        "Uacute": 0x00DA,
-        "Ucirc": 0x00DB,
-        "Uuml": 0x00DC,
-        "Yacute": 0x00DD,
-        "THORN": 0x00DE,
-        "szlig": 0x00DF,
-        "agrave": 0x00E0,
-        "aacute": 0x00E1,
-        "acirc": 0x00E2,
-        "atilde": 0x00E3,
-        "auml": 0x00E4,
-        "aring": 0x00E5,
-        "aelig": 0x00E6,
-        "ccedil": 0x00E7,
-        "egrave": 0x00E8,
-        "eacute": 0x00E9,
-        "ecirc": 0x00EA,
-        "euml": 0x00EB,
-        "igrave": 0x00EC,
-        "iacute": 0x00ED,
-        "icirc": 0x00EE,
-        "iuml": 0x00EF,
-        "eth": 0x00F0,
-        "ntilde": 0x00F1,
-        "ograve": 0x00F2,
-        "oacute": 0x00F3,
-        "ocirc": 0x00F4,
-        "otilde": 0x00F5,
-        "ouml": 0x00F6,
-        "divide": 0x00F7,
-        "oslash": 0x00F8,
-        "ugrave": 0x00F9,
-        "uacute": 0x00FA,
-        "ucirc": 0x00FB,
-        "uuml": 0x00FC,
-        "yacute": 0x00FD,
-        "thorn": 0x00FE,
-        "yuml": 0x00FF,
-        "OElig": 0x0152,
-        "oelig": 0x0153,
-        "Scaron": 0x0160,
-        "scaron": 0x0161,
-        "Yuml": 0x0178,
-        "fnof": 0x0192,
-        "circ": 0x02C6,
-        "tilde": 0x02DC,
-        "Alpha": 0x0391,
-        "Beta": 0x0392,
-        "Gamma": 0x0393,
-        "Delta": 0x0394,
-        "Epsilon": 0x0395,
-        "Zeta": 0x0396,
-        "Eta": 0x0397,
-        "Theta": 0x0398,
-        "Iota": 0x0399,
-        "Kappa": 0x039A,
-        "Lambda": 0x039B,
-        "Mu": 0x039C,
-        "Nu": 0x039D,
-        "Xi": 0x039E,
-        "Omicron": 0x039F,
-        "Pi": 0x03A0,
-        "Rho": 0x03A1,
-        "Sigma": 0x03A3,
-        "Tau": 0x03A4,
-        "Upsilon": 0x03A5,
-        "Phi": 0x03A6,
-        "Chi": 0x03A7,
-        "Psi": 0x03A8,
-        "Omega": 0x03A9,
-        "alpha": 0x03B1,
-        "beta": 0x03B2,
-        "gamma": 0x03B3,
-        "delta": 0x03B4,
-        "epsilon": 0x03B5,
-        "zeta": 0x03B6,
-        "eta": 0x03B7,
-        "theta": 0x03B8,
-        "iota": 0x03B9,
-        "kappa": 0x03BA,
-        "lambda": 0x03BB,
-        "mu": 0x03BC,
-        "nu": 0x03BD,
-        "xi": 0x03BE,
-        "omicron": 0x03BF,
-        "pi": 0x03C0,
-        "rho": 0x03C1,
-        "sigmaf": 0x03C2,
-        "sigma": 0x03C3,
-        "tau": 0x03C4,
-        "upsilon": 0x03C5,
-        "phi": 0x03C6,
-        "chi": 0x03C7,
-        "psi": 0x03C8,
-        "omega": 0x03C9,
-        "thetasym": 0x03D1,
-        "upsih": 0x03D2,
-        "piv": 0x03D6,
-        "ensp": 0x2002,
-        "emsp": 0x2003,
-        "thinsp": 0x2009,
-        "zwnj": 0x200C,
-        "zwj": 0x200D,
-        "lrm": 0x200E,
-        "rlm": 0x200F,
-        "ndash": 0x2013,
-        "mdash": 0x2014,
-        "lsquo": 0x2018,
-        "rsquo": 0x2019,
-        "sbquo": 0x201A,
-        "ldquo": 0x201C,
-        "rdquo": 0x201D,
-        "bdquo": 0x201E,
-        "dagger": 0x2020,
-        "Dagger": 0x2021,
-        "bull": 0x2022,
-        "hellip": 0x2026,
-        "permil": 0x2030,
-        "prime": 0x2032,
-        "Prime": 0x2033,
-        "lsaquo": 0x2039,
-        "rsaquo": 0x203A,
-        "oline": 0x203E,
-        "frasl": 0x2044,
-        "euro": 0x20AC,
-        "image": 0x2111,
-        "weierp": 0x2118,
-        "real": 0x211C,
-        "trade": 0x2122,
-        "alefsym": 0x2135,
-        "larr": 0x2190,
-        "uarr": 0x2191,
-        "rarr": 0x2192,
-        "darr": 0x2193,
-        "harr": 0x2194,
-        "crarr": 0x21B5,
-        "lArr": 0x21D0,
-        "uArr": 0x21D1,
-        "rArr": 0x21D2,
-        "dArr": 0x21D3,
-        "hArr": 0x21D4,
-        "forall": 0x2200,
-        "part": 0x2202,
-        "exist": 0x2203,
-        "empty": 0x2205,
-        "nabla": 0x2207,
-        "isin": 0x2208,
-        "notin": 0x2209,
-        "ni": 0x220B,
-        "prod": 0x220F,
-        "sum": 0x2211,
-        "minus": 0x2212,
-        "lowast": 0x2217,
-        "radic": 0x221A,
-        "prop": 0x221D,
-        "infin": 0x221E,
-        "ang": 0x2220,
-        "and": 0x2227,
-        "or": 0x2228,
-        "cap": 0x2229,
-        "cup": 0x222A,
-        "int": 0x222B,
-        "there4": 0x2234,
-        "sim": 0x223C,
-        "cong": 0x2245,
-        "asymp": 0x2248,
-        "ne": 0x2260,
-        "equiv": 0x2261,
-        "le": 0x2264,
-        "ge": 0x2265,
-        "sub": 0x2282,
-        "sup": 0x2283,
-        "nsub": 0x2284,
-        "sube": 0x2286,
-        "supe": 0x2287,
-        "oplus": 0x2295,
-        "otimes": 0x2297,
-        "perp": 0x22A5,
-        "sdot": 0x22C5,
-        "lceil": 0x2308,
-        "rceil": 0x2309,
-        "lfloor": 0x230A,
-        "rfloor": 0x230B,
-        "lang": 0x2329,
-        "rang": 0x232A,
-        "loz": 0x25CA,
-        "spades": 0x2660,
-        "clubs": 0x2663,
-        "hearts": 0x2665,
-        "diams": 0x2666
     }
 }

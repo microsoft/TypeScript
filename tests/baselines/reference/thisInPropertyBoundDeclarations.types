@@ -32,7 +32,7 @@ class Bug {
         this.name = name;
 >this.name = name : string
 >this.name : string
->this : Bug
+>this : this
 >name : string
 >name : string
     }
@@ -110,21 +110,21 @@ class B {
 >B : B
 
     prop1 = this;
->prop1 : B
->this : B
+>prop1 : this
+>this : this
 
     prop2 = () => this;
->prop2 : () => B
->() => this : () => B
->this : B
+>prop2 : () => this
+>() => this : () => this
+>this : this
 
     prop3 = () => () => () => () => this;
->prop3 : () => () => () => () => B
->() => () => () => () => this : () => () => () => () => B
->() => () => () => this : () => () => () => B
->() => () => this : () => () => B
->() => this : () => B
->this : B
+>prop3 : () => () => () => () => this
+>() => () => () => () => this : () => () => () => () => this
+>() => () => () => this : () => () => () => this
+>() => () => this : () => () => this
+>() => this : () => this
+>this : this
 
     prop4 = '  ' +
 >prop4 : string
@@ -141,34 +141,34 @@ class B {
 >' ' : string
 
     (() => () => () => this);
->(() => () => () => this) : () => () => () => B
->() => () => () => this : () => () => () => B
->() => () => this : () => () => B
->() => this : () => B
->this : B
+>(() => () => () => this) : () => () => () => this
+>() => () => () => this : () => () => () => this
+>() => () => this : () => () => this
+>() => this : () => this
+>this : this
 
     prop5 = {
->prop5 : { a: () => B; }
->{        a: () => { return this; }    } : { a: () => B; }
+>prop5 : { a: () => this; }
+>{        a: () => { return this; }    } : { a: () => this; }
 
         a: () => { return this; }
->a : () => B
->() => { return this; } : () => B
->this : B
+>a : () => this
+>() => { return this; } : () => this
+>this : this
 
     };
 
     prop6 = () => {
->prop6 : () => { a: () => B; }
->() => {        return {            a: () => { return this; }        };    } : () => { a: () => B; }
+>prop6 : () => { a: () => this; }
+>() => {        return {            a: () => { return this; }        };    } : () => { a: () => this; }
 
         return {
->{            a: () => { return this; }        } : { a: () => B; }
+>{            a: () => { return this; }        } : { a: () => this; }
 
             a: () => { return this; }
->a : () => B
->() => { return this; } : () => B
->this : B
+>a : () => this
+>() => { return this; } : () => this
+>this : this
 
         };
     };

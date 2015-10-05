@@ -71,7 +71,7 @@ module TypeScript {
 >positionedToken : any
 >this.findTokenInternal(null, position, 0) : any
 >this.findTokenInternal : (x: any, y: any, z: any) => any
->this : SyntaxNode
+>this : this
 >findTokenInternal : (x: any, y: any, z: any) => any
 >null : null
 >position : number
@@ -114,7 +114,7 @@ module TypeScript.Syntax {
 >new PositionedToken(parent, this, fullStart) : PositionedToken
 >PositionedToken : typeof PositionedToken
 >parent : PositionedElement
->this : VariableWidthTokenWithTrailingTrivia
+>this : this
 >fullStart : number
         }
     }

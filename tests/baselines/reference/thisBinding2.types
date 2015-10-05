@@ -9,7 +9,7 @@ class C {
         this.x = (() => {
 >this.x = (() => {   var x = 1;   return this.x;  })() : number
 >this.x : number
->this : C
+>this : this
 >x : number
 >(() => {   var x = 1;   return this.x;  })() : number
 >(() => {   var x = 1;   return this.x;  }) : () => number
@@ -21,14 +21,14 @@ class C {
 
    return this.x;
 >this.x : number
->this : C
+>this : this
 >x : number
 
   })();
   this.x = function() {
 >this.x = function() {   var x = 1;   return this.x;  }() : any
 >this.x : number
->this : C
+>this : this
 >x : number
 >function() {   var x = 1;   return this.x;  }() : any
 >function() {   var x = 1;   return this.x;  } : () => any

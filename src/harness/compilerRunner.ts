@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+/* tslint:disable:no-null */
 
 const enum CompilerTestType {
     Conformance,
@@ -32,7 +33,8 @@ class CompilerBaselineRunner extends RunnerBase {
         }
         else if (testType === CompilerTestType.Test262) {
             this.testSuiteName = "test262";
-        } else {
+        }
+        else {
             this.testSuiteName = "compiler"; // default to this for historical reasons
         }
         this.basePath += "/" + this.testSuiteName;
@@ -82,7 +84,8 @@ class CompilerBaselineRunner extends RunnerBase {
                             otherFiles.push({ unitName: rootDir + unit.name, content: unit.content });
                         }
                     });
-                } else {
+                }
+                else {
                     toBeCompiled = units.map(unit => {
                         return { unitName: rootDir + unit.name, content: unit.content };
                     });
@@ -193,7 +196,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                         if (jsCode.length > 0) {
                             return tsCode + "\r\n\r\n" + jsCode;
-                        } else {
+                        }
+                        else {
                             return null;
                         }
                     });
