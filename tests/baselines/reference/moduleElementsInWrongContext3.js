@@ -37,7 +37,6 @@ var P;
     {
         var v;
         function foo() { }
-        __export(require("ambient"));
         P["default"] = v;
         var C = (function () {
             function C() {

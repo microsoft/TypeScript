@@ -53,7 +53,7 @@ var Bbb;
         return SomeType;
     })();
     Bbb.SomeType = SomeType;
-    __export(require()); // this line causes the nullref
+     // this line causes the nullref
 })(Bbb || (Bbb = {}));
 var a;
 
