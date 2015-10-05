@@ -1650,7 +1650,7 @@ module Harness {
             let encoded_actual =  Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
-                let errMsg = "The baseline file " + relativeFileName + " has changed";
+                let errMsg = "The baseline file " + relativeFileName + " has changed.\nExpected:\n" + expected + "\nActual:\n" + encoded_actual;
                 throw new Error(errMsg);
             }
         }
