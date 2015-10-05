@@ -628,10 +628,9 @@ function deleteTemporaryProjectOutput() {
 
 var testTimeout = 20000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["tests", builtLocalDirectory], function() {
+task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
-    host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
@@ -653,9 +652,16 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = host + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+    var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd, deleteTemporaryProjectOutput);
+    exec(cmd, function() {
+        deleteTemporaryProjectOutput();
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    });
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -813,7 +819,6 @@ task("update-sublime", ["local", serverFile], function() {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
-    "noInferrableTypesRule",
     "noNullRule",
     "booleanTriviaRule"
 ]);
@@ -826,7 +831,7 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ true, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
 });
 
 function getLinterOptions() {
@@ -860,8 +865,6 @@ function lintFileAsync(options, path, cb) {
 
 var lintTargets = compilerSources.concat(harnessCoreSources);
 
-// if the codebase were free of linter errors we could make jake runtests
-// run this task automatically
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();

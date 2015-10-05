@@ -317,8 +317,8 @@ namespace ts {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
-                var index = rootFileNames.indexOf(sourceFile.fileName);
-                if (index !== -1) {
+                let index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index >= 0) {
                     rootFileNames.splice(index, 1);
                 }
             }
@@ -568,8 +568,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string|number|boolean> {
-            let result: Map<string|number|boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            let result: Map<string | number | boolean> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (let name in options) {
