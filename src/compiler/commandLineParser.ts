@@ -458,6 +458,8 @@ namespace ts {
       * @param jsonText The text of the config file
       */
     export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+        console.log("fileName: \"" + fileName + "\"");
+        console.log("jsonText: \"" + jsonText + "\"");
         try {
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
