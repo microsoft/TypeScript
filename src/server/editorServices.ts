@@ -543,7 +543,7 @@ namespace ts.server {
         }
 
         /**
-         * This is the callback function when a watched directory has added or removed files.
+         * This is the callback function when a watched directory has added or removed source code files.
          * @param project the project that associates with this directory watcher
          * @param fileName the absolute file name that changed in watched directory
          */
@@ -567,12 +567,15 @@ namespace ts.server {
                 // just update the current project.
                 this.updateConfiguredProject(project);
 
-                // Call updateProjectStructure to clean up inferred projects we may have created for the
-                // new files
+                // Call updateProjectStructure to clean up inferred projects we may have 
+                // created for the new files
                 this.updateProjectStructure();
             }
         }
 
+        /**
+         * This is the callback function when a watched directory has an added tsconfig file.
+         */
         directoryWatchedForTsconfigChanged(fileName: string) {
             if (ts.getBaseFileName(fileName) != "tsconfig.json") {
                 this.log(fileName + " is not tsconfig.json");
@@ -585,6 +588,8 @@ namespace ts.server {
             let rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
             let openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
 
+            // We should only care about the new tsconfig file if it contains any
+            // opened root files of existing inferred projects
             for (let openFileRoot of openFileRoots) {
                 if (rootFilesInTsconfig.indexOf(openFileRoot) >= 0) {
                     this.reloadProjects();
@@ -708,6 +713,7 @@ namespace ts.server {
             }
             else {
                 for (let directory of project.directoriesWatchedForTsconfig) {
+                    // if the ref count for this directory watcher drops to 0, it's time to close it
                     if (!(--project.projectService.directoryWatchersRefCount[directory])) {
                         this.log("Close directory watcher for: " + directory);
                         project.projectService.directoryWatchersForTsconfig[directory].close();
@@ -956,9 +962,6 @@ namespace ts.server {
                 this.addOpenFile(unattachedOpenFiles[i]);
             }
             this.printProjects();
-
-            this.log("Current openFileRoots: " + this.openFileRoots.map(s => s.fileName).toString());
-            this.log("Current openFileRootsConfigured: " + this.openFileRootsConfigured.map(s => s.fileName).toString());
         }
 
         getScriptInfo(filename: string) {
