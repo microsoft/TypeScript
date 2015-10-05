@@ -410,30 +410,19 @@ namespace ts {
                 watchDirectory: (path, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    // therefore if the current node.js version is newer than 4, use `fs.watch` instead.
-
-                    // In watchDirectory we only care about adding and removing files (when event name is
-                    // "rename"); changes made within files are handled by corresponding fileWatchers (when
-                    // event name is "change")
-
-                    if (isNode4OrLater()) {
-                        return _fs.watch(
-                            path,
-                            { persisten: true, recursive: !!recursive },
-                            (eventName: string, relativeFileName: string) => {
-                                if (eventName == "rename") {
-                                    // when deleting a file, the passed baseFileName is null
-                                    callback(relativeFileName == null ? null : normalizePath(ts.combinePaths(path, relativeFileName)))
-                                };
-                            }
-                        );
-                    }
-
-                    // If Node version is older than 4.0, the "recursive" parameter will be ignored
-                    var watchedFile = watchedFileSet.addFile(path, callback);
-                    return {
-                        close: () => watchedFileSet.removeFile(watchedFile)
-                    }
+                    return _fs.watch(
+                        path,
+                        { persisten: true, recursive: !!recursive },
+                        (eventName: string, relativeFileName: string) => {
+                            // In watchDirectory we only care about adding and removing files (when event name is
+                            // "rename"); changes made within files are handled by corresponding fileWatchers (when
+                            // event name is "change")
+                            if (eventName == "rename") {
+                                // When deleting a file, the passed baseFileName is null
+                                callback(relativeFileName == null ? null : normalizePath(ts.combinePaths(path, relativeFileName)))
+                            };
+                        }
+                    );
                 },
                 resolvePath: function (path: string): string {
                     return _path.resolve(path);

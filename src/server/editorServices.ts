@@ -927,7 +927,7 @@ namespace ts.server {
                 var rootedProject = rootFile.defaultProject;
                 var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
 
-                if (rootFile.defaultProject.isConfiguredProject()) {
+                if (rootFile.defaultProject && rootFile.defaultProject.isConfiguredProject()) {
                     // If the root file has already been added into a configured project,
                     // meaning the original inferred project is gone already. 
                     if (!rootedProject.isConfiguredProject()) {
