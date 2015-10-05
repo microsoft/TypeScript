@@ -7631,7 +7631,9 @@ namespace ts {
                 // Look up the value in the current scope
                 if (valueSymbol && valueSymbol !== unknownSymbol) {
                     links.jsxFlags |= JsxFlags.ClassElement;
-                    getSymbolLinks(valueSymbol).referenced = true;
+                    if (valueSymbol.flags & SymbolFlags.Alias) {
+                        markAliasSymbolAsReferenced(valueSymbol);
+                    }
                 }
 
                 return valueSymbol || unknownSymbol;
