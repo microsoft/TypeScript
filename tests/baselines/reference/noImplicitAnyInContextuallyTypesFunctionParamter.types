@@ -14,9 +14,9 @@ regexMatchList.forEach(match => ''.replace(match, ''));
 >match => ''.replace(match, '') : (match: string) => string
 >match : string
 >''.replace(match, '') : string
->''.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>''.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >'' : string
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >match : string
 >'' : string
 

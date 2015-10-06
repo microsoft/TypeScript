@@ -4,15 +4,16 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Symbol(p, Decl(awaitBinaryExpression2_es6.ts, 1, 11))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4772, 1), Decl(lib.d.ts, 4858, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 
 async function func(): Promise<void> {
 >func : Symbol(func, Decl(awaitBinaryExpression2_es6.ts, 1, 32))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4772, 1), Decl(lib.d.ts, 4858, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 
     "before";
     var b = await p && a;
 >b : Symbol(b, Decl(awaitBinaryExpression2_es6.ts, 4, 7))
+>p : Symbol(p, Decl(awaitBinaryExpression2_es6.ts, 1, 11))
 >a : Symbol(a, Decl(awaitBinaryExpression2_es6.ts, 0, 11))
 
     "after";

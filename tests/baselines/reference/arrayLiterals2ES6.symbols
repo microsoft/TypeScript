@@ -72,14 +72,14 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 
 interface myArray extends Array<Number> { }
 >myArray : Symbol(myArray, Decl(arrayLiterals2ES6.ts, 40, 67))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 1452, 1))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 4118, 1))
 >Number : Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
 
 interface myArray2 extends Array<Number|String> { }
 >myArray2 : Symbol(myArray2, Decl(arrayLiterals2ES6.ts, 42, 43))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 1452, 1))
+>Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 4118, 1))
 >Number : Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(lib.d.ts, 1556, 1))
+>String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(lib.d.ts, 4236, 1))
 
 var d0 = [1, true, ...temp, ];  // has type (string|number|boolean)[]
 >d0 : Symbol(d0, Decl(arrayLiterals2ES6.ts, 44, 3))

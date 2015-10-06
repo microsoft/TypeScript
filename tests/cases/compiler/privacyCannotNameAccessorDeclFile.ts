@@ -36,7 +36,7 @@ export module SpecializedWidget {
 
 // @Filename:privacyCannotNameAccessorDeclFile_exporter.ts
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
-import Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
+import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -52,7 +52,7 @@ export function createExportedWidget4() {
 }
 
 // @Filename:privacyCannotNameAccessorDeclFile_consumer.ts
-import exporter = require("privacyCannotNameAccessorDeclFile_exporter");
+import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 export class publicClassWithWithPrivateGetAccessorTypes {
     static get myPublicStaticMethod() { // Error
         return exporter.createExportedWidget1();

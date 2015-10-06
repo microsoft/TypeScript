@@ -11,7 +11,7 @@ let x = Test; // emit test_1.default
 ><anything attr={Test} /> : any
 >anything : any
 >attr : any
->Test : any
+>Test : typeof Test
 
 === tests/cases/compiler/component.d.ts ===
 

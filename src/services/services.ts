@@ -132,6 +132,46 @@ namespace ts {
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     let emptyArray: any[] = [];
+    
+    const jsDocTagNames = [
+        "augments", 
+        "author", 
+        "argument", 
+        "borrows", 
+        "class", 
+        "constant", 
+        "constructor", 
+        "constructs", 
+        "default", 
+        "deprecated", 
+        "description", 
+        "event", 
+        "example", 
+        "extends", 
+        "field", 
+        "fileOverview", 
+        "function", 
+        "ignore", 
+        "inner", 
+        "lends", 
+        "link", 
+        "memberOf", 
+        "name", 
+        "namespace", 
+        "param", 
+        "private", 
+        "property", 
+        "public", 
+        "requires", 
+        "returns", 
+        "see", 
+        "since", 
+        "static", 
+        "throws", 
+        "type", 
+        "version"
+    ];
+    let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
         let node = <NodeObject> new (getNodeConstructor(kind))();
@@ -685,7 +725,7 @@ namespace ts {
         }
         getBaseTypes(): ObjectType[] {
             return this.flags & (TypeFlags.Class | TypeFlags.Interface)
-                ? this.checker.getBaseTypes(<TypeObject & InterfaceType>this)
+                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
     }
@@ -762,7 +802,7 @@ namespace ts {
         public languageVariant: LanguageVariant;
         public identifiers: Map<string>;
         public nameTable: Map<string>;
-        public resolvedModules: Map<string>;
+        public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
@@ -982,7 +1022,7 @@ namespace ts {
          * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
          * host specific questions using 'getScriptSnapshot'.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     //
@@ -1826,7 +1866,7 @@ namespace ts {
         let sourceMapText: string;
         // Create a compilerHost object to allow the compiler to read and write files
         let compilerHost: CompilerHost = {
-            getSourceFile: (fileName, target) => fileName === inputFileName ? sourceFile : undefined,
+            getSourceFile: (fileName, target) => fileName === normalizeSlashes(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 if (fileExtensionIs(name, ".map")) {
                     Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
@@ -1842,9 +1882,8 @@ namespace ts {
             getCanonicalFileName: fileName => fileName,
             getCurrentDirectory: () => "",
             getNewLine: () => newLine,
-            // these two methods should never be called in transpile scenarios since 'noResolve' is set to 'true'
-            fileExists: (fileName): boolean => { throw new Error("Should never be called."); },
-            readFile: (fileName): string => { throw new Error("Should never be called."); }
+            fileExists: (fileName): boolean => fileName === inputFileName,
+            readFile: (fileName): string => ""
         };
 
         let program = createProgram([inputFileName], options, compilerHost);
@@ -2113,6 +2152,7 @@ namespace ts {
             //
             //    export * from "mod"
             //    export {a as b} from "mod"
+            //    export import i = require("mod")
 
             while (token !== SyntaxKind.EndOfFileToken) {
                 if (token === SyntaxKind.DeclareKeyword) {
@@ -2234,6 +2274,25 @@ namespace ts {
                             if (token === SyntaxKind.StringLiteral) {
                                 // export * from "mod"
                                 recordModuleName();
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.ImportKeyword) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.EqualsToken) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.RequireKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.OpenParenToken) {
+                                        token = scanner.scan();
+                                        if (token === SyntaxKind.StringLiteral) {
+                                            //  export import i = require("mod");
+                                            recordModuleName();
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -2972,6 +3031,8 @@ namespace ts {
             let sourceFile = getValidSourceFile(fileName);
             let isJavaScriptFile = isJavaScript(fileName);
 
+            let isJsDocTagName = false;
+
             let start = new Date().getTime();
             let currentToken = getTokenAtPosition(sourceFile, position);
             log("getCompletionData: Get current token: " + (new Date().getTime() - start));
@@ -2982,8 +3043,44 @@ namespace ts {
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                log("Returning an empty list because completion was inside a comment.");
-                return undefined;
+                // The current position is next to the '@' sign, when no tag name being provided yet. 
+                // Provide a full list of tag names
+                if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
+                    isJsDocTagName = true;
+                }
+
+                // Completion should work inside certain JsDoc tags. For example:
+                //     /** @type {number | string} */
+                // Completion should work in the brackets
+                let insideJsDocTagExpression = false;
+                let tag = getJsDocTagAtPosition(sourceFile, position);
+                if (tag) {
+                    if (tag.tagName.pos <= position && position <= tag.tagName.end) {
+                        isJsDocTagName = true;
+                    }
+
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocTypeTag:
+                        case SyntaxKind.JSDocParameterTag:
+                        case SyntaxKind.JSDocReturnTag:
+                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
+                            if (tagWithExpression.typeExpression) {
+                                insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
+                            }
+                            break;
+                    }
+                }
+
+                if (isJsDocTagName) {
+                    return { symbols: undefined, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, isJsDocTagName };
+                }
+
+                if (!insideJsDocTagExpression) {
+                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal 
+                    // comment or the plain text part of a jsDoc comment, so no completion should be available
+                    log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
+                    return undefined;
+                }
             }
 
             start = new Date().getTime();
@@ -3069,7 +3166,7 @@ namespace ts {
 
             log("getCompletionData: Semantic work: " + (new Date().getTime() - semanticStart));
 
-            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag) };
+            return { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), isJsDocTagName };
 
             function getTypeScriptMemberSymbols(): void {
                 // Right of dot member completion list
@@ -3452,6 +3549,9 @@ namespace ts {
                             if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
+                            else if (parent.kind === SyntaxKind.JsxAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
                             break;
 
                         // The context token is the closing } or " of an attribute, which means
@@ -3512,10 +3612,11 @@ namespace ts {
                             containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
                             isFunction(containingNodeKind) ||
                             containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A<T, |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D<T, |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
-                            containingNodeKind === SyntaxKind.ArrayBindingPattern;                      // var [x, y|
-
+                            containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
+                                                                                                          
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
 
@@ -3542,8 +3643,9 @@ namespace ts {
 
                     case SyntaxKind.LessThanToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
-                            containingNodeKind === SyntaxKind.FunctionDeclaration ||                    // function A< |
+                            containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
+                            containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
                             isFunction(containingNodeKind);
 
                     case SyntaxKind.StaticKeyword:
@@ -3560,9 +3662,9 @@ namespace ts {
                         return containingNodeKind === SyntaxKind.Parameter;
 
                     case SyntaxKind.AsKeyword:
-                        containingNodeKind === SyntaxKind.ImportSpecifier ||
-                        containingNodeKind === SyntaxKind.ExportSpecifier ||
-                        containingNodeKind === SyntaxKind.NamespaceImport;
+                        return containingNodeKind === SyntaxKind.ImportSpecifier ||
+                            containingNodeKind === SyntaxKind.ExportSpecifier ||
+                            containingNodeKind === SyntaxKind.NamespaceImport;
 
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
@@ -3581,14 +3683,20 @@ namespace ts {
 
                 // Previous token may have been a keyword that was converted to an identifier.
                 switch (contextToken.getText()) {
+                    case "abstract":
+                    case "async":
                     case "class":
-                    case "interface":
+                    case "const":
+                    case "declare":
                     case "enum":
                     case "function":
-                    case "var":
-                    case "static":
+                    case "interface":
                     case "let":
-                    case "const":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "static":
+                    case "var":
                     case "yield":
                         return true;
                 }
@@ -3709,9 +3817,14 @@ namespace ts {
                 return undefined;
             }
 
-            let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot } = completionData;
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
 
             let entries: CompletionEntry[];
+            if (isJsDocTagName) {
+                // If the current position is a jsDoc tag name, only tag names should be provided for completion
+                return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
+            }
+
             if (isRightOfDot && isJavaScript(fileName)) {
                 entries = getCompletionEntriesFromSymbols(symbols);
                 addRange(entries, getJavaScriptCompletionEntries());
@@ -3725,7 +3838,7 @@ namespace ts {
             }
 
             // Add keywords if this is not a member completion list
-            if (!isMemberCompletion) {
+            if (!isMemberCompletion && !isJsDocTagName) {
                 addRange(entries, keywordCompletions);
             }
 
@@ -3756,6 +3869,17 @@ namespace ts {
                 }
 
                 return entries;
+            }
+
+            function getAllJsDocCompletionEntries(): CompletionEntry[] {
+                return jsDocCompletionEntries || (jsDocCompletionEntries = ts.map(jsDocTagNames, tagName => {
+                    return {
+                        name: tagName,
+                        kind: ScriptElementKind.keyword,
+                        kindModifiers: "",
+                        sortText: "0",
+                    }
+                }));
             }
 
             function createCompletionEntry(symbol: Symbol, location: Node): CompletionEntry {
@@ -4088,6 +4212,7 @@ namespace ts {
                 displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
+                writeTypeParametersOfSymbol(symbol, sourceFile);
                 displayParts.push(spacePart());
                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                 displayParts.push(spacePart());
@@ -4128,16 +4253,29 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                    let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
-                    if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
-                        displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                    let container = getContainingFunction(location);
+                    if (container) {
+                        let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                        let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
+                        if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
+                            displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                            displayParts.push(spacePart());
+                        }
+                        else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
+                            addFullSymbolName(signatureDeclaration.symbol);
+                        }
+                        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                    }
+                    else {
+                        // Type  aliash type parameter
+                        // For example
+                        //      type list<T> = T[];  // Both T will go through same code path
+                        let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                        displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
+                        addFullSymbolName(declaration.symbol);
+                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
-                    else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
-                        addFullSymbolName(signatureDeclaration.symbol);
-                    }
-                    addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
@@ -4371,10 +4509,19 @@ namespace ts {
                 // and in either case the symbol has a construct signature definition, i.e. class
                 if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
                     if (symbol.flags & SymbolFlags.Class) {
-                        let classDeclaration = <ClassDeclaration>symbol.getDeclarations()[0];
-                        Debug.assert(classDeclaration && classDeclaration.kind === SyntaxKind.ClassDeclaration);
+                        // Find the first class-like declaration and try to get the construct signature.
+                        for (let declaration of symbol.getDeclarations()) {
+                            if (isClassLike(declaration)) {
+                                return tryAddSignature(declaration.members,
+                                                       /*selectConstructors*/ true,
+                                                       symbolKind,
+                                                       symbolName,
+                                                       containerName,
+                                                       result);
+                            }
+                        }
 
-                        return tryAddSignature(classDeclaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
+                        Debug.fail("Expected declaration to have at least one class-like declaration");
                     }
                 }
                 return false;
@@ -5767,6 +5914,7 @@ namespace ts {
                                     result.push(getReferenceEntryFromNode(node));
                                 }
                                 break;
+                            case SyntaxKind.ClassExpression:
                             case SyntaxKind.ClassDeclaration:
                                 // Make sure the container belongs to the same class
                                 // and has the appropriate static modifier from the original container.
@@ -6110,7 +6258,8 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
+                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -6858,8 +7007,12 @@ namespace ts {
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
          * Valid positions are
-         * - outside of comments, statements, and expressions, and
-         * - preceding a function declaration.
+         *      - outside of comments, statements, and expressions, and
+         *      - preceding a:
+         *          - function/constructor/method declaration
+         *          - class declarations
+         *          - variable statements
+         *          - namespace declarations
          *
          * Hosts should ideally check that:
          * - The line is all whitespace up to 'position' before performing the insertion.
@@ -6886,16 +7039,37 @@ namespace ts {
             }
 
             // TODO: add support for:
-            // - methods
-            // - constructors
-            // - class decls
-            let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
+            // - enums/enum members
+            // - interfaces
+            // - property declarations
+            // - potentially property assignments
+            let commentOwner: Node;
+            findOwner: for (commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
+                switch (commentOwner.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.VariableStatement:
+                        break findOwner;
+                    case SyntaxKind.SourceFile:
+                        return undefined;
+                    case SyntaxKind.ModuleDeclaration:
+                        // If in walking up the tree, we hit a a nested namespace declaration,
+                        // then we must be somewhere within a dotted namespace name; however we don't
+                        // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
+                        if (commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
+                            return undefined;
+                        }
+                        break findOwner;
+                }
+            }
 
-            if (!containingFunction || containingFunction.getStart() < position) {
+            if (!commentOwner || commentOwner.getStart() < position) {
                 return undefined;
             }
 
-            let parameters = containingFunction.parameters;
+            let parameters = getParametersForJsDocOwningNode(commentOwner);
             let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
             let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
@@ -6904,9 +7078,15 @@ namespace ts {
             // TODO: call a helper method instead once PR #4133 gets merged in.
             const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
 
-            let docParams = parameters.reduce((prev, cur, index) =>
-                prev +
-                indentationStr + " * @param " + (cur.name.kind === SyntaxKind.Identifier ? (<Identifier>cur.name).text : "param" + index) + newLine, "");
+            let docParams = "";
+            for (let i = 0, numParams = parameters.length; i < numParams; i++) {
+                const currentName = parameters[i].name;
+                const paramName = currentName.kind === SyntaxKind.Identifier ?
+                    (<Identifier>currentName).text :
+                    "param" + i;
+
+                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+            }
 
             // A doc comment consists of the following
             // * The opening comment line
@@ -6924,6 +7104,52 @@ namespace ts {
                 (tokenStart === position ? newLine + indentationStr : "");
 
             return { newText: result, caretOffset: preamble.length };
+        }
+
+        function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
+            if (isFunctionLike(commentOwner)) {
+                return commentOwner.parameters;
+            }
+
+            if (commentOwner.kind === SyntaxKind.VariableStatement) {
+                const varStatement = <VariableStatement>commentOwner;
+                const varDeclarations = varStatement.declarationList.declarations;
+
+                if (varDeclarations.length === 1 && varDeclarations[0].initializer) {
+                    return getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer);
+                }
+            }
+
+            return emptyArray;
+        }
+
+        /**
+         * Digs into an an initializer or RHS operand of an assignment operation
+         * to get the parameters of an apt signature corresponding to a
+         * function expression or a class expression.
+         *
+         * @param rightHandSide the expression which may contain an appropriate set of parameters
+         * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
+         */
+        function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ParameterDeclaration[] {
+            while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
+                rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
+            }
+
+            switch (rightHandSide.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    return (<FunctionExpression>rightHandSide).parameters;
+                case SyntaxKind.ClassExpression:
+                    for (let member of (<ClassExpression>rightHandSide).members) {
+                        if (member.kind === SyntaxKind.Constructor) {
+                            return (<ConstructorDeclaration>member).parameters;
+                        }
+                    }
+                    break;
+            }
+
+            return emptyArray;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -7595,6 +7821,7 @@ namespace ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:

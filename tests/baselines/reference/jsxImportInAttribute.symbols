@@ -9,6 +9,7 @@ let x = Test; // emit test_1.default
 
 <anything attr={Test} />; // ?
 >attr : Symbol(unknown)
+>Test : Symbol(Test, Decl(consumer.tsx, 1, 6))
 
 === tests/cases/compiler/component.d.ts ===
 

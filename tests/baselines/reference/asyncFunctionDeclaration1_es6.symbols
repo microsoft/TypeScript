@@ -1,5 +1,5 @@
 === tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration1_es6.ts ===
 async function foo(): Promise<void> {
 >foo : Symbol(foo, Decl(asyncFunctionDeclaration1_es6.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4772, 1), Decl(lib.d.ts, 4858, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, 5068, 1), Decl(lib.d.ts, 5154, 11))
 }

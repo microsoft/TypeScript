@@ -7,7 +7,7 @@ var classes = undefined;
 }
 
 //// [file2.ts]
-import f = require('file1');
+import f = require('./file1');
 f.foo();
 
 
@@ -18,7 +18,7 @@ function foo() {
 }
 exports.foo = foo;
 //// [file2.js]
-var f = require('file1');
+var f = require('./file1');
 f.foo();
 
 

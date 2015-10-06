@@ -251,6 +251,7 @@ var x =
 >y : any
 
 ={2 } z />;
+>2 : number
 >z : any
 
 <Component
@@ -287,18 +288,21 @@ var x =
 >Component : any
 >x : any
 >y : any
+>2 : number
 
 <Component { ... x } y={2} z />;
 ><Component { ... x } y={2} z /> : any
 >Component : any
 >x : any
 >y : any
+>2 : number
 >z : any
 
 <Component x={1} {...y} />;
 ><Component x={1} {...y} /> : any
 >Component : any
 >x : any
+>1 : number
 >y : any
 
 
@@ -306,6 +310,7 @@ var x =
 ><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
 >Component : any
 >x : any
+>1 : number
 >y : any
 >z : any
 >z : any
@@ -326,6 +331,7 @@ var x =
 >2 : number
 >z : any
 >z : any
+>3 : number
 >Component : any
 
 

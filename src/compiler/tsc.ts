@@ -179,6 +179,19 @@ namespace ts {
         sys.write(output);
     }
 
+    function reportWatchDiagnostic(diagnostic: Diagnostic) {
+        let output = new Date().toLocaleTimeString() + " - ";
+
+        if (diagnostic.file) {
+            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+        }
+
+        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+
+        sys.write(output);
+    }
+
     function padLeft(s: string, length: number) {
         while (s.length < length) {
             s = " " + s;
@@ -236,6 +249,11 @@ namespace ts {
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
+        if (commandLine.options.init) {
+            writeConfigFile(commandLine.options, commandLine.fileNames);
+            return sys.exit(ExitStatus.Success);
+        }
+
         if (commandLine.options.version) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
             return sys.exit(ExitStatus.Success);
@@ -288,9 +306,9 @@ namespace ts {
             if (!cachedProgram) {
                 if (configFileName) {
 
-                    let result = readConfigFile(configFileName);
+                    let result = readConfigFile(configFileName, sys.readFile);
                     if (result.error) {
-                        reportDiagnostic(result.error);
+                        reportWatchDiagnostic(result.error);
                         return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                     }
 
@@ -323,7 +341,7 @@ namespace ts {
             }
 
             setCachedProgram(compileResult.program);
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -339,7 +357,7 @@ namespace ts {
             let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName, removed) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -361,9 +379,15 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile) {
+        function sourceFileChanged(sourceFile: SourceFile, removed: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
+            if (removed) {
+                let index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index >= 0) {
+                    rootFileNames.splice(index, 1);
+                }
+            }
             startTimer();
         }
 
@@ -385,7 +409,7 @@ namespace ts {
 
         function recompile() {
             timerHandle = undefined;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
     }
@@ -437,7 +461,7 @@ namespace ts {
 
         function compileProgram(): ExitStatus {
             let diagnostics: Diagnostic[];
-            
+
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
@@ -568,6 +592,70 @@ namespace ts {
 
         function makePadding(paddingLength: number): string {
             return Array(paddingLength + 1).join(" ");
+        }
+    }
+
+    function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
+        let currentDirectory = sys.getCurrentDirectory();
+        let file = combinePaths(currentDirectory, "tsconfig.json");
+        if (sys.fileExists(file)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+        }
+        else {
+            let compilerOptions = extend(options, defaultInitCompilerOptions);
+            let configurations: any = {
+                compilerOptions: serializeCompilerOptions(compilerOptions),
+                exclude: ["node_modules"]
+            };
+
+            if (fileNames && fileNames.length) {
+                // only set the files property if we have at least one file
+                configurations.files = fileNames;
+            }
+
+            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+        }
+
+        return;
+
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            let result: Map<string | number | boolean> = {};
+            let optionsNameMap = getOptionNameMap().optionNameMap;
+
+            for (let name in options) {
+                if (hasProperty(options, name)) {
+                    let value = options[name];
+                    switch (name) {
+                        case "init":
+                        case "watch":
+                        case "version":
+                        case "help":
+                        case "project":
+                            break;
+                        default:
+                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            if (optionDefinition) {
+                                if (typeof optionDefinition.type === "string") {
+                                    // string, number or boolean
+                                    result[name] = value;
+                                }
+                                else {
+                                    // Enum
+                                    let typeMap = <Map<number>>optionDefinition.type;
+                                    for (let key in typeMap) {
+                                        if (hasProperty(typeMap, key)) {
+                                            if (typeMap[key] === value)
+                                                result[name] = key;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

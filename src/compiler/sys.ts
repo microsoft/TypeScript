@@ -9,7 +9,7 @@ namespace ts {
         writesToTty?(): boolean;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
+        watchFile?(path: string, callback: (path: string, removed: boolean) => void): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -30,8 +30,8 @@ namespace ts {
     declare var process: any;
     declare var global: any;
     declare var __filename: string;
-    declare var Buffer: {  
-        new (str: string, encoding?: string): any;  
+    declare var Buffer: {
+        new (str: string, encoding?: string): any;
     };
 
     declare class Enumerator {
@@ -117,7 +117,7 @@ namespace ts {
                 return path.toLowerCase();
             }
 
-            function getNames(collection: any): string[]{
+            function getNames(collection: any): string[] {
                 let result: string[] = [];
                 for (let e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
                     result.push(e.item().Name);
@@ -287,11 +287,16 @@ namespace ts {
                     };
 
                     function fileChanged(curr: any, prev: any) {
+                        // mtime.getTime() equals 0 if file was removed
+                        if (curr.mtime.getTime() === 0) {
+                            callback(fileName, /* removed */ true);
+                            return;
+                        }
                         if (+curr.mtime <= +prev.mtime) {
                             return;
                         }
 
-                        callback(fileName);
+                        callback(fileName, /* removed */ false);
                     }
                 },
                 resolvePath: function (path: string): string {

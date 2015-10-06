@@ -1,4 +1,5 @@
 /// <reference path="binder.ts" />
+/// <reference path="sys.ts" />
 
 /* @internal */
 namespace ts {
@@ -64,7 +65,8 @@ namespace ts {
                 increaseIndent: () => { },
                 decreaseIndent: () => { },
                 clear: () => str = "",
-                trackSymbol: () => { }
+                trackSymbol: () => { },
+                reportInaccessibleThisError: () => { }
             };
         }
 
@@ -97,22 +99,22 @@ namespace ts {
         }
 
         return true;
-    }    
-   
-    export function hasResolvedModuleName(sourceFile: SourceFile, moduleNameText: string): boolean {
+    }
+
+    export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
 
-    export function getResolvedModuleFileName(sourceFile: SourceFile, moduleNameText: string): string {
-        return hasResolvedModuleName(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
+    export function getResolvedModule(sourceFile: SourceFile, moduleNameText: string): ResolvedModule {
+        return hasResolvedModule(sourceFile, moduleNameText) ? sourceFile.resolvedModules[moduleNameText] : undefined;
     }
 
-    export function setResolvedModuleName(sourceFile: SourceFile, moduleNameText: string, resolvedFileName: string): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModule): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = {};
         }
 
-        sourceFile.resolvedModules[moduleNameText] = resolvedFileName;
+        sourceFile.resolvedModules[moduleNameText] = resolvedModule;
     }
 
     // Returns true if this node contains a parse error anywhere underneath it.
@@ -164,16 +166,16 @@ namespace ts {
         return node.pos;
     }
 
-    // Returns true if this node is missing from the actual source code.  'missing' is different
-    // from 'undefined/defined'.  When a node is undefined (which can happen for optional nodes
-    // in the tree), it is definitel missing.  HOwever, a node may be defined, but still be
+    // Returns true if this node is missing from the actual source code. A 'missing' node is different
+    // from 'undefined/defined'. When a node is undefined (which can happen for optional nodes
+    // in the tree), it is definitely missing. However, a node may be defined, but still be
     // missing.  This happens whenever the parser knows it needs to parse something, but can't
-    // get anything in the source code that it expects at that location.  For example:
+    // get anything in the source code that it expects at that location. For example:
     //
     //          let a: ;
     //
     // Here, the Type in the Type-Annotation is not-optional (as there is a colon in the source
-    // code).  So the parser will attempt to parse out a type, and will create an actual node.
+    // code). So the parser will attempt to parse out a type, and will create an actual node.
     // However, this node will be 'missing' in the sense that no actual source-code/tokens are
     // contained within it.
     export function nodeIsMissing(node: Node) {
@@ -240,7 +242,7 @@ namespace ts {
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
     // all non-alphanumeric characters with underscores
     export function makeIdentifierFromModuleName(moduleName: string): string {
-        return getBaseFileName(moduleName).replace(/\W/g, "_");
+        return getBaseFileName(moduleName).replace(/^(\d)/, "_$1").replace(/\W/g, "_");
     }
 
     export function isBlockOrCatchScoped(declaration: Declaration) {
@@ -420,7 +422,10 @@ namespace ts {
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
+            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
+                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :
+            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
         return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
@@ -432,6 +437,7 @@ namespace ts {
     }
 
     export let fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
+    export let fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
 
     export function isTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -463,13 +469,12 @@ namespace ts {
                 else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
                     node = node.parent;
                 }
-            // fall through
-            case SyntaxKind.QualifiedName:
-            case SyntaxKind.PropertyAccessExpression:
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
-
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
@@ -608,15 +613,15 @@ namespace ts {
         return false;
     }
 
-    export function isAccessor(node: Node): boolean {
+    export function isAccessor(node: Node): node is AccessorDeclaration {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node): boolean {
+    export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
-    export function isFunctionLike(node: Node): boolean {
+    export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -638,11 +643,25 @@ namespace ts {
         return false;
     }
 
+    export function introducesArgumentsExoticObject(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+                return true;
+        }
+        return false;
+    }
+
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
-    export function isObjectLiteralMethod(node: Node) {
+    export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
@@ -714,6 +733,9 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.SourceFile:
                     return node;
@@ -876,7 +898,6 @@ namespace ts {
 
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
@@ -909,6 +930,7 @@ namespace ts {
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.AwaitExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -922,6 +944,7 @@ namespace ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -961,6 +984,8 @@ namespace ts {
                     case SyntaxKind.ComputedPropertyName:
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
+                    case SyntaxKind.JsxExpression:
+                    case SyntaxKind.JsxSpreadAttribute:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -971,6 +996,12 @@ namespace ts {
                 }
         }
         return false;
+    }
+
+    export function isExternalModuleNameRelative(moduleName: string): boolean {
+        // TypeScript 1.0 spec (April 2014): 11.2.1
+        // An external module name is "relative" if the first term is "." or "..".
+        return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
@@ -1489,11 +1520,22 @@ namespace ts {
             add,
             getGlobalDiagnostics,
             getDiagnostics,
-            getModificationCount
+            getModificationCount,
+            reattachFileDiagnostics
         };
 
         function getModificationCount() {
             return modificationCount;
+        }
+
+        function reattachFileDiagnostics(newFile: SourceFile): void {
+            if (!hasProperty(fileDiagnostics, newFile.fileName)) {
+                return;
+            }
+
+            for (let diagnostic of fileDiagnostics[newFile.fileName]) {
+                diagnostic.file = newFile;
+            }
         }
 
         function add(diagnostic: Diagnostic): void {
@@ -1749,7 +1791,7 @@ namespace ts {
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !compilerOptions.out)) {
+            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non .js file
                 return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");

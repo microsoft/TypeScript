@@ -273,7 +273,7 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
         
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => string[];
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
         
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
@@ -281,7 +281,10 @@ namespace ts {
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
                     let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
-                    return map(moduleNames, name => lookUp(resolutionsInFile, name));
+                    return map(moduleNames, name => {
+                        const result = lookUp(resolutionsInFile, name);
+                        return result ? { resolvedFileName: result } : undefined;
+                    });
                 };
             }
         }
@@ -942,7 +945,11 @@ namespace ts {
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                return resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                return {
+                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName: undefined,
+                    failedLookupLocations: result.failedLookupLocations
+                };
             }); 
         }
 
@@ -1097,4 +1104,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-let toolsVersion = "1.5";
+const toolsVersion = "1.6";

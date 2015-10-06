@@ -88,6 +88,7 @@ namespace ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
+        let seenThisKeyword: boolean;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -329,7 +330,14 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
-            forEachChild(node, bind);
+            if (node.kind === SyntaxKind.InterfaceDeclaration) {
+                seenThisKeyword = false;
+                forEachChild(node, bind);
+                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            }
+            else {
+                forEachChild(node, bind);
+            }
 
             container = saveContainer;
             parent = saveParent;
@@ -851,6 +859,9 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+                case SyntaxKind.ThisKeyword:
+                    seenThisKeyword = true;
+                    return;
 
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
@@ -973,6 +984,10 @@ namespace ts {
             else {
                 let bindingName = node.name ? node.name.text : "__class";
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
+                // Add name of class expression into the map for semantic classifier
+                if (node.name) {
+                    classifiableNames[node.name.text] = node.name.text;
+                }
             }
 
             let symbol = node.symbol;

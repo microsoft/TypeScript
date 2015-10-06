@@ -158,14 +158,14 @@ var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
 <Component constructor="foo"/>;
 <Namespace.Component />;
 <Namespace.DeepNamespace.Component />;
-<Component {...x} y={2} z=/>;
+<Component {...x} y={2} z/>;
 <Component {...this.props} sound="moo"/>;
 <font-face />;
 <Component x={y}/>;
 <x-component />;
 <Component {...x}/>;
 <Component {...x} y={2}/>;
-<Component {...x} y={2} z=/>;
+<Component {...x} y={2} z/>;
 <Component x={1} {...y}/>;
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;

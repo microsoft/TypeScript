@@ -376,6 +376,7 @@ namespace ts {
         OctalLiteral =      0x00010000,  // Octal numeric literal
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
+        ContainsThis =      0x00080000,  // Interface contains references to "this"
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -1244,7 +1245,7 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
-        
+
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
         renamedDependencies?: Map<string>;
@@ -1284,7 +1285,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<string>;
+        /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
     }
 
@@ -1312,12 +1313,12 @@ namespace ts {
     }
 
     export interface Program extends ScriptReferenceHost {
-        
+
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
-        getRootFileNames(): string[]
-        
+        getRootFileNames(): string[];
+
         /**
          * Get a list of files in the program
          */
@@ -1359,6 +1360,7 @@ namespace ts {
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
 
+        /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         // For testing purposes only.
         /* @internal */ structureIsReused?: boolean;
     }
@@ -1411,6 +1413,7 @@ namespace ts {
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
+    /* @internal */
     export interface TypeCheckerHost {
         getCompilerOptions(): CompilerOptions;
 
@@ -1494,6 +1497,7 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -1551,8 +1555,8 @@ namespace ts {
     export interface SymbolAccessiblityResult extends SymbolVisibilityResult {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
-    
-    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator 
+
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator
       * metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
@@ -1596,7 +1600,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
@@ -1713,6 +1717,7 @@ namespace ts {
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        bindingElement?: BindingElement;    // Binding element associated with property symbol
     }
 
     /* @internal */
@@ -1794,6 +1799,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ThisType                = 0x02000000,  // This type
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1810,11 +1816,14 @@ namespace ts {
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
+    export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+
     // Properties common to all types
     export interface Type {
-        flags: TypeFlags;               // Flags
-        /* @internal */ id: number;     // Unique ID
-        symbol?: Symbol;                // Symbol associated with type (if any)
+        flags: TypeFlags;                // Flags
+        /* @internal */ id: number;      // Unique ID
+        symbol?: Symbol;                 // Symbol associated with type (if any)
+        pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
     }
 
     /* @internal */
@@ -1836,6 +1845,7 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+        thisType: TypeParameter;                   // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
@@ -1850,10 +1860,17 @@ namespace ts {
         declaredNumberIndexType: Type;             // Declared numeric index type
     }
 
-    // Type references (TypeFlags.Reference)
+    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
+    // a "this" type, references to the class or interface are made using type references. The
+    // typeArguments property specififes the types to substitute for the type parameters of the
+    // class or interface and optionally includes an extra element that specifies the type to
+    // substitute for "this" in the resulting instantiation. When no extra argument is present,
+    // the type reference itself is substituted for "this". The typeArguments property is undefined
+    // if the class or interface has no type parameters and the reference isn't specifying an
+    // explicit "this" argument.
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments: Type[];  // Type reference type arguments
+        typeArguments: Type[];  // Type reference type arguments (undefined if none)
     }
 
     // Generic class and interface types
@@ -1863,8 +1880,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];          // Element types
-        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
+        elementTypes: Type[];  // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -1878,6 +1894,13 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType { }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
+
+    /* @internal */
+    // An instantiated anonymous type has a target and a mapper
+    export interface AnonymousType extends ObjectType {
+        target?: AnonymousType;  // Instantiation target
+        mapper?: TypeMapper;     // Instantiation mapper
+    }
 
     /* @internal */
     // Resolved object, union, or intersection type
@@ -1952,6 +1975,7 @@ namespace ts {
     /* @internal */
     export interface TypeMapper {
         (t: TypeParameter): Type;
+        instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
                                     // The identity mapper and regular instantiation mappers do not need it.
@@ -2009,6 +2033,11 @@ namespace ts {
         Message,
     }
 
+    export const enum ModuleResolutionKind {
+        Classic  = 1,
+        NodeJs  = 2
+    }
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2016,6 +2045,7 @@ namespace ts {
         diagnostics?: boolean;
         emitBOM?: boolean;
         help?: boolean;
+        init?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
@@ -2032,6 +2062,7 @@ namespace ts {
         noLib?: boolean;
         noResolve?: boolean;
         out?: string;
+        outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
         project?: string;
@@ -2039,6 +2070,7 @@ namespace ts {
         rootDir?: string;
         sourceMap?: boolean;
         sourceRoot?: string;
+        suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         version?: boolean;
@@ -2047,6 +2079,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
+        moduleResolution?: ModuleResolutionKind;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2061,6 +2094,7 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+        ES6 = 5,
     }
 
     export const enum JsxEmit {
@@ -2107,16 +2141,29 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOption {
+    export interface CommandLineOptionBase {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
-        error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
         experimental?: boolean;
     }
+
+    /* @internal */
+    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
+        type: string;                   // "string" | "number" | "boolean"
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
+        type: Map<number>;             // an object literal mapping named values to actual values
+        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -2253,21 +2300,30 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
-    }   
-    
+    }
+
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module 
         readFile(fileName: string): string;
     }
-    
+
     export interface ResolvedModule {
         resolvedFileName: string;
+        /*
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+         * - be a .d.ts file 
+         * - use top level imports\exports
+         * - don't use tripleslash references
+         */
+        isExternalLibraryImport?: boolean;
+    }
+
+    export interface ResolvedModuleWithFailedLookupLocations {
+        resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
     }
-    
-    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
@@ -2278,7 +2334,7 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        
+
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
          * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
@@ -2286,7 +2342,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
          * 'throw new Error("NotImplemented")'  
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     export interface TextSpan {
@@ -2317,5 +2373,7 @@ namespace ts {
         // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
+
+        /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
     }
 }

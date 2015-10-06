@@ -160,7 +160,7 @@ module ts {
         return size;
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<string>): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
         let file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         if (expectedContent === undefined) {
@@ -175,7 +175,16 @@ module ts {
             for (let id in expectedContent) {
                 if (hasProperty(expectedContent, id)) {
                     assert.isTrue(hasProperty(file.resolvedModules, id), `expected ${id} to be found in resolved modules`);
-                    assert.isTrue(expectedContent[id] === file.resolvedModules[id], `expected '${expectedContent[id]}' to be equal to '${file.resolvedModules[id]}'`);
+                    if (expectedContent[id]) {
+                        const expected = expectedContent[id];
+                        const actual = file.resolvedModules[id];
+                        assert.isTrue(actual !== undefined);
+                        assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
+                        assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'shouldBeProperExternalModule': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+                    }
+                    else {
+                        assert.isTrue(file.resolvedModules[id] === undefined);
+                    }
                 }
             }
         }
@@ -184,7 +193,11 @@ module ts {
     describe("Reuse program structure", () => {
         let target = ScriptTarget.Latest;
         let files = [
-            { name: "a.ts", text: SourceText.New(`/// <reference path='b.ts'/>`, "", `var x = 1`) },
+            { name: "a.ts", text: SourceText.New(
+                `
+/// <reference path='b.ts'/>
+/// <reference path='non-existing-file.ts'/>
+`, "",`var x = 1`) },
             { name: "b.ts", text: SourceText.New(`/// <reference path='c.ts'/>`, "", `var y = 2`) },
             { name: "c.ts", text: SourceText.New("", "", `var z = 1;`) },
         ]
@@ -195,6 +208,9 @@ module ts {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
             assert.isTrue(program_1.structureIsReused);
+            let program1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("a.ts"))
+            let program2Diagnostics = program_2.getSemanticDiagnostics(program_1.getSourceFile("a.ts"))
+            assert.equal(program1Diagnostics.length, program2Diagnostics.length);
         });
 
         it("fails if change affects tripleslash references", () => {
@@ -230,7 +246,7 @@ module ts {
             var options: CompilerOptions = { target };
 
             var program_1 = newProgram(files, ["a.ts"], options);
-            checkResolvedModulesCache(program_1, "a.ts", { "b": "b.ts" });
+            checkResolvedModulesCache(program_1, "a.ts", { "b": { resolvedFileName: "b.ts" } });
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             var program_2 = updateProgram(program_1, ["a.ts"], options, files => {
@@ -239,7 +255,7 @@ module ts {
             assert.isTrue(program_1.structureIsReused);
 
             // content of resolution cache should not change
-            checkResolvedModulesCache(program_1, "a.ts", { "b": "b.ts" });
+            checkResolvedModulesCache(program_1, "a.ts", { "b": { resolvedFileName: "b.ts" } });
             checkResolvedModulesCache(program_1, "b.ts", undefined);
 
             // imports has changed - program is not reused
@@ -256,7 +272,7 @@ module ts {
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
             assert.isTrue(!program_3.structureIsReused);
-            checkResolvedModulesCache(program_4, "a.ts", { "b": "b.ts", "c": undefined });
+            checkResolvedModulesCache(program_4, "a.ts", { "b": { resolvedFileName: "b.ts" }, "c": undefined });
         });
     })
 }

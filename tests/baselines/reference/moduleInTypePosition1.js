@@ -7,7 +7,7 @@ export class Promise {
 
 //// [moduleInTypePosition1_1.ts]
 ///<reference path='moduleInTypePosition1_0.ts'/>
-import WinJS = require('moduleInTypePosition1_0');
+import WinJS = require('./moduleInTypePosition1_0');
 var x = (w1: WinJS) => { };
 
 
