@@ -3188,8 +3188,14 @@ namespace ts {
         }
 
         /**
-         * Comment
-         * @param node
+         * Check if the current token can possibly be in an ES7 increment expression.
+         *
+         * Increment Expression:
+         *      LeftHandSideExpression[?Yield]
+         *      LeftHandSideExpression[?Yield][no LineTerminator here]++
+         *      LeftHandSideExpression[?Yield][no LineTerminator here]--
+         *      ++LeftHandSideExpression[?Yield]
+         *      --LeftHandSideExpression[?Yield]
          */
         function isIncrementExpression(): boolean{
             // TODO(yuisu): Comment why we have to do what are we doing here
@@ -3208,7 +3214,18 @@ namespace ts {
             }
         }
 
+        /**
+         * Parse ES7 unary expression and await expression
+         * 
+         * ES7 UnaryExpression:
+         *      1) SimpleUnaryExpression[?yield]
+         *      2) IncrementExpression[?yield] ** UnaryExpression[?yield]
+         */
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
+            if (isAwaitExpression()) {
+                return parseAwaitExpression();
+            }
+
             if (isIncrementExpression()) {
                 let incrementExpression = parseIncrementExpression();
                 return token === SyntaxKind.AsteriskAsteriskToken ?
@@ -3224,24 +3241,19 @@ namespace ts {
         }
 
         /**
-         *  Parse SimpleUnaryExpression or higher:
-         *  In ES7 grammar,
-         *      UnaryExpression:
-         *          1) IncrementExpression[?yield]
-         *          2) delete UnaryExpression[?yield]
-         *          3) void UnaryExpression[?yield]
-         *          4) typeof UnaryExpression[?yield]
-         *          5) + UnaryExpression[?yield]
-         *          6) - UnaryExpression[?yield]
-         *          7) ~ UnaryExpression[?yield]
-         *          8) ! UnaryExpression[?yield]
-         *          9) IncrementExpression[?yield] ** UnaryExpression[?yield]
+         *  Parse ES7 simple-unary expression or higher:
+         *
+         * SimpleUnaryExpression:
+         *      1) IncrementExpression[?yield]
+         *      2) delete UnaryExpression[?yield]
+         *      3) void UnaryExpression[?yield]
+         *      4) typeof UnaryExpression[?yield]
+         *      5) + UnaryExpression[?yield]
+         *      6) - UnaryExpression[?yield]
+         *      7) ~ UnaryExpression[?yield]
+         *      8) ! UnaryExpression[?yield]
          */
         function parseSimpleUnaryExpression(): UnaryExpression {
-            if (isAwaitExpression()) {
-                return parseAwaitExpression();
-            }
-
             switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
