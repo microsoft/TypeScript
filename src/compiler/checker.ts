@@ -1020,10 +1020,13 @@ namespace ts {
             return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        function extendExportSymbols(target: SymbolTable, source: SymbolTable) {
+        function extendExportSymbols(originalModule: Symbol, target: SymbolTable, source: SymbolTable) {
             for (let id in source) {
                 if (id !== "default" && !hasProperty(target, id)) {
                     target[id] = source[id];
+                }
+                else if (id !== "default" && hasProperty(target, id)) {            
+                    diagnostics.add(createFileDiagnostic(getSourceFileOfNode(originalModule.valueDeclaration), 0, 0, Diagnostics.Duplicate_identifier_0, id));
                 }
             }
         }
@@ -1043,7 +1046,7 @@ namespace ts {
                         if (!result) {
                             result = cloneSymbolTable(moduleSymbol.exports);
                         }
-                        extendExportSymbols(result, symbol.exports);
+                        extendExportSymbols(moduleSymbol, result, symbol.exports);
                     }
                     // All export * declarations are collected in an __export symbol by the binder
                     let exportStars = symbol.exports["__export"];
