@@ -140,13 +140,16 @@ var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.call(this);
-        _super.prototype. = Math.pow(_super.prototype., value);
+        _a = _super.prototype, _a. = Math.pow(_a., value);
+        var _a;
     }
     Derived.prototype.foo = function () {
-        _super.prototype. = Math.pow(_super.prototype., value);
+        _a = _super.prototype, _a. = Math.pow(_a., value);
+        var _a;
     };
     Derived.sfoo = function () {
-        _super. = Math.pow(_super., value);
+        _a = _super, _a. = Math.pow(_a., value);
+        var _a;
     };
     return Derived;
 })(C);
