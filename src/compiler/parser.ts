@@ -3600,7 +3600,7 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
