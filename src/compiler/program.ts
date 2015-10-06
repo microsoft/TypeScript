@@ -86,7 +86,7 @@ namespace ts {
             }
         }
     }
-    
+
     function loadNodeModuleFromDirectory(candidate: string, loadOnlyDts: boolean, failedLookupLocation: string[], host: ModuleResolutionHost, mustBePackage: boolean): ResolvedModule {
         let packageJsonPath = combinePaths(candidate, "package.json");
         if (host.fileExists(packageJsonPath)) {
@@ -850,7 +850,7 @@ namespace ts {
             forEach(file.referencedFiles, ref => {
                 let referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
                 if (file.package && !fileExtensionIs(ref.fileName, ".d.ts")) {
-                    fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_script_file_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition)); 
+                    fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_script_file_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
                 }
                 processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
