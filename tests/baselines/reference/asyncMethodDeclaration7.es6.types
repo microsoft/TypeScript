@@ -1,0 +1,43 @@
+=== tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration7.es6.ts ===
+class D {
+>D : D
+
+    superMethod() {}
+>superMethod : () => void
+
+    static staticSuperMethod() {}
+>staticSuperMethod : () => void
+}
+let c = class extends D {
+>c : typeof (Anonymous class)
+>class extends D {    async method() {        super.superMethod();        await undefined;    }        static async staticMethod() {        super.staticSuperMethod();        await undefined;    }} : typeof (Anonymous class)
+>D : D
+
+    async method() {
+>method : () => Promise<void>
+
+        super.superMethod();
+>super.superMethod() : void
+>super.superMethod : () => void
+>super : D
+>superMethod : () => void
+
+        await undefined;
+>await undefined : any
+>undefined : undefined
+    }
+    
+    static async staticMethod() {
+>staticMethod : () => Promise<void>
+
+        super.staticSuperMethod();
+>super.staticSuperMethod() : void
+>super.staticSuperMethod : () => void
+>super : typeof D
+>staticSuperMethod : () => void
+
+        await undefined;
+>await undefined : any
+>undefined : undefined
+    }
+}

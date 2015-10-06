@@ -1,0 +1,24 @@
+tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration5.es6.ts(7,9): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration5.es6.ts(12,9): error TS2335: 'super' can only be referenced in a derived class.
+
+
+==== tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration5.es6.ts (2 errors) ====
+    class D {
+        superMethod() {}
+        static staticSuperMethod() {}
+    }
+    class C {
+        async method() {
+            super.superMethod();
+            ~~~~~
+!!! error TS2335: 'super' can only be referenced in a derived class.
+            await undefined;
+        }
+        
+        static async staticMethod() {
+            super.staticSuperMethod();
+            ~~~~~
+!!! error TS2335: 'super' can only be referenced in a derived class.
+            await undefined;
+        }
+    }

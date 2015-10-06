@@ -1,0 +1,22 @@
+=== tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration2.es6.ts ===
+let c = class C {
+>c : typeof C
+>class C {    async method() {        await undefined;    }        static async staticMethod() {        await undefined;    }} : typeof C
+>C : typeof C
+
+    async method() {
+>method : () => Promise<void>
+
+        await undefined;
+>await undefined : any
+>undefined : undefined
+    }
+    
+    static async staticMethod() {
+>staticMethod : () => Promise<void>
+
+        await undefined;
+>await undefined : any
+>undefined : undefined
+    }
+}

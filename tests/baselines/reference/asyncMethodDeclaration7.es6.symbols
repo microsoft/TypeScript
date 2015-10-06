@@ -1,0 +1,38 @@
+=== tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration7.es6.ts ===
+class D {
+>D : Symbol(D, Decl(asyncMethodDeclaration7.es6.ts, 0, 0))
+
+    superMethod() {}
+>superMethod : Symbol(superMethod, Decl(asyncMethodDeclaration7.es6.ts, 0, 9))
+
+    static staticSuperMethod() {}
+>staticSuperMethod : Symbol(D.staticSuperMethod, Decl(asyncMethodDeclaration7.es6.ts, 1, 20))
+}
+let c = class extends D {
+>c : Symbol(c, Decl(asyncMethodDeclaration7.es6.ts, 4, 3))
+>D : Symbol(D, Decl(asyncMethodDeclaration7.es6.ts, 0, 0))
+
+    async method() {
+>method : Symbol((Anonymous class).method, Decl(asyncMethodDeclaration7.es6.ts, 4, 25))
+
+        super.superMethod();
+>super.superMethod : Symbol(D.superMethod, Decl(asyncMethodDeclaration7.es6.ts, 0, 9))
+>super : Symbol(D, Decl(asyncMethodDeclaration7.es6.ts, 0, 0))
+>superMethod : Symbol(D.superMethod, Decl(asyncMethodDeclaration7.es6.ts, 0, 9))
+
+        await undefined;
+>undefined : Symbol(undefined)
+    }
+    
+    static async staticMethod() {
+>staticMethod : Symbol((Anonymous class).staticMethod, Decl(asyncMethodDeclaration7.es6.ts, 8, 5))
+
+        super.staticSuperMethod();
+>super.staticSuperMethod : Symbol(D.staticSuperMethod, Decl(asyncMethodDeclaration7.es6.ts, 1, 20))
+>super : Symbol(D, Decl(asyncMethodDeclaration7.es6.ts, 0, 0))
+>staticSuperMethod : Symbol(D.staticSuperMethod, Decl(asyncMethodDeclaration7.es6.ts, 1, 20))
+
+        await undefined;
+>undefined : Symbol(undefined)
+    }
+}

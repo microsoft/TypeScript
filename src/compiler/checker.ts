@@ -6493,7 +6493,6 @@ namespace ts {
 
                 if (node.parserContextFlags & ParserContextFlags.Await) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
-                    getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
                 }
             }
 
@@ -6662,6 +6661,12 @@ namespace ts {
                 }
 
                 getNodeLinks(node).flags |= nodeCheckFlag;
+
+                // Due to how we emit async functions, we need to specialize the
+                // emit for an async method that contains a `super` reference.
+                if (container.kind === SyntaxKind.MethodDeclaration && container.flags & NodeFlags.Async) {
+                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                }
 
                 if (needToCaptureLexicalThis) {
                     // call expressions are allowed only in constructors so they should always capture correct 'this'
@@ -11306,6 +11311,7 @@ namespace ts {
         }
 
         function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage) {
+            type = getWidenedType(type);
             if (!(type.flags & TypeFlags.Any) && isTypeAssignableTo(type, getGlobalThenableType())) {
                 if (location) {
                     if (!message) {
