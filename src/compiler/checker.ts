@@ -1020,41 +1020,62 @@ namespace ts {
             return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        function extendExportSymbols(originalModule: Symbol, target: SymbolTable, source: SymbolTable) {
+        interface ExportStarDiagnosticsLookupTable {
+            [id: string]: {specifierText: string, exportsWithDuplicate: ExportDeclaration[]};
+        }
+
+        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: ExportStarDiagnosticsLookupTable, exportNode?: ExportDeclaration) {
             for (let id in source) {
                 if (id !== "default" && !hasProperty(target, id)) {
                     target[id] = source[id];
+                    if (lookupTable && exportNode) {
+                        lookupTable[id] = {
+                            specifierText: getTextOfNode(exportNode.moduleSpecifier),
+                            exportsWithDuplicate: []
+                        };
+                    }
                 }
-                else if (id !== "default" && hasProperty(target, id)) {            
-                    diagnostics.add(createFileDiagnostic(getSourceFileOfNode(originalModule.valueDeclaration), 0, 0, Diagnostics.Duplicate_identifier_0, id));
+                else if (lookupTable && exportNode && id !== "default" && hasProperty(target, id)) {
+                    lookupTable[id].exportsWithDuplicate.push(exportNode);
                 }
             }
         }
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
-            let result: SymbolTable;
             let visitedSymbols: Symbol[] = [];
-            visit(moduleSymbol);
-            return result || moduleSymbol.exports;
+            return visit(moduleSymbol) || moduleSymbol.exports;
 
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
-            function visit(symbol: Symbol) {
+            function visit(symbol: Symbol): SymbolTable {
                 if (symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol)) {
                     visitedSymbols.push(symbol);
-                    if (symbol !== moduleSymbol) {
-                        if (!result) {
-                            result = cloneSymbolTable(moduleSymbol.exports);
-                        }
-                        extendExportSymbols(moduleSymbol, result, symbol.exports);
-                    }
+                    let symbols: SymbolTable = cloneSymbolTable(symbol.exports);
                     // All export * declarations are collected in an __export symbol by the binder
                     let exportStars = symbol.exports["__export"];
                     if (exportStars) {
+                        let nestedSymbols: SymbolTable = {};
+                        let lookupTable: ExportStarDiagnosticsLookupTable = {};
                         for (let node of exportStars.declarations) {
-                            visit(resolveExternalModuleName(node, (<ExportDeclaration>node).moduleSpecifier));
+                            let resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
+                            let exportedSymbols = visit(resolvedModule);
+                            extendExportSymbols(
+                                nestedSymbols,
+                                exportedSymbols,
+                                lookupTable,
+                                node as ExportDeclaration
+                            );
                         }
+                        for (let id in lookupTable) {
+                            if (id !== "export=" && lookupTable[id].exportsWithDuplicate.length && !(id in symbols)) { // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
+                                for (let node of lookupTable[id].exportsWithDuplicate) {
+                                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, lookupTable[id].specifierText, id));
+                                }
+                            }
+                        }
+                        extendExportSymbols(symbols, nestedSymbols);
                     }
+                    return symbols;
                 }
             }
         }
@@ -13701,13 +13722,14 @@ namespace ts {
 
         function checkExternalModuleExports(node: SourceFile | ModuleDeclaration) {
             let moduleSymbol = getSymbolOfNode(node);
-            let links = getSymbolLinks(moduleSymbol);
+            let links: SymbolLinks = getSymbolLinks(moduleSymbol);
             if (!links.exportsChecked) {
                 let exportEqualsSymbol = moduleSymbol.exports["export="];
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     let declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                 }
+                getExportsOfModule(moduleSymbol); // Checks for export * conflicts
                 links.exportsChecked = true;
             }
         }

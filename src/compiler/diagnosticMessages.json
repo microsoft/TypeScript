@@ -832,6 +832,10 @@
         "category": "Error",
         "code": 2307
     },
+    "An 'export * from {0}' declaration has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": {
+        "category": "Error",
+        "code": 2308
+    },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
         "code": 2309
