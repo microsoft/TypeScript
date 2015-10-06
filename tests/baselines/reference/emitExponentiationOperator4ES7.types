@@ -2,66 +2,81 @@
 var temp: any;
 >temp : any
 
-<number>--temp ** 3;
-><number>--temp ** 3 : number
->--temp ** 3 : number
+(<number>temp) ** 3;
+>(<number>temp) ** 3 : number
+>(<number>temp) : number
+><number>temp : number
+>temp : any
+>3 : number
+
+(<number>--temp) ** 3;
+>(<number>--temp) ** 3 : number
+>(<number>--temp) : number
+><number>--temp : number
 >--temp : number
 >temp : any
 >3 : number
 
-<number>++temp ** 3;
-><number>++temp ** 3 : number
->++temp ** 3 : number
+(<number>++temp) ** 3;
+>(<number>++temp) ** 3 : number
+>(<number>++temp) : number
+><number>++temp : number
 >++temp : number
 >temp : any
 >3 : number
 
-<number>temp-- ** 3;
-><number>temp-- ** 3 : number
->temp-- ** 3 : number
+(<number>temp--) ** 3;
+>(<number>temp--) ** 3 : number
+>(<number>temp--) : number
+><number>temp-- : number
 >temp-- : number
 >temp : any
 >3 : number
 
-<number>temp++ ** 3;
-><number>temp++ ** 3 : number
->temp++ ** 3 : number
+(<number>temp++) ** 3;
+>(<number>temp++) ** 3 : number
+>(<number>temp++) : number
+><number>temp++ : number
 >temp++ : number
 >temp : any
 >3 : number
 
-1 ** <number>--temp ** 3;
->1 ** <number>--temp ** 3 : number
+1 ** (<number>--temp) ** 3;
+>1 ** (<number>--temp) ** 3 : number
 >1 : number
-><number>--temp ** 3 : number
->--temp ** 3 : number
+>(<number>--temp) ** 3 : number
+>(<number>--temp) : number
+><number>--temp : number
 >--temp : number
 >temp : any
 >3 : number
 
-1 ** <number>++temp ** 3;
->1 ** <number>++temp ** 3 : number
+1 ** (<number>++temp) ** 3;
+>1 ** (<number>++temp) ** 3 : number
 >1 : number
-><number>++temp ** 3 : number
->++temp ** 3 : number
+>(<number>++temp) ** 3 : number
+>(<number>++temp) : number
+><number>++temp : number
 >++temp : number
 >temp : any
 >3 : number
 
-1 ** <number>temp-- ** 3;
->1 ** <number>temp-- ** 3 : number
+1 ** (<number>temp--) ** 3;
+>1 ** (<number>temp--) ** 3 : number
 >1 : number
-><number>temp-- ** 3 : number
->temp-- ** 3 : number
+>(<number>temp--) ** 3 : number
+>(<number>temp--) : number
+><number>temp-- : number
 >temp-- : number
 >temp : any
 >3 : number
 
-1 ** <number>temp++ ** 3;
->1 ** <number>temp++ ** 3 : number
+1 ** (<number>temp++) ** 3;
+>1 ** (<number>temp++) ** 3 : number
 >1 : number
-><number>temp++ ** 3 : number
->temp++ ** 3 : number
+>(<number>temp++) ** 3 : number
+>(<number>temp++) : number
+><number>temp++ : number
 >temp++ : number
 >temp : any
 >3 : number

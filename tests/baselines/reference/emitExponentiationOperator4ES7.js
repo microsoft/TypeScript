@@ -1,15 +1,16 @@
 //// [emitExponentiationOperator4ES7.ts]
 var temp: any;
 
-<number>--temp ** 3;
-<number>++temp ** 3;
-<number>temp-- ** 3;
-<number>temp++ ** 3;
+(<number>temp) ** 3;
+(<number>--temp) ** 3;
+(<number>++temp) ** 3;
+(<number>temp--) ** 3;
+(<number>temp++) ** 3;
 
-1 ** <number>--temp ** 3;
-1 ** <number>++temp ** 3;
-1 ** <number>temp-- ** 3;
-1 ** <number>temp++ ** 3;
+1 ** (<number>--temp) ** 3;
+1 ** (<number>++temp) ** 3;
+1 ** (<number>temp--) ** 3;
+1 ** (<number>temp++) ** 3;
 
 (void --temp) ** 3;
 (void temp--) ** 3;
@@ -38,14 +39,15 @@ var temp: any;
 
 //// [emitExponentiationOperator4ES7.js]
 var temp;
---temp ** 3;
-++temp ** 3;
-temp-- ** 3;
-temp++ ** 3;
-1 ** --temp ** 3;
-1 ** ++temp ** 3;
-1 ** temp-- ** 3;
-1 ** temp++ ** 3;
+temp ** 3;
+(--temp) ** 3;
+(++temp) ** 3;
+(temp--) ** 3;
+(temp++) ** 3;
+1 ** (--temp) ** 3;
+1 ** (++temp) ** 3;
+1 ** (temp--) ** 3;
+1 ** (temp++) ** 3;
 (void --temp) ** 3;
 (void temp--) ** 3;
 (void 3) ** 4;

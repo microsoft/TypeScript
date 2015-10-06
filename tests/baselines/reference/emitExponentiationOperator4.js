@@ -1,15 +1,16 @@
 //// [emitExponentiationOperator4.ts]
 var temp: any;
 
-<number>--temp ** 3;
-<number>++temp ** 3;
-<number>temp-- ** 3;
-<number>temp++ ** 3;
+(<number>temp) ** 3;
+(<number>--temp) ** 3;
+(<number>++temp) ** 3;
+(<number>temp--) ** 3;
+(<number>temp++) ** 3;
 
-1 ** <number>--temp ** 3;
-1 ** <number>++temp ** 3;
-1 ** <number>temp-- ** 3;
-1 ** <number>temp++ ** 3;
+1 ** (<number>--temp) ** 3;
+1 ** (<number>++temp) ** 3;
+1 ** (<number>temp--) ** 3;
+1 ** (<number>temp++) ** 3;
 
 (void --temp) ** 3;
 (void temp--) ** 3;
@@ -38,14 +39,15 @@ var temp: any;
 
 //// [emitExponentiationOperator4.js]
 var temp;
-Math.pow(--temp, 3);
-Math.pow(++temp, 3);
-Math.pow(temp--, 3);
-Math.pow(temp++, 3);
-Math.pow(1, Math.pow(--temp, 3));
-Math.pow(1, Math.pow(++temp, 3));
-Math.pow(1, Math.pow(temp--, 3));
-Math.pow(1, Math.pow(temp++, 3));
+Math.pow(temp, 3);
+Math.pow((--temp), 3);
+Math.pow((++temp), 3);
+Math.pow((temp--), 3);
+Math.pow((temp++), 3);
+Math.pow(1, Math.pow((--temp), 3));
+Math.pow(1, Math.pow((++temp), 3));
+Math.pow(1, Math.pow((temp--), 3));
+Math.pow(1, Math.pow((temp++), 3));
 Math.pow((void --temp), 3);
 Math.pow((void temp--), 3);
 Math.pow((void 3), 4);

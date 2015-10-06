@@ -61,3 +61,9 @@ void temp-- ** 4;
 1 ** !3 ** 4;
 1 ** !temp++ ** 4;
 1 ** !temp-- ** 4;
+
+<number>temp ** 3;
+<number>++temp ** 3;
+<number>--temp ** 3;
+<number>temp++ ** 3;
+<number>temp-- ** 3;

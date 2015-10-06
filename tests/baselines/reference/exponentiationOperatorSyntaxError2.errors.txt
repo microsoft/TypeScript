@@ -74,9 +74,14 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxE
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(61,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(62,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(62,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(64,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(65,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(66,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(67,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(68,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
 
 
-==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts (76 errors) ====
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts (81 errors) ====
     
     // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
     var temp;
@@ -292,3 +297,18 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxE
                  ~~
 !!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
     
+    <number>temp ** 3;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    <number>++temp ** 3;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    <number>--temp ** 3;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    <number>temp++ ** 3;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    <number>temp-- ** 3;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.

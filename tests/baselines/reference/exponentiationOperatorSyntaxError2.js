@@ -62,6 +62,11 @@ void temp-- ** 4;
 1 ** !temp++ ** 4;
 1 ** !temp-- ** 4;
 
+<number>temp ** 3;
+<number>++temp ** 3;
+<number>--temp ** 3;
+<number>temp++ ** 3;
+<number>temp-- ** 3;
 
 //// [exponentiationOperatorSyntaxError2.js]
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
@@ -114,3 +119,8 @@ Math.pow(1, Math.pow(!temp--, 3));
 Math.pow(1, Math.pow(!3, 4));
 Math.pow(1, Math.pow(!temp++, 4));
 Math.pow(1, Math.pow(!temp--, 4));
+Math.pow(temp, 3);
+Math.pow(++temp, 3);
+Math.pow(--temp, 3);
+Math.pow(temp++, 3);
+Math.pow(temp--, 3);

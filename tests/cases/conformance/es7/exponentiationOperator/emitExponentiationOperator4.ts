@@ -1,15 +1,16 @@
 ﻿// @target: es5
 var temp: any;
 
-<number>--temp ** 3;
-<number>++temp ** 3;
-<number>temp-- ** 3;
-<number>temp++ ** 3;
+(<number>temp) ** 3;
+(<number>--temp) ** 3;
+(<number>++temp) ** 3;
+(<number>temp--) ** 3;
+(<number>temp++) ** 3;
 
-1 ** <number>--temp ** 3;
-1 ** <number>++temp ** 3;
-1 ** <number>temp-- ** 3;
-1 ** <number>temp++ ** 3;
+1 ** (<number>--temp) ** 3;
+1 ** (<number>++temp) ** 3;
+1 ** (<number>temp--) ** 3;
+1 ** (<number>temp++) ** 3;
 
 (void --temp) ** 3;
 (void temp--) ** 3;
