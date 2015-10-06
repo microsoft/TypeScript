@@ -932,7 +932,16 @@ module Harness {
                 }
                 else {
                     if (fn === defaultLibFileName) {
-                        return languageVersion === ts.ScriptTarget.ES6 ? defaultES6LibSourceFile : defaultLibSourceFile;
+                        switch (languageVersion) {
+                            case ts.ScriptTarget.ES6:
+                            case ts.ScriptTarget.ES7:
+                                // TODO : Update to use ES7 specific lib file
+                                return defaultES6LibSourceFile;
+                            case ts.ScriptTarget.ES3:
+                            case ts.ScriptTarget.ES5:
+                            default:
+                                return defaultLibSourceFile;
+                        }
                     }
                     // Don't throw here -- the compiler might be looking for a test that actually doesn't exist as part of the TC
                     return undefined;
