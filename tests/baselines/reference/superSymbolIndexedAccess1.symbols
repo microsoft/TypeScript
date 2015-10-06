@@ -1,9 +1,9 @@
 === tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess1.ts ===
 var symbol = Symbol.for('myThing');
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess1.ts, 0, 3))
->Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, 3868, 42))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
->for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, 3868, 42))
+>Symbol.for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>for : Symbol(SymbolConstructor.for, Decl(lib.d.ts, --, --))
 
 class Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess1.ts, 0, 35))

@@ -93,9 +93,9 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.to
 >IWithStringIndexSignature2 : Symbol(IWithStringIndexSignature2, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 17, 1))
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 42, 67))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 42, 70))
->a.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>a.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 42, 70))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
 var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a }; // a should be number
 >x2 : Symbol(x2, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 42, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 43, 3))
@@ -133,9 +133,9 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.to
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))
 >IWithNumberIndexSignature2 : Symbol(IWithNumberIndexSignature2, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 23, 1))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 70))
->a.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>a.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 70))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a }; // a should be number
 >x4 : Symbol(x4, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 3))

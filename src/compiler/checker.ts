@@ -3171,8 +3171,8 @@ namespace ts {
                 members = createInstantiatedSymbolTable(source.declaredProperties, mapper, /*mappingThisOnly*/ typeParameters.length === 1);
                 callSignatures = instantiateList(source.declaredCallSignatures, mapper, instantiateSignature);
                 constructSignatures = instantiateList(source.declaredConstructSignatures, mapper, instantiateSignature);
-                stringIndexType = source.declaredStringIndexType ? instantiateType(source.declaredStringIndexType, mapper) : undefined;
-                numberIndexType = source.declaredNumberIndexType ? instantiateType(source.declaredNumberIndexType, mapper) : undefined;
+                stringIndexType = instantiateType(source.declaredStringIndexType, mapper);
+                numberIndexType = instantiateType(source.declaredNumberIndexType, mapper);
             }
             let baseTypes = getBaseTypes(source);
             if (baseTypes.length) {
@@ -3371,7 +3371,7 @@ namespace ts {
             setObjectTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
-        function resolveAnonymousTypeMembers(type: ObjectType) {
+        function resolveAnonymousTypeMembers(type: AnonymousType) {
             let symbol = type.symbol;
             let members: SymbolTable;
             let callSignatures: Signature[];
@@ -3379,7 +3379,14 @@ namespace ts {
             let stringIndexType: Type;
             let numberIndexType: Type;
 
-            if (symbol.flags & SymbolFlags.TypeLiteral) {
+            if (type.target) {
+                members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper, /*mappingThisOnly*/ false);
+                callSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper, instantiateSignature);
+                constructSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper, instantiateSignature);
+                stringIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.String), type.mapper);
+                numberIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.Number), type.mapper);
+            }
+            else if (symbol.flags & SymbolFlags.TypeLiteral) {
                 members = symbol.members;
                 callSignatures = getSignaturesOfSymbol(members["__call"]);
                 constructSignatures = getSignaturesOfSymbol(members["__new"]);
@@ -3424,7 +3431,7 @@ namespace ts {
                     resolveClassOrInterfaceMembers(<InterfaceType>type);
                 }
                 else if (type.flags & TypeFlags.Anonymous) {
-                    resolveAnonymousTypeMembers(<ObjectType>type);
+                    resolveAnonymousTypeMembers(<AnonymousType>type);
                 }
                 else if (type.flags & TypeFlags.Tuple) {
                     resolveTupleTypeMembers(<TupleType>type);
@@ -4543,7 +4550,7 @@ namespace ts {
             }
             let result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
-                signature.resolvedReturnType ? instantiateType(signature.resolvedReturnType, mapper) : undefined,
+                instantiateType(signature.resolvedReturnType, mapper),
                 freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
             result.target = signature;
@@ -4575,7 +4582,7 @@ namespace ts {
             return result;
         }
 
-        function instantiateAnonymousType(type: ObjectType, mapper: TypeMapper): ObjectType {
+        function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper): ObjectType {
             if (mapper.instantiations) {
                 let cachedType = mapper.instantiations[type.id];
                 if (cachedType) {
@@ -4586,27 +4593,21 @@ namespace ts {
                 mapper.instantiations = [];
             }
             // Mark the anonymous type as instantiated such that our infinite instantiation detection logic can recognize it
-            let result = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.Instantiated, type.symbol);
-            result.properties = instantiateList(getPropertiesOfObjectType(type), mapper, instantiateSymbol);
-            result.members = createSymbolTable(result.properties);
-            result.callSignatures = instantiateList(getSignaturesOfType(type, SignatureKind.Call), mapper, instantiateSignature);
-            result.constructSignatures = instantiateList(getSignaturesOfType(type, SignatureKind.Construct), mapper, instantiateSignature);
-            let stringIndexType = getIndexTypeOfType(type, IndexKind.String);
-            let numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
-            if (stringIndexType) result.stringIndexType = instantiateType(stringIndexType, mapper);
-            if (numberIndexType) result.numberIndexType = instantiateType(numberIndexType, mapper);
+            let result = <AnonymousType>createObjectType(TypeFlags.Anonymous | TypeFlags.Instantiated, type.symbol);
+            result.target = type;
+            result.mapper = mapper;
             mapper.instantiations[type.id] = result;
             return result;
         }
 
         function instantiateType(type: Type, mapper: TypeMapper): Type {
-            if (mapper !== identityMapper) {
+            if (type && mapper !== identityMapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
                     return mapper(<TypeParameter>type);
                 }
                 if (type.flags & TypeFlags.Anonymous) {
                     return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) ?
-                        instantiateAnonymousType(<ObjectType>type, mapper) : type;
+                        instantiateAnonymousType(<AnonymousType>type, mapper) : type;
                 }
                 if (type.flags & TypeFlags.Reference) {
                     return createTypeReference((<TypeReference>type).target, instantiateList((<TypeReference>type).typeArguments, mapper, instantiateType));

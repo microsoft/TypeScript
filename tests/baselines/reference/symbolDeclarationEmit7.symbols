@@ -3,7 +3,7 @@ var obj: {
 >obj : Symbol(obj, Decl(symbolDeclarationEmit7.ts, 0, 3))
 
     [Symbol.isConcatSpreadable]: string;
->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 3890, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3846, 52), Decl(lib.d.ts, 3952, 11))
->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, 3890, 24))
+>Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.d.ts, --, --))
 }
