@@ -108,61 +108,44 @@ module ts.server {
     module Metrics {
         var eventCounts: Map<number> = {};
         var properties: Map<string> = {};
-        var dtsCount = 0;
+        let dtsCount = 0;
 
-        // TODO make shorter
-        var sendInterval = 1000 * 5; // 5 seconds
-        // var sendInterval = 1000 * 60 * 5; // 5 minutes
-        var nextSendTimeMs = Date.now() + sendInterval;
+        // TODO: set this back to 5 minutes
+        const sendInterval = 1000 * 5; // 5 seconds
+        //var sendInterval = 1000 * 60 * 5; // 5 minutes
+        let nextSendTimeMs = Date.now() + sendInterval;
 
-        var settingNames = [
+        const settingNames = [
             "allowNonTsExtensions",
             "declaration",
             "emitBOM",
+            "emitDecoratorMetadata",
+            "experimentalAsyncFunctions",
+            "jsx",
+            "isolatedModules",
             "module",
+            "moduleResolution",
             "noEmit",
             "noEmitOnError",
             "noImplicitAny",
             "noLib",
             "noResolve",
+            "out",
+            "outFile",           
             "preserveConstEnums",
             "removeComments",
             "suppressImplicitAnyIndexErrors",
-            "target",
-            "isolatedModules",
-            "emitDecoratorMetadata",
-            "jsx",
-            "outFile"
+            "target"
         ];
-
-        var logPath = 'C:/throwaway/';
 
         // Keeps a count of total invocations of various language service operations (rename, gotodef, etc)
         export function countEvent(eventName: string, projectSvc: ProjectService, host: ts.System) {
-            var opts = projectSvc.getFormatCodeOptions();
+            let opts = projectSvc.getFormatCodeOptions();
             if (opts.SendMetrics) {
                 eventCounts[eventName] = (eventCounts[eventName] || 0) + 1;
 
                 if (Date.now() > nextSendTimeMs) {
-                    var props = '';
-                    props += projectSvc.configuredProjects.length + '\r\n';
-                    props += projectSvc.inferredProjects.length + '\r\n';
-                    for (var i in projectSvc.configuredProjects) {
-                        var proj = projectSvc.configuredProjects[i];
-
-                        registerSettings(projectSvc);
-
-                        props += "Project name: " + proj.projectFilename + '\r\n';
-                        props += "Files: " + proj.getFileNames().join('\r\n');
-                        props += 'compilerOptions:\r\n';
-                        for (var p in proj.projectOptions.compilerOptions) {
-                            props += p + ':' + proj.projectOptions.compilerOptions[p] + '\r\n';
-                        }
-                        props += "\r\n\CompilerOptions from settingsNames\r\n";
-                    }
-
-                    host.writeFile(logPath + 'projLog.txt', props, false);
-                    
+                    registerSettings(projectSvc);                    
                     send(host, opts.TelemetryUserID);
                 }
             }
@@ -170,7 +153,6 @@ module ts.server {
 
         // Keeps track of any .d.ts files used which correspond to known versions from DefinitelyTyped
         export function countDts(file: string) {
-            // TODO: think this will break the ASA query right now since this ends up before host, inferred, etc
             for(var i in properties) {
                 if(properties[i] == file) {
                     return;
@@ -184,17 +166,23 @@ module ts.server {
             properties['inferredProjects'] = svc.inferredProjects.length.toString();
             properties['configuredProjects'] = svc.configuredProjects.length.toString();
 
-            var someProject: Project = undefined;
+            let someProject: Project = undefined;
             if (svc.configuredProjects.length > 0) {
                 someProject = svc.configuredProjects[0];
             } else if (svc.inferredProjects.length > 0) {
                 someProject = svc.inferredProjects[0];
             }
 
-            var src = someProject && someProject.projectOptions && someProject.projectOptions.compilerOptions;
+            let src = someProject && someProject.projectOptions && someProject.projectOptions.compilerOptions;
             if (src) {
                 for (var i = 0, n = settingNames.length; i < n; i++) {
-                    properties['project.' + settingNames[i]] = <string>src[settingNames[i]];
+                    let setting = settingNames[i];
+                    let value: any = src[settingNames[i]];
+                    // actual value of out or outFile is PII, don't record it, just record the flag was used
+                    if((setting == "out" || setting == "outFile") && value != null && value != '') {
+                        value = 1;
+                    }
+                    properties['project.' + settingNames[i]] = value;
                 }
             }
         }
@@ -208,7 +196,7 @@ module ts.server {
                     baseType: 'EventData',
                     baseData: {
                         ver: 2,
-                        name: 'TypeScriptLanguageServiceEvent', // This name is up to us
+                        name: 'TypeScriptLanguageServiceEvent',
                         measurements: eventCounts,
                         properties: properties
                     }
@@ -218,12 +206,14 @@ module ts.server {
                 }
             }];
             var payload = JSON.stringify(data);
-            // TODO: stop logging this locally
             
-            host.writeFile(logPath + 'appLog.txt', payload, false);
+            // TODO: stop logging this locally
             host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json', (err, data) => {
-                host.writeFile(logPath + 'errorLog.txt', err ? 'err: ' + err : 'data: ' + data, false);
+                if (err) {
+                    host.writeFile('C:\\throwaway\\errorLog.txt', err ? 'err: ' + err : 'data: ' + data, false);
+                }
             });
+            host.writeFile('C:\\throwaway\\appLog.txt', payload, false);
 
             eventCounts = {};
             properties = {};
