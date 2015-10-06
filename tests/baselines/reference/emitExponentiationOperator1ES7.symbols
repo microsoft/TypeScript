@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator1.ts ===
+=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator1ES7.ts ===
 
 No type information for this code.1 ** -2;
 No type information for this code.1 ** 2;
