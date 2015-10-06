@@ -3,7 +3,7 @@
 /* tslint:disable:no-null */
 
 // Test case is json of below type in tests/cases/project/
-interface ProjectRunnerTestCase extends ts.CompilerOptions{
+interface ProjectRunnerTestCase extends ts.CompilerOptions {
     scenario: string;
     projectRoot: string; // project where it lives - this also is the current directory when compiling
     inputFiles: string[]; // list of input files to be given to program
