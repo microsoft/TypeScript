@@ -4785,10 +4785,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // emit name if
                 // - node has a name
-                // - this is default export and target is not ES6 (for ES6 `export default` does not need to be compiled downlevel)
                 // - this is default export with static initializers
-                if ((node.name || (node.flags & NodeFlags.Default && (languageVersion < ScriptTarget.ES6
-                    || staticProperties.length > 0))) && !thisNodeIsDecorated) {
+                if ((node.name || (node.flags & NodeFlags.Default && staticProperties.length > 0)) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
                 }
