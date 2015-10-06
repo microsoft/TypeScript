@@ -1,4 +1,4 @@
-﻿// @target:es7
+﻿// @target: es7
 
 var comp: number;
 

@@ -1,6 +1,8 @@
 ﻿// @target: es5
 
+var globalCounter = 0;
 function incrementIdx(max: number) {
+    globalCounter += 1;
     let idx = Math.floor(Math.random() * max);
     return idx;
 }
