@@ -74,7 +74,7 @@ var m: MyMap<number> = {
     "1": 1,
     "2": 2,
     "Okay that's enough for today.": NaN
->NaN : Symbol(NaN, Decl(lib.d.ts, 21, 11))
+>NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
 
 };
 
