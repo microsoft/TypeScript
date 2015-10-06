@@ -6,10 +6,6 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
-    export interface CompilerOptions {
-        diagnosticStyle?: DiagnosticStyle;
-    }
-
     let reportDiagnostic = reportDiagnosticSimply;
 
     function reportDiagnostics(diagnostics: Diagnostic[]): void {
@@ -95,7 +91,7 @@ namespace ts {
 
     function reportDiagnosticSimply(diagnostic: Diagnostic): void {
         let output = "";
-        
+
         if (diagnostic.file) {
             let { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
 
@@ -111,7 +107,7 @@ namespace ts {
     const shouldUseColors = sys.writesToTty && sys.writesToTty();
     const redForegroundEscapeSequence = shouldUseColors ? "\u001b[91m" : "";
     const gutterStyleSequence = shouldUseColors ? "\u001b[100;30m" : "";
-    const gutterSeparator = shouldUseColors ? " " : " | "
+    const gutterSeparator = shouldUseColors ? " " : " | ";
     const resetEscapeSequence = shouldUseColors ? "\u001b[0m" : "";
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic): void {
@@ -147,7 +143,7 @@ namespace ts {
                 // Output the gutter and the actual contents of the line.
                 output += gutterStyleSequence + padLeft(i + 1 + "", gutterWidth) + resetEscapeSequence + gutterSeparator;
                 output += lineContent + sys.newLine;
-                
+
                 // Output the gutter and the error span for the line using tildes.
                 output += gutterStyleSequence + padLeft("", gutterWidth) + resetEscapeSequence + gutterSeparator;
                 output += redForegroundEscapeSequence;

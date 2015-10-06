@@ -2043,6 +2043,7 @@ namespace ts {
         charset?: string;
         declaration?: boolean;
         diagnostics?: boolean;
+        /* @internal */diagnosticStyle?: DiagnosticStyle;
         emitBOM?: boolean;
         help?: boolean;
         init?: boolean;
