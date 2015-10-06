@@ -210,7 +210,7 @@ namespace ts {
                 }
 
                 private static copyListRemovingItem<T>(item: T, list: T[]) {
-                    var copiedList: T[] = [];
+                    let copiedList: T[] = [];
                     for (var i = 0, len = list.length; i < len; i++) {
                         if (list[i] != item) {
                             copiedList.push(list[i]);
@@ -224,7 +224,7 @@ namespace ts {
                 }
 
                 private poll(checkedIndex: number) {
-                    var watchedFile = this.watchedFiles[checkedIndex];
+                    let watchedFile = this.watchedFiles[checkedIndex];
                     if (!watchedFile) {
                         return;
                     }
@@ -245,9 +245,9 @@ namespace ts {
                 // and efficiency of stat on modern filesystems
                 private startWatchTimer() {
                     this.watchTimer = setInterval(() => {
-                        var count = 0;
-                        var nextToCheck = this.nextFileToCheck;
-                        var firstCheck = -1;
+                        let count = 0;
+                        let nextToCheck = this.nextFileToCheck;
+                        let firstCheck = -1;
                         while ((count < this.chunkSize) && (nextToCheck !== firstCheck)) {
                             this.poll(nextToCheck);
                             if (firstCheck < 0) {
@@ -264,7 +264,7 @@ namespace ts {
                 }
 
                 addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
-                    var file: WatchedFile = {
+                    let file: WatchedFile = {
                         fileName,
                         callback,
                         mtime: WatchedFileSet.getModifiedTime(fileName)
@@ -295,7 +295,7 @@ namespace ts {
             // changes for large reference sets? If so, do we want
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
-            var watchedFileSet = new WatchedFileSet();
+            let watchedFileSet = new WatchedFileSet();
 
             function isNode4OrLater(): Boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
@@ -402,10 +402,10 @@ namespace ts {
                         return _fs.watch(fileName, (eventName: string, relativeFileName: string) => callback(fileName));
                     }
 
-                    var watchedFile = watchedFileSet.addFile(fileName, callback);
+                    let watchedFile = watchedFileSet.addFile(fileName, callback);
                     return {
                         close: () => watchedFileSet.removeFile(watchedFile)
-                    }
+                    };
                 },
                 watchDirectory: (path, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
@@ -419,7 +419,7 @@ namespace ts {
                             // event name is "change")
                             if (eventName == "rename") {
                                 // When deleting a file, the passed baseFileName is null
-                                callback(relativeFileName == null ? null : normalizePath(ts.combinePaths(path, relativeFileName)))
+                                callback(!relativeFileName ? relativeFileName : normalizePath(ts.combinePaths(path, relativeFileName)));
                             };
                         }
                     );
