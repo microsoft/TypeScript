@@ -4787,7 +4787,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // - node has a name
                 // - this is default export and target is not ES6 (for ES6 `export default` does not need to be compiled downlevel)
                 // - this is default export with static initializers
-                if ((node.name || (node.flags & NodeFlags.Default && (languageVersion < ScriptTarget.ES6 
+                if ((node.name || (node.flags & NodeFlags.Default && (languageVersion < ScriptTarget.ES6
                     || staticProperties.length > 0))) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
@@ -5647,8 +5647,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             /*
-             * Some bundlers (SystemJS builder) sometimes want to rename dependencies. 
-             * Here we check if alternative name was provided for a given moduleName and return it if possible. 
+             * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
+             * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
                 if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
@@ -7076,7 +7076,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
 
-                // If the node is emitted in specialized fashion, dont emit comments as this node will handle 
+                // If the node is emitted in specialized fashion, dont emit comments as this node will handle
                 // emitting comments when emitting itself
                 Debug.assert(!isSpecializedCommentHandling(node));
 
