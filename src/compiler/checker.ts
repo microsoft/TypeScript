@@ -14869,7 +14869,8 @@ namespace ts {
                         }
                         file.package = packages[file.package.packageFile]; // Dedupe packages
                         mergeSymbolTable(file.package.symbols, file.locals);
-                    } else {
+                    }
+                    else {
                         mergeSymbolTable(globalScope.symbols, file.locals);
                     }
                 }

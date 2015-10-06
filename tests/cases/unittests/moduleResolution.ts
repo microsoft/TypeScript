@@ -162,7 +162,6 @@ module ts {
                 "/a/node_modules/foo/package.json"
             ]);
         });
-        
     });
     
     describe("Module resolution - relative imports", () => {
