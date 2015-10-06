@@ -108,9 +108,11 @@ namespace ts {
         sys.write(output);
     }
 
-    const redForegroundEscapeSequence = "\u001b[91m";
-    const gutterStyleSequence = "\u001b[100;30m";
-    const resetEscapeSequence = "\u001b[0m";
+    const shouldUseColors = sys.writesToTty && sys.writesToTty();
+    const redForegroundEscapeSequence = shouldUseColors ? "\u001b[91m" : "";
+    const gutterStyleSequence = shouldUseColors ? "\u001b[100;30m" : "";
+    const gutterSeparator = shouldUseColors ? " " : " | "
+    const resetEscapeSequence = shouldUseColors ? "\u001b[0m" : "";
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic): void {
         let output = "";
@@ -132,7 +134,7 @@ namespace ts {
                 // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                 // so we'll skip ahead to the second-to-last line.
                 if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                    output += gutterStyleSequence + padLeft("...", gutterWidth) + resetEscapeSequence + " " + sys.newLine;
+                    output += gutterStyleSequence + padLeft("...", gutterWidth) + resetEscapeSequence + gutterSeparator + sys.newLine;
                     i = lastLine - 1;
                 }
 
@@ -142,11 +144,12 @@ namespace ts {
                 lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
                 lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
-                // Output the actual contents of the line.
-                output += gutterStyleSequence + padLeft(i + 1 + "", gutterWidth) + resetEscapeSequence + " " + lineContent + sys.newLine;
+                // Output the gutter and the actual contents of the line.
+                output += gutterStyleSequence + padLeft(i + 1 + "", gutterWidth) + resetEscapeSequence + gutterSeparator;
+                output += lineContent + sys.newLine;
                 
-                // Output the error span for the line using tildes.
-                output += gutterStyleSequence + padLeft("", gutterWidth) + resetEscapeSequence + " ";
+                // Output the gutter and the error span for the line using tildes.
+                output += gutterStyleSequence + padLeft("", gutterWidth) + resetEscapeSequence + gutterSeparator;
                 output += redForegroundEscapeSequence;
                 if (i === firstLine) {
                     // If we're on the last line, then limit it to the last character of the last line.

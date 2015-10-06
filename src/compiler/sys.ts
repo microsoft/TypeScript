@@ -272,7 +272,7 @@ namespace ts {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
-                write(s: string): void {  
+                write(s: string): void {
                     process.stdout.write(s);
                 },
                 writesToTty: () => _tty.isatty(1),
