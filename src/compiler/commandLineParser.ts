@@ -551,28 +551,40 @@ namespace ts {
                 }
             }
             else {
+                let filesSeen: Map<boolean> = {};
                 let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let extensionsToRead = getSupportedExtensions(options);
-                for (let extensionsIndex = 0; extensionsIndex < extensionsToRead.length; extensionsIndex++) {
-                    let extension = extensionsToRead[extensionsIndex];
-                    let sysFiles = host.readDirectory(basePath, extension, exclude);
-                    for (let i = 0; i < sysFiles.length; i++) {
-                        let fileName = sysFiles[i];
-                        // If this is not the extension of one of the lower priority extension, then only we can use this file name
-                        // This could happen if the extension taking priority is substring of lower priority extension. eg. .ts and .d.ts
-                        let hasLowerPriorityExtension: boolean;
-                        for (let j = extensionsIndex + 1; !hasLowerPriorityExtension && j < extensionsToRead.length; j++) {
-                            hasLowerPriorityExtension = fileExtensionIs(fileName, extensionsToRead[j]);
-                        };
-                        if (!hasLowerPriorityExtension) {
-                            // If the basename + higher priority extensions arent in the filenames, use this file name
-                            let baseName = fileName.substr(0, fileName.length - extension.length - 1);
-                            let hasSameNameHigherPriorityExtensionFile: boolean;
-                            for (let j = 0; !hasSameNameHigherPriorityExtensionFile && j < extensionsIndex; j++) {
-                                hasSameNameHigherPriorityExtensionFile = contains(fileNames, baseName + "." + extensionsToRead[j]);
-                            };
+                let extensionsByPriority = getSupportedExtensions(options);
+                for (let extensionsIndex = 0; extensionsIndex < extensionsByPriority.length; extensionsIndex++) {
+                    let currentExtension = extensionsByPriority[extensionsIndex];
+                    let filesInDirWithExtension = host.readDirectory(basePath, currentExtension, exclude);
+                    // Get list of conflicting extensions, conflicting extension is
+                    // - extension that is lower priority than current extension and 
+                    // - extension also is current extension (ends with "." + currentExtension)
+                    let conflictingExtensions: string[] = [];
+                    for (let i = extensionsIndex + 1; i < extensionsByPriority.length; i++) {
+                        let extension = extensionsByPriority[i]; // lower priority extension
+                        if (fileExtensionIs(extension, currentExtension)) { // also has current extension
+                            conflictingExtensions.push(extension);
+                        }
+                    }
 
-                            if (!hasSameNameHigherPriorityExtensionFile) {
+                    // Add the files to fileNames list if the file is not any of conflicting extension
+                    for (const fileName of filesInDirWithExtension) {
+                        let hasConflictingExtension = false;
+                        for (const conflictingExtension of conflictingExtensions) {
+                            // eg. 'f.d.ts' will match '.ts' extension but really should be process later with '.d.ts' files
+                            if (fileExtensionIs(fileName, conflictingExtension)) {
+                                hasConflictingExtension = true;
+                                break;
+                            }
+                        }
+
+                        if (!hasConflictingExtension) {
+                            // Add the file only if there is no higher priority extension file already included
+                            // eg. when a.d.ts and a.js are present in the folder, include only a.d.ts not a.js
+                            const baseName = fileName.substr(0, fileName.length - currentExtension.length - 1);
+                            if (!hasProperty(filesSeen, baseName)) {
+                                filesSeen[baseName] = true;
                                 fileNames.push(fileName);
                             }
                         }
