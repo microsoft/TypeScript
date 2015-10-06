@@ -14764,31 +14764,6 @@ namespace ts {
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
-        function getBlockScopedVariableId(n: Identifier): number {
-            Debug.assert(!nodeIsSynthesized(n));
-
-            let isVariableDeclarationOrBindingElement =
-                n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
-
-            let symbol =
-                (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
-                getNodeLinks(n).resolvedSymbol ||
-                resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-
-            let isLetOrConst =
-                symbol &&
-                (symbol.flags & SymbolFlags.BlockScopedVariable) &&
-                symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause;
-
-            if (isLetOrConst) {
-                // side-effect of calling this method:
-                //   assign id to symbol if it was not yet set
-                getSymbolLinks(symbol);
-                return symbol.id;
-            }
-            return undefined;
-        }
-
         function instantiateSingleCallFunctionType(functionType: Type, typeArguments: Type[]): Type {
             if (functionType === unknownType) {
                 return unknownType;
@@ -14823,7 +14798,6 @@ namespace ts {
                 isEntityNameVisible,
                 getConstantValue,
                 collectLinkedAliases,
-                getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter
