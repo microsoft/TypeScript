@@ -1,0 +1,294 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(5,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(5,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(6,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(6,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(7,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(8,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(11,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(11,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(12,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(12,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(13,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(13,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(14,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(14,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(16,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(16,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(17,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(17,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(18,10): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(19,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(19,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(20,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(20,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(22,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(22,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(23,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(23,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(24,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(24,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(25,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(25,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(26,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(26,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(28,13): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(29,13): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(30,8): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(31,13): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(32,13): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(34,18): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(35,18): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(36,13): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(37,18): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(38,18): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(40,10): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(41,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(42,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(43,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(44,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(46,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(47,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(48,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(49,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(50,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(52,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(52,10): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(53,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(53,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(54,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(54,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(55,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(55,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(56,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(56,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(58,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(58,15): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(59,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(59,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(60,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(60,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(61,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(61,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(62,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(62,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts (76 errors) ====
+    
+    // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+    var temp;
+    
+    delete --temp ** 3;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    delete ++temp ** 3;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    delete temp-- ** 3;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    delete temp++ ** 3;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    
+    1 ** delete --temp ** 3;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** delete ++temp ** 3;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** delete temp-- ** 3;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** delete temp++ ** 3;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    typeof --temp ** 3;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    typeof temp-- ** 3;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    typeof 3 ** 4;
+    ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+             ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    typeof temp++ ** 4;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    typeof temp-- ** 4;
+    ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    1 ** typeof --temp ** 3;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** typeof temp-- ** 3;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** typeof 3 ** 4;
+         ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** typeof temp++ ** 4;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** typeof temp-- ** 4;
+         ~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    void --temp ** 3;
+                ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    void temp-- ** 3;
+                ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    void 3 ** 4;
+           ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    void temp++ ** 4;
+                ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    void temp-- ** 4;
+                ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    1 ** void --temp ** 3;
+                     ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** void temp-- ** 3;
+                     ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** void 3 ** 4;
+                ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** void temp++ ** 4;
+                     ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** void temp-- ** 4 ;
+                     ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    ~ --temp ** 3;
+             ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    ~temp-- ** 3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    ~3 ** 4;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    ~temp++ ** 4;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    ~temp-- ** 4;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    1 ** ~ --temp ** 3;
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** ~temp-- ** 3;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** ~3 ** 4;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** ~temp++ ** 4;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** ~temp-- ** 4;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    ! --temp ** 3;
+    ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+             ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    !temp-- ** 3;
+    ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    !3 ** 4;
+    ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    !temp++ ** 4;
+    ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    !temp-- ** 4;
+    ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    1 ** ! --temp ** 3;
+         ~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** !temp-- ** 3;
+         ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** !3 ** 4;
+         ~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** !temp++ ** 4;
+         ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** !temp-- ** 4;
+         ~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    

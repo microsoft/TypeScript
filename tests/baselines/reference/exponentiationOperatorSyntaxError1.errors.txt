@@ -1,0 +1,135 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(3,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(4,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(5,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(6,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(7,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(7,10): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(8,11): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(12,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(13,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(14,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(15,9): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(16,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(17,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(18,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(19,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(21,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(22,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(23,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(24,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(25,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(26,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(27,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(28,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(29,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(30,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(31,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(32,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(33,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(34,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(35,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts(36,4): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError1.ts (31 errors) ====
+    
+    // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+    -1 ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +1 ** 2
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** -2 ** 3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** -2 ** -3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -1 ** -2 ** -3;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+             ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -(1 ** 2) ** 3;
+              ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    var temp = 10;
+    
+    -++temp ** 3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +--temp ** 3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -temp++ ** 3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +temp-- ** 3;
+            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** -++temp ** 3;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** +--temp ** 3;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** -temp++ ** 3;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    1 ** +temp-- ** 3;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    -3 ** temp++;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** temp--;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** ++temp;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** --temp;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** temp++;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** temp--;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** ++temp;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** --temp;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** temp++ ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** temp-- ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** ++temp ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    -3 ** --temp ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** temp++ ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** temp-- ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** ++temp ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    +3 ** --temp ** 2;
+       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    
+    

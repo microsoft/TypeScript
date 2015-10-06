@@ -1,0 +1,166 @@
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(8,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(9,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(10,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(11,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(11,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(12,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(12,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(13,14): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(13,24): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(15,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(15,31): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(16,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(16,35): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(17,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(17,35): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(18,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(18,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(18,31): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(18,35): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(19,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(19,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(19,34): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(19,44): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(20,14): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(20,24): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(20,42): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(20,52): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(22,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(22,44): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(23,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(23,48): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(24,16): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(24,48): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(25,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(25,14): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(25,44): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(25,48): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(26,10): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(26,20): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(26,47): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(26,57): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(27,14): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(27,24): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(27,55): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts(27,65): error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+
+
+==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorInTemplateStringWithSyntaxError2.ts (45 errors) ====
+    
+    var t1 = 10;
+    var t2 = 10;
+    var s;
+    
+    // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+    // With templateHead
+    `hello ${-t1 ** t2 - t1}`;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${-++t1 ** t2 - t1}`;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${-t1++ ** t2 - t1}`;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${!t1 ** t2 ** --t1 }`;
+             ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${typeof t1 ** t2 ** t1}`;
+             ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${1 + typeof t1 ** t2 ** t1}`;
+                 ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    `hello ${-t1 ** t2 - t1}${-t1 ** t2 - t1}`;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                  ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${-++t1 ** t2 - t1}${-++t1 ** t2 - t1}`;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                      ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${-t1++ ** t2 - t1}${-t1++ ** t2 - t1}`;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                      ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${!t1 ** t2 ** --t1 }${!t1 ** t2 ** --t1 }`;
+             ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                  ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                      ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1}`;
+             ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                     ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                               ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${1 + typeof t1 ** t2 ** t1}${1 + typeof t1 ** t2 ** t1}`;
+                 ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                             ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
+    `hello ${-t1 ** t2 - t1} hello world ${-t1 ** t2 - t1}`;
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                               ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${-++t1 ** t2 - t1} hello world ${-++t1 ** t2 - t1}`;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${-t1++ ** t2 - t1} hello world ${-t1++ ** t2 - t1}`;
+                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${!t1 ** t2 ** --t1 } hello world ${!t1 ** t2 ** --t1 }`;
+             ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                 ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                               ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                                   ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1}`;
+             ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                       ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                                  ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                                            ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    `hello ${1 + typeof t1 ** t2 ** t1} hello world ${1 + typeof t1 ** t2 ** t1}`;
+                 ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                           ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+                                                          ~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+                                                                    ~~
+!!! error TS17006: Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression.
+    
