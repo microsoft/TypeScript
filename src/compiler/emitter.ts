@@ -2515,7 +2515,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let leftHandSideExpression = node.left;
                 if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
                     let synthesizedLHS: ElementAccessExpression | PropertyAccessExpression;
-                    // TODO (yuisu) : comment
+
+                    // This is used to decide whether to emit parenthesis around the expresison.
+                    // Parenthesis is required for following cases:
+                    //      capture variable while emitting right-hand side operand.
+                    //          a[0] **= a[0] **= 2
+                    //          _a = a, _a[0] = Math.pow(_a[0], (_b = a, _b[0] = Math.pow(_b[0], 2)));
+                    //                                          ^ -> required extra parenthesis controlled by shouldEmitParenthesis
+                    //      exponentiation compount in variable declaration
+                    //          var x = a[0] **= a[0] **= 2
+                    //          var x = (_a = a, _a[0] = Math.pow(_a[0], (_b = a, _b[0] = Math.pow(_b[0], 2))));
+                    //                  ^ -> required extra parenthesis controlled by shouldEmitParenthesis
+                    // Otherwise, false
                     let shouldEmitParenthesis = false;
 
                     if (isElementAccessExpression(leftHandSideExpression)) {

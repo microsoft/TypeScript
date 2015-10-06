@@ -3015,8 +3015,8 @@ namespace ts {
                 let newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
-                // - For left associative operator (all operator but **), only consume the operator
-                //   , recursively call the function below and parse binaryExpression as a rightOperand
+                // - For left associative operator (all operator but **), consume the operator,
+                //   recursively call the function below, and parse binaryExpression as a rightOperand
                 //   of the caller if the new precendence of the operator is greater then or equal to the current precendence.
                 //   For example:
                 //      a - b - c;
@@ -3025,7 +3025,7 @@ namespace ts {
                 //            ^token; leftOperand = b. Return b to the caller as a rightOperand
                 //      a - b * c;
                 //            ^token; leftOperand = b. Return b * c to the caller as a rightOperand
-                // - For right associative operator (**), only consume the operator, recursively call the function
+                // - For right associative operator (**), consume the operator, recursively call the function
                 //   and parse binaryExpression as a rightOperand of the caller if the new precendence of
                 //   the operator is strictly grater than the current precendence
                 //   For example:
@@ -3188,33 +3188,6 @@ namespace ts {
         }
 
         /**
-         * Check if the current token can possibly be in an ES7 increment expression.
-         *
-         * Increment Expression:
-         *      LeftHandSideExpression[?Yield]
-         *      LeftHandSideExpression[?Yield][no LineTerminator here]++
-         *      LeftHandSideExpression[?Yield][no LineTerminator here]--
-         *      ++LeftHandSideExpression[?Yield]
-         *      --LeftHandSideExpression[?Yield]
-         */
-        function isIncrementExpression(): boolean{
-            // TODO(yuisu): Comment why we have to do what are we doing here
-             switch (token) {
-                case SyntaxKind.PlusToken:
-                case SyntaxKind.MinusToken:
-                case SyntaxKind.TildeToken:
-                case SyntaxKind.ExclamationToken:
-                case SyntaxKind.DeleteKeyword:
-                case SyntaxKind.TypeOfKeyword:
-                case SyntaxKind.VoidKeyword:
-                case SyntaxKind.LessThanToken:
-                    return false;
-                default:
-                    return true;
-            }
-        }
-
-        /**
          * Parse ES7 unary expression and await expression
          * 
          * ES7 UnaryExpression:
@@ -3241,9 +3214,9 @@ namespace ts {
         }
 
         /**
-         *  Parse ES7 simple-unary expression or higher:
+         * Parse ES7 simple-unary expression or higher:
          *
-         * SimpleUnaryExpression:
+         * ES7 SimpleUnaryExpression:
          *      1) IncrementExpression[?yield]
          *      2) delete UnaryExpression[?yield]
          *      3) void UnaryExpression[?yield]
@@ -3283,9 +3256,37 @@ namespace ts {
         }
 
         /**
-         * Parse ES7 IncrementExpression. The IncrementExpression is used instead of ES6's PostFixExpression.
+         * Check if the current token can possibly be an ES7 increment expression.
          *
-         * IncrementExpression[yield]:
+         * ES7 IncrementExpression:
+         *      LeftHandSideExpression[?Yield]
+         *      LeftHandSideExpression[?Yield][no LineTerminator here]++
+         *      LeftHandSideExpression[?Yield][no LineTerminator here]--
+         *      ++LeftHandSideExpression[?Yield]
+         *      --LeftHandSideExpression[?Yield]
+         */
+        function isIncrementExpression(): boolean{
+            // This function is called inside parseUnaryExpression to decide
+            // whether to call parseSimpleUnaryExpression or call parseIncrmentExpression directly
+            switch (token) {
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.TildeToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.DeleteKeyword:
+                case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.LessThanToken:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /**
+         * Parse ES7 IncrementExpression. IncrementExpression is used instead of ES6's PostFixExpression.
+         *
+         * ES7 IncrementExpression[yield]:
          *      1) LeftHandSideExpression[?yield]
          *      2) LeftHandSideExpression[?yield] [[no LineTerminator here]]++
          *      3) LeftHandSideExpression[?yield] [[no LineTerminator here]]--

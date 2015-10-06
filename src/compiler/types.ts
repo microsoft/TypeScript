@@ -711,11 +711,10 @@ namespace ts {
     export interface IncrementExpression extends UnaryExpression {
         _incrementExpressionBrand: any;
     }
-    //export type IncrementExpression = PrefixUnaryExpression | PostfixUnaryExpression | LeftHandSideExpression;
 
     export interface PrefixUnaryExpression extends IncrementExpression {
         operator: SyntaxKind;
-        operand: UnaryExpression | BinaryExpression;
+        operand: UnaryExpression;
     }
 
     export interface PostfixUnaryExpression extends IncrementExpression {
@@ -740,19 +739,19 @@ namespace ts {
     }
 
     export interface DeleteExpression extends UnaryExpression {
-        expression: UnaryExpression | BinaryExpression;
+        expression: UnaryExpression;
     }
 
     export interface TypeOfExpression extends UnaryExpression {
-        expression: UnaryExpression | BinaryExpression;
+        expression: UnaryExpression;
     }
 
     export interface VoidExpression extends UnaryExpression {
-        expression: UnaryExpression | BinaryExpression;
+        expression: UnaryExpression;
     }
 
     export interface AwaitExpression extends UnaryExpression {
-        expression: UnaryExpression | BinaryExpression;
+        expression: UnaryExpression;
     }
 
     export interface YieldExpression extends Expression {
@@ -859,7 +858,7 @@ namespace ts {
 
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
-        expression: UnaryExpression | BinaryExpression;
+        expression: UnaryExpression;
     }
 
     export type AssertionExpression = TypeAssertion | AsExpression;
