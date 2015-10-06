@@ -24,9 +24,9 @@ export function fooWithRestParameters(a: string, ...rests: string[]) {
 
     return a + rests.join("");
 >a : Symbol(a, Decl(declFileFunctions_0.ts, 10, 38))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileFunctions_0.ts, 10, 48))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 }
 
 export function fooWithOverloads(a: string): string;
@@ -115,9 +115,9 @@ function nonExportedFooWithRestParameters(a: string, ...rests: string[]) {
 
     return a + rests.join("");
 >a : Symbol(a, Decl(declFileFunctions_0.ts, 47, 42))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileFunctions_0.ts, 47, 52))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 }
 
 function nonExportedFooWithOverloads(a: string): string;
@@ -161,9 +161,9 @@ function globalfooWithRestParameters(a: string, ...rests: string[]) {
 
     return a + rests.join("");
 >a : Symbol(a, Decl(declFileFunctions_1.ts, 9, 37))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileFunctions_1.ts, 9, 47))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 }
 function globalfooWithOverloads(a: string): string;
 >globalfooWithOverloads : Symbol(globalfooWithOverloads, Decl(declFileFunctions_1.ts, 11, 1), Decl(declFileFunctions_1.ts, 12, 51), Decl(declFileFunctions_1.ts, 13, 51))

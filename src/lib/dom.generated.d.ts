@@ -2450,8 +2450,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     importNode(importedNode: Node, deep: boolean): Node;
     msElementsFromPoint(x: number, y: number): NodeList;
     msElementsFromRect(left: number, top: number, width: number, height: number): NodeList;
-    msGetPrintDocumentForNamedFlow(flowName: string): Document;
-    msSetPrintDocumentUriForNamedFlow(flowName: string, uri: string): void;
     /**
       * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
       * @param url Specifies a MIME type for the document.
@@ -7273,27 +7271,6 @@ declare var MSHTMLWebViewElement: {
     new(): MSHTMLWebViewElement;
 }
 
-interface MSHeaderFooter {
-    URL: string;
-    dateLong: string;
-    dateShort: string;
-    font: string;
-    htmlFoot: string;
-    htmlHead: string;
-    page: number;
-    pageTotal: number;
-    textFoot: string;
-    textHead: string;
-    timeLong: string;
-    timeShort: string;
-    title: string;
-}
-
-declare var MSHeaderFooter: {
-    prototype: MSHeaderFooter;
-    new(): MSHeaderFooter;
-}
-
 interface MSInputMethodContext extends EventTarget {
     compositionEndOffset: number;
     compositionStartOffset: number;
@@ -7452,24 +7429,6 @@ declare var MSPointerEvent: {
     new(typeArg: string, eventInitDict?: PointerEventInit): MSPointerEvent;
 }
 
-interface MSPrintManagerTemplatePrinter extends MSTemplatePrinter, EventTarget {
-    percentScale: number;
-    showHeaderFooter: boolean;
-    shrinkToFit: boolean;
-    drawPreviewPage(element: HTMLElement, pageNumber: number): void;
-    endPrint(): void;
-    getPrintTaskOptionValue(key: string): any;
-    invalidatePreview(): void;
-    setPageCount(pageCount: number): void;
-    startPrint(): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-}
-
-declare var MSPrintManagerTemplatePrinter: {
-    prototype: MSPrintManagerTemplatePrinter;
-    new(): MSPrintManagerTemplatePrinter;
-}
-
 interface MSRangeCollection {
     length: number;
     item(index: number): Range;
@@ -7515,63 +7474,6 @@ interface MSStreamReader extends EventTarget, MSBaseReader {
 declare var MSStreamReader: {
     prototype: MSStreamReader;
     new(): MSStreamReader;
-}
-
-interface MSTemplatePrinter {
-    collate: boolean;
-    copies: number;
-    currentPage: boolean;
-    currentPageAvail: boolean;
-    duplex: boolean;
-    footer: string;
-    frameActive: boolean;
-    frameActiveEnabled: boolean;
-    frameAsShown: boolean;
-    framesetDocument: boolean;
-    header: string;
-    headerFooterFont: string;
-    marginBottom: number;
-    marginLeft: number;
-    marginRight: number;
-    marginTop: number;
-    orientation: string;
-    pageFrom: number;
-    pageHeight: number;
-    pageTo: number;
-    pageWidth: number;
-    selectedPages: boolean;
-    selection: boolean;
-    selectionEnabled: boolean;
-    unprintableBottom: number;
-    unprintableLeft: number;
-    unprintableRight: number;
-    unprintableTop: number;
-    usePrinterCopyCollate: boolean;
-    createHeaderFooter(): MSHeaderFooter;
-    deviceSupports(property: string): any;
-    ensurePrintDialogDefaults(): boolean;
-    getPageMarginBottom(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginBottomImportant(pageRule: CSSPageRule): boolean;
-    getPageMarginLeft(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginLeftImportant(pageRule: CSSPageRule): boolean;
-    getPageMarginRight(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginRightImportant(pageRule: CSSPageRule): boolean;
-    getPageMarginTop(pageRule: CSSPageRule, pageWidth: number, pageHeight: number): any;
-    getPageMarginTopImportant(pageRule: CSSPageRule): boolean;
-    printBlankPage(): void;
-    printNonNative(document: any): boolean;
-    printNonNativeFrames(document: any, activeFrame: boolean): void;
-    printPage(element: HTMLElement): void;
-    showPageSetupDialog(): boolean;
-    showPrintDialog(): boolean;
-    startDoc(title: string): boolean;
-    stopDoc(): void;
-    updatePageStatus(status: number): void;
-}
-
-declare var MSTemplatePrinter: {
-    prototype: MSTemplatePrinter;
-    new(): MSTemplatePrinter;
 }
 
 interface MSWebViewAsyncOperation extends EventTarget {
@@ -11871,7 +11773,6 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     locationbar: BarProp;
     menubar: BarProp;
     msAnimationStartTime: number;
-    msTemplatePrinter: MSTemplatePrinter;
     name: string;
     navigator: Navigator;
     offscreenBuffering: string | boolean;
@@ -12706,7 +12607,6 @@ declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
 declare var msAnimationStartTime: number;
-declare var msTemplatePrinter: MSTemplatePrinter;
 declare var name: string;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;

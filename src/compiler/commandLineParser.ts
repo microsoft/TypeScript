@@ -459,6 +459,9 @@ namespace ts {
                             }
                             if (opt.isFilePath) {
                                 value = normalizePath(combinePaths(basePath, value));
+                                if (value === "") {
+                                    value = ".";
+                                }
                             }
                             options[opt.name] = value;
                         }
