@@ -99,7 +99,6 @@ module ts.server {
         export const Saveto = "saveto";
         export const SignatureHelp = "signatureHelp";
         export const TypeDefinition = "typeDefinition";
-        export const UpdateDts = "updatedts";
         export const ProjectInfo = "projectInfo";
         export const ReloadProjects = "reloadProjects";
         export const Unknown = "unknown";
@@ -111,7 +110,8 @@ module ts.server {
         let dtsCount = 0;
 
         // TODO: set this back to 5 minutes
-        const sendInterval = 1000 * 5; // 5 seconds
+        //const sendInterval = 1000 * 5; // 5 seconds
+        var sendInterval = 1000 * 60; // 1 minute
         //var sendInterval = 1000 * 60 * 5; // 5 minutes
         let nextSendTimeMs = Date.now() + sendInterval;
 
@@ -405,7 +405,7 @@ module ts.server {
                 try {
                     var info = Session.matchFileByHash(file, this.dtsVersionHistory, this.host);
                     if (info) {
-                        var r = Metrics.countDts(info.fileName);
+                        Metrics.countDts(info.fileName);
                         
                         if(info.commitsBehind > 0) {
                             // Not up to date
@@ -465,26 +465,7 @@ module ts.server {
                 this.logError(err, "up-to-date check");
             }
         }
-
-        updateDts(line: number, offset: number, fileName: string) {
-            if (this.projectService.getFormatCodeOptions(ts.normalizePath(fileName)).CheckForDtsUpdates === false) return;
-
-            var fileInfo = Session.matchFileByHash(fileName, this.dtsVersionHistory, this.host);
-            if (fileInfo) {
-                // Note: trailing slash is important!
-                var urlUrl = 'https://typescript-dts-service.azurewebsites.net/urlOf/' + fileInfo.path + '/' + fileInfo.fileName + '/';
-                this.host.https(urlUrl, (err, downloadUrl) => {
-                    this.host.https(downloadUrl, (err, fileData) => {
-                        this.host.writeFile(fileName, fileData || err);
-                    });
-                });
-            } else {
-                // File was probably modified into an unrecognized one?
-                var failReason = this.dtsVersionHistory ? 'File was not a recognized hash' : 'DTS version history not available';
-                this.logError(new Error(failReason), 'up-to-date check');
-            }
-        }
-
+        
         private errorCheck(file: string, project: Project) {
             this.syntacticCheck(file, project);
             this.semanticCheck(file, project);
@@ -1292,10 +1273,6 @@ module ts.server {
             [CommandNames.NavBar]: (request: protocol.Request) => {
                 var navBarArgs = <protocol.FileRequestArgs>request.arguments;
                 return {response: this.getNavigationBarItems(navBarArgs.file), responseRequired: true};
-            },
-            [CommandNames.UpdateDts]: (request: protocol.Request) => {
-                var updateDtsArgs = <protocol.UpdateDtsArgs>request.arguments;
-                return { response: this.updateDts(updateDtsArgs.line, updateDtsArgs.offset, updateDtsArgs.file)};
             },
             [CommandNames.Occurrences]: (request: protocol.Request) => {
                 var { line, offset, file: fileName } = <protocol.FileLocationRequestArgs>request.arguments;
