@@ -856,7 +856,7 @@ namespace ts {
             let saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
-            // because the saving/restorating of these flags happens naturally through the recursive
+            // because the saving/restoring of these flags happens naturally through the recursive
             // descent nature of our parser.  However, we still store this here just so we can
             // assert that that invariant holds.
             let saveContextFlags = contextFlags;
@@ -1124,7 +1124,15 @@ namespace ts {
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
             }
+            if (token === SyntaxKind.StaticKeyword) {
+                nextToken();
+                return canFollowModifier();
+            }
+
             nextToken();
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
+            }
             return canFollowModifier();
         }
 
@@ -4157,8 +4165,12 @@ namespace ts {
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
                         return nextTokenIsIdentifierOrStringLiteralOnSameLine();
+                    case SyntaxKind.AbstractKeyword:
                     case SyntaxKind.AsyncKeyword:
                     case SyntaxKind.DeclareKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.PublicKeyword:
                         nextToken();
                         // ASI takes effect for this modifier.
                         if (scanner.hasPrecedingLineBreak()) {
@@ -4178,11 +4190,7 @@ namespace ts {
                         }
                         continue;
 
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                    case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.StaticKeyword:
-                    case SyntaxKind.AbstractKeyword:
                         nextToken();
                         continue;
                     default:

@@ -285,12 +285,10 @@ var __extends = (this && this.__extends) || function (d, b) {
         // emit output for the __decorate helper function
         const decorateHelper = `
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };`;
 
         // emit output for the __metadata helper function
@@ -448,7 +446,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** If removeComments is true, no leading-comments needed to be emitted **/
             let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
 
-            let moduleEmitDelegates: Map<(node: SourceFile, startIndex: number) => void> = {
+            let moduleEmitDelegates: Map<(node: SourceFile) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -1652,7 +1650,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //
                     // The emit for the decorated computed property decorator is:
                     //
-                    //   Object.defineProperty(C.prototype, _a, __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a)));
+                    //   __decorate([dec], C.prototype, _a, Object.getOwnPropertyDescriptor(C.prototype, _a));
                     //
                     if (nodeIsDecorated(node.parent)) {
                         if (!computedPropertyNamesToGeneratedNames) {
@@ -4707,7 +4705,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //
                         //     let C = class {
                         //     };
-                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
                         //     C = __decorate([dec], C);
                         //
                         // * For an exported class declaration:
@@ -4719,7 +4716,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //
                         //     export let C = class {
                         //     };
-                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
                         //     C = __decorate([dec], C);
                         //
                         // * For a default export of a class declaration with a name:
@@ -4731,7 +4727,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         //
                         //     let C = class {
                         //     }
-                        //     Object.defineProperty(C, "name", { value: "C", configurable: true });
                         //     C = __decorate([dec], C);
                         //     export default C;
                         //
@@ -5059,21 +5054,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //
                     // The emit for a method is:
                     //
-                    //   Object.defineProperty(C.prototype, "method",
-                    //       __decorate([
-                    //           dec,
-                    //           __param(0, dec2),
-                    //           __metadata("design:type", Function),
-                    //           __metadata("design:paramtypes", [Object]),
-                    //           __metadata("design:returntype", void 0)
-                    //       ], C.prototype, "method", Object.getOwnPropertyDescriptor(C.prototype, "method")));
+                    //   __decorate([
+                    //       dec,
+                    //       __param(0, dec2),
+                    //       __metadata("design:type", Function),
+                    //       __metadata("design:paramtypes", [Object]),
+                    //       __metadata("design:returntype", void 0)
+                    //   ], C.prototype, "method", undefined);
                     //
                     // The emit for an accessor is:
                     //
-                    //   Object.defineProperty(C.prototype, "accessor",
-                    //       __decorate([
-                    //           dec
-                    //       ], C.prototype, "accessor", Object.getOwnPropertyDescriptor(C.prototype, "accessor")));
+                    //   __decorate([
+                    //       dec
+                    //   ], C.prototype, "accessor", undefined);
                     //
                     // The emit for a property is:
                     //
@@ -5084,18 +5077,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     writeLine();
                     emitStart(member);
-                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
-                        write("Object.defineProperty(");
-                        emitStart(member.name);
-                        emitClassMemberPrefix(node, member);
-                        write(", ");
-                        emitExpressionForPropertyName(member.name);
-                        emitEnd(member.name);
-                        write(",");
-                        increaseIndent();
-                        writeLine();
-                    }
-
                     write("__decorate([");
                     increaseIndent();
                     writeLine();
@@ -5119,15 +5100,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitExpressionForPropertyName(member.name);
                     emitEnd(member.name);
 
-                    if (member.kind !== SyntaxKind.PropertyDeclaration) {
-                        write(", Object.getOwnPropertyDescriptor(");
-                        emitStart(member.name);
-                        emitClassMemberPrefix(node, member);
-                        write(", ");
-                        emitExpressionForPropertyName(member.name);
-                        emitEnd(member.name);
-                        write("))");
-                        decreaseIndent();
+                    if (languageVersion > ScriptTarget.ES3) {
+                        if (member.kind !== SyntaxKind.PropertyDeclaration) {
+                            // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
+                            // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
+                            write(", null");
+                        }
+                        else {
+                            // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
+                            // should not invoke `Object.getOwnPropertyDescriptor`.
+                            write(", void 0");
+                        }
                     }
 
                     write(");");
@@ -6611,7 +6594,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function emitSystemModule(node: SourceFile, startIndex: number): void {
+            function emitSystemModule(node: SourceFile): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -6656,6 +6639,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
@@ -6749,7 +6733,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(") {");
             }
 
-            function emitAMDModule(node: SourceFile, startIndex: number) {
+            function emitAMDModule(node: SourceFile) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
@@ -6760,6 +6744,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6770,7 +6755,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitCommonJSModule(node: SourceFile, startIndex: number) {
+            function emitCommonJSModule(node: SourceFile) {
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
@@ -6780,7 +6766,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitExportEquals(/*emitAsReturn*/ false);
             }
 
-            function emitUMDModule(node: SourceFile, startIndex: number) {
+            function emitUMDModule(node: SourceFile) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
@@ -6799,6 +6785,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 })(`);
                 emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6809,11 +6796,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitES6Module(node: SourceFile, startIndex: number) {
+            function emitES6Module(node: SourceFile) {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
                 hasExportStars = false;
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7002,14 +6990,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitShebang();
                 emitDetachedComments(node);
 
-                // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
-                    emitModule(node, startIndex);
+                    emitModule(node);
                 }
                 else {
+                    // emit prologue directives prior to __extends
+                    let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                     externalImports = undefined;
                     exportSpecifiers = undefined;
                     exportEquals = undefined;
