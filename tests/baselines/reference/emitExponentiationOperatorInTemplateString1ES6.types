@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperatorInTemplateString1.ts ===
+=== tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperatorInTemplateString1ES6.ts ===
 
 var t1 = 10;
 >t1 : number

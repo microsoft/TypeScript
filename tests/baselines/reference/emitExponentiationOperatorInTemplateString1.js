@@ -1,60 +1,53 @@
 //// [emitExponentiationOperatorInTemplateString1.ts]
+
 var t1 = 10;
 var t2 = 10;
 var s;
-`Exp: ${t1 ** t2} abc`;
-`Exp: ${t1 ** t2 ** t1} abc`;
-`Exp: ${t1 + t2 ** t1} abc`;
-`Exp: ${t1 - t2 ** t1} abc`;
-`Exp: ${t1 ** t2 + t1} abc`;
-`Exp: ${t1 ** t2 - t1} abc`;
-`Exp: ${t1 + t2 ** t2 + t1} abc`;
-`Exp: ${t1 - t2 ** t2 - t1} abc`;
-`Exp: ${-t1 ** t2 - t1} abc`;
-`Exp: ${+t1 ** t2 - t1} abc`;
-`Exp: ${-++t1 ** t2 - t1} abc`;
-`Exp: ${+--t1 ** t2 - t1} abc`;
-`Exp: ${-t1++ ** t2 - t1} abc`;
-`Exp: ${-t1-- ** t2 - t1} abc`;
-`Exp: ${+t1++ ** t2 - t1} abc`;
-`Exp: ${+t1-- ** t2 - t1} abc`;
-`Exp: ${typeof t1 ** t2 ** t1} abc`;
-`Exp: ${typeof t1 ** t2 + t1} abc`;
-`Exp: ${typeof t1 ** (t2 - t1)} abc`;
-`Exp: ${1 + typeof t1 ** t2 ** t1} abc`;
-`Exp: ${2 + typeof t1 ** t2 ** ++t1} abc`;
-`Exp: ${3 + typeof t1 ** t2 ** --t1} abc`;
-`Exp: ${!t1 ** t2 ** t1} abc`;
-`Exp: ${!t1 ** t2 ** ++t1} abc`;
-`Exp: ${!t1 ** t2 ** --t1} abc`;
 
+// TempateHead & TemplateTail are empty
+`${t1 ** t2}`;
+`${t1 ** t2 ** t1}`;
+`${t1 + t2 ** t1}`;
+`${t1 ** t2 + t1}`;
+`${t1 + t2 ** t2 + t1 }`;
+`${typeof (t1 ** t2 ** t1) }`;
+`${1 + typeof (t1 ** t2 ** t1) }`;
+
+`${t1 ** t2}${t1 ** t2}`;
+`${t1 ** t2 ** t1}${t1 ** t2 ** t1}`;
+`${t1 + t2 ** t1}${t1 + t2 ** t1}`;
+`${t1 ** t2 + t1}${t1 ** t2 + t1}`;
+`${t1 + t2 ** t2 + t1}${t1 + t2 ** t2 + t1}`;
+`${typeof (t1 ** t2 ** t1)}${typeof (t1 ** t2 ** t1)}`;
+
+`${t1 ** t2} hello world ${t1 ** t2}`;
+`${t1 ** t2 ** t1} hello world ${t1 ** t2 ** t1}`;
+`${t1 + t2 ** t1} hello world ${t1 + t2 ** t1}`;
+`${t1 ** t2 + t1} hello world ${t1 ** t2 + t1}`;
+`${t1 + t2 ** t2 + t1} hello world ${t1 + t2 ** t2 + t1}`;
+`${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }`;
 
 //// [emitExponentiationOperatorInTemplateString1.js]
 var t1 = 10;
 var t2 = 10;
 var s;
-"Exp: " + (Math.pow(t1, t2)) + " abc";
-"Exp: " + (Math.pow(t1, Math.pow(t2, t1))) + " abc";
-"Exp: " + (t1 + Math.pow(t2, t1)) + " abc";
-"Exp: " + (t1 - Math.pow(t2, t1)) + " abc";
-"Exp: " + (Math.pow(t1, t2) + t1) + " abc";
-"Exp: " + (Math.pow(t1, t2) - t1) + " abc";
-"Exp: " + (t1 + Math.pow(t2, t2) + t1) + " abc";
-"Exp: " + (t1 - Math.pow(t2, t2) - t1) + " abc";
-"Exp: " + (-Math.pow(t1, t2) - t1) + " abc";
-"Exp: " + (+Math.pow(t1, t2) - t1) + " abc";
-"Exp: " + (-Math.pow(++t1, t2) - t1) + " abc";
-"Exp: " + (+Math.pow(--t1, t2) - t1) + " abc";
-"Exp: " + (-Math.pow(t1++, t2) - t1) + " abc";
-"Exp: " + (-Math.pow(t1--, t2) - t1) + " abc";
-"Exp: " + (+Math.pow(t1++, t2) - t1) + " abc";
-"Exp: " + (+Math.pow(t1--, t2) - t1) + " abc";
-"Exp: " + typeof Math.pow(t1, Math.pow(t2, t1)) + " abc";
-"Exp: " + (typeof Math.pow(t1, t2) + t1) + " abc";
-"Exp: " + typeof Math.pow(t1, (t2 - t1)) + " abc";
-"Exp: " + (1 + typeof Math.pow(t1, Math.pow(t2, t1))) + " abc";
-"Exp: " + (2 + typeof Math.pow(t1, Math.pow(t2, ++t1))) + " abc";
-"Exp: " + (3 + typeof Math.pow(t1, Math.pow(t2, --t1))) + " abc";
-"Exp: " + !Math.pow(t1, Math.pow(t2, t1)) + " abc";
-"Exp: " + !Math.pow(t1, Math.pow(t2, ++t1)) + " abc";
-"Exp: " + !Math.pow(t1, Math.pow(t2, --t1)) + " abc";
+// TempateHead & TemplateTail are empty
+"" + (Math.pow(t1, t2));
+"" + (Math.pow(t1, Math.pow(t2, t1)));
+"" + (t1 + Math.pow(t2, t1));
+"" + (Math.pow(t1, t2) + t1);
+"" + (t1 + Math.pow(t2, t2) + t1);
+"" + typeof (Math.pow(t1, Math.pow(t2, t1)));
+"" + (1 + typeof (Math.pow(t1, Math.pow(t2, t1))));
+"" + (Math.pow(t1, t2)) + (Math.pow(t1, t2));
+"" + (Math.pow(t1, Math.pow(t2, t1))) + (Math.pow(t1, Math.pow(t2, t1)));
+"" + (t1 + Math.pow(t2, t1)) + (t1 + Math.pow(t2, t1));
+"" + (Math.pow(t1, t2) + t1) + (Math.pow(t1, t2) + t1);
+"" + (t1 + Math.pow(t2, t2) + t1) + (t1 + Math.pow(t2, t2) + t1);
+"" + typeof (Math.pow(t1, Math.pow(t2, t1))) + typeof (Math.pow(t1, Math.pow(t2, t1)));
+(Math.pow(t1, t2)) + " hello world " + (Math.pow(t1, t2));
+(Math.pow(t1, Math.pow(t2, t1))) + " hello world " + (Math.pow(t1, Math.pow(t2, t1)));
+(t1 + Math.pow(t2, t1)) + " hello world " + (t1 + Math.pow(t2, t1));
+(Math.pow(t1, t2) + t1) + " hello world " + (Math.pow(t1, t2) + t1);
+(t1 + Math.pow(t2, t2) + t1) + " hello world " + (t1 + Math.pow(t2, t2) + t1);
+typeof (Math.pow(t1, Math.pow(t2, t1))) + " hello world " + typeof (Math.pow(t1, Math.pow(t2, t1)));
