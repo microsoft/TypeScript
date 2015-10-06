@@ -1,0 +1,16 @@
+=== tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration4.es6.ts ===
+export default class {
+    async method() {
+>method : Symbol(method, Decl(asyncMethodDeclaration4.es6.ts, 0, 22))
+
+        await undefined;
+>undefined : Symbol(undefined)
+    }
+    
+    static async staticMethod() {
+>staticMethod : Symbol(default.staticMethod, Decl(asyncMethodDeclaration4.es6.ts, 3, 5))
+
+        await undefined;
+>undefined : Symbol(undefined)
+    }
+}

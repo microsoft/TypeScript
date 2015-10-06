@@ -1,0 +1,18 @@
+=== tests/cases/conformance/async/es6/asyncMethodDeclaration/asyncMethodDeclaration3.es6.ts ===
+let c = class {
+>c : Symbol(c, Decl(asyncMethodDeclaration3.es6.ts, 0, 3))
+
+    async method() {
+>method : Symbol((Anonymous class).method, Decl(asyncMethodDeclaration3.es6.ts, 0, 15))
+
+        await undefined;
+>undefined : Symbol(undefined)
+    }
+    
+    static async staticMethod() {
+>staticMethod : Symbol((Anonymous class).staticMethod, Decl(asyncMethodDeclaration3.es6.ts, 3, 5))
+
+        await undefined;
+>undefined : Symbol(undefined)
+    }
+}

@@ -306,7 +306,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         const awaiterHelper = `
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
     return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
+        generator = generator.apply(thisArg, _arguments);
         function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
         function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
         function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
@@ -550,6 +550,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return makeUniqueName("class");
             }
 
+            function generateNameForMethodDeclaration(node: MethodDeclaration) {
+                Debug.assert(!!(node.flags & NodeFlags.Async), "Generated name only supported for async methods.");
+
+                // Async methods with a super reference need to be split into two methods,
+                // one that is the main entry point with the original name of the method,
+                // and another generator method that contains the original body.
+                let name = "_";
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    name += (<Identifier>node.name).text;
+                }
+                else {
+                    name += "method";
+                }
+
+                name += "_async";
+                return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
+            }
+
             function generateNameForNode(node: Node) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
@@ -566,6 +584,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return generateNameForExportDefault();
                     case SyntaxKind.ClassExpression:
                         return generateNameForClassExpression();
+                    case SyntaxKind.MethodDeclaration:
+                        return generateNameForMethodDeclaration(<MethodDeclaration>node);
                 }
             }
 
@@ -970,11 +990,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
+            function createIdentifier(text: string): Identifier {
+                let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+                result.text = text;
+                return result;
+            }
+
             // Create a temporary variable with a unique unused name.
             function createTempVariable(flags: TempFlags): Identifier {
-                let result = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                result.text = makeTempVariableName(flags);
-                return result;
+                return createIdentifier(makeTempVariableName(flags));
             }
 
             function recordTempDeclaration(name: Identifier): void {
@@ -1750,11 +1774,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
-                    write("_arguments");
-                    return;
-                }
-
                 let container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -3942,6 +3961,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return node.kind === SyntaxKind.ArrowFunction && languageVersion >= ScriptTarget.ES6;
             }
 
+            function shouldEmitAsSplitAsyncMethod(node: FunctionLikeDeclaration) {
+                return resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper && languageVersion >= ScriptTarget.ES6;
+            }
+
             function emitDeclarationName(node: Declaration) {
                 if (node.name) {
                     emitNodeWithCommentsAndWithoutSourcemap(node.name);
@@ -4052,7 +4075,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSignatureParameters(node);
             }
 
-            function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration) {
+            function emitAsyncFunctionBodyForES6(node: FunctionLikeDeclaration, isAsyncMethodWithSuper?: boolean) {
                 let promiseConstructor = getEntityNameFromTypeNode(node.type);
                 let isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
                 let hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
@@ -4080,7 +4103,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //  let a = async (b) => { await arguments[0]; }
                 //
                 //  // output
-                //  let a = (b) => __awaiter(this, arguments, void 0, function* (arguments) {
+                //  let a = (b) => __awaiter(this, arguments, void 0, function* () {
                 //      yield arguments[0];
                 //  });
                 //
@@ -4109,8 +4132,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter(this, arguments, void 0, function* (_arguments) {
-                //          yield _arguments[0];
+                //      return __awaiter(this, arguments, void 0, function* () {
+                //          yield arguments[0];
                 //      });
                 //  }
                 //
@@ -4124,8 +4147,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 //  // output
                 //  let a = function (b) {
-                //      return __awaiter(this, arguments, MyPromise, function* (_arguments) {
-                //          yield _arguments[0];
+                //      return __awaiter(this, arguments, MyPromise, function* () {
+                //          yield arguments[0];
                 //      });
                 //  }
                 //
@@ -4139,6 +4162,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("return");
                 }
 
+                // Emit the call to __awaiter.
                 write(" __awaiter(this");
                 if (hasLexicalArguments) {
                     write(", arguments");
@@ -4150,21 +4174,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (promiseConstructor) {
                     write(", ");
                     emitNodeWithoutSourceMap(promiseConstructor);
+                    write(", ");
                 }
                 else {
-                    write(", Promise");
+                    write(", Promise, ");
                 }
 
-                // Emit the call to __awaiter.
-                if (hasLexicalArguments) {
-                    write(", function* (_arguments)");
+                if (isAsyncMethodWithSuper) {
+                    // An async class method that has a `super` reference
+                    // must be split into two methods to preserve the `super`
+                    // references as a generator function in ES6 does not have a
+                    // bound `super`.
+                    let name = getGeneratedNameForNode(node);
+                    emitClassMemberPrefix(<ClassLikeDeclaration>node.parent, node);
+                    write(`.${name}`);
                 }
                 else {
-                    write(", function* ()");
-                }
+                    write("function* ()");
 
-                // Emit the signature and body for the inner generator function.
-                emitFunctionBody(node);
+                    // Emit the signature and body for the inner generator function.
+                    emitFunctionBody(node);
+                }
                 write(")");
 
                 // If this is not an async arrow, emit the closing brace of the outer function body.
@@ -4192,7 +4222,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            function emitSplitAsyncMethodSignatureAndBody(node: FunctionLikeDeclaration) {
+                // The default emit for an async function does not work with an async
+                // class method that contains a `super` reference. Instead, we must
+                // split the method in two:
+                //
+                // - The original method that is the entry point and that calls the
+                //   `__awaiter` helper
+                // - A generator method that is invoked by the awaiter and contains
+                //   the body of the async method.
+                write("()");
+                emitAsyncFunctionBodyForES6(node, /*isAsyncMethodWithSuper*/ true);
+                writeLine();
+
+                let name = getGeneratedNameForNode(node);
+                if (node.flags & NodeFlags.Static) {
+                    write("static ");
+                }
+
+                write("*");
+                write(name);
+
+                let saveTempFlags = tempFlags;
+                let saveTempVariables = tempVariables;
+                let saveTempParameters = tempParameters;
+                tempFlags = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+
+                emitSignatureParameters(node);
+                emitFunctionBody(node);
+
+                tempFlags = saveTempFlags;
+                tempVariables = saveTempVariables;
+                tempParameters = saveTempParameters;
+            }
+
             function emitSignatureAndBody(node: FunctionLikeDeclaration) {
+                if (shouldEmitAsSplitAsyncMethod(node)) {
+                    emitSplitAsyncMethodSignatureAndBody(node);
+                    return;
+                }
+
                 let saveTempFlags = tempFlags;
                 let saveTempVariables = tempVariables;
                 let saveTempParameters = tempParameters;
@@ -4758,6 +4829,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
+                let isUnnamedClassLikeWithAsyncMethodWithSuper = forEach(node.members, isSplitAsyncMethodWithSuper) && !node.name;
+                let isUnnamedClassDeclarationWithAsyncMethodWithSuper = node.kind === SyntaxKind.ClassDeclaration && isUnnamedClassLikeWithAsyncMethodWithSuper;
+                let isUnnamedClassExpressionWithAsyncMethodWithSuper = node.kind === SyntaxKind.ClassExpression && isUnnamedClassLikeWithAsyncMethodWithSuper;
+
                 // If the class has static properties, and it's a class expression, then we'll need
                 // to specialize the emit a bit.  for a class expression of the form:
                 //
@@ -4773,22 +4848,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
                 let tempVariable: Identifier;
 
-                if (isClassExpressionWithStaticProperties) {
-                    tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                if (isClassExpressionWithStaticProperties || isUnnamedClassExpressionWithAsyncMethodWithSuper) {
+                    if (isUnnamedClassExpressionWithAsyncMethodWithSuper) {
+                        // For this class expression, we need a name that is reachable both inside and outside of the class.
+                        tempVariable = createIdentifier(getGeneratedNameForNode(node));
+                        recordTempDeclaration(tempVariable);
+                    }
+                    else {
+                        tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                    }
+
                     write("(");
-                    increaseIndent();
+                    if (isClassExpressionWithStaticProperties) {
+                        increaseIndent();
+                    }
                     emit(tempVariable);
                     write(" = ");
                 }
 
                 write("class");
 
-                // emit name if
+                // emit name if the class is not decorated, and:
                 // - node has a name
                 // - this is default export and target is not ES6 (for ES6 `export default` does not need to be compiled downlevel)
                 // - this is default export with static initializers
+                // - this is default export and has async methods with super calls
                 if ((node.name || (node.flags & NodeFlags.Default && (languageVersion < ScriptTarget.ES6
-                    || staticProperties.length > 0))) && !thisNodeIsDecorated) {
+                    || staticProperties.length > 0 || isUnnamedClassLikeWithAsyncMethodWithSuper))) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
                 }
@@ -4829,16 +4915,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
                 //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
 
-                if (isClassExpressionWithStaticProperties) {
-                    for (var property of staticProperties) {
+                if (isClassExpressionWithStaticProperties || isUnnamedClassExpressionWithAsyncMethodWithSuper) {
+                    if (isClassExpressionWithStaticProperties) {
+                        for (var property of staticProperties) {
+                            write(",");
+                            writeLine();
+                            emitPropertyDeclaration(node, property, /*receiver:*/ tempVariable, /*isExpression:*/ true);
+                        }
                         write(",");
                         writeLine();
-                        emitPropertyDeclaration(node, property, /*receiver:*/ tempVariable, /*isExpression:*/ true);
+                        emit(tempVariable);
+                        decreaseIndent();
                     }
-                    write(",");
-                    writeLine();
-                    emit(tempVariable);
-                    decreaseIndent();
+
                     write(")");
                 }
                 else {
@@ -4865,6 +4954,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDeclarationName(node);
                     write(";");
                 }
+            }
+
+            function isSplitAsyncMethodWithSuper(node: ClassElement) {
+                return resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper;
             }
 
             function emitClassLikeDeclarationBelowES6(node: ClassLikeDeclaration) {
