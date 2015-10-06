@@ -2508,7 +2508,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             /**
-             * Emit exponentiation operator down-level using Math.pow
+             * Emit ES7 exponentiation operator downlevel using Math.pow
              * @param node {BinaryExpression} a binary expression node containing exponentiationOperator (**, **=) 
              */
             function emitExponentiationOperator(node: BinaryExpression) {
@@ -2516,12 +2516,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
                     let synthesizedLHS: ElementAccessExpression | PropertyAccessExpression;
                     // TODO (yuisu) : comment
-                    let shouldEmitParenthesis = node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BinaryExpression;
+                    let shouldEmitParenthesis = false;
 
                     if (isElementAccessExpression(leftHandSideExpression)) {
+                        shouldEmitParenthesis = node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BinaryExpression;
+ 
                         if (shouldEmitParenthesis) {
                             write("(");
                         }
+
                         synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
                         let tempExpression = createAndRecordTempVariable(TempFlags.Auto);
                         emitAssignment(tempExpression, leftHandSideExpression.expression, /*shouldEmitCommaBeforeAssignment*/ false);
@@ -2539,9 +2542,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
                     else if (isPropertyAccessExpression(leftHandSideExpression)) {
+                        shouldEmitParenthesis = node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BinaryExpression;
+
                         if (shouldEmitParenthesis) {
                             write("(");
                         }
+
                         synthesizedLHS = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression, /*startsOnNewLine*/ false);
                         let tempExpression = createAndRecordTempVariable(TempFlags.Auto);
                         synthesizedLHS.expression = tempExpression
