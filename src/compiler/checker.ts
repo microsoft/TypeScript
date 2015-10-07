@@ -1067,9 +1067,15 @@ namespace ts {
                             );
                         }
                         for (let id in lookupTable) {
-                            if (id !== "export=" && lookupTable[id].exportsWithDuplicate.length && !(id in symbols)) { // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
+                            // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
+                            if (id !== "export=" && lookupTable[id].exportsWithDuplicate.length && !(id in symbols)) {
                                 for (let node of lookupTable[id].exportsWithDuplicate) {
-                                    diagnostics.add(createDiagnosticForNode(node, Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity, lookupTable[id].specifierText, id));
+                                    diagnostics.add(createDiagnosticForNode(
+                                        node,
+                                        Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
+                                        lookupTable[id].specifierText,
+                                        id
+                                    ));
                                 }
                             }
                         }
@@ -13722,7 +13728,7 @@ namespace ts {
 
         function checkExternalModuleExports(node: SourceFile | ModuleDeclaration) {
             let moduleSymbol = getSymbolOfNode(node);
-            let links: SymbolLinks = getSymbolLinks(moduleSymbol);
+            let links = getSymbolLinks(moduleSymbol);
             if (!links.exportsChecked) {
                 let exportEqualsSymbol = moduleSymbol.exports["export="];
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
@@ -13732,9 +13738,11 @@ namespace ts {
                 let exports = getExportsOfModule(moduleSymbol); // Checks for export * conflicts
                 for (let id in exports) {
                     if (id === "__export") continue;
-                    if (!(exports[id].flags & SymbolFlags.Namespace || exports[id].flags & SymbolFlags.Interface) && exports[id].declarations.length > 1) { // 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, and interfaces)
+                    let exportedSymbol = exports[id];
+                     // 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
+                    if (!(exportedSymbol.flags & SymbolFlags.Namespace || exportedSymbol.flags & SymbolFlags.Interface || exportedSymbol.flags & SymbolFlags.Enum) && exportedSymbol.declarations.length > 1) {
                         let exportedDeclarations: Declaration[] = [];
-                        for (let declaration of exports[id].declarations) {
+                        for (let declaration of exportedSymbol.declarations) {
                             if (declaration.kind === SyntaxKind.FunctionDeclaration) {
                                 if (!(declaration as FunctionDeclaration).body) {
                                     continue;

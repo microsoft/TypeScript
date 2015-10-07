@@ -6,7 +6,7 @@ export interface Bar {
 	_brand1: any;
 }
 
-export interface Bar {
+export interface Bar { // Shouldn't error
 	_brand2: any;
 }
 
@@ -14,7 +14,7 @@ export namespace FooBar {
 	export var member1 = 2;
 }
 
-export namespace FooBar {
+export namespace FooBar { // Shouldn't error
 	export var member2 = 42;
 }
 
@@ -22,12 +22,23 @@ export class Kettle {
 	member1 = 2;
 }
 
-export class Kettle {
+export class Kettle { // Should error
 	member2 = 42;
 }
 
 export var Pot = 2;
 Pot = 42; // Shouldn't error
+
+export enum Utensils {
+	Spoon,
+	Fork,
+	Knife
+}
+
+export enum Utensils { // Shouldn't error
+	Spork = 3
+}
+
 
 //// [moduleDuplicateIdentifiers.js]
 exports.Foo = 2;
@@ -56,3 +67,13 @@ var Kettle = (function () {
 exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error
+(function (Utensils) {
+    Utensils[Utensils["Spoon"] = 0] = "Spoon";
+    Utensils[Utensils["Fork"] = 1] = "Fork";
+    Utensils[Utensils["Knife"] = 2] = "Knife";
+})(exports.Utensils || (exports.Utensils = {}));
+var Utensils = exports.Utensils;
+(function (Utensils) {
+    Utensils[Utensils["Spork"] = 3] = "Spork";
+})(exports.Utensils || (exports.Utensils = {}));
+var Utensils = exports.Utensils;

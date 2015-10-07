@@ -16,7 +16,7 @@ tests/cases/compiler/moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplica
     	_brand1: any;
     }
     
-    export interface Bar {
+    export interface Bar { // Shouldn't error
     	_brand2: any;
     }
     
@@ -24,7 +24,7 @@ tests/cases/compiler/moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplica
     	export var member1 = 2;
     }
     
-    export namespace FooBar {
+    export namespace FooBar { // Shouldn't error
     	export var member2 = 42;
     }
     
@@ -34,7 +34,7 @@ tests/cases/compiler/moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplica
     	member1 = 2;
     }
     
-    export class Kettle {
+    export class Kettle { // Should error
                  ~~~~~~
 !!! error TS2300: Duplicate identifier 'Kettle'.
     	member2 = 42;
@@ -42,3 +42,14 @@ tests/cases/compiler/moduleDuplicateIdentifiers.ts(24,14): error TS2300: Duplica
     
     export var Pot = 2;
     Pot = 42; // Shouldn't error
+    
+    export enum Utensils {
+    	Spoon,
+    	Fork,
+    	Knife
+    }
+    
+    export enum Utensils { // Shouldn't error
+    	Spork = 3
+    }
+    
