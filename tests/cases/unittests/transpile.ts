@@ -276,59 +276,11 @@ var x = 0;`,
         });
         
         it("transpile file as 'tsx' if 'jsx' is specified", () => {
-            let input = `import * as React from 'react';\r\n` +
-`export default class Test extends React.Component<any, any> {\r\n` +
-`  constructor(props: any) {\r\n` +
-`    this.state = {\r\n` +
-`      text : undefined\r\n` +
-`    };\r\n` +
-`    super();\r\n` +
-`  }\r\n` +
-`  handleClick(e) {\r\n` +
-`    e.preventDefault();\r\n` +
-`    this.setState({\r\n` +
-`      text : 'just testing'\r\n` +
-`    });\r\n` +
-`  }\r\n` +
-`  render() {\r\n` +
-`    return (\r\n` +
-`        <div>\r\n` +
-`         <a href="#" onClick={this.handleClick}>\r\n` +
-`            {'test'}\r\n` +
-`          </a>\r\n` +
-`        </div>\r\n` +
-`    );\r\n` +
-`  }\r\n` +
-`}`;
-            let output = `var __extends = (this && this.__extends) || function (d, b) {\r\n` +
-`    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\r\n` +
-`    function __() { this.constructor = d; }\r\n` +
-`    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());\r\n` +
-`};\r\n` +
-`var React = require('react');\r\n` +
-`var Test = (function (_super) {\r\n` +
-`    __extends(Test, _super);\r\n` +
-`    function Test(props) {\r\n` +
-`        this.state = {\r\n` +
-`            text: undefined\r\n` +
-`        };\r\n` +
-`        _super.call(this);\r\n` +
-`    }\r\n` +
-`    Test.prototype.handleClick = function (e) {\r\n` +
-`        e.preventDefault();\r\n` +
-`        this.setState({\r\n` +
-`            text: 'just testing'\r\n` +
-`        });\r\n` +
-`    };\r\n` +
-`    Test.prototype.render = function () {\r\n` +
-`        return (React.createElement("div", null, React.createElement("a", {"href": "#", "onClick": this.handleClick}, 'test')));\r\n` +
-`    };\r\n` +
-`    return Test;\r\n` +
-`})(React.Component);\r\n` +
-`exports["default"] = Test;\r\n`;
+            let input = `var x = <div/>`;
+            let output = `var x = React.createElement("div", null);\n`;
             test(input, {
                 expectedOutput: output,
-                options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.CarriageReturnLineFeed } }
+                options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
             })
         });
     });
