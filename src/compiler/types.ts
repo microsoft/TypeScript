@@ -2068,6 +2068,8 @@ namespace ts {
         LoopWithCapturedBlockScopedBinding = 0x00010000, // Loop that contains block scoped variable captured in closure
         CapturedBlockScopedBinding = 0x00020000,         // Block-scoped binding that is captured in some function
         BlockScopedBindingInLoop   = 0x00040000,         // Block-scoped binding with declaration nested inside iteration statement
+        HasSeenSuperBeforeThis      = 0x00080000,  // Set during the binding if the 'super' is used before 'this' in constructor function
+        HasSeenThisCall             = 0x00100000,  // Set during the binding when encounter 'this'
     }
 
     /* @internal */
