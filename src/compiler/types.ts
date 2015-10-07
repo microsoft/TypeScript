@@ -619,7 +619,6 @@ namespace ts {
 
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: Block;
-        hasSeenSuperBeforeThis: boolean;  // TODDO (yuisu): comment
     }
 
     // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
@@ -1245,7 +1244,7 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
-        
+
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
         renamedDependencies?: Map<string>;
@@ -1313,12 +1312,12 @@ namespace ts {
     }
 
     export interface Program extends ScriptReferenceHost {
-        
+
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
         getRootFileNames(): string[]
-        
+
         /**
          * Get a list of files in the program
          */
@@ -1599,7 +1598,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
@@ -1745,6 +1744,8 @@ namespace ts {
         EnumValuesComputed          = 0x00002000,
         BlockScopedBindingInLoop    = 0x00004000,
         LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        HasSeenSuperBeforeThis      = 0x00010000,  // Set during the binding if the 'super' is used before 'this' in constructor function
+        HasSeenThisCall             = 0x00020000,  // Set during the binding when encounter 'this'
     }
 
     /* @internal */
@@ -2012,12 +2013,12 @@ namespace ts {
         Error,
         Message,
     }
-    
+
     export const enum ModuleResolutionKind {
         Classic  = 1,
         NodeJs  = 2
     }
-    
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2260,20 +2261,20 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
-    }   
-    
+    }
+
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
-        // to determine location of bundled typings for node module 
+        // to determine location of bundled typings for node module
         readFile(fileName: string): string;
     }
-    
+
     export interface ResolvedModule {
         resolvedFileName: string;
         failedLookupLocations: string[];
     }
-    
+
     export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
 
     export interface CompilerHost extends ModuleResolutionHost {
@@ -2285,13 +2286,13 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        
+
         /*
-         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
-         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
          * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
-         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
-         * 'throw new Error("NotImplemented")'  
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
+         * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
     }
@@ -2324,7 +2325,7 @@ namespace ts {
         // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
-        
+
         /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
     }
 }

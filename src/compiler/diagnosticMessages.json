@@ -2447,7 +2447,7 @@
       "category": "Error",
       "code": 17005
     },
-    "'super' has to be called before 'this' accessing.": {
+    "'super' must be called before accessing 'this' in the constructor of a derived class.": {
       "category": "Error",
       "code": 17006
     }

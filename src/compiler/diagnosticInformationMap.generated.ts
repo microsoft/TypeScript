@@ -613,6 +613,6 @@ namespace ts {
         JSX_attribute_expected: { code: 17003, category: DiagnosticCategory.Error, key: "JSX attribute expected." },
         Cannot_use_JSX_unless_the_jsx_flag_is_provided: { code: 17004, category: DiagnosticCategory.Error, key: "Cannot use JSX unless the '--jsx' flag is provided." },
         A_constructor_cannot_contain_a_super_call_when_its_class_extends_null: { code: 17005, category: DiagnosticCategory.Error, key: "A constructor cannot contain a 'super' call when its class extends 'null'" },
-        super_has_to_be_called_before_this_accessing: { code: 17006, category: DiagnosticCategory.Error, key: "'super' has to be called before 'this' accessing." },
+        super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class: { code: 17006, category: DiagnosticCategory.Error, key: "'super' must be called before accessing 'this' in the constructor of a derived class." },
     };
 }
