@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(3,16): error TS2334: 'this' cannot be referenced in a static property initializer.
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(14,9): error TS17006: 'super' has to be called before 'this' accessing.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(14,9): error TS17006: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(22,15): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(28,13): error TS2331: 'this' cannot be referenced in a module or namespace body.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(38,25): error TS2507: Type 'any' is not a constructor function type.
@@ -25,7 +25,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts(45,9): 
         constructor() {
             super(this); // Error
             ~~~~~~~~~~~~
-!!! error TS17006: 'super' has to be called before 'this' accessing.
+!!! error TS17006: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
