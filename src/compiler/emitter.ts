@@ -3329,7 +3329,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (!canDefineTempVariablesInPlace) {
                         recordTempDeclaration(identifier);
                     }
-                    emitAssignment(identifier, expr, /*shouldEmitCommaBeforeAssignment*/ emitCount++ > 0);
+                    emitAssignment(identifier, expr, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                    emitCount++;
                     return identifier;
                 }
 
@@ -3429,7 +3430,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value);
                     }
                     else {
-                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount++ > 0);
+                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                        emitCount++;
                     }
                 }
 
@@ -3498,7 +3500,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount++ > 0);
+                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount> 0);
+                        emitCount++;
                     }
                 }
             }
