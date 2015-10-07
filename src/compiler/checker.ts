@@ -13729,7 +13729,26 @@ namespace ts {
                     let declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                 }
-                getExportsOfModule(moduleSymbol); // Checks for export * conflicts
+                let exports = getExportsOfModule(moduleSymbol); // Checks for export * conflicts
+                for (let id in exports) {
+                    if (id === "__export") continue;
+                    if (!(exports[id].flags & SymbolFlags.Namespace || exports[id].flags & SymbolFlags.Interface) && exports[id].declarations.length > 1) { // 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, and interfaces)
+                        let exportedDeclarations: Declaration[] = [];
+                        for (let declaration of exports[id].declarations) {
+                            if (declaration.kind === SyntaxKind.FunctionDeclaration) {
+                                if (!(declaration as FunctionDeclaration).body) {
+                                    continue;
+                                }
+                            }
+                            exportedDeclarations.push(declaration);
+                        }
+                        if (exportedDeclarations.length > 1) {
+                            for (let declaration of exportedDeclarations) {
+                                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, id));
+                            }
+                        }
+                    }
+                }
                 links.exportsChecked = true;
             }
         }

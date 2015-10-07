@@ -892,6 +892,10 @@
         "category": "Error",
         "code": 2322
     },
+    "Cannot redeclare exported variable '{0}'.": {
+        "category": "Error",
+        "code": 2323
+    },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2324
