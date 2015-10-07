@@ -202,8 +202,8 @@ interface AnalyserNode extends AudioNode {
     smoothingTimeConstant: number;
     getByteFrequencyData(array: Uint8Array): void;
     getByteTimeDomainData(array: Uint8Array): void;
-    getFloatFrequencyData(array: any): void;
-    getFloatTimeDomainData(array: any): void;
+    getFloatFrequencyData(array: Float32Array): void;
+    getFloatTimeDomainData(array: Float32Array): void;
 }
 
 declare var AnalyserNode: {
@@ -290,7 +290,7 @@ interface AudioBuffer {
     length: number;
     numberOfChannels: number;
     sampleRate: number;
-    getChannelData(channel: number): any;
+    getChannelData(channel: number): Float32Array;
 }
 
 declare var AudioBuffer: {
@@ -334,7 +334,7 @@ interface AudioContext extends EventTarget {
     createMediaElementSource(mediaElement: HTMLMediaElement): MediaElementAudioSourceNode;
     createOscillator(): OscillatorNode;
     createPanner(): PannerNode;
-    createPeriodicWave(real: any, imag: any): PeriodicWave;
+    createPeriodicWave(real: Float32Array, imag: Float32Array): PeriodicWave;
     createScriptProcessor(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): ScriptProcessorNode;
     createStereoPanner(): StereoPannerNode;
     createWaveShaper(): WaveShaperNode;
@@ -392,7 +392,7 @@ interface AudioParam {
     linearRampToValueAtTime(value: number, endTime: number): void;
     setTargetAtTime(target: number, startTime: number, timeConstant: number): void;
     setValueAtTime(value: number, startTime: number): void;
-    setValueCurveAtTime(values: any, startTime: number, duration: number): void;
+    setValueCurveAtTime(values: Float32Array, startTime: number, duration: number): void;
 }
 
 declare var AudioParam: {
@@ -468,7 +468,7 @@ interface BiquadFilterNode extends AudioNode {
     frequency: AudioParam;
     gain: AudioParam;
     type: string;
-    getFrequencyResponse(frequencyHz: any, magResponse: any, phaseResponse: any): void;
+    getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
 }
 
 declare var BiquadFilterNode: {
@@ -10893,7 +10893,7 @@ declare var WEBGL_depth_texture: {
 }
 
 interface WaveShaperNode extends AudioNode {
-    curve: any;
+    curve: Float32Array;
     oversample: string;
 }
 
@@ -11080,34 +11080,34 @@ interface WebGLRenderingContext {
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, video: HTMLVideoElement): void;
     texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageData): void;
     uniform1f(location: WebGLUniformLocation, x: number): void;
-    uniform1fv(location: WebGLUniformLocation, v: any): void;
+    uniform1fv(location: WebGLUniformLocation, v: Float32Array): void;
     uniform1i(location: WebGLUniformLocation, x: number): void;
     uniform1iv(location: WebGLUniformLocation, v: Int32Array): void;
     uniform2f(location: WebGLUniformLocation, x: number, y: number): void;
-    uniform2fv(location: WebGLUniformLocation, v: any): void;
+    uniform2fv(location: WebGLUniformLocation, v: Float32Array): void;
     uniform2i(location: WebGLUniformLocation, x: number, y: number): void;
     uniform2iv(location: WebGLUniformLocation, v: Int32Array): void;
     uniform3f(location: WebGLUniformLocation, x: number, y: number, z: number): void;
-    uniform3fv(location: WebGLUniformLocation, v: any): void;
+    uniform3fv(location: WebGLUniformLocation, v: Float32Array): void;
     uniform3i(location: WebGLUniformLocation, x: number, y: number, z: number): void;
     uniform3iv(location: WebGLUniformLocation, v: Int32Array): void;
     uniform4f(location: WebGLUniformLocation, x: number, y: number, z: number, w: number): void;
-    uniform4fv(location: WebGLUniformLocation, v: any): void;
+    uniform4fv(location: WebGLUniformLocation, v: Float32Array): void;
     uniform4i(location: WebGLUniformLocation, x: number, y: number, z: number, w: number): void;
     uniform4iv(location: WebGLUniformLocation, v: Int32Array): void;
-    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: any): void;
-    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: any): void;
-    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: any): void;
+    uniformMatrix2fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array): void;
+    uniformMatrix3fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array): void;
+    uniformMatrix4fv(location: WebGLUniformLocation, transpose: boolean, value: Float32Array): void;
     useProgram(program: WebGLProgram): void;
     validateProgram(program: WebGLProgram): void;
     vertexAttrib1f(indx: number, x: number): void;
-    vertexAttrib1fv(indx: number, values: any): void;
+    vertexAttrib1fv(indx: number, values: Float32Array): void;
     vertexAttrib2f(indx: number, x: number, y: number): void;
-    vertexAttrib2fv(indx: number, values: any): void;
+    vertexAttrib2fv(indx: number, values: Float32Array): void;
     vertexAttrib3f(indx: number, x: number, y: number, z: number): void;
-    vertexAttrib3fv(indx: number, values: any): void;
+    vertexAttrib3fv(indx: number, values: Float32Array): void;
     vertexAttrib4f(indx: number, x: number, y: number, z: number, w: number): void;
-    vertexAttrib4fv(indx: number, values: any): void;
+    vertexAttrib4fv(indx: number, values: Float32Array): void;
     vertexAttribPointer(indx: number, size: number, type: number, normalized: boolean, stride: number, offset: number): void;
     viewport(x: number, y: number, width: number, height: number): void;
     ACTIVE_ATTRIBUTES: number;

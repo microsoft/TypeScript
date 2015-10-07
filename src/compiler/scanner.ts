@@ -224,7 +224,7 @@ namespace ts {
         }
 
         // Perform binary search in one of the Unicode range maps
-        let lo: number = 0;
+        let lo = 0;
         let hi: number = map.length;
         let mid: number;
 
@@ -657,7 +657,7 @@ namespace ts {
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
-    
+
     /** Optionally, get the shebang */
     export function getShebang(text: string): string {
         return shebangTriviaRegex.test(text)
@@ -1361,7 +1361,9 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                         }
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash && languageVariant === LanguageVariant.JSX) {
+                        if (languageVariant === LanguageVariant.JSX &&
+                                text.charCodeAt(pos + 1) === CharacterCodes.slash &&
+                                text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
                             return pos += 2, token = SyntaxKind.LessThanSlashToken;
                         }
                         return pos++, token = SyntaxKind.LessThanToken;

@@ -129,12 +129,12 @@ class MyClass {
 >1 : number
 
     p = (n) => n && this;
->p : (n: any) => MyClass
->(n) => n && this : (n: any) => MyClass
+>p : (n: any) => this
+>(n) => n && this : (n: any) => this
 >n : any
->n && this : MyClass
+>n && this : this
 >n : any
->this : MyClass
+>this : this
 
     fn() {
 >fn : () => void
@@ -148,12 +148,12 @@ class MyClass {
 >1 : number
 
         var p = (n) => n && this;
->p : (n: any) => MyClass
->(n) => n && this : (n: any) => MyClass
+>p : (n: any) => this
+>(n) => n && this : (n: any) => this
 >n : any
->n && this : MyClass
+>n && this : this
 >n : any
->this : MyClass
+>this : this
     }
 }
 

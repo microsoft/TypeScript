@@ -41,6 +41,7 @@ async function func(): Promise<void> {
     "before";
     var b = (await pfn)(a, a, a);
 >b : Symbol(b, Decl(awaitCallExpression4_es6.ts, 8, 7))
+>pfn : Symbol(pfn, Decl(awaitCallExpression4_es6.ts, 4, 11))
 >a : Symbol(a, Decl(awaitCallExpression4_es6.ts, 0, 11))
 >a : Symbol(a, Decl(awaitCallExpression4_es6.ts, 0, 11))
 >a : Symbol(a, Decl(awaitCallExpression4_es6.ts, 0, 11))
