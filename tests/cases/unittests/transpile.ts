@@ -43,7 +43,7 @@ module ts {
             }
             
             if (canUseOldTranspile) {
-                let diagnostics: Diagnostic[] = [];                
+                let diagnostics: Diagnostic[] = [];
                 let transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);                
                 checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
                 if (testSettings.expectedOutput) {
@@ -57,10 +57,10 @@ module ts {
             }
             
             if (!transpileOptions.fileName) {
-                transpileOptions.fileName = "file.ts";
+                transpileOptions.fileName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
             }
             
-            transpileOptions.compilerOptions.sourceMap = true;            
+            transpileOptions.compilerOptions.sourceMap = true;
             let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
             assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
             
@@ -68,7 +68,7 @@ module ts {
             let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
                         
             if (testSettings.expectedOutput !== undefined) {
-                assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);    
+                assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);
             }
             else {
                 // expected output is not set, just verify that output text has sourceMappingURL as a last line
@@ -78,7 +78,7 @@ module ts {
                     assert.equal(output, expectedSourceMappingUrlLine);
                 }
                 else {
-                    let suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine                                
+                    let suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine
                     assert.isTrue(output.indexOf(suffix, output.length - suffix.length) !== -1);
                 }
             }       
@@ -273,6 +273,63 @@ var x = 0;`,
 
         it("Supports backslashes in file name", () => {
             test("var x", { expectedOutput: "var x;\r\n", options: { fileName: "a\\b.ts" }});
+        });
+        
+        it("transpile file as 'tsx' if 'jsx' is specified", () => {
+            let input = `import * as React from 'react';\r\n` +
+`export default class Test extends React.Component<any, any> {\r\n` +
+`  constructor(props: any) {\r\n` +
+`    this.state = {\r\n` +
+`      text : undefined\r\n` +
+`    };\r\n` +
+`    super();\r\n` +
+`  }\r\n` +
+`  handleClick(e) {\r\n` +
+`    e.preventDefault();\r\n` +
+`    this.setState({\r\n` +
+`      text : 'just testing'\r\n` +
+`    });\r\n` +
+`  }\r\n` +
+`  render() {\r\n` +
+`    return (\r\n` +
+`        <div>\r\n` +
+`         <a href="#" onClick={this.handleClick}>\r\n` +
+`            {'test'}\r\n` +
+`          </a>\r\n` +
+`        </div>\r\n` +
+`    );\r\n` +
+`  }\r\n` +
+`}`;
+            let output = `var __extends = (this && this.__extends) || function (d, b) {\r\n` +
+`    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];\r\n` +
+`    function __() { this.constructor = d; }\r\n` +
+`    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());\r\n` +
+`};\r\n` +
+`var React = require('react');\r\n` +
+`var Test = (function (_super) {\r\n` +
+`    __extends(Test, _super);\r\n` +
+`    function Test(props) {\r\n` +
+`        this.state = {\r\n` +
+`            text: undefined\r\n` +
+`        };\r\n` +
+`        _super.call(this);\r\n` +
+`    }\r\n` +
+`    Test.prototype.handleClick = function (e) {\r\n` +
+`        e.preventDefault();\r\n` +
+`        this.setState({\r\n` +
+`            text: 'just testing'\r\n` +
+`        });\r\n` +
+`    };\r\n` +
+`    Test.prototype.render = function () {\r\n` +
+`        return (React.createElement("div", null, React.createElement("a", {"href": "#", "onClick": this.handleClick}, 'test')));\r\n` +
+`    };\r\n` +
+`    return Test;\r\n` +
+`})(React.Component);\r\n` +
+`exports["default"] = Test;\r\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.CarriageReturnLineFeed } }
+            })
         });
     });
 }
