@@ -121,7 +121,7 @@ namespace ts.formatting {
 
     function findOutermostParent(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node {
         let precedingToken = findPrecedingToken(position, sourceFile);
-        
+
         // when it is claimed that trigger character was typed at given position 
         // we verify that there is a token with a matching kind whose end is equal to position (because the character was just typed).
         // If this condition is not hold - then trigger character was typed in some other context, 
@@ -151,7 +151,7 @@ namespace ts.formatting {
 
         return current;
     }
-    
+
     // Returns true if node is a element in some list in parent
     // i.e. parent is class declaration with the list of members and node is one of members.
     function isListElement(parent: Node, node: Node): boolean {
@@ -198,7 +198,7 @@ namespace ts.formatting {
         if (!errors.length) {
             return rangeHasNoErrors;
         }
-        
+
         // pick only errors that fall in range
         let sorted = errors
             .filter(d => rangeOverlapsWithStartEnd(originalRange, d.start, d.start + d.length))
@@ -340,6 +340,12 @@ namespace ts.formatting {
             let delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
             processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
         }
+        else {
+            let leadingTrivia = formattingScanner.readTokenInfo(undefined).leadingTrivia;
+            if (leadingTrivia) {
+                trimWhitespacesInEmptyLineTrivia(leadingTrivia, true);
+            }
+        }
 
         formattingScanner.close();
 
@@ -445,7 +451,7 @@ namespace ts.formatting {
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
-                    // fall-through
+                // fall-through
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
@@ -553,6 +559,13 @@ namespace ts.formatting {
                     break;
                 }
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
+            }
+
+            if (!formattingScanner.isOnToken()) {
+                let leadingTrivia = formattingScanner.readTokenInfo(node).leadingTrivia;
+                if (leadingTrivia) {
+                    trimWhitespacesInEmptyLineTrivia(leadingTrivia, true);
+                }
             }
 
             function processChildNode(
@@ -686,6 +699,7 @@ namespace ts.formatting {
                 let indentToken = false;
 
                 if (currentTokenInfo.leadingTrivia) {
+                    trimWhitespacesInEmptyLineTrivia(currentTokenInfo.leadingTrivia, formattingScanner.lastTrailingTriviaWasNewLine());
                     processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, dynamicIndentation);
                 }
 
@@ -838,8 +852,8 @@ namespace ts.formatting {
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
                 trimTrailingWhitespaces =
-                (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
-                rule.Flag !== RuleFlags.CanDeleteNewLines;
+                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
+                    rule.Flag !== RuleFlags.CanDeleteNewLines;
             }
             else {
                 trimTrailingWhitespaces = true;
@@ -946,6 +960,31 @@ namespace ts.formatting {
                     Debug.assert(pos === lineStartPosition || !isWhiteSpace(sourceFile.text.charCodeAt(pos)));
                     recordDelete(pos + 1, lineEndPosition - pos);
                 }
+            }
+        }
+
+        function trimWhitespacesInEmptyLineTrivia(trivia: TextRangeWithKind[], lastTraviaWasNewLine: boolean) {
+            let targetCandidate: TextRangeWithKind;
+
+            for (let triviaItem of trivia) {
+                switch (triviaItem.kind) {
+                    case SyntaxKind.WhitespaceTrivia:
+                        targetCandidate = lastTraviaWasNewLine ? triviaItem : undefined;
+                        break;
+                    case SyntaxKind.NewLineTrivia:
+                        if (targetCandidate) {
+                            recordDelete(targetCandidate.pos, targetCandidate.end - targetCandidate.pos);
+                            targetCandidate = undefined;
+                        }
+                        break;
+                    default:
+                        targetCandidate = undefined;
+                        break;
+                }
+                lastTraviaWasNewLine = triviaItem.kind === SyntaxKind.NewLineTrivia;
+            }
+            if (targetCandidate && targetCandidate.end === sourceFile.end) {
+                recordDelete(targetCandidate.pos, targetCandidate.end - targetCandidate.pos);
             }
         }
 
