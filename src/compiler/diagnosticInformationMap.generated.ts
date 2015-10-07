@@ -618,6 +618,7 @@ namespace ts {
         JSX_attribute_expected: { code: 17003, category: DiagnosticCategory.Error, key: "JSX attribute expected." },
         Cannot_use_JSX_unless_the_jsx_flag_is_provided: { code: 17004, category: DiagnosticCategory.Error, key: "Cannot use JSX unless the '--jsx' flag is provided." },
         A_constructor_cannot_contain_a_super_call_when_its_class_extends_null: { code: 17005, category: DiagnosticCategory.Error, key: "A constructor cannot contain a 'super' call when its class extends 'null'" },
-        Left_hand_side_of_Asterisk_Asterisk_cannot_be_a_simple_unary_expression_Consider_parenthesize_the_expression: { code: 17006, category: DiagnosticCategory.Error, key: "Left hand side of '**' cannot be a simple unary expression. Consider parenthesize the expression." },
+        An_unary_expression_with_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses: { code: 17006, category: DiagnosticCategory.Error, key: "An unary expression with '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses." },
+        Type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses: { code: 17006, category: DiagnosticCategory.Error, key: "Type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses." },
     };
 }

@@ -3206,9 +3206,17 @@ namespace ts {
                     incrementExpression;
             }
             
+            let unaryOperator = token;
             let simpleUnaryExpression = parseSimpleUnaryExpression();
             if (token === SyntaxKind.AsteriskAsteriskToken) {
-                parseErrorAtCurrentToken(Diagnostics.Left_hand_side_of_Asterisk_Asterisk_cannot_be_a_simple_unary_expression_Consider_parenthesize_the_expression)
+                let diagnostic: Diagnostic;
+                let start = skipTrivia(sourceText, simpleUnaryExpression.pos);
+                if (simpleUnaryExpression.kind === SyntaxKind.TypeAssertionExpression) {
+                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.Type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
+                }
+                else {
+                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.An_unary_expression_with_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
+                }
             }
             return simpleUnaryExpression;
         }
@@ -3240,16 +3248,10 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
-                        // This is modified UnaryExpression grammar in TypeScript
-                        //  UnaryExpression (modified):
-                        //      < type > UnaryExpression
-                        return parseTypeAssertion();
-                    }
-                    if (lookAhead(nextTokenIsIdentifierOrKeyword)) {
-                        return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
-                    }
-                    // Fall through
+                    // This is modified UnaryExpression grammar in TypeScript
+                    //  UnaryExpression (modified):
+                    //      < type > UnaryExpression
+                    return parseTypeAssertion();
                 default:
                     return parseIncrementExpression();
             }
@@ -3276,8 +3278,13 @@ namespace ts {
                 case SyntaxKind.DeleteKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
+                    return false
                 case SyntaxKind.LessThanToken:
-                    return false;
+                    // TODO (yuisu): comment
+                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
+                        return false;
+                    }
+                    // Fall through
                 default:
                     return true;
             }
@@ -3302,20 +3309,23 @@ namespace ts {
                 node.operand = parseLeftHandSideExpressionOrHigher();
                 return finishNode(node);
             }
-            else {
-                let expression = parseLeftHandSideExpressionOrHigher();
-
-                Debug.assert(isLeftHandSideExpression(expression));
-                if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                    let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
-                    node.operand = expression;
-                    node.operator = token;
-                    nextToken();
-                    return finishNode(node);
-                }
-
-                return expression;
+            else if (sourceFile.languageVariant === LanguageVariant.JSX && token === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeyword)) {
+                // TODO (yuisu) : comment
+                return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
             }
+
+            let expression = parseLeftHandSideExpressionOrHigher();
+
+            Debug.assert(isLeftHandSideExpression(expression));
+            if ((token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
+                let node = <PostfixUnaryExpression>createNode(SyntaxKind.PostfixUnaryExpression, expression.pos);
+                node.operand = expression;
+                node.operator = token;
+                nextToken();
+                return finishNode(node);
+            }
+
+            return expression;
         }
 
         function parseLeftHandSideExpressionOrHigher(): LeftHandSideExpression {
