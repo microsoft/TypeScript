@@ -8,7 +8,7 @@ export module a {
 }
 
 //// [es6ImportNamedImportInIndirectExportAssignment_1.ts]
-import { a } from "es6ImportNamedImportInIndirectExportAssignment_0";
+import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
 import x = a;
 export = x;
 
@@ -23,7 +23,7 @@ var a;
     a.c = c;
 })(a = exports.a || (exports.a = {}));
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]
-var es6ImportNamedImportInIndirectExportAssignment_0_1 = require("es6ImportNamedImportInIndirectExportAssignment_0");
+var es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
 var x = es6ImportNamedImportInIndirectExportAssignment_0_1.a;
 module.exports = x;
 
@@ -34,6 +34,6 @@ export declare module a {
     }
 }
 //// [es6ImportNamedImportInIndirectExportAssignment_1.d.ts]
-import { a } from "es6ImportNamedImportInIndirectExportAssignment_0";
+import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
 import x = a;
 export = x;

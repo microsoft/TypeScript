@@ -1,0 +1,14 @@
+=== tests/cases/compiler/enumWithoutInitializerAfterComputedMember.ts ===
+enum E {
+>E : E
+
+    a,
+>a : E
+
+    b = a,
+>b : E
+>a : E
+
+    c
+>c : E
+}

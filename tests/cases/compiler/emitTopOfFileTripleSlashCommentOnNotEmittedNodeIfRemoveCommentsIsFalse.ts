@@ -1,4 +1,4 @@
-﻿// @comments: true
+﻿// @removeComments: false
 
 // @Filename: file0.ts
 var x = 10

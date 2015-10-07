@@ -92,7 +92,7 @@ var M;
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
 function genericFunc(x) { }
-genericFunc < this > (undefined); // Should be an error
+genericFunc(undefined); // Should be an error
 var ErrClass3 = (function (_super) {
     __extends(ErrClass3, _super);
     function ErrClass3() {

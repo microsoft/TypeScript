@@ -1,8 +1,8 @@
 === tests/cases/compiler/aliasUsage1_main.ts ===
-import Backbone = require("aliasUsage1_backbone");
+import Backbone = require("./aliasUsage1_backbone");
 >Backbone : typeof Backbone
 
-import moduleA = require("aliasUsage1_moduleA");
+import moduleA = require("./aliasUsage1_moduleA");
 >moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
@@ -26,7 +26,7 @@ class C2 {
 
         return this.x;
 >this.x : IHasVisualizationModel
->this : C2
+>this : this
 >x : IHasVisualizationModel
     }
     set A(x) {
@@ -48,7 +48,7 @@ export class Model {
 }
 
 === tests/cases/compiler/aliasUsage1_moduleA.ts ===
-import Backbone = require("aliasUsage1_backbone");
+import Backbone = require("./aliasUsage1_backbone");
 >Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {

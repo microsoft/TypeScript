@@ -5,7 +5,7 @@ export function bar(a: foo.Foo) { }
 >foo : any
 >Foo : foo.Foo
 
-import foo = require("declFileAliasUseBeforeDeclaration_foo");
+import foo = require("./declFileAliasUseBeforeDeclaration_foo");
 >foo : typeof foo
 
 === tests/cases/compiler/declFileAliasUseBeforeDeclaration_foo.ts ===

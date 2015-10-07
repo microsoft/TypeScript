@@ -1,5 +1,5 @@
 ﻿// @module: commonjs
-// @includebuiltfile: typescript.d.ts
+// @includebuiltfile: typescript_standalone.d.ts
 // @stripInternal:true
 
 /*

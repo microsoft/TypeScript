@@ -1,6 +1,6 @@
 === tests/cases/compiler/elidingImportNames_test.ts ===
 
-import a = require('elidingImportNames_main'); // alias used in typeof
+import a = require('./elidingImportNames_main'); // alias used in typeof
 >a : typeof a
 
 var b = a;
@@ -11,7 +11,7 @@ var x: typeof a;
 >x : typeof a
 >a : typeof a
 
-import a2 = require('elidingImportNames_main1'); // alias not used in typeof
+import a2 = require('./elidingImportNames_main1'); // alias not used in typeof
 >a2 : typeof a2
 
 var b2 = a2;

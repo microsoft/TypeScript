@@ -20,7 +20,7 @@ class c1 {
     private _forEachBindingContext(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
 >_forEachBindingContext : Symbol(_forEachBindingContext, Decl(declFilePrivateMethodOverloads.ts, 4, 10), Decl(declFilePrivateMethodOverloads.ts, 5, 101), Decl(declFilePrivateMethodOverloads.ts, 6, 113))
 >bindingContextArray : Symbol(bindingContextArray, Decl(declFilePrivateMethodOverloads.ts, 6, 35))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
 >fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 6, 72))
 >bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 6, 78))
@@ -44,7 +44,7 @@ class c1 {
     private overloadWithArityDifference(bindingContextArray: Array<IContext>, fn: (bindingContext: IContext) => void);
 >overloadWithArityDifference : Symbol(overloadWithArityDifference, Decl(declFilePrivateMethodOverloads.ts, 9, 5), Decl(declFilePrivateMethodOverloads.ts, 11, 66), Decl(declFilePrivateMethodOverloads.ts, 12, 118))
 >bindingContextArray : Symbol(bindingContextArray, Decl(declFilePrivateMethodOverloads.ts, 12, 40))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >IContext : Symbol(IContext, Decl(declFilePrivateMethodOverloads.ts, 0, 0))
 >fn : Symbol(fn, Decl(declFilePrivateMethodOverloads.ts, 12, 77))
 >bindingContext : Symbol(bindingContext, Decl(declFilePrivateMethodOverloads.ts, 12, 83))

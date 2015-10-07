@@ -376,6 +376,7 @@ namespace ts {
         OctalLiteral =      0x00010000,  // Octal numeric literal
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
+        ContainsThis =      0x00080000,  // Interface contains references to "this"
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -1284,7 +1285,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules: Map<string>;
+        /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
     }
 
@@ -1316,7 +1317,7 @@ namespace ts {
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
-        getRootFileNames(): string[]
+        getRootFileNames(): string[];
 
         /**
          * Get a list of files in the program
@@ -1496,6 +1497,7 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -1596,7 +1598,6 @@ namespace ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
@@ -1715,6 +1716,7 @@ namespace ts {
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
+        bindingElement?: BindingElement;    // Binding element associated with property symbol
     }
 
     /* @internal */
@@ -1798,6 +1800,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ThisType                = 0x02000000,  // This type
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1814,11 +1817,14 @@ namespace ts {
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
 
+    export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
+
     // Properties common to all types
     export interface Type {
-        flags: TypeFlags;               // Flags
-        /* @internal */ id: number;     // Unique ID
-        symbol?: Symbol;                // Symbol associated with type (if any)
+        flags: TypeFlags;                // Flags
+        /* @internal */ id: number;      // Unique ID
+        symbol?: Symbol;                 // Symbol associated with type (if any)
+        pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
     }
 
     /* @internal */
@@ -1840,6 +1846,7 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+        thisType: TypeParameter;                   // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
@@ -1854,10 +1861,17 @@ namespace ts {
         declaredNumberIndexType: Type;             // Declared numeric index type
     }
 
-    // Type references (TypeFlags.Reference)
+    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
+    // a "this" type, references to the class or interface are made using type references. The
+    // typeArguments property specififes the types to substitute for the type parameters of the
+    // class or interface and optionally includes an extra element that specifies the type to
+    // substitute for "this" in the resulting instantiation. When no extra argument is present,
+    // the type reference itself is substituted for "this". The typeArguments property is undefined
+    // if the class or interface has no type parameters and the reference isn't specifying an
+    // explicit "this" argument.
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments: Type[];  // Type reference type arguments
+        typeArguments: Type[];  // Type reference type arguments (undefined if none)
     }
 
     // Generic class and interface types
@@ -1867,8 +1881,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];          // Element types
-        baseArrayType: TypeReference;  // Array<T> where T is best common type of element types
+        elementTypes: Type[];  // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -1882,6 +1895,13 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType { }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
+
+    /* @internal */
+    // An instantiated anonymous type has a target and a mapper
+    export interface AnonymousType extends ObjectType {
+        target?: AnonymousType;  // Instantiation target
+        mapper?: TypeMapper;     // Instantiation mapper
+    }
 
     /* @internal */
     // Resolved object, union, or intersection type
@@ -2060,7 +2080,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
-        moduleResolution?: ModuleResolutionKind
+        moduleResolution?: ModuleResolutionKind;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
@@ -2075,6 +2095,7 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+        ES6 = 5,
     }
 
     export const enum JsxEmit {
@@ -2115,16 +2136,29 @@ namespace ts {
     }
 
     /* @internal */
-    export interface CommandLineOption {
+    export interface CommandLineOptionBase {
         name: string;
         type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
         isFilePath?: boolean;               // True if option value is a path or fileName
         shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;    // The message describing what the command line switch does
         paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
-        error?: DiagnosticMessage;          // The error given when the argument does not fit a customized 'type'
         experimental?: boolean;
     }
+
+    /* @internal */
+    export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
+        type: string;                   // "string" | "number" | "boolean"
+    }
+
+    /* @internal */
+    export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
+        type: Map<number>;             // an object literal mapping named values to actual values
+        error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
 
     /* @internal */
     export const enum CharacterCodes {
@@ -2272,6 +2306,17 @@ namespace ts {
 
     export interface ResolvedModule {
         resolvedFileName: string;
+        /*
+         * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
+         * - be a .d.ts file 
+         * - use top level imports\exports
+         * - don't use tripleslash references
+         */
+        isExternalLibraryImport?: boolean;
+    }
+
+    export interface ResolvedModuleWithFailedLookupLocations {
+        resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
     }
 
@@ -2294,7 +2339,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string): string[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }
 
     export interface TextSpan {

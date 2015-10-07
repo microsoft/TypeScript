@@ -76,10 +76,11 @@ namespace ts {
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
+                "es6": ModuleKind.ES6,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es6
         },
         {
             name: "newLine",
@@ -243,8 +244,9 @@ namespace ts {
                 "node": ModuleResolutionKind.NodeJs,
                 "classic": ModuleResolutionKind.Classic
             },
-            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_or_classic_TypeScript_pre_1_6
-        }        
+            description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
+            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        }
     ];
 
     /* @internal */
@@ -327,7 +329,7 @@ namespace ts {
                                     options[opt.name] = map[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                 }
                         }
                     }
@@ -440,12 +442,15 @@ namespace ts {
                                     value = optType[key];
                                 }
                                 else {
-                                    errors.push(createCompilerDiagnostic(opt.error));
+                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
                                     value = 0;
                                 }
                             }
                             if (opt.isFilePath) {
                                 value = normalizePath(combinePaths(basePath, value));
+                                if (value === "") {
+                                    value = ".";
+                                }
                             }
                             options[opt.name] = value;
                         }
@@ -468,7 +473,7 @@ namespace ts {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));                    
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));
                 }
             }
             else {

@@ -8,6 +8,7 @@ var x = foo1;
 
 class y extends x {}
 >y : Symbol(y, Decl(foo2.ts, 1, 13))
+>x : Symbol(x, Decl(foo2.ts, 1, 3))
 
 === tests/cases/conformance/classes/classExpressions/foo1.ts ===
 class x{}

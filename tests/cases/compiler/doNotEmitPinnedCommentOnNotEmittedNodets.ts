@@ -1,4 +1,4 @@
-﻿// @comments: false
+﻿// @removeComments: true
 
 class C {
     /*! remove pinned comment anywhere else */

@@ -1,8 +1,8 @@
 === tests/cases/compiler/aliasUsageInGenericFunction_main.ts ===
-import Backbone = require("aliasUsageInGenericFunction_backbone");
+import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : typeof Backbone
 
-import moduleA = require("aliasUsageInGenericFunction_moduleA");
+import moduleA = require("./aliasUsageInGenericFunction_moduleA");
 >moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
@@ -52,7 +52,7 @@ export class Model {
 }
 
 === tests/cases/compiler/aliasUsageInGenericFunction_moduleA.ts ===
-import Backbone = require("aliasUsageInGenericFunction_backbone");
+import Backbone = require("./aliasUsageInGenericFunction_backbone");
 >Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {

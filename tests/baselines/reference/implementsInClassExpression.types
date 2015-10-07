@@ -1,0 +1,16 @@
+=== tests/cases/compiler/implementsInClassExpression.ts ===
+interface Foo {
+>Foo : Foo
+
+    doThing(): void;
+>doThing : () => void
+}
+
+let cls = class implements Foo {
+>cls : typeof (Anonymous class)
+>class implements Foo {    doThing() { }} : typeof (Anonymous class)
+>Foo : Foo
+
+    doThing() { }
+>doThing : () => void
+}
