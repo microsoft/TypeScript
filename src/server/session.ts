@@ -208,13 +208,8 @@ module ts.server {
             var payload = JSON.stringify(data);
             
             // TODO: stop logging this locally
-            host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json', (err, data) => {
-                if (err) {
-                    host.writeFile('C:\\throwaway\\errorLog.txt', err ? 'err: ' + err : 'data: ' + data, false);
-                }
-            });
-            host.writeFile('C:\\throwaway\\appLog.txt', payload, false);
-
+            host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json');
+            
             eventCounts = {};
             properties = {};
             dtsCount = 0;
@@ -426,36 +421,39 @@ module ts.server {
 
             try {
                 if (this.host.https && /\.d\.ts$/i.test(file)) { // Is this a .d.ts file?
-                    if (this.dtsVersionHistory === undefined && !this.fetchingDts) { // Do we need to download the version history?
+                    // only download once per session and if we're not in the process of downloading already
+                    if (this.dtsVersionHistory === undefined && !this.fetchingDts) { 
                         var filename = this.host.getTempDir() + '/dts-versions.json';
                         var indexUrl = 'https://typescript-dts-service.azurewebsites.net/api/index/';
+                        var fileWriteTime: number = null;
                         if (this.host.fileExists(filename)) {
                             if (this.host.getFileWriteTime) {
                                 // Use file timestamp to avoid re-downloading entire index our copy is up-to-date
-                                indexUrl = indexUrl + this.host.getFileWriteTime(filename);
+                                fileWriteTime = this.host.getFileWriteTime(filename);
+                                indexUrl = indexUrl + fileWriteTime;
                             }
+
                             // Read index from disk
                             this.dtsVersionHistory = JSON.parse(this.host.readFile(filename, 'utf-8'));
                             doUpToDateCheck();
-                        } else {
-                            // TODO: need to actually get a new file even if it exists based on age
-                            // Fetch from web
-                            this.fetchingDts = true;
-                            
-                            this.host.https(indexUrl, (err, data) => {
-                                this.fetchingDts = false;
-                                if (err) {
-                                    // Define this so we don't retry continuously
-                                    this.dtsVersionHistory = [];
-                                } else {
-                                    if (data.length > 0) { // length will be 0 if we're up-to-date
-                                        //this.host.writeFile('C:\\throwaway\\rawdata.txt', data)
-                                        this.host.writeFile(filename, data);
-                                        this.dtsVersionHistory = JSON.parse(data);
-                                    }
-                                }
-                            });
                         }
+
+                        // Fetch from web
+                        this.fetchingDts = true;
+
+                        this.host.https(indexUrl, (err, data) => {
+                            this.fetchingDts = false;
+                            if (err) {
+                                // Define this so we don't retry continuously
+                                this.dtsVersionHistory = [];
+                            } else {
+                                if (data && data != 'null') { // server returns null string if we already have the latest index
+                                    this.host.writeFile(filename, data);
+                                    this.dtsVersionHistory = JSON.parse(data);
+                                    doUpToDateCheck();
+                                }
+                            }                            
+                        });
                     } else if (this.dtsVersionHistory) {
                         doUpToDateCheck();
                     }
