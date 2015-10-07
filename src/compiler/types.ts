@@ -695,7 +695,6 @@ namespace ts {
     // @kind(SyntaxKind.Constructor)
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         body?: FunctionBody;
-        hasSeenSuperBeforeThis: boolean;  // TODDO (yuisu): comment
     }
 
     // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
@@ -2031,6 +2030,8 @@ namespace ts {
         BlockScopedBindingInLoop    = 0x00004000,
         LexicalModuleMergesWithClass = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithBlockScopedBindingCapturedInFunction = 0x00010000, // Loop that contains block scoped variable captured in closure
+        HasSeenSuperBeforeThis      = 0x00020000,  // Set during the binding if the 'super' is used before 'this' in constructor function
+        HasSeenThisCall             = 0x00040000,  // Set during the binding when encounter 'this'
     }
 
     /* @internal */

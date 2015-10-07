@@ -6859,9 +6859,8 @@ namespace ts {
                 //          (()=>this);  // No Error
                 //          super();
                 //      }
-                if ((<ConstructorDeclaration>container).hasSeenSuperBeforeThis === undefined) {
-                    (<ConstructorDeclaration>container).hasSeenSuperBeforeThis = false;
-                }
+                let nodeLinks = getNodeLinks(container);
+                nodeLinks.flags |= NodeCheckFlags.HasSeenThisCall;
             }
 
             // Now skip arrow functions to get the "real" owner of 'this'.
@@ -9605,8 +9604,12 @@ namespace ts {
             const signature = getResolvedSignature(node);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 let containgFunction = getContainingFunction(node.expression);
-                if (containgFunction && containgFunction.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>containgFunction).hasSeenSuperBeforeThis === undefined) {
-                    (<ConstructorDeclaration>containgFunction).hasSeenSuperBeforeThis = true;
+
+                if (containgFunction && containgFunction.kind === SyntaxKind.Constructor) {
+                    let nodeLinks = getNodeLinks(containgFunction);
+                    if (!(nodeLinks.flags & NodeCheckFlags.HasSeenThisCall)) {
+                        nodeLinks.flags |= NodeCheckFlags.HasSeenSuperBeforeThis;
+                    }
                 }
                 return voidType;
             }
@@ -11208,9 +11211,9 @@ namespace ts {
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
                     }
-                    else if (!node.hasSeenSuperBeforeThis) {
+                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)){
                         // In ES6, super inside constructor of class-declaration has to precede "this" accessing
-                        error(superCallStatement, Diagnostics.super_has_to_be_called_before_this_accessing);
+                        error(superCallStatement, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
                     }
                 }
                 else if (baseConstructorType !== nullType) {
