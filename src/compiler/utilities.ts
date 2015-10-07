@@ -1031,59 +1031,49 @@ namespace ts {
         return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
     }
 
-    function isCalledToNamedFunction(expression: Node, name: string): boolean;
-    function isCalledToNamedFunction(expression: CallExpression, name: string) {
+    function isCalledToNamedFunction(expression: Node, name: string): expression is CallExpression {
         return expression.kind === SyntaxKind.CallExpression &&
-                expression.expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>expression.expression).text === name;
+                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>(<CallExpression>expression).expression).text === name;
     }
 
-    export function isDefineCall(expression: Node): boolean;
-    export function isDefineCall(expression: CallExpression): boolean {
+    export function isDefineCall(expression: Node): expression is CallExpression {
         // In .js files, calls to the identifier 'define' are treated specially
         return expression &&
             expression.kind === SyntaxKind.CallExpression &&
-            expression.arguments.length > 0 &&
+            (<CallExpression>expression).arguments.length > 0 &&
             isInJavaScriptFile(expression) &&
             isCalledToNamedFunction(expression, "define");
     }
 
-    export function isAnonymousDefineCall(expression: Node): boolean;
-    export function isAnonymousDefineCall(expression: CallExpression): boolean {
+    export function isAnonymousDefineCall(expression: Node): expression is CallExpression {
         return isDefineCall(expression) &&
             expression.arguments.length > 0 &&
             expression.arguments[0].kind !== SyntaxKind.StringLiteral;
     }
 
-    export function isAmdRequireCall(expression: Node): boolean;
-    export function isAmdRequireCall(expression: CallExpression): boolean {
+    export function isAmdRequireCall(expression: Node): expression is CallExpression {
         // of the form 'require("name")' or 'require(arg1, arg2, ...)'
         return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, "require") && expression.arguments.length >= 1;
     }
 
-    export function isAmdExportAssignment(expression: Node): boolean;
-    export function isAmdExportAssignment(expression: BinaryExpression): boolean {
-        if (!isInJavaScriptFile(expression)) {
-            return false;
-        }
-        return (expression.kind === SyntaxKind.BinaryExpression) &&
-            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
-            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === "exports");
+    export function isAmdExportAssignment(expression: Node): boolean {
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
     }
 
-    export function isCommonJsExportsAssignment(expression: Node): boolean;
-    export function isCommonJsExportsAssignment(expression: BinaryExpression): boolean {
-        if (!isInJavaScriptFile(expression)) {
-            return false;
-        }
-        return (expression.kind === SyntaxKind.BinaryExpression) &&
-            (expression.operatorToken.kind === SyntaxKind.EqualsToken) &&
-            (expression.left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>expression.left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>expression.left).expression)).text === "module") &&
-            ((<PropertyAccessExpression>expression.left).name.text === "exports");
+    export function isCommonJsExportsAssignment(expression: Node): boolean {
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
     }
 
     export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
