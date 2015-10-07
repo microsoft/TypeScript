@@ -57,7 +57,9 @@ class TypeWriterWalker {
                     symbolString += ", ";
                     let declSourceFile = declaration.getSourceFile();
                     let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
-                    symbolString += `Decl(${ ts.getBaseFileName(declSourceFile.fileName) }, ${ declLineAndCharacter.line }, ${ declLineAndCharacter.character })`;
+                    let fileName = ts.getBaseFileName(declSourceFile.fileName);
+                    let isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
+                    symbolString += `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
                 }
             }
             symbolString += ")";

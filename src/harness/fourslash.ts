@@ -157,7 +157,7 @@ namespace FourSlash {
             return true;
         }
 
-        public setCancelled(numberOfCalls: number = 0): void {
+        public setCancelled(numberOfCalls = 0): void {
             ts.Debug.assert(numberOfCalls >= 0);
             this.numberOfCallsBeforeCancellation = numberOfCalls;
         }
@@ -800,7 +800,7 @@ namespace FourSlash {
             this.raiseError(`verifyReferencesAtPositionListContains failed - could not find the item: ${JSON.stringify(missingItem)} in the returned list: (${JSON.stringify(references)})`);
         }
 
-        public verifyReferencesCountIs(count: number, localFilesOnly: boolean = true) {
+        public verifyReferencesCountIs(count: number, localFilesOnly = true) {
             this.taoInvalidReason = "verifyReferences NYI";
 
             let references = this.getReferencesAtCaret();

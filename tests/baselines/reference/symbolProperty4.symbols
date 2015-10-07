@@ -3,13 +3,13 @@ var x = {
 >x : Symbol(x, Decl(symbolProperty4.ts, 0, 3))
 
     [Symbol()]: 0,
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3873, 52), Decl(lib.d.ts, 3979, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [Symbol()]() { },
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3873, 52), Decl(lib.d.ts, 3979, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     get [Symbol()]() {
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3873, 52), Decl(lib.d.ts, 3979, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         return 0;
     }

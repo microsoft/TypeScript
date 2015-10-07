@@ -6,7 +6,7 @@ declare function foo<T, U>(x: T, fun: () => Iterable<(x: T) => U>, fun2: (y: U) 
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 0, 27))
 >T : Symbol(T, Decl(generatorTypeCheck46.ts, 0, 21))
 >fun : Symbol(fun, Decl(generatorTypeCheck46.ts, 0, 32))
->Iterable : Symbol(Iterable, Decl(lib.d.ts, 4429, 1))
+>Iterable : Symbol(Iterable, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 0, 54))
 >T : Symbol(T, Decl(generatorTypeCheck46.ts, 0, 21))
 >U : Symbol(U, Decl(generatorTypeCheck46.ts, 0, 23))
@@ -21,15 +21,15 @@ foo("", function* () {
 
     yield* {
         *[Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3923, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3873, 52), Decl(lib.d.ts, 3979, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3923, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
             yield x => x.length
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
->x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
         }
     }
 }, p => undefined); // T is fixed, should be string

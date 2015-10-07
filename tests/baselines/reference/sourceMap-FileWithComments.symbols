@@ -25,9 +25,9 @@ module Shapes {
         // Instance member
         getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
 >getDist : Symbol(getDist, Decl(sourceMap-FileWithComments.ts, 12, 59))
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, 620, 27))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, 620, 27))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
 >this.x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))
 >this : Symbol(Point, Decl(sourceMap-FileWithComments.ts, 7, 15))
 >x : Symbol(x, Decl(sourceMap-FileWithComments.ts, 12, 20))

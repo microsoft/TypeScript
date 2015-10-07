@@ -1,4 +1,4 @@
-//// [classAbstractMultiLineDecl.ts]
+//// [classAbstractSingleLineDecl.ts]
 abstract class A {}
 
 abstract
@@ -12,17 +12,19 @@ new A;
 new B;
 new C;
 
-//// [classAbstractMultiLineDecl.js]
+//// [classAbstractSingleLineDecl.js]
 var A = (function () {
     function A() {
     }
     return A;
 })();
+abstract;
 var B = (function () {
     function B() {
     }
     return B;
 })();
+abstract;
 var C = (function () {
     function C() {
     }

@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of40.ts ===
 var map = new Map([["", true]]);
 >map : Symbol(map, Decl(for-of40.ts, 0, 3))
->Map : Symbol(Map, Decl(lib.d.ts, 4668, 1), Decl(lib.d.ts, 4691, 11))
+>Map : Symbol(Map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 for (var [k = "", v = false] of map) {
 >k : Symbol(k, Decl(for-of40.ts, 1, 10))
