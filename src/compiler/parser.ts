@@ -2366,7 +2366,7 @@ namespace ts {
                     let node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.StringLiteral:
-                    return <StringLiteral>parseLiteralNode(/*internName*/ true)
+                    return <StringLiteral>parseLiteralNode(/*internName*/ true);
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
