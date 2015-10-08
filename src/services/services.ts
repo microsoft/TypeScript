@@ -3322,11 +3322,16 @@ namespace ts {
                     return true;
                 }
 
-                return contextToken.kind === SyntaxKind.GreaterThanToken &&
-                    contextToken.parent &&
-                    (contextToken.parent.kind === SyntaxKind.JsxOpeningElement ||
-                        contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement ||
-                        contextToken.parent.kind === SyntaxKind.JsxClosingElement);
+                if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
+                    if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                        return true;
+                    }
+
+                    if (contextToken.parent.kind === SyntaxKind.JsxClosingElement || contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                        return contextToken.parent.parent && contextToken.parent.parent.kind === SyntaxKind.JsxElement;
+                    }
+                }
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
