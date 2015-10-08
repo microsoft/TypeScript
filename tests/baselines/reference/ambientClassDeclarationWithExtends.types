@@ -6,3 +6,23 @@ declare class B extends A { }
 >B : B
 >A : A
 
+declare class C {
+>C : C
+
+    public foo;
+>foo : any
+}
+namespace D { var x; }
+>D : typeof D
+>x : any
+
+declare class D extends C { }
+>D : D
+>C : C
+
+var d: C = new D();
+>d : C
+>C : C
+>new D() : D
+>D : typeof D
+
