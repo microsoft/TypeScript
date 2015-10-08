@@ -3280,10 +3280,11 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return false
                 case SyntaxKind.LessThanToken:
-                    // TODO (yuisu): comment
+                    // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
+                    // We are in JSX context and the token is part of JSXElement.
                     // Fall through
                 default:
                     return true;
@@ -3310,7 +3311,7 @@ namespace ts {
                 return finishNode(node);
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX && token === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeyword)) {
-                // TODO (yuisu) : comment
+                // JSXElement is part of primaryExpression
                 return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
             }
 
