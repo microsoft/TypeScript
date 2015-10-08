@@ -529,7 +529,13 @@ namespace ts {
                         let opt = optionNameMap[id];
                         let { hasValidValue, value } = parseJsonCompilerOption(opt, jsonOptions[id], errors);
                         if (hasValidValue) {
-                            options[opt.name] = opt.isFilePath ? normalizePath(combinePaths(basePath, <string>value)) : value;
+                            if (opt.isFilePath) {
+                                value = normalizePath(combinePaths(basePath, <string>value));
+                                if (value === "") {
+                                    value = ".";
+                                }
+                            }
+                            options[opt.name] = value;
                         }
                     }
                     else {

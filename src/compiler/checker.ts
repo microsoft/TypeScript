@@ -2209,7 +2209,7 @@ namespace ts {
 
         /**
          * Push an entry on the type resolution stack. If an entry with the given target and the given property name
-         * is already on the stack, and no entries in between already have a type, then a circularity has occurred. 
+         * is already on the stack, and no entries in between already have a type, then a circularity has occurred.
          * In this case, the result values of the existing entry and all entries pushed after it are changed to false,
          * and the value false is returned. Otherwise, the new entry is just pushed onto the stack, and true is returned.
          * In order to see if the same query has already been done before, the target object and the propertyName both
@@ -5243,7 +5243,7 @@ namespace ts {
                     // Only want to compare the construct signatures for abstractness guarantees.
 
                     // Because the "abstractness" of a class is the same across all construct signatures
-                    // (internally we are checking the corresponding declaration), it is enough to perform 
+                    // (internally we are checking the corresponding declaration), it is enough to perform
                     // the check and report an error once over all pairs of source and target construct signatures.
                     //
                     // sourceSig and targetSig are (possibly) undefined.
@@ -6642,7 +6642,7 @@ namespace ts {
             let needToCaptureLexicalThis = false;
 
             if (!isCallExpression) {
-                // adjust the container reference in case if super is used inside arrow functions with arbitrary deep nesting                                    
+                // adjust the container reference in case if super is used inside arrow functions with arbitrary deep nesting
                 while (container && container.kind === SyntaxKind.ArrowFunction) {
                     container = getSuperContainer(container, /*includeFunctions*/ true);
                     needToCaptureLexicalThis = languageVersion < ScriptTarget.ES6;
@@ -6652,7 +6652,7 @@ namespace ts {
             let canUseSuperExpression = isLegalUsageOfSuperExpression(container);
             let nodeCheckFlag: NodeCheckFlags = 0;
 
-            // always set NodeCheckFlags for 'super' expression node            
+            // always set NodeCheckFlags for 'super' expression node
             if (canUseSuperExpression) {
                 if ((container.flags & NodeFlags.Static) || isCallExpression) {
                     nodeCheckFlag = NodeCheckFlags.SuperStatic;
@@ -8568,7 +8568,7 @@ namespace ts {
                         // A method or accessor declaration decorator will have two or three arguments (see
                         // `PropertyDecorator` and `MethodDecorator` in core.d.ts)
 
-                        // If we are emitting decorators for ES3, we will only pass two arguments. 
+                        // If we are emitting decorators for ES3, we will only pass two arguments.
                         if (languageVersion === ScriptTarget.ES3) {
                             return 2;
                         }
@@ -11306,7 +11306,8 @@ namespace ts {
         }
 
         function checkNonThenableType(type: Type, location?: Node, message?: DiagnosticMessage) {
-            if (!(type.flags & TypeFlags.Any) && isTypeAssignableTo(type, getGlobalThenableType())) {
+            type = getWidenedType(type);
+            if (!isTypeAny(type) && isTypeAssignableTo(type, getGlobalThenableType())) {
                 if (location) {
                     if (!message) {
                         message = Diagnostics.Operand_for_await_does_not_have_a_valid_callable_then_member;
@@ -12544,7 +12545,12 @@ namespace ts {
                         if (isAsyncFunctionLike(func)) {
                             let promisedType = getPromisedType(returnType);
                             let awaitedType = checkAwaitedType(exprType, node.expression, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);
-                            checkTypeAssignableTo(awaitedType, promisedType, node.expression);
+                            if (promisedType) {
+                                // If the function has a return type, but promisedType is
+                                // undefined, an error will be reported in checkAsyncFunctionReturnType
+                                // so we don't need to report one here.
+                                checkTypeAssignableTo(awaitedType, promisedType, node.expression);
+                            }
                         }
                         else {
                             checkTypeAssignableTo(exprType, returnType, node.expression);
@@ -13154,13 +13160,13 @@ namespace ts {
                         autoValue = computeConstantValueForEnumMemberInitializer(initializer, enumType, enumIsConst, ambient);
                     }
                     else if (ambient && !enumIsConst) {
-                        // In ambient enum declarations that specify no const modifier, enum member declarations 
+                        // In ambient enum declarations that specify no const modifier, enum member declarations
                         // that omit a value are considered computed members (as opposed to having auto-incremented values assigned).
                         autoValue = undefined;
                     }
                     else if (previousEnumMemberIsNonConstant) {
-                        // If the member declaration specifies no value, the member is considered a constant enum member. 
-                        // If the member is the first member in the enum declaration, it is assigned the value zero. 
+                        // If the member declaration specifies no value, the member is considered a constant enum member.
+                        // If the member is the first member in the enum declaration, it is assigned the value zero.
                         // Otherwise, it is assigned the value of the immediately preceding member plus one,
                         // and an error occurs if the immediately preceding member is not a constant enum member
                         error(member.name, Diagnostics.Enum_member_must_have_initializer);
@@ -14100,7 +14106,7 @@ namespace ts {
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             // If we didn't come from static member of class or interface,
-                            // add the type parameters into the symbol table 
+                            // add the type parameters into the symbol table
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
                             // Note: that the memberFlags come from previous iteration.
                             if (!(memberFlags & NodeFlags.Static)) {
@@ -14764,31 +14770,6 @@ namespace ts {
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
-        function getBlockScopedVariableId(n: Identifier): number {
-            Debug.assert(!nodeIsSynthesized(n));
-
-            let isVariableDeclarationOrBindingElement =
-                n.parent.kind === SyntaxKind.BindingElement || (n.parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>n.parent).name === n);
-
-            let symbol =
-                (isVariableDeclarationOrBindingElement ? getSymbolOfNode(n.parent) : undefined) ||
-                getNodeLinks(n).resolvedSymbol ||
-                resolveName(n, n.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-
-            let isLetOrConst =
-                symbol &&
-                (symbol.flags & SymbolFlags.BlockScopedVariable) &&
-                symbol.valueDeclaration.parent.kind !== SyntaxKind.CatchClause;
-
-            if (isLetOrConst) {
-                // side-effect of calling this method:
-                //   assign id to symbol if it was not yet set
-                getSymbolLinks(symbol);
-                return symbol.id;
-            }
-            return undefined;
-        }
-
         function instantiateSingleCallFunctionType(functionType: Type, typeArguments: Type[]): Type {
             if (functionType === unknownType) {
                 return unknownType;
@@ -14823,7 +14804,6 @@ namespace ts {
                 isEntityNameVisible,
                 getConstantValue,
                 collectLinkedAliases,
-                getBlockScopedVariableId,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter

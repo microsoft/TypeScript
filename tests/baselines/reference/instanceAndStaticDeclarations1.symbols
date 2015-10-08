@@ -32,9 +32,9 @@ class Point {
 >y : Symbol(Point.y, Decl(instanceAndStaticDeclarations1.ts, 3, 33))
 
         return Math.sqrt(dx * dx + dy * dy);
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, 620, 27))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, 620, 27))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
 >dx : Symbol(dx, Decl(instanceAndStaticDeclarations1.ts, 5, 11))
 >dx : Symbol(dx, Decl(instanceAndStaticDeclarations1.ts, 5, 11))
 >dy : Symbol(dy, Decl(instanceAndStaticDeclarations1.ts, 6, 11))

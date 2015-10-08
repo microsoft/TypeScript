@@ -43,7 +43,7 @@ module ts {
             }
             
             if (canUseOldTranspile) {
-                let diagnostics: Diagnostic[] = [];                
+                let diagnostics: Diagnostic[] = [];
                 let transpileResult = transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, diagnostics, transpileOptions.moduleName);                
                 checkDiagnostics(diagnostics, testSettings.expectedDiagnosticCodes);
                 if (testSettings.expectedOutput) {
@@ -57,10 +57,10 @@ module ts {
             }
             
             if (!transpileOptions.fileName) {
-                transpileOptions.fileName = "file.ts";
+                transpileOptions.fileName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
             }
             
-            transpileOptions.compilerOptions.sourceMap = true;            
+            transpileOptions.compilerOptions.sourceMap = true;
             let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
             assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
             
@@ -68,7 +68,7 @@ module ts {
             let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
                         
             if (testSettings.expectedOutput !== undefined) {
-                assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);    
+                assert.equal(transpileModuleResultWithSourceMap.outputText, testSettings.expectedOutput + expectedSourceMappingUrlLine);
             }
             else {
                 // expected output is not set, just verify that output text has sourceMappingURL as a last line
@@ -78,7 +78,7 @@ module ts {
                     assert.equal(output, expectedSourceMappingUrlLine);
                 }
                 else {
-                    let suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine                                
+                    let suffix = getNewLineCharacter(transpileOptions.compilerOptions) + expectedSourceMappingUrlLine
                     assert.isTrue(output.indexOf(suffix, output.length - suffix.length) !== -1);
                 }
             }       
@@ -273,6 +273,15 @@ var x = 0;`,
 
         it("Supports backslashes in file name", () => {
             test("var x", { expectedOutput: "var x;\r\n", options: { fileName: "a\\b.ts" }});
+        });
+        
+        it("transpile file as 'tsx' if 'jsx' is specified", () => {
+            let input = `var x = <div/>`;
+            let output = `var x = React.createElement("div", null);\n`;
+            test(input, {
+                expectedOutput: output,
+                options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }
+            })
         });
     });
 }
