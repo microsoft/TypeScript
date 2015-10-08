@@ -3311,9 +3311,22 @@ namespace ts {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
-                    isDotOfNumericLiteral(contextToken);
+                    isDotOfNumericLiteral(contextToken) ||
+                    isInJsxText(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function isInJsxText(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.JsxText) {
+                    return true;
+                }
+
+                return contextToken.kind === SyntaxKind.GreaterThanToken &&
+                    contextToken.parent &&
+                    (contextToken.parent.kind === SyntaxKind.JsxOpeningElement ||
+                        contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement ||
+                        contextToken.parent.kind === SyntaxKind.JsxClosingElement);
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
