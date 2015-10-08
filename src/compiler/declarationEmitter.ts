@@ -103,60 +103,73 @@ namespace ts {
             }
         }
         else {
-            // Emit references corresponding to this file
-            let emittedReferencedFiles: SourceFile[] = [];
-            let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    noDeclare = false;
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-
-                    emitSourceFile(sourceFile);
+            if (compilerOptions.optimizationEntrypoint) {
+                let entrypoint = host.getSourceFile(compilerOptions.optimizationEntrypoint);
+                if (!entrypoint) {
+                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, compilerOptions.optimizationEntrypoint));
+                    return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
-                else if (isExternalModule(sourceFile)) {
-                    noDeclare = true;
-                    write(`declare module "${sourceFile.moduleName}" {`);
-                    writeLine();
-                    increaseIndent();
-                    emitSourceFile(sourceFile);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-
-                    // create asynchronous output for the importDeclarations
-                    if (moduleElementDeclarationEmitInfo.length) {
-                        let oldWriter = writer;
-                        forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                            if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
-                                Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
-                                createAndSetNewTextWriterWithSymbolWriter();
-                                Debug.assert(aliasEmitInfo.indent === 1);
-                                increaseIndent();
-                                writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
-                                aliasEmitInfo.asynchronousOutput = writer.getText();
-                                decreaseIndent();
-                            }
-                        });
-                        setWriter(oldWriter);
-                    }
-                    prevModuleElementDeclarationEmitInfo = prevModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
-                    moduleElementDeclarationEmitInfo = [];
+                if (!isExternalModule(entrypoint)) {
+                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, compilerOptions.optimizationEntrypoint));
+                    return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
-            });
-            moduleElementDeclarationEmitInfo = moduleElementDeclarationEmitInfo.concat(prevModuleElementDeclarationEmitInfo);
+                traverseEntrypoint(entrypoint);
+            } else {
+                // Emit references corresponding to this file
+                let emittedReferencedFiles: SourceFile[] = [];
+                let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        noDeclare = false;
+                        // Check what references need to be added
+                        if (!compilerOptions.noResolve) {
+                            forEach(sourceFile.referencedFiles, fileReference => {
+                                let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+
+                                // If the reference file is a declaration file or an external module, emit that reference
+                                if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                                    !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+
+                                    writeReferencePath(referencedFile);
+                                    emittedReferencedFiles.push(referencedFile);
+                                }
+                            });
+                        }
+
+                        emitSourceFile(sourceFile);
+                    }
+                    else if (isExternalModule(sourceFile)) {
+                        noDeclare = true;
+                        write(`declare module "${sourceFile.moduleName}" {`);
+                        writeLine();
+                        increaseIndent();
+                        emitSourceFile(sourceFile);
+                        decreaseIndent();
+                        write("}");
+                        writeLine();
+
+                        // create asynchronous output for the importDeclarations
+                        if (moduleElementDeclarationEmitInfo.length) {
+                            let oldWriter = writer;
+                            forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                                if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
+                                    Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
+                                    createAndSetNewTextWriterWithSymbolWriter();
+                                    Debug.assert(aliasEmitInfo.indent === 1);
+                                    increaseIndent();
+                                    writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
+                                    aliasEmitInfo.asynchronousOutput = writer.getText();
+                                    decreaseIndent();
+                                }
+                            });
+                            setWriter(oldWriter);
+                        }
+                        prevModuleElementDeclarationEmitInfo = prevModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                        moduleElementDeclarationEmitInfo = [];
+                    }
+                });
+                moduleElementDeclarationEmitInfo = moduleElementDeclarationEmitInfo.concat(prevModuleElementDeclarationEmitInfo);
+            }
         }
 
         return {
@@ -165,6 +178,10 @@ namespace ts {
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
         };
+
+        function traverseEntrypoint(file: SourceFile) {
+            emitLines(file.statements)            
+        }
 
         function hasInternalAnnotation(range: CommentRange) {
             let text = currentSourceFile.text;

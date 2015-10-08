@@ -2036,6 +2036,10 @@
         "category": "Error",
         "code": 5033
     },
+    "Option '{0}' can only be specified with both options '{1}' and '{2}'.": {
+        "category": "Error",
+        "code": 5034
+    },
     "Option 'project' cannot be mixed with source files on a command line.": {
         "category": "Error",
         "code": 5042
@@ -2257,7 +2261,10 @@
         "category": "Error",
         "code": 6063
     },
-
+    "Specifies the script file used as the entrypoint for optimizations.": {
+        "category": "Error",
+        "code": 6064
+    },
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
