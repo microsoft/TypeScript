@@ -10292,7 +10292,7 @@ namespace ts {
                 if (contextualType.flags & TypeFlags.Union) {
                     for (const type of (<UnionType>contextualType).types) {
                         if (type.flags & TypeFlags.StringLiteral && (<StringLiteralType>type).text === node.text) {
-                            return contextualType;
+                            return type;
                         }
                     }
                 }
