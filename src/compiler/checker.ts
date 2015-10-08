@@ -10286,7 +10286,7 @@ namespace ts {
 
         function checkStringLiteralExpression(node: LiteralExpression) {
             // TODO (drosen): Do we want to apply the same approach to no-sub template literals?
-            
+
             let contextualType = getContextualType(node);
             if (contextualType) {
                 if (contextualType.flags & TypeFlags.Union) {
@@ -10435,7 +10435,7 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                     return checkStringLiteralExpression(<LiteralExpression>node);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return stringType
+                    return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
