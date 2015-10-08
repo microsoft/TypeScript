@@ -9744,7 +9744,7 @@ namespace ts {
                         return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
                     }
                     case SyntaxKind.ElementAccessExpression:
-                        //  old compiler doesn't check indexed assess
+                        //  old compiler doesn't check indexed access
                         return true;
                     case SyntaxKind.ParenthesizedExpression:
                         return isReferenceOrErrorExpression((<ParenthesizedExpression>n).expression);
@@ -9753,12 +9753,12 @@ namespace ts {
                 }
             }
 
-            function isConstVariableReference(n: Node): boolean {
+            function isNotWritableVariableReference(n: Node): boolean {
                 switch (n.kind) {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.PropertyAccessExpression: {
                         let symbol = findSymbol(n);
-                        return symbol && (symbol.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
+                        return symbol && (symbol.constraints & SymbolConstraints.notWritable) !== 0;
                     }
                     case SyntaxKind.ElementAccessExpression: {
                         let index = (<ElementAccessExpression>n).argumentExpression;
@@ -9766,12 +9766,12 @@ namespace ts {
                         if (symbol && index && index.kind === SyntaxKind.StringLiteral) {
                             let name = (<LiteralExpression>index).text;
                             let prop = getPropertyOfType(getTypeOfSymbol(symbol), name);
-                            return prop && (prop.flags & SymbolFlags.Variable) !== 0 && (getDeclarationFlagsFromSymbol(prop) & NodeFlags.Const) !== 0;
+                            return prop && (prop.constraints & SymbolConstraints.notWritable) !== 0;
                         }
                         return false;
                     }
                     case SyntaxKind.ParenthesizedExpression:
-                        return isConstVariableReference((<ParenthesizedExpression>n).expression);
+                        return isNotWritableVariableReference((<ParenthesizedExpression>n).expression);
                     default:
                         return false;
                 }
@@ -9782,7 +9782,7 @@ namespace ts {
                 return false;
             }
 
-            if (isConstVariableReference(n)) {
+            if (isNotWritableVariableReference(n)) {
                 error(n, constantVariableMessage);
                 return false;
             }
