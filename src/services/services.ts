@@ -3105,6 +3105,7 @@ namespace ts {
             let node = currentToken;
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
+            let isStartingCloseTag = false;
 
             let location = getTouchingPropertyName(sourceFile, position);
             if (contextToken) {
@@ -3130,9 +3131,14 @@ namespace ts {
                         return undefined;
                     }
                 }
-                else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    if (kind === SyntaxKind.LessThanToken) {
+                        isRightOfOpenTag = true;
+                        location = contextToken;
+                    }
+                    else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
+                        isStartingCloseTag = true;
+                    }
                 }
             }
 
@@ -3152,6 +3158,13 @@ namespace ts {
                 else {
                     symbols = tagSymbols;
                 }
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
+            }
+            else if (isStartingCloseTag) {
+                let tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
+                symbols = [typeChecker.getSymbolAtLocation(tagName)];
+
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
             }
