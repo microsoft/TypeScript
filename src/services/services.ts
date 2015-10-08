@@ -6263,7 +6263,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile);
+            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {

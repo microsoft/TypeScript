@@ -14833,7 +14833,7 @@ namespace ts {
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file);
+                bindSourceFile(file, compilerOptions);
             });
 
             // Initialize global symbol table
