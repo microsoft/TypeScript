@@ -1,13 +1,13 @@
 //// [constIndexedAccess.ts]
 
 const enum numbers {
-	zero,
-	one
+    zero,
+    one
 }
 
 interface indexAccess {
-	0: string;
-	1: number;
+    0: string;
+    1: number;
 }
 
 let test: indexAccess;
@@ -18,27 +18,17 @@ let n = test[1];
 let s1 = test[numbers.zero];
 let n1 = test[numbers.one];
 
-/*
-TODO: revisit with const propagation
+let s2 = test[numbers["zero"]];
+let n2 = test[numbers["one"]];
 
-const zero = 0;
-const one = 1;
+enum numbersNotConst {
+    zero,
+    one
+}
 
-let s2 = test[zero];
-let n2 = test[one];
+let s3 = test[numbersNotConst.zero];
+let n3 = test[numbersNotConst.one];
 
-const zeroRef = zero;
-const oneRef = one;
-
-let s3 = test[zeroRef];
-let n3 = test[oneRef];
-
-const zeroRefEnum = numbers.zero;
-const oneRefEnum = numbers.one;
-
-let s4 = test[zeroRefEnum];
-let n4 = test[oneRefEnum];
-*/
 
 //// [constIndexedAccess.js]
 var test;
@@ -46,24 +36,12 @@ var s = test[0];
 var n = test[1];
 var s1 = test[0 /* zero */];
 var n1 = test[1 /* one */];
-/*
-TODO: revisit with const propagation
-
-const zero = 0;
-const one = 1;
-
-let s2 = test[zero];
-let n2 = test[one];
-
-const zeroRef = zero;
-const oneRef = one;
-
-let s3 = test[zeroRef];
-let n3 = test[oneRef];
-
-const zeroRefEnum = numbers.zero;
-const oneRefEnum = numbers.one;
-
-let s4 = test[zeroRefEnum];
-let n4 = test[oneRefEnum];
-*/ 
+var s2 = test[0 /* "zero" */];
+var n2 = test[1 /* "one" */];
+var numbersNotConst;
+(function (numbersNotConst) {
+    numbersNotConst[numbersNotConst["zero"] = 0] = "zero";
+    numbersNotConst[numbersNotConst["one"] = 1] = "one";
+})(numbersNotConst || (numbersNotConst = {}));
+var s3 = test[numbersNotConst.zero];
+var n3 = test[numbersNotConst.one];

@@ -3,18 +3,18 @@
 const enum numbers {
 >numbers : numbers
 
-	zero,
+    zero,
 >zero : numbers
 
-	one
+    one
 >one : numbers
 }
 
 interface indexAccess {
 >indexAccess : indexAccess
 
-	0: string;
-	1: number;
+    0: string;
+    1: number;
 }
 
 let test: indexAccess;
@@ -49,24 +49,45 @@ let n1 = test[numbers.one];
 >numbers : typeof numbers
 >one : numbers
 
-/*
-TODO: revisit with const propagation
+let s2 = test[numbers["zero"]];
+>s2 : string
+>test[numbers["zero"]] : string
+>test : indexAccess
+>numbers["zero"] : numbers
+>numbers : typeof numbers
+>"zero" : string
 
-const zero = 0;
-const one = 1;
+let n2 = test[numbers["one"]];
+>n2 : number
+>test[numbers["one"]] : number
+>test : indexAccess
+>numbers["one"] : numbers
+>numbers : typeof numbers
+>"one" : string
 
-let s2 = test[zero];
-let n2 = test[one];
+enum numbersNotConst {
+>numbersNotConst : numbersNotConst
 
-const zeroRef = zero;
-const oneRef = one;
+    zero,
+>zero : numbersNotConst
 
-let s3 = test[zeroRef];
-let n3 = test[oneRef];
+    one
+>one : numbersNotConst
+}
 
-const zeroRefEnum = numbers.zero;
-const oneRefEnum = numbers.one;
+let s3 = test[numbersNotConst.zero];
+>s3 : any
+>test[numbersNotConst.zero] : any
+>test : indexAccess
+>numbersNotConst.zero : numbersNotConst
+>numbersNotConst : typeof numbersNotConst
+>zero : numbersNotConst
 
-let s4 = test[zeroRefEnum];
-let n4 = test[oneRefEnum];
-*/
+let n3 = test[numbersNotConst.one];
+>n3 : any
+>test[numbersNotConst.one] : any
+>test : indexAccess
+>numbersNotConst.one : numbersNotConst
+>numbersNotConst : typeof numbersNotConst
+>one : numbersNotConst
+
