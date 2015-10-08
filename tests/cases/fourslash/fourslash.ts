@@ -205,7 +205,7 @@ module FourSlashInterface {
         // Verifies the completion list items count to be greater than the specified amount. The
         // completion list is brought up if necessary
         public completionListItemsCountIsGreaterThan(count: number) {
-            FourSlash.currentTestState.verifyCompletionListItemsCountIsGreaterThan(count);
+            FourSlash.currentTestState.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
         }
 
         public completionListIsEmpty() {
