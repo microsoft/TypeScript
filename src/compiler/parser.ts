@@ -955,8 +955,11 @@ namespace ts {
                 createMissingNode(t, reportAtCurrentPosition, diagnosticMessage, arg0);
         }
 
-        function parseTokenNode<T extends Node>(): T {
+        function parseTokenNode<T extends Node>(flags?: NodeFlags): T {
             let node = <T>createNode(token);
+            if (flags) {
+                node.flags = flags;
+            }
             nextToken();
             return finishNode(node);
         }
@@ -1849,7 +1852,7 @@ namespace ts {
         function parseTemplateExpression(): TemplateExpression {
             let template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
-            template.head = parseLiteralNode();
+            template.head = parseLiteralNode(/*internName*/ false, NodeFlags.ConstValue);
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             let templateSpans = <NodeArray<TemplateSpan>>[];
@@ -1884,11 +1887,13 @@ namespace ts {
             return finishNode(span);
         }
 
-        function parseLiteralNode(internName?: boolean): LiteralExpression {
+        function parseLiteralNode(internName?: boolean, flags?: NodeFlags): LiteralExpression {
             let node = <LiteralExpression>createNode(token);
             let text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
-
+            if (flags) {
+                node.flags = flags;
+            }
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
             }
@@ -3651,13 +3656,14 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return parseLiteralNode();
+                    return parseLiteralNode(/* internName */ false, NodeFlags.ConstValue);
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.SuperKeyword:
+                    return parseTokenNode<PrimaryExpression>();
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                    return parseTokenNode<PrimaryExpression>();
+                    return parseTokenNode<PrimaryExpression>(NodeFlags.ConstValue);
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedExpression();
                 case SyntaxKind.OpenBracketToken:

@@ -242,6 +242,22 @@ namespace ts {
             addDeclarationToSymbol(symbol, node, includes);
             symbol.parent = parent;
 
+            if (node.flags & NodeFlags.Const ||
+                (node.kind === SyntaxKind.VariableDeclaration && node.parent.flags & NodeFlags.Const)) {
+                if (symbol.flags & SymbolFlags.ConstEnum) {
+                    symbol.constraints |= SymbolConstraints.Immutable;
+                }
+                else {
+                    symbol.constraints |= SymbolConstraints.notWritable;
+                }
+            }
+
+            // Only true for 'const enum' which its members are implicitly not writable
+            // Note: Immutable class/container could exist iff all its members are notWritable/const
+            if(symbol.parent && symbol.parent.constraints & SymbolConstraints.Immutable) {
+                symbol.constraints |= SymbolConstraints.notWritable;
+            }
+
             return symbol;
         }
 

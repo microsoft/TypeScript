@@ -377,10 +377,12 @@ namespace ts {
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
         ContainsThis =      0x00080000,  // Interface contains references to "this"
+        ConstValue =        0x00100000,  // Node that represents a constant value (1, "a", true/false, null) 
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
-        BlockScoped = Let | Const
+        BlockScoped = Let | Const,
+        Constant = Const | ConstValue
     }
 
     /* @internal */
@@ -1693,6 +1695,7 @@ namespace ts {
         name: string;                           // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
+        constraints?: SymbolConstraints;        // Symbol constraints
 
         members?: SymbolTable;                  // Class, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
@@ -1701,6 +1704,12 @@ namespace ts {
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+    }
+
+    export const enum SymbolConstraints {
+        notWritable = 1,
+        notMutable,
+        Immutable = notWritable | notMutable,
     }
 
     /* @internal */
