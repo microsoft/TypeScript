@@ -3212,10 +3212,10 @@ namespace ts {
                 let diagnostic: Diagnostic;
                 let start = skipTrivia(sourceText, simpleUnaryExpression.pos);
                 if (simpleUnaryExpression.kind === SyntaxKind.TypeAssertionExpression) {
-                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.Type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
+                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
                 }
                 else {
-                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.An_unary_expression_with_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
+                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
                 }
             }
             return simpleUnaryExpression;

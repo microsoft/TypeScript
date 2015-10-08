@@ -836,8 +836,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     let node = nodes[start + i];
-                    let leadcomment = getLeadingCommentsToEmit(node);
-                    let trailcomment = getTrailingCommentRanges(currentSourceFile.text, node.pos);
+                    let leadingComments = getLeadingCommentsToEmit(node);
+                    let trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.pos);
                     // This emitting is to make sure we emit following comment properly
                     //   ...(x, /*comment1*/ y)...
                     //         ^ => node.pos
@@ -2522,7 +2522,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //          a[0] **= a[0] **= 2
                     //          _a = a, _a[0] = Math.pow(_a[0], (_b = a, _b[0] = Math.pow(_b[0], 2)));
                     //                                          ^ -> required extra parenthesis controlled by shouldEmitParenthesis
-                    //      exponentiation compount in variable declaration
+                    //      exponentiation compound in variable declaration
                     //          var x = a[0] **= a[0] **= 2
                     //          var x = (_a = a, _a[0] = Math.pow(_a[0], (_b = a, _b[0] = Math.pow(_b[0], 2))));
                     //                  ^ -> required extra parenthesis controlled by shouldEmitParenthesis
@@ -2537,9 +2537,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
 
                         synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
-                        let tempExpression = createAndRecordTempVariable(TempFlags.Auto);
-                        emitAssignment(tempExpression, leftHandSideExpression.expression, /*shouldEmitCommaBeforeAssignment*/ false);
-                        synthesizedLHS.expression = tempExpression
+                        let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                        emitAssignment(tempVariable, leftHandSideExpression.expression, /*shouldEmitCommaBeforeAssignment*/ false);
+                        synthesizedLHS.expression = tempVariable
 
                         if (leftHandSideExpression.argumentExpression.kind !== SyntaxKind.NumericLiteral &&
                             leftHandSideExpression.argumentExpression.kind !== SyntaxKind.StringLiteral) {
@@ -2560,9 +2560,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
 
                         synthesizedLHS = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression, /*startsOnNewLine*/ false);
-                        let tempExpression = createAndRecordTempVariable(TempFlags.Auto);
-                        synthesizedLHS.expression = tempExpression
-                        emitAssignment(tempExpression, leftHandSideExpression.expression,  /*shouldEmitCommaBeforeAssignment*/ false);
+                        let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
+                        synthesizedLHS.expression = tempVariable
+                        emitAssignment(tempVariable, leftHandSideExpression.expression,  /*shouldEmitCommaBeforeAssignment*/ false);
                         (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
                         (<PropertyAccessExpression>synthesizedLHS).name = leftHandSideExpression.name;
                         write(", ");
@@ -3259,9 +3259,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(", ");
                 }
 
-                const isVariableDeclarationOrBindingElement =
-                    name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
-
                 let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
 
                 if (exportChanged) {
@@ -3269,6 +3266,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitNodeWithCommentsAndWithoutSourcemap(name);
                     write(`", `);
                 }
+
+                const isVariableDeclarationOrBindingElement =
+                    name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
 
                 if (isVariableDeclarationOrBindingElement) {
                     emitModuleMemberName(<Declaration>name.parent);
@@ -3500,7 +3500,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount> 0);
+                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
                         emitCount++;
                     }
                 }
