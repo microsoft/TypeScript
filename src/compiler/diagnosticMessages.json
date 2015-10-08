@@ -631,10 +631,6 @@
         "category": "Error",
         "code": 1204
     },
-    "Decorators are only available when targeting ECMAScript 5 and higher.": {
-        "category": "Error",
-        "code": 1205
-    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206
@@ -1300,7 +1296,7 @@
         "category": "Error",
         "code": 2434
     },
-    "Ambient modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules or namespaces.": {
         "category": "Error",
         "code": 2435
     },
@@ -1651,6 +1647,14 @@
     "Initializer provides no value for this binding element and the binding element has no default value.": {
         "category": "Error",
         "code": 2525
+    },
+    "A 'this' type is available only in a non-static member of a class or interface.": {
+        "category": "Error",
+        "code": 2526
+    },
+    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2527
     },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",

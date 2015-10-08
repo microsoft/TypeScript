@@ -46,6 +46,7 @@
         "build:tests": "jake tests",
         "clean": "jake clean",
         "jake": "jake",
+        "lint": "jake lint",
         "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {

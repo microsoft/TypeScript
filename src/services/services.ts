@@ -725,7 +725,7 @@ namespace ts {
         }
         getBaseTypes(): ObjectType[] {
             return this.flags & (TypeFlags.Class | TypeFlags.Interface)
-                ? this.checker.getBaseTypes(<TypeObject & InterfaceType>this)
+                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
     }
@@ -1850,8 +1850,8 @@ namespace ts {
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
 
-        // Parse
-        let inputFileName = transpileOptions.fileName || "module.ts";
+        // if jsx is specified then treat file as .tsx
+        let inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
         let sourceFile = createSourceFile(inputFileName, input, options.target);
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
@@ -3549,6 +3549,9 @@ namespace ts {
                             if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
+                            else if (parent.kind === SyntaxKind.JsxAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
                             break;
 
                         // The context token is the closing } or " of an attribute, which means
@@ -3659,9 +3662,9 @@ namespace ts {
                         return containingNodeKind === SyntaxKind.Parameter;
 
                     case SyntaxKind.AsKeyword:
-                        containingNodeKind === SyntaxKind.ImportSpecifier ||
-                        containingNodeKind === SyntaxKind.ExportSpecifier ||
-                        containingNodeKind === SyntaxKind.NamespaceImport;
+                        return containingNodeKind === SyntaxKind.ImportSpecifier ||
+                            containingNodeKind === SyntaxKind.ExportSpecifier ||
+                            containingNodeKind === SyntaxKind.NamespaceImport;
 
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
@@ -3680,14 +3683,20 @@ namespace ts {
 
                 // Previous token may have been a keyword that was converted to an identifier.
                 switch (contextToken.getText()) {
+                    case "abstract":
+                    case "async":
                     case "class":
-                    case "interface":
+                    case "const":
+                    case "declare":
                     case "enum":
                     case "function":
-                    case "var":
-                    case "static":
+                    case "interface":
                     case "let":
-                    case "const":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "static":
+                    case "var":
                     case "yield":
                         return true;
                 }
@@ -6249,7 +6258,8 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
+                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -7811,6 +7821,7 @@ namespace ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:

@@ -4,6 +4,7 @@ var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
+var Linter = require("tslint");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -627,10 +628,9 @@ function deleteTemporaryProjectOutput() {
 
 var testTimeout = 20000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["tests", builtLocalDirectory], function() {
+task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
-    host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
@@ -652,9 +652,16 @@ task("runtests", ["tests", builtLocalDirectory], function() {
     reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = host + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+    var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd, deleteTemporaryProjectOutput);
+    exec(cmd, function() {
+        deleteTemporaryProjectOutput();
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    });
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -812,7 +819,6 @@ task("update-sublime", ["local", serverFile], function() {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
-    "noInferrableTypesRule",
     "noNullRule",
     "booleanTriviaRule"
 ]);
@@ -825,20 +831,94 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ true, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
 });
 
-// if the codebase were free of linter errors we could make jake runtests
-// run this task automatically
+function getLinterOptions() {
+    return {
+        configuration: require("./tslint.json"),
+        formatter: "prose",
+        formattersDirectory: undefined,
+        rulesDirectory: "built/local/tslint"
+    };
+}
+
+function lintFileContents(options, path, contents) {
+    var ll = new Linter(path, contents, options);
+    return ll.lint();
+}
+
+function lintFile(options, path) {
+    var contents = fs.readFileSync(path, "utf8");
+    return lintFileContents(options, path, contents);
+}
+
+function lintFileAsync(options, path, cb) {
+    fs.readFile(path, "utf8", function(err, contents) {
+        if (err) {
+            return cb(err);
+        }
+        var result = lintFileContents(options, path, contents);
+        cb(undefined, result);
+    });
+}
+
+var lintTargets = compilerSources.concat(harnessCoreSources);
+
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
-    function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
-    function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
-
-    var lintTargets = compilerSources.concat(harnessCoreSources);
+    var lintOptions = getLinterOptions();
     for (var i in lintTargets) {
-        var f = lintTargets[i];
-        var cmd = 'tslint --rules-dir built/local/tslint -c tslint.json ' + f;
-        exec(cmd, success(f), failure(f));
+        var result = lintFile(lintOptions, lintTargets[i]);
+        if (result.failureCount > 0) {
+            console.log(result.output);
+            fail('Linter errors.', result.failureCount);
+        }
     }
-}, { async: true });
+});
+
+/**
+ * This is required because file watches on Windows get fires _twice_
+ * when a file changes on some node/windows version configuations
+ * (node v4 and win 10, for example). By not running a lint for a file
+ * which already has a pending lint, we avoid duplicating our work.
+ * (And avoid printing duplicate results!)
+ */
+var lintSemaphores = {};
+
+function lintWatchFile(filename) {
+    fs.watch(filename, {persistent: true}, function(event) {
+        if (event !== "change") {
+            return;
+        }
+     
+        if (!lintSemaphores[filename]) {
+            lintSemaphores[filename] = true;
+            lintFileAsync(getLinterOptions(), filename, function(err, result) {
+                delete lintSemaphores[filename];
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                if (result.failureCount > 0) {
+                    console.log("***Lint failure***");
+                    for (var i = 0; i < result.failures.length; i++) {
+                        var failure = result.failures[i];
+                        var start = failure.startPosition.lineAndCharacter;
+                        var end = failure.endPosition.lineAndCharacter;
+                        console.log("warning " + filename + " (" + (start.line + 1) + "," + (start.character + 1) + "," + (end.line + 1) + "," + (end.character + 1) + "): " + failure.failure);
+                    }
+                    console.log("*** Total " + result.failureCount + " failures.");
+                }
+            });
+        }
+    });
+}
+
+desc("Watches files for changes to rerun a lint pass");
+task("lint-server", ["build-rules"], function() {
+    console.log("Watching ./src for changes to linted files");
+    for (var i = 0; i < lintTargets.length; i++) {
+        lintWatchFile(lintTargets[i]);
+    }
+});

@@ -7,7 +7,7 @@ class Base {
 
         bar: Object;
 >bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType.ts, 1, 17))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }
 

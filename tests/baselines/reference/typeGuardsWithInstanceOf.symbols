@@ -13,7 +13,7 @@ var result2: I;
 
 if (!(result instanceof RegExp)) {
 >result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     result = result2;
 >result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))

@@ -16,10 +16,10 @@ class C {
     'a': {}
 
     fn() {
->fn : () => C
+>fn : () => this
 
         return this;
->this : C
+>this : this
     }
 }
 

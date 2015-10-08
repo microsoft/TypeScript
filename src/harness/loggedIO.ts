@@ -1,6 +1,7 @@
 /// <reference path="..\..\src\compiler\sys.ts" />
 /// <reference path="..\..\src\harness\harness.ts" />
 /// <reference path="..\..\src\harness\runnerbase.ts" />
+/* tslint:disable:no-null */
 
 interface FileInformation {
     contents: string;
@@ -76,7 +77,7 @@ interface PlaybackControl {
     endRecord(): void;
 }
 
-module Playback {
+namespace Playback {
     let recordLog: IOLog = undefined;
     let replayLog: IOLog = undefined;
     let recordLogFileNameBase = "";
@@ -95,7 +96,7 @@ module Playback {
         run.reset = () => {
             lookup = null;
         };
-    
+
         return run;
     }
 
