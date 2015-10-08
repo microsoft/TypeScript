@@ -5,12 +5,12 @@ type T = "foo" | "bar" | "baz";
 
 var x: "foo" | "bar" | "baz" = "foo";
 >x : "foo" | "bar" | "baz"
->"foo" : "foo" | "bar" | "baz"
+>"foo" : "foo"
 
 var y: T = "bar";
 >y : "foo" | "bar" | "baz"
 >T : "foo" | "bar" | "baz"
->"bar" : "foo" | "bar" | "baz"
+>"bar" : "bar"
 
 if (x === "foo") {
 >x === "foo" : boolean

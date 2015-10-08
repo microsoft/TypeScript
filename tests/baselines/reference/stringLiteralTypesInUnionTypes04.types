@@ -6,12 +6,12 @@ type T = "" | "foo";
 let x: T = "";
 >x : "" | "foo"
 >T : "" | "foo"
->"" : "" | "foo"
+>"" : ""
 
 let y: T = "foo";
 >y : "" | "foo"
 >T : "" | "foo"
->"foo" : "" | "foo"
+>"foo" : "foo"
 
 if (x === "") {
 >x === "" : boolean

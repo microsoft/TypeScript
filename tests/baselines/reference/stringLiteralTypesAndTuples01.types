@@ -20,10 +20,10 @@ let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 >a : "a"
 >dinosaur : "t-rex" | "raptor"
 >RexOrRaptor : "t-rex" | "raptor"
->['I\'m', 'a', 't-rex'] : ["I'm", "a", "t-rex" | "raptor"]
+>['I\'m', 'a', 't-rex'] : ["I'm", "a", "t-rex"]
 >'I\'m' : "I'm"
 >'a' : "a"
->'t-rex' : "t-rex" | "raptor"
+>'t-rex' : "t-rex"
 
 rawr(dinosaur);
 >rawr(dinosaur) : string
