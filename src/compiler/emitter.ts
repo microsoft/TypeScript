@@ -6848,7 +6848,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (isLineBreak(c)) {
                         if (firstNonWhitespace !== -1 && (lastNonWhitespace - firstNonWhitespace + 1 > 0)) {
                             let part = text.substr(firstNonWhitespace, lastNonWhitespace - firstNonWhitespace + 1);
-                            result = (result ? result + "\" + ' ' + \"" : "") + part;
+                            result = (result ? result + "\" + ' ' + \"" : "") + escapeString(part);
                         }
                         firstNonWhitespace = -1;
                     }
@@ -6862,7 +6862,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (firstNonWhitespace !== -1) {
                     let part = text.substr(firstNonWhitespace);
-                    result = (result ? result + "\" + ' ' + \"" : "") + part;
+                    result = (result ? result + "\" + ' ' + \"" : "") + escapeString(part);
                 }
 
                 if (result) {
