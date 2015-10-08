@@ -7893,6 +7893,11 @@ declare var Node: {
 }
 
 interface NodeFilter {
+    acceptNode(n: Node): number;
+}
+
+declare var NodeFilter: {
+    prototype: NodeFilter;
     FILTER_ACCEPT: number;
     FILTER_REJECT: number;
     FILTER_SKIP: number;
@@ -7910,7 +7915,6 @@ interface NodeFilter {
     SHOW_PROCESSING_INSTRUCTION: number;
     SHOW_TEXT: number;
 }
-declare var NodeFilter: NodeFilter;
 
 interface NodeIterator {
     expandEntityReferences: boolean;
