@@ -8134,12 +8134,12 @@ namespace ts {
             if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
                 return (<LiteralExpression>indexArgumentExpression).text;
             }
-			if (indexArgumentExpression.kind === SyntaxKind.ElementAccessExpression || indexArgumentExpression.kind === SyntaxKind.PropertyAccessExpression) {
-				let value = getConstantValue(<ElementAccessExpression | PropertyAccessExpression>indexArgumentExpression);
-				if (value !== undefined) {
-					return value.toString();
-				}
-			}
+            if (indexArgumentExpression.kind === SyntaxKind.ElementAccessExpression || indexArgumentExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                let value = getConstantValue(<ElementAccessExpression | PropertyAccessExpression>indexArgumentExpression);
+                if (value !== undefined) {
+                    return value.toString();
+                }
+            }
             if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
                 let rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
