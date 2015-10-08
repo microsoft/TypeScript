@@ -476,7 +476,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, "lint"]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -628,7 +628,7 @@ function deleteTemporaryProjectOutput() {
 
 var testTimeout = 20000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["tests", builtLocalDirectory], function() {
+task("runtests", ["lint", "tests", builtLocalDirectory], function() {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
