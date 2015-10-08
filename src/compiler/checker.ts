@@ -1020,11 +1020,12 @@ namespace ts {
             return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        interface ExportStarDiagnosticsLookupTable {
-            [id: string]: {specifierText: string, exportsWithDuplicate: ExportDeclaration[]};
+        interface ExportedSymbolDiagnostics {
+            specifierText: string;
+            exportsWithDuplicate: ExportDeclaration[];
         }
 
-        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: ExportStarDiagnosticsLookupTable, exportNode?: ExportDeclaration) {
+        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: Map<ExportedSymbolDiagnostics>, exportNode?: ExportDeclaration) {
             for (let id in source) {
                 if (id !== "default" && !hasProperty(target, id)) {
                     target[id] = source[id];
@@ -1055,7 +1056,7 @@ namespace ts {
                     let exportStars = symbol.exports["__export"];
                     if (exportStars) {
                         let nestedSymbols: SymbolTable = {};
-                        let lookupTable: ExportStarDiagnosticsLookupTable = {};
+                        let lookupTable: Map<ExportedSymbolDiagnostics> = {};
                         for (let node of exportStars.declarations) {
                             let resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
                             let exportedSymbols = visit(resolvedModule);
