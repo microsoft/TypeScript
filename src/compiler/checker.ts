@@ -8125,6 +8125,7 @@ namespace ts {
 
         /**
          * If indexArgumentExpression is a string literal or number literal, returns its text.
+         * If indexArgumentExpression is a constant value, returns its string value.
          * If indexArgumentExpression is a well known symbol, returns the property name corresponding
          *    to this symbol, as long as it is a proper symbol reference.
          * Otherwise, returns undefined.
@@ -8132,6 +8133,12 @@ namespace ts {
         function getPropertyNameForIndexedAccess(indexArgumentExpression: Expression, indexArgumentType: Type): string {
             if (indexArgumentExpression.kind === SyntaxKind.StringLiteral || indexArgumentExpression.kind === SyntaxKind.NumericLiteral) {
                 return (<LiteralExpression>indexArgumentExpression).text;
+            }
+            if (indexArgumentExpression.kind === SyntaxKind.ElementAccessExpression || indexArgumentExpression.kind === SyntaxKind.PropertyAccessExpression) {
+                let value = getConstantValue(<ElementAccessExpression | PropertyAccessExpression>indexArgumentExpression);
+                if (value !== undefined) {
+                    return value.toString();
+                }
             }
             if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
                 let rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
