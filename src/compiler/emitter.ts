@@ -2509,37 +2509,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /**
              * Emit ES7 exponentiation operator downlevel using Math.pow
-             * @param node {BinaryExpression} a binary expression node containing exponentiationOperator (**, **=) 
+             * @param node a binary expression node containing exponentiationOperator (**, **=) 
              */
             function emitExponentiationOperator(node: BinaryExpression) {
                 let leftHandSideExpression = node.left;
                 if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
                     let synthesizedLHS: ElementAccessExpression | PropertyAccessExpression;
-
-                    // This is used to decide whether to emit parenthesis around the expresison.
-                    // Parenthesis is required for following cases:
-                    //      capture variable while emitting right-hand side operand.
-                    //          a[0] **= a[0] **= 2
-                    //          _a = a, _a[0] = Math.pow(_a[0], (_b = a, _b[0] = Math.pow(_b[0], 2)));
-                    //                                          ^ -> required extra parenthesis controlled by shouldEmitParenthesis
-                    //      exponentiation compound in variable declaration
-                    //          var x = a[0] **= a[0] **= 2
-                    //          var x = (_a = a, _a[0] = Math.pow(_a[0], (_b = a, _b[0] = Math.pow(_b[0], 2))));
-                    //                  ^ -> required extra parenthesis controlled by shouldEmitParenthesis
-                    // Otherwise, false
-                    let shouldEmitParenthesis = false;
-
+                    let shouldEmitParentheses = false;
                     if (isElementAccessExpression(leftHandSideExpression)) {
-                        shouldEmitParenthesis = node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BinaryExpression;
- 
-                        if (shouldEmitParenthesis) {
-                            write("(");
-                        }
+                        shouldEmitParentheses = true;
+                        write("(");
 
                         synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
-                        let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
-                        emitAssignment(tempVariable, leftHandSideExpression.expression, /*shouldEmitCommaBeforeAssignment*/ false);
-                        synthesizedLHS.expression = tempVariable
+
+                        let identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldemitCommaBeforeAssignment*/ false);
+                        synthesizedLHS.expression = identifier;
 
                         if (leftHandSideExpression.argumentExpression.kind !== SyntaxKind.NumericLiteral &&
                             leftHandSideExpression.argumentExpression.kind !== SyntaxKind.StringLiteral) {
@@ -2553,16 +2537,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
                     else if (isPropertyAccessExpression(leftHandSideExpression)) {
-                        shouldEmitParenthesis = node.parent.kind === SyntaxKind.VariableDeclaration || node.parent.kind === SyntaxKind.BinaryExpression;
-
-                        if (shouldEmitParenthesis) {
-                            write("(");
-                        }
-
+                        shouldEmitParentheses = true;
+                        write("(");
                         synthesizedLHS = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression, /*startsOnNewLine*/ false);
-                        let tempVariable = createAndRecordTempVariable(TempFlags.Auto);
-                        synthesizedLHS.expression = tempVariable
-                        emitAssignment(tempVariable, leftHandSideExpression.expression,  /*shouldEmitCommaBeforeAssignment*/ false);
+
+                        let identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldemitCommaBeforeAssignment*/ false);
+                        synthesizedLHS.expression = identifier;
+
                         (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
                         (<PropertyAccessExpression>synthesizedLHS).name = leftHandSideExpression.name;
                         write(", ");
@@ -2575,7 +2556,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(", ");
                     emit(node.right);
                     write(")");
-                    if (shouldEmitParenthesis) {
+                    if (shouldEmitParentheses) {
                         write(")");
                     }
                 }
@@ -3254,6 +3235,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(";");
             }
 
+            /**
+             * Emit an assignment to a given identifier, 'name', with a given expression, 'value'.
+             * @param name an identifier as a left-hand-side operand of the assignment
+             * @param value an expression as a right-hand-side operand of the assignment
+             * @param shouldEmitCommaBeforeAssignment a boolean indicating whether to prefix an assignment with comma
+             */
             function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean) {
                 if (shouldEmitCommaBeforeAssignment) {
                     write(", ");
@@ -3284,6 +3271,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(")");
                 }
             }
+
+            /**
+             * Create temporary variable, emit an assignment of the variable the given expression
+             * @param expression an expression to assign to the newly created temporary variable
+             * @param canDefineTempVariablesInPlace a boolean indicating whether you can define the temporary variable at an assignment location
+             * @param shouldEmitCommaBeforeAssignment a boolean indicating whether an assignment should prefix with comma
+             */
+            function emitTempVariableAssignment(expression: Expression, canDefineTempVariablesInPlace: boolean, shouldEmitCommaBeforeAssignment: boolean): Identifier {
+                let identifier = createTempVariable(TempFlags.Auto);
+                if (!canDefineTempVariablesInPlace) {
+                    recordTempDeclaration(identifier);
+                }
+                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment);
+                return identifier;
+            } 
 
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
                 let emitCount = 0;
@@ -3325,11 +3327,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return expr;
                     }
 
-                    let identifier = createTempVariable(TempFlags.Auto);
-                    if (!canDefineTempVariablesInPlace) {
-                        recordTempDeclaration(identifier);
-                    }
-                    emitAssignment(identifier, expr, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                    let identifier = emitTempVariableAssignment(expr, canDefineTempVariablesInPlace, emitCount > 0);
                     emitCount++;
                     return identifier;
                 }
