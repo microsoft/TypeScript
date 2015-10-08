@@ -356,17 +356,17 @@ class ProjectRunner extends RunnerBase {
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
+                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath), ts.getExtensionsToRemoveForEmitPath(compilerOptions));
                     }
                     else {
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
+                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName, ts.getExtensionsToRemoveForEmitPath(compilerOptions));
                     }
 
                     let outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
                     allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
                 }
                 else {
-                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
+                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out, ts.getExtensionsToRemoveForEmitPath(compilerOptions)) + ".d.ts";
                     let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);

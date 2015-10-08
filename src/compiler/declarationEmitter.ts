@@ -1605,7 +1605,7 @@ namespace ts {
                 ? referencedFile.fileName // Declaration file, use declaration file name
                 : shouldEmitToOwnFile(referencedFile, compilerOptions)
                     ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts"; // Global out file
+                    : removeFileExtension(compilerOptions.outFile || compilerOptions.out, getExtensionsToRemoveForEmitPath(compilerOptions)) + ".d.ts"; // Global out file
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(jsFilePath)),
@@ -1626,7 +1626,8 @@ namespace ts {
         if (!emitDeclarationResult.reportedDeclarationError) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
+            let compilerOptions = host.getCompilerOptions();
+            writeFile(host, diagnostics, removeFileExtension(jsFilePath, getExtensionsToRemoveForEmitPath(compilerOptions)) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
         }
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {

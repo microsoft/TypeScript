@@ -1748,14 +1748,19 @@ namespace ts {
         };
     }
 
+    export function getExtensionsToRemoveForEmitPath(compilerOptons: CompilerOptions) {
+        return getSupportedExtensions(compilerOptons).concat("jsx", "js");
+    }
+
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
         let compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir),
+                getExtensionsToRemoveForEmitPath(compilerOptions));
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName, getExtensionsToRemoveForEmitPath(compilerOptions));
         }
 
         return emitOutputFilePathWithoutExtension + extension;
