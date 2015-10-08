@@ -10860,7 +10860,7 @@ namespace ts {
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
                     }
-                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)){
+                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)) {
                         // In ES6, super inside constructor of class-declaration has to precede "this" accessing
                         error(superCallStatement, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
                     }
