@@ -1,0 +1,58 @@
+error TS2393: Duplicate function implementation.
+tests/cases/conformance/es6/modules/m2.ts(1,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m2.ts(5,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m3.ts(1,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m3.ts(5,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m4.ts(1,25): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m4.ts(5,1): error TS2528: A module cannot have multiple default exports.
+
+
+!!! error TS2393: Duplicate function implementation.
+==== tests/cases/conformance/es6/modules/m1.ts (0 errors) ====
+    
+    export default function () {
+    
+    }
+    
+    export default function () {
+    
+    }
+    
+==== tests/cases/conformance/es6/modules/m2.ts (2 errors) ====
+    export default function () {
+    ~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+    export default class {
+    ~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+==== tests/cases/conformance/es6/modules/m3.ts (2 errors) ====
+    export default function () {
+    ~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+    export default class C {
+                         ~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+==== tests/cases/conformance/es6/modules/m4.ts (2 errors) ====
+    export default function f() {
+                            ~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+    export default class {
+    ~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
