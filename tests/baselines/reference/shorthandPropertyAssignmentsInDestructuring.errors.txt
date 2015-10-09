@@ -13,7 +13,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(87,19): erro
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(113,12): error TS2304: Cannot find name 's'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(113,14): error TS1312: '=' can only be used in object literal properties inside destructuring assignment.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(113,14): error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
 
 
 ==== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts (12 errors) ====
@@ -157,7 +157,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(113,14): err
     	          ~
 !!! error TS2304: Cannot find name 's'.
     	            ~
-!!! error TS1312: '=' can only be used in object literal properties inside destructuring assignment.
+!!! error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
     });
     
     function foo({a = 4, b = { x: 5 }}) {
