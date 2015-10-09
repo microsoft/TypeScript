@@ -17,6 +17,7 @@ var docDirectory = "doc/";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
+var builtScriptsDirectory = "built/scripts/";
 var LKGDirectory = "lib/";
 
 var copyright = "CopyrightNotice.txt";
@@ -42,9 +43,9 @@ var compilerSources = [
     "binder.ts",
     "checker.ts",
     "transform.ts",
-    "transform.generated.ts",
+    "transforms/jsx.ts",
+    "transforms/ts.ts",
     "transforms/es6.ts",
-    "transforms/es5.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -67,9 +68,9 @@ var servicesSources = [
     "binder.ts",
     "checker.ts",
     "transform.ts",
-    "transform.generated.ts",
+    "transforms/jsx.ts",
+    "transforms/ts.ts",
     "transforms/es6.ts",
-    "transforms/es5.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -247,7 +248,7 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
           , experimentalTransforms = opts && opts.experimentalTransforms
           , target = opts && opts.target
           , diagnostics = opts && opts.diagnostics;
-         
+
         var dir = useBuiltCompiler ? builtLocalDirectory : LKGDirectory;
         var options = "--module commonjs --noImplicitAny --noEmitOnError";
 
@@ -284,19 +285,19 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
         if (stripInternal) {
             options += " --stripInternal";
         }
-        
+
         if (experimentalDecorators) {
             options += " --experimentalDecorators";
         }
-        
+
         if (experimentalTransforms || (useBuiltCompiler && useTransforms)) {
             options += " --experimentalTransforms";
         }
-        
+
         if (target) {
             options += " --target " + target;
         }
-        
+
         if (diagnostics) {
             options += " --diagnostics";
         }
@@ -390,31 +391,46 @@ desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
 // Generate the node factory
-var processTypesJs = path.join(scriptsDirectory, "processTypes.js");
-var processTypesTs = path.join(scriptsDirectory, "processTypes.ts");
+var processTypesBuiltDirectory = path.join(builtScriptsDirectory, "processTypes");
+var processTypesJs = path.join(processTypesBuiltDirectory, "processTypes.js");
+var processTypesDirectory = path.join(scriptsDirectory, "processTypes");
+var processTypesTs = path.join(processTypesDirectory, "processTypes.ts");
+var processTypesSources = [
+    "typescript-internal.d.ts",
+    "processTypes.ts",
+    "discovery.ts",
+    "utilities.ts",
+    "types.ts",
+].map(function (f) {
+    return path.join(processTypesDirectory, f);
+});
 var typesTs = path.join(compilerDirectory, "types.ts");
 var factoryTs = path.join(compilerDirectory, "factory.ts");
-var transformTs = path.join(compilerDirectory, "transform.ts");
 var utilitiesTs = path.join(compilerDirectory, "utilities.ts");
 var factoryGeneratedTs = path.join(compilerDirectory, "factory.generated.ts");
-var transformGeneratedTs = path.join(compilerDirectory, "transform.generated.ts");
 
+directory(builtScriptsDirectory);
+directory(processTypesBuiltDirectory);
 file(processTypesTs);
 
 // processTypes script
-compileFile(processTypesJs, [processTypesTs], [processTypesTs], {
+compileFile(processTypesJs, processTypesSources, [processTypesBuiltDirectory].concat(processTypesSources), {
     useBuiltCompiler: false,
     noOutFile: true,
+    outDir: processTypesBuiltDirectory,
+    target: "es5",
     experimentalDecorators: true,
-    target: "es5"
+}, function () {
+    jake.cpR(
+        path.join(processTypesDirectory, "typescript-internal.js"),
+        path.join(builtScriptsDirectory, "processTypes/typescript-internal.js"));
 });
 
 // The generated factory; built for the compiler and for the 'generate-factory' task
-file(factoryGeneratedTs, [processTypesJs, typesTs, factoryTs, transformTs, utilitiesTs], function() {
-    var cmd = "node " + processTypesJs 
+file(factoryGeneratedTs, [processTypesJs, typesTs, factoryTs, utilitiesTs], function() {
+    var cmd = "node " + processTypesJs
             + " " + typesTs
             + " " + factoryTs
-            + " " + transformTs
             + " " + utilitiesTs;
     console.log(cmd);
     var ex = jake.createExec([cmd]);
@@ -431,10 +447,8 @@ file(factoryGeneratedTs, [processTypesJs, typesTs, factoryTs, transformTs, utili
     ex.run();
 }, { async: true });
 
-file(transformGeneratedTs, [factoryGeneratedTs]);
-
 desc("Generates a TypeScript file that contains factory methods to create each Syntax Node.")
-task("generate-factory", [/*factoryGeneratedTs, transformGeneratedTs*/]);
+task("generate-factory", [factoryGeneratedTs]);
 
 
 // Publish nightly
@@ -482,7 +496,7 @@ task("publish-nightly", ["configure-nightly", "LKG", "clean", "setDebugMode", "r
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
 compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), {
-    prefixes: [copyright], 
+    prefixes: [copyright],
     useBuiltCompiler: false
 });
 
@@ -516,7 +530,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
     var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
     fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
 
-    // Node package definition file to be distributed without the package. Created by replacing 
+    // Node package definition file to be distributed without the package. Created by replacing
     // 'ts' namespace with '"typescript"' as a module.
     var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
     fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
@@ -524,7 +538,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), {
-    prefixes: [copyright], 
+    prefixes: [copyright],
     useBuiltCompiler: true
 });
 
@@ -746,7 +760,7 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 var nodeServerOutFile = 'tests/webTestServer.js';
 var nodeServerInFile = 'tests/webTestServer.ts';
 compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], {
-    useBuiltCompiler: true, 
+    useBuiltCompiler: true,
     noOutFile: true
 });
 

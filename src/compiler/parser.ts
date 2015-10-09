@@ -1,4 +1,5 @@
 /// <reference path="scanner.ts"/>
+/// <reference path="factory.ts"/>
 /// <reference path="utilities.ts"/>
 
 namespace ts {

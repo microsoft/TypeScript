@@ -29,7 +29,7 @@ class TypeWriterWalker {
     }
 
     private visitNode(node: ts.Node): void {
-        if (ts.isPartOfExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
+        if (ts.isExpression(node) || node.kind === ts.SyntaxKind.Identifier) {
             this.logTypeAndSymbol(node);
         }
 

@@ -97,8 +97,8 @@ namespace ts {
         }
 
         return true;
-    }    
-   
+    }
+
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
@@ -391,7 +391,7 @@ namespace ts {
 
         return flags;
     }
-    
+
     export function isConst(navigable: ParentNavigable): boolean {
         return !!(getCombinedNodeFlags(navigable) & NodeFlags.Const);
     }
@@ -400,7 +400,7 @@ namespace ts {
         return !!(getCombinedNodeFlags(navigable) & NodeFlags.Let);
     }
 
-    export function isPrologueDirective(node: Node): boolean {
+    export function isPrologueDirective(node: Statement): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
@@ -409,10 +409,10 @@ namespace ts {
         while (node && node.original) {
             node = node.original;
         }
-        
+
         return node;
     }
-    
+
     export function getOriginalNodeIf<T extends Node>(node: T, nodeTest: (node: Node) => node is T): T {
         while (node && node.original) {
             let original = node.original;
@@ -680,7 +680,7 @@ namespace ts {
                 return <FunctionLikeDeclaration>node;
             }
         }
-        
+
         return undefined;
     }
 
@@ -692,7 +692,7 @@ namespace ts {
                 return <ClassLikeDeclaration>node;
             }
         }
-        
+
         return undefined;
     }
 
@@ -774,7 +774,7 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (isParameter(nav.getParent()) 
+                    if (isParameter(nav.getParent())
                         && isClassElement(nav.getGrandparent())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
@@ -964,19 +964,19 @@ namespace ts {
                             break;
                         }
                     }
-    
+
                     return nav.getKind() === SyntaxKind.TypeQuery;
-                    
+
                 case SyntaxKind.Identifier:
                     if (nav.getParent().kind === SyntaxKind.TypeQuery) {
                         return true;
                     }
-    
+
                 // fall through
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.StringLiteral:
                     nav.moveToParent();
-                    
+
                     let parent = nav.getNode();
                     switch (parent.kind) {
                         case SyntaxKind.VariableDeclaration:
@@ -1062,23 +1062,23 @@ namespace ts {
                 return Comparison.GreaterThan;
         }
     }
-    
+
     export function getExpressionPrecedence(expr: Expression) {
         return getOperatorPrecedence(expr.kind, getOperator(expr), isNewExpression(expr) && !expr.arguments)
     }
-    
+
     export function getBinaryOperatorPrecedence(operator: SyntaxKind) {
         return getOperatorPrecedence(SyntaxKind.BinaryExpression, operator);
     }
 
     function getOperator(expr: Expression) {
-        return isBinaryExpression(expr) 
-            ? expr.operatorToken.kind 
-            : isPrefixUnaryExpression(expr) || isPostfixUnaryExpression(expr) 
-                ? expr.operator 
+        return isBinaryExpression(expr)
+            ? expr.operatorToken.kind
+            : isPrefixUnaryExpression(expr) || isPostfixUnaryExpression(expr)
+                ? expr.operator
                 : undefined;
     }
-    
+
     function getOperatorPrecedence(kind: SyntaxKind, operator: SyntaxKind, isNewExpressionWithoutArguments?: boolean) {
         switch (kind) {
             case SyntaxKind.ThisKeyword:
@@ -1101,48 +1101,48 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
                 return 19;
-                
+
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
                 return 18;
-                
+
             case SyntaxKind.NewExpression:
                 return isNewExpressionWithoutArguments ? 17 : 18;
-                
+
             case SyntaxKind.CallExpression:
                 return 17;
-                
+
             case SyntaxKind.PostfixUnaryExpression:
                 return 16;
-                
+
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
                 return 15;
-                
+
             case SyntaxKind.BinaryExpression:
                 switch (operator) {
                     case SyntaxKind.ExclamationToken:
                     case SyntaxKind.TildeToken:
                         return 15;
-                        
+
                     case SyntaxKind.AsteriskToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.PercentToken:
                         return 14;
-                    
+
                     case SyntaxKind.PlusToken:
                     case SyntaxKind.MinusToken:
                         return 13;
-                        
+
                     case SyntaxKind.LessThanLessThanToken:
                     case SyntaxKind.GreaterThanGreaterThanToken:
                     case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
                         return 12;
-                        
+
                     case SyntaxKind.LessThanToken:
                     case SyntaxKind.LessThanEqualsToken:
                     case SyntaxKind.GreaterThanToken:
@@ -1150,28 +1150,28 @@ namespace ts {
                     case SyntaxKind.InKeyword:
                     case SyntaxKind.InstanceOfKeyword:
                         return 11;
-                        
+
                     case SyntaxKind.EqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                         return 10;
-                        
+
                     case SyntaxKind.AmpersandToken:
                         return 9;
-                        
+
                     case SyntaxKind.CaretToken:
                         return 8;
-                        
+
                     case SyntaxKind.BarToken:
                         return 7;
-                        
+
                     case SyntaxKind.AmpersandAmpersandToken:
                         return 6;
-                        
+
                     case SyntaxKind.BarBarToken:
                         return 5;
-                        
+
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.PlusEqualsToken:
                     case SyntaxKind.MinusEqualsToken:
@@ -1185,28 +1185,28 @@ namespace ts {
                     case SyntaxKind.CaretEqualsToken:
                     case SyntaxKind.BarEqualsToken:
                         return 3;
-                        
+
                     case SyntaxKind.CommaToken:
                         return 0;
-                        
+
                     default:
                         return -1;
                 }
-                
+
             case SyntaxKind.ConditionalExpression:
                 return 4;
-                
+
             case SyntaxKind.YieldExpression:
                 return 2;
-                
+
             case SyntaxKind.SpreadElementExpression:
                 return 1;
-                
+
             default:
                 return -1;
         }
     }
-    
+
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
         let moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
@@ -1239,6 +1239,43 @@ namespace ts {
         if (node.kind === SyntaxKind.ExportDeclaration) {
             return (<ExportDeclaration>node).moduleSpecifier;
         }
+    }
+
+    export function getLiteralText(node: LiteralExpression, sourceFile: SourceFile, languageVersion: ScriptTarget) {
+        // Any template literal or string literal with an extended escape
+        // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
+        if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
+            return getQuotedEscapedLiteralText("\"", node.text, "\"");
+        }
+
+        // If we don't need to downlevel and we can reach the original source text using
+        // the node's parent reference, then simply get the text as it was originally written.
+        if (!nodeIsSynthesized(node) && node.parent) {
+            return getSourceTextOfNodeFromSourceFile(sourceFile, node);
+        }
+
+        // If we can't reach the original source text, use the canonical form if it's a number,
+        // or an escaped quoted form of the original text if it's string-like.
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+                return getQuotedEscapedLiteralText("\"", node.text, "\"");
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return getQuotedEscapedLiteralText("`", node.text, "`");
+            case SyntaxKind.TemplateHead:
+                return getQuotedEscapedLiteralText("`", node.text, "${");
+            case SyntaxKind.TemplateMiddle:
+                return getQuotedEscapedLiteralText("}", node.text, "${");
+            case SyntaxKind.TemplateTail:
+                return getQuotedEscapedLiteralText("}", node.text, "`");
+            case SyntaxKind.NumericLiteral:
+                return node.text;
+        }
+
+        Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
+    }
+
+    function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
+        return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
     }
 
     export function hasQuestionToken(node: Node) {
@@ -1422,11 +1459,11 @@ namespace ts {
         }
         return false;
     }
-    
+
     export function isStatementOrDeclarationStatement(n: Node): n is Statement {
         return isStatement(n) || isDeclarationStatement(n);
     }
-    
+
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): name is Identifier | StringLiteral | LiteralExpression {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
@@ -1503,11 +1540,11 @@ namespace ts {
         if (isBinaryExpression(node)) {
             if (node.operatorToken.kind === SyntaxKind.EqualsToken) {
                 let left = node.left;
-                return left.kind === SyntaxKind.ObjectLiteralExpression 
+                return left.kind === SyntaxKind.ObjectLiteralExpression
                     || left.kind === SyntaxKind.ArrayLiteralExpression;
             }
         }
-        
+
         return false;
     }
 
@@ -1683,7 +1720,7 @@ namespace ts {
     export function nodeStartsNewLexicalEnvironment(n: Node): boolean {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
-    
+
     export function cloneEntityName(node: EntityName): EntityName {
         if (node.kind === SyntaxKind.Identifier) {
             let clone = <Identifier>createNode(SyntaxKind.Identifier);
@@ -1703,7 +1740,7 @@ namespace ts {
     export function nodeIsSynthesized(node: Node): boolean {
         return node && node.pos === -1;
     }
-    
+
     export function positionIsSynthesized(pos: number): boolean {
         return pos === -1;
     }
@@ -1737,12 +1774,12 @@ namespace ts {
         function getModificationCount() {
             return modificationCount;
         }
-        
+
         function reattachFileDiagnostics(newFile: SourceFile): void {
             if (!hasProperty(fileDiagnostics, newFile.fileName)) {
                 return;
             }
-            
+
             for (let diagnostic of fileDiagnostics[newFile.fileName]) {
                 diagnostic.file = newFile;
             }
@@ -2010,7 +2047,7 @@ namespace ts {
         }
         return false;
     }
-    
+
     export interface AllAccessorDeclarations {
         firstAccessor: AccessorDeclaration;
         secondAccessor: AccessorDeclaration;
@@ -2249,7 +2286,7 @@ namespace ts {
     }
 
     /**
-      * Tests whether the node is an ExpressionWithTypeArguments node that is part of the `extends` 
+      * Tests whether the node is an ExpressionWithTypeArguments node that is part of the `extends`
       * clause of a class.
       */
     export function isExpressionWithTypeArgumentsInClassExtendsClause(navigable: ParentNavigable): boolean {

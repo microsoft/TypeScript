@@ -321,7 +321,7 @@ namespace ts {
         bindTime = 0;
         checkTime = 0;
         emitTime = 0;
-        transform.transformTime = 0;
+        transformTime = 0;
 
         let program = createProgram(fileNames, compilerOptions, compilerHost);
         let exitStatus = compileProgram();
@@ -354,7 +354,7 @@ namespace ts {
             reportTimeStatistic("Parse time", programTime);
             reportTimeStatistic("Bind time", bindTime);
             reportTimeStatistic("Check time", checkTime);
-            reportTimeStatistic("Transform time", transform.transformTime);
+            reportTimeStatistic("Transform time", transformTime);
             reportTimeStatistic("Emit time", emitTime);
             reportTimeStatistic("Total time", programTime + bindTime + checkTime + emitTime);
         }
@@ -363,7 +363,7 @@ namespace ts {
 
         function compileProgram(): ExitStatus {
             let diagnostics: Diagnostic[];
-            
+
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
@@ -560,7 +560,7 @@ namespace ts {
             return result;
         }
     }
-    
+
     // declare var global: any, require: any;
     // if (typeof global !== "undefined" && Object.prototype.toString.call(global.process) === '[object process]') {
     //     try {

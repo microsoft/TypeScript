@@ -52,7 +52,7 @@ namespace ts {
         function normalizeKey(key: string) {
             return getCanonicalFileName(normalizeSlashes(key));
         }
-        
+
         function clear() {
             files = {};
         }
@@ -129,14 +129,14 @@ namespace ts {
         }
         return result;
     }
-    
+
     export function every<T>(array: T[], f: (x: T) => boolean): boolean {
         if (array) {
             for (let item of array) {
                 if (!f(item)) {
                     return false;
                 }
-                
+
                 return true;
             }
         }
@@ -189,7 +189,7 @@ namespace ts {
             }
         }
     }
-    
+
     export function trimArray<T>(array: T[]): T[] {
         let result: T[];
         if (array) {
@@ -202,22 +202,34 @@ namespace ts {
         }
         return result;
     }
-    
+
     export function skip<T>(array: T[], count: number) {
         if (array) {
-            return count === 0 ? array : array.slice(count); 
+            return count === 0 ? array : array.slice(count);
         }
         return undefined;
     }
-    
+
     export function take<T>(array: T[], count: number) {
         if (array) {
-            return count === array.length ? array : array.slice(0, count);
+            return count >= array.length ? array : array.slice(0, count);
         }
-        
+
         return undefined;
     }
-    
+
+    export function takeWhile<T>(array: T[], callbackfn: (item: T) => boolean): T[] {
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (!callbackfn(array[i])) {
+                    return array.slice(0, i);
+                }
+            }
+            return array.slice(0);
+        }
+        return undefined;
+    }
+
     export function append<T>(to: T[], ...values: T[]): T[] {
         let result: T[];
         if (to) {
@@ -242,7 +254,7 @@ namespace ts {
         }
         return true;
     }
-    
+
     /**
      * Returns the first element of an array if non-empty, undefined otherwise.
      */
@@ -376,6 +388,16 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    export function assign<T>(target: Map<T>, source: Map<T>): Map<T> {
+        if (!target) {
+            target = {};
+        }
+        for (let id in source) {
+            target[id] = source[id];
+        }
+        return target;
     }
 
     export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
@@ -883,22 +905,22 @@ namespace ts {
             let parent = getParent();
             return parent ? parent.parent : undefined;
         }
-        
+
         /** Gets the parent of the current node, without moving the navigator. */
         function getParent() {
             return currentNode ? currentNode.parent : undefined;
         }
-        
+
         /** Gets the current node. */
         function getNode() {
             return currentNode;
         }
-        
+
         /** Gets the SyntaxKind for the current node. */
         function getKind() {
             return currentNode ? currentNode.kind : undefined;
         }
-        
+
         /** Navigates to the parent of the current node if it has one. */
         function moveToParent(): boolean {
             let parent = getParent();
@@ -906,15 +928,15 @@ namespace ts {
                 currentNode = parent;
                 return true;
             }
-            
+
             return false;
         }
-        
+
         /** Creates a new ParentNavigator from the current node. */
         function createParentNavigator() {
             return ts.createParentNavigator(currentNode);
         }
-        
+
         return {
             getGrandparent,
             getParent,
@@ -924,7 +946,7 @@ namespace ts {
             createParentNavigator,
         };
     }
-    
+
     /**
       * Creates a node stack used to maintain parent relationships without parent pointers.
       */
@@ -934,27 +956,27 @@ namespace ts {
         let rootNode: Node;
         let parentNode: Node;
         let currentNode: Node;
-        
+
         /** Gets the node two steps back from the top of the stack. */
         function getGrandparent() {
             return peekNode(2);
         }
-        
+
         /** Gets the node one step back from the top of the stack. */
         function getParent() {
             return parentNode;
         }
-        
+
         /** Gets the node at the top of the stack. */
         function getNode() {
             return currentNode;
         }
-        
+
         /** Gets the SyntaxKind for the node at the top of the stack. */
         function getKind() {
             return currentNode ? currentNode.kind : undefined;
         }
-        
+
         /** Pushes a node onto the stack. */
         function pushNode(node: Node): void {
             stackSize++;
@@ -967,17 +989,17 @@ namespace ts {
             parentNode = currentNode;
             currentNode = node;
         }
-        
+
         /** Pushes a node onto the stack if it is not already at the top of the stack. */
         function tryPushNode(node: Node): boolean {
             if (currentNode !== node) {
                 return false;
             }
-            
+
             pushNode(node);
             return true;
         }
-        
+
         /** Pops the top node from the stack. */
         function popNode(): void {
             currentNode = parentNode;
@@ -987,12 +1009,12 @@ namespace ts {
                 rootNode = undefined;
             }
         }
-        
+
         /** Replaces the node at the top of the stack. */
         function setNode(node: Node): void {
             currentNode = node;
         }
-        
+
         /** Peeks at a node a specified number of steps back from the top of the stack. */
         function peekNode(stackOffset: number): Node {
             switch (stackOffset) {
@@ -1018,60 +1040,60 @@ namespace ts {
             }
             return undefined;
         }
-        
+
         /** Creates a parent navigator from the top of the stack. */
         function createParentNavigator() {
             return createParentNavigatorFromStackOffset(0);
         }
-        
+
         /** Creates a parent navigator a specified number of steps back from the top of the stack. */
         function createParentNavigatorFromStackOffset(stackOffset: number): ParentNavigator {
             /** Gets the node two steps back from the current stack offset. */
             function getGrandparent() {
                 return peekNode(stackOffset + 2);
             }
-            
+
             /** Gets the node one step back from the current stack offset. */
             function getParent() {
                 return peekNode(stackOffset + 1);
             }
-            
+
             /** Gets the node at the current stack offset. */
             function getNode() {
                 return peekNode(stackOffset);
             }
-            
+
             /** Gets the SyntaxKind of the node at the current stack offset. */
             function getKind() {
                 let node = getNode();
-                return node ? node.kind : undefined; 
+                return node ? node.kind : undefined;
             }
-            
+
             /** Navigates to the node one step back from the current stack offset. */
             function moveToParent() {
                 if (getParent()) {
                     stackOffset++;
                     return true;
                 }
-                
+
                 return false;
             }
-            
+
             /** Navigates to the node at the bottom of the stack. */
             function moveToRoot() {
                 if (stackSize > 0) {
                     stackOffset = stackSize;
                     return true;
                 }
-                
+
                 return false;
             }
-            
+
             /** Creates a new ParentNavigator from the current stack offset. */
             function createParentNavigator() {
                 return createParentNavigatorFromStackOffset(stackOffset);
             }
-            
+
             return {
                 getGrandparent,
                 getParent,
@@ -1081,7 +1103,7 @@ namespace ts {
                 createParentNavigator,
             };
         }
-        
+
         return {
             getGrandparent,
             getParent,
@@ -1095,7 +1117,7 @@ namespace ts {
             createParentNavigator,
         };
     }
-    
+
     export const enum AssertionLevel {
         None = 0,
         Normal = 1,

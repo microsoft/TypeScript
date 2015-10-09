@@ -328,6 +328,10 @@ namespace ts {
         JSDocTypeTag,
         JSDocTemplateTag,
 
+        // Raw nodes
+        RawExpression,
+        RawStatement,
+
         // Synthesized list
         SyntaxList,
         // Enum value count
@@ -425,185 +429,7 @@ namespace ts {
         // Used to know if we've computed data from children and cached it in this node.
         HasAggregatedChildData = 1 << 7
     }
-    
-    /* @internal */
-    export const enum TransformFlags {
-        //
-        // Individual Facts
-        //
-        
-        // A fact that states that a node is TypeScript syntax
-        TypeScript = 1 << 1,
-        ContainsTypeScript = 1 << 2,
-        ContainsTypeScriptClassSyntaxExtension = 1 << 3,
-        ContainsTypeScriptDecorator = 1 << 4,
-        ContainsTypeScriptModifier = 1 << 20,
-        
-        // A fact that states that a node is ES6 syntax
-        ES6 = 1 << 5,
-        ContainsES6 = 1 << 6,
-        ContainsES6Yield = 1 << 7,
-        ContainsES6ParameterBindingPattern = 1 << 8,
-        ContainsES6VariableBindingPattern = 1 << 9,
-        ContainsES6RestParameter = 1 << 10,
-        ContainsES6ParameterInitializer = 1 << 11,
-        ContainsES6SpreadElement = 1 << 12,
-        ContainsES6LetOrConst = 1 << 13,
-        ContainsES6ComputedPropertyName = 1 << 14,
-        
-        ContainsCapturedThis = 1 << 15,
-        ContainsLexicalThis = 1 << 16,
-        ContainsHoistedDeclaration = 1 << 17,
-        ContainsCompletionStatement = 1 << 18,
-        
-        LexicalEnvironment = 1 << 19,
 
-        //
-        // Assertions
-        //
-        
-        ThisNodeIsTypeScript = TypeScript | ContainsTypeScript,
-        ThisNodeIsTypeScriptModifier = ThisNodeIsTypeScript | ContainsTypeScriptModifier,
-        ThisNodeIsTypeScriptClassSyntaxExtension = ThisNodeIsTypeScript | ContainsTypeScriptClassSyntaxExtension,
-        ThisNodeIsTypeScriptDecorator = ThisNodeIsTypeScriptClassSyntaxExtension | ContainsTypeScriptDecorator,
-        
-        ThisNodeIsES6 = ES6 | ContainsES6,
-        ThisNodeIsES6Yield = ThisNodeIsES6 | ContainsES6Yield,
-        ThisNodeIsES6ParameterBindingPattern = ThisNodeIsES6 | ContainsES6ParameterBindingPattern,
-        ThisNodeIsES6VariableBindingPattern = ThisNodeIsES6 | ContainsES6VariableBindingPattern,
-        ThisNodeIsES6RestParameter = ThisNodeIsES6 | ContainsES6RestParameter,
-        ThisNodeIsES6ParameterInitializer = ThisNodeIsES6 | ContainsES6ParameterInitializer,
-        ThisNodeIsES6SpreadElement = ThisNodeIsES6 | ContainsES6SpreadElement,
-        ThisNodeIsES6LetOrConst = ThisNodeIsES6 | ContainsES6LetOrConst,
-        
-        // Additional markers 
-        ThisNodeCapturesLexicalThis = ContainsCapturedThis,
-        ThisNodeIsThisKeyword = ContainsLexicalThis,
-        ThisNodeIsHoistedDeclaration = ContainsHoistedDeclaration,
-        ThisNodeIsCompletionStatement = ContainsCompletionStatement,
-        ThisNodeStartsNewLexicalEnvironment = LexicalEnvironment,
-        
-        //
-        // Masks
-        //
-        
-        ThisNodeIsTypeScriptMask =
-            TypeScript,
-            
-        ThisNodeIsES6Mask =
-            ES6,
-
-        //
-        // Transformation Tests
-        //
-        
-        ThisNodeNeedsTransformToES6 =
-            ThisNodeIsTypeScriptMask,
-        
-        ThisNodeNeedsTransformToES5 =
-            ThisNodeIsES6Mask,
-          
-        //
-        // Queries
-        //
-        
-        SubtreeContainsTypeScript =
-            ThisNodeIsTypeScriptMask |
-            ContainsTypeScript,
-            
-        SubtreeNeedsTransformToES6 =
-            SubtreeContainsTypeScript,
-        
-        SubtreeContainsLexicalThis =
-            ContainsLexicalThis,
-            
-        SubtreeCapturesLexicalThis =
-            ContainsCapturedThis,
-            
-        SubtreeContainsRestParameter =
-            ContainsES6RestParameter,
-            
-        SubtreeContainsParameterBindingPattern =
-            ContainsES6ParameterBindingPattern,
-            
-        SubtreeContainsVariableBindingPattern =
-            ContainsES6VariableBindingPattern,
-
-        SubtreeContainsParameterInitializer =
-            ContainsES6ParameterInitializer,
-            
-        SubtreeContainsES6 =
-            ThisNodeIsES6Mask |
-            ContainsES6,
-            
-        SubtreeNeedsTransformToES5 =
-            SubtreeContainsES6,
-            
-        SubtreeNeedsAnyTransform =
-            SubtreeNeedsTransformToES6 |
-            SubtreeNeedsTransformToES5,
-            
-        ThisParameterNeedsTransform =
-            ContainsES6VariableBindingPattern |
-            ContainsES6ParameterBindingPattern |
-            ContainsES6RestParameter |
-            ContainsES6ParameterInitializer,
-            
-        SubtreeContainsES6ParameterOrCapturedThis =
-            ContainsES6ParameterBindingPattern |
-            ContainsES6ParameterInitializer |
-            ContainsES6RestParameter |
-            ContainsCapturedThis,
-          
-        //
-        // Scope Exclusions
-        //
-
-        NodeExcludes = 
-            ThisNodeIsTypeScriptMask |
-            ThisNodeIsES6Mask,
-            
-        ParameterScopeExcludes =
-            ContainsTypeScriptModifier,
-        
-        ArrowFunctionScopeExcludes =
-            ContainsES6Yield |
-            ContainsES6VariableBindingPattern |
-            ContainsES6ParameterBindingPattern |
-            ContainsES6RestParameter |
-            ContainsES6ParameterInitializer |
-            ContainsES6LetOrConst |
-            ContainsHoistedDeclaration |
-            ContainsCompletionStatement |
-            ContainsLexicalThis,
-            
-        FunctionScopeExcludes =
-            ArrowFunctionScopeExcludes |
-            ContainsLexicalThis |
-            ContainsCapturedThis,
-            
-        ClassScopeExcludes =
-            ContainsLexicalThis |
-            ContainsCapturedThis |
-            ContainsES6VariableBindingPattern |
-            ContainsES6ParameterBindingPattern |
-            ContainsTypeScriptClassSyntaxExtension |
-            ContainsTypeScriptDecorator,
-            
-        ModuleScopeExcludes =
-            ContainsES6LetOrConst |
-            ContainsLexicalThis |
-            ContainsCapturedThis |
-            ContainsES6VariableBindingPattern |
-            ContainsES6ParameterBindingPattern,
-            
-        TypeExcludes =
-            ~ContainsTypeScript,
-            
-        CallOrArrayLiteralExcludes =
-            ContainsES6SpreadElement,
-    }
-    
     /* @internal */
     export interface TransformResolver {
         getGeneratedNameForNode(node: Node): string;
@@ -673,7 +499,7 @@ namespace ts {
         /** Pops the top node from the stack. */
         popNode(): void;
     }
-    
+
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
     // @factoryhidden("parent", true)
@@ -710,7 +536,7 @@ namespace ts {
     export interface ModifiersArray extends NodeArray<Modifier> {
         flags: number;
     }
-    
+
     // @kind(SyntaxKind.AbstractKeyword, { create: false, update: false, test: false })
     // @kind(SyntaxKind.AsyncKeyword, { create: false, update: false, test: false })
     // @kind(SyntaxKind.ConstKeyword, { create: false, update: false, test: false })
@@ -722,7 +548,7 @@ namespace ts {
     // @kind(SyntaxKind.ProtectedKeyword, { create: false, update: false, test: false })
     // @kind(SyntaxKind.StaticKeyword, { create: false, update: false, test: false })
     export type Modifier = Node;
-    
+
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
         // @factoryparam
@@ -740,20 +566,22 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
+    // @nodetest("isDeclarationNameNode")
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
-    
+
     export type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
-    
+
     // @factoryhidden("decorators", false)
     // @factoryhidden("modifiers", false)
     export interface Declaration extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
     }
-    
+
     export interface DeclarationStatement extends Declaration, Statement {
+        name?: Identifier;
     }
-    
+
     // @kind(SyntaxKind.ComputedPropertyName)
     export interface ComputedPropertyName extends Node {
         expression: Expression;
@@ -781,7 +609,7 @@ namespace ts {
         parameters: NodeArray<ParameterDeclaration>;
         type?: TypeNode;
     }
-    
+
     // @kind(SyntaxKind.CallSignature)
     // @factoryhidden("name")
     // @factoryhidden("decorators")
@@ -831,7 +659,7 @@ namespace ts {
         name: Identifier | BindingPattern;  // Declared binding element name
         initializer?: Expression;           // Optional initializer
     }
-    
+
     // @kind(SyntaxKind.PropertySignature)
     // @factoryorder("decorators", "modifiers", "name", "questionToken", "type")
     export interface PropertySignature extends TypeElement {
@@ -853,6 +681,7 @@ namespace ts {
 
     export interface ObjectLiteralElement extends Declaration {
         _objectLiteralBrandBrand: any;
+        name?: PropertyName;
    }
 
     // @kind(SyntaxKind.PropertyAssignment)
@@ -892,7 +721,7 @@ namespace ts {
         type?: TypeNode;
         initializer?: Expression;
     }
-    
+
     export interface PropertyLikeDeclaration extends Declaration {
         name: PropertyName;
     }
@@ -900,12 +729,12 @@ namespace ts {
     export interface BindingPattern extends Node {
         elements: NodeArray<BindingElement>;
     }
-    
+
     // @kind(SyntaxKind.ObjectBindingPattern)
     export type ObjectBindingPattern = BindingPattern;
-    
+
     // @kind(SyntaxKind.ArrayBindingPattern)
-    export type ArrayBindingPattern = BindingPattern; 
+    export type ArrayBindingPattern = BindingPattern;
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -923,7 +752,6 @@ namespace ts {
         // @factoryparam
         questionToken?: Node;
 
-        // @newlexicalenvironment()
         body?: Block | Expression;
     }
 
@@ -932,9 +760,7 @@ namespace ts {
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
     export interface FunctionDeclaration extends FunctionLikeDeclaration, DeclarationStatement {
         name?: Identifier;
-        
-        // @newlexicalenvironment()
-        body?: Block;
+        body?: FunctionBody;
     }
 
     // @kind(SyntaxKind.MethodSignature)
@@ -960,11 +786,9 @@ namespace ts {
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
     export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         name: PropertyName;
-        
-        // @newlexicalenvironment()
-        body?: Block;
+        body?: FunctionBody;
     }
-    
+
     // @kind(SyntaxKind.Constructor)
     // @factoryhidden("asteriskToken")
     // @factoryhidden("questionToken")
@@ -972,8 +796,7 @@ namespace ts {
     // @factoryhidden("name")
     // @factoryorder("decorators", "modifiers", "name", "parameters", "type", "body")
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
-        // @newlexicalenvironment()
-        body?: Block;
+        body?: FunctionBody;
     }
 
     // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
@@ -992,18 +815,16 @@ namespace ts {
     export interface AccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         _accessorDeclarationBrand: any;
         name: PropertyName;
-
-        // @newlexicalenvironment()
-        body: Block;
+        body: FunctionBody;
     }
-    
+
     // @kind(SyntaxKind.GetAccessor)
     // @factoryhidden("typeParameters")
     // @factoryhidden("questionToken")
     // @factoryhidden("asteriskToken")
     // @factoryorder("decorators", "modifiers", "name", "parameters", "type", "body")
     export type GetAccessorDeclaration = AccessorDeclaration;
-    
+
     // @kind(SyntaxKind.SetAccessor)
     // @factoryhidden("typeParameters")
     // @factoryhidden("questionToken")
@@ -1018,6 +839,7 @@ namespace ts {
         _indexSignatureDeclarationBrand: any;
     }
 
+    // @nodetest("isTypeNodeNode")
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
@@ -1025,13 +847,13 @@ namespace ts {
     export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
         _functionOrConstructorTypeNodeBrand: any;
     }
-    
+
     // @kind(SyntaxKind.FunctionType)
     // @factoryhidden("name")
     // @factoryhidden("decorators")
     // @factoryhidden("modifiers")
     export type FunctionTypeNode = FunctionOrConstructorTypeNode;
-    
+
     // @kind(SyntaxKind.ConstructorType)
     // @factoryhidden("name")
     // @factoryhidden("decorators")
@@ -1054,7 +876,7 @@ namespace ts {
     export interface TypeQueryNode extends TypeNode {
         exprName: EntityName;
     }
-    
+
     // A TypeLiteral is the declaration node for an anonymous symbol.
     // @kind(SyntaxKind.TypeLiteral)
     // @factoryhidden("name", true)
@@ -1102,11 +924,17 @@ namespace ts {
     // takes an Expression without any error.  By using the 'brands' we ensure that the type
     // checker actually thinks you have something of the right type.  Note: the brands are
     // never actually given values.  At runtime they have zero cost.
-    // @kind(SyntaxKind.OmittedExpression)
     // @nodetest("isExpressionNode")
     export interface Expression extends Node {
         _expressionBrand: any;
         contextualType?: Type;  // Used to temporarily assign a contextual type during overload resolution
+    }
+
+    // @kind(SyntaxKind.OmittedExpression)
+    export type OmittedExpression = Expression;
+
+    // @kind(SyntaxKind.RawExpression)
+    export interface RawExpression extends LiteralExpression {
     }
 
     export interface UnaryExpression extends Expression {
@@ -1141,7 +969,7 @@ namespace ts {
 
     // @kind(SyntaxKind.TrueKeyword)
     // @kind(SyntaxKind.FalseKeyword)
-    // @kind(SyntaxKind.NullKeyword, { create: false })
+    // @kind(SyntaxKind.NullKeyword)
     // @kind(SyntaxKind.ThisKeyword)
     // @kind(SyntaxKind.SuperKeyword)
     export interface PrimaryExpression extends MemberExpression {
@@ -1167,7 +995,7 @@ namespace ts {
     export interface AwaitExpression extends UnaryExpression {
         expression: UnaryExpression;
     }
-    
+
     // @kind(SyntaxKind.YieldExpression)
     export interface YieldExpression extends Expression {
         // @factoryparam
@@ -1194,14 +1022,15 @@ namespace ts {
         whenFalse: Expression;
     }
 
+    export type FunctionBody = Block;
+    export type ConciseBody = FunctionBody | Expression;
+
     // @kind(SyntaxKind.FunctionExpression)
     // @factoryhidden("questionToken", true)
     // @factoryorder("decorators", "modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body")
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclaration {
         name?: Identifier;
-        
-        // @newlexicalenvironment()
-        body: Block | Expression;  // Required, whereas the member inherited from FunctionDeclaration is optional
+        body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
     // @kind(SyntaxKind.ArrowFunction)
@@ -1214,6 +1043,7 @@ namespace ts {
     export interface ArrowFunction extends Expression, FunctionLikeDeclaration {
         // @factoryparam
         equalsGreaterThanToken: Node;
+        body: ConciseBody;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -1311,7 +1141,7 @@ namespace ts {
         expression: Expression;
         type: TypeNode;
     }
-    
+
     // @kind(SyntaxKind.TypeAssertionExpression)
     export interface TypeAssertion extends UnaryExpression {
         type: TypeNode;
@@ -1364,7 +1194,7 @@ namespace ts {
 
     // @kind(SyntaxKind.JsxExpression)
     export interface JsxExpression extends Expression {
-        expression?: Expression;
+        expression: Expression;
     }
 
     // @kind(SyntaxKind.JsxText)
@@ -1378,10 +1208,16 @@ namespace ts {
     export interface Statement extends Node {
         _statementBrand: any;
     }
-    
+
+    // @kind(SyntaxKind.RawStatement)
+    export interface RawStatement extends Statement {
+        // @factoryparam
+        text: string;
+    }
+
     // @kind(SyntaxKind.EmptyStatement)
     export type EmptyStatement = Statement;
-    
+
     // @kind(SyntaxKind.DebuggerStatement)
     export type DebuggerStatement = Statement;
 
@@ -1390,6 +1226,8 @@ namespace ts {
     export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
         name?: Identifier;
     }
+
+    export type BlockLike = SourceFile | Block | ModuleBlock | CaseClause;
 
     // @kind(SyntaxKind.Block)
     export interface Block extends Statement {
@@ -1452,10 +1290,10 @@ namespace ts {
     export interface BreakOrContinueStatement extends Statement {
         label?: Identifier;
     }
-    
+
     // @kind(SyntaxKind.BreakStatement)
     export type BreakStatement = BreakOrContinueStatement;
-    
+
     // @kind(SyntaxKind.ContinueStatement)
     export type ContinueStatement = BreakOrContinueStatement;
 
@@ -1541,7 +1379,7 @@ namespace ts {
         _classElementBrand: any;
         name?: PropertyName;
     }
-    
+
     export interface TypeElement extends Declaration {
         _typeElementBrand: any;
         name?: PropertyName;
@@ -1587,12 +1425,12 @@ namespace ts {
         members: NodeArray<EnumMember>;
     }
 
+    export type ModuleBody = ModuleBlock | ModuleDeclaration;
+
     // @kind(SyntaxKind.ModuleDeclaration)
     export interface ModuleDeclaration extends DeclarationStatement {
         name: Identifier | LiteralExpression;
-        
-        // @newlexicalenvironment()
-        body: ModuleBlock | ModuleDeclaration;
+        body: ModuleBody;
     }
 
     // @kind(SyntaxKind.ModuleBlock)
@@ -1660,7 +1498,7 @@ namespace ts {
 
     // @kind(SyntaxKind.NamedImports)
     export type NamedImports = NamedImportsOrExports;
-    
+
     // @kind(SyntaxKind.NamedExports)
     export type NamedExports = NamedImportsOrExports;
 
@@ -1673,7 +1511,7 @@ namespace ts {
 
     // @kind(SyntaxKind.ImportSpecifier)
     export type ImportSpecifier = ImportOrExportSpecifier;
-    
+
     // @kind(SyntaxKind.ExportSpecifier)
     export type ExportSpecifier = ImportOrExportSpecifier;
 
@@ -1764,7 +1602,7 @@ namespace ts {
         parameters: NodeArray<ParameterDeclaration>;
         type: JSDocType;
     }
-    
+
     // @kind(SyntaxKind.JSDocVariadicType)
     export interface JSDocVariadicType extends JSDocType {
         type: JSDocType;
@@ -1825,6 +1663,11 @@ namespace ts {
         isBracketed: boolean;
     }
 
+    export interface AmdDependency {
+        path: string;
+        name: string;
+    }
+
     // Source files are declarations when they are external modules.
     // @kind(SyntaxKind.SourceFile, { create: "createSourceFileNode", update: "updateSourceFileNode" })
     // @factoryhidden("decorators")
@@ -1834,16 +1677,23 @@ namespace ts {
         statements: NodeArray<Statement>;
         endOfFileToken: Node;
 
+        // @factoryparam
         fileName: string;
+        // @factoryparam
         text: string;
 
-        amdDependencies: {path: string; name: string}[];
+        // @factoryparam
+        amdDependencies: AmdDependency[];
+        // @factoryparam
         moduleName: string;
+        // @factoryparam
         referencedFiles: FileReference[];
+        // @factoryparam
         languageVariant: LanguageVariant;
-        
+
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
+        // @factoryparam
         renamedDependencies?: Map<string>;
 
         /**
@@ -1854,15 +1704,19 @@ namespace ts {
          * If any other file has this comment, it signals not to include lib.d.ts
          * because this containing file is intended to act as a default library.
          */
+        // @factoryparam
         hasNoDefaultLib: boolean;
 
+        // @factoryparam
         languageVersion: ScriptTarget;
 
         // The first node that causes this file to be an external module
-        // @factoryhidden
+        // @factoryparam
         /* @internal */ externalModuleIndicator: Node;
 
+        // @factoryparam
         /* @internal */ isDefaultLib: boolean;
+        // @factoryparam
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1870,19 +1724,25 @@ namespace ts {
 
         // File level diagnostics reported by the parser (includes diagnostics about /// references
         // as well as code diagnostics).
+        // @factoryparam
         /* @internal */ parseDiagnostics: Diagnostic[];
 
         // File level diagnostics reported by the binder.
+        // @factoryparam
         /* @internal */ bindDiagnostics: Diagnostic[];
 
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
+        // @factoryparam
         /* @internal */ lineMap: number[];
+        // @factoryparam
         /* @internal */ classifiableNames?: Map<string>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
+        // @factoryparam
         /* @internal */ resolvedModules: Map<ResolvedModule>;
+        // @factoryparam
         /* @internal */ imports: LiteralExpression[];
     }
 
@@ -1910,12 +1770,12 @@ namespace ts {
     }
 
     export interface Program extends ScriptReferenceHost {
-        
+
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
         getRootFileNames(): string[]
-        
+
         /**
          * Get a list of files in the program
          */
@@ -2196,7 +2056,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
-        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind; 
+        getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
     }
 
@@ -2333,16 +2193,17 @@ namespace ts {
         EmitParam                   = 0x00000020,  // Emit __param helper for decorators
         EmitAwaiter                 = 0x00000040,  // Emit __awaiter
         EmitGenerator               = 0x00000080,  // Emit __generator
-        SuperInstance               = 0x00000100,  // Instance 'super' reference
-        SuperStatic                 = 0x00000200,  // Static 'super' reference
-        ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        LexicalArguments            = 0x00000800,
-        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
+        EmitExportStar              = 0x00000100,  // Emit __export
+        SuperInstance               = 0x00000200,  // Instance 'super' reference
+        SuperStatic                 = 0x00000400,  // Static 'super' reference
+        ContextChecked              = 0x00000800,  // Contextual types have been assigned
+        LexicalArguments            = 0x00001000,
+        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00002000,
-        BlockScopedBindingInLoop    = 0x00004000,
-        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00004000,
+        BlockScopedBindingInLoop    = 0x00008000,
+        LexicalModuleMergesWithClass= 0x00010000,  // Instantiated lexical module declaration is merged with a previous class declaration.
     }
 
     /* @internal */
@@ -2612,12 +2473,12 @@ namespace ts {
         Error,
         Message,
     }
-    
+
     export const enum ModuleResolutionKind {
         Classic  = 1,
         NodeJs  = 2
     }
-    
+
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
         charset?: string;
@@ -2874,31 +2735,31 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
-    }   
-    
+    }
+
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
-        // to determine location of bundled typings for node module 
+        // to determine location of bundled typings for node module
         readFile(fileName: string): string;
     }
-    
+
     export interface ResolvedModule {
         resolvedFileName: string;
         /*
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
-         * - be a .d.ts file 
+         * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
          */
         isExternalLibraryImport?: boolean;
     }
-    
+
     export interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModule;
         failedLookupLocations: string[];
     }
-    
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
@@ -2908,15 +2769,241 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
-        
+
         /*
-         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
-         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
          * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
-         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
-         * 'throw new Error("NotImplemented")'  
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
+         * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+    }
+
+    // @internal
+    export type Through<TIn extends Node, TOut extends Node> = (node: TIn, write: (node: TOut) => void) => void;
+
+    // Flags enum to track count of temp variables and a few dedicated names
+    // @internal
+    export const enum TempFlags {
+        Auto      = 0x00000000,  // No preferred name
+        CountMask = 0x0FFFFFFF,  // Temp variable counter
+        _i        = 0x10000000,  // Use/preference flag for '_i'
+    }
+
+    /* @internal */
+    export const enum TransformFlags {
+        //
+        // Facts
+        //
+
+        /**
+         * A fact that states that this node is TypeScript syntax.
+         */
+        TypeScript = 1 << 0,
+
+        /**
+         * A fact that states that the subtree of this node contains TypeScript syntax.
+         */
+        ContainsTypeScript = 1 << 1,
+
+        /**
+         * A fact that states that this node is Jsx syntax.
+         */
+        Jsx = 1 << 2,
+
+        /**
+         * A fact that states that the subtree of this node contains Jsx syntax.
+         */
+        ContainsJsx = 1 << 3,
+
+        /**
+         * A fact that states that this node is ES6 syntax.
+         */
+        ES6 = 1 << 4,
+
+        /**
+         * A fact that states that the subtree of this node contains ES6 syntax.
+         */
+        ContainsES6 = 1 << 5,
+
+        //
+        // Markers
+        //
+
+        /**
+         * A marker used by a descendant node to indicate that one of its ancestors should be considered TypeScript syntax.
+         * @remarks
+         * This is used to force the TypeScript class transformation for classes that contain:
+         * - Property Initializers
+         * - Constructor Parameters with accessibility modifiers.
+         * - Decorators
+         */
+        ContainerIsTypeScript = 1 << 16,
+        ContainerIsES6 = 1 << 17,
+        ContainsLexicalThis = 1 << 18,
+        ContainsCapturedLexicalThis = 1 << 19,
+        ContainsDefaultValueAssignments = 1 << 20,
+
+        // ContainsES6Yield = 1 << 20,
+        // ContainsES6SpreadElement = 1 << 21,
+        // ContainsES6LetOrConst = 1 << 22,
+        // ContainsES6ComputedPropertyName = 1 << 23,
+
+        //
+        // Assertions
+        //
+
+        /**
+         * Asserts that this node is TypeScript syntax, and that it's ancestors contain TypeScript syntax.
+         */
+        ThisNodeIsTypeScript = TypeScript | ContainsTypeScript,
+
+        /**
+         * Asserts that this node is Jsx syntax, and that it's ancestors contain Jsx syntax.
+         */
+        ThisNodeIsJsx = Jsx | ContainsJsx,
+
+        /**
+         * Asserts that this node is ES6 syntax, and that it's ancestors contain ES6 syntax.
+         */
+        ThisNodeIsES6 = ES6 | ContainsES6,
+
+        //
+        // Queries
+        //
+
+        // SubtreeContainsLexicalThis =
+        //     ContainsLexicalThis,
+
+        // SubtreeCapturesLexicalThis =
+        //     ContainsCapturedThis,
+
+        // SubtreeContainsRestParameter =
+        //     ContainsES6RestParameter,
+
+        // SubtreeContainsParameterBindingPattern =
+        //     ContainsES6ParameterBindingPattern,
+
+        // SubtreeContainsParameterInitializer =
+        //     ContainsES6ParameterInitializer,
+
+        // ThisParameterNeedsTransform =
+        //     ContainsES6VariableBindingPattern |
+        //     ContainsES6ParameterBindingPattern |
+        //     ContainsES6RestParameter |
+        //     ContainsES6ParameterInitializer,
+
+        // SubtreeContainsES6ParameterOrCapturedThis =
+        //     ContainsES6ParameterBindingPattern |
+        //     ContainsES6ParameterInitializer |
+        //     ContainsES6RestParameter |
+        //     ContainsCapturedThis,
+
+        //
+        // Scope Exclusions
+        //
+
+        NodeExcludes =
+            TypeScript |
+            Jsx |
+            ES6,
+
+        ArrowFunctionExcludes =
+            ContainerIsTypeScript |
+            ContainerIsES6 |
+            ContainsDefaultValueAssignments |
+            ContainsLexicalThis,
+
+        FunctionDeclarationOrExpressionExcludes =
+            ContainerIsTypeScript |
+            ContainerIsES6 |
+            ContainsDefaultValueAssignments |
+            ContainsCapturedLexicalThis |
+            ContainsLexicalThis,
+
+        ConstructorExcludes =
+            ContainsDefaultValueAssignments |
+            ContainsLexicalThis |
+            ContainsCapturedLexicalThis,
+
+        MethodDeclarationExcludes =
+            ContainsDefaultValueAssignments |
+            ContainsLexicalThis |
+            ContainsCapturedLexicalThis,
+
+        GetOrSetAccessorExcludes =
+            ContainsDefaultValueAssignments |
+            ContainsLexicalThis |
+            ContainsCapturedLexicalThis,
+
+        ClassDeclarationOrExpressionExcludes =
+            ContainerIsTypeScript |
+            ContainsLexicalThis |
+            ContainsCapturedLexicalThis,
+
+        ModuleScopeExcludes =
+            ContainerIsTypeScript |
+            ContainsLexicalThis |
+            ContainsCapturedLexicalThis,
+
+        TypeExcludes =
+            ~ContainsTypeScript,
+
+        // CallOrArrayLiteralExcludes =
+        //     ContainsES6SpreadElement,
+    }
+
+    // @internal
+    export interface NodeArrayWriter<T extends Node> {
+        write(node: T): void;
+    }
+
+    // @internal
+    export interface Transformer {
+        getEmitResolver(): EmitResolver;
+        getCompilerOptions(): CompilerOptions;
+        makeUniqueName(baseName: string): string;
+        getGeneratedNameForNode(node: Node): Identifier;
+        nodeHasGeneratedName(node: Node): boolean;
+        createUniqueIdentifier(baseName: string): Identifier;
+        createTempVariable(flags?: TempFlags): Identifier;
+        declareLocal(baseName?: string): Identifier;
+        hoistVariableDeclaration(name: Identifier): void;
+        hoistFunctionDeclaration(func: FunctionDeclaration): void;
+        createParentNavigator(): ParentNavigator;
+        getRootNode(): SourceFile;
+        getParentNode(): Node;
+        getCurrentNode(): Node;
+        tryPushNode(node: Node): boolean;
+        pushNode(node: Node): void;
+        popNode(): void;
+        findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
+        findAncestorNode(match: (node: Node) => boolean): Node;
+        getDeclarationName(node: DeclarationStatement): Identifier;
+        getDeclarationName(node: ClassLikeDeclaration): Identifier;
+        getDeclarationName(node: Declaration): DeclarationName;
+        getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement): LeftHandSideExpression;
+
+        emitEmitHelpers(write: (node: Statement) => void): void;
+        emitExportStarHelper(write: (node: Statement) => void): void;
+
+        startLexicalEnvironment(): void;
+        endLexicalEnvironment(out: ((node: Statement) => void) | Statement[]): void;
+
+        pipeNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[]): void;
+        pipeNodes<TIn extends Node, TOut extends Node>(node: TIn[], through: (node: TIn, write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[], start?: number, count?: number): void;
+        mapNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void): TOut;
+        mapNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], through: (node: TIn, write: (node: TOut) => void) => void, start?: number, count?: number): TOut[];
+        flattenNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void): TOut[];
+        visitNode<T extends Node>(node: T, visitor: (node: Node, write: (node: Node) => void) => void, test: (node: Node) => node is T): T;
+        visitNodes<T extends Node>(nodes: T[], visitor: (node: Node, write: (node: Node) => void) => void, test: (node: Node) => node is T, start?: number, count?: number): NodeArray<T>;
+        visitStatement(node: Statement, visitor: (node: Node, write: (node: Node) => void) => void): Statement;
+        visitModuleBody(node: ModuleBody, visitor: (node: Node, write: (node: Node) => void) => void): ModuleBody;
+        visitFunctionBody(node: FunctionBody, visitor: (node: Node, write: (node: Node) => void) => void): FunctionBody;
+        visitConciseBody(node: ConciseBody, visitor: (node: Node, write: (node: Node) => void) => void): ConciseBody;
+        visitSourceFile(node: SourceFile, visitor: (node: Node, write: (node: Node) => void) => void): SourceFile;
+        accept<T extends Node>(node: T, visitor: (node: Node, write: (node: Node) => void) => void): T;
     }
 
     export interface TextSpan {
@@ -2947,7 +3034,7 @@ namespace ts {
         // operation caused diagnostics to be returned by storing and comparing the return value
         // of this method before/after the operation is performed.
         getModificationCount(): number;
-        
+
         /* @internal */ reattachFileDiagnostics(newFile: SourceFile): void;
     }
 }
