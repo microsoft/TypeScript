@@ -11186,7 +11186,7 @@ namespace ts {
                     Diagnostics.Duplicate_function_implementation;
 
                 for (let declaration of declarations) {
-                    error(declaration.name, message);
+                    error(declaration.name || declaration, message);
                 }
             }
 
