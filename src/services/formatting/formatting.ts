@@ -340,10 +340,12 @@ namespace ts.formatting {
             let delta = getOwnOrInheritedDelta(enclosingNode, options, sourceFile);
             processNode(enclosingNode, enclosingNode, startLine, undecoratedStartLine, initialIndentation, delta);
         }
-        else {
+
+        if (!formattingScanner.isOnToken()) {
             let leadingTrivia = formattingScanner.readTokenInfo(undefined).leadingTrivia;
             if (leadingTrivia) {
-                trimWhitespacesInEmptyLineTrivia(leadingTrivia, true);
+                processTrivia(leadingTrivia, enclosingNode, enclosingNode, undefined);
+                trimTrailingWhitespacesForRemainingRange();
             }
         }
 
@@ -561,13 +563,6 @@ namespace ts.formatting {
                 consumeTokenAndAdvanceScanner(tokenInfo, node, nodeDynamicIndentation);
             }
 
-            if (!formattingScanner.isOnToken()) {
-                let leadingTrivia = formattingScanner.readTokenInfo(node).leadingTrivia;
-                if (leadingTrivia) {
-                    trimWhitespacesInEmptyLineTrivia(leadingTrivia, true);
-                }
-            }
-
             function processChildNode(
                 child: Node,
                 inheritedIndentation: number,
@@ -699,7 +694,6 @@ namespace ts.formatting {
                 let indentToken = false;
 
                 if (currentTokenInfo.leadingTrivia) {
-                    trimWhitespacesInEmptyLineTrivia(currentTokenInfo.leadingTrivia, formattingScanner.lastTrailingTriviaWasNewLine());
                     processTrivia(currentTokenInfo.leadingTrivia, parent, childContextNode, dynamicIndentation);
                 }
 
@@ -852,7 +846,7 @@ namespace ts.formatting {
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
                 trimTrailingWhitespaces =
-                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
+                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space | RuleAction.Ignore)) &&
                     rule.Flag !== RuleFlags.CanDeleteNewLines;
             }
             else {
@@ -963,29 +957,14 @@ namespace ts.formatting {
             }
         }
 
-        function trimWhitespacesInEmptyLineTrivia(trivia: TextRangeWithKind[], lastTraviaWasNewLine: boolean) {
-            let targetCandidate: TextRangeWithKind;
-
-            for (let triviaItem of trivia) {
-                switch (triviaItem.kind) {
-                    case SyntaxKind.WhitespaceTrivia:
-                        targetCandidate = lastTraviaWasNewLine ? triviaItem : undefined;
-                        break;
-                    case SyntaxKind.NewLineTrivia:
-                        if (targetCandidate) {
-                            recordDelete(targetCandidate.pos, targetCandidate.end - targetCandidate.pos);
-                            targetCandidate = undefined;
-                        }
-                        break;
-                    default:
-                        targetCandidate = undefined;
-                        break;
-                }
-                lastTraviaWasNewLine = triviaItem.kind === SyntaxKind.NewLineTrivia;
+        function trimTrailingWhitespacesForRemainingRange() {
+            let startPosition = previousRange ? previousRange.end : originalRange.pos;
+            let startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
+            let endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;
+            if (originalRange.end === sourceFile.end) {
+                endLine++;
             }
-            if (targetCandidate && targetCandidate.end === sourceFile.end) {
-                recordDelete(targetCandidate.pos, targetCandidate.end - targetCandidate.pos);
-            }
+            trimTrailingWhitespacesForLines(startLine, endLine, previousRange);
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
