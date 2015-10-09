@@ -43,7 +43,7 @@ namespace ts.formatting {
             // whitespace.
             if (options.IndentStyle === IndentStyle.Block) {
 
-                // move backwards untill we find a line with a non-whitespace character,
+                // move backwards until we find a line with a non-whitespace character,
                 // then find the first non-whitespace character for that line.
                 let current = position;
                 while (current > 0){
