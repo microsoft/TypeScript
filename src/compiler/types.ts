@@ -1601,6 +1601,7 @@ namespace ts {
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getExportsOfModule(symbol: Symbol): Symbol[];
     }
 
     export const enum SymbolFlags {

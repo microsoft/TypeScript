@@ -1096,7 +1096,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
             }
 
-            if (options.optimizationEntrypoint && outFile && options.module) {
+            if (options.optimizationEntrypoint && !(outFile && options.module)) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_with_both_options_1_and_2, "optimizationEntrypoint", "module", "outFile"));
             }
         }

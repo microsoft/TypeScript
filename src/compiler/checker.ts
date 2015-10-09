@@ -14813,7 +14813,8 @@ namespace ts {
                 collectLinkedAliases,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
-                isOptionalParameter
+                isOptionalParameter,
+                getExportsOfModule: getExportsOfModuleAsArray
             };
         }
 

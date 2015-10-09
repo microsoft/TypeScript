@@ -113,7 +113,22 @@ namespace ts {
                     diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, compilerOptions.optimizationEntrypoint));
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
-                traverseEntrypoint(entrypoint);
+                let exports = collectExportedMembers(entrypoint);
+                let liftedDeclarations: Map<Declaration[]> = {};
+                forEachValue(exports, collection => { // TODO: Resolve `import`ed types and rename(space) them
+                    let realSourceFile = currentSourceFile;
+                    currentSourceFile = collection.source;
+                    forEach(collection.declarations, d => {
+                        currentSourceFile = getSourceFileOfNode(d);
+                        liftedDeclarations[d.symbol.name] = liftedDeclarations[d.symbol.name] || [];
+                        liftedDeclarations[d.symbol.name].push(d);
+                        let oldFlags = d.flags;
+                        d.flags |= NodeFlags.Export;
+                        emitModuleElement(d, /*isModuleElementVisible*/true);
+                        d.flags = oldFlags;
+                    });
+                    currentSourceFile = realSourceFile;
+                });
             } else {
                 // Emit references corresponding to this file
                 let emittedReferencedFiles: SourceFile[] = [];
@@ -179,8 +194,18 @@ namespace ts {
             referencePathsOutput,
         };
 
-        function traverseEntrypoint(file: SourceFile) {
-            emitLines(file.statements)            
+        type CollectedMembersMap = Map<{source: SourceFile, declarations: Declaration[]}>;
+
+        function collectExportedMembers(file: SourceFile, result: CollectedMembersMap = {}): CollectedMembersMap {
+            let exportedMembers = resolver.getExportsOfModule(file.symbol);
+            forEach(exportedMembers, exported => {
+                forEach(exported.declarations, declaration => {
+                    let subfile = getSourceFileOfNode(declaration);
+                    result[subfile.symbol.name] = result[subfile.symbol.name] || {source: subfile, declarations: []};
+                    result[subfile.symbol.name].declarations.push(declaration);
+                });
+            });
+            return result;
         }
 
         function hasInternalAnnotation(range: CommentRange) {
