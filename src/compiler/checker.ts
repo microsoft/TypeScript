@@ -9751,7 +9751,7 @@ namespace ts {
                         return !symbol || symbol === unknownSymbol || (symbol.flags & ~SymbolFlags.EnumMember) !== 0;
                     }
                     case SyntaxKind.ElementAccessExpression:
-                        //  old compiler doesn't check indexed assess
+                        //  old compiler doesn't check indexed access
                         return true;
                     case SyntaxKind.ParenthesizedExpression:
                         return isReferenceOrErrorExpression((<ParenthesizedExpression>n).expression);
