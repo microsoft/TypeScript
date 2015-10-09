@@ -1,23 +1,23 @@
 === tests/cases/compiler/library_StringSlice.ts ===
 // String.prototype.slice can have zero, one, or two arguments
 String.prototype.slice();
->String.prototype.slice : Symbol(String.slice, Decl(lib.d.ts, 369, 35))
->String.prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, 435, 26))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
->prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, 435, 26))
->slice : Symbol(String.slice, Decl(lib.d.ts, 369, 35))
+>String.prototype.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>String.prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 
 String.prototype.slice(0);
->String.prototype.slice : Symbol(String.slice, Decl(lib.d.ts, 369, 35))
->String.prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, 435, 26))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
->prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, 435, 26))
->slice : Symbol(String.slice, Decl(lib.d.ts, 369, 35))
+>String.prototype.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>String.prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 
 String.prototype.slice(0,1);
->String.prototype.slice : Symbol(String.slice, Decl(lib.d.ts, 369, 35))
->String.prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, 435, 26))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11))
->prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, 435, 26))
->slice : Symbol(String.slice, Decl(lib.d.ts, 369, 35))
+>String.prototype.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>String.prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(StringConstructor.prototype, Decl(lib.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
 

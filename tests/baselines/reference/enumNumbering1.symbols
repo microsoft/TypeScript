@@ -10,12 +10,12 @@ enum Test {
 
     C = Math.floor(Math.random() * 1000),
 >C : Symbol(Test.C, Decl(enumNumbering1.ts, 2, 6))
->Math.floor : Symbol(Math.floor, Decl(lib.d.ts, 582, 27))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->floor : Symbol(Math.floor, Decl(lib.d.ts, 582, 27))
->Math.random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math.floor : Symbol(Math.floor, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
 
     D = 10,
 >D : Symbol(Test.D, Decl(enumNumbering1.ts, 3, 41))
