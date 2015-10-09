@@ -836,8 +836,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     let node = nodes[start + i];
-                    let leadingComments = getLeadingCommentsToEmit(node);
-                    let trailingComments = getTrailingCommentRanges(currentSourceFile.text, node.pos);
                     // This emitting is to make sure we emit following comment properly
                     //   ...(x, /*comment1*/ y)...
                     //         ^ => node.pos
@@ -2587,7 +2585,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`", `);
                     }
 
-                    if (languageVersion < ScriptTarget.ES7 && (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken)) {
+                    if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                        // Downleveled emit exponentiation operator using Math.pow
                         emitExponentiationOperator(node);
                     }
                     else {

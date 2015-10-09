@@ -74,11 +74,11 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxE
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(61,6): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(62,6): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(62,6): error TS17006: An unary expression with the '!' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(64,1): error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(65,1): error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(66,1): error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(67,1): error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(68,1): error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(64,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(65,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(66,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(67,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts(68,1): error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
 
 
 ==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxError2.ts (81 errors) ====
@@ -299,16 +299,16 @@ tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorSyntaxE
     
     <number>temp ** 3;
     ~~~~~~~~~~~~
-!!! error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
     <number>++temp ** 3;
     ~~~~~~~~~~~~~~
-!!! error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
     <number>--temp ** 3;
     ~~~~~~~~~~~~~~
-!!! error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
     <number>temp++ ** 3;
     ~~~~~~~~~~~~~~
-!!! error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
     <number>temp-- ** 3;
     ~~~~~~~~~~~~~~
-!!! error TS17006: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.
+!!! error TS17007: A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.

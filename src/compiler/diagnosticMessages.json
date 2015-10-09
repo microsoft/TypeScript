@@ -2473,6 +2473,6 @@
     },
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
       "category": "Error",
-      "code": 17006
+      "code": 17007
     }
 }

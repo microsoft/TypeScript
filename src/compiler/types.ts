@@ -2107,7 +2107,6 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
-        ES7 = 3,
         Latest = ES6,
     }
 
