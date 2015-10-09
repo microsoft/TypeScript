@@ -1,4 +1,5 @@
-error TS2393: Duplicate function implementation.
+tests/cases/conformance/es6/modules/m1.ts(2,1): error TS2393: Duplicate function implementation.
+tests/cases/conformance/es6/modules/m1.ts(6,1): error TS2393: Duplicate function implementation.
 tests/cases/conformance/es6/modules/m2.ts(1,1): error TS2528: A module cannot have multiple default exports.
 tests/cases/conformance/es6/modules/m2.ts(5,1): error TS2528: A module cannot have multiple default exports.
 tests/cases/conformance/es6/modules/m3.ts(1,1): error TS2528: A module cannot have multiple default exports.
@@ -7,14 +8,17 @@ tests/cases/conformance/es6/modules/m4.ts(1,25): error TS2528: A module cannot h
 tests/cases/conformance/es6/modules/m4.ts(5,1): error TS2528: A module cannot have multiple default exports.
 
 
-!!! error TS2393: Duplicate function implementation.
-==== tests/cases/conformance/es6/modules/m1.ts (0 errors) ====
+==== tests/cases/conformance/es6/modules/m1.ts (2 errors) ====
     
     export default function () {
+    ~~~~~~
+!!! error TS2393: Duplicate function implementation.
     
     }
     
     export default function () {
+    ~~~~~~
+!!! error TS2393: Duplicate function implementation.
     
     }
     
