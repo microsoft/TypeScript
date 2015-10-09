@@ -638,13 +638,6 @@ compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTa
     diagnostics: true
 });
 
-var run2 = path.join(builtLocalDirectory, "run-tx.js");
-compileFile(run2, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), {
-    useBuiltCompiler: true,
-    experimentalTransforms: true,
-    diagnostics: true
-});
-
 var internalTests = "internal/";
 
 var localBaseline = "tests/baselines/local/";
@@ -658,9 +651,6 @@ var refTest262Baseline = path.join(internalTests, "baselines/test262/reference")
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
-
-// Temporary task created to compare transform output on typescriptServices.js
-task("tx", ["generate-diagnostics", "generate-factory", "lib", tscFile, run, run2]);
 
 function exec(cmd, completeHandler, errorHandler) {
     var ex = jake.createExec([cmd], {windowsVerbatimArguments: true});
