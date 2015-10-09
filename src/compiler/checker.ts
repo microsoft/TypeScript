@@ -2766,10 +2766,9 @@ namespace ts {
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments {
-            let classDeclaration = getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration);
-            if (classDeclaration) {
-                return getClassExtendsHeritageClauseElement(classDeclaration as ClassLikeDeclaration);
-            }
+            let classDeclaration =
+                getDeclarationOfKind(type.symbol, SyntaxKind.ClassDeclaration) || type.symbol.valueDeclaration;
+            return getClassExtendsHeritageClauseElement(classDeclaration as ClassLikeDeclaration);
         }
 
         function getConstructorsForTypeArguments(type: ObjectType, typeArgumentNodes: TypeNode[]): Signature[] {
