@@ -130,7 +130,9 @@ namespace ts {
                 symbol.members = {};
             }
 
-            if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
+            if (symbolFlags & SymbolFlags.Value &&
+                (!symbol.valueDeclaration || symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                // other kinds of value declarations take precedence over modules
                 symbol.valueDeclaration = node;
             }
         }
