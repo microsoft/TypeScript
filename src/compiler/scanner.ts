@@ -226,7 +226,7 @@ namespace ts {
         }
 
         // Perform binary search in one of the Unicode range maps
-        let lo: number = 0;
+        let lo = 0;
         let hi: number = map.length;
         let mid: number;
 
@@ -659,7 +659,7 @@ namespace ts {
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] {
         return getCommentRanges(text, pos, /*trailing*/ true);
     }
-    
+
     /** Optionally, get the shebang */
     export function getShebang(text: string): string {
         return shebangTriviaRegex.test(text)
@@ -739,18 +739,6 @@ namespace ts {
             if (onError) {
                 onError(message, length || 0);
             }
-        }
-
-        function isIdentifierStart(ch: number): boolean {
-            return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
-                ch === CharacterCodes.$ || ch === CharacterCodes._ ||
-                ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
-        }
-
-        function isIdentifierPart(ch: number): boolean {
-            return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
-                ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
-                ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
         }
 
         function scanNumber(): number {
@@ -1066,12 +1054,12 @@ namespace ts {
             let start = pos;
             while (pos < end) {
                 let ch = text.charCodeAt(pos);
-                if (isIdentifierPart(ch)) {
+                if (isIdentifierPart(ch, languageVersion)) {
                     pos++;
                 }
                 else if (ch === CharacterCodes.backslash) {
                     ch = peekUnicodeEscape();
-                    if (!(ch >= 0 && isIdentifierPart(ch))) {
+                    if (!(ch >= 0 && isIdentifierPart(ch, languageVersion))) {
                         break;
                     }
                     result += text.substring(start, pos);
@@ -1381,7 +1369,9 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                         }
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.slash && languageVariant === LanguageVariant.JSX) {
+                        if (languageVariant === LanguageVariant.JSX &&
+                                text.charCodeAt(pos + 1) === CharacterCodes.slash &&
+                                text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
                             return pos += 2, token = SyntaxKind.LessThanSlashToken;
                         }
                         return pos++, token = SyntaxKind.LessThanToken;
@@ -1447,7 +1437,7 @@ namespace ts {
                         return pos++, token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
                         let cookedChar = peekUnicodeEscape();
-                        if (cookedChar >= 0 && isIdentifierStart(cookedChar)) {
+                        if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
                             pos += 6;
                             tokenValue = String.fromCharCode(cookedChar) + scanIdentifierParts();
                             return token = getIdentifierToken();
@@ -1455,9 +1445,9 @@ namespace ts {
                         error(Diagnostics.Invalid_character);
                         return pos++, token = SyntaxKind.Unknown;
                     default:
-                        if (isIdentifierStart(ch)) {
+                        if (isIdentifierStart(ch, languageVersion)) {
                             pos++;
-                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos))) pos++;
+                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos), languageVersion)) pos++;
                             tokenValue = text.substring(tokenPos, pos);
                             if (ch === CharacterCodes.backslash) {
                                 tokenValue += scanIdentifierParts();
@@ -1544,7 +1534,7 @@ namespace ts {
                     p++;
                 }
 
-                while (p < end && isIdentifierPart(text.charCodeAt(p))) {
+                while (p < end && isIdentifierPart(text.charCodeAt(p), languageVersion)) {
                     p++;
                 }
                 pos = p;
@@ -1607,7 +1597,7 @@ namespace ts {
                 let firstCharPosition = pos;
                 while (pos < end) {
                     let ch = text.charCodeAt(pos);
-                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch) : isIdentifierPart(ch))) {
+                    if (ch === CharacterCodes.minus || ((firstCharPosition === pos) ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
                         pos++;
                     }
                     else {

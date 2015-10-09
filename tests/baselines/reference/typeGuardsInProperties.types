@@ -35,11 +35,11 @@ class C1 {
 >typeof this.pp1 === "string" : boolean
 >typeof this.pp1 : string
 >this.pp1 : string | number
->this : C1
+>this : this
 >pp1 : string | number
 >"string" : string
 >this.pp1 : string | number
->this : C1
+>this : this
 >pp1 : string | number
 
         strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
@@ -49,11 +49,11 @@ class C1 {
 >typeof this.pp2 === "string" : boolean
 >typeof this.pp2 : string
 >this.pp2 : string | number
->this : C1
+>this : this
 >pp2 : string | number
 >"string" : string
 >this.pp2 : string | number
->this : C1
+>this : this
 >pp2 : string | number
 
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
@@ -63,11 +63,11 @@ class C1 {
 >typeof this.pp3 === "string" : boolean
 >typeof this.pp3 : string
 >this.pp3 : string | number
->this : C1
+>this : this
 >pp3 : string | number
 >"string" : string
 >this.pp3 : string | number
->this : C1
+>this : this
 >pp3 : string | number
     }
 }

@@ -81,7 +81,7 @@ x;
 >x : Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
 
 x.toString();
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(letDeclarations-access.ts, 1, 3))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 

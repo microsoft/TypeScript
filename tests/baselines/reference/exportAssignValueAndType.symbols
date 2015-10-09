@@ -16,7 +16,7 @@ interface server {
 
     startTime: Date;
 >startTime : Symbol(startTime, Decl(exportAssignValueAndType.ts, 5, 20))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
  
 var x = 5;
@@ -24,7 +24,7 @@ var x = 5;
 
 var server = new Date();
 >server : Symbol(server, Decl(exportAssignValueAndType.ts, 2, 1), Decl(exportAssignValueAndType.ts, 10, 3))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 export = server;
 >server : Symbol(server, Decl(exportAssignValueAndType.ts, 2, 1), Decl(exportAssignValueAndType.ts, 10, 3))

@@ -216,8 +216,10 @@ namespace ts.formatting {
         // Async functions
         public SpaceBetweenAsyncAndFunctionKeyword: Rule;
 
-        // Tagged template string
+        // Template strings
         public SpaceBetweenTagAndTemplateString: Rule;
+        public NoSpaceAfterTemplateHeadAndMiddle: Rule;
+        public NoSpaceBeforeTemplateMiddleAndTail: Rule;
 
         constructor() {
             ///
@@ -371,6 +373,8 @@ namespace ts.formatting {
 
             // template string
             this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterTemplateHeadAndMiddle = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // These rules are higher in priority than user-configurable rules.
             this.HighPriorityCommonRules =
@@ -399,7 +403,7 @@ namespace ts.formatting {
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
                 this.SpaceBetweenAsyncAndFunctionKeyword,
-                this.SpaceBetweenTagAndTemplateString,
+                this.SpaceBetweenTagAndTemplateString, this.NoSpaceAfterTemplateHeadAndMiddle, this.NoSpaceBeforeTemplateMiddleAndTail,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
