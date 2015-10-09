@@ -7978,7 +7978,7 @@ namespace ts {
             }
             // An instance property must be accessed through an instance of the enclosing class
             if (type.flags & TypeFlags.ThisType) {
-                // get the original type -- represented as the type constraint of the this type
+                // get the original type -- represented as the type constraint of the 'this' type
                 type = getConstraintOfTypeParameter(<TypeParameter>type);
             }
 
