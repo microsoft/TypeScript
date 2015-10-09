@@ -1656,6 +1656,10 @@
         "category": "Error",
         "code": 2527
     },
+    "A module cannot have multiple default exports.": {
+        "category": "Error",
+        "code": 2528
+    },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
         "code": 2600
