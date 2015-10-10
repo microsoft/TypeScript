@@ -119,9 +119,6 @@ namespace ts {
                 //TODO: Rename mapping in emitModuleElement
                 forEachValue(dependentTypes, type => {
                     let realSourceFile = currentSourceFile;
-                    if (!type.symbol) {
-                        return;
-                    }
                     forEach(type.symbol.declarations, d => {
                         currentSourceFile = getSourceFileOfNode(d);
                         let oldFlags = d.flags;
@@ -135,9 +132,6 @@ namespace ts {
                 });
                 forEachValue(types, type => {
                     let realSourceFile = currentSourceFile;
-                    if (!type.symbol) {
-                        return;
-                    }
                     forEach(type.symbol.declarations, d => {
                         currentSourceFile = getSourceFileOfNode(d);
                         let oldFlags = d.flags;
@@ -216,7 +210,7 @@ namespace ts {
 
         function collectExportedTypes(file: SourceFile): Map<Type> {
             let exportedMembers = resolver.getExportsOfModule(file.symbol);
-            return arrayToMap(map(exportedMembers, exported => resolver.getTypeOfSymbol(exported)), value => (value.id + ""));
+            return arrayToMap(map(exportedMembers, exported => resolver.getTypeOfSymbol(exported)), value => (value.symbol.id + ""));
         }
 
         function collectDependentTypes(exported: Map<Type>): Map<Type> {
@@ -227,26 +221,34 @@ namespace ts {
 
             function visit(type: Type): void {
                 let symbol = type.symbol;
-                if (!symbol) {
-                    return;
-                }
                 if (symbol.flags & SymbolFlags.HasMembers) {
-                    forEachValue(symbol.members, member => { // TODO: Check member visibility
-                        let type = resolver.getTypeOfSymbol(member);
-                        if (type.id in exported || type.id in dependentTypes) {
+                    forEachValue(symbol.members, member => {
+                        if (member.valueDeclaration && member.valueDeclaration.flags && member.valueDeclaration.flags & NodeFlags.Private) {
                             return;
                         }
-                        dependentTypes[type.id] = type;
+                        let type = resolver.getTypeOfSymbol(member);
+                        if (!type.symbol) {
+                            return;
+                        }
+                        let id = type.symbol.id;
+                        if (id in exported || id in dependentTypes) {
+                            return;
+                        }
+                        dependentTypes[id] = type;
                         visit(type);
                     });
                 }
                 if (symbol.flags & SymbolFlags.HasExports) {
                     forEachValue(symbol.exports, member => {
                         let type = resolver.getTypeOfSymbol(member);
-                        if (type.id in exported || type.id in dependentTypes) {
+                        if (!type.symbol) {
                             return;
                         }
-                        dependentTypes[type.id] = type;
+                        let id = type.symbol.id;
+                        if (id in exported || id in dependentTypes) {
+                            return;
+                        }
+                        dependentTypes[id] = type;
                         visit(type);
                     });
                 }
