@@ -113,15 +113,33 @@ namespace ts {
                     diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, compilerOptions.optimizationEntrypoint));
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
-                let exports = collectExportedMembers(entrypoint);
-                let liftedDeclarations: Map<Declaration[]> = {};
-                forEachValue(exports, collection => { // TODO: Resolve `import`ed types and rename(space) them
+                let types = collectExportedTypes(entrypoint);
+                let dependentTypes = collectDependentTypes(types);
+
+                //TODO: Rename mapping in emitModuleElement
+                forEachValue(dependentTypes, type => {
                     let realSourceFile = currentSourceFile;
-                    currentSourceFile = collection.source;
-                    forEach(collection.declarations, d => {
+                    if (!type.symbol) {
+                        return;
+                    }
+                    forEach(type.symbol.declarations, d => {
                         currentSourceFile = getSourceFileOfNode(d);
-                        liftedDeclarations[d.symbol.name] = liftedDeclarations[d.symbol.name] || [];
-                        liftedDeclarations[d.symbol.name].push(d);
+                        let oldFlags = d.flags;
+                        if (oldFlags & NodeFlags.Export) {
+                            d.flags -= NodeFlags.Export;
+                        }
+                        emitModuleElement(d, /*isModuleElementVisible*/true);
+                        d.flags = oldFlags;
+                    });
+                    currentSourceFile = realSourceFile;
+                });
+                forEachValue(types, type => {
+                    let realSourceFile = currentSourceFile;
+                    if (!type.symbol) {
+                        return;
+                    }
+                    forEach(type.symbol.declarations, d => {
+                        currentSourceFile = getSourceFileOfNode(d);
                         let oldFlags = d.flags;
                         d.flags |= NodeFlags.Export;
                         emitModuleElement(d, /*isModuleElementVisible*/true);
@@ -196,16 +214,43 @@ namespace ts {
 
         type CollectedMembersMap = Map<{source: SourceFile, declarations: Declaration[]}>;
 
-        function collectExportedMembers(file: SourceFile, result: CollectedMembersMap = {}): CollectedMembersMap {
+        function collectExportedTypes(file: SourceFile): Map<Type> {
             let exportedMembers = resolver.getExportsOfModule(file.symbol);
-            forEach(exportedMembers, exported => {
-                forEach(exported.declarations, declaration => {
-                    let subfile = getSourceFileOfNode(declaration);
-                    result[subfile.symbol.name] = result[subfile.symbol.name] || {source: subfile, declarations: []};
-                    result[subfile.symbol.name].declarations.push(declaration);
-                });
-            });
-            return result;
+            return arrayToMap(map(exportedMembers, exported => resolver.getTypeOfSymbol(exported)), value => (value.id + ""));
+        }
+
+        function collectDependentTypes(exported: Map<Type>): Map<Type> {
+            let dependentTypes: Map<Type> = {};
+            forEachValue(exported, type => visit(type));
+
+            return dependentTypes;
+
+            function visit(type: Type): void {
+                let symbol = type.symbol;
+                if (!symbol) {
+                    return;
+                }
+                if (symbol.flags & SymbolFlags.HasMembers) {
+                    forEachValue(symbol.members, member => { // TODO: Check member visibility
+                        let type = resolver.getTypeOfSymbol(member);
+                        if (type.id in exported || type.id in dependentTypes) {
+                            return;
+                        }
+                        dependentTypes[type.id] = type;
+                        visit(type);
+                    });
+                }
+                if (symbol.flags & SymbolFlags.HasExports) {
+                    forEachValue(symbol.exports, member => {
+                        let type = resolver.getTypeOfSymbol(member);
+                        if (type.id in exported || type.id in dependentTypes) {
+                            return;
+                        }
+                        dependentTypes[type.id] = type;
+                        visit(type);
+                    });
+                }
+            }
         }
 
         function hasInternalAnnotation(range: CommentRange) {

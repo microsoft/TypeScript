@@ -14814,7 +14814,8 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
-                getExportsOfModule: getExportsOfModuleAsArray
+                getExportsOfModule: getExportsOfModuleAsArray,
+                getTypeOfSymbol
             };
         }
 
