@@ -55,7 +55,8 @@ namespace ts {
         let errorNameNode: DeclarationName;
         let emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         let emit = compilerOptions.stripInternal ? stripInternal : emitNode;
-        let noDeclare = !root;
+        let noDeclare = false;
+        let symbolGeneratedNameMap: Map<string> = {};
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -113,10 +114,29 @@ namespace ts {
                     diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, compilerOptions.optimizationEntrypoint));
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
+                noDeclare = false;
                 let types = collectExportedTypes(entrypoint);
                 let dependentTypes = collectDependentTypes(types);
+                let symbolNameSet: Map<number> = {};
+                forEachValue(dependentTypes, type => {
+                    let symbol = type.symbol;
+                    if (symbol.name in symbolNameSet) {
+                        let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
+                        symbolNameSet[symbol.name]++;
+                        symbolGeneratedNameMap[symbol.id] = generatedName;
+                        forEach(symbol.declarations, declaration => {
+                            let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
+                            synthId.flags |= NodeFlags.Synthetic;
+                            synthId.text = generatedName;
+                            declaration.name = synthId;
+                        });
+                    }
+                    else {
+                        symbolNameSet[symbol.name] = 1;
+                        symbolGeneratedNameMap[symbol.id] = symbol.name;
+                    }
+                });
 
-                //TODO: Rename mapping in emitModuleElement
                 forEachValue(dependentTypes, type => {
                     let realSourceFile = currentSourceFile;
                     forEach(type.symbol.declarations, d => {
@@ -210,7 +230,7 @@ namespace ts {
 
         function collectExportedTypes(file: SourceFile): Map<Type> {
             let exportedMembers = resolver.getExportsOfModule(file.symbol);
-            return arrayToMap(map(exportedMembers, exported => resolver.getTypeOfSymbol(exported)), value => (value.symbol.id + ""));
+            return arrayToMap(filter(map(exportedMembers, exported => resolver.getTypeOfSymbol(exported)), value => !!value.symbol), value => (value.symbol.id + ""));
         }
 
         function collectDependentTypes(exported: Map<Type>): Map<Type> {
@@ -496,6 +516,12 @@ namespace ts {
             }
 
             function writeEntityName(entityName: EntityName | Expression) {
+                // Lookup for renames
+                let symbol = resolver.resolveEntityName(entityName, SymbolFlags.Type | SymbolFlags.Namespace);
+                if (symbol && symbol.id in symbolGeneratedNameMap) {
+                    write(symbolGeneratedNameMap[symbol.id]);
+                    return;
+                }
                 if (entityName.kind === SyntaxKind.Identifier) {
                     writeTextOfNode(currentSourceFile, entityName);
                 }

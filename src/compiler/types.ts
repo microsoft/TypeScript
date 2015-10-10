@@ -1603,6 +1603,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getExportsOfModule(symbol: Symbol): Symbol[];
         getTypeOfSymbol(symbol: Symbol): Type;
+        resolveEntityName(entityName: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol;
     }
 
     export const enum SymbolFlags {
