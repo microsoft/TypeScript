@@ -946,22 +946,44 @@ namespace ts.formatting {
                     continue;
                 }
 
-                let pos = lineEndPosition;
-                while (pos >= lineStartPosition && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
-                    pos--;
-                }
-                if (pos !== lineEndPosition) {
-                    Debug.assert(pos === lineStartPosition || !isWhiteSpace(sourceFile.text.charCodeAt(pos)));
-                    recordDelete(pos + 1, lineEndPosition - pos);
+                let whitespaceStart = getTrailingWhitespaceStartPosition(lineStartPosition, lineEndPosition);
+                if (whitespaceStart !== -1) {
+                    recordDelete(whitespaceStart, lineEndPosition + 1 - whitespaceStart);
                 }
             }
         }
 
+        /**
+         * @param start The position of the first character in range
+         * @param end The position of the last character in range
+         */
+        function getTrailingWhitespaceStartPosition(start: number, end: number) {
+            let pos = end;
+            while (pos >= start && isWhiteSpace(sourceFile.text.charCodeAt(pos))) {
+                pos--;
+            }
+            if (pos !== end) {
+                // pos must be out of range or non-whitespace
+                Debug.assert(pos === start - 1 || !isWhiteSpace(sourceFile.text.charCodeAt(pos)));
+                return pos + 1;
+            }
+            return -1;
+        }
+
+        /**
+         * Trimming will be done for lines after the previous range
+         */
         function trimTrailingWhitespacesForRemainingRange() {
             let startPosition = previousRange ? previousRange.end : originalRange.pos;
+
             let startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
             let endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;
-            if (originalRange.end === sourceFile.end) {
+
+            let endLineStartPosition = getStartPositionOfLine(endLine, sourceFile);
+            let endLineEndPosition = getEndLinePosition(endLine, sourceFile);
+
+            if (getTrailingWhitespaceStartPosition(endLineStartPosition, endLineEndPosition) === endLineStartPosition) {
+                // Trim the whole last line when it has whitespaces only
                 endLine++;
             }
             trimTrailingWhitespacesForLines(startLine, endLine, previousRange);
