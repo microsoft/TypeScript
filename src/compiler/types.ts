@@ -561,6 +561,10 @@ namespace ts {
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
+        // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
+        // it is grammar error to appear in actual object initializer
+        equalsToken?: Node;
+        objectAssignmentInitializer?: Expression;
     }
 
     // SyntaxKind.VariableDeclaration
