@@ -2008,10 +2008,6 @@
         "category": "Error",
         "code": 4082
     },
-    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 4091
-    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001

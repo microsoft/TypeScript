@@ -6550,7 +6550,7 @@ namespace ts {
             while (current && !nodeStartsNewLexicalEnvironment(current)) {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
                     if (inFunction) {
-                        grammarErrorOnFirstToken(current, Diagnostics.Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithBlockScopedBindingCapturedInFunction;
                     }
                     // mark value declaration so during emit they can have a special handling
                     getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
@@ -14533,6 +14533,10 @@ namespace ts {
 
         // Emitter support
 
+        function isArgumentsLocalBinding(node: Identifier): boolean {
+            return getReferencedValueSymbol(node) === argumentsSymbol;
+        }
+
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
@@ -14837,7 +14841,8 @@ namespace ts {
                 collectLinkedAliases,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
-                isOptionalParameter
+                isOptionalParameter,
+                isArgumentsLocalBinding
             };
         }
 
@@ -15662,21 +15667,6 @@ namespace ts {
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
                 return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol);
             }
-        }
-
-        function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
-            switch (node.kind) {
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                    return true;
-                case SyntaxKind.LabeledStatement:
-                    return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
-            }
-
-            return false;
         }
 
         function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {

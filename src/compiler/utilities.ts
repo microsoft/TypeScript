@@ -657,6 +657,22 @@ namespace ts {
         return false;
     }
 
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return true;
+            case SyntaxKind.LabeledStatement:
+                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+        }
+
+        return false;
+    }
+
+
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
