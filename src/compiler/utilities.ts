@@ -363,7 +363,7 @@ namespace ts {
     }
 
     export function isDeclarationFile(file: SourceFile): boolean {
-        return (file.flags & NodeFlags.DeclarationFile) !== 0;
+        return file && (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
     export function isConstEnumDeclaration(node: Node): boolean {
@@ -1453,6 +1453,7 @@ namespace ts {
             case SyntaxKind.ExportKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.InternalKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.StaticKeyword:
                 return true;
@@ -1983,6 +1984,7 @@ namespace ts {
             case SyntaxKind.StaticKeyword: return NodeFlags.Static;
             case SyntaxKind.PublicKeyword: return NodeFlags.Public;
             case SyntaxKind.ProtectedKeyword: return NodeFlags.Protected;
+            case SyntaxKind.InternalKeyword: return NodeFlags.Internal;
             case SyntaxKind.PrivateKeyword: return NodeFlags.Private;
             case SyntaxKind.AbstractKeyword: return NodeFlags.Abstract;
             case SyntaxKind.ExportKeyword: return NodeFlags.Export;

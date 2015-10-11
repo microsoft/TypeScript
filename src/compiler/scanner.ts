@@ -82,6 +82,7 @@ namespace ts {
         "in": SyntaxKind.InKeyword,
         "instanceof": SyntaxKind.InstanceOfKeyword,
         "interface": SyntaxKind.InterfaceKeyword,
+        "internal": SyntaxKind.InternalKeyword,
         "is": SyntaxKind.IsKeyword,
         "let": SyntaxKind.LetKeyword,
         "module": SyntaxKind.ModuleKeyword,

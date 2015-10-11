@@ -1,0 +1,33 @@
+tests/cases/conformance/classes/members/accessibility/internalInstanceMemberAccessibility_1.ts(4,9): error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+tests/cases/conformance/classes/members/accessibility/internalInstanceMemberAccessibility_1.ts(6,16): error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+
+
+==== tests/cases/conformance/classes/members/accessibility/internalInstanceMemberAccessibility_0.d.ts (0 errors) ====
+    export declare class Base1 {
+        internal foo(): string;
+    }
+    
+==== tests/cases/conformance/classes/members/accessibility/internalInstanceMemberAccessibility_1.ts (2 errors) ====
+    import { Base1 } from "./internalInstanceMemberAccessibility_0";
+    
+    class Derived1 extends Base1 {
+        x = super.foo(); // error
+            ~~~~~~~~~
+!!! error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+        y() {
+            return super.foo(); // error
+                   ~~~~~~~~~
+!!! error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+        }
+    }
+    
+    declare class Base2 {
+        internal foo(): string;
+    }
+    
+    class Derived2 extends Base2 {
+        x = super.foo(); // ok
+        y() {
+            return super.foo(); // ok
+        }
+    }

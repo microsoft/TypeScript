@@ -1,0 +1,119 @@
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(27,1): error TS2322: Type 'Class1' is not assignable to type 'XY'.
+  Property 'y' of type 'Class1' is internal in a declaration file and is only accessible within a declaration file.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(28,1): error TS2322: Type 'Class2' is not assignable to type 'XY'.
+  Property 'y' of type 'Class2' is internal in a declaration file and is only accessible within a declaration file.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(30,1): error TS2322: Type 'Class4' is not assignable to type 'XY'.
+  Property 'y' of type 'Class4' is internal in a declaration file and is only accessible within a declaration file.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(32,1): error TS2322: Type 'XY' is not assignable to type 'Class1'.
+  Property 'y' is internal in a declaration file, but type 'XY' is not a class derived from 'Class1'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(36,1): error TS2322: Type 'Class5' is not assignable to type 'Class1'.
+  Property 'y' is internal in a declaration file, but type 'Class5' is not a class derived from 'Class1'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(37,1): error TS2322: Type 'XY' is not assignable to type 'Class2'.
+  Property 'y' is internal in a declaration file, but type 'XY' is not a class derived from 'Class2'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(38,1): error TS2322: Type 'Class3' is not assignable to type 'Class2'.
+  Property 'y' is internal in a declaration file, but type 'Class3' is not a class derived from 'Class2'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(39,1): error TS2322: Type 'Class4' is not assignable to type 'Class2'.
+  Property 'y' is internal in a declaration file, but type 'Class1' is not a class derived from 'Class2'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(40,1): error TS2322: Type 'Class5' is not assignable to type 'Class2'.
+  Property 'y' is internal in a declaration file, but type 'Class5' is not a class derived from 'Class2'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(42,1): error TS2322: Type 'Class4' is not assignable to type 'Class3'.
+  Property 'y' is internal in a declaration file, but type 'Class1' is not a class derived from 'Class3'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(44,1): error TS2322: Type 'XY' is not assignable to type 'Class4'.
+  Property 'y' is internal in a declaration file, but type 'XY' is not a class derived from 'Class1'.
+tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts(45,1): error TS2322: Type 'Class5' is not assignable to type 'Class4'.
+  Property 'y' is internal in a declaration file, but type 'Class5' is not a class derived from 'Class1'.
+
+
+==== tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_1.ts (12 errors) ====
+    /// <reference path="internalClassPropertyAssignability_0.d.ts" />
+    interface XY {
+    	x: number;
+    	y: number;
+    }
+    
+    declare class Class3 extends Class1 {
+    	internal y: number; // error
+    }
+    
+    declare class Class4 extends Class1 {
+    }
+    
+    
+    declare class Class5 {
+    	public x: number;
+    	internal y: number;
+    }
+    
+    declare var xy: XY;
+    declare var c1: Class1;
+    declare var c2: Class2;
+    declare var c3: Class3;
+    declare var c4: Class4;
+    declare var c5: Class5;
+    
+    xy = c1; // error
+    ~~
+!!! error TS2322: Type 'Class1' is not assignable to type 'XY'.
+!!! error TS2322:   Property 'y' of type 'Class1' is internal in a declaration file and is only accessible within a declaration file.
+    xy = c2; // error
+    ~~
+!!! error TS2322: Type 'Class2' is not assignable to type 'XY'.
+!!! error TS2322:   Property 'y' of type 'Class2' is internal in a declaration file and is only accessible within a declaration file.
+    xy = c3; // ok
+    xy = c4; // error
+    ~~
+!!! error TS2322: Type 'Class4' is not assignable to type 'XY'.
+!!! error TS2322:   Property 'y' of type 'Class4' is internal in a declaration file and is only accessible within a declaration file.
+    xy = c5; // ok
+    c1 = xy; // error
+    ~~
+!!! error TS2322: Type 'XY' is not assignable to type 'Class1'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'XY' is not a class derived from 'Class1'.
+    c1 = c2; // ok
+    c1 = c3; // ok
+    c1 = c4; // ok
+    c1 = c5; // error
+    ~~
+!!! error TS2322: Type 'Class5' is not assignable to type 'Class1'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'Class5' is not a class derived from 'Class1'.
+    c2 = xy; // error
+    ~~
+!!! error TS2322: Type 'XY' is not assignable to type 'Class2'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'XY' is not a class derived from 'Class2'.
+    c2 = c3; // error
+    ~~
+!!! error TS2322: Type 'Class3' is not assignable to type 'Class2'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'Class3' is not a class derived from 'Class2'.
+    c2 = c4; // error
+    ~~
+!!! error TS2322: Type 'Class4' is not assignable to type 'Class2'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'Class1' is not a class derived from 'Class2'.
+    c2 = c5; // error
+    ~~
+!!! error TS2322: Type 'Class5' is not assignable to type 'Class2'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'Class5' is not a class derived from 'Class2'.
+    c3 = xy; // ok
+    c3 = c4; // error
+    ~~
+!!! error TS2322: Type 'Class4' is not assignable to type 'Class3'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'Class1' is not a class derived from 'Class3'.
+    c3 = c5; // ok
+    c4 = xy; // error
+    ~~
+!!! error TS2322: Type 'XY' is not assignable to type 'Class4'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'XY' is not a class derived from 'Class1'.
+    c4 = c5; // error
+    ~~
+!!! error TS2322: Type 'Class5' is not assignable to type 'Class4'.
+!!! error TS2322:   Property 'y' is internal in a declaration file, but type 'Class5' is not a class derived from 'Class1'.
+    c5 = xy; // ok
+==== tests/cases/conformance/classes/members/accessibility/internalClassPropertyAssignability_0.d.ts (0 errors) ====
+    declare class Class1 {
+    	public x: number;
+    	internal y: number;
+    }
+    
+    declare class Class2 extends Class1 {
+    	internal y: number; // ok
+    }
+    

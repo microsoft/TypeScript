@@ -1120,7 +1120,7 @@
         "category": "Error",
         "code": 2384
     },
-    "Overload signatures must all be public, private or protected.": {
+    "Overload signatures must all be public, internal, private or protected.": {
         "category": "Error",
         "code": 2385
     },
@@ -1723,6 +1723,18 @@
     "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
         "category": "Error",
         "code": 2656
+    },
+    "Property '{0}' is internal in a declaration file and is only accessible within a declaration file.": {
+        "category": "Error",
+        "code": 2657
+    },
+    "Property '{0}' of type '{1}' is internal in a declaration file and is only accessible within a declaration file.": {
+        "category": "Error",
+        "code": 2658
+    },
+    "Property '{0}' is internal in a declaration file, but type '{1}' is not a class derived from '{2}'.": {
+        "category": "Error",
+        "code": 2659
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

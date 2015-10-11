@@ -1,0 +1,28 @@
+tests/cases/conformance/classes/members/accessibility/internalStaticMemberAccessibility_1.ts(3,18): error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+tests/cases/conformance/classes/members/accessibility/internalStaticMemberAccessibility_1.ts(4,18): error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+
+
+==== tests/cases/conformance/classes/members/accessibility/internalStaticMemberAccessibility_1.ts (2 errors) ====
+    /// <reference path="internalStaticMemberAccessibility_0.d.ts" />
+    class Derived1 extends Base1 {
+        static bar = Base1.foo; // error
+                     ~~~~~~~~~
+!!! error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+        bing = () => Base1.foo; // error
+                     ~~~~~~~~~
+!!! error TS2657: Property 'foo' is internal in a declaration file and is only accessible within a declaration file.
+    }
+    
+    class Base2 {
+        internal static foo: string;
+    }
+    
+    class Derived2 extends Base2 {
+        static bar = Base2.foo; // ok
+        bing = () => Base2.foo; // ok
+    }
+==== tests/cases/conformance/classes/members/accessibility/internalStaticMemberAccessibility_0.d.ts (0 errors) ====
+    declare class Base1 {
+        internal static foo: string;
+    }
+    

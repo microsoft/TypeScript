@@ -1,0 +1,126 @@
+=== tests/cases/conformance/classes/members/accessibility/internalClassPropertyAccessibleWithinClass.ts ===
+// no errors
+
+class C {
+>C : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+
+    internal x: string;
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 2, 9))
+
+    internal get y() { return this.x; }
+>y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 3, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 4, 39))
+>this.x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 2, 9))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 2, 9))
+
+    internal set y(x) { this.y = this.x; }
+>y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 3, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 4, 39))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 5, 19))
+>this.y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 3, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 4, 39))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 3, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 4, 39))
+>this.x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 2, 9))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 2, 9))
+
+    internal foo() { return this.foo; }
+>foo : Symbol(foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 5, 42))
+>this.foo : Symbol(foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 5, 42))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>foo : Symbol(foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 5, 42))
+
+    internal static x: string;
+>x : Symbol(C.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 6, 39))
+
+    internal static get y() { return this.x; }
+>y : Symbol(C.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 8, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 9, 46))
+>this.x : Symbol(C.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 6, 39))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 6, 39))
+
+    internal static set y(x) { this.y = this.x; }
+>y : Symbol(C.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 8, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 9, 46))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 10, 26))
+>this.y : Symbol(C.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 8, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 9, 46))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>y : Symbol(C.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 8, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 9, 46))
+>this.x : Symbol(C.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 6, 39))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>x : Symbol(C.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 6, 39))
+
+    internal static foo() { return this.foo; }
+>foo : Symbol(C.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 10, 49))
+>this.foo : Symbol(C.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 10, 49))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 10, 49))
+
+    internal static bar() { this.foo(); }
+>bar : Symbol(C.bar, Decl(internalClassPropertyAccessibleWithinClass.ts, 11, 46))
+>this.foo : Symbol(C.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 10, 49))
+>this : Symbol(C, Decl(internalClassPropertyAccessibleWithinClass.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 10, 49))
+}
+
+// added level of function nesting
+class C2 {
+>C2 : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+
+    internal x: string;
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 16, 10))
+
+    internal get y() { () => this.x; return null; }
+>y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 17, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 18, 51))
+>this.x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 16, 10))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 16, 10))
+
+    internal set y(x) { () => { this.y = this.x; } }
+>y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 17, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 18, 51))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 19, 19))
+>this.y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 17, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 18, 51))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>y : Symbol(y, Decl(internalClassPropertyAccessibleWithinClass.ts, 17, 23), Decl(internalClassPropertyAccessibleWithinClass.ts, 18, 51))
+>this.x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 16, 10))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 16, 10))
+
+    internal foo() { () => this.foo; }
+>foo : Symbol(foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 19, 52))
+>this.foo : Symbol(foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 19, 52))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>foo : Symbol(foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 19, 52))
+
+    internal static x: string;
+>x : Symbol(C2.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 20, 38))
+
+    internal static get y() { () => this.x; return null; }
+>y : Symbol(C2.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 22, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 23, 58))
+>this.x : Symbol(C2.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 20, 38))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(C2.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 20, 38))
+
+    internal static set y(x) {
+>y : Symbol(C2.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 22, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 23, 58))
+>x : Symbol(x, Decl(internalClassPropertyAccessibleWithinClass.ts, 24, 26))
+
+        () => { this.y = this.x; }
+>this.y : Symbol(C2.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 22, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 23, 58))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>y : Symbol(C2.y, Decl(internalClassPropertyAccessibleWithinClass.ts, 22, 30), Decl(internalClassPropertyAccessibleWithinClass.ts, 23, 58))
+>this.x : Symbol(C2.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 20, 38))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>x : Symbol(C2.x, Decl(internalClassPropertyAccessibleWithinClass.ts, 20, 38))
+     }
+    internal static foo() { () => this.foo; }
+>foo : Symbol(C2.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 26, 6))
+>this.foo : Symbol(C2.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 26, 6))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>foo : Symbol(C2.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 26, 6))
+
+    internal static bar() { () => this.foo(); }
+>bar : Symbol(C2.bar, Decl(internalClassPropertyAccessibleWithinClass.ts, 27, 45))
+>this.foo : Symbol(C2.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 26, 6))
+>this : Symbol(C2, Decl(internalClassPropertyAccessibleWithinClass.ts, 13, 1))
+>foo : Symbol(C2.foo, Decl(internalClassPropertyAccessibleWithinClass.ts, 26, 6))
+}
+

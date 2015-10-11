@@ -169,7 +169,7 @@ namespace ts {
         let emitParam = false;
         let emitAwaiter = false;
         let emitGenerator = false;
-
+        
         let resolutionTargets: TypeSystemEntity[] = [];
         let resolutionResults: boolean[] = [];
         let resolutionPropertyNames: TypeSystemPropertyName[] = [];
@@ -2116,8 +2116,8 @@ namespace ts {
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        if (node.flags & (NodeFlags.Private | NodeFlags.Protected)) {
-                            // Private/protected properties/methods are not visible
+                        if (node.flags & (NodeFlags.Private | NodeFlags.Protected | NodeFlags.Internal)) {
+                            // Private/protected/internal properties/methods are not visible
                             return false;
                         }
                     // Public properties/methods are visible if its parents are visible, so let it fall into next case statement
@@ -5173,6 +5173,32 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
+                            else if (sourcePropFlags & NodeFlags.Internal || targetPropFlags & NodeFlags.Internal) {
+                                let sourceInDeclarationFile = isDeclarationFile(getSourceFile(sourceProp.valueDeclaration));
+                                let targetInDeclarationFile = isDeclarationFile(getSourceFile(targetProp.valueDeclaration));
+                                if (sourceInDeclarationFile || targetInDeclarationFile) {
+                                    if (targetPropFlags & NodeFlags.Internal) {
+                                        let sourceDeclaredInClass = sourceProp.parent && sourceProp.parent.flags & SymbolFlags.Class;
+                                        let sourceClass = sourceDeclaredInClass ? <InterfaceType>getDeclaredTypeOfSymbol(sourceProp.parent) : undefined;
+                                        let targetClass = <InterfaceType>getDeclaredTypeOfSymbol(targetProp.parent);
+                                        if (!sourceClass || !hasBaseType(sourceClass, targetClass)) {
+                                            if (reportErrors) {
+                                                reportError(Diagnostics.Property_0_is_internal_in_a_declaration_file_but_type_1_is_not_a_class_derived_from_2, 
+                                                    symbolToString(targetProp), typeToString(sourceClass || source), typeToString(targetClass));
+                                            }
+                                            return Ternary.False;
+                                        }
+                                    }
+                                    else if (sourcePropFlags & NodeFlags.Internal) {
+                                        if (reportErrors) {
+                                            reportError(Diagnostics.Property_0_of_type_1_is_internal_in_a_declaration_file_and_is_only_accessible_within_a_declaration_file,
+                                                symbolToString(targetProp),
+                                                typeToString(source));
+                                        }
+                                        return Ternary.False;
+                                    }
+                                }
+                            }
                             let related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
                             if (!related) {
                                 if (reportErrors) {
@@ -7943,7 +7969,16 @@ namespace ts {
             }
 
             // Public properties are otherwise accessible.
-            if (!(flags & (NodeFlags.Private | NodeFlags.Protected))) {
+            if (!(flags & (NodeFlags.Private | NodeFlags.Protected | NodeFlags.Internal))) {
+                return true;
+            }
+
+            // Internal property is accessible only if declaring class comes from a non-declaration file
+            if (flags & NodeFlags.Internal) {
+                if (!isDeclarationFile(getSourceFile(node)) && (!declaringClass.symbol || isDeclarationFile(getSourceFile(declaringClass.symbol.valueDeclaration)))) {
+                    error(node, Diagnostics.Property_0_is_internal_in_a_declaration_file_and_is_only_accessible_within_a_declaration_file, symbolToString(prop));
+                    return false;
+                }
                 return true;
             }
 
@@ -7961,7 +7996,7 @@ namespace ts {
                 }
                 return true;
             }
-
+            
             // Property is known to be protected at this point
 
             // All protected properties of a supertype are accessible in a super access
@@ -10814,7 +10849,7 @@ namespace ts {
                     //   or the containing class declares instance member variables with initializers.
                     let superCallShouldBeFirst =
                         forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
-                        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
+                        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected | NodeFlags.Internal));
 
                     // Skip past any prologue directives to find the first statement
                     // to ensure that it was a super call.
@@ -11033,8 +11068,8 @@ namespace ts {
                         else if (deviation & NodeFlags.Ambient) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
                         }
-                        else if (deviation & (NodeFlags.Private | NodeFlags.Protected)) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                        else if (deviation & (NodeFlags.Private | NodeFlags.Protected | NodeFlags.Internal)) {
+                            error(o.name, Diagnostics.Overload_signatures_must_all_be_public_internal_private_or_protected);
                         }
                         else if (deviation & NodeFlags.Abstract) {
                             error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_not_abstract);
@@ -11055,7 +11090,7 @@ namespace ts {
                 }
             }
 
-            let flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected | NodeFlags.Abstract;
+            let flagsToCheck: NodeFlags = NodeFlags.Export | NodeFlags.Ambient | NodeFlags.Private | NodeFlags.Protected | NodeFlags.Internal | NodeFlags.Abstract;
             let someNodeFlags: NodeFlags = 0;
             let allNodeFlags = flagsToCheck;
             let someHaveQuestionToken = false;
@@ -14967,7 +15002,7 @@ namespace ts {
                 return;
             }
 
-            let lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastDeclare: Node, lastAsync: Node;
+            let lastStatic: Node, lastPrivate: Node, lastProtected: Node, lastInternal: Node, lastDeclare: Node, lastAsync: Node;
             let flags = 0;
             for (let modifier of node.modifiers) {
                 switch (modifier.kind) {
@@ -15119,6 +15154,9 @@ namespace ts {
                 }
                 else if (flags & NodeFlags.Protected) {
                     return grammarErrorOnNode(lastProtected, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "protected");
+                }
+                else if (flags & NodeFlags.Internal) {
+                    return grammarErrorOnNode(lastInternal, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "internal");
                 }
                 else if (flags & NodeFlags.Private) {
                     return grammarErrorOnNode(lastPrivate, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "private");

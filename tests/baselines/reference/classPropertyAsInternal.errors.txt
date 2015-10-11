@@ -1,0 +1,38 @@
+tests/cases/conformance/classes/members/accessibility/classPropertyAsInternal.ts(3,18): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsInternal.ts(4,18): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsInternal.ts(8,25): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/classes/members/accessibility/classPropertyAsInternal.ts(9,25): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/conformance/classes/members/accessibility/classPropertyAsInternal.ts (4 errors) ====
+    class C {
+        internal x: string;
+        internal get y() { return null; }
+                     ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        internal set y(x) { }
+                     ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        internal foo() { }
+    
+        internal static a: string;
+        internal static get b() { return null; }
+                            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        internal static set b(x) { }
+                            ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+        internal static foo() { }
+    }
+    
+    var c: C;
+    // all OK
+    c.x;
+    c.y;
+    c.y = 1;
+    c.foo();
+    
+    C.a;
+    C.b();
+    C.b = 1;
+    C.foo();

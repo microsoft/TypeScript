@@ -614,6 +614,9 @@ namespace ts {
             else if (node.flags & NodeFlags.Protected) {
                 write("protected ");
             }
+            else if (node.flags & NodeFlags.Internal) {
+                write("internal ");
+            }
 
             if (node.flags & NodeFlags.Static) {
                 write("static ");
@@ -1027,7 +1030,7 @@ namespace ts {
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && node.parent.kind === SyntaxKind.TypeLiteral) {
                         emitTypeOfVariableDeclarationFromTypeLiteral(node);
                     }
-                    else if (!(node.flags & NodeFlags.Private)) {
+                    else if (!(node.flags & (NodeFlags.Private | NodeFlags.Internal))) {
                         writeTypeOfDeclaration(node, node.type, getVariableDeclarationTypeVisibilityError);
                     }
                 }
