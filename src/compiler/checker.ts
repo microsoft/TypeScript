@@ -294,7 +294,8 @@ namespace ts {
                 }
                 target.flags |= source.flags;
                 if (source.valueDeclaration &&
-                    (!target.valueDeclaration || target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    (!target.valueDeclaration ||
+                     (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
                 }

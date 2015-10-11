@@ -131,7 +131,8 @@ namespace ts {
             }
 
             if (symbolFlags & SymbolFlags.Value &&
-                (!symbol.valueDeclaration || symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                (!symbol.valueDeclaration ||
+                 (symbol.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && node.kind !== SyntaxKind.ModuleDeclaration))) {
                 // other kinds of value declarations take precedence over modules
                 symbol.valueDeclaration = node;
             }
