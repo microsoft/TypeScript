@@ -7313,15 +7313,15 @@ namespace ts {
         }
 
         function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
+            let inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
-            checkGrammarObjectLiteralExpression(node);
+            checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
             let propertiesTable: SymbolTable = {};
             let propertiesArray: Symbol[] = [];
             let contextualType = getContextualType(node);
             let contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
-            let inDestructuringPattern = isAssignmentTarget(node);
             let typeFlags: TypeFlags = 0;
 
             for (let memberDecl of node.properties) {
@@ -7345,7 +7345,10 @@ namespace ts {
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
-                        if (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) {
+                        const isOptional =
+                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
+                            (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
+                        if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
                         }
                     }
@@ -9909,32 +9912,32 @@ namespace ts {
             return (symbol.flags & SymbolFlags.ConstEnum) !== 0;
         }
 
-        function checkInstanceOfExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
+        function checkInstanceOfExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             // TypeScript 1.0 spec (April 2014): 4.15.4
             // The instanceof operator requires the left operand to be of type Any, an object type, or a type parameter type,
             // and the right operand to be of type Any or a subtype of the 'Function' interface type.
             // The result is always of the Boolean primitive type.
             // NOTE: do not raise error if leftType is unknown as related error was already reported
             if (allConstituentTypesHaveKind(leftType, TypeFlags.Primitive)) {
-                error(node.left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
+                error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
             if (!(isTypeAny(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
-                error(node.right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
+                error(right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
         }
 
-        function checkInExpression(node: BinaryExpression, leftType: Type, rightType: Type): Type {
+        function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             // TypeScript 1.0 spec (April 2014): 4.15.5
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
             if (!isTypeAnyOrAllConstituentTypesHaveKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
-                error(node.left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
+                error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
             if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.ObjectType | TypeFlags.TypeParameter)) {
-                error(node.right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
+                error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
         }
@@ -9951,7 +9954,12 @@ namespace ts {
                         isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
                         getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
-                        checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
+                        if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                            checkDestructuringAssignment(<ShorthandPropertyAssignment>p, type);
+                        }
+                        else {
+                            checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
+                        }
                     }
                     else {
                         error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(sourceType), declarationNameToString(name));
@@ -10011,7 +10019,19 @@ namespace ts {
             return sourceType;
         }
 
-        function checkDestructuringAssignment(target: Expression, sourceType: Type, contextualMapper?: TypeMapper): Type {
+        function checkDestructuringAssignment(exprOrAssignment: Expression | ShorthandPropertyAssignment, sourceType: Type, contextualMapper?: TypeMapper): Type {
+            let target: Expression;
+            if (exprOrAssignment.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                const prop = <ShorthandPropertyAssignment>exprOrAssignment;
+                if (prop.objectAssignmentInitializer) {
+                    checkBinaryLikeExpression(prop.name, prop.equalsToken, prop.objectAssignmentInitializer, contextualMapper);
+                }
+                target = (<ShorthandPropertyAssignment>exprOrAssignment).name;
+            }
+            else {
+                target = <Expression>exprOrAssignment;
+            }
+
             if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                 checkBinaryExpression(<BinaryExpression>target, contextualMapper);
                 target = (<BinaryExpression>target).left;
@@ -10034,12 +10054,16 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, contextualMapper?: TypeMapper) {
-            let operator = node.operatorToken.kind;
-            if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
-                return checkDestructuringAssignment(node.left, checkExpression(node.right, contextualMapper), contextualMapper);
+            return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, contextualMapper, node);
+        }
+
+        function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, contextualMapper?: TypeMapper, errorNode?: Node) {
+            let operator = operatorToken.kind;
+            if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
+                return checkDestructuringAssignment(left, checkExpression(right, contextualMapper), contextualMapper);
             }
-            let leftType = checkExpression(node.left, contextualMapper);
-            let rightType = checkExpression(node.right, contextualMapper);
+            let leftType = checkExpression(left, contextualMapper);
+            let rightType = checkExpression(right, contextualMapper);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
                 case SyntaxKind.AsteriskEqualsToken:
@@ -10075,13 +10099,13 @@ namespace ts {
                     // try and return them a helpful suggestion
                     if ((leftType.flags & TypeFlags.Boolean) &&
                         (rightType.flags & TypeFlags.Boolean) &&
-                        (suggestedOperator = getSuggestedBooleanOperator(node.operatorToken.kind)) !== undefined) {
-                        error(node, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(node.operatorToken.kind), tokenToString(suggestedOperator));
+                        (suggestedOperator = getSuggestedBooleanOperator(operatorToken.kind)) !== undefined) {
+                        error(errorNode || operatorToken, Diagnostics.The_0_operator_is_not_allowed_for_boolean_types_Consider_using_1_instead, tokenToString(operatorToken.kind), tokenToString(suggestedOperator));
                     }
                     else {
                         // otherwise just check each operand separately and report errors as normal
-                        let leftOk = checkArithmeticOperandType(node.left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
-                        let rightOk = checkArithmeticOperandType(node.right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
+                        let leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
+                        let rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type);
                         if (leftOk && rightOk) {
                             checkAssignmentOperator(numberType);
                         }
@@ -10147,9 +10171,9 @@ namespace ts {
                     }
                     return booleanType;
                 case SyntaxKind.InstanceOfKeyword:
-                    return checkInstanceOfExpression(node, leftType, rightType);
+                    return checkInstanceOfExpression(left, right, leftType, rightType);
                 case SyntaxKind.InKeyword:
-                    return checkInExpression(node, leftType, rightType);
+                    return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
                     return rightType;
                 case SyntaxKind.BarBarToken:
@@ -10164,8 +10188,8 @@ namespace ts {
             // Return true if there was no error, false if there was an error.
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 let offendingSymbolOperand =
-                    someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? node.left :
-                        someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? node.right :
+                    someConstituentTypeHasKind(leftType, TypeFlags.ESSymbol) ? left :
+                        someConstituentTypeHasKind(rightType, TypeFlags.ESSymbol) ? right :
                             undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
@@ -10199,17 +10223,17 @@ namespace ts {
                     // requires VarExpr to be classified as a reference
                     // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
                     // and the type of the non - compound operation to be assignable to the type of VarExpr.
-                    let ok = checkReferenceExpression(node.left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
+                    let ok = checkReferenceExpression(left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     // Use default messages
                     if (ok) {
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, node.left, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
                     }
                 }
             }
 
             function reportOperatorError() {
-                error(node, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(node.operatorToken.kind), typeToString(leftType), typeToString(rightType));
+                error(errorNode || operatorToken, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2, tokenToString(operatorToken.kind), typeToString(leftType), typeToString(rightType));
             }
         }
 
@@ -15421,7 +15445,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression) {
+        function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
             let seen: Map<SymbolFlags> = {};
             let Property = 1;
             let GetAccessor = 2;
@@ -15435,6 +15459,12 @@ namespace ts {
                     // If the name is not a ComputedPropertyName, the grammar checking will skip it
                     checkGrammarComputedPropertyName(<ComputedPropertyName>name);
                     continue;
+                }
+
+                if (prop.kind === SyntaxKind.ShorthandPropertyAssignment && !inDestructuring && (<ShorthandPropertyAssignment>prop).objectAssignmentInitializer) {
+                    // having objectAssignmentInitializer is only valid in ObjectAssignmentPattern
+                    // outside of destructuring it is a syntax error
+                    return grammarErrorOnNode((<ShorthandPropertyAssignment>prop).equalsToken, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
                 }
 
                 // ECMA-262 11.1.5 Object Initialiser
