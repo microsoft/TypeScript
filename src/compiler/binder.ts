@@ -207,8 +207,9 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
+            let isDefaultExport = node.flags & NodeFlags.Default;
             // The exported symbol for an export default function/class node is always named "default"
-            let name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+            let name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -249,6 +250,13 @@ namespace ts {
                     let message = symbol.flags & SymbolFlags.BlockScopedVariable
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
+
+                    forEach(symbol.declarations, declaration => {
+                        if (declaration.flags & NodeFlags.Default) {
+                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                        }
+                    });
+
                     forEach(symbol.declarations, declaration => {
                         file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });

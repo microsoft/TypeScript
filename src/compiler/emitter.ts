@@ -446,7 +446,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** If removeComments is true, no leading-comments needed to be emitted **/
             let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
 
-            let moduleEmitDelegates: Map<(node: SourceFile, startIndex: number) => void> = {
+            let moduleEmitDelegates: Map<(node: SourceFile) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -2311,6 +2311,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(": ");
                     emit(node.name);
                 }
+
+                if (languageVersion >= ScriptTarget.ES6 && node.objectAssignmentInitializer) {
+                    write(" = ");
+                    emit(node.objectAssignmentInitializer);
+                }
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
@@ -3574,7 +3579,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             let propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
+                            let target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
+                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
                 }
@@ -3599,8 +3605,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function emitDestructuringAssignment(target: Expression, value: Expression) {
-                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
+                function emitDestructuringAssignment(target: Expression | ShorthandPropertyAssignment, value: Expression) {
+                    if (target.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        if ((<ShorthandPropertyAssignment>target).objectAssignmentInitializer) {
+                            value = createDefaultValueCheck(value, (<ShorthandPropertyAssignment>target).objectAssignmentInitializer);
+                        }
+                        target = (<ShorthandPropertyAssignment>target).name;
+                    }
+                    else if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                         value = createDefaultValueCheck(value, (<BinaryExpression>target).right);
                         target = (<BinaryExpression>target).left;
                     }
@@ -3785,7 +3797,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(";");
                     }
                 }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                if (modulekind !== ModuleKind.ES6 && node.parent === currentSourceFile) {
                     forEach(node.declarationList.declarations, emitExportVariableAssignments);
                 }
             }
@@ -4011,7 +4023,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitSignatureAndBody(node);
-                if (languageVersion < ScriptTarget.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
+                if (modulekind !== ModuleKind.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
 
@@ -4687,6 +4699,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitClassLikeDeclarationForES6AndHigher(node);
                 }
+                if (modulekind !== ModuleKind.ES6 && node.parent === currentSourceFile && node.name) {
+                    emitExportMemberAssignments(node.name);
+                }
             }
 
             function emitClassLikeDeclarationForES6AndHigher(node: ClassLikeDeclaration) {
@@ -4785,8 +4800,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // emit name if
                 // - node has a name
-                // - this is default export and target is not ES6 (for ES6 `export default` does not need to be compiled downlevel)                
-                if ((node.name || (node.flags & NodeFlags.Default && languageVersion < ScriptTarget.ES6)) && !thisNodeIsDecorated) {
+                // - this is default export with static initializers
+                if ((node.name || (node.flags & NodeFlags.Default && staticProperties.length > 0)) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
                 }
@@ -4933,10 +4948,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     emitExportMemberAssignment(<ClassDeclaration>node);
-                }
-
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile && node.name) {
-                    emitExportMemberAssignments(node.name);
                 }
             }
 
@@ -5509,7 +5520,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitEnd(node);
                     write(";");
                 }
-                if (languageVersion < ScriptTarget.ES6 && node.parent === currentSourceFile) {
+                if (modulekind !== ModuleKind.ES6 && node.parent === currentSourceFile) {
                     if (modulekind === ModuleKind.System && (node.flags & NodeFlags.Export)) {
                         // write the call to exporter for enum
                         writeLine();
@@ -5645,8 +5656,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             /*
-             * Some bundlers (SystemJS builder) sometimes want to rename dependencies. 
-             * Here we check if alternative name was provided for a given moduleName and return it if possible. 
+             * Some bundlers (SystemJS builder) sometimes want to rename dependencies.
+             * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
                 if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
@@ -6594,7 +6605,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function emitSystemModule(node: SourceFile, startIndex: number): void {
+            function emitSystemModule(node: SourceFile): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -6639,6 +6650,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
@@ -6732,7 +6744,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(") {");
             }
 
-            function emitAMDModule(node: SourceFile, startIndex: number) {
+            function emitAMDModule(node: SourceFile) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
@@ -6743,6 +6755,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6753,7 +6766,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitCommonJSModule(node: SourceFile, startIndex: number) {
+            function emitCommonJSModule(node: SourceFile) {
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
@@ -6763,7 +6777,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitExportEquals(/*emitAsReturn*/ false);
             }
 
-            function emitUMDModule(node: SourceFile, startIndex: number) {
+            function emitUMDModule(node: SourceFile) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
@@ -6782,6 +6796,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 })(`);
                 emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6792,11 +6807,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function emitES6Module(node: SourceFile, startIndex: number) {
+            function emitES6Module(node: SourceFile) {
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
                 hasExportStars = false;
+                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -6985,14 +7001,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitShebang();
                 emitDetachedComments(node);
 
-                // emit prologue directives prior to __extends
-                let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
-
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
-                    emitModule(node, startIndex);
+                    emitModule(node);
                 }
                 else {
+                    // emit prologue directives prior to __extends
+                    let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                     externalImports = undefined;
                     exportSpecifiers = undefined;
                     exportEquals = undefined;
@@ -7070,7 +7085,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return shouldEmitEnumDeclaration(<EnumDeclaration>node);
                 }
 
-                // If the node is emitted in specialized fashion, dont emit comments as this node will handle 
+                // If the node is emitted in specialized fashion, dont emit comments as this node will handle
                 // emitting comments when emitting itself
                 Debug.assert(!isSpecializedCommentHandling(node));
 

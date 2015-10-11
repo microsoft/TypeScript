@@ -7,7 +7,7 @@ class StringIterator {
 >StringIterator : Symbol(StringIterator, Decl(for-of27.ts, 0, 37))
 
     [Symbol.iterator]: any;
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 }

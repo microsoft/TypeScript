@@ -28,7 +28,7 @@ interface I<T> {
     new(x: T): Date;
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 13, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 12, 12))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface I2 {
@@ -38,7 +38,7 @@ interface I2 {
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 17, 8))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 17, 11))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType.ts, 17, 8))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var a: { new<T>(x: T): T }
