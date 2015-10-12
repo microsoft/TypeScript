@@ -1,0 +1,12 @@
+error TS5056: Cannot write file 'tests/cases/compiler/a.js' since one or more input files would emit into it.
+
+
+!!! error TS5056: Cannot write file 'tests/cases/compiler/a.js' since one or more input files would emit into it.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    export class c {
+    }
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    function foo() {
+    }
+    
