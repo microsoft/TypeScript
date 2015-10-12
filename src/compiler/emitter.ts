@@ -2864,6 +2864,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         emit(node.left);
+                        // Add indentation before emit the operator if the operator is on different line
+                        // For example:
+                        //      3
+                        //      + 2;
+                        //   emitted as
+                        //      3
+                        //          + 2;
                         let indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
                         write(tokenToString(node.operatorToken.kind));
                         let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
