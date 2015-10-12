@@ -2477,5 +2477,9 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "'super' must be called before accessing 'this' in the constructor of a derived class.": {
+      "category": "Error",
+      "code": 17006
     }
 }

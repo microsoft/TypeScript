@@ -1750,6 +1750,8 @@ namespace ts {
         EnumValuesComputed          = 0x00002000,
         BlockScopedBindingInLoop    = 0x00004000,
         LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        HasSeenSuperBeforeThis      = 0x00010000,  // Set during the binding if the 'super' is used before 'this' in constructor function
+        HasSeenThisCall             = 0x00020000,  // Set during the binding when encounter 'this'
     }
 
     /* @internal */
@@ -2302,7 +2304,7 @@ namespace ts {
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
-        // to determine location of bundled typings for node module 
+        // to determine location of bundled typings for node module
         readFile(fileName: string): string;
     }
 
@@ -2322,6 +2324,8 @@ namespace ts {
         failedLookupLocations: string[];
     }
 
+    export type ModuleNameResolver = (moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => ResolvedModule;
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile;
         getCancellationToken?(): CancellationToken;
@@ -2333,11 +2337,11 @@ namespace ts {
         getNewLine(): string;
 
         /*
-         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
-         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
          * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
-         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
-         * 'throw new Error("NotImplemented")'  
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
+         * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }

@@ -6580,6 +6580,21 @@ namespace ts {
             let container = getThisContainer(node, /* includeArrowFunctions */ true);
             let needToCaptureLexicalThis = false;
 
+
+            if (container.kind === SyntaxKind.Constructor) {
+                // Keep track of whether we have seen "super" before encounter "this" so that
+                // we can report appropriate error later in checkConstructorDeclaration
+                // We have to do the check here to make sure we won't give false error when
+                // "this" is used in arrow functions
+                // For example:
+                //      constructor() {
+                //          (()=>this);  // No Error
+                //          super();
+                //      }
+                let nodeLinks = getNodeLinks(container);
+                nodeLinks.flags |= NodeCheckFlags.HasSeenThisCall;
+            }
+
             // Now skip arrow functions to get the "real" owner of 'this'.
             if (container.kind === SyntaxKind.ArrowFunction) {
                 container = getThisContainer(container, /* includeArrowFunctions */ false);
@@ -9303,6 +9318,14 @@ namespace ts {
 
             let signature = getResolvedSignature(node);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                let containgFunction = getContainingFunction(node.expression);
+
+                if (containgFunction && containgFunction.kind === SyntaxKind.Constructor) {
+                    let nodeLinks = getNodeLinks(containgFunction);
+                    if (!(nodeLinks.flags & NodeCheckFlags.HasSeenThisCall)) {
+                        nodeLinks.flags |= NodeCheckFlags.HasSeenSuperBeforeThis;
+                    }
+                }
                 return voidType;
             }
             if (node.kind === SyntaxKind.NewExpression) {
@@ -10833,8 +10856,25 @@ namespace ts {
                 let containingClassSymbol = getSymbolOfNode(containingClassDecl);
                 let containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
                 let baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
+                let statements = (<Block>node.body).statements;
+                let superCallStatement: ExpressionStatement;
+                let isSuperCallFirstStatment: boolean;
 
-                if (containsSuperCall(node.body)) {
+                for (let statement of statements) {
+                    if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+                        superCallStatement = <ExpressionStatement>statement;
+                        if (isSuperCallFirstStatment === undefined) {
+                            isSuperCallFirstStatment = true;
+                        }
+                    }
+                    else if (isSuperCallFirstStatment === undefined && !isPrologueDirective(statement)) {
+                        isSuperCallFirstStatment = false;
+                    }
+                }
+
+                // The main different between looping through each statement in constructor and calling containsSuperCall is that,
+                // containsSuperCall will consider "super" inside computed-property for inner class declaration
+                if (superCallStatement || containsSuperCall(node.body)) {
                     if (baseConstructorType === nullType) {
                         error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
                     }
@@ -10851,24 +10891,17 @@ namespace ts {
                     // Skip past any prologue directives to find the first statement
                     // to ensure that it was a super call.
                     if (superCallShouldBeFirst) {
-                        let statements = (<Block>node.body).statements;
-                        let superCallStatement: ExpressionStatement;
-                        for (let statement of statements) {
-                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
-                                superCallStatement = <ExpressionStatement>statement;
-                                break;
-                            }
-                            if (!isPrologueDirective(statement)) {
-                                break;
-                            }
-                        }
-                        if (!superCallStatement) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
+                        if (!isSuperCallFirstStatment) {
+                            error(superCallStatement, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
                         }
                         else {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
+                    }
+                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)) {
+                        // In ES6, super inside constructor of class-declaration has to precede "this" accessing
+                        error(superCallStatement, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
                     }
                 }
                 else if (baseConstructorType !== nullType) {
