@@ -13897,6 +13897,7 @@ namespace ts {
                     break;
                 case SyntaxKind.ClassExpression:
                     forEach((<ClassExpression>node).members, checkSourceElement);
+                    forEachChild(node, checkFunctionAndClassExpressionBodies);
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
