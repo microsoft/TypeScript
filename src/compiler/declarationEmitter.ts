@@ -150,9 +150,7 @@ namespace ts {
                     forEach(type.symbol.declarations, d => {
                         currentSourceFile = getSourceFileOfNode(d);
                         let oldFlags = d.flags;
-                        if (oldFlags & NodeFlags.Export) {
-                            d.flags -= NodeFlags.Export;
-                        }
+                        d.flags |= NodeFlags.Export; // TODO: Consider the implications of this
                         emitModuleElement(d, /*isModuleElementVisible*/true);
                         d.flags = oldFlags;
                     });

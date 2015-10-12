@@ -1,0 +1,82 @@
+=== tests/cases/compiler/index.ts ===
+
+export * from "./a";
+export {Detail} from "./b";
+>Detail : any
+
+export interface Inner {
+>Inner : Inner
+
+	item4: number;
+>item4 : number
+}
+
+=== tests/cases/compiler/a.ts ===
+import {Main as BaseMain, Inner as Middle} from "./b";
+>Main : typeof BaseMain
+>BaseMain : typeof BaseMain
+>Inner : any
+>Middle : any
+
+export class Main extends BaseMain {
+>Main : Main
+>BaseMain : BaseMain
+
+	memberc: Middle;
+>memberc : Middle
+>Middle : Middle
+}
+
+export interface Inner {
+>Inner : Inner
+
+	item3: number;
+>item3 : number
+}
+
+=== tests/cases/compiler/b.ts ===
+import {Main as BaseMain, Inner as Innermost} from "./c";
+>Main : typeof BaseMain
+>BaseMain : typeof BaseMain
+>Inner : any
+>Innermost : any
+>Main_2 : (Missing)
+>Inner_2 : (Missing)
+
+export class Main extends BaseMain {
+>BaseMain : BaseMain
+
+	member2: Innermost;
+>member2 : Innermost
+>Innermost : Innermost
+
+	details: Detail;
+>details : Detail
+>Detail : Detail
+}
+
+export interface Inner {
+	item2: number;
+>item2 : number
+}
+
+export interface Detail {
+>Detail : Detail
+
+	id: string;
+>id : string
+}
+
+=== tests/cases/compiler/c.ts ===
+export class Main {
+>Main_1 : (Missing)
+>Inner_1 : (Missing)
+
+	member1: string;
+>member1 : string
+}
+
+export interface Inner {
+	item: number;
+>item : number
+}
