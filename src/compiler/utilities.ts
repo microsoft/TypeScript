@@ -1769,7 +1769,7 @@ namespace ts {
     }
 
     export function getEmitFileNames(sourceFile: SourceFile, host: EmitHost) {
-        if (!isDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
+        if (!isDeclarationFile(sourceFile)) {
             let options = host.getCompilerOptions();
             let jsFilePath: string;
             if (shouldEmitToOwnFile(sourceFile, options)) {
@@ -1835,12 +1835,12 @@ namespace ts {
     }
 
     export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
+        if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
                 // 2. non supported extension file
                 return compilerOptions.isolatedModules ||
-                    forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(sourceFile.fileName, extension));
+                    forEach(getSupportedExtensions(compilerOptions), extension => fileExtensionIs(sourceFile.fileName, extension));
             }
             return false;
         }

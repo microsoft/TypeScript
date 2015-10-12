@@ -5,7 +5,7 @@ class c {
 
 === tests/cases/compiler/b.ts ===
 /// <reference path="c.js"/>
-// no error on above reference path since not emitting declarations
+// error on above reference when emitting declarations
 function foo() {
 >foo : () => void
 }

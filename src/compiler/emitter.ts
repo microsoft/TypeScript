@@ -342,7 +342,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitFile(getEmitFileNames(targetSourceFile, host), targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) &&
-                !isJavaScript(targetSourceFile.fileName) &&
                 (compilerOptions.outFile || compilerOptions.out)) {
                 emitFile(getBundledEmitFileNames(compilerOptions));
             }
@@ -462,7 +461,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isJavaScript(sourceFile.fileName) && !isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         emitSourceFile(sourceFile);
                     }
                 });

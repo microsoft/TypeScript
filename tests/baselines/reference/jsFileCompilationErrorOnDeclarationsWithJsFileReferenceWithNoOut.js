@@ -30,3 +30,8 @@ function foo() {
 //// [a.d.ts]
 declare class c {
 }
+//// [c.d.ts]
+declare function bar(): void;
+//// [b.d.ts]
+/// <reference path="c.d.ts" />
+declare function foo(): void;

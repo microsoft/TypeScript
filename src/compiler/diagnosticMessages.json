@@ -2465,10 +2465,6 @@
         "category": "Error",
         "code": 8017
     },
-    ".js file cannot be referenced in .ts file when emitting declarations.": {
-        "category": "Error",
-        "code": 8018
-    },
 
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
         "category": "Error",

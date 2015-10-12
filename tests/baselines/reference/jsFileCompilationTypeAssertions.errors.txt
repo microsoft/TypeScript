@@ -1,6 +1,8 @@
+error TS5055: Cannot write file 'tests/cases/compiler/a.js' which is one of the input files.
 tests/cases/compiler/a.js(1,27): error TS17002: Expected corresponding JSX closing tag for 'string'.
 
 
+!!! error TS5055: Cannot write file 'tests/cases/compiler/a.js' which is one of the input files.
 ==== tests/cases/compiler/a.js (1 errors) ====
     var v = <string>undefined;
                               
