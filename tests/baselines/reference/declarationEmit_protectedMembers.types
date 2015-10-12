@@ -12,7 +12,7 @@ class C1 {
 
         return this.x;
 >this.x : number
->this : C1
+>this : this
 >x : number
     }
 
@@ -60,7 +60,7 @@ class C2 extends C1 {
 >super : C1
 >f : () => number
 >this.x : number
->this : C2
+>this : this
 >x : number
     }
     protected static sf() {

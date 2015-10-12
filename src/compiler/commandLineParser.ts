@@ -76,10 +76,11 @@ namespace ts {
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
+                "es6": ModuleKind.ES6,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es6
         },
         {
             name: "newLine",
@@ -447,6 +448,9 @@ namespace ts {
                             }
                             if (opt.isFilePath) {
                                 value = normalizePath(combinePaths(basePath, value));
+                                if (value === "") {
+                                    value = ".";
+                                }
                             }
                             options[opt.name] = value;
                         }
@@ -469,7 +473,7 @@ namespace ts {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));                    
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));
                 }
             }
             else {

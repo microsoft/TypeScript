@@ -22,7 +22,8 @@ async function func(): Promise<void> {
 >o.a : boolean
 >o : { a: boolean; }
 >a : boolean
->p : any
+>await p : boolean
+>p : Promise<boolean>
 
     "after";
 >"after" : string
