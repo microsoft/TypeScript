@@ -820,7 +820,7 @@ namespace ts {
         properties: NodeArray<ObjectLiteralElement>;
     }
 
-    export interface PropertyAccessExpression extends MemberExpression {
+    export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         dotToken: Node;
         name: Identifier;

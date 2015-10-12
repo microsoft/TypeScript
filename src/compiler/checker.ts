@@ -2609,11 +2609,13 @@ namespace ts {
                     return getUnionType(types);
                 }
                 // Handle JS module inferences
-                if (isAmdExportAssignment(symbol.valueDeclaration)) {
-                    return getTypeOfAmdExportAssignment(symbol);
+                if (isExportsPropertyAssignment(symbol.valueDeclaration)) {
+                    // e.g. exports.prop = expr
+                    return getTypeOfExportsPropertyAssignment(symbol);
                 }
-                else if (isCommonJsExportsAssignment(symbol.valueDeclaration)) {
-                    return getTypeOfCommonJsModuleExportsAssignment(symbol);
+                else if (isModuleExportsAssignment(symbol.valueDeclaration)) {
+                    // e.g. module.exports = expr
+                    return getTypeOfModuleExportsAssignment(symbol);
                 }
 
                 // Handle variable, parameter or property
@@ -2708,8 +2710,8 @@ namespace ts {
                 if (isDefineCall(symbol.valueDeclaration)) {
                     links.type = getTypeOfDefineModule(symbol);
                 }
-                else if (isCommonJsExportsAssignment(symbol.valueDeclaration)) {
-                    links.type = getTypeOfCommonJsModuleExportsAssignment(symbol);
+                else if (isModuleExportsAssignment(symbol.valueDeclaration)) {
+                    links.type = getTypeOfModuleExportsAssignment(symbol);
                 }
                 else {
                     links.type = createObjectType(TypeFlags.Anonymous, symbol);
@@ -2870,7 +2872,7 @@ namespace ts {
             return links.type;
         }
 
-        function getTypeOfAmdExportAssignment(symbol: Symbol): Type {
+        function getTypeOfExportsPropertyAssignment(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -2887,7 +2889,7 @@ namespace ts {
             return links.type;
         }
 
-        function getTypeOfCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+        function getTypeOfModuleExportsAssignment(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {

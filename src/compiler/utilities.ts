@@ -1057,7 +1057,8 @@ namespace ts {
         return isInJavaScriptFile(expression) && isCallToNamedFunction(expression, "require") && expression.arguments.length >= 1;
     }
 
-    export function isAmdExportAssignment(expression: Node): boolean {
+    export function isExportsPropertyAssignment(expression: Node): boolean {
+        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
         return isInJavaScriptFile(expression) &&
             (expression.kind === SyntaxKind.BinaryExpression) &&
             ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
@@ -1066,7 +1067,8 @@ namespace ts {
             ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
     }
 
-    export function isCommonJsExportsAssignment(expression: Node): boolean {
+    export function isModuleExportsAssignment(expression: Node): boolean {
+        // of the form 'module.exports = expr' where 'expr' is arbitrary
         return isInJavaScriptFile(expression) &&
             (expression.kind === SyntaxKind.BinaryExpression) &&
             ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
