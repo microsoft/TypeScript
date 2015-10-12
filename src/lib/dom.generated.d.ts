@@ -7897,7 +7897,6 @@ interface NodeFilter {
 }
 
 declare var NodeFilter: {
-    prototype: NodeFilter;
     FILTER_ACCEPT: number;
     FILTER_REJECT: number;
     FILTER_SKIP: number;
