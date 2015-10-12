@@ -1185,7 +1185,8 @@ namespace Harness {
                         assert(sourceFile, "Program has no source file with name '" + fileName + "'");
                         // Is this file going to be emitted separately
                         let sourceFileName: string;
-                        if (ts.isExternalModule(sourceFile)) {
+                        let outFile = options.outFile || options.out;
+                        if (ts.isExternalModule(sourceFile) || !outFile) {
                             if (options.outDir) {
                                 let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.currentDirectoryForProgram);
                                 sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
@@ -1194,6 +1195,9 @@ namespace Harness {
                             else {
                                 sourceFileName = sourceFile.fileName;
                             }
+                        }
+                        else {
+                            sourceFileName = outFile;
                         }
 
                         let dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
