@@ -2860,7 +2860,7 @@ namespace ts {
                 let type = resolveDefineModule(symbol);
                 if (!popTypeResolution()) {
                     // Circularly-defined module
-                    type = anyType;
+                    type = unknownType;
                 }
                 links.type = type;
             }
@@ -2877,7 +2877,7 @@ namespace ts {
                 let type = resolveAmdExportAssignment(symbol);
                 if (!popTypeResolution()) {
                     // Circularly-defined module
-                    type = anyType;
+                    type = unknownType;
                 }
                 links.type = type;
             }
@@ -2894,7 +2894,7 @@ namespace ts {
                 let type = resolveCommonJsModuleExportsAssignment(symbol);
                 if (!popTypeResolution()) {
                     // Circularly-defined module
-                    type = anyType;
+                    type = unknownType;
                 }
                 links.type = type;
             }
