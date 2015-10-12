@@ -1031,7 +1031,7 @@ namespace ts {
         return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
     }
 
-    function isCalledToNamedFunction(expression: Node, name: string): expression is CallExpression {
+    function isCallToNamedFunction(expression: Node, name: string): expression is CallExpression {
         return expression.kind === SyntaxKind.CallExpression &&
                 (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
                 (<Identifier>(<CallExpression>expression).expression).text === name;
@@ -1043,7 +1043,7 @@ namespace ts {
             expression.kind === SyntaxKind.CallExpression &&
             (<CallExpression>expression).arguments.length > 0 &&
             isInJavaScriptFile(expression) &&
-            isCalledToNamedFunction(expression, "define");
+            isCallToNamedFunction(expression, "define");
     }
 
     export function isAnonymousDefineCall(expression: Node): expression is CallExpression {
@@ -1054,7 +1054,7 @@ namespace ts {
 
     export function isAmdRequireCall(expression: Node): expression is CallExpression {
         // of the form 'require("name")' or 'require(arg1, arg2, ...)'
-        return isInJavaScriptFile(expression) && isCalledToNamedFunction(expression, "require") && expression.arguments.length >= 1;
+        return isInJavaScriptFile(expression) && isCallToNamedFunction(expression, "require") && expression.arguments.length >= 1;
     }
 
     export function isAmdExportAssignment(expression: Node): boolean {
