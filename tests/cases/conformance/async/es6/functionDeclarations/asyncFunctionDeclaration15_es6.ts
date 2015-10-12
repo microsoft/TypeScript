@@ -1,6 +1,5 @@
 // @target: ES6
 // @noEmitHelpers: true
-// @experimentalAsyncFunctions: true
 declare class Thenable { then(): void; }
 declare let a: any;
 declare let obj: { then: string; };
