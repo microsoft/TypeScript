@@ -10992,7 +10992,7 @@ namespace ts {
 
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
-            
+
             // children of classes (even ambient classes) should not be marked as ambient or export
             // because those flags have no useful semantics there.
             if (n.parent.kind !== SyntaxKind.InterfaceDeclaration &&
