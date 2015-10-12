@@ -3564,7 +3564,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment);
                 return identifier;
-            } 
+            }
 
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
                 let emitCount = 0;

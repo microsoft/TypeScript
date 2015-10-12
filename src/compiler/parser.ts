@@ -3215,7 +3215,7 @@ namespace ts {
                     <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), incrementExpression) :
                     incrementExpression;
             }
-            
+
             let unaryOperator = token;
             let simpleUnaryExpression = parseSimpleUnaryExpression();
             if (token === SyntaxKind.AsteriskAsteriskToken) {
@@ -3277,7 +3277,7 @@ namespace ts {
          *      ++LeftHandSideExpression[?Yield]
          *      --LeftHandSideExpression[?Yield]
          */
-        function isIncrementExpression(): boolean{
+        function isIncrementExpression(): boolean {
             // This function is called inside parseUnaryExpression to decide
             // whether to call parseSimpleUnaryExpression or call parseIncrmentExpression directly
             switch (token) {
@@ -3288,7 +3288,7 @@ namespace ts {
                 case SyntaxKind.DeleteKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
-                    return false
+                    return false;
                 case SyntaxKind.LessThanToken:
                     // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {

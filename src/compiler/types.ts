@@ -708,7 +708,7 @@ namespace ts {
     export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
     }
- 
+
     export interface IncrementExpression extends UnaryExpression {
         _incrementExpressionBrand: any;
     }
