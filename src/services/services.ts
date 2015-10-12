@@ -4112,8 +4112,9 @@ namespace ts {
                         let useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (!contains(allSignatures, signature.target || signature)) {
-                            // Get the first signature if there
+                        if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                            // Get the first signature if there is one -- allSignatures may contain
+                            // either the original signature or its target, so check for either
                             signature = allSignatures.length ? allSignatures[0] : undefined;
                         }
 

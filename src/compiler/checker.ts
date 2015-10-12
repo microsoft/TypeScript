@@ -7984,6 +7984,11 @@ namespace ts {
                 return true;
             }
             // An instance property must be accessed through an instance of the enclosing class
+            if (type.flags & TypeFlags.ThisType) {
+                // get the original type -- represented as the type constraint of the 'this' type
+                type = getConstraintOfTypeParameter(<TypeParameter>type);
+            }
+
             // TODO: why is the first part of this check here?
             if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
