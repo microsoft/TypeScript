@@ -10992,7 +10992,13 @@ namespace ts {
 
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
-            if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
+            
+            // children of classes (even ambient classes) should not be marked as ambient or export
+            // because those flags have no useful semantics there.
+            if (n.parent.kind !== SyntaxKind.InterfaceDeclaration &&
+                n.parent.kind !== SyntaxKind.ClassDeclaration &&
+                n.parent.kind !== SyntaxKind.ClassExpression &&
+                isInAmbientContext(n)) {
                 if (!(flags & NodeFlags.Ambient)) {
                     // It is nested in an ambient context, which means it is automatically exported
                     flags |= NodeFlags.Export;
