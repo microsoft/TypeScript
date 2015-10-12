@@ -725,7 +725,7 @@ namespace ts {
         }
         getBaseTypes(): ObjectType[] {
             return this.flags & (TypeFlags.Class | TypeFlags.Interface)
-                ? this.checker.getBaseTypes(<TypeObject & InterfaceType>this)
+                ? this.checker.getBaseTypes(<InterfaceType><Type>this)
                 : undefined;
         }
     }
@@ -1857,8 +1857,8 @@ namespace ts {
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
 
-        // Parse
-        let inputFileName = transpileOptions.fileName || "module.ts";
+        // if jsx is specified then treat file as .tsx
+        let inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
         let sourceFile = createSourceFile(inputFileName, input, options.target);
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
@@ -3556,6 +3556,9 @@ namespace ts {
                             if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                                 return <JsxOpeningLikeElement>parent;
                             }
+                            else if (parent.kind === SyntaxKind.JsxAttribute) {
+                                return <JsxOpeningLikeElement>parent.parent;
+                            }
                             break;
 
                         // The context token is the closing } or " of an attribute, which means
@@ -3666,9 +3669,9 @@ namespace ts {
                         return containingNodeKind === SyntaxKind.Parameter;
 
                     case SyntaxKind.AsKeyword:
-                        containingNodeKind === SyntaxKind.ImportSpecifier ||
-                        containingNodeKind === SyntaxKind.ExportSpecifier ||
-                        containingNodeKind === SyntaxKind.NamespaceImport;
+                        return containingNodeKind === SyntaxKind.ImportSpecifier ||
+                            containingNodeKind === SyntaxKind.ExportSpecifier ||
+                            containingNodeKind === SyntaxKind.NamespaceImport;
 
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
@@ -3687,14 +3690,20 @@ namespace ts {
 
                 // Previous token may have been a keyword that was converted to an identifier.
                 switch (contextToken.getText()) {
+                    case "abstract":
+                    case "async":
                     case "class":
-                    case "interface":
+                    case "const":
+                    case "declare":
                     case "enum":
                     case "function":
-                    case "var":
-                    case "static":
+                    case "interface":
                     case "let":
-                    case "const":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "static":
+                    case "var":
                     case "yield":
                         return true;
                 }
@@ -4103,8 +4112,9 @@ namespace ts {
                         let useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (!contains(allSignatures, signature.target || signature)) {
-                            // Get the first signature if there
+                        if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                            // Get the first signature if there is one -- allSignatures may contain
+                            // either the original signature or its target, so check for either
                             signature = allSignatures.length ? allSignatures[0] : undefined;
                         }
 
@@ -6256,7 +6266,8 @@ namespace ts {
             }
 
             return node.parent.kind === SyntaxKind.TypeReference ||
-                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent));
+                (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
+                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -7004,8 +7015,12 @@ namespace ts {
          * Checks if position points to a valid position to add JSDoc comments, and if so,
          * returns the appropriate template. Otherwise returns an empty string.
          * Valid positions are
-         * - outside of comments, statements, and expressions, and
-         * - preceding a function declaration.
+         *      - outside of comments, statements, and expressions, and
+         *      - preceding a:
+         *          - function/constructor/method declaration
+         *          - class declarations
+         *          - variable statements
+         *          - namespace declarations
          *
          * Hosts should ideally check that:
          * - The line is all whitespace up to 'position' before performing the insertion.
@@ -7032,16 +7047,37 @@ namespace ts {
             }
 
             // TODO: add support for:
-            // - methods
-            // - constructors
-            // - class decls
-            let containingFunction = <FunctionDeclaration>getAncestor(tokenAtPos, SyntaxKind.FunctionDeclaration);
+            // - enums/enum members
+            // - interfaces
+            // - property declarations
+            // - potentially property assignments
+            let commentOwner: Node;
+            findOwner: for (commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
+                switch (commentOwner.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.VariableStatement:
+                        break findOwner;
+                    case SyntaxKind.SourceFile:
+                        return undefined;
+                    case SyntaxKind.ModuleDeclaration:
+                        // If in walking up the tree, we hit a a nested namespace declaration,
+                        // then we must be somewhere within a dotted namespace name; however we don't
+                        // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
+                        if (commentOwner.parent.kind === SyntaxKind.ModuleDeclaration) {
+                            return undefined;
+                        }
+                        break findOwner;
+                }
+            }
 
-            if (!containingFunction || containingFunction.getStart() < position) {
+            if (!commentOwner || commentOwner.getStart() < position) {
                 return undefined;
             }
 
-            let parameters = containingFunction.parameters;
+            let parameters = getParametersForJsDocOwningNode(commentOwner);
             let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
             let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
@@ -7050,9 +7086,15 @@ namespace ts {
             // TODO: call a helper method instead once PR #4133 gets merged in.
             const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
 
-            let docParams = parameters.reduce((prev, cur, index) =>
-                prev +
-                indentationStr + " * @param " + (cur.name.kind === SyntaxKind.Identifier ? (<Identifier>cur.name).text : "param" + index) + newLine, "");
+            let docParams = "";
+            for (let i = 0, numParams = parameters.length; i < numParams; i++) {
+                const currentName = parameters[i].name;
+                const paramName = currentName.kind === SyntaxKind.Identifier ?
+                    (<Identifier>currentName).text :
+                    "param" + i;
+
+                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+            }
 
             // A doc comment consists of the following
             // * The opening comment line
@@ -7070,6 +7112,52 @@ namespace ts {
                 (tokenStart === position ? newLine + indentationStr : "");
 
             return { newText: result, caretOffset: preamble.length };
+        }
+
+        function getParametersForJsDocOwningNode(commentOwner: Node): ParameterDeclaration[] {
+            if (isFunctionLike(commentOwner)) {
+                return commentOwner.parameters;
+            }
+
+            if (commentOwner.kind === SyntaxKind.VariableStatement) {
+                const varStatement = <VariableStatement>commentOwner;
+                const varDeclarations = varStatement.declarationList.declarations;
+
+                if (varDeclarations.length === 1 && varDeclarations[0].initializer) {
+                    return getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer);
+                }
+            }
+
+            return emptyArray;
+        }
+
+        /**
+         * Digs into an an initializer or RHS operand of an assignment operation
+         * to get the parameters of an apt signature corresponding to a
+         * function expression or a class expression.
+         *
+         * @param rightHandSide the expression which may contain an appropriate set of parameters
+         * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
+         */
+        function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ParameterDeclaration[] {
+            while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
+                rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
+            }
+
+            switch (rightHandSide.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    return (<FunctionExpression>rightHandSide).parameters;
+                case SyntaxKind.ClassExpression:
+                    for (let member of (<ClassExpression>rightHandSide).members) {
+                        if (member.kind === SyntaxKind.Constructor) {
+                            return (<ConstructorDeclaration>member).parameters;
+                        }
+                    }
+                    break;
+            }
+
+            return emptyArray;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -7741,6 +7829,7 @@ namespace ts {
                 case SyntaxKind.GreaterThanEqualsToken:
                 case SyntaxKind.InstanceOfKeyword:
                 case SyntaxKind.InKeyword:
+                case SyntaxKind.AsKeyword:
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:

@@ -25,11 +25,11 @@ class Board {
 >allShipsSunk : Symbol(allShipsSunk, Decl(2dArrays.ts, 9, 18))
 
         return this.ships.every(function (val) { return val.isSunk; });
->this.ships.every : Symbol(Array.every, Decl(lib.d.ts, 1094, 62))
+>this.ships.every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >this.ships : Symbol(ships, Decl(2dArrays.ts, 7, 13))
 >this : Symbol(Board, Decl(2dArrays.ts, 5, 1))
 >ships : Symbol(ships, Decl(2dArrays.ts, 7, 13))
->every : Symbol(Array.every, Decl(lib.d.ts, 1094, 62))
+>every : Symbol(Array.every, Decl(lib.d.ts, --, --))
 >val : Symbol(val, Decl(2dArrays.ts, 12, 42))
 >val.isSunk : Symbol(Ship.isSunk, Decl(2dArrays.ts, 3, 12))
 >val : Symbol(val, Decl(2dArrays.ts, 12, 42))

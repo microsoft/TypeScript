@@ -2,8 +2,9 @@
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
+/* tslint:disable:no-null */
 
-module RWC {
+namespace RWC {
     function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
         let oldIO = Harness.IO;
 
@@ -105,7 +106,7 @@ module RWC {
                             }
                             otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
                         }
-                        else if (!opts.options.noLib && Harness.isLibraryFile(fileRead.path)){
+                        else if (!opts.options.noLib && Harness.isLibraryFile(fileRead.path)) {
                             if (!inInputList) {
                                 // If useCustomLibraryFile is true, we will use lib.d.ts from json object
                                 // otherwise use the lib.d.ts from built/local

@@ -25,13 +25,7 @@ namespace ts.formatting {
             }
 
             // no indentation in string \regex\template literals
-            let precedingTokenIsLiteral =
-                precedingToken.kind === SyntaxKind.StringLiteral ||
-                precedingToken.kind === SyntaxKind.RegularExpressionLiteral ||
-                precedingToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
-                precedingToken.kind === SyntaxKind.TemplateHead ||
-                precedingToken.kind === SyntaxKind.TemplateMiddle ||
-                precedingToken.kind === SyntaxKind.TemplateTail;
+            let precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
             if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
                 return 0;
             }
@@ -431,6 +425,7 @@ namespace ts.formatting {
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
             switch (kind) {
+                case SyntaxKind.ExpressionStatement:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
