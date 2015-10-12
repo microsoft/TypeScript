@@ -404,7 +404,7 @@ namespace ts {
         verifyCompilerOptions();
 
         programTime += new Date().getTime() - start;
-        
+
         return program;
 
         function getClassifiableNames() {
