@@ -223,11 +223,6 @@ namespace ts {
             description: Diagnostics.Watch_input_files,
         },
         {
-            name: "experimentalAsyncFunctions",
-            type: "boolean",
-            description: Diagnostics.Enables_experimental_support_for_ES7_async_functions
-        },
-        {
             name: "experimentalDecorators",
             type: "boolean",
             description: Diagnostics.Enables_experimental_support_for_ES7_decorators
