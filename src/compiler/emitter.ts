@@ -2793,7 +2793,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                         synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
 
-                        let identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldemitCommaBeforeAssignment*/ false);
+                        let identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
                         synthesizedLHS.expression = identifier;
 
                         if (leftHandSideExpression.argumentExpression.kind !== SyntaxKind.NumericLiteral &&
