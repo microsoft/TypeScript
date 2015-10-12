@@ -32,12 +32,12 @@ namespace ts {
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         let diagnostics: Diagnostic[] = [];
-        let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
+        let { declarationFilePath } = getEmitFileNames(targetSourceFile, host);
+        emitDeclarations(host, resolver, diagnostics, declarationFilePath, targetSourceFile);
         return diagnostics;
     }
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], declarationFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
 
@@ -1603,12 +1603,10 @@ namespace ts {
         function writeReferencePath(referencedFile: SourceFile) {
             let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.fileName // Declaration file, use declaration file name
-                : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.outFile || compilerOptions.out, getExtensionsToRemoveForEmitPath(compilerOptions)) + ".d.ts"; // Global out file
+                :  getEmitFileNames(referencedFile, host).declarationFilePath; // declaration file name
 
             declFileName = getRelativePathToDirectoryOrUrl(
-                getDirectoryPath(normalizeSlashes(jsFilePath)),
+                getDirectoryPath(normalizeSlashes(declarationFilePath)),
                 declFileName,
                 host.getCurrentDirectory(),
                 host.getCanonicalFileName,
@@ -1619,15 +1617,15 @@ namespace ts {
     }
 
     /* @internal */
-    export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
-        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
+    export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
+        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, declarationFilePath, sourceFile);
         // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
         // or should we just not write this file like we are doing now
         if (!emitDeclarationResult.reportedDeclarationError) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             let compilerOptions = host.getCompilerOptions();
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath, getExtensionsToRemoveForEmitPath(compilerOptions)) + ".d.ts", declarationOutput, compilerOptions.emitBOM);
+            writeFile(host, diagnostics, declarationFilePath, declarationOutput, compilerOptions.emitBOM);
         }
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {

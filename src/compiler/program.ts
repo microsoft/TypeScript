@@ -330,6 +330,7 @@ namespace ts {
         let files: SourceFile[] = [];
         let fileProcessingDiagnostics = createDiagnosticCollection();
         let programDiagnostics = createDiagnosticCollection();
+        let hasEmitBlockingDiagnostics: Map<boolean> = {}; // Map storing if there is emit blocking diagnostics for given input
 
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
@@ -374,12 +375,8 @@ namespace ts {
             }
         }
 
-        verifyCompilerOptions();
-
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
-
-        programTime += new Date().getTime() - start;
 
         program = {
             getRootFileNames: () => rootNames,
@@ -403,6 +400,11 @@ namespace ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics
         };
+
+        verifyCompilerOptions();
+
+        programTime += new Date().getTime() - start;
+        
         return program;
 
         function getClassifiableNames() {
@@ -519,6 +521,7 @@ namespace ts {
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
+                isEmitBlocked: emitFileName => hasProperty(hasEmitBlockingDiagnostics, emitFileName),
             };
         }
 
@@ -1245,6 +1248,55 @@ namespace ts {
                 options.target !== ScriptTarget.ES6) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
             }
+
+            if (!options.noEmit) {
+                let emitHost = getEmitHost();
+                let emitFilesSeen: Map<SourceFile[]> = {};
+
+                // Build map of files seen
+                for (let file of files) {
+                    let { jsFilePath, declarationFilePath } = getEmitFileNames(file, emitHost);
+                    if (jsFilePath) {
+                        let filesEmittingJsFilePath = lookUp(emitFilesSeen, jsFilePath);
+                        if (!filesEmittingJsFilePath) {
+                            emitFilesSeen[jsFilePath] = [file];
+                            if (options.declaration) {
+                                emitFilesSeen[declarationFilePath] = [file];
+                            }
+                        }
+                        else {
+                            filesEmittingJsFilePath.push(file);
+                        }
+                    }
+                }
+
+                // Verify that all the emit files are unique and dont overwrite input files
+                forEachKey(emitFilesSeen, emitFilePath => {
+                    // Report error if the output overwrites input file
+                    if (hasFile(files, emitFilePath)) {
+                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_which_is_one_of_the_input_files);
+                    }
+
+                    // Report error if multiple files write into same file (except if specified by --out or --outFile)
+                    if (emitFilePath !== (options.outFile || options.out)) {
+                        // Not --out or --outFile emit, There should be single file emitting to this file
+                        if (emitFilesSeen[emitFilePath].length > 1) {
+                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_since_one_or_more_input_files_would_emit_into_it);
+                        }
+                    }
+                    else {
+                        // --out or --outFile, error if there exist file emitting to single file colliding with --out
+                        if (forEach(emitFilesSeen[emitFilePath], sourceFile => shouldEmitToOwnFile(sourceFile, options))) {
+                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_since_one_or_more_input_files_would_emit_into_it);
+                        }
+                    }
+                });
+            }
+        }
+
+        function createEmitBlockingDiagnostics(emitFileName: string, message: DiagnosticMessage) {
+            hasEmitBlockingDiagnostics[emitFileName] = true;
+            programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
         }
     }
 }

@@ -2060,9 +2060,13 @@
         "category": "Error",
         "code": 5054
     },
-    "Could not write file '{0}' which is one of the input files.": {
+    "Cannot write file '{0}' which is one of the input files.": {
         "category": "Error",
         "code": 5055
+    },
+    "Cannot write file '{0}' since one or more input files would emit into it.": {
+        "category": "Error",
+        "code": 5056
     },
 
     "Concatenate and emit output to single file.": {

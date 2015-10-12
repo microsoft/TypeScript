@@ -324,31 +324,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
-        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
-        let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
+                    emitFile(getEmitFileNames(sourceFile, host), sourceFile);
                 }
             });
 
             if (compilerOptions.outFile || compilerOptions.out) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+                emitFile(getBundledEmitFileNames(compilerOptions));
             }
         }
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
-                emitFile(jsFilePath, targetSourceFile);
+                emitFile(getEmitFileNames(targetSourceFile, host), targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) &&
                 !isJavaScript(targetSourceFile.fileName) &&
                 (compilerOptions.outFile || compilerOptions.out)) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+                emitFile(getBundledEmitFileNames(compilerOptions));
             }
         }
 
@@ -7491,18 +7487,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            if (forEach(host.getSourceFiles(), sourceFile => jsFilePath === sourceFile.fileName)) {
-                // TODO(shkamat) Verify if this works if same file is referred via different paths ..\foo\a.js and a.js refering to same one
-                // Report error and dont emit this file
-                diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_which_is_one_of_the_input_files, jsFilePath));
-                return;
+        function emitFile({ jsFilePath, declarationFilePath}: { jsFilePath: string, declarationFilePath: string }, sourceFile?: SourceFile) {
+            if (!host.isEmitBlocked(jsFilePath)) {
+                emitJavaScript(jsFilePath, sourceFile);
             }
 
-            emitJavaScript(jsFilePath, sourceFile);
-
-            if (compilerOptions.declaration) {
-                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+            if (compilerOptions.declaration && !host.isEmitBlocked(declarationFilePath)) {
+                writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics);
             }
         }
     }

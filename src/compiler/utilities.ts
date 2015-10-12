@@ -39,6 +39,8 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
+        isEmitBlocked(emitFileName: string): boolean;
+
         writeFile: WriteFileCallback;
     }
 
@@ -1764,6 +1766,44 @@ namespace ts {
         }
 
         return emitOutputFilePathWithoutExtension + extension;
+    }
+
+    export function getEmitFileNames(sourceFile: SourceFile, host: EmitHost) {
+        if (!isDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
+            let options = host.getCompilerOptions();
+            let jsFilePath: string;
+            if (shouldEmitToOwnFile(sourceFile, options)) {
+                let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
+                    sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+                return {
+                    jsFilePath,
+                    declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+                };
+            }
+            else if (options.outFile || options.out) {
+                return getBundledEmitFileNames(options);
+            }
+        }
+        return {
+            jsFilePath: undefined,
+            declarationFilePath: undefined
+        };
+    }
+
+    export function getBundledEmitFileNames(options: CompilerOptions) {
+        let jsFilePath = options.outFile || options.out;
+        return {
+            jsFilePath,
+            declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+        };
+    }
+
+    function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
+        return options.declaration ? removeFileExtension(jsFilePath, getExtensionsToRemoveForEmitPath(options)) + ".d.ts" : undefined;
+    }
+
+    export function hasFile(sourceFiles: SourceFile[], fileName: string) {
+        return forEach(sourceFiles, file => file.fileName === fileName);
     }
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
