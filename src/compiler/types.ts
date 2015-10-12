@@ -1606,7 +1606,8 @@ namespace ts {
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getExportsOfModule(symbol: Symbol): Symbol[];
-        getTypeOfSymbol(symbol: Symbol): Type;
+        getDefiningTypeOfSymbol(symbol: Symbol): Type;
+        getTypeAtLocation(node: Node): Type;
         resolveEntityName(entityName: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol;
     }
 

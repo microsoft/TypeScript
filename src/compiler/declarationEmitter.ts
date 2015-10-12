@@ -119,6 +119,11 @@ namespace ts {
                 let types = collectExportedTypes(entrypoint);
                 let dependentTypes = collectDependentTypes(types);
                 let symbolNameSet: Map<number> = {};
+                forEachValue(types, type => {
+                    let symbol = type.symbol;
+                    symbolNameSet[symbol.name] = 1;
+                    symbolGeneratedNameMap[symbol.id] = symbol.name;
+                });
                 forEachValue(dependentTypes, type => {
                     let symbol = type.symbol;
                     if (symbol.name in symbolNameSet) {
@@ -130,6 +135,7 @@ namespace ts {
                             let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
                             synthId.flags |= NodeFlags.Synthetic;
                             synthId.text = generatedName;
+                            synthId.parent = declaration;
                             declaration.name = synthId;
                         });
                     }
@@ -228,11 +234,9 @@ namespace ts {
             referencePathsOutput,
         };
 
-        type CollectedMembersMap = Map<{source: SourceFile, declarations: Declaration[]}>;
-
         function collectExportedTypes(file: SourceFile): Map<Type> {
             let exportedMembers = resolver.getExportsOfModule(file.symbol);
-            return arrayToMap(filter(map(exportedMembers, exported => resolver.getTypeOfSymbol(exported)), value => !!value.symbol), value => (value.symbol.id + ""));
+            return arrayToMap(filter(map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported)), value => !!value.symbol), value => (value.symbol.id + ""));
         }
 
         function collectDependentTypes(exported: Map<Type>): Map<Type> {
@@ -248,32 +252,43 @@ namespace ts {
                         if (member.valueDeclaration && member.valueDeclaration.flags && member.valueDeclaration.flags & NodeFlags.Private) {
                             return;
                         }
-                        let type = resolver.getTypeOfSymbol(member);
-                        if (!type.symbol) {
-                            return;
-                        }
-                        let id = type.symbol.id;
-                        if (id in exported || id in dependentTypes) {
-                            return;
-                        }
-                        dependentTypes[id] = type;
-                        visit(type);
+                        inspectSymbol(member);
                     });
                 }
                 if (symbol.flags & SymbolFlags.HasExports) {
                     forEachValue(symbol.exports, member => {
-                        let type = resolver.getTypeOfSymbol(member);
-                        if (!type.symbol) {
-                            return;
-                        }
-                        let id = type.symbol.id;
-                        if (id in exported || id in dependentTypes) {
-                            return;
-                        }
-                        dependentTypes[id] = type;
-                        visit(type);
+                        inspectSymbol(member);
                     });
                 }
+                if (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Interface) {
+                    forEach(symbol.declarations, declaration => {
+                        if (isClassLike(declaration) || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                            let clauses = (declaration as (ClassLikeDeclaration|InterfaceDeclaration)).heritageClauses;
+                            forEach(clauses, clause => {
+                                let types = clause.types;
+                                forEach(types, typeExpression => {
+                                    let type = resolver.getTypeAtLocation(typeExpression);
+                                    if (type && type.symbol) {
+                                        inspectSymbol(type.symbol);
+                                    }
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+            
+            function inspectSymbol(symbol: Symbol) {
+                let type = resolver.getDefiningTypeOfSymbol(symbol);
+                if (!type || !type.symbol) {
+                    return;
+                }
+                let id = type.symbol.id;
+                if (id in exported || id in dependentTypes) {
+                    return;
+                }
+                dependentTypes[id] = type;
+                visit(type);
             }
         }
 

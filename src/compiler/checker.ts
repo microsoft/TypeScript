@@ -14839,7 +14839,17 @@ namespace ts {
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
                 getExportsOfModule: getExportsOfModuleAsArray,
-                getTypeOfSymbol,
+                getDefiningTypeOfSymbol: (symbol: Symbol) => {
+                    let valueType = getTypeOfSymbol(symbol);
+                    if (valueType !== unknownType) {
+                        return valueType;
+                    }
+                    let declaredType = getDeclaredTypeOfSymbol(symbol);
+                    if (declaredType !== unknownType) {
+                        return declaredType;
+                    }
+                },
+                getTypeAtLocation: getTypeOfNode,
                 resolveEntityName
             };
         }
