@@ -169,17 +169,17 @@ export interface Inner {
     item4: number;
 }
 //// [bundled.d.ts]
-export declare class Main_1 {
+declare class Main_1 {
     member1: string;
 }
-export interface Inner_1 {
+interface Inner_1 {
     item: number;
 }
-export declare class Main_2 extends Main_1 {
+declare class Main_2 extends Main_1 {
     member2: Inner_1;
     details: Detail;
 }
-export interface Inner_2 {
+interface Inner_2 {
     item2: number;
 }
 export interface Detail {
@@ -191,3 +191,77 @@ export declare class Main extends Main_2 {
 export interface Inner {
     item4: number;
 }
+
+
+//// [DtsFileErrors]
+
+
+bundled.d.ts(17,35): error TS4020: Extends clause of exported class 'Main' has or is using private name 'Main_2'.
+bundled.d.ts(18,14): error TS4031: Public property 'memberc' of exported class has or is using private name 'Inner_2'.
+
+
+==== tests/cases/compiler/index.d.ts (0 errors) ====
+    export * from "./a";
+    export { Detail } from "./b";
+    export interface Inner {
+        item4: number;
+    }
+    
+==== tests/cases/compiler/a.d.ts (0 errors) ====
+    import { Main as BaseMain, Inner as Middle } from "./b";
+    export declare class Main extends BaseMain {
+        memberc: Middle;
+    }
+    export interface Inner {
+        item3: number;
+    }
+    
+==== tests/cases/compiler/b.d.ts (0 errors) ====
+    import { Main as BaseMain, Inner as Innermost } from "./c";
+    export declare class Main extends BaseMain {
+        member2: Innermost;
+        details: Detail;
+    }
+    export interface Inner {
+        item2: number;
+    }
+    export interface Detail {
+        id: string;
+    }
+    
+==== tests/cases/compiler/c.d.ts (0 errors) ====
+    export declare class Main {
+        member1: string;
+    }
+    export interface Inner {
+        item: number;
+    }
+    
+==== bundled.d.ts (2 errors) ====
+    declare class Main_1 {
+        member1: string;
+    }
+    interface Inner_1 {
+        item: number;
+    }
+    declare class Main_2 extends Main_1 {
+        member2: Inner_1;
+        details: Detail;
+    }
+    interface Inner_2 {
+        item2: number;
+    }
+    export interface Detail {
+        id: string;
+    }
+    export declare class Main extends Main_2 {
+                                      ~~~~~~
+!!! error TS4020: Extends clause of exported class 'Main' has or is using private name 'Main_2'.
+        memberc: Inner_2;
+                 ~~~~~~~
+!!! error TS4031: Public property 'memberc' of exported class has or is using private name 'Inner_2'.
+    }
+    export interface Inner {
+        item4: number;
+    }
+    

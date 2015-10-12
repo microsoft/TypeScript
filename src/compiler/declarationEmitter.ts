@@ -150,7 +150,9 @@ namespace ts {
                     forEach(type.symbol.declarations, d => {
                         currentSourceFile = getSourceFileOfNode(d);
                         let oldFlags = d.flags;
-                        d.flags |= NodeFlags.Export; // TODO: Consider the implications of this
+                        if (oldFlags & NodeFlags.Export) {
+                            d.flags -= NodeFlags.Export;
+                        }
                         emitModuleElement(d, /*isModuleElementVisible*/true);
                         d.flags = oldFlags;
                     });
@@ -167,7 +169,8 @@ namespace ts {
                     });
                     currentSourceFile = realSourceFile;
                 });
-            } else {
+            }
+            else {
                 // Emit references corresponding to this file
                 let emittedReferencedFiles: SourceFile[] = [];
                 let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
@@ -275,7 +278,7 @@ namespace ts {
                     });
                 }
             }
-            
+
             function inspectSymbol(symbol: Symbol) {
                 let type = resolver.getDefiningTypeOfSymbol(symbol);
                 if (!type || !type.symbol) {
