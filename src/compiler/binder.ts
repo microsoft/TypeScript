@@ -1128,6 +1128,9 @@ namespace ts {
             // of the form 'this.name = expr' in the constructor. Set the flag that indicates
             // when that should happen.
             if (isJavaScriptFile) {
+                node.flags = node.flags | NodeFlags.InferredClass;
+            }
+            else {
                 let hasDeclaredProperties = forEachChild(node, child => child.kind === SyntaxKind.PropertyDeclaration);
                 node.flags = hasDeclaredProperties ? (node.flags & ~NodeFlags.InferredClass) : (node.flags | NodeFlags.InferredClass);
             }
