@@ -314,6 +314,10 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyGetEmitOutputForCurrentFile(expected);
         }
 
+        public verifyGetEmitOutputContentsForCurrentFile(expected: { fileName: string; content: string; }[]): void {
+            FourSlash.currentTestState.verifyGetEmitOutputContentsForCurrentFile(expected);
+        }
+
         public currentParameterHelpArgumentNameIs(name: string) {
             FourSlash.currentTestState.verifyCurrentParameterHelpName(name);
         }
