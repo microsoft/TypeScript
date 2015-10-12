@@ -1184,6 +1184,7 @@ namespace ts.server {
             TabSize: 4,
             NewLineCharacter: ts.sys ? ts.sys.newLine : '\n',
             ConvertTabsToSpaces: true,
+            IndentStyle: ts.IndentStyle.Smart,
             InsertSpaceAfterCommaDelimiter: true,
             InsertSpaceAfterSemicolonInForStatements: true,
             InsertSpaceBeforeAndAfterBinaryOperators: true,
@@ -1194,7 +1195,6 @@ namespace ts.server {
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         }
-
     }
 
     export interface LineCollection {

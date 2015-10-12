@@ -607,6 +607,7 @@ namespace ts.server {
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
+                                IndentStyle: ts.IndentStyle.Smart,
                             };
                             var indentPosition =
                                 compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);

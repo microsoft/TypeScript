@@ -68,6 +68,13 @@ enum EmitReturnStatus {
     EmitErrorsEncountered = 4           // Emitter errors occurred during emitting process
 }
 
+// This is a duplicate of the indentstyle in services.ts to expose it to testcases in fourslash
+enum IndentStyle {
+    None,
+    Block,
+    Smart,
+}
+
 module FourSlashInterface {
 
     export interface Marker {
@@ -287,8 +294,8 @@ module FourSlashInterface {
             FourSlash.currentTestState.verifyIndentationAtCurrentPosition(numberOfSpaces);
         }
 
-        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number) {
-            FourSlash.currentTestState.verifyIndentationAtPosition(fileName, position, numberOfSpaces);
+        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = IndentStyle.Smart) {
+            FourSlash.currentTestState.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle);
         }
 
         public textAtCaretIs(text: string) {

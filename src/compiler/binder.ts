@@ -187,10 +187,10 @@ namespace ts {
                     return "p" + index;
 
                 case SyntaxKind.BinaryExpression:
-                    if (isAmdExportAssignment(node)) {
+                    if (isExportsPropertyAssignment(node)) {
                         return getAmdExportAssignmentName(node);
                     }
-                    else if (isCommonJsExportsAssignment(node)) {
+                    else if (isModuleExportsAssignment(node)) {
                         return getAnonymousModuleName(node);
                     }
                     else {
@@ -210,7 +210,7 @@ namespace ts {
         }
 
         function getAmdExportAssignmentName(node: Node) {
-            Debug.assert(isAmdExportAssignment(<BinaryExpression>node));
+            Debug.assert(isExportsPropertyAssignment(<BinaryExpression>node));
 
             let binaryExpr = <BinaryExpression>node;
             let propAccess = <PropertyAccessExpression>(binaryExpr.left);
@@ -255,8 +255,9 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
+            let isDefaultExport = node.flags & NodeFlags.Default;
             // The exported symbol for an export default function/class node is always named "default"
-            let name = (node.flags & NodeFlags.Default && parent) ? "default" : getDeclarationName(node);
+            let name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -297,6 +298,13 @@ namespace ts {
                     let message = symbol.flags & SymbolFlags.BlockScopedVariable
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
+
+                    forEach(symbol.declarations, declaration => {
+                        if (declaration.flags & NodeFlags.Default) {
+                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                        }
+                    });
+
                     forEach(symbol.declarations, declaration => {
                         file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });
@@ -337,7 +345,7 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isAmdExportAssignment(node) || isCommonJsExportsAssignment(node)) {
+                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isExportsPropertyAssignment(node) || isModuleExportsAssignment(node)) {
                     let exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -925,11 +933,11 @@ namespace ts {
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     if (isJavaScriptFile) {
-                        if (isAmdExportAssignment(node)) {
-                            bindAmdExportAssignment(<BinaryExpression>node);
+                        if (isExportsPropertyAssignment(node)) {
+                            bindExportsPropertyAssignment(<BinaryExpression>node);
                         }
-                        else if (isCommonJsExportsAssignment(node)) {
-                            bindAmdModuleExportsAssignment(<BinaryExpression>node);
+                        else if (isModuleExportsAssignment(node)) {
+                            bindModuleExportsAssignment(<BinaryExpression>node);
                         }
                         else if (container &&
                             isJavaScriptFile &&
@@ -1091,11 +1099,11 @@ namespace ts {
             }
         }
 
-        function bindAmdExportAssignment(node: BinaryExpression) {
-            declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.Property, SymbolFlags.None);
+        function bindExportsPropertyAssignment(node: BinaryExpression) {
+            declareSymbolAndAddToSymbolTableWorker(<PropertyAccessExpression>node.left, SymbolFlags.Property, SymbolFlags.None);
         }
 
-        function bindAmdModuleExportsAssignment(node: BinaryExpression) {
+        function bindModuleExportsAssignment(node: BinaryExpression) {
             // This file is an external module
             file.symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
         }

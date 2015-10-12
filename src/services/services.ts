@@ -1189,6 +1189,13 @@ namespace ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        IndentStyle: IndentStyle;
+    }
+
+    export enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
     }
 
     export interface FormatCodeOptions extends EditorOptions {

@@ -57,11 +57,17 @@ namespace ts {
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).name) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -3765,11 +3771,23 @@ namespace ts {
                 return parseMethodDeclaration(fullStart, decorators, modifiers, asteriskToken, propertyName, questionToken);
             }
 
-            // Parse to check if it is short-hand property assignment or normal property assignment
-            if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
+            // check if it is short-hand property assignment or normal property assignment
+            // NOTE: if token is EqualsToken it is interpreted as CoverInitializedName production
+            // CoverInitializedName[Yield] :
+            //     IdentifierReference[?Yield] Initializer[In, ?Yield]
+            // this is necessary because ObjectLiteral productions are also used to cover grammar for ObjectAssignmentPattern
+            const isShorthandPropertyAssignment =
+                tokenIsIdentifier && (token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EqualsToken);
+
+            if (isShorthandPropertyAssignment) {
                 let shorthandDeclaration = <ShorthandPropertyAssignment>createNode(SyntaxKind.ShorthandPropertyAssignment, fullStart);
                 shorthandDeclaration.name = <Identifier>propertyName;
                 shorthandDeclaration.questionToken = questionToken;
+                const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
+                if (equalsToken) {
+                    shorthandDeclaration.equalsToken = equalsToken;
+                    shorthandDeclaration.objectAssignmentInitializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                }
                 return finishNode(shorthandDeclaration);
             }
             else {

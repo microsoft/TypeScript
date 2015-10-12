@@ -2311,6 +2311,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(": ");
                     emit(node.name);
                 }
+
+                if (languageVersion >= ScriptTarget.ES6 && node.objectAssignmentInitializer) {
+                    write(" = ");
+                    emit(node.objectAssignmentInitializer);
+                }
             }
 
             function tryEmitConstantValue(node: PropertyAccessExpression | ElementAccessExpression): boolean {
@@ -3574,7 +3579,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     for (let p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             let propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                            emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, createPropertyAccessForDestructuringProperty(value, propName));
+                            let target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
+                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName));
                         }
                     }
                 }
@@ -3599,8 +3605,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function emitDestructuringAssignment(target: Expression, value: Expression) {
-                    if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
+                function emitDestructuringAssignment(target: Expression | ShorthandPropertyAssignment, value: Expression) {
+                    if (target.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        if ((<ShorthandPropertyAssignment>target).objectAssignmentInitializer) {
+                            value = createDefaultValueCheck(value, (<ShorthandPropertyAssignment>target).objectAssignmentInitializer);
+                        }
+                        target = (<ShorthandPropertyAssignment>target).name;
+                    }
+                    else if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
                         value = createDefaultValueCheck(value, (<BinaryExpression>target).right);
                         target = (<BinaryExpression>target).left;
                     }
