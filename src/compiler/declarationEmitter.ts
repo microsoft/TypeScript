@@ -105,13 +105,14 @@ namespace ts {
         }
         else {
             if (compilerOptions.optimizationEntrypoint) {
-                let entrypoint = host.getSourceFile(compilerOptions.optimizationEntrypoint);
+                let path = compilerOptions.optimizationEntrypoint;
+                let entrypoint = host.getSourceFile(path);
                 if (!entrypoint) {
-                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, compilerOptions.optimizationEntrypoint));
+                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, path));
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
                 if (!isExternalModule(entrypoint)) {
-                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, compilerOptions.optimizationEntrypoint));
+                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, path));
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
                 noDeclare = false;
@@ -123,6 +124,7 @@ namespace ts {
                     if (symbol.name in symbolNameSet) {
                         let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
                         symbolNameSet[symbol.name]++;
+                        symbolNameSet[generatedName] = 1;
                         symbolGeneratedNameMap[symbol.id] = generatedName;
                         forEach(symbol.declarations, declaration => {
                             let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
@@ -517,7 +519,7 @@ namespace ts {
 
             function writeEntityName(entityName: EntityName | Expression) {
                 // Lookup for renames
-                let symbol = resolver.resolveEntityName(entityName, SymbolFlags.Type | SymbolFlags.Namespace);
+                let symbol = resolver.resolveEntityName(entityName, SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace);
                 if (symbol && symbol.id in symbolGeneratedNameMap) {
                     write(symbolGeneratedNameMap[symbol.id]);
                     return;

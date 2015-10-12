@@ -1153,6 +1153,16 @@ namespace Harness {
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                     ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                     ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
+                    let outFile = options.outFile || options.out;
+                    if (outFile) {
+                        let dTsFileName = ts.removeFileExtension(outFile) + ".d.ts";
+                        if (!findUnit(dTsFileName, declInputFiles) && !findUnit(dTsFileName, declOtherFiles)) {
+                            let out = ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
+                            if (out) {
+                                declInputFiles.push({unitName: out.fileName, content: out.code});
+                            }
+                        }
+                    }
                     this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },
                         settingsCallback, options, currentDirectory);
 
@@ -1175,8 +1185,7 @@ namespace Harness {
                         assert(sourceFile, "Program has no source file with name '" + fileName + "'");
                         // Is this file going to be emitted separately
                         let sourceFileName: string;
-                        let outFile = options.outFile || options.out;
-                        if (ts.isExternalModule(sourceFile) || !outFile) {
+                        if (ts.isExternalModule(sourceFile)) {
                             if (options.outDir) {
                                 let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.currentDirectoryForProgram);
                                 sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
@@ -1186,19 +1195,15 @@ namespace Harness {
                                 sourceFileName = sourceFile.fileName;
                             }
                         }
-                        else {
-                            // Goes to single --out file
-                            sourceFileName = outFile;
-                        }
 
                         let dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
 
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
+                }
 
-                    function findUnit(fileName: string, units: { unitName: string; content: string; }[]) {
-                        return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
-                    }
+                function findUnit(fileName: string, units: { unitName: string; content: string; }[]) {
+                    return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
                 }
             }
         }

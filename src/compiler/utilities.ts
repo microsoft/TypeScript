@@ -1758,7 +1758,7 @@ namespace ts {
         }
 
         function writeTextOfNode(sourceFile: SourceFile, node: Node) {
-            if (node.flags & NodeFlags.Synthetic) {
+            if (node && node.flags & NodeFlags.Synthetic) {
                 write((node as SynthesizedNode).text);
                 return;
             }
