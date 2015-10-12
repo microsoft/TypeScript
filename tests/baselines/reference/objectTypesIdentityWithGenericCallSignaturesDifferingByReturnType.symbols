@@ -41,7 +41,7 @@ interface I<T> {
 >foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 16, 16))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 17, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface I2 {
@@ -52,7 +52,7 @@ interface I2 {
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 21, 8))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 21, 11))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 21, 8))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 var a: { foo<T>(x: T): T }

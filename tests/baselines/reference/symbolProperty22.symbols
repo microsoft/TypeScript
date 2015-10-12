@@ -5,9 +5,9 @@ interface I<T, U> {
 >U : Symbol(U, Decl(symbolProperty22.ts, 0, 14))
 
     [Symbol.unscopables](x: T): U;
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 3938, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 3938, 24))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(symbolProperty22.ts, 1, 25))
 >T : Symbol(T, Decl(symbolProperty22.ts, 0, 12))
 >U : Symbol(U, Decl(symbolProperty22.ts, 0, 14))
@@ -27,11 +27,11 @@ declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 
 foo("", { [Symbol.unscopables]: s => s.length });
 >foo : Symbol(foo, Decl(symbolProperty22.ts, 2, 1))
->Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 3938, 24))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, 3938, 24))
+>Symbol.unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(symbolProperty22.ts, 6, 31))
->s.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(symbolProperty22.ts, 6, 31))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 

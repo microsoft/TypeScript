@@ -31,7 +31,7 @@ class TestClass {
         this.bar(x); // should not error
 >this.bar(x) : void
 >this.bar : { (x: string): void; (x: string[]): void; }
->this : TestClass
+>this : this
 >bar : { (x: string): void; (x: string[]): void; }
 >x : any
     }
@@ -71,7 +71,7 @@ class TestClass2 {
         return this.bar(x); // should not error
 >this.bar(x) : number
 >this.bar : { (x: string): number; (x: string[]): number; }
->this : TestClass2
+>this : this
 >bar : { (x: string): number; (x: string[]): number; }
 >x : any
     }
