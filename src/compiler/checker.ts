@@ -610,8 +610,11 @@ namespace ts {
                 // block - scope variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block- scoped
-                if (meaning & SymbolFlags.BlockScopedVariable && result.flags & SymbolFlags.BlockScopedVariable) {
-                    checkResolvedBlockScopedVariable(result, errorLocation);
+                if (meaning & SymbolFlags.BlockScopedVariable) {
+                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
+                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
+                    }
                 }
             }
             return result;
