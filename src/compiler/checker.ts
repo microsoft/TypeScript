@@ -383,20 +383,42 @@ namespace ts {
             // return undefined if we can't find a symbol.
         }
 
-        /** Returns true if node1 is defined before node 2**/
-        function isDefinedBefore(node1: Node, node2: Node): boolean {
-            let file1 = getSourceFileOfNode(node1);
-            let file2 = getSourceFileOfNode(node2);
+        const enum RelativeLocation {
+            Unknown,
+            SameFileLocatedBefore,
+            SameFileLocatedAfter,
+            DifferentFilesLocatedBefore,
+            DifferentFilesLocatedAfter,
+        }
+
+        function isLocatedBefore(origin: Node, target: Node): boolean {
+            switch (getRelativeLocation(origin, target)) {
+                // unknown is returned with nodes are in different files and order cannot be determined based on compilation settings
+                // optimistically assume this is ok
+                case RelativeLocation.Unknown:
+                case RelativeLocation.SameFileLocatedBefore:
+                case RelativeLocation.DifferentFilesLocatedBefore:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /** gets relative location of target comparing to origin **/
+        function getRelativeLocation(origin: Node, target: Node): RelativeLocation {
+            let file1 = getSourceFileOfNode(origin);
+            let file2 = getSourceFileOfNode(target);
             if (file1 === file2) {
-                return node1.pos <= node2.pos;
+                return origin.pos > target.pos ? RelativeLocation.SameFileLocatedBefore : RelativeLocation.SameFileLocatedAfter;
             }
 
             if (!compilerOptions.outFile && !compilerOptions.out) {
-                return true;
+                // nodes are in different files and order cannot be determines
+                return RelativeLocation.Unknown;
             }
 
             let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
+            return sourceFiles.indexOf(file1) > sourceFiles.indexOf(file2) ? RelativeLocation.DifferentFilesLocatedBefore : RelativeLocation.DifferentFilesLocatedAfter;
         }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
@@ -628,31 +650,53 @@ namespace ts {
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
             // first check if usage is lexically located after the declaration
-            let isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
-            if (!isUsedBeforeDeclaration) {
-                // lexical check succeeded however code still can be illegal.
-                // - block scoped variables cannot be used in its initializers
-                //   let x = x; // illegal but usage is lexically after definition
-                // - in ForIn/ForOf statements variable cannot be contained in expression part
-                //   for (let x in x)
-                //   for (let x of x)
+            let isUsedBeforeDeclaration = false;
+            switch (getRelativeLocation(declaration, errorLocation)) {
+                case RelativeLocation.DifferentFilesLocatedBefore:
+                    isUsedBeforeDeclaration = true;
+                    break;
+                case RelativeLocation.SameFileLocatedBefore:
+                    // try to detect if forward reference to block scoped variable is inside function
+                    // such forward references are permitted (they are still technically can be incorrect (i.e. in case of IIFEs) 
+                    // but detecting these case is more complicated task)  
+                    const declarationContainer = getEnclosingBlockScopeContainer(declaration);
+                    let current = errorLocation;
+                    while (current) {
+                        if (current === declarationContainer) {
+                            isUsedBeforeDeclaration = true;
+                            break;
+                        }
+                        else if (isFunctionLike(current)) {
+                            break;
+                        }
+                        current = current.parent;
+                    }
+                    break;
+                case RelativeLocation.SameFileLocatedAfter:
+                    // lexical check succeeded however code still can be illegal.
+                    // - block scoped variables cannot be used in its initializers
+                    //   let x = x; // illegal but usage is lexically after definition
+                    // - in ForIn/ForOf statements variable cannot be contained in expression part
+                    //   for (let x in x)
+                    //   for (let x of x)
 
-                // climb up to the variable declaration skipping binding patterns
-                let variableDeclaration = <VariableDeclaration>getAncestor(declaration, SyntaxKind.VariableDeclaration);
-                let container = getEnclosingBlockScopeContainer(variableDeclaration);
+                    // climb up to the variable declaration skipping binding patterns
+                    let variableDeclaration = <VariableDeclaration>getAncestor(declaration, SyntaxKind.VariableDeclaration);
+                    let container = getEnclosingBlockScopeContainer(variableDeclaration);
 
-                if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                    // variable statement/for statement case,
-                    // use site should not be inside variable declaration (initializer of declaration or binding element)
-                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
-                }
-                else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                    // ForIn/ForOf case - use site should not be used in expression part
-                    let expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
-                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
-                }
+                    if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
+                        variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
+                        // variable statement/for statement case,
+                        // use site should not be inside variable declaration (initializer of declaration or binding element)
+                        isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
+                    }
+                    else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
+                        variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                        // ForIn/ForOf case - use site should not be used in expression part
+                        let expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
+                        isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
+                    }
+                    break;
             }
             if (isUsedBeforeDeclaration) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
@@ -13356,7 +13400,7 @@ namespace ts {
                             }
 
                             // illegal case: forward reference
-                            if (!isDefinedBefore(propertyDecl, member)) {
+                            if (isLocatedBefore(propertyDecl, member)) {
                                 reportError = false;
                                 error(e, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                                 return undefined;
