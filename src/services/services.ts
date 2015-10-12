@@ -1189,6 +1189,13 @@ namespace ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        IndentStyle: IndentStyle;
+    }
+
+    export enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
     }
 
     export interface FormatCodeOptions extends EditorOptions {
@@ -1850,8 +1857,8 @@ namespace ts {
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
 
-        // Parse
-        let inputFileName = transpileOptions.fileName || "module.ts";
+        // if jsx is specified then treat file as .tsx
+        let inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
         let sourceFile = createSourceFile(inputFileName, input, options.target);
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;

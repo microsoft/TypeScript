@@ -800,6 +800,10 @@
         "category": "Error",
         "code": 1311
     },
+    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+        "category": "Error",
+        "code": 1312
+    },    
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1655,6 +1659,10 @@
     "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
         "category": "Error",
         "code": 2527
+    },
+    "A module cannot have multiple default exports.": {
+        "category": "Error",
+        "code": 2528
     },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
