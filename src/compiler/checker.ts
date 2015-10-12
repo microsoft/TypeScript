@@ -7326,16 +7326,20 @@ namespace ts {
             let argIndex = indexOf(args, arg);
 
             if (isDefineCall(callTarget) && argIndex === args.length - 1) {
-                // Synthesize a type with a call signature for the 'define'/'require' invocation
-                let symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call");
-                let params: Symbol[] = [];
-                for (let i = 0; i < args.length; i++) {
-                    let paramSym = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call_" + i);
-                    paramSym.type = getDefineOrRequireCallParameterType(<FunctionExpression>arg, i);
-                    params.push(paramSym);
+                let links = getNodeLinks(callTarget);
+                if (links.resolvedContextualType === undefined) {
+                    // Synthesize a type with a call signature for the 'define'/'require' invocation
+                    let symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call");
+                    let params: Symbol[] = [];
+                    for (let i = 0; i < args.length; i++) {
+                        let paramSym = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call_" + i);
+                        paramSym.type = getDefineOrRequireCallParameterType(<FunctionExpression>arg, i);
+                        params.push(paramSym);
+                    }
+                    let callSignature = createSignature(undefined, emptyArray, params, voidType, undefined, params.length, false, false);
+                    links.resolvedContextualType = createAnonymousType(symbol, {}, [callSignature], emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
                 }
-                let callSignature = createSignature(undefined, emptyArray, params, voidType, undefined, params.length, false, false);
-                return createAnonymousType(symbol, {}, [callSignature], emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                return links.resolvedContextualType;
             }
 
             if (argIndex >= 0) {
