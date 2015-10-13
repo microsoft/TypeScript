@@ -160,8 +160,6 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
-        let cjsModuleType: Type;
-        let cjsExportsType: Type;
         let cjsRequireType: Type;
 
         let tupleTypes: Map<TupleType> = {};
@@ -15216,8 +15214,6 @@ namespace ts {
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
 
-            cjsModuleType = getExportedTypeFromNamespace("CommonJS", "Module");
-            cjsExportsType = getExportedTypeFromNamespace("CommonJS", "Exports");
             cjsRequireType = getExportedTypeFromNamespace("CommonJS", "Require");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
