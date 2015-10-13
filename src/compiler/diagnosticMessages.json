@@ -107,25 +107,13 @@
         "category": "Error",
         "code": 1040
     },
-    "'{0}' modifier cannot be used with a class declaration.": {
-        "category": "Error",
-        "code": 1041
-    },
     "'{0}' modifier cannot be used here.": {
         "category": "Error",
         "code": 1042
     },
-    "'{0}' modifier cannot appear on a data property.": {
-        "category": "Error",
-        "code": 1043
-    },
     "'{0}' modifier cannot appear on a module element.": {
         "category": "Error",
         "code": 1044
-    },
-    "A '{0}' modifier cannot be used with an interface declaration.": {
-        "category": "Error",
-        "code": 1045
     },
     "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
         "category": "Error",
@@ -844,10 +832,6 @@
         "category": "Error",
         "code": 2310
     },
-    "A class may only extend another class.": {
-        "category": "Error",
-        "code": 2311
-    },
     "An interface may only extend a class or another interface.": {
         "category": "Error",
         "code": 2312
@@ -1244,10 +1228,6 @@
         "category": "Error",
         "code": 2417
     },
-    "Type name '{0}' in extends clause does not reference constructor function for '{0}'.": {
-        "category": "Error",
-        "code": 2419
-    },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420
@@ -1608,10 +1588,6 @@
         "category": "Error",
         "code": 2513
     },
-    "Classes containing abstract methods must be marked abstract.": {
-        "category": "Error",
-        "code": 2514
-    },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515
@@ -1631,14 +1607,6 @@
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
-    },
-    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
-        "category": "Error",
-        "code": 2521
-    },
-    "The 'arguments' object cannot be referenced in an async arrow function. Consider using a standard async function expression.": {
-        "category": "Error",
-        "code": 2522
     },
     "'yield' expressions cannot be used in a parameter initializer.": {
         "category": "Error",
@@ -1668,17 +1636,9 @@
         "category": "Error",
         "code": 2600
     },
-    "The return type of a JSX element constructor must return an object type.": {
-        "category": "Error",
-        "code": 2601
-    },
     "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
         "category": "Error",
         "code": 2602
-    },
-    "Property '{0}' in type '{1}' is not assignable to type '{2}'": {
-        "category": "Error",
-        "code": 2603
     },
     "JSX element type '{0}' does not have any construct or call signatures.": {
         "category": "Error",
@@ -1699,10 +1659,6 @@
     "The global type 'JSX.{0}' may not have more than one property": {
         "category": "Error",
         "code": 2608
-    },
-    "Cannot emit namespaced JSX elements in React": {
-        "category": "Error",
-        "code": 2650
     },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
@@ -2445,15 +2401,6 @@
         "category": "Error",
         "code": 8017
     },
-
-    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.": {
-        "category": "Error",
-        "code": 9002
-    },
-    "'class' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9003
-    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000
@@ -2465,10 +2412,6 @@
     "Expected corresponding JSX closing tag for '{0}'.": {
         "category": "Error",
         "code": 17002
-    },
-    "JSX attribute expected.": {
-        "category": "Error",
-        "code": 17003
     },
     "Cannot use JSX unless the '--jsx' flag is provided.": {
         "category": "Error",
