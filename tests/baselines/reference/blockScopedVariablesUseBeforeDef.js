@@ -103,15 +103,6 @@ function foo14() {
     let x
 }
 
-const enum A { X = B.Y }
-
-const enum B { Y }
-
-function foo15() {
-    const enum A1 { X = B1.Y }
-}
-const enum B1 { Y }
-
 //// [blockScopedVariablesUseBeforeDef.js]
 function foo0() {
     var a = x;
@@ -222,6 +213,4 @@ function foo14() {
         a: x
     };
     var x;
-}
-function foo15() {
 }

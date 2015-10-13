@@ -102,12 +102,3 @@ function foo14() {
     }
     let x
 }
-
-const enum A { X = B.Y }
-
-const enum B { Y }
-
-function foo15() {
-    const enum A1 { X = B1.Y }
-}
-const enum B1 { Y }

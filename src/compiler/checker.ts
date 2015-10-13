@@ -13203,8 +13203,6 @@ namespace ts {
             let nodeLinks = getNodeLinks(node);
 
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
-                nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
-
                 let enumSymbol = getSymbolOfNode(node);
                 let enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 let autoValue = 0; // set to undefined when enum member is non-constant
@@ -13242,6 +13240,8 @@ namespace ts {
                         getNodeLinks(member).enumMemberValue = autoValue++;
                     }
                 }
+
+                nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
             function computeConstantValueForEnumMemberInitializer(initializer: Expression, enumType: Type, enumIsConst: boolean, ambient: boolean): number {
@@ -13387,7 +13387,6 @@ namespace ts {
                                 return undefined;
                             }
 
-                            computeEnumMemberValues(<EnumDeclaration>propertyDecl.parent);
                             return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }
