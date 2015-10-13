@@ -383,20 +383,72 @@ namespace ts {
             // return undefined if we can't find a symbol.
         }
 
-        /** Returns true if node1 is defined before node 2**/
-        function isDefinedBefore(node1: Node, node2: Node): boolean {
-            let file1 = getSourceFileOfNode(node1);
-            let file2 = getSourceFileOfNode(node2);
-            if (file1 === file2) {
-                return node1.pos <= node2.pos;
+        function isBlockScopedNameDeclaredBeforeUse(declaration: Declaration, usage: Node): boolean {
+            const declarationFile = getSourceFileOfNode(declaration);
+            const useFile = getSourceFileOfNode(usage);
+            if (declarationFile !== useFile) {
+                if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
+                    // nodes are in different files and order cannot be determines
+                    return true;
+                }
+
+                const sourceFiles = host.getSourceFiles();
+                return indexOf(sourceFiles, declarationFile) <= indexOf(sourceFiles, useFile);
             }
 
-            if (!compilerOptions.outFile && !compilerOptions.out) {
-                return true;
+            if (declaration.pos <= usage.pos) {
+                // declaration is before usage
+                // still might be illegal if usage is in the initializer of the variable declaration
+                return declaration.kind !== SyntaxKind.VariableDeclaration ||
+                    !isImmediatelyUsedInInitializerOfBlockScopedVariable(<VariableDeclaration>declaration, usage);
             }
 
-            let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
+            // declaration is after usage
+            // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+            return isUsedInFunctionOrNonStaticProperty(declaration, usage);
+
+            function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
+                const container = getEnclosingBlockScopeContainer(declaration);
+
+                if (declaration.parent.parent.kind === SyntaxKind.VariableStatement ||
+                    declaration.parent.parent.kind === SyntaxKind.ForStatement) {
+                    // variable statement/for statement case,
+                    // use site should not be inside variable declaration (initializer of declaration or binding element)
+                    return isSameScopeDescendentOf(usage, declaration, container);
+                }
+                else if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
+                    declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                    // ForIn/ForOf case - use site should not be used in expression part
+                    let expression = (<ForInStatement | ForOfStatement>declaration.parent.parent).expression;
+                    return isSameScopeDescendentOf(usage, expression, container);
+                }
+            }
+
+            function isUsedInFunctionOrNonStaticProperty(declaration: Declaration, usage: Node): boolean {
+                const container = getEnclosingBlockScopeContainer(declaration);
+                let current = usage;
+                while (current) {
+                    if (current === container) {
+                        return false;
+                    }
+
+                    if (isFunctionLike(current)) {
+                        return true;
+                    }
+
+                    const initializerOfNonStaticProperty = current.parent &&
+                        current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                        (current.parent.flags & NodeFlags.Static) === 0 &&
+                        (<PropertyDeclaration>current.parent).initializer === current;
+
+                    if (initializerOfNonStaticProperty) {
+                        return true;
+                    }
+
+                    current = current.parent;
+                }
+                return false;
+            }
         }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
@@ -627,34 +679,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
-            // first check if usage is lexically located after the declaration
-            let isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
-            if (!isUsedBeforeDeclaration) {
-                // lexical check succeeded however code still can be illegal.
-                // - block scoped variables cannot be used in its initializers
-                //   let x = x; // illegal but usage is lexically after definition
-                // - in ForIn/ForOf statements variable cannot be contained in expression part
-                //   for (let x in x)
-                //   for (let x of x)
-
-                // climb up to the variable declaration skipping binding patterns
-                let variableDeclaration = <VariableDeclaration>getAncestor(declaration, SyntaxKind.VariableDeclaration);
-                let container = getEnclosingBlockScopeContainer(variableDeclaration);
-
-                if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                    // variable statement/for statement case,
-                    // use site should not be inside variable declaration (initializer of declaration or binding element)
-                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
-                }
-                else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                    // ForIn/ForOf case - use site should not be used in expression part
-                    let expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
-                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
-                }
-            }
-            if (isUsedBeforeDeclaration) {
+            if (!isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
         }
@@ -13354,7 +13379,7 @@ namespace ts {
                             }
 
                             // illegal case: forward reference
-                            if (!isDefinedBefore(propertyDecl, member)) {
+                            if (!isBlockScopedNameDeclaredBeforeUse(propertyDecl, member)) {
                                 reportError = false;
                                 error(e, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                                 return undefined;
