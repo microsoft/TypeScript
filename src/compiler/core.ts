@@ -437,8 +437,12 @@ namespace ts {
     }
 
     export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
-        Debug.assert(!headChain.next);
-        headChain.next = tailChain;
+        let lastChain = headChain;
+        while (lastChain.next) {
+            lastChain = lastChain.next;
+        }
+
+        lastChain.next = tailChain;
         return headChain;
     }
 
