@@ -116,13 +116,41 @@ namespace ts {
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
                 noDeclare = false;
-                let types = collectExportedTypes(entrypoint);
+
+                let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
+                let types = collectExportedTypes(entrypoint, exportedMembers);
                 let dependentTypes = collectDependentTypes(types);
                 let symbolNameSet: Map<number> = {};
-                forEachValue(types, type => {
+                let aliasMapping = map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported));
+                let createSynthIdentifiers = (symbol: Symbol, generatedName: string) => {
+                    forEach(symbol.declarations, declaration => {
+                        let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
+                        synthId.flags |= NodeFlags.Synthetic;
+                        synthId.text = generatedName;
+                        synthId.parent = declaration;
+                        declaration.name = synthId;
+                    });
+                };
+                let defaultExport: boolean;
+                forEach(aliasMapping, (type, index) => {
+                    let exportedSymbol = exportedMembers[index];
                     let symbol = type.symbol;
-                    symbolNameSet[symbol.name] = 1;
-                    symbolGeneratedNameMap[symbol.id] = symbol.name;
+                    if (symbol) { // use the name from the exported symbol, but the id from the internal one
+                        if (symbol.name !== exportedSymbol.name) {
+                            if (exportedSymbol.name === "default") {
+                                let name = "default_1";
+                                createSynthIdentifiers(symbol, name);
+                                symbolNameSet[name] = 1;
+                                symbolGeneratedNameMap[symbol.id] = name;
+                                defaultExport = true;
+                            }
+                            else {
+                                createSynthIdentifiers(symbol, exportedSymbol.name);
+                                symbolNameSet[exportedSymbol.name] = 1;
+                                symbolGeneratedNameMap[symbol.id] = exportedSymbol.name;
+                            }
+                        }
+                    }
                 });
                 forEachValue(dependentTypes, type => {
                     let symbol = type.symbol;
@@ -131,13 +159,7 @@ namespace ts {
                         symbolNameSet[symbol.name]++;
                         symbolNameSet[generatedName] = 1;
                         symbolGeneratedNameMap[symbol.id] = generatedName;
-                        forEach(symbol.declarations, declaration => {
-                            let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
-                            synthId.flags |= NodeFlags.Synthetic;
-                            synthId.text = generatedName;
-                            synthId.parent = declaration;
-                            declaration.name = synthId;
-                        });
+                        createSynthIdentifiers(symbol, generatedName); 
                     }
                     else {
                         symbolNameSet[symbol.name] = 1;
@@ -164,11 +186,18 @@ namespace ts {
                         currentSourceFile = getSourceFileOfNode(d);
                         let oldFlags = d.flags;
                         d.flags |= NodeFlags.Export;
+                        if (oldFlags & NodeFlags.Default) {
+                            d.flags -= NodeFlags.Default;
+                        }
                         emitModuleElement(d, /*isModuleElementVisible*/true);
                         d.flags = oldFlags;
                     });
                     currentSourceFile = realSourceFile;
                 });
+                if (defaultExport) {
+                    writeLine();
+                    write("export default default_1;");
+                }
             }
             else {
                 // Emit references corresponding to this file
@@ -235,8 +264,7 @@ namespace ts {
             referencePathsOutput,
         };
 
-        function collectExportedTypes(file: SourceFile): Map<Type> {
-            let exportedMembers = resolver.getExportsOfModule(file.symbol);
+        function collectExportedTypes(file: SourceFile, exportedMembers: Symbol[]): Map<Type> {
             return arrayToMap(filter(map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported)), value => !!value.symbol), value => (value.symbol.id + ""));
         }
 

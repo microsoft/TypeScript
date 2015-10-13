@@ -11,10 +11,14 @@ export interface Inner {
 	item4: number;
 }
 
+export {Main as BBaseMain, Main as default, Inner as Middle} from "./b";
+export {Main as CBaseMain, Inner as Innermost} from "./c";
+export {default as Main} from "./a";
+
 // @Filename: a.ts
 import {Main as BaseMain, Inner as Middle} from "./b";
 
-export class Main extends BaseMain {
+export default class Main extends BaseMain {
 	memberc: Middle;
 }
 
@@ -25,7 +29,7 @@ export interface Inner {
 // @Filename: b.ts
 import {Main as BaseMain, Inner as Innermost} from "./c";
 
-export class Main extends BaseMain {
+export default class Main extends BaseMain {
 	member2: Innermost;
 	details: Detail;
 }
@@ -39,7 +43,7 @@ export interface Detail {
 }
 
 // @Filename: c.ts
-export class Main {
+export default class Main {
 	member1: string;
 }
 
