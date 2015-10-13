@@ -1,0 +1,143 @@
+=== tests/cases/compiler/systemModule8.ts ===
+
+export var x;
+>x : any
+
+x = 1;
+>x = 1 : number
+>x : any
+>1 : number
+
+x++;
+>x++ : number
+>x : any
+
+x--;
+>x-- : number
+>x : any
+
+++x;
+>++x : number
+>x : any
+
+--x;
+>--x : number
+>x : any
+
+x += 1;
+>x += 1 : any
+>x : any
+>1 : number
+
+x -= 1;
+>x -= 1 : number
+>x : any
+>1 : number
+
+x *= 1;
+>x *= 1 : number
+>x : any
+>1 : number
+
+x /= 1;
+>x /= 1 : number
+>x : any
+>1 : number
+
+x |= 1;
+>x |= 1 : number
+>x : any
+>1 : number
+
+x &= 1;
+>x &= 1 : number
+>x : any
+>1 : number
+
+x + 1;
+>x + 1 : any
+>x : any
+>1 : number
+
+x - 1;
+>x - 1 : number
+>x : any
+>1 : number
+
+x & 1;
+>x & 1 : number
+>x : any
+>1 : number
+
+x | 1;
+>x | 1 : number
+>x : any
+>1 : number
+
+for (x = 5;;x++) {}
+>x = 5 : number
+>x : any
+>5 : number
+>x++ : number
+>x : any
+
+for (x = 8;;x--) {}
+>x = 8 : number
+>x : any
+>8 : number
+>x-- : number
+>x : any
+
+for (x = 15;;++x) {}
+>x = 15 : number
+>x : any
+>15 : number
+>++x : number
+>x : any
+
+for (x = 18;;--x) {}
+>x = 18 : number
+>x : any
+>18 : number
+>--x : number
+>x : any
+
+for (let x = 50;;) {}
+>x : number
+>50 : number
+
+function foo() {
+>foo : () => void
+
+    x = 100;
+>x = 100 : number
+>x : any
+>100 : number
+}
+
+export let [y] = [1];
+>y : number
+>[1] : [number]
+>1 : number
+
+export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
+>a : any
+>z0 : boolean
+>b : any
+>c : any
+>z1 : string
+>{a: true, b: {c: "123"}} : { a: boolean; b: { c: string; }; }
+>a : boolean
+>true : boolean
+>b : { c: string; }
+>{c: "123"} : { c: string; }
+>c : string
+>"123" : string
+
+for ([x] of [[1]]) {}
+>[x] : any[]
+>x : any
+>[[1]] : number[][]
+>[1] : number[]
+>1 : number
+
