@@ -163,7 +163,6 @@ namespace ts {
         let cjsModuleType: Type;
         let cjsExportsType: Type;
         let cjsRequireType: Type;
-        let amdRequireType: Type;
 
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
@@ -2736,117 +2735,6 @@ namespace ts {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
                 links.type = instantiateType(getTypeOfSymbol(links.target), links.mapper);
-            }
-            return links.type;
-        }
-
-        /*
-         * Given a Symbol for a declaration of an AMD module ('define(..., ..., ...')'),
-         * produces the type of that module
-        */
-        function resolveDefineModule(symbol: Symbol): Type {
-            // Can't meaningfully define the same module more than once
-            if (symbol.declarations.length !== 1) {
-                return unknownType;
-            }
-
-            // If the invocation of 'define' has zero args ('define()')... we
-            // shouldn't really be here, but it's meaningless
-            let callExpr = <CallExpression>symbol.declarations[0];
-            if (callExpr.arguments.length === 0) {
-                Debug.fail("Should not have a zero-arg define call");
-                return unknownType;
-            }
-
-            // If the last arg isn't a function expr, just resolve
-            // its type and define that as the shape of the module
-            let lastArg = <FunctionExpression>callExpr.arguments[callExpr.arguments.length - 1];
-            if (!isFunctionLike(lastArg)) {
-                let resultType = checkExpression(lastArg);
-                // If this type is a function type, we want to use its return type since
-                // it's going to get invoked anyway
-                let signatures = getSignaturesOfType(resultType, SignatureKind.Call);
-                if (signatures.length > 0) {
-                    return getReturnTypeOfSignature(signatures[0]);
-                }
-                else {
-                    return resultType;
-                }
-            }
-
-            // If there are any expressionful return statements in this function,
-            // we'll use those as the shape of the module
-            let bodyReturnType = getReturnTypeFromBody(lastArg);
-            if (bodyReturnType !== voidType) {
-                return bodyReturnType;
-            }
-
-            // Collect assignments in the body to 'module.exports' or 'exports.propName' or 'module.exports.propName'
-            let assignedModuleType: Type = undefined;
-            let exportAssignedProperties: Symbol[] = [];
-            let exportAssignedPropTable: SymbolTable = {};
-
-            if (cjsModuleType === undefined || cjsExportsType === undefined) {
-                return unknownType;
-            }
-
-            traverse(lastArg.body);
-
-            // Someone assigned to 'module.exports', so ignore other assignments
-            if (assignedModuleType) {
-                return assignedModuleType;
-            }
-
-            // Otherwise return the collected property assignments
-            if (exportAssignedProperties.length > 0) {
-                return createAnonymousType(lastArg.symbol,
-                        exportAssignedPropTable,
-                        /*callSignatures*/ [],
-                        /*constructSignatures*/ [],
-                        /*stringIndexType*/ undefined,
-                        /*numberIndexType*/ undefined);
-            }
-
-            // Empty module?
-            return emptyObjectType;
-
-            function traverse(node: Node) {
-                if (node.kind === SyntaxKind.BinaryExpression &&
-                   (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken) {
-                    let lhs = (<BinaryExpression>node).left;
-                    if (lhs.kind === SyntaxKind.PropertyAccessExpression) {
-                        // e.g. module.exports = foo;
-                        let propertyName = (<PropertyAccessExpression>lhs).name.text;
-                        let operandType = checkExpression((<PropertyAccessExpression>lhs).expression);
-                        if (operandType === cjsModuleType && propertyName === "exports") {
-                            assignedModuleType = checkExpression((<BinaryExpression>node).right);
-                        }
-                        else if (operandType === cjsExportsType) {
-                            // e.g. exports = bar;
-                            let prop = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient, propertyName);
-                            prop.type = checkExpression((<BinaryExpression>node).right);
-                            exportAssignedProperties.push(prop);
-                            exportAssignedPropTable[propertyName] = prop;
-                        }
-                    }
-                }
-                forEachChild(node, traverse);
-            }
-        }
-
-        function getTypeOfDefineModule(symbol: Symbol): Type {
-            let links = getSymbolLinks(symbol);
-            if (!links.type) {
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return unknownType;
-                }
-
-                let type = resolveDefineModule(symbol);
-                if (!popTypeResolution()) {
-                    // Circularly-defined module
-                    type = unknownType;
-                }
-                links.type = type;
             }
             return links.type;
         }
@@ -9728,8 +9616,7 @@ namespace ts {
             }
 
             let exprType = checkExpression(node.expression);
-            if ((exprType === cjsRequireType) ||
-               (exprType === amdRequireType)) {
+            if (exprType === cjsRequireType) {
                 if (node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
                     return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
                 }
@@ -15372,14 +15259,9 @@ namespace ts {
 
             // Initialize special symbols
             if (compilerOptions.allowNonTsExtensions) {
-                let req = getExportedSymbolFromNamespace("AMD", "require");
+                let req = getExportedSymbolFromNamespace("CommonJS", "require");
                 if (req) {
                     globals["require"] = req;
-                }
-
-                let def = getExportedSymbolFromNamespace("AMD", "define");
-                if (def) {
-                    globals["define"] = def;
                 }
             }
 
@@ -15413,8 +15295,6 @@ namespace ts {
             cjsModuleType = getExportedTypeFromNamespace("CommonJS", "Module");
             cjsExportsType = getExportedTypeFromNamespace("CommonJS", "Exports");
             cjsRequireType = getExportedTypeFromNamespace("CommonJS", "Require");
-            amdRequireType = getExportedTypeFromNamespace("AMD", "Require");
-
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
