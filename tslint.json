@@ -38,6 +38,7 @@
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
         "no-null": true,
+        "error-message-arity": true,
         "boolean-trivia": true
   }
 }
