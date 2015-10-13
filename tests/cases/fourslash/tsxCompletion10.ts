@@ -10,6 +10,5 @@
 //// var x1 = <div><//**/
 
 goTo.marker();
-verify.completionListItemsCountIsGreaterThan(0);
-verify.not.completionListItemsCountIsGreaterThan(1);
+verify.memberListCount(1);
 verify.completionListContains('div');
