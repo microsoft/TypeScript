@@ -923,3 +923,24 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
+
+var builtScripts = path.join(builtLocalDirectory, 'scripts');
+var errorCheckTsFile = path.join('scripts/errorCheck.ts')
+var errorCheckJsFile = path.join(builtScripts, 'errorCheck.js')
+
+compileFile(errorCheckJsFile, [errorCheckTsFile], [tscFile, errorCheckTsFile], [], /*useBuiltCompiler*/false);
+
+desc("Runs the error validation script");
+task("error-check", [errorCheckJsFile], function() {
+    var cmd = host + " " + errorCheckJsFile;
+    console.log(cmd + "\n");
+
+    var ex = jake.createExec([cmd]);
+    ex.addListener("cmdEnd", function() {
+        complete();
+    });
+    ex.addListener("stdout", function(output) {
+        process.stdout.write(output);
+    });
+    ex.run();
+}, { async: true });    
