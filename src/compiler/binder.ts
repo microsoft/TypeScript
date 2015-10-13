@@ -187,34 +187,9 @@ namespace ts {
                     return "p" + index;
 
                 case SyntaxKind.BinaryExpression:
-                    if (isExportsPropertyAssignment(node)) {
-                        return getAmdExportAssignmentName(node);
-                    }
-                    else if (isModuleExportsAssignment(node)) {
-                        return getAnonymousModuleName(node);
-                    }
-                    else {
-                        Debug.fail("Unknown binder BinaryExpression kind");
-                    }
-
-                case SyntaxKind.CallExpression:
-                    Debug.assert(isDefineCall(<CallExpression>node));
-                    if ((<CallExpression>node).arguments[0].kind === SyntaxKind.StringLiteral) {
-                        let moduleName = (<StringLiteral>(<CallExpression>node).arguments[0]).text;
-                        return `"` + moduleName + `"`;
-                    }
-                    else {
-                        return getAnonymousModuleName(node);
-                    }
+                    Debug.assert(isModuleExportsAssignment(node));
+                    return "__jsExports";
             }
-        }
-
-        function getAmdExportAssignmentName(node: Node) {
-            Debug.assert(isExportsPropertyAssignment(<BinaryExpression>node));
-
-            let binaryExpr = <BinaryExpression>node;
-            let propAccess = <PropertyAccessExpression>(binaryExpr.left);
-            return propAccess.name.text;
         }
 
         /**
@@ -402,7 +377,6 @@ namespace ts {
 
                 addToContainerChain(container);
             }
-
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
                 blockScopeContainer.locals = undefined;
@@ -411,6 +385,7 @@ namespace ts {
             if (isJavaScriptFile && node.jsDocComment) {
                 bind(node.jsDocComment);
             }
+
 
             if (node.kind === SyntaxKind.InterfaceDeclaration) {
                 seenThisKeyword = false;
@@ -971,12 +946,6 @@ namespace ts {
                     seenThisKeyword = true;
                     return;
 
-                case SyntaxKind.CallExpression:
-                    if (isDefineCall(<CallExpression>node)) {
-                        return bindDefineCall(<CallExpression>node);
-                    }
-                    return;
-
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
@@ -1100,21 +1069,14 @@ namespace ts {
         }
 
         function bindExportsPropertyAssignment(node: BinaryExpression) {
-            declareSymbolAndAddToSymbolTableWorker(<PropertyAccessExpression>node.left, SymbolFlags.Property, SymbolFlags.None);
+            // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
+            // expression is the declaration
+            declareSymbol(file.symbol.exports, /*parent*/ undefined, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.Export, SymbolFlags.None);
         }
 
         function bindModuleExportsAssignment(node: BinaryExpression) {
-            // This file is an external module
-            file.symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
-        }
-
-        function bindDefineCall(node: CallExpression) {
-            let symbol = declareSymbolAndAddToSymbolTableWorker(node, SymbolFlags.ValueModule, SymbolFlags.None);
-
-            // If this was a file-level module, hook up the file symbol to this module
-            if (isAnonymousDefineCall(node)) {
-                file.symbol = symbol;
-            }
+            // 'module.exports = expr' is treated exactly the same as 'export = expr'
+            declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
         }
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {

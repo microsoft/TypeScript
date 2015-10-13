@@ -5,7 +5,7 @@
 //// module.exports = { n: 3, s: 'foo', b: true };
 
 // @Filename: consumer.js
-//// var x = require('myMod');
+//// var x = require('./myMod');
 //// x/**/;
 
 goTo.file('consumer.js');

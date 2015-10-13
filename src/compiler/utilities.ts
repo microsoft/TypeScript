@@ -1028,7 +1028,7 @@ namespace ts {
     }
 
     function isInJavaScriptFile(node: Node): boolean {
-        return !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
     }
 
     function isCallToNamedFunction(expression: Node, name: string): expression is CallExpression {
@@ -1037,22 +1037,7 @@ namespace ts {
                 (<Identifier>(<CallExpression>expression).expression).text === name;
     }
 
-    export function isDefineCall(expression: Node): expression is CallExpression {
-        // In .js files, calls to the identifier 'define' are treated specially
-        return expression &&
-            expression.kind === SyntaxKind.CallExpression &&
-            (<CallExpression>expression).arguments.length > 0 &&
-            isInJavaScriptFile(expression) &&
-            isCallToNamedFunction(expression, "define");
-    }
-
-    export function isAnonymousDefineCall(expression: Node): expression is CallExpression {
-        return isDefineCall(expression) &&
-            expression.arguments.length > 0 &&
-            expression.arguments[0].kind !== SyntaxKind.StringLiteral;
-    }
-
-    export function isAmdRequireCall(expression: Node): expression is CallExpression {
+    export function isRequireCall(expression: Node): expression is CallExpression {
         // of the form 'require("name")' or 'require(arg1, arg2, ...)'
         return isInJavaScriptFile(expression) && isCallToNamedFunction(expression, "require") && expression.arguments.length >= 1;
     }
@@ -1076,25 +1061,6 @@ namespace ts {
             ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
             ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
             ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
-    }
-
-    export function getDefineOrRequireCallImports(callExpr: CallExpression): Expression[] {
-        // e.g. define(['a', 'b', 'c'], ...) or define('myMod', ['a', 'b', 'c'], ...)
-        if (callExpr.arguments.length < 1) {
-            return undefined;
-        }
-
-        for (var i = 0; i < callExpr.arguments.length; i++) {
-            if (callExpr.arguments[i].kind === SyntaxKind.ArrayLiteralExpression) {
-                return (<ArrayLiteralExpression>callExpr.arguments[i]).elements;
-            }
-        }
-
-        if (isAmdRequireCall(callExpr)) {
-            return callExpr.arguments;
-        }
-
-        return undefined;
     }
 
     export function getExternalModuleName(node: Node): Expression {

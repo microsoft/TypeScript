@@ -3,10 +3,10 @@
 
 
 // @Filename: refFile1.js
-//// export var V = 1;
+//// module.exports = { V: 1 };
 
 // @Filename: refFile2.js
-//// export var V = "123"
+//// module.exports = { V: "123" };
 
 // @Filename: main.js
 // @ResolveReference: true

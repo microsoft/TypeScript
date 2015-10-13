@@ -1065,6 +1065,12 @@ namespace ts {
                             visit(resolveExternalModuleName(node, (<ExportDeclaration>node).moduleSpecifier));
                         }
                     }
+
+                    // CommonJS 'module.exports = expr' assignments
+                    let commonJsModuleExports = symbol.exports["__jsExports"];
+                    if (commonJsModuleExports) {
+                        result = createSymbolTable(getPropertiesOfType(checkExpression((<BinaryExpression>commonJsModuleExports.declarations[0]).right)));
+                    }
                 }
             }
         }
@@ -1370,8 +1376,7 @@ namespace ts {
 
         function hasExternalModuleSymbol(declaration: Node) {
             return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
-                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration)) ||
-                (declaration.kind === SyntaxKind.CallExpression && isDefineCall(<CallExpression>declaration));
+                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
@@ -2166,7 +2171,7 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         return true;
 
-                    // Export assignements do not create name bindings outside the module
+                    // Export assignments do not create name bindings outside the module
                     case SyntaxKind.ExportAssignment:
                         return false;
 
@@ -2608,16 +2613,6 @@ namespace ts {
                     let types = symbol.declarations.map((decl: VariableLikeDeclaration) => getWidenedTypeForVariableLikeDeclaration(decl, /*reportErrors*/ true));
                     return getUnionType(types);
                 }
-                // Handle JS module inferences
-                if (isExportsPropertyAssignment(symbol.valueDeclaration)) {
-                    // e.g. exports.prop = expr
-                    return getTypeOfExportsPropertyAssignment(symbol);
-                }
-                else if (isModuleExportsAssignment(symbol.valueDeclaration)) {
-                    // e.g. module.exports = expr
-                    return getTypeOfModuleExportsAssignment(symbol);
-                }
-
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                     return unknownType;
@@ -2707,10 +2702,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (isDefineCall(symbol.valueDeclaration)) {
-                    links.type = getTypeOfDefineModule(symbol);
-                }
-                else if (isModuleExportsAssignment(symbol.valueDeclaration)) {
+                if (isModuleExportsAssignment(symbol.valueDeclaration)) {
                     links.type = getTypeOfModuleExportsAssignment(symbol);
                 }
                 else {
@@ -2753,11 +2745,16 @@ namespace ts {
             return links.type;
         }
 
-        function resolveAmdExportAssignment(symbol: Symbol): Type {
-            return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl).right)));
+        function resolveExportsPropertyAssignment(symbol: Symbol): Type {
+            // When we have a declaration in the form 'exports.name = expr', the declaration
+            // node is the left-side property access node. Walk up the parent chain to the
+            // surrounding binary expression and get the type of its right-hand side
+            return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl.parent).right)));
         }
 
-        function resolveCommonJsModuleExportsAssignment(symbol: Symbol): Type {
+        function resolveModuleExportsAssignment(symbol: Symbol): Type {
+            // For a declaration in the form 'module.exports = expr', the declaration node
+            // is the entire binary expression. Get the type of its right-hand side
             return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl).right)));
         }
 
@@ -2879,7 +2876,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                let type = resolveAmdExportAssignment(symbol);
+                let type = resolveExportsPropertyAssignment(symbol);
                 if (!popTypeResolution()) {
                     // Circularly-defined module
                     type = unknownType;
@@ -2896,7 +2893,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                let type = resolveCommonJsModuleExportsAssignment(symbol);
+                let type = resolveModuleExportsAssignment(symbol);
                 if (!popTypeResolution()) {
                     // Circularly-defined module
                     type = unknownType;
@@ -7217,16 +7214,6 @@ namespace ts {
             let func = parameter.parent;
             if (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) {
                 if (isContextSensitive(func)) {
-                    // In a JS file, get types to parameters of a function 
-                    // expression that is an argument to 'define'/'require'
-                    if (func.parent) {
-                        if (isDefineCall(<CallExpression>func.parent) || isAmdRequireCall(<CallExpression>func.parent)) {
-                            let indexOfParameter = indexOf(func.parameters, parameter);
-
-                            return getDefineOrRequireCallParameterType(<FunctionExpression>func, indexOfParameter);
-                        }
-                    }
-
                     let contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
                         let funcHasRestParameters = hasRestParameter(func);
@@ -7329,23 +7316,6 @@ namespace ts {
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
             let args = getEffectiveCallArguments(callTarget);
             let argIndex = indexOf(args, arg);
-
-            if (isDefineCall(callTarget) && argIndex === args.length - 1) {
-                let links = getNodeLinks(callTarget);
-                if (links.resolvedContextualType === undefined) {
-                    // Synthesize a type with a call signature for the 'define'/'require' invocation
-                    let symbol = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call");
-                    let params: Symbol[] = [];
-                    for (let i = 0; i < args.length; i++) {
-                        let paramSym = <TransientSymbol>createSymbol(SymbolFlags.Transient, "__define_call_" + i);
-                        paramSym.type = getDefineOrRequireCallParameterType(<FunctionExpression>arg, i);
-                        params.push(paramSym);
-                    }
-                    let callSignature = createSignature(undefined, emptyArray, params, voidType, undefined, params.length, false, false);
-                    links.resolvedContextualType = createAnonymousType(symbol, {}, [callSignature], emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
-                }
-                return links.resolvedContextualType;
-            }
 
             if (argIndex >= 0) {
                 let signature = getResolvedSignature(callTarget);

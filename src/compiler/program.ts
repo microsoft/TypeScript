@@ -717,10 +717,9 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.CallExpression:
-                        if (isJavaScriptFile &&
-                            (isDefineCall(node) || isAmdRequireCall(node))) {
+                        if (isJavaScriptFile && isRequireCall(node)) {
 
-                            let jsImports = getDefineOrRequireCallImports(<CallExpression>node);
+                            let jsImports = (<CallExpression>node).arguments;
                             if (jsImports) {
                                 imports = (imports || []);
                                 for (var i = 0; i < jsImports.length; i++) {
