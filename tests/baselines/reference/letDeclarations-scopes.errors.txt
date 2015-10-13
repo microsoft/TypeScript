@@ -1,10 +1,8 @@
-tests/cases/compiler/letDeclarations-scopes.ts(13,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/letDeclarations-scopes.ts(22,1): error TS7027: Unreachable code detected.
-tests/cases/compiler/letDeclarations-scopes.ts(28,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
-tests/cases/compiler/letDeclarations-scopes.ts(120,5): error TS7028: Unused label.
+tests/cases/compiler/letDeclarations-scopes.ts(29,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
-==== tests/cases/compiler/letDeclarations-scopes.ts (4 errors) ====
+==== tests/cases/compiler/letDeclarations-scopes.ts (1 errors) ====
+    
     
     // global
     let l = "string";
@@ -18,8 +16,6 @@ tests/cases/compiler/letDeclarations-scopes.ts(120,5): error TS7028: Unused labe
     }
     else {
         let l = 0;
-        ~~~
-!!! error TS7027: Unreachable code detected.
         n = l;
     }
     
@@ -29,8 +25,6 @@ tests/cases/compiler/letDeclarations-scopes.ts(120,5): error TS7028: Unused labe
     }
     
     do {
-    ~~
-!!! error TS7027: Unreachable code detected.
        let l = 0;
         n = l;
     } while (true);
@@ -131,8 +125,6 @@ tests/cases/compiler/letDeclarations-scopes.ts(120,5): error TS7028: Unused labe
         }
     
         lable: let l2 = 0;
-        ~~~~~
-!!! error TS7028: Unused label.
     }
     
     // methods

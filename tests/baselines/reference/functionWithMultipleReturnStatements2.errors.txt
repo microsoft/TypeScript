@@ -1,16 +1,9 @@
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(8,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(15,12): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(36,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(43,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(58,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(62,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(67,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(71,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(80,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(89,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(59,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts(68,10): error TS2354: No best common type exists among return expressions.
 
 
-==== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts (10 errors) ====
+==== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements2.ts (2 errors) ====
+    
     // return type of a function with multiple returns is the BCT of each return statement
     // no errors expected here
     
@@ -19,8 +12,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return 1;
         } else {
             return null;
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -28,8 +19,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
         if (true) {
             return 1;
         } else if (false) {
-               ~~
-!!! error TS7027: Unreachable code detected.
             return null;
         } else {
             return 2;
@@ -51,8 +40,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
     function f5() {
         return 1;
         return new Object();
-        ~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     function f6<T>(x: T) {
@@ -60,8 +47,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return x;
         } else {
             return null;
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -83,8 +68,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return a;
         } else {
             return b;
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -96,8 +79,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return b;
         } else {
             return a;
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -107,8 +88,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return (x: number) => { }
         } else {
             return (x: Object) => { }
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -118,7 +97,5 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return (x: Object) => { }
         } else {
             return (x: number) => { }        
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }

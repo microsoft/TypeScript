@@ -1,0 +1,15 @@
+=== tests/cases/compiler/duplicateLabel4.ts ===
+
+target:
+>target : any
+
+while (true) {
+>true : boolean
+}
+
+target: 
+>target : any
+
+while (true) {
+>true : boolean
+}

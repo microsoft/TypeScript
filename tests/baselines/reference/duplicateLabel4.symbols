@@ -1,0 +1,10 @@
+=== tests/cases/compiler/duplicateLabel4.ts ===
+
+No type information for this code.target:
+No type information for this code.while (true) {
+No type information for this code.}
+No type information for this code.
+No type information for this code.target: 
+No type information for this code.while (true) {
+No type information for this code.}
+No type information for this code.

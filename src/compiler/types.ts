@@ -384,7 +384,9 @@ namespace ts {
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
-        BlockScoped = Let | Const
+        BlockScoped = Let | Const,
+
+        ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn
     }
 
     /* @internal */

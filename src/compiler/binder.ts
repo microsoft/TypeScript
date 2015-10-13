@@ -374,10 +374,6 @@ namespace ts {
             blockScopeContainer = savedBlockScopeContainer;
         }
 
-        function shouldSaveReachabilityState(n: Node): boolean {
-            return n.kind === SyntaxKind.SourceFile || n.kind === SyntaxKind.ModuleBlock || isFunctionLike(n);
-        }
-
         function bindWithReachabilityChecks(node: Node): void {
             let savedReachabilityState: Reachability;
             let savedLabelStack: Reachability[];
@@ -385,7 +381,10 @@ namespace ts {
             let savedImplicitLabels: number[];
             let savedHasExplicitReturn: boolean;
 
-            let saveState = shouldSaveReachabilityState(node);
+            // reset all reachability check related flags on node (for incremental scenarios)
+            node.flags &= ~NodeFlags.ReachabilityCheckFlags;
+
+            let saveState = node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.ModuleBlock || isFunctionLike(node);
             if (saveState) {
                 savedReachabilityState = currentReachabilityState;
                 savedLabelStack = labelStack;
@@ -398,9 +397,7 @@ namespace ts {
                 labelStack = labelIndexMap = implicitLabels = undefined;
             }
 
-            if (!bindReachableStatement(node)) {
-                forEachChild(node, bind);
-            }
+            bindReachableStatement(node);
 
             if (currentReachabilityState === Reachability.Reachable && isFunctionLike(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
                 node.flags |= NodeFlags.HasImplicitReturn;
@@ -422,43 +419,56 @@ namespace ts {
          * Returns true if node and its subnodes were successfully traversed.
          * Returning false means that node was not examined and caller needs to dive into the node himself. 
          */
-        function bindReachableStatement(node: Node): boolean {
+        function bindReachableStatement(node: Node): void {
             if (checkUnreachable(node)) {
-                return false;
+                forEachChild(node, bind);
+                return;
             }
 
             switch (node.kind) {
                 case SyntaxKind.WhileStatement:
-                    return bindWhileStatement(<WhileStatement>node);
+                    bindWhileStatement(<WhileStatement>node);
+                    break;
                 case SyntaxKind.DoStatement:
-                    return bindDoStatement(<DoStatement>node);
+                    bindDoStatement(<DoStatement>node);
+                    break;
                 case SyntaxKind.ForStatement:
-                    return bindForStatement(<ForStatement>node);
+                    bindForStatement(<ForStatement>node);
+                    break;
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    return bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                    bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                    break;
                 case SyntaxKind.IfStatement:
-                    return bindIfStatement(<IfStatement>node);
+                    bindIfStatement(<IfStatement>node);
+                    break;
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.ThrowStatement:
-                    return bindReturnOrThrow(<ReturnStatement | ThrowStatement>node);
+                    bindReturnOrThrow(<ReturnStatement | ThrowStatement>node);
+                    break;
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
-                    return bindBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                    bindBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                    break;
                 case SyntaxKind.TryStatement:
-                    return bindTryStatement(<TryStatement>node);
+                    bindTryStatement(<TryStatement>node);
+                    break;
                 case SyntaxKind.SwitchStatement:
-                    return bindSwitchStatement(<SwitchStatement>node);
+                    bindSwitchStatement(<SwitchStatement>node);
+                    break;
                 case SyntaxKind.CaseBlock:
-                    return bindCaseBlock(<CaseBlock>node);
+                    bindCaseBlock(<CaseBlock>node);
+                    break;
                 case SyntaxKind.LabeledStatement:
-                    return bindLabeledStatement(<LabeledStatement>node);
+                    bindLabeledStatement(<LabeledStatement>node);
+                    break;
                 default:
-                    return false;
+                    forEachChild(node, bind);
+                    break;
             }
         }
 
-        function bindWhileStatement(n: WhileStatement): boolean {
+        function bindWhileStatement(n: WhileStatement): void {
             const preWhileState =
                 n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
             const postWhileState =
@@ -471,11 +481,9 @@ namespace ts {
             const postWhileLabel = pushImplicitLabel();
             bind(n.statement);
             popImplicitLabel(postWhileLabel, postWhileState);
-
-            return true;
         }
 
-        function bindDoStatement(n: DoStatement): boolean {
+        function bindDoStatement(n: DoStatement): void {
             const preDoState = currentReachabilityState;
 
             const postDoLabel = pushImplicitLabel();
@@ -485,11 +493,9 @@ namespace ts {
 
             // bind expressions (don't affect reachability)
             bind(n.expression);
-
-            return true;
         }
 
-        function bindForStatement(n: ForStatement): boolean {
+        function bindForStatement(n: ForStatement): void {
             const preForState = currentReachabilityState;
             const postForLabel = pushImplicitLabel();
 
@@ -506,11 +512,9 @@ namespace ts {
             const isInfiniteLoop = (!n.condition || n.condition.kind === SyntaxKind.TrueKeyword);
             const postForState = isInfiniteLoop ? Reachability.Unreachable : preForState;
             popImplicitLabel(postForLabel, postForState);
-
-            return true;
         }
 
-        function bindForInOrForOfStatement(n: ForInStatement | ForOfStatement): boolean {
+        function bindForInOrForOfStatement(n: ForInStatement | ForOfStatement): void {
             const preStatementState = currentReachabilityState;
             const postStatementLabel = pushImplicitLabel();
 
@@ -520,11 +524,9 @@ namespace ts {
 
             bind(n.statement);
             popImplicitLabel(postStatementLabel, preStatementState);
-
-            return true;
         }
 
-        function bindIfStatement(n: IfStatement): boolean {
+        function bindIfStatement(n: IfStatement): void {
             // denotes reachability state when entering 'thenStatement' part of the if statement: 
             // i.e. if condition is false then thenStatement is unreachable
             const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
@@ -547,22 +549,18 @@ namespace ts {
             else {
                 currentReachabilityState = or(currentReachabilityState, ifFalseState);
             }
-
-            return true;
         }
 
-        function bindReturnOrThrow(n: ReturnStatement | ThrowStatement): boolean {
+        function bindReturnOrThrow(n: ReturnStatement | ThrowStatement): void {
             // bind expression (don't affect reachability)
             bind(n.expression);
             if (n.kind === SyntaxKind.ReturnStatement) {
                 hasExplicitReturn = true;
             }
             currentReachabilityState = Reachability.Unreachable;
-
-            return true;
         }
 
-        function bindBreakOrContinueStatement(n: BreakOrContinueStatement): boolean {
+        function bindBreakOrContinueStatement(n: BreakOrContinueStatement): void {
             // call bind on label (don't affect reachability)
             bind(n.label);
             // for continue case touch label so it will be marked a used
@@ -570,10 +568,9 @@ namespace ts {
             if (isValidJump) {
                 currentReachabilityState = Reachability.Unreachable;
             }
-            return true;
         }
 
-        function bindTryStatement(n: TryStatement): boolean {
+        function bindTryStatement(n: TryStatement): void {
             // catch\finally blocks has the same reachability as try block
             const preTryState = currentReachabilityState;
             bind(n.tryBlock);
@@ -590,11 +587,9 @@ namespace ts {
             // - post try state is reachable - control flow can fall out of try block
             // - post catch state is reachable - control flow can fall out of catch block
             currentReachabilityState = or(postTryState, postCatchState);
-
-            return true;
         }
 
-        function bindSwitchStatement(n: SwitchStatement): boolean {
+        function bindSwitchStatement(n: SwitchStatement): void {
             const preSwitchState = currentReachabilityState;
             const postSwitchLabel = pushImplicitLabel();
 
@@ -609,11 +604,9 @@ namespace ts {
             const postSwitchState = hasDefault && currentReachabilityState !== Reachability.Reachable ? Reachability.Unreachable : preSwitchState;
 
             popImplicitLabel(postSwitchLabel, postSwitchState);
-
-            return true;
         }
 
-        function bindCaseBlock(n: CaseBlock): boolean {
+        function bindCaseBlock(n: CaseBlock): void {
             const startState = currentReachabilityState;
 
             for (let clause of n.clauses) {
@@ -623,11 +616,9 @@ namespace ts {
                     errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
             }
-
-            return true;
         }
 
-        function bindLabeledStatement(n: LabeledStatement): boolean {
+        function bindLabeledStatement(n: LabeledStatement): void {
             // call bind on label (don't affect reachability)
             bind(n.label);
 
@@ -636,8 +627,6 @@ namespace ts {
             if (ok) {
                 popNamedLabel(n.label, currentReachabilityState);
             }
-
-            return true;
         }
 
         function getContainerFlags(node: Node): ContainerFlags {
@@ -1387,8 +1376,6 @@ namespace ts {
         }
 
         function popNamedLabel(label: Identifier, outerState: Reachability): void {
-            initializeReachabilityStateIfNecessary();
-
             let index = labelIndexMap[label.text];
             Debug.assert(index !== undefined);
             Debug.assert(labelStack.length == index + 1);
@@ -1399,8 +1386,6 @@ namespace ts {
         }
 
         function popImplicitLabel(implicitLabelIndex: number, outerState: Reachability): void {
-            initializeReachabilityStateIfNecessary();
-
             Debug.assert(labelStack.length === implicitLabelIndex + 1, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
             let i = implicitLabels.pop();
             Debug.assert(implicitLabelIndex === i, `i: ${i}, index: ${implicitLabelIndex}`);
@@ -1408,8 +1393,6 @@ namespace ts {
         }
 
         function setCurrentStateAtLabel(innerMergedState: Reachability, outerState: Reachability, label: Identifier): void {
-            initializeReachabilityStateIfNecessary();
-
             if (innerMergedState === Reachability.Unintialized) {
                 if (label && !options.allowUnusedLabels) {
                     file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));

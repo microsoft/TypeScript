@@ -1,16 +1,14 @@
-tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(3,21): error TS7027: Unreachable code detected.
-tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(5,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts (3 errors) ====
+==== tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts (2 errors) ====
+    
     class a {
         static get x(): () => string {
                    ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return null;;
-                        ~
-!!! error TS7027: Unreachable code detected.
         }
         static set x(aValue: () => string) {
                    ~

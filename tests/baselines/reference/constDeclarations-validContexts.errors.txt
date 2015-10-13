@@ -1,9 +1,7 @@
-tests/cases/compiler/constDeclarations-validContexts.ts(8,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/constDeclarations-validContexts.ts(15,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/constDeclarations-validContexts.ts(20,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
 
 
-==== tests/cases/compiler/constDeclarations-validContexts.ts (3 errors) ====
+==== tests/cases/compiler/constDeclarations-validContexts.ts (1 errors) ====
     
     
     // Control flow statements with blocks
@@ -12,8 +10,6 @@ tests/cases/compiler/constDeclarations-validContexts.ts(20,7): error TS2410: All
     }
     else { 
         const c2 = 0;
-        ~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     while (true) { 
@@ -21,8 +17,6 @@ tests/cases/compiler/constDeclarations-validContexts.ts(20,7): error TS2410: All
     }
     
     do { 
-    ~~
-!!! error TS7027: Unreachable code detected.
         const c4 = 0;
     } while (true);
     

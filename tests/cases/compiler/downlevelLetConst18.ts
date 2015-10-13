@@ -1,4 +1,6 @@
 // @target:es5
+// @allowUnreachableCode: true
+
 'use strict'
 
 for (let x; ;) {

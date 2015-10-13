@@ -1,8 +1,8 @@
-tests/cases/compiler/for.ts(29,1): error TS7027: Unreachable code detected.
-tests/cases/compiler/for.ts(29,6): error TS1109: Expression expected.
+tests/cases/compiler/for.ts(30,6): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/for.ts (2 errors) ====
+==== tests/cases/compiler/for.ts (1 errors) ====
+    
     for (var i = 0; i < 10; i++) { // ok
         var x1 = i;
     }
@@ -32,8 +32,6 @@ tests/cases/compiler/for.ts(29,6): error TS1109: Expression expected.
     }
     
     for () { // error
-    ~~~
-!!! error TS7027: Unreachable code detected.
          ~
 !!! error TS1109: Expression expected.
     }

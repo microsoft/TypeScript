@@ -1,4 +1,5 @@
 //// [forStatements.ts]
+
 interface I {
     id: number;
 }

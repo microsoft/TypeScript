@@ -1,20 +1,16 @@
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(4,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(8,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(12,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(15,12): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(22,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(31,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(43,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(45,5): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(48,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(52,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(56,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(56,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(56,26): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(60,9): error TS7027: Unreachable code detected.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(5,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(13,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(23,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(32,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(44,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(49,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(57,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(57,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts(57,26): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts (14 errors) ====
+==== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts (9 errors) ====
+    
     // return type of a function with multiple returns is the BCT of each return statement
     // it is an error if there is no single BCT, these are error cases
     
@@ -25,8 +21,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return 1;
         } else {
             return '';
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -36,8 +30,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
         if (true) {
             return 1;
         } else if (false) {
-               ~~
-!!! error TS7027: Unreachable code detected.
             return 2;
         } else {
             return '';
@@ -74,8 +66,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
 !!! error TS2354: No best common type exists among return expressions.
         return 1;
         return '';
-        ~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     
     function f6<T, U>(x: T, y:U) {
@@ -85,8 +75,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return x;
         } else {
             return y;
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -101,8 +89,6 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMulti
             return x;
         } else {
             return y;
-            ~~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
