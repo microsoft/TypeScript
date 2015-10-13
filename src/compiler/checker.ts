@@ -2702,12 +2702,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             let links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (isModuleExportsAssignment(symbol.valueDeclaration)) {
-                    links.type = getTypeOfModuleExportsAssignment(symbol);
-                }
-                else {
-                    links.type = createObjectType(TypeFlags.Anonymous, symbol);
-                }
+                links.type = createObjectType(TypeFlags.Anonymous, symbol);
             }
             return links.type;
         }
@@ -2743,19 +2738,6 @@ namespace ts {
                 links.type = instantiateType(getTypeOfSymbol(links.target), links.mapper);
             }
             return links.type;
-        }
-
-        function resolveExportsPropertyAssignment(symbol: Symbol): Type {
-            // When we have a declaration in the form 'exports.name = expr', the declaration
-            // node is the left-side property access node. Walk up the parent chain to the
-            // surrounding binary expression and get the type of its right-hand side
-            return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl.parent).right)));
-        }
-
-        function resolveModuleExportsAssignment(symbol: Symbol): Type {
-            // For a declaration in the form 'module.exports = expr', the declaration node
-            // is the entire binary expression. Get the type of its right-hand side
-            return getUnionType(map(symbol.declarations, decl => checkExpression((<BinaryExpression>decl).right)));
         }
 
         /*
@@ -2860,40 +2842,6 @@ namespace ts {
                 }
 
                 let type = resolveDefineModule(symbol);
-                if (!popTypeResolution()) {
-                    // Circularly-defined module
-                    type = unknownType;
-                }
-                links.type = type;
-            }
-            return links.type;
-        }
-
-        function getTypeOfExportsPropertyAssignment(symbol: Symbol): Type {
-            let links = getSymbolLinks(symbol);
-            if (!links.type) {
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return unknownType;
-                }
-
-                let type = resolveExportsPropertyAssignment(symbol);
-                if (!popTypeResolution()) {
-                    // Circularly-defined module
-                    type = unknownType;
-                }
-                links.type = type;
-            }
-            return links.type;
-        }
-
-        function getTypeOfModuleExportsAssignment(symbol: Symbol): Type {
-            let links = getSymbolLinks(symbol);
-            if (!links.type) {
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return unknownType;
-                }
-
-                let type = resolveModuleExportsAssignment(symbol);
                 if (!popTypeResolution()) {
                     // Circularly-defined module
                     type = unknownType;
