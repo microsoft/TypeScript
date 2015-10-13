@@ -2506,5 +2506,13 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17006
+    },
+    "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17007
     }
 }

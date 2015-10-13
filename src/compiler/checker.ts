@@ -612,8 +612,11 @@ namespace ts {
                 // block - scope variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block- scoped
-                if (meaning & SymbolFlags.BlockScopedVariable && result.flags & SymbolFlags.BlockScopedVariable) {
-                    checkResolvedBlockScopedVariable(result, errorLocation);
+                if (meaning & SymbolFlags.BlockScopedVariable) {
+                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
+                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
+                    }
                 }
             }
             return result;
@@ -7982,6 +7985,11 @@ namespace ts {
                 return true;
             }
             // An instance property must be accessed through an instance of the enclosing class
+            if (type.flags & TypeFlags.ThisType) {
+                // get the original type -- represented as the type constraint of the 'this' type
+                type = getConstraintOfTypeParameter(<TypeParameter>type);
+            }
+
             // TODO: why is the first part of this check here?
             if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
@@ -10051,7 +10059,9 @@ namespace ts {
             let rightType = checkExpression(right, contextualMapper);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
+                case SyntaxKind.AsteriskAsteriskToken:
                 case SyntaxKind.AsteriskEqualsToken:
+                case SyntaxKind.AsteriskAsteriskEqualsToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                 case SyntaxKind.PercentToken:
@@ -10070,7 +10080,7 @@ namespace ts {
                 case SyntaxKind.CaretEqualsToken:
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandEqualsToken:
-                    // TypeScript 1.0 spec (April 2014): 4.15.1
+                    // TypeScript 1.0 spec (April 2014): 4.19.1
                     // These operators require their operands to be of type Any, the Number primitive type,
                     // or an enum type. Operands of an enum type are treated
                     // as having the primitive type Number. If one operand is the null or undefined value,
@@ -10099,7 +10109,7 @@ namespace ts {
                     return numberType;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
-                    // TypeScript 1.0 spec (April 2014): 4.15.2
+                    // TypeScript 1.0 spec (April 2014): 4.19.2
                     // The binary + operator requires both operands to be of the Number primitive type or an enum type,
                     // or at least one of the operands to be of type Any or the String primitive type.
 
@@ -13889,6 +13899,7 @@ namespace ts {
                     break;
                 case SyntaxKind.ClassExpression:
                     forEach((<ClassExpression>node).members, checkSourceElement);
+                    forEachChild(node, checkFunctionAndClassExpressionBodies);
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
