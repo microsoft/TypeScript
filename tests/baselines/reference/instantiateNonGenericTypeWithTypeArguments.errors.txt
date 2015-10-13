@@ -3,7 +3,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGen
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(11,9): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(14,10): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(14,10): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts(18,10): error TS2347: Untyped function calls cannot accept type arguments.
 
 
 ==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGenericTypeWithTypeArguments.ts (6 errors) ====
@@ -36,4 +36,4 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiateNonGen
     // BUG 790977
     var r2 = new a<number>();
              ~~~~~~~~~~~~~~~
-!!! error TS2347: Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls cannot accept type arguments.
