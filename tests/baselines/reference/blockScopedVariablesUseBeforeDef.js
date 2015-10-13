@@ -1,4 +1,9 @@
 //// [blockScopedVariablesUseBeforeDef.ts]
+function foo0() {
+    let a = x;
+    let x;
+}
+
 function foo1() {
     let a = () => x;
     let x;
@@ -84,7 +89,34 @@ function foo12() {
     let x;
 }
 
+function foo13() {
+    let a = {
+        get a() { return x } 
+    }
+    let x
+}
+
+function foo14() {
+    let a = {
+        a: x 
+    }
+    let x
+}
+
+const enum A { X = B.Y }
+
+const enum B { Y }
+
+function foo15() {
+    const enum A1 { X = B1.Y }
+}
+const enum B1 { Y }
+
 //// [blockScopedVariablesUseBeforeDef.js]
+function foo0() {
+    var a = x;
+    var x;
+}
 function foo1() {
     var a = function () { return x; };
     var x;
@@ -178,4 +210,18 @@ function foo12() {
         })();
     }
     var x;
+}
+function foo13() {
+    var a = {
+        get a() { return x; }
+    };
+    var x;
+}
+function foo14() {
+    var a = {
+        a: x
+    };
+    var x;
+}
+function foo15() {
 }

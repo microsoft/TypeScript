@@ -383,42 +383,72 @@ namespace ts {
             // return undefined if we can't find a symbol.
         }
 
-        const enum RelativeLocation {
-            Unknown,
-            SameFileLocatedBefore,
-            SameFileLocatedAfter,
-            DifferentFilesLocatedBefore,
-            DifferentFilesLocatedAfter,
-        }
-
-        function isLocatedBefore(origin: Node, target: Node): boolean {
-            switch (getRelativeLocation(origin, target)) {
-                // unknown is returned with nodes are in different files and order cannot be determined based on compilation settings
-                // optimistically assume this is ok
-                case RelativeLocation.Unknown:
-                case RelativeLocation.SameFileLocatedBefore:
-                case RelativeLocation.DifferentFilesLocatedBefore:
+        function isBlockScopedNameDeclaredBeforeUse(declaration: Declaration, usage: Node): boolean {
+            const declarationFile = getSourceFileOfNode(declaration);
+            const useFile = getSourceFileOfNode(usage);
+            if (declarationFile !== useFile) {
+                if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
+                    // nodes are in different files and order cannot be determines
                     return true;
-                default:
-                    return false;
-            }
-        }
+                }
 
-        /** gets relative location of target comparing to origin **/
-        function getRelativeLocation(origin: Node, target: Node): RelativeLocation {
-            let file1 = getSourceFileOfNode(origin);
-            let file2 = getSourceFileOfNode(target);
-            if (file1 === file2) {
-                return origin.pos > target.pos ? RelativeLocation.SameFileLocatedBefore : RelativeLocation.SameFileLocatedAfter;
+                const sourceFiles = host.getSourceFiles();
+                return indexOf(sourceFiles, declarationFile) <= indexOf(sourceFiles, useFile);
             }
 
-            if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
-                // nodes are in different files and order cannot be determines
-                return RelativeLocation.Unknown;
+            if (declaration.pos <= usage.pos) {
+                // declaration is before usage
+                // still might be illegal if usage is in the initializer of the variable declaration
+                return declaration.kind !== SyntaxKind.VariableDeclaration ||
+                    !isImmediatelyUsedInInitializerOfBlockScopedVariable(<VariableDeclaration>declaration, usage);
             }
 
-            let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) > sourceFiles.indexOf(file2) ? RelativeLocation.DifferentFilesLocatedBefore : RelativeLocation.DifferentFilesLocatedAfter;
+            // declaration is after usage
+            // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+            return isUsedInFunctionOrNonStaticProperty(declaration, usage);
+
+            function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
+                const container = getEnclosingBlockScopeContainer(declaration);
+
+                if (declaration.parent.parent.kind === SyntaxKind.VariableStatement ||
+                    declaration.parent.parent.kind === SyntaxKind.ForStatement) {
+                    // variable statement/for statement case,
+                    // use site should not be inside variable declaration (initializer of declaration or binding element)
+                    return isSameScopeDescendentOf(usage, declaration, container);
+                }
+                else if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
+                    declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                    // ForIn/ForOf case - use site should not be used in expression part
+                    let expression = (<ForInStatement | ForOfStatement>declaration.parent.parent).expression;
+                    return isSameScopeDescendentOf(usage, expression, container);
+                }
+            }
+
+            function isUsedInFunctionOrNonStaticProperty(declaration: Declaration, usage: Node): boolean {
+                const container = getEnclosingBlockScopeContainer(declaration);
+                let current = usage;
+                while (current) {
+                    if (current === container) {
+                        return false;
+                    }
+
+                    if (isFunctionLike(current)) {
+                        return true;
+                    }
+
+                    const initializerOfNonStaticProperty = current.parent &&
+                        current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                        (current.parent.flags & NodeFlags.Static) === 0 &&
+                        (<PropertyDeclaration>current.parent).initializer === current;
+
+                    if (initializerOfNonStaticProperty) {
+                        return true;
+                    }
+
+                    current = current.parent;
+                }
+                return false;
+            }
         }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
@@ -649,67 +679,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
-            // first check if usage is lexically located after the declaration
-            let isUsedBeforeDeclaration = false;
-            switch (getRelativeLocation(declaration, errorLocation)) {
-                case RelativeLocation.DifferentFilesLocatedBefore:
-                    isUsedBeforeDeclaration = true;
-                    break;
-                case RelativeLocation.SameFileLocatedBefore:
-                    // try to detect if forward reference to block scoped variable is inside function
-                    // such forward references are permitted (they are still technically can be incorrect (i.e. in case of IIFEs) 
-                    // but detecting these case is more complicated task)  
-                    const declarationContainer = getEnclosingBlockScopeContainer(declaration);
-                    let current = errorLocation;
-                    while (current) {
-                        if (current === declarationContainer) {
-                            isUsedBeforeDeclaration = true;
-                            break;
-                        }
-
-                        if (isFunctionLike(current)) {
-                            break;
-                        }
-
-                        const isInitializerOfNonStaticProperty =
-                            current.parent &&
-                            current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                            (current.parent.flags & NodeFlags.Static) === 0 &&
-                            (<PropertyDeclaration>current.parent).initializer === current;
-
-                        if (isInitializerOfNonStaticProperty) {
-                            break;
-                        }
-                        current = current.parent;
-                    }
-                    break;
-                case RelativeLocation.SameFileLocatedAfter:
-                    // lexical check succeeded however code still can be illegal.
-                    // - block scoped variables cannot be used in its initializers
-                    //   let x = x; // illegal but usage is lexically after definition
-                    // - in ForIn/ForOf statements variable cannot be contained in expression part
-                    //   for (let x in x)
-                    //   for (let x of x)
-
-                    // climb up to the variable declaration skipping binding patterns
-                    let variableDeclaration = <VariableDeclaration>getAncestor(declaration, SyntaxKind.VariableDeclaration);
-                    let container = getEnclosingBlockScopeContainer(variableDeclaration);
-
-                    if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
-                        variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                        // variable statement/for statement case,
-                        // use site should not be inside variable declaration (initializer of declaration or binding element)
-                        isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
-                    }
-                    else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
-                        variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                        // ForIn/ForOf case - use site should not be used in expression part
-                        let expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
-                        isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
-                    }
-                    break;
-            }
-            if (isUsedBeforeDeclaration) {
+            if (!isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
         }
@@ -13233,6 +13203,8 @@ namespace ts {
             let nodeLinks = getNodeLinks(node);
 
             if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
+                nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
+
                 let enumSymbol = getSymbolOfNode(node);
                 let enumType = getDeclaredTypeOfSymbol(enumSymbol);
                 let autoValue = 0; // set to undefined when enum member is non-constant
@@ -13270,8 +13242,6 @@ namespace ts {
                         getNodeLinks(member).enumMemberValue = autoValue++;
                     }
                 }
-
-                nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             }
 
             function computeConstantValueForEnumMemberInitializer(initializer: Expression, enumType: Type, enumIsConst: boolean, ambient: boolean): number {
@@ -13411,12 +13381,13 @@ namespace ts {
                             }
 
                             // illegal case: forward reference
-                            if (isLocatedBefore(propertyDecl, member)) {
+                            if (!isBlockScopedNameDeclaredBeforeUse(propertyDecl, member)) {
                                 reportError = false;
                                 error(e, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                                 return undefined;
                             }
 
+                            computeEnumMemberValues(<EnumDeclaration>propertyDecl.parent);
                             return <number>getNodeLinks(propertyDecl).enumMemberValue;
                     }
                 }

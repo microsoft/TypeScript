@@ -1,8 +1,18 @@
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(53,20): error TS2448: Block-scoped variable 'x' used before its declaration.
-tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(60,20): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(2,13): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(58,20): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(65,20): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: Block-scoped variable 'x' used before its declaration.
+tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(105,20): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 
 
-==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (2 errors) ====
+==== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts (5 errors) ====
+    function foo0() {
+        let a = x;
+                ~
+!!! error TS2448: Block-scoped variable 'x' used before its declaration.
+        let x;
+    }
+    
     function foo1() {
         let a = () => x;
         let x;
@@ -91,3 +101,30 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(60,20): error TS2448: B
         }
         let x;
     }
+    
+    function foo13() {
+        let a = {
+            get a() { return x } 
+        }
+        let x
+    }
+    
+    function foo14() {
+        let a = {
+            a: x 
+               ~
+!!! error TS2448: Block-scoped variable 'x' used before its declaration.
+        }
+        let x
+    }
+    
+    const enum A { X = B.Y }
+                       ~~~
+!!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
+    
+    const enum B { Y }
+    
+    function foo15() {
+        const enum A1 { X = B1.Y }
+    }
+    const enum B1 { Y }

@@ -1,3 +1,9 @@
+// @target: ES5
+function foo0() {
+    let a = x;
+    let x;
+}
+
 function foo1() {
     let a = () => x;
     let x;
@@ -82,3 +88,26 @@ function foo12() {
     }
     let x;
 }
+
+function foo13() {
+    let a = {
+        get a() { return x } 
+    }
+    let x
+}
+
+function foo14() {
+    let a = {
+        a: x 
+    }
+    let x
+}
+
+const enum A { X = B.Y }
+
+const enum B { Y }
+
+function foo15() {
+    const enum A1 { X = B1.Y }
+}
+const enum B1 { Y }
