@@ -2891,7 +2891,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                                error(node, Diagnostics.An_interface_can_only_extend_a_class_or_another_interface);
                             }
                         }
                     }
@@ -4940,7 +4940,7 @@ namespace ts {
                             // Use this property as the error node as this will be more helpful in
                             // reasoning about what went wrong.
                             errorNode = prop.valueDeclaration;
-                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                            reportError(Diagnostics.Object_literal_can_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                         symbolToString(prop),
                                         typeToString(target));
                         }
@@ -7363,7 +7363,7 @@ namespace ts {
                             prop.flags |= impliedProp.flags & SymbolFlags.Optional;
                         }
                         else if (!compilerOptions.suppressExcessPropertyErrors) {
-                            error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                            error(memberDecl.name, Diagnostics.Object_literal_can_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                 symbolToString(member), typeToString(contextualType));
                         }
                     }
@@ -7731,7 +7731,7 @@ namespace ts {
                 }
                 // More than one property on ElementAttributesProperty is an error
                 else {
-                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
+                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_cannot_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
                     return undefined;
                 }
             }
@@ -9099,7 +9099,7 @@ namespace ts {
                 // The unknownType indicates that an error already occured (and was reported).  No
                 // need to report another error in this case.
                 if (funcType !== unknownType && node.typeArguments) {
-                    error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
+                    error(node, Diagnostics.Untyped_function_calls_cannot_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
             }
@@ -9154,7 +9154,7 @@ namespace ts {
             // list and the result of the operation is of type Any.
             if (isTypeAny(expressionType)) {
                 if (node.typeArguments) {
-                    error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
+                    error(node, Diagnostics.Untyped_function_calls_cannot_accept_type_arguments);
                 }
                 return resolveUntypedCall(node);
             }
@@ -12918,7 +12918,7 @@ namespace ts {
                                 checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(t, type.thisType), node.name || node, Diagnostics.Class_0_incorrectly_implements_interface_1);
                             }
                             else {
-                                error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
+                                error(typeRefNode, Diagnostics.A_class_can_only_implement_another_class_or_interface);
                             }
                         }
                     }
@@ -15160,7 +15160,7 @@ namespace ts {
                 return grammarErrorOnNode(lastDeclare, Diagnostics.A_0_modifier_cannot_be_used_with_an_import_declaration, "declare");
             }
             else if (node.kind === SyntaxKind.Parameter && (flags & NodeFlags.AccessibilityModifier) && isBindingPattern((<ParameterDeclaration>node).name)) {
-                return grammarErrorOnNode(node, Diagnostics.A_parameter_property_may_not_be_a_binding_pattern);
+                return grammarErrorOnNode(node, Diagnostics.A_parameter_property_cannot_be_a_binding_pattern);
             }
             if (flags & NodeFlags.Async) {
                 return checkGrammarAsyncModifier(node, lastAsync);

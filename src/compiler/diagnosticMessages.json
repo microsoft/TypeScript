@@ -551,7 +551,7 @@
         "category": "Error",
         "code": 1186
     },
-    "A parameter property may not be a binding pattern.": {
+    "A parameter property cannot be a binding pattern.": {
         "category": "Error",
         "code": 1187
     },
@@ -832,7 +832,7 @@
         "category": "Error",
         "code": 2310
     },
-    "An interface may only extend a class or another interface.": {
+    "An interface can only extend a class or another interface.": {
         "category": "Error",
         "code": 2312
     },
@@ -964,7 +964,7 @@
         "category": "Error",
         "code": 2346
     },
-    "Untyped function calls may not accept type arguments.": {
+    "Untyped function calls cannot accept type arguments.": {
         "category": "Error",
         "code": 2347
     },
@@ -988,7 +988,7 @@
         "category": "Error",
         "code": 2352
     },
-    "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
+    "Object literal can only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
         "code": 2353
     },
@@ -1232,7 +1232,7 @@
         "category": "Error",
         "code": 2420
     },
-    "A class may only implement another class or interface.": {
+    "A class can only implement another class or interface.": {
         "category": "Error",
         "code": 2422
     },
@@ -1656,7 +1656,7 @@
         "category": "Error",
         "code": 2607
     },
-    "The global type 'JSX.{0}' may not have more than one property": {
+    "The global type 'JSX.{0}' cannot have more than one property": {
         "category": "Error",
         "code": 2608
     },
