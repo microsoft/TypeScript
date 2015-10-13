@@ -412,7 +412,7 @@ namespace ts {
                 return origin.pos > target.pos ? RelativeLocation.SameFileLocatedBefore : RelativeLocation.SameFileLocatedAfter;
             }
 
-            if (!compilerOptions.outFile && !compilerOptions.out) {
+            if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
                 // nodes are in different files and order cannot be determines
                 return RelativeLocation.Unknown;
             }
@@ -666,7 +666,18 @@ namespace ts {
                             isUsedBeforeDeclaration = true;
                             break;
                         }
-                        else if (isFunctionLike(current)) {
+
+                        if (isFunctionLike(current)) {
+                            break;
+                        }
+
+                        const isInitializerOfNonStaticProperty =
+                            current.parent &&
+                            current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                            (current.parent.flags & NodeFlags.Static) === 0 &&
+                            (<PropertyDeclaration>current.parent).initializer === current;
+
+                        if (isInitializerOfNonStaticProperty) {
                             break;
                         }
                         current = current.parent;
