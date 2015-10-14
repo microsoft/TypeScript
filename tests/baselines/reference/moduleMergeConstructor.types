@@ -4,7 +4,7 @@ declare module "foo" {
     export class Foo {
 >Foo : Foo
 
-        // constructor(): Foo;
+        constructor();
         method1(): any;
 >method1 : () => any
     }

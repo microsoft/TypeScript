@@ -4,7 +4,7 @@
 
 declare module "foo" {
     export class Foo {
-        // constructor(): Foo;
+        constructor();
         method1(): any;
     }
 }

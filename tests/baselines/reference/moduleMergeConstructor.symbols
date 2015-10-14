@@ -4,9 +4,9 @@ declare module "foo" {
     export class Foo {
 >Foo : Symbol(Foo, Decl(foo.d.ts, 1, 22), Decl(foo-ext.d.ts, 0, 22))
 
-        // constructor(): Foo;
+        constructor();
         method1(): any;
->method1 : Symbol(method1, Decl(foo.d.ts, 2, 22))
+>method1 : Symbol(method1, Decl(foo.d.ts, 3, 22))
     }
 }
 
