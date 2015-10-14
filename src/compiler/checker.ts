@@ -3679,7 +3679,9 @@ namespace ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
+                let classType = declaration.kind === SyntaxKind.Constructor ?
+                    getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
+                    : undefined;
                 let typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 let parameters: Symbol[] = [];
