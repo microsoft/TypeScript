@@ -833,15 +833,13 @@ namespace ts {
         }
     }
 
-    export function arrayStructurallyIsEqualTo<T>(array1: Array<T>, array2: Array<T>): boolean {
-        if (!array1 || !array2) {
-            return false;
+    export function copyListRemovingItem<T>(item: T, list: T[]) {		
+        let copiedList: T[] = [];
+        for (var i = 0, len = list.length; i < len; i++) {
+            if (list[i] != item) {
+                copiedList.push(list[i]);
+            }
         }
-
-        if (array1.length !== array2.length) {
-            return false;
-        }
-
-        return arrayIsEqualTo(array1.sort(), array2.sort());
+        return copiedList;
     }
 }
