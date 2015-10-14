@@ -10,7 +10,7 @@ module ts {
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
 
                 let result = Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type);
-                assert.deepEqual(JSON.parse(result), JSON.parse(expected));
+                assert.equal(result, expected);
             }
 
             function parsesIncorrectly(content: string) {
@@ -24,8 +24,7 @@ module ts {
                         `{
     "kind": "JSDocUnknownType",
     "pos": 1,
-    "end": 2,
-    "transformFlags": 0
+    "end": 2
 }`);
                 });
 
@@ -34,8 +33,7 @@ module ts {
                         `{
     "kind": "JSDocAllType",
     "pos": 1,
-    "end": 2,
-    "transformFlags": 0
+    "end": 2
 }`);
                 });
 
@@ -45,12 +43,10 @@ module ts {
     "kind": "JSDocNullableType",
     "pos": 1,
     "end": 8,
-    "transformFlags": 0,
     "type": {
         "kind": "NumberKeyword",
         "pos": 2,
-        "end": 8,
-        "transformFlags": 0
+        "end": 8
     }
 }`)
                 });
@@ -61,12 +57,10 @@ module ts {
     "kind": "JSDocNullableType",
     "pos": 1,
     "end": 8,
-    "transformFlags": 0,
     "type": {
         "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7,
-        "transformFlags": 0
+        "end": 7
     }
 }`)
                 });
@@ -77,12 +71,10 @@ module ts {
     "kind": "JSDocNonNullableType",
     "pos": 1,
     "end": 8,
-    "transformFlags": 0,
     "type": {
         "kind": "NumberKeyword",
         "pos": 2,
-        "end": 8,
-        "transformFlags": 0
+        "end": 8
     }
 }`)
                 });
@@ -93,12 +85,10 @@ module ts {
     "kind": "JSDocNonNullableType",
     "pos": 1,
     "end": 8,
-    "transformFlags": 0,
     "type": {
         "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7,
-        "transformFlags": 0
+        "end": 7
     }
 }`)
                 });
@@ -109,7 +99,6 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 3,
-    "transformFlags": 0,
     "members": {
         "length": 0,
         "pos": 2,
@@ -124,18 +113,15 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 6,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 5,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
-                "transformFlags": 0,
                 "text": "foo"
             }
         },
@@ -152,25 +138,21 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 14,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 13,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
-                "transformFlags": 0,
                 "text": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
                 "pos": 6,
-                "end": 13,
-                "transformFlags": 0
+                "end": 13
             }
         },
         "length": 1,
@@ -186,18 +168,15 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 11,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 5,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
-                "transformFlags": 0,
                 "text": "foo"
             }
         },
@@ -205,12 +184,10 @@ module ts {
             "kind": "JSDocRecordMember",
             "pos": 6,
             "end": 10,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 6,
                 "end": 10,
-                "transformFlags": 0,
                 "text": "bar"
             }
         },
@@ -227,37 +204,31 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 19,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 13,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
-                "transformFlags": 0,
                 "text": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
                 "pos": 6,
-                "end": 13,
-                "transformFlags": 0
+                "end": 13
             }
         },
         "1": {
             "kind": "JSDocRecordMember",
             "pos": 14,
             "end": 18,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
                 "end": 18,
-                "transformFlags": 0,
                 "text": "bar"
             }
         },
@@ -274,18 +245,15 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 19,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 5,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
-                "transformFlags": 0,
                 "text": "foo"
             }
         },
@@ -293,19 +261,16 @@ module ts {
             "kind": "JSDocRecordMember",
             "pos": 6,
             "end": 18,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 6,
                 "end": 10,
-                "transformFlags": 0,
                 "text": "bar"
             },
             "type": {
                 "kind": "NumberKeyword",
                 "pos": 11,
-                "end": 18,
-                "transformFlags": 0
+                "end": 18
             }
         },
         "length": 2,
@@ -321,44 +286,37 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 27,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 13,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 5,
-                "transformFlags": 0,
                 "text": "foo"
             },
             "type": {
                 "kind": "NumberKeyword",
                 "pos": 6,
-                "end": 13,
-                "transformFlags": 0
+                "end": 13
             }
         },
         "1": {
             "kind": "JSDocRecordMember",
             "pos": 14,
             "end": 26,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
                 "end": 18,
-                "transformFlags": 0,
                 "text": "bar"
             },
             "type": {
                 "kind": "NumberKeyword",
                 "pos": 19,
-                "end": 26,
-                "transformFlags": 0
+                "end": 26
             }
         },
         "length": 2,
@@ -374,18 +332,15 @@ module ts {
     "kind": "JSDocRecordType",
     "pos": 1,
     "end": 11,
-    "transformFlags": 0,
     "members": {
         "0": {
             "kind": "JSDocRecordMember",
             "pos": 2,
             "end": 10,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,
                 "end": 10,
-                "transformFlags": 0,
                 "originalKeywordKind": "FunctionKeyword",
                 "text": "function"
             }
@@ -403,19 +358,16 @@ module ts {
     "kind": "JSDocUnionType",
     "pos": 1,
     "end": 16,
-    "transformFlags": 0,
     "types": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "transformFlags": 0
+            "end": 8
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 9,
-            "end": 15,
-            "transformFlags": 0
+            "end": 15
         },
         "length": 2,
         "pos": 2,
@@ -430,19 +382,16 @@ module ts {
     "kind": "JSDocUnionType",
     "pos": 1,
     "end": 14,
-    "transformFlags": 0,
     "types": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 1,
-            "end": 7,
-            "transformFlags": 0
+            "end": 7
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 8,
-            "end": 14,
-            "transformFlags": 0
+            "end": 14
         },
         "length": 2,
         "pos": 1,
@@ -457,7 +406,6 @@ module ts {
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 11,
-    "transformFlags": 0,
     "parameters": {
         "length": 0,
         "pos": 10,
@@ -472,30 +420,25 @@ module ts {
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 26,
-    "transformFlags": 0,
     "parameters": {
         "0": {
             "kind": "Parameter",
             "pos": 10,
             "end": 16,
-            "transformFlags": 0,
             "type": {
                 "kind": "StringKeyword",
                 "pos": 10,
-                "end": 16,
-                "transformFlags": 0
+                "end": 16
             }
         },
         "1": {
             "kind": "Parameter",
             "pos": 17,
             "end": 25,
-            "transformFlags": 0,
             "type": {
                 "kind": "BooleanKeyword",
                 "pos": 17,
-                "end": 25,
-                "transformFlags": 0
+                "end": 25
             }
         },
         "length": 2,
@@ -511,30 +454,25 @@ module ts {
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 26,
-    "transformFlags": 0,
     "parameters": {
         "0": {
             "kind": "Parameter",
             "pos": 10,
             "end": 16,
-            "transformFlags": 0,
             "type": {
                 "kind": "StringKeyword",
                 "pos": 10,
-                "end": 16,
-                "transformFlags": 0
+                "end": 16
             }
         },
         "1": {
             "kind": "Parameter",
             "pos": 17,
             "end": 25,
-            "transformFlags": 0,
             "type": {
                 "kind": "BooleanKeyword",
                 "pos": 17,
-                "end": 25,
-                "transformFlags": 0
+                "end": 25
             }
         },
         "length": 2,
@@ -550,29 +488,24 @@ module ts {
     "kind": "JSDocThisType",
     "pos": 1,
     "end": 9,
-    "transformFlags": 0,
     "type": {
         "kind": "JSDocTypeReference",
         "pos": 6,
         "end": 9,
-        "transformFlags": 0,
         "name": {
             "kind": "FirstNode",
             "pos": 6,
             "end": 9,
-            "transformFlags": 0,
             "left": {
                 "kind": "Identifier",
                 "pos": 6,
                 "end": 7,
-                "transformFlags": 0,
                 "text": "a"
             },
             "right": {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 9,
-                "transformFlags": 0,
                 "text": "b"
             }
         }
@@ -586,29 +519,24 @@ module ts {
     "kind": "JSDocConstructorType",
     "pos": 1,
     "end": 8,
-    "transformFlags": 0,
     "type": {
         "kind": "JSDocTypeReference",
         "pos": 5,
         "end": 8,
-        "transformFlags": 0,
         "name": {
             "kind": "FirstNode",
             "pos": 5,
             "end": 8,
-            "transformFlags": 0,
             "left": {
                 "kind": "Identifier",
                 "pos": 5,
                 "end": 6,
-                "transformFlags": 0,
                 "text": "a"
             },
             "right": {
                 "kind": "Identifier",
                 "pos": 7,
                 "end": 8,
-                "transformFlags": 0,
                 "text": "b"
             }
         }
@@ -622,12 +550,10 @@ module ts {
     "kind": "JSDocVariadicType",
     "pos": 1,
     "end": 10,
-    "transformFlags": 0,
     "type": {
         "kind": "NumberKeyword",
         "pos": 4,
-        "end": 10,
-        "transformFlags": 0
+        "end": 10
     }
 }`);
                 });
@@ -638,12 +564,10 @@ module ts {
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 8,
-    "transformFlags": 0,
     "type": {
         "kind": "NumberKeyword",
         "pos": 1,
-        "end": 7,
-        "transformFlags": 0
+        "end": 7
     }
 }`);
                 });
@@ -654,12 +578,10 @@ module ts {
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 3,
-    "transformFlags": 0,
     "type": {
         "kind": "JSDocUnknownType",
         "pos": 1,
-        "end": 2,
-        "transformFlags": 0
+        "end": 2
     }
 }`);
                 });
@@ -670,20 +592,17 @@ module ts {
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 11,
-    "transformFlags": 0,
     "name": {
         "kind": "Identifier",
         "pos": 1,
         "end": 2,
-        "transformFlags": 0,
         "text": "a"
     },
     "typeArguments": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 4,
-            "end": 10,
-            "transformFlags": 0
+            "end": 10
         },
         "length": 1,
         "pos": 4,
@@ -698,26 +617,22 @@ module ts {
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 18,
-    "transformFlags": 0,
     "name": {
         "kind": "Identifier",
         "pos": 1,
         "end": 2,
-        "transformFlags": 0,
         "text": "a"
     },
     "typeArguments": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 4,
-            "end": 10,
-            "transformFlags": 0
+            "end": 10
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 11,
-            "end": 17,
-            "transformFlags": 0
+            "end": 17
         },
         "length": 2,
         "pos": 4,
@@ -732,24 +647,20 @@ module ts {
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 11,
-    "transformFlags": 0,
     "name": {
         "kind": "FirstNode",
         "pos": 1,
         "end": 11,
-        "transformFlags": 0,
         "left": {
             "kind": "Identifier",
             "pos": 1,
             "end": 2,
-            "transformFlags": 0,
             "text": "a"
         },
         "right": {
             "kind": "Identifier",
             "pos": 3,
             "end": 11,
-            "transformFlags": 0,
             "originalKeywordKind": "FunctionKeyword",
             "text": "function"
         }
@@ -764,17 +675,14 @@ module ts {
     "kind": "JSDocArrayType",
     "pos": 1,
     "end": 4,
-    "transformFlags": 0,
     "elementType": {
         "kind": "JSDocTypeReference",
         "pos": 1,
         "end": 2,
-        "transformFlags": 0,
         "name": {
             "kind": "Identifier",
             "pos": 1,
             "end": 2,
-            "transformFlags": 0,
             "text": "a"
         }
     }
@@ -788,22 +696,18 @@ module ts {
     "kind": "JSDocArrayType",
     "pos": 1,
     "end": 6,
-    "transformFlags": 0,
     "elementType": {
         "kind": "JSDocArrayType",
         "pos": 1,
         "end": 4,
-        "transformFlags": 0,
         "elementType": {
             "kind": "JSDocTypeReference",
             "pos": 1,
             "end": 2,
-            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 1,
                 "end": 2,
-                "transformFlags": 0,
                 "text": "a"
             }
         }
@@ -818,27 +722,22 @@ module ts {
     "kind": "JSDocOptionalType",
     "pos": 1,
     "end": 7,
-    "transformFlags": 0,
     "type": {
         "kind": "JSDocArrayType",
         "pos": 1,
         "end": 6,
-        "transformFlags": 0,
         "elementType": {
             "kind": "JSDocArrayType",
             "pos": 1,
             "end": 4,
-            "transformFlags": 0,
             "elementType": {
                 "kind": "JSDocTypeReference",
                 "pos": 1,
                 "end": 2,
-                "transformFlags": 0,
                 "name": {
                     "kind": "Identifier",
                     "pos": 1,
                     "end": 2,
-                    "transformFlags": 0,
                     "text": "a"
                 }
             }
@@ -854,12 +753,10 @@ module ts {
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 4,
-    "transformFlags": 0,
     "name": {
         "kind": "Identifier",
         "pos": 1,
         "end": 4,
-        "transformFlags": 0,
         "originalKeywordKind": "VarKeyword",
         "text": "var"
     }
@@ -873,12 +770,10 @@ module ts {
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 5,
-    "transformFlags": 0,
     "name": {
         "kind": "Identifier",
         "pos": 1,
         "end": 5,
-        "transformFlags": 0,
         "originalKeywordKind": "NullKeyword",
         "text": "null"
     }
@@ -892,12 +787,10 @@ module ts {
     "kind": "JSDocTypeReference",
     "pos": 1,
     "end": 10,
-    "transformFlags": 0,
     "name": {
         "kind": "Identifier",
         "pos": 1,
         "end": 10,
-        "transformFlags": 0,
         "text": "undefined"
     }
 }`);
@@ -910,7 +803,6 @@ module ts {
     "kind": "JSDocTupleType",
     "pos": 1,
     "end": 3,
-    "transformFlags": 0,
     "types": {
         "length": 0,
         "pos": 2,
@@ -926,13 +818,11 @@ module ts {
     "kind": "JSDocTupleType",
     "pos": 1,
     "end": 9,
-    "transformFlags": 0,
     "types": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "transformFlags": 0
+            "end": 8
         },
         "length": 1,
         "pos": 2,
@@ -948,19 +838,16 @@ module ts {
     "kind": "JSDocTupleType",
     "pos": 1,
     "end": 16,
-    "transformFlags": 0,
     "types": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "transformFlags": 0
+            "end": 8
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 9,
-            "end": 15,
-            "transformFlags": 0
+            "end": 15
         },
         "length": 2,
         "pos": 2,
@@ -976,25 +863,21 @@ module ts {
     "kind": "JSDocTupleType",
     "pos": 1,
     "end": 24,
-    "transformFlags": 0,
     "types": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8,
-            "transformFlags": 0
+            "end": 8
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 9,
-            "end": 15,
-            "transformFlags": 0
+            "end": 15
         },
         "2": {
             "kind": "BooleanKeyword",
             "pos": 16,
-            "end": 23,
-            "transformFlags": 0
+            "end": 23
         },
         "length": 3,
         "pos": 2,
@@ -1109,8 +992,8 @@ module ts {
                         ? JSON.parse(Utils.sourceFileToJSON(v))
                         : v;
                 }, "    ");
-                
-                assert.deepEqual(JSON.parse(result), JSON.parse(expected));
+
+                assert.equal(result, expected);
             }
 
             function parsesIncorrectly(content: string) {
@@ -1134,7 +1017,7 @@ module ts {
                 it("multipleTypes", () => {
                     parsesIncorrectly(
 `/**
-  * @type {number} 
+  * @type {number}
   * @type {string}
   */`);
                 });
@@ -1171,7 +1054,7 @@ module ts {
                 it("paramWithoutTypeOrName", () => {
                     parsesIncorrectly(
 `/**
-  * @param 
+  * @param
   */`);
                 });
             });
@@ -1186,13 +1069,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 27,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1202,19 +1083,16 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 13,
-                "transformFlags": 0,
                 "text": "type"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 14,
                 "end": 22,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 15,
-                    "end": 21,
-                    "transformFlags": 0
+                    "end": 21
                 }
             }
         },
@@ -1234,13 +1112,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 18,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 13,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1250,7 +1126,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 13,
-                "transformFlags": 0,
                 "text": "type"
             }
         },
@@ -1270,13 +1145,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 20,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 15,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1286,7 +1159,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
-                "transformFlags": 0,
                 "text": "return"
             }
         },
@@ -1306,13 +1178,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 27,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1322,19 +1192,16 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 13,
-                "transformFlags": 0,
                 "text": "type"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 14,
                 "end": 22,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 15,
-                    "end": 21,
-                    "transformFlags": 0
+                    "end": 21
                 }
             }
         },
@@ -1354,13 +1221,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 27,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1370,19 +1235,16 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 13,
-                "transformFlags": 0,
                 "text": "type"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 14,
                 "end": 22,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 15,
-                    "end": 21,
-                    "transformFlags": 0
+                    "end": 21
                 }
             }
         },
@@ -1402,13 +1264,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 29,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 24,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1418,19 +1278,16 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
-                "transformFlags": 0,
                 "text": "return"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 16,
                 "end": 24,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 17,
-                    "end": 23,
-                    "transformFlags": 0
+                    "end": 23
                 }
             }
         },
@@ -1450,13 +1307,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 54,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 24,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1466,19 +1321,16 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
-                "transformFlags": 0,
                 "text": "return"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 16,
                 "end": 24,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 17,
-                    "end": 23,
-                    "transformFlags": 0
+                    "end": 23
                 }
             }
         },
@@ -1498,13 +1350,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 30,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 25,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1514,19 +1364,16 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 16,
-                "transformFlags": 0,
                 "text": "returns"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 17,
                 "end": 25,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 18,
-                    "end": 24,
-                    "transformFlags": 0
+                    "end": 24
                 }
             }
         },
@@ -1546,13 +1393,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 34,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 29,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1562,26 +1407,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "transformFlags": 0
+                    "end": 22
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "transformFlags": 0,
                 "text": "name1"
             }
         },
@@ -1602,13 +1443,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 60,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 29,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1618,26 +1457,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "transformFlags": 0
+                    "end": 22
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "transformFlags": 0,
                 "text": "name1"
             }
         },
@@ -1645,7 +1480,6 @@ module ts {
             "kind": "JSDocParameterTag",
             "pos": 34,
             "end": 55,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 34,
@@ -1655,26 +1489,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 35,
                 "end": 40,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 41,
                 "end": 49,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 42,
-                    "end": 48,
-                    "transformFlags": 0
+                    "end": 48
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 50,
                 "end": 55,
-                "transformFlags": 0,
                 "text": "name2"
             }
         },
@@ -1694,13 +1524,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 59,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 29,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1710,26 +1538,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "transformFlags": 0
+                    "end": 22
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "transformFlags": 0,
                 "text": "name1"
             }
         },
@@ -1749,13 +1573,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 61,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 30,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1765,26 +1587,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "transformFlags": 0
+                    "end": 22
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 25,
                 "end": 30,
-                "transformFlags": 0,
                 "text": "name1"
             },
             "isBracketed": true
@@ -1805,13 +1623,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 66,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 31,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1821,26 +1637,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "transformFlags": 0
+                    "end": 22
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 26,
                 "end": 31,
-                "transformFlags": 0,
                 "text": "name1"
             },
             "isBracketed": true
@@ -1861,13 +1673,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 56,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 29,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1877,26 +1687,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22,
-                    "transformFlags": 0
+                    "end": 22
                 }
             },
             "postParameterName": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
-                "transformFlags": 0,
                 "text": "name1"
             }
         },
@@ -1916,13 +1722,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 34,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 29,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1932,26 +1736,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
-                "transformFlags": 0,
                 "text": "name1"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 21,
                 "end": 29,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 22,
-                    "end": 28,
-                    "transformFlags": 0
+                    "end": 28
                 }
             }
         },
@@ -1971,13 +1771,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 46,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 29,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -1987,26 +1785,22 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
-                "transformFlags": 0,
                 "text": "name1"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 21,
                 "end": 29,
-                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 22,
-                    "end": 28,
-                    "transformFlags": 0
+                    "end": 28
                 }
             }
         },
@@ -2026,13 +1820,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 24,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 19,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2042,7 +1834,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "transformFlags": 0,
                 "text": "template"
             },
             "typeParameters": {
@@ -2050,12 +1841,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "transformFlags": 0,
                         "text": "T"
                     }
                 },
@@ -2080,13 +1869,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 26,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 21,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2096,7 +1883,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "transformFlags": 0,
                 "text": "template"
             },
             "typeParameters": {
@@ -2104,12 +1890,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "transformFlags": 0,
                         "text": "K"
                     }
                 },
@@ -2117,12 +1901,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 20,
                     "end": 21,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 20,
                         "end": 21,
-                        "transformFlags": 0,
                         "text": "V"
                     }
                 },
@@ -2147,13 +1929,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 27,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 22,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2163,7 +1943,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "transformFlags": 0,
                 "text": "template"
             },
             "typeParameters": {
@@ -2171,12 +1950,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "transformFlags": 0,
                         "text": "K"
                     }
                 },
@@ -2184,12 +1961,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 21,
                     "end": 22,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 21,
                         "end": 22,
-                        "transformFlags": 0,
                         "text": "V"
                     }
                 },
@@ -2214,13 +1989,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 27,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 22,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2230,7 +2003,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "transformFlags": 0,
                 "text": "template"
             },
             "typeParameters": {
@@ -2238,12 +2010,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "transformFlags": 0,
                         "text": "K"
                     }
                 },
@@ -2251,12 +2021,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 21,
                     "end": 22,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 21,
                         "end": 22,
-                        "transformFlags": 0,
                         "text": "V"
                     }
                 },
@@ -2281,13 +2049,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 28,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 23,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2297,7 +2063,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "transformFlags": 0,
                 "text": "template"
             },
             "typeParameters": {
@@ -2305,12 +2070,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "transformFlags": 0,
                         "text": "K"
                     }
                 },
@@ -2318,12 +2081,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 22,
                     "end": 23,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 22,
                         "end": 23,
-                        "transformFlags": 0,
                         "text": "V"
                     }
                 },
@@ -2348,13 +2109,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 60,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 24,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2364,7 +2123,6 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "transformFlags": 0,
                 "text": "template"
             },
             "typeParameters": {
@@ -2372,12 +2130,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "transformFlags": 0,
                         "text": "K"
                     }
                 },
@@ -2385,12 +2141,10 @@ module ts {
                     "kind": "TypeParameter",
                     "pos": 22,
                     "end": 23,
-                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 22,
                         "end": 23,
-                        "transformFlags": 0,
                         "text": "V"
                     }
                 },
@@ -2415,13 +2169,11 @@ module ts {
     "kind": "JSDocComment",
     "pos": 0,
     "end": 23,
-    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 18,
-            "transformFlags": 0,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -2431,14 +2183,12 @@ module ts {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
-                "transformFlags": 0,
                 "text": "param"
             },
             "preParameterName": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,
-                "transformFlags": 0,
                 "text": "foo"
             }
         },
