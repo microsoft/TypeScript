@@ -3854,6 +3854,13 @@ namespace ts {
                     }
                 }
                 else {
+                    if (declaration.parserContextFlags & ParserContextFlags.JavaScriptFile) {
+                        let type = getReturnTypeFromJSDocComment(declaration);
+                        if (type && type !== unknownType) {
+                            returnType = type;
+                        }
+                    }
+
                     // TypeScript 1.0 spec (April 2014):
                     // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
                     if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
@@ -9712,7 +9719,7 @@ namespace ts {
             }
         }
 
-        function getReturnTypeFromJSDocComment(func: FunctionLikeDeclaration): Type {
+        function getReturnTypeFromJSDocComment(func: SignatureDeclaration|FunctionDeclaration): Type {
             let returnTag = getJSDocReturnTag(func);
             if (returnTag) {
                 return getTypeFromTypeNode(returnTag.typeExpression.type);
@@ -9733,13 +9740,6 @@ namespace ts {
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
             let type: Type;
-            if (func.parserContextFlags & ParserContextFlags.JavaScriptFile) {
-                type = getReturnTypeFromJSDocComment(func);
-                if (type && type !== unknownType) {
-                    return type;
-                }
-            }
-
             let contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
