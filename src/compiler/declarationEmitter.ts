@@ -184,7 +184,7 @@ namespace ts {
             referencePathsOutput,
         };
         
-        function emitFlattenedTypeDefinitions(entrypoint: SourceFile) {
+        function emitFlattenedTypeDefinitions(entrypoint: SourceFile): void {
             let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
             let types = collectExportedTypes(entrypoint, exportedMembers);
             let dependentTypes = collectDependentTypes(types);
@@ -207,6 +207,8 @@ namespace ts {
                 symbolGeneratedNameMap[id] = name;
             };
             let createDefaultExportAlias = (): string => undefined;
+            let reentry: SourceFile;
+            let exportEquals: Type;
             forEach(aliasMapping, (type, index) => {
                 if (!type) {
                     return;
@@ -214,8 +216,14 @@ namespace ts {
                 let exportedSymbol = exportedMembers[index];
                 let symbol = type.symbol;
                 if (symbol) { // use the name from the exported symbol, but the id from the internal one
-                    if (exportedSymbol.name === "default") {
-                        createDefaultExportAlias = () => {
+                    if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.SourceFile) { // export= import case (effectively entrypoint redirection)
+                        reentry = symbol.valueDeclaration as SourceFile;
+                    }
+                    else if (exportedSymbol.name === "export=") { // Special case all the things
+                        exportEquals = type;
+                    }
+                    else if (exportedSymbol.name === "default") {
+                        createDefaultExportAlias = () => { // delay making the alias until after all exported names are collected
                             let name = "default_1";
                             while (!!symbolNameSet[name]) {
                                 name += "_1";
@@ -234,6 +242,9 @@ namespace ts {
                     }
                 }
             });
+            if (reentry) {
+                return emitFlattenedTypeDefinitions(reentry);
+            }
             forEachValue(dependentTypes, type => {
                 let symbol = type.symbol;
                 if (symbol.name in symbolNameSet) {
@@ -284,11 +295,18 @@ namespace ts {
                 forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/false));
                 currentSourceFile = realSourceFile;
             });
-            forEachValue(types, type => {
-                let realSourceFile = currentSourceFile;
-                forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
-                currentSourceFile = realSourceFile;
-            });
+            if (exportEquals) {
+                forEach(exportEquals.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/false));
+                writeLine();
+                write(`export = ${exportEquals.symbol.name};`);
+            }
+            else {
+                forEachValue(types, type => {
+                    let realSourceFile = currentSourceFile;
+                    forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
+                    currentSourceFile = realSourceFile;
+                });
+            }
             if (alias) {
                 writeLine();
                 write(`export default ${alias};`);
