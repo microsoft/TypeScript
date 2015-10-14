@@ -10770,6 +10770,7 @@ namespace ts {
 
             let symbol = getSymbolOfNode(node);
             let firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+
             // Only type check the symbol once
             if (node === firstDeclaration) {
                 checkFunctionOrConstructorSymbol(symbol);
@@ -11782,7 +11783,13 @@ namespace ts {
                 let symbol = getSymbolOfNode(node);
                 let localSymbol = node.localSymbol || symbol;
 
-                let firstDeclaration = getDeclarationOfKind(localSymbol, node.kind);
+                let firstDeclaration = forEach(symbol.declarations, declaration => {
+                    // Get first non javascript function declaration
+                    if (declaration.kind === node.kind && !isJavaScript(getSourceFile(declaration).fileName)) {
+                        return declaration;
+                    }
+                });
+
                 // Only type check the symbol once
                 if (node === firstDeclaration) {
                     checkFunctionOrConstructorSymbol(localSymbol);
