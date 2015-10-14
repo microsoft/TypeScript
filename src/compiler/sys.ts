@@ -274,7 +274,7 @@ namespace ts {
                     startWatchTimer: startWatchTimer,
                     addFile: addFile,
                     removeFile: removeFile
-                }
+                };
             }
 
             // REVIEW: for now this implementation uses polling.
