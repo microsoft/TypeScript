@@ -683,6 +683,11 @@ namespace ts.server {
           * @param info The file that has been closed or newly configured
           */
         closeOpenFile(info: ScriptInfo) {
+            // Closing file should trigger re-reading the file content from disk. This is 
+            // because the user may chose to discard the buffer content before saving 
+            // to the disk, and the server's version of the file can be out of sync.
+            info.svc.reloadFromFile(info.fileName);
+
             var openFileRoots: ScriptInfo[] = [];
             var removedProject: Project;
             for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
