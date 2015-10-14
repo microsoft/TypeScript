@@ -11,12 +11,16 @@ export interface Inner {
 	item4: number;
 }
 
-export {Main as BBaseMain, Main as default, Inner as Middle} from "./b";
-export {Main as CBaseMain, Inner as Innermost} from "./c";
-export {default as Main} from "./a";
+export interface default_1 { // make sure generated names don't clash
+	number: number;
+}
+
+export {default as BBaseMain, Inner as Middle} from "./b";
+export {default as CBaseMain, Inner as Innermost} from "./c";
+export {default} from "./a";
 
 // @Filename: a.ts
-import {Main as BaseMain, Inner as Middle} from "./b";
+import {default as BaseMain, Inner as Middle} from "./b";
 
 export default class Main extends BaseMain {
 	memberc: Middle;
@@ -27,7 +31,7 @@ export interface Inner {
 }
 
 // @Filename: b.ts
-import {Main as BaseMain, Inner as Innermost} from "./c";
+import {default as BaseMain, Inner as Innermost} from "./c";
 
 export default class Main extends BaseMain {
 	member2: Innermost;
