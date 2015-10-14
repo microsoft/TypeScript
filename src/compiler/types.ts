@@ -1779,7 +1779,6 @@ namespace ts {
         importOnRightSide?: Symbol;       // for import declarations - import that appear on the right side
         jsxFlags?: JsxFlags;              // flags for knowning what kind of element/attributes we're dealing with
         resolvedJsxType?: Type;           // resolved element attributes type of a JSX openinglike element
-        resolvedContextualType?: Type;    // Cached contextual type of expression node
     }
 
     export const enum TypeFlags {

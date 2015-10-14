@@ -187,11 +187,6 @@ namespace ts {
             }
         }
 
-        function getAnonymousModuleName(node: Node) {
-            let sourceFileName = removeFileExtension(file.fileName);
-            return `"` + sourceFileName + `"`;
-        }
-
         function getDisplayName(node: Declaration): string {
             return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
         }
@@ -297,7 +292,7 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext || isExportsPropertyAssignment(node) || isModuleExportsAssignment(node)) {
+                if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
                     let exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -1077,10 +1072,7 @@ namespace ts {
         }
 
         function bindCallExpression(node: CallExpression) {
-            if (node.expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>node.expression).text === "require" &&
-                node.arguments.length === 1) {
-
+            if (isRequireCall(node)) {
                 setCommonJsModuleIndicator(node);
             }
         }

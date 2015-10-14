@@ -1043,17 +1043,23 @@ namespace ts {
         return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
     }
 
-    function isCallToNamedFunction(expression: Node, name: string): expression is CallExpression {
+    /**
+     * Returns true if the node is a CallExpression to the identifier 'require' with
+     * exactly one argument.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isRequireCall(expression: Node): expression is CallExpression {
+        // of the form 'require("name")'
         return expression.kind === SyntaxKind.CallExpression &&
                 (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-                (<Identifier>(<CallExpression>expression).expression).text === name;
+                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+                (<CallExpression>expression).arguments.length === 1;
     }
 
-    export function isRequireCall(expression: Node): expression is CallExpression {
-        // of the form 'require("name")' or 'require(arg1, arg2, ...)'
-        return isInJavaScriptFile(expression) && isCallToNamedFunction(expression, "require") && expression.arguments.length >= 1;
-    }
-
+    /**
+     * Returns true if the node is an assignment to a property on the identifier 'exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
     export function isExportsPropertyAssignment(expression: Node): boolean {
         // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
         return isInJavaScriptFile(expression) &&
@@ -1064,6 +1070,10 @@ namespace ts {
             ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
     }
 
+    /**
+     * Returns true if the node is an assignment to the property access expression 'module.exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
     export function isModuleExportsAssignment(expression: Node): boolean {
         // of the form 'module.exports = expr' where 'expr' is arbitrary
         return isInJavaScriptFile(expression) &&
