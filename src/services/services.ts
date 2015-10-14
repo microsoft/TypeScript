@@ -794,6 +794,7 @@ namespace ts {
         public isDefaultLib: boolean;
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
+        public commonJsModuleIndicator: Node; // The first node that causes this file to be a CommonJS module
         public nodeCount: number;
         public identifierCount: number;
         public symbolCount: number;

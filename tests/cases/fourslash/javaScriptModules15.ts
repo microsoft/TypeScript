@@ -1,12 +1,17 @@
 ///<reference path="fourslash.ts" />
 
-// Assignments to 'exports.p' define a property 'p'
+// Assignments to 'exports.p' define a property 'p' even if they're not at top-level
 
 // @allowNonTsExtensions: true
 // @Filename: myMod.js
-//// exports.n = 3;
-//// exports.s = 'foo';
-//// exports.b = true;
+//// if (true) {
+////     exports.b = true;
+//// } else {
+////     exports.n = 3;
+//// }
+//// function fn() {
+////     exports.s = 'foo';
+//// }
 
 // @Filename: consumer.js
 //// var x = require('myMod');

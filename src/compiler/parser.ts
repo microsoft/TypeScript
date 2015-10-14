@@ -5433,9 +5433,6 @@ namespace ts {
                     || node.kind === SyntaxKind.ImportDeclaration
                     || node.kind === SyntaxKind.ExportAssignment
                     || node.kind === SyntaxKind.ExportDeclaration
-                    || (node.kind === SyntaxKind.ExpressionStatement &&
-                            (isExportsPropertyAssignment((<ExpressionStatement>node).expression)) ||
-                             isModuleExportsAssignment((<ExpressionStatement>node).expression))
                     ? node
                     : undefined);
         }

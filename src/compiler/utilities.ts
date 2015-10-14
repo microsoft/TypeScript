@@ -362,6 +362,10 @@ namespace ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isExternalOrCommonJsModule(file: SourceFile): boolean {
+        return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
+    }
+
     export function isDeclarationFile(file: SourceFile): boolean {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }

@@ -364,7 +364,7 @@ namespace ts {
         }
 
         function isGlobalSourceFile(node: Node) {
-            return node.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node);
+            return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
         function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
@@ -480,7 +480,7 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
+                        if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         let moduleExports = getSymbolOfNode(location).exports;
                         if (location.kind === SyntaxKind.SourceFile ||
@@ -1091,7 +1091,15 @@ namespace ts {
                     // CommonJS 'module.exports = expr' assignments
                     let commonJsModuleExports = symbol.exports["__jsExports"];
                     if (commonJsModuleExports) {
-                        result = createSymbolTable(getPropertiesOfType(checkExpression((<BinaryExpression>commonJsModuleExports.declarations[0]).right)));
+                        for (var i = 0; i < commonJsModuleExports.declarations.length; i++) {
+                            let properties = getPropertiesOfType(checkExpression((<BinaryExpression>commonJsModuleExports.declarations[i]).right));
+                            if (i === 0) {
+                                result  = createSymbolTable(properties);
+                            }
+                            else {
+                                mergeSymbolTable(result, createSymbolTable(properties));
+                            }
+                        }
                     }
                 }
             }
@@ -1216,7 +1224,7 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) {
+                        if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                             break;
                         }
                     case SyntaxKind.ModuleDeclaration:
@@ -1398,7 +1406,7 @@ namespace ts {
 
         function hasExternalModuleSymbol(declaration: Node) {
             return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
-                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
+                (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
@@ -2072,7 +2080,7 @@ namespace ts {
                         }
                     }
                     else if (node.kind === SyntaxKind.SourceFile) {
-                        return isExternalModule(<SourceFile>node) ? node : undefined;
+                        return isExternalOrCommonJsModule(<SourceFile>node) ? node : undefined;
                     }
                 }
                 Debug.fail("getContainingModule cant reach here");
@@ -12285,7 +12293,7 @@ namespace ts {
 
             // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
             let parent = getDeclarationContainer(node);
-            if (parent.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>parent)) {
+            if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent)) {
                 // If the declaration happens to be in external module, report error that require and exports are reserved keywords
                 error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
                     declarationNameToString(name), declarationNameToString(name));
@@ -14367,7 +14375,7 @@ namespace ts {
                 forEach(node.statements, checkSourceElement);
                 checkFunctionAndClassExpressionBodies(node);
 
-                if (isExternalModule(node)) {
+                if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
                 }
 
@@ -14470,7 +14478,7 @@ namespace ts {
 
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
-                            if (!isExternalModule(<SourceFile>location)) {
+                            if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                                 break;
                             }
                         case SyntaxKind.ModuleDeclaration:
@@ -15202,7 +15210,7 @@ namespace ts {
 
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
-                if (!isExternalModule(file)) {
+                if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
             });
