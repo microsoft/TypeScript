@@ -230,6 +230,7 @@ namespace ts.server {
             if (scriptInfo) {
                 this.filenameToScript[info.fileName] = undefined;
                 this.roots = copyListRemovingItem(info, this.roots);
+                this.resolvedModuleNames.remove(info.fileName);
             }
         }
 
@@ -557,8 +558,8 @@ namespace ts.server {
 
             this.log("Detected source file changes: " + fileName);
             let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
-            let newRootFiles = ts.map(projectOptions.files, this.getCanonicalFileName);
-            let currentRootFiles = ts.map(project.getRootFiles(), this.getCanonicalFileName);
+            let newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
+            let currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
             if (!arrayStructurallyIsEqualTo(currentRootFiles, newRootFiles)) {
                 // For configured projects, the change is made outside the tsconfig file, and
@@ -673,6 +674,9 @@ namespace ts.server {
             if (!info.isOpen) {
                 this.filenameToScriptInfo[info.fileName] = undefined;
                 var referencingProjects = this.findReferencingProjects(info);
+                if (info.defaultProject) {
+                    info.defaultProject.removeRoot(info);
+                }
                 for (var i = 0, len = referencingProjects.length; i < len; i++) {
                     referencingProjects[i].removeReferencedFile(info);
                 }
@@ -1227,7 +1231,9 @@ namespace ts.server {
 
                     for (let fileName of fileNamesToRemove) {
                         let info = this.getScriptInfo(fileName);
-                        project.removeRoot(info);
+                        if (info) {
+                            project.removeRoot(info);
+                        }
                     }
 
                     for (let fileName of fileNamesToAdd) {
