@@ -343,6 +343,8 @@ declare namespace ts {
         OctalLiteral = 65536,
         Namespace = 131072,
         ExportContext = 262144,
+        InferredClass = 524288,
+        ContainsThis = 1048576,
         Modifier = 2035,
         AccessibilityModifier = 112,
         BlockScoped = 49152,
@@ -438,6 +440,8 @@ declare namespace ts {
     interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
+        equalsToken?: Node;
+        objectAssignmentInitializer?: Expression;
     }
     interface VariableLikeDeclaration extends Declaration {
         propertyName?: Identifier;
@@ -610,7 +614,7 @@ declare namespace ts {
     interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
     }
-    interface PropertyAccessExpression extends MemberExpression {
+    interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         dotToken: Node;
         name: Identifier;
@@ -1082,6 +1086,7 @@ declare namespace ts {
         decreaseIndent(): void;
         clear(): void;
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
     const enum TypeFormatFlags {
         None = 0,
@@ -1202,6 +1207,7 @@ declare namespace ts {
         Instantiated = 131072,
         ObjectLiteral = 524288,
         ESSymbol = 16777216,
+        ThisType = 33554432,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 80896,
@@ -1223,6 +1229,7 @@ declare namespace ts {
         typeParameters: TypeParameter[];
         outerTypeParameters: TypeParameter[];
         localTypeParameters: TypeParameter[];
+        thisType: TypeParameter;
     }
     interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
         declaredProperties: Symbol[];
@@ -1348,6 +1355,7 @@ declare namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+        ES6 = 5,
     }
     const enum JsxEmit {
         None = 0,
@@ -1417,7 +1425,7 @@ declare namespace ts {
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: (path: string) => void): FileWatcher;
+        watchFile?(path: string, callback: (path: string, removed: boolean) => void): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -1775,6 +1783,12 @@ declare namespace ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        IndentStyle: IndentStyle;
+    }
+    enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
     }
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
@@ -2132,7 +2146,7 @@ declare namespace ts {
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string;
     function createDocumentRegistry(useCaseSensitiveFileNames?: boolean): DocumentRegistry;
-    function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
+    function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry): LanguageService;
     function createClassifier(): Classifier;
     /**
