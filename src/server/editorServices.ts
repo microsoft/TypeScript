@@ -503,6 +503,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
+        timerForDetectingProjectFilelistChanges: Map<NodeJS.Timer> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -557,6 +558,20 @@ namespace ts.server {
             }
 
             this.log("Detected source file changes: " + fileName);
+            this.startTimerForDetectingProjectFilelistChanges(project);
+        }
+
+        startTimerForDetectingProjectFilelistChanges(project: Project) {
+            if (this.timerForDetectingProjectFilelistChanges[project.projectFilename]) {
+                clearTimeout(this.timerForDetectingProjectFilelistChanges[project.projectFilename]);
+            }
+            this.timerForDetectingProjectFilelistChanges[project.projectFilename] = setTimeout(
+                () => this.handleProjectFilelistChanges(project),
+                250
+            );
+        }
+
+        handleProjectFilelistChanges(project: Project) {
             let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
             let newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             let currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
