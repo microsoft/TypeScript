@@ -117,115 +117,7 @@ namespace ts {
                 }
                 noDeclare = false;
 
-                let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
-                let types = collectExportedTypes(entrypoint, exportedMembers);
-                let dependentTypes = collectDependentTypes(types);
-                let symbolNameSet: Map<number> = {};
-                let aliasMapping = map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported));
-                let undoSynthNodesStack: (() => void)[] = [];
-                let createSynthIdentifiers = (symbol: Symbol, generatedName: string) => {
-                    forEach(symbol.declarations, declaration => {
-                        let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
-                        synthId.flags |= NodeFlags.Synthetic;
-                        synthId.text = generatedName;
-                        synthId.parent = declaration;
-                        let oldName = declaration.name;
-                        undoSynthNodesStack.push(() => declaration.name = oldName);
-                        declaration.name = synthId;
-                    });
-                };
-                let createSymbolEntry = (name: string, id: number) => {
-                    symbolNameSet[name] = 1;
-                    symbolGeneratedNameMap[id] = name;
-                };
-                let createDefaultExportAlias = (): string => undefined;
-                forEach(aliasMapping, (type, index) => {
-                    if (!type) {
-                        return;
-                    }
-                    let exportedSymbol = exportedMembers[index];
-                    let symbol = type.symbol;
-                    if (symbol) { // use the name from the exported symbol, but the id from the internal one
-                        if (exportedSymbol.name === "default") {
-                            createDefaultExportAlias = () => {
-                                let name = "default_1";
-                                while (!!symbolNameSet[name]) {
-                                    name += "_1";
-                                }
-                                createSymbolEntry(name, symbol.id);
-                                createSynthIdentifiers(symbol, name);
-                                return name;
-                            }
-                        }
-                        else if (symbol.name !== exportedSymbol.name) {
-                            createSynthIdentifiers(symbol, exportedSymbol.name);
-                            createSymbolEntry(exportedSymbol.name, symbol.id);
-                        }
-                        else {
-                            createSymbolEntry(exportedSymbol.name, symbol.id);
-                        }
-                    }
-                });
-                forEachValue(dependentTypes, type => {
-                    let symbol = type.symbol;
-                    if (symbol.name in symbolNameSet) {
-                        let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
-                        symbolNameSet[symbol.name]++;
-                        createSymbolEntry(generatedName, symbol.id);
-                        createSynthIdentifiers(symbol, generatedName); 
-                    }
-                    else {
-                        createSymbolEntry(symbol.name, symbol.id);
-                    }
-                });
-
-                let alias = createDefaultExportAlias();
-                let emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
-                    currentSourceFile = getSourceFileOfNode(d);
-                    if (isDeclarationFile(currentSourceFile)) {
-                        return;
-                    }
-                    let oldFlags = d.flags;
-                    if (shouldExport) {
-                        d.flags |= NodeFlags.Export;
-                    }
-                    else {
-                        if (oldFlags & NodeFlags.Export) {
-                            d.flags -= NodeFlags.Export;
-                        }
-                    }
-                    if (oldFlags & NodeFlags.Default) {
-                        d.flags -= NodeFlags.Default;
-                    }
-                    switch (d.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.VariableStatement:
-                        case SyntaxKind.InterfaceDeclaration:
-                        case SyntaxKind.ClassDeclaration:
-                        case SyntaxKind.TypeAliasDeclaration:
-                        case SyntaxKind.EnumDeclaration:
-                        case SyntaxKind.ModuleDeclaration:
-                            writeModuleElement(d);
-                        default:
-                            /// Declaration doesn't contribute to module exports (eg, TypeParameter)
-                    }
-                    d.flags = oldFlags;
-                }
-                forEachValue(dependentTypes, type => {
-                    let realSourceFile = currentSourceFile;
-                    forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/false));
-                    currentSourceFile = realSourceFile;
-                });
-                forEachValue(types, type => {
-                    let realSourceFile = currentSourceFile;
-                    forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
-                    currentSourceFile = realSourceFile;
-                });
-                if (alias) {
-                    writeLine();
-                    write(`export default ${alias};`);
-                }
-                forEach(undoSynthNodesStack, undo => undo()); // So we don't ruin the tree
+                emitFlattenedTypeDefinitions(entrypoint);
             }
             else {
                 // Emit references corresponding to this file
@@ -291,61 +183,175 @@ namespace ts {
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
         };
-
-        function collectExportedTypes(file: SourceFile, exportedMembers: Symbol[]): Map<Type> {
-            return arrayToMap(filter(map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported)), value => value && !!value.symbol), value => (value.symbol.id + ""));
-        }
-
-        function collectDependentTypes(exported: Map<Type>): Map<Type> {
-            let dependentTypes: Map<Type> = {};
-            forEachValue(exported, type => visit(type));
-
-            return dependentTypes;
-
-            function visit(type: Type): void {
+        
+        function emitFlattenedTypeDefinitions(entrypoint: SourceFile) {
+            let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
+            let types = collectExportedTypes(entrypoint, exportedMembers);
+            let dependentTypes = collectDependentTypes(types);
+            let symbolNameSet: Map<number> = {};
+            let aliasMapping = map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported));
+            let undoSynthNodesStack: (() => void)[] = [];
+            let createSynthIdentifiers = (symbol: Symbol, generatedName: string) => {
+                forEach(symbol.declarations, declaration => {
+                    let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
+                    synthId.flags |= NodeFlags.Synthetic;
+                    synthId.text = generatedName;
+                    synthId.parent = declaration;
+                    let oldName = declaration.name;
+                    undoSynthNodesStack.push(() => declaration.name = oldName);
+                    declaration.name = synthId;
+                });
+            };
+            let createSymbolEntry = (name: string, id: number) => {
+                symbolNameSet[name] = 1;
+                symbolGeneratedNameMap[id] = name;
+            };
+            let createDefaultExportAlias = (): string => undefined;
+            forEach(aliasMapping, (type, index) => {
+                if (!type) {
+                    return;
+                }
+                let exportedSymbol = exportedMembers[index];
                 let symbol = type.symbol;
-                if (symbol.flags & SymbolFlags.HasMembers) {
-                    forEachValue(symbol.members, member => {
-                        if (member.valueDeclaration && member.valueDeclaration.flags && member.valueDeclaration.flags & NodeFlags.Private) {
-                            return;
+                if (symbol) { // use the name from the exported symbol, but the id from the internal one
+                    if (exportedSymbol.name === "default") {
+                        createDefaultExportAlias = () => {
+                            let name = "default_1";
+                            while (!!symbolNameSet[name]) {
+                                name += "_1";
+                            }
+                            createSymbolEntry(name, symbol.id);
+                            createSynthIdentifiers(symbol, name);
+                            return name;
                         }
-                        inspectSymbol(member);
-                    });
+                    }
+                    else if (symbol.name !== exportedSymbol.name) {
+                        createSynthIdentifiers(symbol, exportedSymbol.name);
+                        createSymbolEntry(exportedSymbol.name, symbol.id);
+                    }
+                    else {
+                        createSymbolEntry(exportedSymbol.name, symbol.id);
+                    }
                 }
-                if (symbol.flags & SymbolFlags.HasExports) {
-                    forEachValue(symbol.exports, member => {
-                        inspectSymbol(member);
-                    });
+            });
+            forEachValue(dependentTypes, type => {
+                let symbol = type.symbol;
+                if (symbol.name in symbolNameSet) {
+                    let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
+                    symbolNameSet[symbol.name]++;
+                    createSymbolEntry(generatedName, symbol.id);
+                    createSynthIdentifiers(symbol, generatedName); 
                 }
-                if (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Interface) {
-                    forEach(symbol.declarations, declaration => {
-                        if (isClassLike(declaration) || declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                            let clauses = (declaration as (ClassLikeDeclaration|InterfaceDeclaration)).heritageClauses;
-                            forEach(clauses, clause => {
-                                let types = clause.types;
-                                forEach(types, typeExpression => {
-                                    let type = resolver.getTypeAtLocation(typeExpression);
-                                    if (type && type.symbol) {
-                                        inspectSymbol(type.symbol);
-                                    }
-                                });
-                            });
-                        }
-                    });
+                else {
+                    createSymbolEntry(symbol.name, symbol.id);
                 }
-            }
+            });
 
-            function inspectSymbol(symbol: Symbol) {
-                let type = resolver.getDefiningTypeOfSymbol(symbol);
-                if (!type || !type.symbol) {
+            let alias = createDefaultExportAlias();
+            let emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
+                currentSourceFile = getSourceFileOfNode(d);
+                if (isDeclarationFile(currentSourceFile)) {
                     return;
                 }
-                let id = type.symbol.id;
-                if (id in exported || id in dependentTypes) {
-                    return;
+                let oldFlags = d.flags;
+                if (shouldExport) {
+                    d.flags |= NodeFlags.Export;
                 }
-                dependentTypes[id] = type;
-                visit(type);
+                else {
+                    if (oldFlags & NodeFlags.Export) {
+                        d.flags -= NodeFlags.Export;
+                    }
+                }
+                if (oldFlags & NodeFlags.Default) {
+                    d.flags -= NodeFlags.Default;
+                }
+                switch (d.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                        writeModuleElement(d);
+                    default:
+                        /// Declaration doesn't contribute to module exports (eg, TypeParameter)
+                }
+                d.flags = oldFlags;
+            }
+            forEachValue(dependentTypes, type => {
+                let realSourceFile = currentSourceFile;
+                forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/false));
+                currentSourceFile = realSourceFile;
+            });
+            forEachValue(types, type => {
+                let realSourceFile = currentSourceFile;
+                forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
+                currentSourceFile = realSourceFile;
+            });
+            if (alias) {
+                writeLine();
+                write(`export default ${alias};`);
+            }
+            forEach(undoSynthNodesStack, undo => undo()); // So we don't ruin the tree
+
+            return;
+        
+            function collectExportedTypes(file: SourceFile, exportedMembers: Symbol[]): Map<Type> {
+                return arrayToMap(filter(map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported)), value => value && !!value.symbol), value => (value.symbol.id + ""));
+            }
+    
+            function collectDependentTypes(exported: Map<Type>): Map<Type> {
+                let dependentTypes: Map<Type> = {};
+                forEachValue(exported, type => visit(type));
+    
+                return dependentTypes;
+    
+                function visit(type: Type): void {
+                    let symbol = type.symbol;
+                    if (symbol.flags & SymbolFlags.HasMembers) {
+                        forEachValue(symbol.members, member => {
+                            if (member.valueDeclaration && member.valueDeclaration.flags && member.valueDeclaration.flags & NodeFlags.Private) {
+                                return;
+                            }
+                            inspectSymbol(member);
+                        });
+                    }
+                    if (symbol.flags & SymbolFlags.HasExports) {
+                        forEachValue(symbol.exports, member => {
+                            inspectSymbol(member);
+                        });
+                    }
+                    if (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Interface) {
+                        forEach(symbol.declarations, declaration => {
+                            if (isClassLike(declaration) || declaration.kind === SyntaxKind.InterfaceDeclaration) {
+                                let clauses = (declaration as (ClassLikeDeclaration|InterfaceDeclaration)).heritageClauses;
+                                forEach(clauses, clause => {
+                                    let types = clause.types;
+                                    forEach(types, typeExpression => {
+                                        let type = resolver.getTypeAtLocation(typeExpression);
+                                        if (type && type.symbol) {
+                                            inspectSymbol(type.symbol);
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    }
+                }
+    
+                function inspectSymbol(symbol: Symbol) {
+                    let type = resolver.getDefiningTypeOfSymbol(symbol);
+                    if (!type || !type.symbol) {
+                        return;
+                    }
+                    let id = type.symbol.id;
+                    if (id in exported || id in dependentTypes) {
+                        return;
+                    }
+                    dependentTypes[id] = type;
+                    visit(type);
+                }
             }
         }
 
