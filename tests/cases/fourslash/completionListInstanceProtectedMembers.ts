@@ -31,15 +31,15 @@
 
 
 // Same class, everything is visible
-//goTo.marker("1");
-//verify.memberListContains('privateMethod');
-//verify.memberListContains('privateProperty');
-//verify.memberListContains('protectedMethod');
-//verify.memberListContains('protectedProperty');
-//verify.memberListContains('publicMethod');
-//verify.memberListContains('publicProperty');
-//verify.memberListContains('protectedOverriddenMethod');
-//verify.memberListContains('protectedOverriddenProperty');
+goTo.marker("1");
+verify.memberListContains('privateMethod');
+verify.memberListContains('privateProperty');
+verify.memberListContains('protectedMethod');
+verify.memberListContains('protectedProperty');
+verify.memberListContains('publicMethod');
+verify.memberListContains('publicProperty');
+verify.memberListContains('protectedOverriddenMethod');
+verify.memberListContains('protectedOverriddenProperty');
 
 goTo.marker("2");
 verify.memberListContains('privateMethod');

@@ -3215,6 +3215,7 @@ namespace ts {
             let node = currentToken;
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
+            let isStartingCloseTag = false;
 
             let location = getTouchingPropertyName(sourceFile, position);
             if (contextToken) {
@@ -3240,9 +3241,14 @@ namespace ts {
                         return undefined;
                     }
                 }
-                else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    if (kind === SyntaxKind.LessThanToken) {
+                        isRightOfOpenTag = true;
+                        location = contextToken;
+                    }
+                    else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
+                        isStartingCloseTag = true;
+                    }
                 }
             }
 
@@ -3262,6 +3268,13 @@ namespace ts {
                 else {
                     symbols = tagSymbols;
                 }
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
+            }
+            else if (isStartingCloseTag) {
+                let tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
+                symbols = [typeChecker.getSymbolAtLocation(tagName)];
+
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
             }
@@ -3421,9 +3434,27 @@ namespace ts {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
-                    isDotOfNumericLiteral(contextToken);
+                    isDotOfNumericLiteral(contextToken) ||
+                    isInJsxText(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function isInJsxText(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.JsxText) {
+                    return true;
+                }
+
+                if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
+                    if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                        return true;
+                    }
+
+                    if (contextToken.parent.kind === SyntaxKind.JsxClosingElement || contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                        return contextToken.parent.parent && contextToken.parent.parent.kind === SyntaxKind.JsxElement;
+                    }
+                }
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -4213,8 +4244,9 @@ namespace ts {
                         let useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (!contains(allSignatures, signature.target || signature)) {
-                            // Get the first signature if there
+                        if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                            // Get the first signature if there is one -- allSignatures may contain
+                            // either the original signature or its target, so check for either
                             signature = allSignatures.length ? allSignatures[0] : undefined;
                         }
 

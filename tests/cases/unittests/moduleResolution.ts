@@ -116,23 +116,30 @@ module ts {
             let containingFile = { name: "/a/b/c/d/e.ts" };
             let moduleFile = { name: "/a/b/node_modules/foo.ts" };
             let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
-            assert.equal(resolution.resolvedModule, undefined);
+            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/b/c/d/node_modules/foo.ts",
+                "/a/b/c/d/node_modules/foo.tsx",
                 "/a/b/c/d/node_modules/foo.d.ts",
+                "/a/b/c/d/node_modules/foo.js",
+                "/a/b/c/d/node_modules/foo.jsx",
                 "/a/b/c/d/node_modules/foo/package.json",
+                "/a/b/c/d/node_modules/foo/index.ts",
+                "/a/b/c/d/node_modules/foo/index.tsx",
                 "/a/b/c/d/node_modules/foo/index.d.ts",
+                "/a/b/c/d/node_modules/foo/index.js",
+                "/a/b/c/d/node_modules/foo/index.jsx",
+                "/a/b/c/node_modules/foo.ts",
+                "/a/b/c/node_modules/foo.tsx",
                 "/a/b/c/node_modules/foo.d.ts",
+                "/a/b/c/node_modules/foo.js",
+                "/a/b/c/node_modules/foo.jsx",
                 "/a/b/c/node_modules/foo/package.json",
+                "/a/b/c/node_modules/foo/index.ts",
+                "/a/b/c/node_modules/foo/index.tsx",
                 "/a/b/c/node_modules/foo/index.d.ts",
-                "/a/b/node_modules/foo.d.ts",
-                "/a/b/node_modules/foo/package.json",
-                "/a/b/node_modules/foo/index.d.ts",
-                "/a/node_modules/foo.d.ts",
-                "/a/node_modules/foo/package.json",
-                "/a/node_modules/foo/index.d.ts",
-                "/node_modules/foo.d.ts",
-                "/node_modules/foo/package.json",
-                "/node_modules/foo/index.d.ts"
+                "/a/b/c/node_modules/foo/index.js",
+                "/a/b/c/node_modules/foo/index.jsx"
             ])
         });
 
@@ -151,17 +158,47 @@ module ts {
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
             assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.js",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.jsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.js",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.jsx",
+                "/a/node_modules/b/c/node_modules/foo.ts",
+                "/a/node_modules/b/c/node_modules/foo.tsx",
                 "/a/node_modules/b/c/node_modules/foo.d.ts",
+                "/a/node_modules/b/c/node_modules/foo.js",
+                "/a/node_modules/b/c/node_modules/foo.jsx",
                 "/a/node_modules/b/c/node_modules/foo/package.json",
+                "/a/node_modules/b/c/node_modules/foo/index.ts",
+                "/a/node_modules/b/c/node_modules/foo/index.tsx",
                 "/a/node_modules/b/c/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/foo/index.js",
+                "/a/node_modules/b/c/node_modules/foo/index.jsx",
+                "/a/node_modules/b/node_modules/foo.ts",
+                "/a/node_modules/b/node_modules/foo.tsx",
                 "/a/node_modules/b/node_modules/foo.d.ts",
+                "/a/node_modules/b/node_modules/foo.js",
+                "/a/node_modules/b/node_modules/foo.jsx",
                 "/a/node_modules/b/node_modules/foo/package.json",
+                "/a/node_modules/b/node_modules/foo/index.ts",
+                "/a/node_modules/b/node_modules/foo/index.tsx",
                 "/a/node_modules/b/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/node_modules/foo/index.js",
+                "/a/node_modules/b/node_modules/foo/index.jsx",
+                "/a/node_modules/foo.ts",
+                "/a/node_modules/foo.tsx",
                 "/a/node_modules/foo.d.ts",
-                "/a/node_modules/foo/package.json"
+                "/a/node_modules/foo.js",
+                "/a/node_modules/foo.jsx",
+                "/a/node_modules/foo/package.json",
+                "/a/node_modules/foo/index.ts",
+                "/a/node_modules/foo/index.tsx"
             ]);
         });
     });

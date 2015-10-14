@@ -1198,23 +1198,6 @@ interface PromiseLike<T> {
     then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
 }
 
-declare namespace AMD {
-    interface Require {
-        (moduleName: string): any;
-        (moduleList: string[], callback: (...resolvedModules: any[]) => void): any;
-    }
-
-    export var require: Require;
-
-    interface Define {
-        (dependencies: string[], callback: (...resolvedModules: any[]) => any): void;
-        (moduleName: string, dependencies: string[], callback: (...resolvedModules: any[]) => any): void;
-        (func: (require: Require, module: { exports: any }, exports: any) => any): void;
-        (moduleName: string, object: {}): void;
-    }
-
-    export var define: Define;
-}
 
 declare namespace CommonJS {
     export var require: Require;
@@ -11967,6 +11950,10 @@ declare var Node: {
 }
 
 interface NodeFilter {
+    acceptNode(n: Node): number;
+}
+
+declare var NodeFilter: {
     FILTER_ACCEPT: number;
     FILTER_REJECT: number;
     FILTER_SKIP: number;
@@ -11984,7 +11971,6 @@ interface NodeFilter {
     SHOW_PROCESSING_INSTRUCTION: number;
     SHOW_TEXT: number;
 }
-declare var NodeFilter: NodeFilter;
 
 interface NodeIterator {
     expandEntityReferences: boolean;
