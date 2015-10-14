@@ -2311,15 +2311,10 @@ namespace ts {
     export function isRawStatement(node: Node): node is RawStatement {
         return node && node.kind === SyntaxKind.RawStatement;
     }
-    export function isLiteralExpression(node: Node): node is LiteralExpression {
+    export function isFunctionBody(node: Node): node is FunctionBody {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
+                case SyntaxKind.Block:
                     return true;
             }
         }
@@ -2338,54 +2333,6 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isEntityName(node: Node): node is EntityName {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                case SyntaxKind.QualifiedName:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isDeclarationNameNode(node: Node): node is DeclarationName {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.ObjectBindingPattern:
-                case SyntaxKind.ArrayBindingPattern:
-                case SyntaxKind.ComputedPropertyName:
-                case SyntaxKind.Identifier:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isPropertyName(node: Node): node is PropertyName {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.ComputedPropertyName:
-                case SyntaxKind.Identifier:
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                     return true;
             }
         }
@@ -2539,15 +2486,6 @@ namespace ts {
         }
         return false;
     }
-    export function isFunctionBody(node: Node): node is FunctionBody {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.Block:
-                    return true;
-            }
-        }
-        return false;
-    }
     export function isExpressionNode(node: Node): node is Expression {
         if (node) {
             switch (node.kind) {
@@ -2599,16 +2537,9 @@ namespace ts {
         }
         return false;
     }
-    export function isConciseBody(node: Node): node is ConciseBody {
+    export function isLiteralExpression(node: Node): node is LiteralExpression {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.OmittedExpression:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.Identifier:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -2617,35 +2548,6 @@ namespace ts {
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RawExpression:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.TemplateExpression:
-                case SyntaxKind.ParenthesizedExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.PropertyAccessExpression:
-                case SyntaxKind.ElementAccessExpression:
-                case SyntaxKind.TaggedTemplateExpression:
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.PostfixUnaryExpression:
-                case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.DeleteExpression:
-                case SyntaxKind.TypeOfExpression:
-                case SyntaxKind.VoidExpression:
-                case SyntaxKind.AwaitExpression:
-                case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.YieldExpression:
-                case SyntaxKind.BinaryExpression:
-                case SyntaxKind.ConditionalExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.SpreadElementExpression:
-                case SyntaxKind.AsExpression:
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxExpression:
-                case SyntaxKind.Block:
                     return true;
             }
         }
@@ -2673,18 +2575,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isJsxChild(node: Node): node is JsxChild {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.JsxElement:
-                case SyntaxKind.JsxExpression:
-                case SyntaxKind.JsxSelfClosingElement:
-                case SyntaxKind.JsxText:
                     return true;
             }
         }
@@ -2742,16 +2632,6 @@ namespace ts {
         }
         return false;
     }
-    export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                    return true;
-            }
-        }
-        return false;
-    }
     export function isIdentifierOrLiteralExpression(node: Node): node is Identifier | LiteralExpression {
         if (node) {
             switch (node.kind) {
@@ -2769,21 +2649,9 @@ namespace ts {
         }
         return false;
     }
-    export function isModuleBody(node: Node): node is ModuleBody {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.ModuleBlock:
-                case SyntaxKind.ModuleDeclaration:
-                    return true;
-            }
-        }
-        return false;
-    }
     export function isEntityNameOrExternalModuleReference(node: Node): node is EntityName | ExternalModuleReference {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.Identifier:
-                case SyntaxKind.QualifiedName:
                 case SyntaxKind.ExternalModuleReference:
                     return true;
             }
@@ -2794,7 +2662,6 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.NamedImports:
-                case SyntaxKind.NamedExports:
                 case SyntaxKind.NamespaceImport:
                     return true;
             }

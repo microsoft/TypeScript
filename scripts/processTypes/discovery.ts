@@ -308,13 +308,10 @@ export function discover(): DiscoveryResult {
     function discoverTestableType(syntaxType: SyntaxType) {
         if (syntaxType.type !== nodeType && !syntaxType.syntaxNodes) {
             syntaxType.syntaxNodes = [];
-            if (syntaxType.type.findFirstAnnotation(/*inherited*/ false, KindAnnotation.match)) {
-                copySyntaxNodes(syntaxType.type, syntaxType.syntaxNodes, []);
-            }
-            else {
-                discoverSyntaxNodes(syntaxType.type, syntaxType.syntaxNodes, []);
-            }
 
+            let includeAliasAndUnionConstituents = !syntaxType.type.findFirstAnnotation(/*inherited*/ false, KindAnnotation.match);
+
+            discoverSyntaxNodes(syntaxType.type, syntaxType.syntaxNodes, [], includeAliasAndUnionConstituents);
             if (syntaxType.syntaxNodes.length > 0) {
                 let testFunctionName = discoverIsAnyNodeFunctionName(syntaxType.type);
                 if (testFunctionName) {
@@ -325,7 +322,7 @@ export function discover(): DiscoveryResult {
         }
     }
 
-    function discoverSyntaxNodes(type: TypeInfo, syntaxNodes: SyntaxNode[], seen: boolean[]) {
+    function discoverSyntaxNodes(type: TypeInfo, syntaxNodes: SyntaxNode[], seen: boolean[], includeAliasAndUnionConstituents?: boolean) {
         copySyntaxNodes(type, syntaxNodes, seen);
 
         for (let aliasType of type.getAliases()) {
@@ -338,13 +335,15 @@ export function discover(): DiscoveryResult {
             }
         }
 
-        if (type.isTypeAlias) {
-            discoverSyntaxNodes(type.getAliasedType(), syntaxNodes, seen);
-        }
+        if (includeAliasAndUnionConstituents) {
+            if (type.isTypeAlias) {
+                discoverSyntaxNodes(type.getAliasedType(), syntaxNodes, seen);
+            }
 
-        if (type.isUnionType) {
-            for (let constituentType of type.getConstituentTypes()) {
-                discoverSyntaxNodes(constituentType, syntaxNodes, seen);
+            if (type.isUnionType) {
+                for (let constituentType of type.getConstituentTypes()) {
+                    discoverSyntaxNodes(constituentType, syntaxNodes, seen);
+                }
             }
         }
     }
