@@ -147,15 +147,17 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         let commandLine = parseCommandLine(args);
-        let configFileName: string;                 // Configuration file name (if any)
-        let configFileWatcher: FileWatcher;         // Configuration file watcher
-        let directoryWatcher: FileWatcher;          // Directory watcher to monitor source file addition/removal
-        let cachedProgram: Program;                 // Program cached from last compilation
-        let rootFileNames: string[];                // Root fileNames for compilation
-        let compilerOptions: CompilerOptions;       // Compiler options for compilation
-        let compilerHost: CompilerHost;             // Compiler host
-        let hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
-        let timerHandle: number;                    // Handle for 0.25s wait timer
+        let configFileName: string;                                 // Configuration file name (if any)
+        let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
+        let configFileWatcher: FileWatcher;                         // Configuration file watcher
+        let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
+        let cachedProgram: Program;                                 // Program cached from last compilation
+        let rootFileNames: string[];                                // Root fileNames for compilation
+        let compilerOptions: CompilerOptions;                       // Compiler options for compilation
+        let compilerHost: CompilerHost;                             // Compiler host
+        let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
+        let timerHandleForRecompilation: number;                    // Handle for 0.25s wait timer to trigger recompilation
+        let timerHandleForDirectoryChanges: number;                 // Handle for 0.25s wait timer to trigger directory change handler
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
@@ -232,16 +234,22 @@ namespace ts {
 
         performCompilation();
 
-        function configFileToParsedCommandLine(configFilename: string): ParsedCommandLine {
-            let result = readConfigFile(configFileName, sys.readFile);
-            if (result.error) {
-                reportWatchDiagnostic(result.error);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
+        function parseConfigFile(): ParsedCommandLine {
+            if (!cachedConfigFileText) {
+                try {
+                    cachedConfigFileText = sys.readFile(configFileName);
+                }
+                catch (e) {
+                    let error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+                    reportWatchDiagnostic(error);
+                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                    return;
+                }
             }
 
+            let result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
             let configObject = result.config;
-            let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
+            let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -255,7 +263,7 @@ namespace ts {
 
             if (!cachedProgram) {
                 if (configFileName) {
-                    let configParseResult = configFileToParsedCommandLine(configFileName);
+                    let configParseResult = parseConfigFile();
                     rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
@@ -322,13 +330,14 @@ namespace ts {
                     rootFileNames.splice(index, 1);
                 }
             }
-            startTimer();
+            startTimerForRecompilation();
         }
 
         // If the configuration file changes, forget cached program and start the recompilation timer
         function configFileChanged() {
             setCachedProgram(undefined);
-            startTimer();
+            cachedConfigFileText = undefined;
+            startTimerForRecompilation();
         }
 
         function watchedDirectoryChanged(fileName: string) {
@@ -336,28 +345,39 @@ namespace ts {
                 return;
             }
 
-            let parsedCommandLine = configFileToParsedCommandLine(configFileName);
-            let newFileNames = parsedCommandLine.fileNames.map(compilerHost.getCanonicalFileName);
-            let canonicalRootFileNames = rootFileNames.map(compilerHost.getCanonicalFileName);
+            startTimerForHandlingDirectoryChanges();
+        }
 
-            if (!doTwoArraysHaveTheSameElements(newFileNames, canonicalRootFileNames)) {
+        function startTimerForHandlingDirectoryChanges() {
+            if (timerHandleForDirectoryChanges) {
+                clearTimeout(timerHandleForDirectoryChanges);
+            }
+            timerHandleForDirectoryChanges = setTimeout(directoryChangeHandler, 250);
+        }
+
+        function directoryChangeHandler() {
+            let parsedCommandLine = parseConfigFile();
+            let newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
+            let canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
+
+            if (!arrayStructurallyIsEqualTo(newFileNames, canonicalRootFileNames)) {
                 setCachedProgram(undefined);
-                startTimer();
+                startTimerForRecompilation();
             }
         }
 
         // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
-        function startTimer() {
-            if (timerHandle) {
-                clearTimeout(timerHandle);
+        function startTimerForRecompilation() {
+            if (timerHandleForRecompilation) {
+                clearTimeout(timerHandleForRecompilation);
             }
-            timerHandle = setTimeout(recompile, 250);
+            timerHandleForRecompilation = setTimeout(recompile, 250);
         }
 
         function recompile() {
-            timerHandle = undefined;
+            timerHandleForRecompilation = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }

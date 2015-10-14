@@ -556,12 +556,11 @@ namespace ts.server {
             }
 
             this.log("Detected source file changes: " + fileName);
-
             let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
-            let newRootFiles = projectOptions.files.map(f => this.getCanonicalFileName(f));
-            let currentRootFiles = project.getRootFiles().map(f => this.getCanonicalFileName(f));
+            let newRootFiles = ts.map(projectOptions.files, this.getCanonicalFileName);
+            let currentRootFiles = ts.map(project.getRootFiles(), this.getCanonicalFileName);
 
-            if (!doTwoArraysHaveTheSameElements(currentRootFiles, newRootFiles)) {
+            if (!arrayStructurallyIsEqualTo(currentRootFiles, newRootFiles)) {
                 // For configured projects, the change is made outside the tsconfig file, and
                 // it is not likely to affect the project for other files opened by the client. We can 
                 // just update the current project.
@@ -1159,12 +1158,12 @@ namespace ts.server {
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
             var contents = this.host.readFile(configFilename)
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
+            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
             if (rawConfig.error) {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
+                var parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
                 }

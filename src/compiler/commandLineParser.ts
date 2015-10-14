@@ -389,7 +389,7 @@ namespace ts {
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
-        return parseConfigFileText(fileName, text);
+        return parseConfigFileTextToJson(fileName, text);
     }
 
     /**
@@ -397,7 +397,7 @@ namespace ts {
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
-    export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
@@ -412,7 +412,7 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
 
         return {

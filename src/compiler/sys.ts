@@ -199,32 +199,19 @@ namespace ts {
             const _path = require("path");
             const _os = require("os");
 
-            class WatchedFileSet {
-                private watchedFiles: WatchedFile[] = [];
-                private nextFileToCheck = 0;
-                private watchTimer: any;
+            // average async stat takes about 30 microseconds
+            // set chunk size to do 30 files in < 1 millisecond
+            function createWatchedFileSet(interval = 2500, chunkSize = 30) {
+                let watchedFiles: WatchedFile[] = [];
+                let nextFileToCheck = 0;
+                let watchTimer: any;
 
-                // average async stat takes about 30 microseconds
-                // set chunk size to do 30 files in < 1 millisecond
-                constructor(public interval = 2500, public chunkSize = 30) {
-                }
-
-                private static copyListRemovingItem<T>(item: T, list: T[]) {
-                    let copiedList: T[] = [];
-                    for (var i = 0, len = list.length; i < len; i++) {
-                        if (list[i] != item) {
-                            copiedList.push(list[i]);
-                        }
-                    }
-                    return copiedList;
-                }
-
-                private static getModifiedTime(fileName: string): Date {
+                function getModifiedTime(fileName: string): Date {
                     return _fs.statSync(fileName).mtime;
                 }
 
-                private poll(checkedIndex: number) {
-                    let watchedFile = this.watchedFiles[checkedIndex];
+                function poll(checkedIndex: number) {
+                    let watchedFile = watchedFiles[checkedIndex];
                     if (!watchedFile) {
                         return;
                     }
@@ -234,7 +221,7 @@ namespace ts {
                             watchedFile.callback(watchedFile.fileName);
                         }
                         else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                            watchedFile.mtime = WatchedFileSet.getModifiedTime(watchedFile.fileName);
+                            watchedFile.mtime = getModifiedTime(watchedFile.fileName);
                             watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
                         }
                     });
@@ -243,42 +230,50 @@ namespace ts {
                 // this implementation uses polling and
                 // stat due to inconsistencies of fs.watch
                 // and efficiency of stat on modern filesystems
-                private startWatchTimer() {
-                    this.watchTimer = setInterval(() => {
+                function startWatchTimer() {
+                    watchTimer = setInterval(() => {
                         let count = 0;
-                        let nextToCheck = this.nextFileToCheck;
+                        let nextToCheck = nextFileToCheck;
                         let firstCheck = -1;
-                        while ((count < this.chunkSize) && (nextToCheck !== firstCheck)) {
-                            this.poll(nextToCheck);
+                        while ((count < chunkSize) && (nextToCheck !== firstCheck)) {
+                            poll(nextToCheck);
                             if (firstCheck < 0) {
                                 firstCheck = nextToCheck;
                             }
                             nextToCheck++;
-                            if (nextToCheck === this.watchedFiles.length) {
+                            if (nextToCheck === watchedFiles.length) {
                                 nextToCheck = 0;
                             }
                             count++;
                         }
-                        this.nextFileToCheck = nextToCheck;
-                    }, this.interval);
+                        nextFileToCheck = nextToCheck;
+                    }, interval);
                 }
 
-                addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
+                function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
                     let file: WatchedFile = {
                         fileName,
                         callback,
-                        mtime: WatchedFileSet.getModifiedTime(fileName)
+                        mtime: getModifiedTime(fileName)
                     };
 
-                    this.watchedFiles.push(file);
-                    if (this.watchedFiles.length === 1) {
-                        this.startWatchTimer();
+                    watchedFiles.push(file);
+                    if (watchedFiles.length === 1) {
+                        startWatchTimer();
                     }
                     return file;
                 }
 
-                removeFile(file: WatchedFile) {
-                    this.watchedFiles = WatchedFileSet.copyListRemovingItem(file, this.watchedFiles);
+                function removeFile(file: WatchedFile) {
+                    watchedFiles = copyListRemovingItem(file, watchedFiles);
+                }
+
+                return {
+                    getModifiedTime: getModifiedTime,
+                    poll: poll,
+                    startWatchTimer: startWatchTimer,
+                    addFile: addFile,
+                    removeFile: removeFile
                 }
             }
 
@@ -295,7 +290,7 @@ namespace ts {
             // changes for large reference sets? If so, do we want
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
-            let watchedFileSet = new WatchedFileSet();
+            let watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): Boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
@@ -417,7 +412,7 @@ namespace ts {
                             // In watchDirectory we only care about adding and removing files (when event name is
                             // "rename"); changes made within files are handled by corresponding fileWatchers (when
                             // event name is "change")
-                            if (eventName == "rename") {
+                            if (eventName === "rename") {
                                 // When deleting a file, the passed baseFileName is null
                                 callback(!relativeFileName ? relativeFileName : normalizePath(ts.combinePaths(path, relativeFileName)));
                             };

@@ -833,24 +833,15 @@ namespace ts {
         }
     }
 
-    export function doTwoArraysHaveTheSameElements<T>(array1: Array<T>, array2: Array<T>): Boolean {
+    export function arrayStructurallyIsEqualTo<T>(array1: Array<T>, array2: Array<T>): boolean {
         if (!array1 || !array2) {
             return false;
         }
 
-        if (array1.length != array2.length) {
+        if (array1.length !== array2.length) {
             return false;
         }
 
-        array1 = array1.sort();
-        array2 = array2.sort();
-
-        for (let i = 0; i < array1.length; i++) {
-            if (array1[i] != array2[i]) {
-                return false;
-            }
-        }
-
-        return true;
+        return arrayIsEqualTo(array1.sort(), array2.sort());
     }
 }

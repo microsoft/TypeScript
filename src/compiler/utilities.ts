@@ -2406,4 +2406,14 @@ namespace ts {
             }
         }
     }
+
+    export function copyListRemovingItem<T>(item: T, list: T[]) {
+        var copiedList: T[] = [];
+        for (var i = 0, len = list.length; i < len; i++) {
+            if (list[i] != item) {
+                copiedList.push(list[i]);
+            }
+        }
+        return copiedList;
+    }
 }
