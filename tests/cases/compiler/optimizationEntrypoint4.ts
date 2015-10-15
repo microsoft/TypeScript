@@ -16,4 +16,6 @@ class Foo {
 	static field: {name: string}
 }
 
+namespace Foo {}
+
 export = Foo;

@@ -2039,19 +2039,19 @@ namespace ts {
                 if (type.flags & TypeFlags.Reference) {
                     visitTypeReference(type as TypeReference);
                 }
-                else if (type.flags & TypeFlags.TypeParameter) {
+                if (type.flags & TypeFlags.TypeParameter) {
                     visitTypeParameter(type as TypeParameter);
                 }
-                else if (type.flags & TypeFlags.Tuple) {
+                if (type.flags & TypeFlags.Tuple) {
                     visitTupleType(type as TupleType);
                 }
-                else if (type.flags & TypeFlags.UnionOrIntersection) {
+                if (type.flags & TypeFlags.UnionOrIntersection) {
                     visitUnionOrIntersectionType(type as UnionOrIntersectionType);
                 }
-                else if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
                     visitInterfaceType(type as InterfaceType);
                 }
-                else if (type.flags & TypeFlags.Anonymous) {
+                if (type.flags & TypeFlags.Anonymous) {
                     visitObjectType(type as ObjectType);
                 }
             }
@@ -2093,8 +2093,12 @@ namespace ts {
                     visitType(signature.typePredicate.type);
                 }
                 visitTypeList(signature.typeParameters);
-                visitType(getReturnTypeOfSignature(signature));
+
+                for (let parameter of signature.parameters){
+                    visitTypeFromSymbol(parameter);
+                }
                 visitType(getRestTypeOfSignature(signature));
+                visitType(getReturnTypeOfSignature(signature));
             }
 
             function visitInterfaceType(interfaceT: InterfaceType): void {

@@ -335,7 +335,9 @@ namespace ts {
             function collectDependentTypes(exported: Map<Type>): Map<Type> {
                 let dependentTypes: Map<Type> = {};
                 let walker = resolver.getTypeWalker(inspectType);
-                forEachValue(exported, type => walker.visitType(type));
+                forEachValue(exported, type => {
+                    walker.visitType(type);
+                });
 
                 return dependentTypes;
 
@@ -347,7 +349,7 @@ namespace ts {
                         } else {
                             let id = symbol.id;
                             if (id in exported || id in dependentTypes) {
-                                return false;
+                                return true;
                             }
                             dependentTypes[id] = type;
                         }
