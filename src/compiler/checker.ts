@@ -396,7 +396,7 @@ namespace ts {
             }
 
             let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
+            return indexOf(sourceFiles, file1) <= indexOf(sourceFiles, file2);
         }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
