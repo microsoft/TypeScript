@@ -735,7 +735,7 @@ namespace ts.server {
                     if (!(--project.projectService.directoryWatchersRefCount[directory])) {
                         this.log("Close directory watcher for: " + directory);
                         project.projectService.directoryWatchersForTsconfig[directory].close();
-                        project.projectService.directoryWatchersForTsconfig[directory] = undefined;
+                        delete project.projectService.directoryWatchersForTsconfig[directory];
                     }
                 }
                 this.inferredProjects = copyListRemovingItem(project, this.inferredProjects);
