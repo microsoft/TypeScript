@@ -2298,6 +2298,10 @@
         "category": "Message",
         "code": 6072
     },
+    "Raise error if two file names in program differ only in case.": {
+        "category": "Message",
+        "code": 6073
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

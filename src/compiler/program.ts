@@ -207,7 +207,6 @@ namespace ts {
     };
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
-        let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
 
         function getCanonicalFileName(fileName: string): string {
@@ -277,7 +276,7 @@ namespace ts {
             getSourceFile,
             getDefaultLibFileName: options => combinePaths(getDirectoryPath(normalizePath(sys.getExecutingFilePath())), getDefaultLibFileName(options)),
             writeFile,
-            getCurrentDirectory: () => currentDirectory || (currentDirectory = sys.getCurrentDirectory()),
+            getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine,
@@ -342,11 +341,15 @@ namespace ts {
 
         host = host || createCompilerHost(options);
 
+        const currentDirectory = host.getCurrentDirectory();
         const resolveModuleNamesWorker = host.resolveModuleNames
             ? ((moduleNames: string[], containingFile: string) => host.resolveModuleNames(moduleNames, containingFile))
             : ((moduleNames: string[], containingFile: string) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedModule));
 
-        let filesByName = createFileMap<SourceFile>(fileName => host.getCanonicalFileName(fileName));
+        let filesByName = createFileMap<SourceFile>(getCanonicalFileName);
+        // stores 'filename -> file association' ignoring case
+        // used to track cases when two file names differ only in casing 
+        let filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (oldProgram) {
             // check properties that can affect structure of the program or module resolution strategy
@@ -394,7 +397,7 @@ namespace ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
-            getCurrentDirectory: () => host.getCurrentDirectory(),
+            getCurrentDirectory: () => currentDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
@@ -432,12 +435,17 @@ namespace ts {
 
             // check if program source files has changed in the way that can affect structure of the program
             let newSourceFiles: SourceFile[] = [];
+            let normalizedAbsoluteFileNames: string[] = [];
             let modifiedSourceFiles: SourceFile[] = [];
+
             for (let oldSourceFile of oldProgram.getSourceFiles()) {
                 let newSourceFile = host.getSourceFile(oldSourceFile.fileName, options.target);
                 if (!newSourceFile) {
                     return false;
                 }
+
+                const normalizedAbsolutePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
+                normalizedAbsoluteFileNames.push(normalizedAbsolutePath);
 
                 if (oldSourceFile !== newSourceFile) {
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
@@ -461,7 +469,7 @@ namespace ts {
 
                     if (resolveModuleNamesWorker) {
                         let moduleNames = map(newSourceFile.imports, name => name.text);
-                        let resolutions = resolveModuleNamesWorker(moduleNames, newSourceFile.fileName);
+                        let resolutions = resolveModuleNamesWorker(moduleNames, normalizedAbsolutePath);
                         // ensure that module resolution results are still correct
                         for (let i = 0; i < moduleNames.length; ++i) {
                             let newResolution = resolutions[i];
@@ -491,8 +499,8 @@ namespace ts {
             }
 
             // update fileName -> file mapping
-            for (let file of newSourceFiles) {
-                filesByName.set(file.fileName, file);
+            for (let i = 0, len = newSourceFiles.length; i < len; ++i) {
+                filesByName.set(normalizedAbsoluteFileNames[i], newSourceFiles[i]);
             }
 
             files = newSourceFiles;
@@ -508,10 +516,10 @@ namespace ts {
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
-                getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
+                getCanonicalFileName,
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getCurrentDirectory: () => currentDirectory,
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFiles: program.getSourceFiles,
@@ -561,10 +569,8 @@ namespace ts {
             return emitResult;
         }
 
-        function getSourceFile(fileName: string) {
-            // first try to use file name as is to find file
-            // then try to convert relative file name to absolute and use it to retrieve source file
-            return filesByName.get(fileName) || filesByName.get(getNormalizedAbsolutePath(fileName, host.getCurrentDirectory()));
+        function getSourceFile(fileName: string): SourceFile {
+            return filesByName.get(getNormalizedAbsolutePath(fileName, currentDirectory));
         }
 
         function getDiagnosticsHelper(
@@ -735,7 +741,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, getNormalizedAbsolutePath(fileName, currentDirectory), isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -745,13 +751,13 @@ namespace ts {
                 }
             }
             else {
-                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, getNormalizedAbsolutePath(fileName, currentDirectory), isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, getNormalizedAbsolutePath(fileName + extension, currentDirectory), isDefaultLib, refFile, refPos, refEnd))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -769,19 +775,26 @@ namespace ts {
             }
         }
 
-        // Get source file from normalized fileName
-        function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
-            if (filesByName.contains(fileName)) {
-                // We've already looked for this file, use cached result
-                return getSourceFileFromCache(fileName, /*useAbsolutePath*/ false);
+        function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFileName: string, refFile: SourceFile, refPos: number, refEnd: number): void {
+            if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
+                fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
+                    Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, existingFileName));
             }
+            else {
+                fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, existingFileName));
+            }
+        }
 
-            let normalizedAbsolutePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
+        // Get source file from normalized fileName
+        function findSourceFile(fileName: string, normalizedAbsolutePath: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(normalizedAbsolutePath)) {
-                const file = getSourceFileFromCache(normalizedAbsolutePath, /*useAbsolutePath*/ true);
-                // we don't have resolution for this relative file name but the match was found by absolute file name
-                // store resolution for relative name as well 
-                filesByName.set(fileName, file);
+                const file = filesByName.get(normalizedAbsolutePath);
+                // try to check if we've already seen this file but with a different casing in path
+                // NOTE: this only makes sense for case-insensitive file systems
+                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== normalizedAbsolutePath) {
+                    reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                }
+
                 return file;
             }
 
@@ -796,12 +809,20 @@ namespace ts {
                 }
             });
 
-            filesByName.set(fileName, file);
+            filesByName.set(normalizedAbsolutePath, file);
             if (file) {
-                skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
+                if (host.useCaseSensitiveFileNames()) {
+                    // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
+                    const existingFile = filesByNameIgnoreCase.get(normalizedAbsolutePath);
+                    if (existingFile) {
+                        reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
+                    }
+                    else {
+                        filesByNameIgnoreCase.set(normalizedAbsolutePath, file);
+                    }
+                }
 
-                // Set the source file for normalized absolute path
-                filesByName.set(normalizedAbsolutePath, file);
+                skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
 
                 let basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
@@ -821,23 +842,6 @@ namespace ts {
             }
 
             return file;
-
-            function getSourceFileFromCache(fileName: string, useAbsolutePath: boolean): SourceFile {
-                let file = filesByName.get(fileName);
-                if (file && host.useCaseSensitiveFileNames()) {
-                    let sourceFileName = useAbsolutePath ? getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()) : file.fileName;
-                    if (normalizeSlashes(fileName) !== normalizeSlashes(sourceFileName)) {
-                        if (refFile !== undefined && refPos !== undefined && refEnd !== undefined) {
-                            fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos,
-                                Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
-                        }
-                        else {
-                            fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing, fileName, sourceFileName));
-                        }
-                    }
-                }
-                return file;
-            }
         }
 
         function processReferencedFiles(file: SourceFile, basePath: string) {
@@ -847,17 +851,29 @@ namespace ts {
             });
         }
 
+        function getCanonicalFileName(fileName: string): string {
+            return host.getCanonicalFileName(fileName);
+        }
+
         function processImportedModules(file: SourceFile, basePath: string) {
             collectExternalModuleReferences(file);
             if (file.imports.length) {
                 file.resolvedModules = {};
                 let moduleNames = map(file.imports, name => name.text);
-                let resolutions = resolveModuleNamesWorker(moduleNames, file.fileName);
+                let resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < file.imports.length; ++i) {
                     let resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        const importedFile = findModuleSourceFile(resolution.resolvedFileName, file.imports[i]);
+                        const absoluteImportPath = isRootedDiskPath(resolution.resolvedFileName)
+                            ? resolution.resolvedFileName
+                            : getNormalizedAbsolutePath(resolution.resolvedFileName, currentDirectory);
+
+                        // convert an absolute import path to path that is relative to current directory
+                        // this was host still can locate it but files names in user output will be shorter (and thus look nicer).
+                        const relativePath = getRelativePathToDirectoryOrUrl(currentDirectory, absoluteImportPath, currentDirectory, getCanonicalFileName, false);
+                        const importedFile = findSourceFile(relativePath, absoluteImportPath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {
                                 let start = getTokenPosOfNode(file.imports[i], file);
@@ -880,15 +896,10 @@ namespace ts {
                 file.resolvedModules = undefined;
             }
             return;
-
-            function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
-                return findSourceFile(fileName, /* isDefaultLib */ false, file, skipTrivia(file.text, nameLiteral.pos), nameLiteral.end);
-            }
         }
 
         function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
             let commonPathComponents: string[];
-            let currentDirectory = host.getCurrentDirectory();
             forEach(files, sourceFile => {
                 // Each file contributes into common source file path
                 if (isDeclarationFile(sourceFile)) {
@@ -929,7 +940,6 @@ namespace ts {
         function checkSourceFilesBelongToPath(sourceFiles: SourceFile[], rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
             if (sourceFiles) {
-                let currentDirectory = host.getCurrentDirectory();
                 let absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
                 for (var sourceFile of sourceFiles) {
@@ -1034,7 +1044,7 @@ namespace ts {
 
                 if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
-                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
                 }
                 else {
                     // Compute the commonSourceDirectory from the input files
