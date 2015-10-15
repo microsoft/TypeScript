@@ -82,13 +82,18 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
+    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean, sortBeforeComparison = false): boolean {
         if (!arr1 || !arr2) {
             return arr1 === arr2;
         }
 
         if (arr1.length !== arr2.length) {
             return false;
+        }
+
+        if (sortBeforeComparison) {
+            arr1.sort();
+            arr2.sort();
         }
 
         for (let i = 0; i < arr1.length; ++i) {
@@ -2413,17 +2418,5 @@ namespace ts {
                 }
             }
         }
-    }
-
-    export function arrayStructurallyIsEqualTo<T>(array1: Array<T>, array2: Array<T>): boolean {
-        if (!array1 || !array2) {
-            return false;
-        }
-
-        if (array1.length !== array2.length) {
-            return false;
-        }
-
-        return arrayIsEqualTo(array1.sort(), array2.sort());
     }
 }

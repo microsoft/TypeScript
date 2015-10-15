@@ -576,7 +576,7 @@ namespace ts.server {
             let newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             let currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
-            if (!arrayStructurallyIsEqualTo(currentRootFiles, newRootFiles)) {
+            if (!arrayIsEqualTo(currentRootFiles, newRootFiles, /*comparer*/ undefined, /*sortBeforeComparison*/ true)) {
                 // For configured projects, the change is made outside the tsconfig file, and
                 // it is not likely to affect the project for other files opened by the client. We can 
                 // just update the current project.

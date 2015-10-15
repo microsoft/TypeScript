@@ -844,9 +844,9 @@ namespace ts {
 
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         let copiedList: T[] = [];
-        for (var i = 0, len = list.length; i < len; i++) {
-            if (list[i] !== item) {
-                copiedList.push(list[i]);
+        for (let e of list) {
+            if (e !== item) {
+                copiedList.push(e);
             }
         }
         return copiedList;

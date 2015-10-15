@@ -360,7 +360,7 @@ namespace ts {
             let newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
             let canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
 
-            if (!arrayStructurallyIsEqualTo(newFileNames, canonicalRootFileNames)) {
+            if (!arrayIsEqualTo(newFileNames, canonicalRootFileNames, /*comparer*/ undefined, /*sortBeforeComparison*/ true)) {
                 setCachedProgram(undefined);
                 startTimerForRecompilation();
             }
