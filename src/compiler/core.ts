@@ -365,10 +365,10 @@ namespace ts {
 
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
-    export function getLocaleSpecificMessage(message: string) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
-            ? localizedDiagnosticMessages[message]
-            : message;
+    export function getLocaleSpecificMessage(message: DiagnosticMessage) {
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
+            ? localizedDiagnosticMessages[message.key]
+            : message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -383,7 +383,7 @@ namespace ts {
             Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
         }
 
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
@@ -402,7 +402,7 @@ namespace ts {
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 1) {
             text = formatStringFromArgs(text, arguments, 1);
@@ -421,7 +421,7 @@ namespace ts {
 
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
