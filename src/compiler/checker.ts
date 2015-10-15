@@ -5691,6 +5691,10 @@ namespace ts {
             return !!getPropertyOfType(type, "0");
         }
 
+        function isStringLiteralType(type: Type) {
+            return type.flags & TypeFlags.StringLiteral;
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -6951,6 +6955,10 @@ namespace ts {
 
         function getIndexTypeOfContextualType(type: Type, kind: IndexKind) {
             return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
+        }
+
+        function contextualTypeIsStringLiteralType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
         }
 
         // Return true if the given contextual type is a tuple-like type
@@ -10350,22 +10358,14 @@ namespace ts {
             return getUnionType([type1, type2]);
         }
 
-        function checkStringLiteralExpression(node: LiteralExpression) {
+        function checkStringLiteralExpression(node: StringLiteral): Type {
             // TODO (drosen): Do we want to apply the same approach to no-sub template literals?
 
             let contextualType = getContextualType(node);
-            if (contextualType) {
-                if (contextualType.flags & TypeFlags.Union) {
-                    for (const type of (<UnionType>contextualType).types) {
-                        if (type.flags & TypeFlags.StringLiteral && (<StringLiteralType>type).text === node.text) {
-                            return type;
-                        }
-                    }
-                }
-                else if (contextualType.flags & TypeFlags.StringLiteral && (<StringLiteralType>contextualType).text === node.text) {
-                    return contextualType;
-                }
+            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
+                return getStringLiteralType(node);
             }
+
             return stringType;
         }
 
@@ -10499,7 +10499,7 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
-                    return checkStringLiteralExpression(<LiteralExpression>node);
+                    return checkStringLiteralExpression(<StringLiteral>node);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
