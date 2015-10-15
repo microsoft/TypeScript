@@ -11120,7 +11120,6 @@ namespace ts {
             // names and consistency of modifiers are verified when we check local symbol
             let isExportSymbolInsideModule = symbol.parent && symbol.parent.flags & SymbolFlags.Module;
             let duplicateFunctionDeclaration = false;
-            let duplicateDefaultExports = false;
             let multipleConstructorImplementation = false;
             for (let current of declarations) {
                 let node = <FunctionLikeDeclaration>current;
@@ -11150,7 +11149,11 @@ namespace ts {
                         }
                         else {
                             duplicateFunctionDeclaration = true;
-                            duplicateDefaultExports = !!(node.flags & NodeFlags.Default);
+
+                            // We expect both implementations to agree in defaultness for later on.
+                            if ((node.flags & NodeFlags.Default) !== (implementationDeclaration.flags & NodeFlags.Default)) {
+                                Debug.fail("Expected first and current implementations of and current to agree in export default flag.");
+                            }
                         }
                     }
                     else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
@@ -11181,7 +11184,7 @@ namespace ts {
             }
 
             if (duplicateFunctionDeclaration) {
-                let message = duplicateDefaultExports && areAllFunctionDeclarationsWhereSomeNamesDiffer(declarations) ?
+                let message = implementationDeclaration.flags & NodeFlags.Default && areAllFunctionDeclarationsWhereSomeNamesDiffer(declarations) ?
                     Diagnostics.A_module_cannot_have_multiple_default_exports :
                     Diagnostics.Duplicate_function_implementation;
 
