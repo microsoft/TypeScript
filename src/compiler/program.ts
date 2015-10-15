@@ -65,7 +65,7 @@ namespace ts {
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            return loadModuleFromNodeModules(moduleName, containingDirectory, host);
+            return loadModuleFromNodeModules(moduleName, containingDirectory, supportedExtensions, host);
         }
     }
 
@@ -114,7 +114,7 @@ namespace ts {
         return loadNodeModuleFromFile(combinePaths(candidate, "index"), supportedExtensions, failedLookupLocation, host);
     }
 
-    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, supportedExtensions: string[], host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         let failedLookupLocations: string[] = [];
         directory = normalizeSlashes(directory);
         while (true) {
@@ -122,12 +122,12 @@ namespace ts {
             if (baseName !== "node_modules") {
                 let nodeModulesFolder = combinePaths(directory, "node_modules");
                 let candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(candidate, /* loadOnlyDts */ ["d.ts"], failedLookupLocations, host);
+                let result = loadNodeModuleFromFile(candidate, supportedExtensions, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(candidate, /* loadOnlyDts */ ["d.ts"], failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(candidate, supportedExtensions, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -1242,11 +1242,6 @@ namespace ts {
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
-            }
-
-            if (options.experimentalAsyncFunctions &&
-                options.target !== ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
             }
 
             if (!options.noEmit) {

@@ -2780,6 +2780,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            /**
+             * Emit ES7 exponentiation operator downlevel using Math.pow
+             * @param node a binary expression node containing exponentiationOperator (**, **=) 
+             */
+            function emitExponentiationOperator(node: BinaryExpression) {
+                let leftHandSideExpression = node.left;
+                if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                    let synthesizedLHS: ElementAccessExpression | PropertyAccessExpression;
+                    let shouldEmitParentheses = false;
+                    if (isElementAccessExpression(leftHandSideExpression)) {
+                        shouldEmitParentheses = true;
+                        write("(");
+
+                        synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
+
+                        let identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
+                        synthesizedLHS.expression = identifier;
+
+                        if (leftHandSideExpression.argumentExpression.kind !== SyntaxKind.NumericLiteral &&
+                            leftHandSideExpression.argumentExpression.kind !== SyntaxKind.StringLiteral) {
+                            let tempArgumentExpression = createAndRecordTempVariable(TempFlags._i);
+                            (<ElementAccessExpression>synthesizedLHS).argumentExpression = tempArgumentExpression;
+                            emitAssignment(tempArgumentExpression, leftHandSideExpression.argumentExpression, /*shouldEmitCommaBeforeAssignment*/ true);
+                        }
+                        else {
+                            (<ElementAccessExpression>synthesizedLHS).argumentExpression = leftHandSideExpression.argumentExpression;
+                        }
+                        write(", ");
+                    }
+                    else if (isPropertyAccessExpression(leftHandSideExpression)) {
+                        shouldEmitParentheses = true;
+                        write("(");
+                        synthesizedLHS = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression, /*startsOnNewLine*/ false);
+
+                        let identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldemitCommaBeforeAssignment*/ false);
+                        synthesizedLHS.expression = identifier;
+
+                        (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
+                        (<PropertyAccessExpression>synthesizedLHS).name = leftHandSideExpression.name;
+                        write(", ");
+                    }
+
+                    emit(synthesizedLHS || leftHandSideExpression);
+                    write(" = ");
+                    write("Math.pow(");
+                    emit(synthesizedLHS || leftHandSideExpression);
+                    write(", ");
+                    emit(node.right);
+                    write(")");
+                    if (shouldEmitParentheses) {
+                        write(")");
+                    }
+                }
+                else {
+                    write("Math.pow(");
+                    emit(leftHandSideExpression);
+                    write(", ");
+                    emit(node.right);
+                    write(")");
+                }
+            }
+
             function emitBinaryExpression(node: BinaryExpression) {
                 if (languageVersion < ScriptTarget.ES6 && node.operatorToken.kind === SyntaxKind.EqualsToken &&
                     (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -2797,12 +2859,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitNodeWithoutSourceMap(node.left);
                         write(`", `);
                     }
-                    emit(node.left);
-                    let indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
-                    write(tokenToString(node.operatorToken.kind));
-                    let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
-                    emit(node.right);
-                    decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
+
+                    if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskToken || node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                        // Downleveled emit exponentiation operator using Math.pow
+                        emitExponentiationOperator(node);
+                    }
+                    else {
+                        emit(node.left);
+                        // Add indentation before emit the operator if the operator is on different line
+                        // For example:
+                        //      3
+                        //      + 2;
+                        //   emitted as
+                        //      3
+                        //          + 2;
+                        let indentedBeforeOperator = indentIfOnDifferentLines(node, node.left, node.operatorToken, node.operatorToken.kind !== SyntaxKind.CommaToken ? " " : undefined);
+                        write(tokenToString(node.operatorToken.kind));
+                        let indentedAfterOperator = indentIfOnDifferentLines(node, node.operatorToken, node.right, " ");
+                        emit(node.right);
+                        decreaseIndentIf(indentedBeforeOperator, indentedAfterOperator);
+                    }
+
                     if (exportChanged) {
                         write(")");
                     }
@@ -3439,6 +3516,58 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(";");
             }
 
+            /**
+             * Emit an assignment to a given identifier, 'name', with a given expression, 'value'.
+             * @param name an identifier as a left-hand-side operand of the assignment
+             * @param value an expression as a right-hand-side operand of the assignment
+             * @param shouldEmitCommaBeforeAssignment a boolean indicating whether to prefix an assignment with comma
+             */
+            function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean) {
+                if (shouldEmitCommaBeforeAssignment) {
+                    write(", ");
+                }
+
+                let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
+
+                if (exportChanged) {
+                    write(`${exportFunctionForFile}("`);
+                    emitNodeWithCommentsAndWithoutSourcemap(name);
+                    write(`", `);
+                }
+
+                const isVariableDeclarationOrBindingElement =
+                    name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
+
+                if (isVariableDeclarationOrBindingElement) {
+                    emitModuleMemberName(<Declaration>name.parent);
+                }
+                else {
+                    emit(name);
+                }
+
+                write(" = ");
+                emit(value);
+
+                if (exportChanged) {
+                    write(")");
+                }
+            }
+
+            /**
+             * Create temporary variable, emit an assignment of the variable the given expression
+             * @param expression an expression to assign to the newly created temporary variable
+             * @param canDefineTempVariablesInPlace a boolean indicating whether you can define the temporary variable at an assignment location
+             * @param shouldEmitCommaBeforeAssignment a boolean indicating whether an assignment should prefix with comma
+             */
+            function emitTempVariableAssignment(expression: Expression, canDefineTempVariablesInPlace: boolean, shouldEmitCommaBeforeAssignment: boolean): Identifier {
+                let identifier = createTempVariable(TempFlags.Auto);
+                if (!canDefineTempVariablesInPlace) {
+                    recordTempDeclaration(identifier);
+                }
+                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment);
+                return identifier;
+            }
+
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
                 let emitCount = 0;
 
@@ -3464,36 +3593,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitBindingElement(<BindingElement>root, value);
                 }
 
-                function emitAssignment(name: Identifier, value: Expression) {
-                    if (emitCount++) {
-                        write(", ");
-                    }
-
-                    const isVariableDeclarationOrBindingElement =
-                        name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
-
-                    let exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(name);
-
-                    if (exportChanged) {
-                        write(`${exportFunctionForFile}("`);
-                        emitNodeWithCommentsAndWithoutSourcemap(name);
-                        write(`", `);
-                    }
-
-                    if (isVariableDeclarationOrBindingElement) {
-                        emitModuleMemberName(<Declaration>name.parent);
-                    }
-                    else {
-                        emit(name);
-                    }
-
-                    write(" = ");
-                    emit(value);
-
-                    if (exportChanged) {
-                        write(")");
-                    }
-                }
 
                 /**
                  * Ensures that there exists a declared identifier whose value holds the given expression.
@@ -3509,11 +3608,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return expr;
                     }
 
-                    let identifier = createTempVariable(TempFlags.Auto);
-                    if (!canDefineTempVariablesInPlace) {
-                        recordTempDeclaration(identifier);
-                    }
-                    emitAssignment(identifier, expr);
+                    let identifier = emitTempVariableAssignment(expr, canDefineTempVariablesInPlace, emitCount > 0);
+                    emitCount++;
                     return identifier;
                 }
 
@@ -3620,7 +3716,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value);
                     }
                     else {
-                        emitAssignment(<Identifier>target, value);
+                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                        emitCount++;
                     }
                 }
 
@@ -3689,7 +3786,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        emitAssignment(<Identifier>target.name, value);
+                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                        emitCount++;
                     }
                 }
             }

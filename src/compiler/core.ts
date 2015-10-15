@@ -437,8 +437,12 @@ namespace ts {
     }
 
     export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
-        Debug.assert(!headChain.next);
-        headChain.next = tailChain;
+        let lastChain = headChain;
+        while (lastChain.next) {
+            lastChain = lastChain.next;
+        }
+
+        lastChain.next = tailChain;
         return headChain;
     }
 
@@ -700,6 +704,9 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
+        if (path === undefined) {
+            return undefined;
+        }
         let i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
@@ -722,6 +729,17 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTypeScriptExtensions = ["ts", "tsx", "d.ts"];
+
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
+        if (!fileName) { return false; }
+
+        for (let extension of getSupportedExtensions(compilerOptions)) {
+            if (fileExtensionIs(fileName, extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     export function removeFileExtension(path: string, supportedExtensions: string[]): string {
         // Sort the extensions in descending order of their length
@@ -818,5 +836,15 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(false, message);
         }
+    }
+
+    export function copyListRemovingItem<T>(item: T, list: T[]) {
+        let copiedList: T[] = [];
+        for (var i = 0, len = list.length; i < len; i++) {
+            if (list[i] !== item) {
+                copiedList.push(list[i]);
+            }
+        }
+        return copiedList;
     }
 }

@@ -211,7 +211,7 @@ class ProjectRunner extends RunnerBase {
                 }
 
                 let configObject = result.config;
-                let configParseResult = ts.parseConfigFile(configObject, { fileExists, readFile: getSourceFileText, readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
+                let configParseResult = ts.parseJsonConfigFileContent(configObject, { fileExists, readFile: getSourceFileText, readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,

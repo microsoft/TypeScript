@@ -128,6 +128,9 @@ var ResultIsNumber30 = obj1.y++;
 // miss assignment operators
 ++ANY2;
 ANY2++;
-++ANY1++;
-++ANY2++;
-++ANY2[0]++;
+++ANY1;
+++;
+++ANY2;
+++;
+++ANY2[0];
+++;

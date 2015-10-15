@@ -601,14 +601,21 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionListItemsCountIsGreaterThan(count: number) {
+        public verifyCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
             this.taoInvalidReason = "verifyCompletionListItemsCountIsGreaterThan NYI";
 
             let completions = this.getCompletionListAtCaret();
             let itemsCount = completions.entries.length;
 
-            if (itemsCount <= count) {
-                this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+            if (negative) {
+                if (itemsCount > count) {
+                    this.raiseError(`Expected completion list items count to not be greater than ${count}, but is actually ${itemsCount}`);
+                }
+            }
+            else {
+                if (itemsCount <= count) {
+                    this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+                }
             }
         }
 
