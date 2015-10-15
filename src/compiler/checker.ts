@@ -2057,6 +2057,9 @@ namespace ts {
             }
 
             function visitTypeList(types: Type[]): void {
+                if (!types) {
+                    return;
+                }
                 for (let i = 0; i < types.length; i++) {
                     visitType(types[i]);
                 }
@@ -2086,8 +2089,12 @@ namespace ts {
             }
 
             function visitSignature(signature: Signature): void {
-                visitType(signature.typePredicate.type);
+                if (signature.typePredicate) {
+                    visitType(signature.typePredicate.type);
+                }
                 visitTypeList(signature.typeParameters);
+                visitType(getReturnTypeOfSignature(signature));
+                visitType(getRestTypeOfSignature(signature));
             }
 
             function visitInterfaceType(interfaceT: InterfaceType): void {
@@ -2095,9 +2102,8 @@ namespace ts {
                 if (interfaceT.typeParameters) {
                     visitTypeList(interfaceT.typeParameters);
                 }
-                if (interfaceT.resolvedBaseTypes) {
-                    visitTypeList(interfaceT.resolvedBaseTypes);
-                }
+                visitTypeList(getBaseTypes(interfaceT));
+                visitType(interfaceT.thisType);
             }
 
             function visitObjectType(type: ObjectType): void {
@@ -14973,13 +14979,13 @@ namespace ts {
                 isOptionalParameter,
                 getExportsOfModule: getExportsOfModuleAsArray,
                 getDefiningTypeOfSymbol: (symbol: Symbol) => {
-                    let valueType = getTypeOfSymbol(symbol);
-                    if (valueType !== unknownType) {
-                        return valueType;
-                    }
                     let declaredType = getDeclaredTypeOfSymbol(symbol);
                     if (declaredType !== unknownType) {
                         return declaredType;
+                    }
+                    let valueType = getTypeOfSymbol(symbol);
+                    if (valueType !== unknownType) {
+                        return valueType;
                     }
                 },
                 getTypeAtLocation: getTypeOfNode,

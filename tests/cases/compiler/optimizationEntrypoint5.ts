@@ -16,6 +16,9 @@ export class Main {
 	f: foo.F & foo.F2;
 	g: foo.GAlias;
 	h: {item: foo.H};
+	i: foo.IAlias;
+	j: foo.J<number>;
+	jj: foo.AnyJ;
 }
 
 // @Filename: foo.ts
@@ -29,5 +32,9 @@ export class F {}
 export class E2 {}
 export class F2 {}
 export class G {}
-export type GAlias = G;
+export type GAlias = G | A;
 export class H {}
+export class I {}
+export type IAlias = I;
+export class J<T> {}
+export type AnyJ = J<any>;

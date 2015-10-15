@@ -185,12 +185,12 @@ namespace ts {
         };
         
         function emitFlattenedTypeDefinitions(entrypoint: SourceFile): void {
+            let undoActions: (() => void)[] = [];
+            let symbolNameSet: Map<number> = {};
             let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
             let types = collectExportedTypes(entrypoint, exportedMembers);
             let dependentTypes = collectDependentTypes(types);
-            let symbolNameSet: Map<number> = {};
             let aliasMapping = map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported));
-            let undoSynthNodesStack: (() => void)[] = [];
             let createSynthIdentifiers = (symbol: Symbol, generatedName: string) => {
                 forEach(symbol.declarations, declaration => {
                     let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
@@ -198,7 +198,7 @@ namespace ts {
                     synthId.text = generatedName;
                     synthId.parent = declaration;
                     let oldName = declaration.name;
-                    undoSynthNodesStack.push(() => declaration.name = oldName);
+                    undoActions.push(() => declaration.name = oldName);
                     declaration.name = synthId;
                 });
             };
@@ -277,11 +277,11 @@ namespace ts {
                     d.flags -= NodeFlags.Default;
                 }
                 switch (d.kind) {
+                    case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.VariableStatement:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ModuleDeclaration:
                         writeModuleElement(d);
@@ -290,7 +290,9 @@ namespace ts {
                 }
                 d.flags = oldFlags;
             }
+            let privateTypes = 0;
             forEachValue(dependentTypes, type => {
+                privateTypes++;
                 let realSourceFile = currentSourceFile;
                 forEach(type.symbol.declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/false));
                 currentSourceFile = realSourceFile;
@@ -311,12 +313,23 @@ namespace ts {
                 writeLine();
                 write(`export default ${alias};`);
             }
-            forEach(undoSynthNodesStack, undo => undo()); // So we don't ruin the tree
+            if (privateTypes && !exportEquals) {
+                writeLine();
+                write("export {};");
+            }
+            forEach(undoActions, undo => undo()); // So we don't ruin the tree
 
             return;
         
             function collectExportedTypes(file: SourceFile, exportedMembers: Symbol[]): Map<Type> {
-                return arrayToMap(filter(map(exportedMembers, exported => resolver.getDefiningTypeOfSymbol(exported)), value => value && !!value.symbol), value => (value.symbol.id + ""));
+                return arrayToMap(filter(map(exportedMembers, exported => {
+                    let type = resolver.getDefiningTypeOfSymbol(exported);
+                    if (type && exported.flags & SymbolFlags.TypeAlias) {
+                        let oldSymbol = type.symbol;
+                        type.symbol = exported; // Preserves type aliases if they're exported
+                    }
+                    return type;
+                }), value => value && !!value.symbol), value => (value.symbol.id + ""));
             }
     
             function collectDependentTypes(exported: Map<Type>): Map<Type> {
