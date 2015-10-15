@@ -6,6 +6,9 @@ x = y;  // Error
 y = x;  // Ok because index signature type is any
 x = z;  // Error
 z = x;  // Ok because index signature type is any
+y = "foo"; // Error
+z = "foo"; // Error
+
 
 
 //// [assignmentCompat1.js]
@@ -16,3 +19,5 @@ x = y; // Error
 y = x; // Ok because index signature type is any
 x = z; // Error
 z = x; // Ok because index signature type is any
+y = "foo"; // Error
+z = "foo"; // Error
