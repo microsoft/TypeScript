@@ -378,8 +378,8 @@ namespace ts {
         OctalLiteral =      0x00010000,  // Octal numeric literal
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
-        ContainsThis =      0x00080000,  // Interface contains references to "this"
-
+        InferredClass =     0x00080000,  // A class with no explicitly declared properties (set by binder)
+        ContainsThis =      0x00100000,  // Interface contains references to "this"
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const
@@ -764,7 +764,8 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface BinaryExpression extends Expression {
+    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
+    export interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -825,7 +826,7 @@ namespace ts {
         properties: NodeArray<ObjectLiteralElement>;
     }
 
-    export interface PropertyAccessExpression extends MemberExpression {
+    export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         dotToken: Node;
         name: Identifier;
@@ -836,7 +837,8 @@ namespace ts {
         argumentExpression?: Expression;
     }
 
-    export interface CallExpression extends LeftHandSideExpression {
+    // Call expressions can be declarations if they are 'define' calls in JS files
+    export interface CallExpression extends LeftHandSideExpression, Declaration {
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
@@ -1274,6 +1276,8 @@ namespace ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
+        // The first node that causes this file to be a CommonJS module
+        /* @internal */ commonJsModuleIndicator: Node;
 
         /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;

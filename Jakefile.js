@@ -814,6 +814,8 @@ desc("Updates the sublime plugin's tsserver");
 task("update-sublime", ["local", serverFile], function() {
     jake.cpR(serverFile, "../TypeScript-Sublime-Plugin/tsserver/");
     jake.cpR(serverFile + ".map", "../TypeScript-Sublime-Plugin/tsserver/");
+    jake.cpR(path.join(builtLocalDirectory, "lib.d.ts"), "../TypeScript-Sublime-Plugin/tsserver/");
+    jake.cpR(path.join(builtLocalDirectory, "lib.es6.d.ts"), "../TypeScript-Sublime-Plugin/tsserver/");
 });
 
 var tslintRuleDir = "scripts/tslint";

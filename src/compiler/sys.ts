@@ -188,13 +188,13 @@ namespace ts {
             };
         }
         function getNodeSystem(): System {
-            const _fs = require("fs");
-            const _path = require("path");
-            const _os = require("os");
+            let _fs = require("fs");
+            let _path = require("path");
+            let _os = require("os");
 
-            const platform: string = _os.platform();
+            let platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
-            const useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
+            let useCaseSensitiveFileNames = platform !== "win32" && platform !== "win64" && platform !== "darwin";
 
             function readFile(fileName: string, encoding?: string): string {
                 if (!_fs.existsSync(fileName)) {
@@ -340,8 +340,6 @@ namespace ts {
             return getWScriptSystem();
         }
         else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
-            // process and process.nextTick checks if current environment is node-like
-            // process.browser check excludes webpack and browserify
             return getNodeSystem();
         }
         else {

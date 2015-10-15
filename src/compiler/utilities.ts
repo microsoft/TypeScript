@@ -362,6 +362,10 @@ namespace ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isExternalOrCommonJsModule(file: SourceFile): boolean {
+        return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
+    }
+
     export function isDeclarationFile(file: SourceFile): boolean {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
@@ -1031,6 +1035,56 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    export function isSourceFileJavaScript(file: SourceFile): boolean {
+        return isInJavaScriptFile(file);
+    }
+
+    function isInJavaScriptFile(node: Node): boolean {
+        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+    }
+
+    /**
+     * Returns true if the node is a CallExpression to the identifier 'require' with
+     * exactly one argument.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isRequireCall(expression: Node): expression is CallExpression {
+        // of the form 'require("name")'
+        return expression.kind === SyntaxKind.CallExpression &&
+                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+                (<CallExpression>expression).arguments.length === 1;
+    }
+
+    /**
+     * Returns true if the node is an assignment to a property on the identifier 'exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isExportsPropertyAssignment(expression: Node): boolean {
+        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
+    }
+
+    /**
+     * Returns true if the node is an assignment to the property access expression 'module.exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isModuleExportsAssignment(expression: Node): boolean {
+        // of the form 'module.exports = expr' where 'expr' is arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
+    }
+
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
@@ -1069,47 +1123,79 @@ namespace ts {
             (<JSDocFunctionType>node).parameters[0].type.kind === SyntaxKind.JSDocConstructorType;
     }
 
-    function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
-        if (node && node.jsDocComment) {
-            for (let tag of node.jsDocComment.tags) {
-                if (tag.kind === kind) {
-                    return tag;
-                }
+    function getJSDocTag(node: Node, kind: SyntaxKind, checkParentVariableStatement: boolean): JSDocTag {
+        if (!node) {
+            return undefined;
+        }
+
+        const jsDocComment = getJSDocComment(node, checkParentVariableStatement);
+        if (!jsDocComment) {
+            return undefined;
+        }
+
+        for (let tag of jsDocComment.tags) {
+            if (tag.kind === kind) {
+                return tag;
             }
         }
     }
 
+    function getJSDocComment(node: Node, checkParentVariableStatement: boolean): JSDocComment {
+        if (node.jsDocComment) {
+            return node.jsDocComment;
+        }
+        // Try to recognize this pattern when node is initializer of variable declaration and JSDoc comments are on containing variable statement. 
+        // /** 
+        //   * @param {number} name
+        //   * @returns {number} 
+        //   */
+        // var x = function(name) { return name.length; }
+        if (checkParentVariableStatement) {
+            const isInitializerOfVariableDeclarationInStatement =
+                node.parent.kind === SyntaxKind.VariableDeclaration &&
+                (<VariableDeclaration>node.parent).initializer === node &&
+                node.parent.parent.parent.kind === SyntaxKind.VariableStatement;
+
+            const variableStatementNode = isInitializerOfVariableDeclarationInStatement ? node.parent.parent.parent : undefined;
+            return variableStatementNode && variableStatementNode.jsDocComment;
+        }
+
+        return undefined;
+    }
+
     export function getJSDocTypeTag(node: Node): JSDocTypeTag {
-        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag);
+        return <JSDocTypeTag>getJSDocTag(node, SyntaxKind.JSDocTypeTag, /* checkParentVariableStatement */ false);
     }
 
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
-        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag);
+        return <JSDocReturnTag>getJSDocTag(node, SyntaxKind.JSDocReturnTag, /* checkParentVariableStatement */ true);
     }
 
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
-        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag);
+        return <JSDocTemplateTag>getJSDocTag(node, SyntaxKind.JSDocTemplateTag, /* checkParentVariableStatement */ false);
     }
 
     export function getCorrespondingJSDocParameterTag(parameter: ParameterDeclaration): JSDocParameterTag {
         if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
             // If it's a parameter, see if the parent has a jsdoc comment with an @param
             // annotation.
-            let parameterName = (<Identifier>parameter.name).text;
+            const parameterName = (<Identifier>parameter.name).text;
 
-            let docComment = parameter.parent.jsDocComment;
-            if (docComment) {
-                return <JSDocParameterTag>forEach(docComment.tags, t => {
-                    if (t.kind === SyntaxKind.JSDocParameterTag) {
-                        let parameterTag = <JSDocParameterTag>t;
+            const jsDocComment = getJSDocComment(parameter.parent, /* checkParentVariableStatement */ true);
+            if (jsDocComment) {
+                for (let tag of jsDocComment.tags) {
+                    if (tag.kind === SyntaxKind.JSDocParameterTag) {
+                        let parameterTag = <JSDocParameterTag>tag;
                         let name = parameterTag.preParameterName || parameterTag.postParameterName;
                         if (name.text === parameterName) {
-                            return t;
+                            return parameterTag;
                         }
                     }
-                });
+                }
             }
         }
+
+        return undefined;
     }
 
     export function hasRestParameter(s: SignatureDeclaration): boolean {
@@ -2083,12 +2169,12 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 
     export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+        return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
     }
 
     /**

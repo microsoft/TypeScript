@@ -361,6 +361,10 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+            if(projectOptions && projectOptions.files){
+                // If files are listed explicitly, allow all extensions
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
+            }
             this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
@@ -449,6 +453,7 @@ namespace ts.server {
         setProjectOptions(projectOptions: ProjectOptions) {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
         }
@@ -1161,7 +1166,9 @@ namespace ts.server {
                 this.setCompilerOptions(opt);
             }
             else {
-                this.setCompilerOptions(ts.getDefaultCompilerOptions());
+                var defaultOpts = ts.getDefaultCompilerOptions();
+                defaultOpts.allowNonTsExtensions = true;
+                this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
             this.classifier = ts.createClassifier();

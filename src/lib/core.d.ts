@@ -1183,6 +1183,22 @@ interface PromiseLike<T> {
     then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
 }
 
+
+declare namespace CommonJS {
+    export var require: Require;
+
+    export var exports: any;
+
+    interface Exports { }
+    interface Module {
+      exports: Exports;
+    }
+
+    interface Require {
+        (moduleName: string): any;
+    }
+}
+
 interface ArrayLike<T> {
     length: number;
     [n: number]: T;

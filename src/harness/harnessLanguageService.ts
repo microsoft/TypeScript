@@ -197,7 +197,7 @@ namespace Harness.LanguageService {
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
         getClassifier(): ts.Classifier { return ts.createClassifier(); }
-        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
     }
 
     /// Shim adapter
@@ -614,7 +614,7 @@ namespace Harness.LanguageService {
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
             let serverHost = new SessionServerHost(clientHost);
-            let server = new ts.server.Session(serverHost, Buffer.byteLength, process.hrtime, serverHost);
+            let server = new ts.server.Session(serverHost, data => serverHost.write(data), Buffer.byteLength, process.hrtime, serverHost);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

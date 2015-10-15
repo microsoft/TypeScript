@@ -223,10 +223,22 @@ namespace FourSlash {
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
-        private addMatchedInputFile(referenceFilePath: string) {
-            let inputFile = this.inputFiles[referenceFilePath];
-            if (inputFile && !Harness.isLibraryFile(referenceFilePath)) {
-                this.languageServiceAdapterHost.addScript(referenceFilePath, inputFile);
+        private addMatchedInputFile(referenceFilePath: string, extensions: string[]) {
+            let inputFiles = this.inputFiles;
+            let languageServiceAdapterHost = this.languageServiceAdapterHost;
+            if (!extensions) {
+                tryAdd(referenceFilePath);
+            }
+            else {
+                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
+            }
+
+            function tryAdd(path: string) {
+                let inputFile = inputFiles[path];
+                if (inputFile && !Harness.isLibraryFile(path)) {
+                    languageServiceAdapterHost.addScript(path, inputFile);
+                    return true;
+                }
             }
         }
 
@@ -280,15 +292,15 @@ namespace FourSlash {
                 ts.forEach(referencedFiles, referenceFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
                     let referenceFilePath = this.basePath + "/" + referenceFile.fileName;
-                    this.addMatchedInputFile(referenceFilePath);
+                    this.addMatchedInputFile(referenceFilePath, /* extensions */ undefined);
                 });
 
                 // Add import files into language-service host
                 ts.forEach(importedFiles, importedFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
                     // so convert them before making appropriate comparison
-                    let importedFilePath = this.basePath + "/" + importedFile.fileName + ".ts";
-                    this.addMatchedInputFile(importedFilePath);
+                    let importedFilePath = this.basePath + "/" + importedFile.fileName;
+                    this.addMatchedInputFile(importedFilePath, compilationOptions.allowNonTsExtensions ? ts.supportedJsExtensions : ts.supportedExtensions);
                 });
 
                 // Check if no-default-lib flag is false and if so add default library
@@ -605,6 +617,33 @@ namespace FourSlash {
             else {
                 if (itemsCount <= count) {
                     this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+                }
+            }
+        }
+
+        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
+            this.taoInvalidReason = "verifyCompletionListContainsItemsPreservingOrder NYI";
+            if (items.length === 0) {
+                return;
+            }
+
+            const entries = this.getCompletionListAtCaret().entries;
+            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
+            for (let i = 0; i < items.length; ++i) {
+                assert.equal(entries[i].name, items[i], `Unexpected item in completion list`);
+            }
+        }
+
+        public noItemsWithSameNameButDifferentKind(): void {
+            this.taoInvalidReason = "noItemsWithSameNameButDifferentKind NYI";
+            let completions = this.getCompletionListAtCaret();
+            let uniqueItems: ts.Map<string> = {};
+            for (const item of completions.entries) {
+                if (!ts.hasProperty(uniqueItems, item.name)) {
+                    uniqueItems[item.name] = item.kind;
+                }
+                else {
+                    assert.equal(item.kind, uniqueItems[item.name], `Items should have the same kind, got ${item.kind} and ${uniqueItems[item.name]}`);
                 }
             }
         }
@@ -2257,15 +2296,15 @@ namespace FourSlash {
                         let details = this.getCompletionEntryDetails(item.name);
 
                         if (documentation !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation"));
+                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation for " + name));
                         }
                         if (text !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text"));
+                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text for " + name));
                         }
                     }
 
                     if (kind !== undefined) {
-                        assert.equal(item.kind, kind, assertionMessage("completion item kind"));
+                        assert.equal(item.kind, kind, assertionMessage("completion item kind for " + name));
                     }
 
                     return;

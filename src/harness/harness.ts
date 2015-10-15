@@ -211,7 +211,7 @@ namespace Utils {
             return isNodeOrArray(v) ? serializeNode(v) : v;
         }, "    ");
 
-        function getKindName(k: number | string): string {
+        function getKindName(k: number|string): string {
             if (typeof k === "string") {
                 return k;
             }

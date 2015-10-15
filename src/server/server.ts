@@ -7,11 +7,58 @@ namespace ts.server {
     var path: NodeJS.Path = require('path');
     var fs: typeof NodeJS.fs = require('fs');
 
+    // TODO: 'net' module not defined in local node.d.ts
+    var net: any = require('net');
+
     var rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         terminal: false,
     });
+
+    // Need to write directly to stdout, else rl.write also causes an input 'line' event
+    // See https://github.com/joyent/node/issues/4243
+    var writeHost = (data: string) => process.stdout.write(data);
+
+    // Stubs for I/O
+    var onWrite = (output: string) => writeHost(output);
+    var onInput = (input: string) => { return; };
+    var onClose = () => { return; };
+
+    // Use a socket for comms if defined
+    var tss_debug: string = process.env['TSS_DEBUG']
+    var tcp_port = 0;
+    if(tss_debug){
+        tss_debug.split(' ').forEach( param => {
+            if (param.indexOf("port=") === 0) {
+                tcp_port = parseInt(param.substring(5));
+            }
+        });
+        if(tcp_port){
+            net.createServer( (socket: any) => {
+                // Called once a connection is made
+                socket.setEncoding('utf8');
+                // Wire up the I/O handers to the socket
+                writeHost = (data: string) => {
+                    socket.write(data);
+                    return true;
+                };
+                socket.on('data', (data: string) => {
+                    // May get multiple requests in one network read
+                    if (data) {
+                        data.trim().split(/(\r\n)|\n/).forEach(line => onInput(line));
+                    }
+                });
+                socket.on('end', onClose);
+
+            }).listen(tcp_port);
+        }
+    }
+    if(!tcp_port){
+        // If not using tcp, wire up the I/O handler to stdin/stdout
+        rl.on('line', (input: string) => onInput(input));
+        rl.on('close', () => onClose());
+    }
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -174,7 +221,7 @@ namespace ts.server {
 
     class IOSession extends Session {
         constructor(host: ServerHost, logger: ts.server.Logger) {
-            super(host, Buffer.byteLength, process.hrtime, logger);
+            super(host, onWrite, Buffer.byteLength, process.hrtime, logger);
         }
 
         exit() {
@@ -184,14 +231,14 @@ namespace ts.server {
         }
 
         listen() {
-            rl.on('line',(input: string) => {
+            onInput = (input: string) => {
+                if(!input || !input.trim()){
+                    return;
+                }
                 var message = input.trim();
                 this.onMessage(message);
-            });
-
-            rl.on('close',() => {
-                this.exit();
-            });
+            };
+            onClose = () => this.exit();
         }
     }
 
