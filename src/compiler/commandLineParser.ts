@@ -77,6 +77,7 @@ namespace ts {
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES6,
+                "es2015": ModuleKind.ES2015,
             },
             description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
             paramType: Diagnostics.KIND,
@@ -205,7 +206,12 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
+            type: {
+                "es3": ScriptTarget.ES3,
+                "es5": ScriptTarget.ES5,
+                "es6": ScriptTarget.ES6,
+                "es2015": ScriptTarget.ES2015,
+            },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
             error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
