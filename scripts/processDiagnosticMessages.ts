@@ -116,13 +116,13 @@ function buildDiagnosticMessageOutput(messageTable: InputDiagnosticMessageTable,
         var diagnosticDetails = messageTable[name];
         var propName = convertPropertyName(nameMap[name]);
 
-        result += '  "' + createKey(propName, diagnosticDetails.code) + '"' + ' : "' + name.replace(/[\"]/g, '\\"') + '"';
+        result += '\r\n  "' + createKey(propName, diagnosticDetails.code) + '"' + ' : "' + name.replace(/[\"]/g, '\\"') + '"';
         if (i !== names.length - 1) {
             result += ',';
         }
     }
 
-    result += '}';
+    result += '\r\n}';
 
     return result;
 }
