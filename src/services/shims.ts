@@ -1104,4 +1104,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-const toolsVersion = "1.6";
+const toolsVersion = "1.7";
