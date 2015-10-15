@@ -896,6 +896,14 @@ namespace ts {
         return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
+    export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
+        return node.kind === SyntaxKind.PropertyAccessExpression;
+    }
+
+    export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
+        return node.kind === SyntaxKind.ElementAccessExpression;
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.SuperKeyword:
@@ -1414,7 +1422,7 @@ namespace ts {
      * where Symbol is literally the word "Symbol", and name is any identifierName
      */
     export function isWellKnownSymbolSyntactically(node: Expression): boolean {
-        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+        return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
     export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
@@ -2047,8 +2055,8 @@ namespace ts {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
-        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
+        else if (isPropertyAccessExpression(node)) {
+            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
         }
         else {
             return false;
@@ -2405,5 +2413,17 @@ namespace ts {
                 }
             }
         }
+    }
+
+    export function arrayStructurallyIsEqualTo<T>(array1: Array<T>, array2: Array<T>): boolean {
+        if (!array1 || !array2) {
+            return false;
+        }
+
+        if (array1.length !== array2.length) {
+            return false;
+        }
+
+        return arrayIsEqualTo(array1.sort(), array2.sort());
     }
 }

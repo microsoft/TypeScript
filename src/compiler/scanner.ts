@@ -136,6 +136,7 @@ namespace ts {
         "=>": SyntaxKind.EqualsGreaterThanToken,
         "+": SyntaxKind.PlusToken,
         "-": SyntaxKind.MinusToken,
+        "**": SyntaxKind.AsteriskAsteriskToken,
         "*": SyntaxKind.AsteriskToken,
         "/": SyntaxKind.SlashToken,
         "%": SyntaxKind.PercentToken,
@@ -158,6 +159,7 @@ namespace ts {
         "+=": SyntaxKind.PlusEqualsToken,
         "-=": SyntaxKind.MinusEqualsToken,
         "*=": SyntaxKind.AsteriskEqualsToken,
+        "**=": SyntaxKind.AsteriskAsteriskEqualsToken,
         "/=": SyntaxKind.SlashEqualsToken,
         "%=": SyntaxKind.PercentEqualsToken,
         "<<=": SyntaxKind.LessThanLessThanEqualsToken,
@@ -1199,6 +1201,12 @@ namespace ts {
                     case CharacterCodes.asterisk:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
+                        }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.AsteriskAsteriskEqualsToken;
+                            }
+                            return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                         }
                         return pos++, token = SyntaxKind.AsteriskToken;
                     case CharacterCodes.plus:
