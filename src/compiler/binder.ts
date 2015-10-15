@@ -6,8 +6,8 @@ namespace ts {
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
-        Instantiated    = 1,
-        ConstEnumOnly   = 2
+        Instantiated = 1,
+        ConstEnumOnly = 2
     }
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
@@ -90,6 +90,8 @@ namespace ts {
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
+        let isJavaScriptFile = isSourceFileJavaScript(file);
+
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
@@ -167,6 +169,10 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
+
+                case SyntaxKind.BinaryExpression:
+                    Debug.assert(isModuleExportsAssignment(node));
+                    return "__jsExports";
             }
         }
 
@@ -779,7 +785,7 @@ namespace ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node) {
+        function bind(node: Node): void {
             node.parent = parent;
 
             let savedInStrictMode = inStrictMode;
@@ -851,9 +857,18 @@ namespace ts {
 
         function bindWorker(node: Node) {
             switch (node.kind) {
+                /* Strict mode checks */
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
+                    if (isJavaScriptFile) {
+                        if (isExportsPropertyAssignment(node)) {
+                            bindExportsPropertyAssignment(<BinaryExpression>node);
+                        }
+                        else if (isModuleExportsAssignment(node)) {
+                            bindModuleExportsAssignment(<BinaryExpression>node);
+                        }
+                    }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -919,6 +934,16 @@ namespace ts {
                     checkStrictModeFunctionName(<FunctionExpression>node);
                     let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
+
+                case SyntaxKind.CallExpression:
+                    // We're only inspecting call expressions to detect CommonJS modules, so we can skip
+                    // this check if we've already seen the module indicator
+                    if (isJavaScriptFile && !file.commonJsModuleIndicator) {
+                        bindCallExpression(<CallExpression>node);
+                    }
+                    break;
+
+                // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
@@ -930,6 +955,8 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
+
+                // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
@@ -949,8 +976,12 @@ namespace ts {
         function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
-                bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"`);
+                bindSourceFileAsExternalModule();
             }
+        }
+
+        function bindSourceFileAsExternalModule() {
+            bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName) }"`);
         }
 
         function bindExportAssignment(node: ExportAssignment) {
@@ -982,6 +1013,32 @@ namespace ts {
         function bindImportClause(node: ImportClause) {
             if (node.name) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            }
+        }
+
+        function setCommonJsModuleIndicator(node: Node) {
+            if (!file.commonJsModuleIndicator) {
+                file.commonJsModuleIndicator = node;
+                bindSourceFileAsExternalModule();
+            }
+        }
+
+        function bindExportsPropertyAssignment(node: BinaryExpression) {
+            // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
+            // expression is the declaration
+            setCommonJsModuleIndicator(node);
+            declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.Export, SymbolFlags.None);
+        }
+
+        function bindModuleExportsAssignment(node: BinaryExpression) {
+            // 'module.exports = expr' assignment
+            setCommonJsModuleIndicator(node);
+            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.None, SymbolFlags.None);
+        }
+
+        function bindCallExpression(node: CallExpression) {
+            if (isRequireCall(node)) {
+                setCommonJsModuleIndicator(node);
             }
         }
 

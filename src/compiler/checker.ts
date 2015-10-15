@@ -160,6 +160,8 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
+        let cjsRequireType: Type;
+
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let intersectionTypes: Map<IntersectionType> = {};
@@ -362,7 +364,7 @@ namespace ts {
         }
 
         function isGlobalSourceFile(node: Node) {
-            return node.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>node);
+            return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
         function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
@@ -478,7 +480,7 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) break;
+                        if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         let moduleExports = getSymbolOfNode(location).exports;
                         if (location.kind === SyntaxKind.SourceFile ||
@@ -993,6 +995,11 @@ namespace ts {
             if (moduleName === undefined) {
                 return;
             }
+
+            if (moduleName.indexOf("!") >= 0) {
+                moduleName = moduleName.substr(0, moduleName.indexOf("!"));
+            }
+
             let isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 let symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
@@ -1078,6 +1085,20 @@ namespace ts {
                     if (exportStars) {
                         for (let node of exportStars.declarations) {
                             visit(resolveExternalModuleName(node, (<ExportDeclaration>node).moduleSpecifier));
+                        }
+                    }
+
+                    // CommonJS 'module.exports = expr' assignments
+                    let commonJsModuleExports = symbol.exports["__jsExports"];
+                    if (commonJsModuleExports) {
+                        for (var i = 0; i < commonJsModuleExports.declarations.length; i++) {
+                            let properties = getPropertiesOfType(checkExpression((<BinaryExpression>commonJsModuleExports.declarations[i]).right));
+                            if (i === 0) {
+                                result  = createSymbolTable(properties);
+                            }
+                            else {
+                                mergeSymbolTable(result, createSymbolTable(properties));
+                            }
                         }
                     }
                 }
@@ -1203,7 +1224,7 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
-                        if (!isExternalModule(<SourceFile>location)) {
+                        if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                             break;
                         }
                     case SyntaxKind.ModuleDeclaration:
@@ -1385,7 +1406,7 @@ namespace ts {
 
         function hasExternalModuleSymbol(declaration: Node) {
             return (declaration.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>declaration).name.kind === SyntaxKind.StringLiteral) ||
-                (declaration.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>declaration));
+                (declaration.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>declaration));
         }
 
         function hasVisibleDeclarations(symbol: Symbol): SymbolVisibilityResult {
@@ -2059,7 +2080,7 @@ namespace ts {
                         }
                     }
                     else if (node.kind === SyntaxKind.SourceFile) {
-                        return isExternalModule(<SourceFile>node) ? node : undefined;
+                        return isExternalOrCommonJsModule(<SourceFile>node) ? node : undefined;
                     }
                 }
                 Debug.fail("getContainingModule cant reach here");
@@ -2180,7 +2201,7 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         return true;
 
-                    // Export assignements do not create name bindings outside the module
+                    // Export assignments do not create name bindings outside the module
                     case SyntaxKind.ExportAssignment:
                         return false;
 
@@ -2564,6 +2585,10 @@ namespace ts {
                 // Handle export default expressions
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
+                }
+                // Handle exports.p = expr
+                if (declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                    return checkExpressionCached((<BinaryExpression>declaration.parent).right);
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -3811,6 +3836,18 @@ namespace ts {
             return result;
         }
 
+        function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
+            let moduleSym = resolveExternalModuleName(name, name);
+            if (moduleSym) {
+                let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
+                if (moduleSymSym) {
+                    return getTypeOfSymbol(moduleSymSym);
+                }
+            }
+
+            return anyType;
+        }
+
         function getReturnTypeOfSignature(signature: Signature): Type {
             if (!signature.resolvedReturnType) {
                 if (!pushTypeResolution(signature, TypeSystemPropertyName.ResolvedReturnType)) {
@@ -4174,9 +4211,13 @@ namespace ts {
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
-            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            let typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            let typeSymbol = getExportedSymbolFromNamespace(namespace, name);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
+        }
+
+        function getExportedSymbolFromNamespace(namespace: string, name: string): Symbol {
+            let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            return namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type | SymbolFlags.Value);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -9345,6 +9386,14 @@ namespace ts {
                     return anyType;
                 }
             }
+
+            let exprType = checkExpression(node.expression);
+            if (exprType === cjsRequireType) {
+                if (node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                    return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
+                }
+            }
+
             return getReturnTypeOfSignature(signature);
         }
 
@@ -11965,7 +12014,7 @@ namespace ts {
 
             // In case of variable declaration, node.parent is variable statement so look at the variable statement's parent
             let parent = getDeclarationContainer(node);
-            if (parent.kind === SyntaxKind.SourceFile && isExternalModule(<SourceFile>parent)) {
+            if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent)) {
                 // If the declaration happens to be in external module, report error that require and exports are reserved keywords
                 error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
                     declarationNameToString(name), declarationNameToString(name));
@@ -14047,7 +14096,7 @@ namespace ts {
                 forEach(node.statements, checkSourceElement);
                 checkFunctionAndClassExpressionBodies(node);
 
-                if (isExternalModule(node)) {
+                if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
                 }
 
@@ -14150,7 +14199,7 @@ namespace ts {
 
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
-                            if (!isExternalModule(<SourceFile>location)) {
+                            if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                                 break;
                             }
                         case SyntaxKind.ModuleDeclaration:
@@ -14881,16 +14930,24 @@ namespace ts {
 
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
-                if (!isExternalModule(file)) {
+                if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
             });
 
             // Initialize special symbols
+            if (compilerOptions.allowNonTsExtensions) {
+                let req = getExportedSymbolFromNamespace("CommonJS", "require");
+                if (req) {
+                    globals["require"] = req;
+                }
+            }
+
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
             globals[undefinedSymbol.name] = undefinedSymbol;
+
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
@@ -14912,6 +14969,8 @@ namespace ts {
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
+
+            cjsRequireType = getExportedTypeFromNamespace("CommonJS", "Require");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.

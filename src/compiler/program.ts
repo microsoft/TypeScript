@@ -70,7 +70,7 @@ namespace ts {
     }
 
     function loadNodeModuleFromFile(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
-        return forEach(moduleFileExtensions, tryLoad);
+        return forEach(supportedJsExtensions, tryLoad);
 
         function tryLoad(ext: string): string {
             let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -162,9 +162,10 @@ namespace ts {
         let failedLookupLocations: string[] = [];
 
         let referencedSourceFile: string;
+        let extensions = compilerOptions.allowNonTsExtensions ? supportedJsExtensions : supportedExtensions;
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
-            referencedSourceFile = forEach(supportedExtensions, extension => {
+            referencedSourceFile = forEach(extensions, extension => {
                 if (extension === ".tsx" && !compilerOptions.jsx) {
                     // resolve .tsx files only if jsx support is enabled 
                     // 'logical not' handles both undefined and None cases
@@ -684,6 +685,8 @@ namespace ts {
                 return;
             }
 
+            let isJavaScriptFile = isSourceFileJavaScript(file);
+
             let imports: LiteralExpression[];
             for (let node of file.statements) {
                 collect(node, /* allowRelativeModuleNames */ true);
@@ -708,6 +711,20 @@ namespace ts {
                             (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
                         }
                         break;
+                    case SyntaxKind.CallExpression:
+                        if (isJavaScriptFile && isRequireCall(node)) {
+
+                            let jsImports = (<CallExpression>node).arguments;
+                            if (jsImports) {
+                                imports = (imports || []);
+                                for (var i = 0; i < jsImports.length; i++) {
+                                    if (jsImports[i].kind === SyntaxKind.StringLiteral) {
+                                        imports.push(<StringLiteral>jsImports[i]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
                     case SyntaxKind.ModuleDeclaration:
                         if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                             // TypeScript 1.0 spec (April 2014): 12.1.6
@@ -723,6 +740,10 @@ namespace ts {
                             });
                         }
                         break;
+                }
+
+                if (isSourceFileJavaScript(file)) {
+                    forEachChild(node, node => collect(node, allowRelativeModuleNames));
                 }
             }
         }

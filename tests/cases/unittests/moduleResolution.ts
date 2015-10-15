@@ -82,7 +82,7 @@ module ts {
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
             // expect three failed lookup location - attempt to load module as file with all supported extensions
-            assert.equal(resolution.failedLookupLocations.length, 3);
+            assert.equal(resolution.failedLookupLocations.length, 5);
         }
         
         it("module name as directory - load from typings", () => {
@@ -103,6 +103,8 @@ module ts {
                 "/a/b/foo.ts",
                 "/a/b/foo.tsx",
                 "/a/b/foo.d.ts",
+                "/a/b/foo.js",
+                "/a/b/foo.jsx",
                 "/a/b/foo/index.ts",
                 "/a/b/foo/index.tsx",
             ]);
@@ -119,17 +121,25 @@ module ts {
                 "/a/b/c/d/node_modules/foo.ts",
                 "/a/b/c/d/node_modules/foo.tsx",
                 "/a/b/c/d/node_modules/foo.d.ts",
+                "/a/b/c/d/node_modules/foo.js",
+                "/a/b/c/d/node_modules/foo.jsx",
                 "/a/b/c/d/node_modules/foo/package.json",
                 "/a/b/c/d/node_modules/foo/index.ts",
                 "/a/b/c/d/node_modules/foo/index.tsx",
                 "/a/b/c/d/node_modules/foo/index.d.ts",
+                "/a/b/c/d/node_modules/foo/index.js",
+                "/a/b/c/d/node_modules/foo/index.jsx",
                 "/a/b/c/node_modules/foo.ts",
                 "/a/b/c/node_modules/foo.tsx",
                 "/a/b/c/node_modules/foo.d.ts",
+                "/a/b/c/node_modules/foo.js",
+                "/a/b/c/node_modules/foo.jsx",
                 "/a/b/c/node_modules/foo/package.json",
                 "/a/b/c/node_modules/foo/index.ts",
                 "/a/b/c/node_modules/foo/index.tsx",
-                "/a/b/c/node_modules/foo/index.d.ts"
+                "/a/b/c/node_modules/foo/index.d.ts",
+                "/a/b/c/node_modules/foo/index.js",
+                "/a/b/c/node_modules/foo/index.jsx"
             ])
         });
 
@@ -151,27 +161,41 @@ module ts {
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.js",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.jsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.js",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.jsx",
                 "/a/node_modules/b/c/node_modules/foo.ts",
                 "/a/node_modules/b/c/node_modules/foo.tsx",
                 "/a/node_modules/b/c/node_modules/foo.d.ts",
+                "/a/node_modules/b/c/node_modules/foo.js",
+                "/a/node_modules/b/c/node_modules/foo.jsx",
                 "/a/node_modules/b/c/node_modules/foo/package.json",
                 "/a/node_modules/b/c/node_modules/foo/index.ts",
                 "/a/node_modules/b/c/node_modules/foo/index.tsx",
                 "/a/node_modules/b/c/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/foo/index.js",
+                "/a/node_modules/b/c/node_modules/foo/index.jsx",
                 "/a/node_modules/b/node_modules/foo.ts",
                 "/a/node_modules/b/node_modules/foo.tsx",
                 "/a/node_modules/b/node_modules/foo.d.ts",
+                "/a/node_modules/b/node_modules/foo.js",
+                "/a/node_modules/b/node_modules/foo.jsx",
                 "/a/node_modules/b/node_modules/foo/package.json",
                 "/a/node_modules/b/node_modules/foo/index.ts",
                 "/a/node_modules/b/node_modules/foo/index.tsx",
                 "/a/node_modules/b/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/node_modules/foo/index.js",
+                "/a/node_modules/b/node_modules/foo/index.jsx",
                 "/a/node_modules/foo.ts",
                 "/a/node_modules/foo.tsx",
                 "/a/node_modules/foo.d.ts",
+                "/a/node_modules/foo.js",
+                "/a/node_modules/foo.jsx",
                 "/a/node_modules/foo/package.json",
                 "/a/node_modules/foo/index.ts",
                 "/a/node_modules/foo/index.tsx"

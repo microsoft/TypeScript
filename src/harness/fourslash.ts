@@ -223,10 +223,22 @@ namespace FourSlash {
 
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
-        private addMatchedInputFile(referenceFilePath: string) {
-            let inputFile = this.inputFiles[referenceFilePath];
-            if (inputFile && !Harness.isLibraryFile(referenceFilePath)) {
-                this.languageServiceAdapterHost.addScript(referenceFilePath, inputFile);
+        private addMatchedInputFile(referenceFilePath: string, extensions: string[]) {
+            let inputFiles = this.inputFiles;
+            let languageServiceAdapterHost = this.languageServiceAdapterHost;
+            if (!extensions) {
+                tryAdd(referenceFilePath);
+            }
+            else {
+                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
+            }
+
+            function tryAdd(path: string) {
+                let inputFile = inputFiles[path];
+                if (inputFile && !Harness.isLibraryFile(path)) {
+                    languageServiceAdapterHost.addScript(path, inputFile);
+                    return true;
+                }
             }
         }
 
@@ -280,15 +292,15 @@ namespace FourSlash {
                 ts.forEach(referencedFiles, referenceFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName so we will properly append the same base directory to refFile path
                     let referenceFilePath = this.basePath + "/" + referenceFile.fileName;
-                    this.addMatchedInputFile(referenceFilePath);
+                    this.addMatchedInputFile(referenceFilePath, /* extensions */ undefined);
                 });
 
                 // Add import files into language-service host
                 ts.forEach(importedFiles, importedFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
                     // so convert them before making appropriate comparison
-                    let importedFilePath = this.basePath + "/" + importedFile.fileName + ".ts";
-                    this.addMatchedInputFile(importedFilePath);
+                    let importedFilePath = this.basePath + "/" + importedFile.fileName;
+                    this.addMatchedInputFile(importedFilePath, compilationOptions.allowNonTsExtensions ? ts.supportedJsExtensions : ts.supportedExtensions);
                 });
 
                 // Check if no-default-lib flag is false and if so add default library
@@ -2257,15 +2269,15 @@ namespace FourSlash {
                         let details = this.getCompletionEntryDetails(item.name);
 
                         if (documentation !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation"));
+                            assert.equal(ts.displayPartsToString(details.documentation), documentation, assertionMessage("completion item documentation for " + name));
                         }
                         if (text !== undefined) {
-                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text"));
+                            assert.equal(ts.displayPartsToString(details.displayParts), text, assertionMessage("completion item detail text for " + name));
                         }
                     }
 
                     if (kind !== undefined) {
-                        assert.equal(item.kind, kind, assertionMessage("completion item kind"));
+                        assert.equal(item.kind, kind, assertionMessage("completion item kind for " + name));
                     }
 
                     return;
