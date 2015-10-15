@@ -704,6 +704,9 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
+        if (!path) {
+            return undefined;
+        }
         let i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
@@ -732,6 +735,18 @@ namespace ts {
      *  but still would like to load only TypeScript files as modules 
      */
     export const moduleFileExtensions = supportedExtensions;
+
+    export function isSupportedSourceFileName(fileName: string) {
+        if (!fileName) { return false; }
+
+        let dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex < 0) {
+            return false;
+        }
+
+        let extension = fileName.slice(dotIndex, fileName.length);
+        return supportedExtensions.indexOf(extension) >= 0;
+    }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
@@ -826,5 +841,15 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(false, message);
         }
+    }
+
+    export function copyListRemovingItem<T>(item: T, list: T[]) {
+        let copiedList: T[] = [];
+        for (var i = 0, len = list.length; i < len; i++) {
+            if (list[i] != item) {
+                copiedList.push(list[i]);
+            }
+        }
+        return copiedList;
     }
 }
