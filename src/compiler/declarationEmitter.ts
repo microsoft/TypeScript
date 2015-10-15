@@ -321,54 +321,25 @@ namespace ts {
     
             function collectDependentTypes(exported: Map<Type>): Map<Type> {
                 let dependentTypes: Map<Type> = {};
-                forEachValue(exported, type => visit(type));
-    
+                let walker = resolver.getTypeWalker(inspectType);
+                forEachValue(exported, type => walker.visitType(type));
+
                 return dependentTypes;
-    
-                function visit(type: Type): void {
+
+                function inspectType(type: Type): boolean {
                     let symbol = type.symbol;
-                    if (symbol.flags & SymbolFlags.HasMembers) {
-                        forEachValue(symbol.members, member => {
-                            if (member.valueDeclaration && member.valueDeclaration.flags && member.valueDeclaration.flags & NodeFlags.Private) {
-                                return;
+                    if (symbol) {
+                        if (symbol.valueDeclaration && symbol.valueDeclaration.flags && symbol.valueDeclaration.flags & NodeFlags.Private) {
+                            return false;
+                        } else {
+                            let id = symbol.id;
+                            if (id in exported || id in dependentTypes) {
+                                return false;
                             }
-                            inspectSymbol(member);
-                        });
+                            dependentTypes[id] = type;
+                        }
                     }
-                    if (symbol.flags & SymbolFlags.HasExports) {
-                        forEachValue(symbol.exports, member => {
-                            inspectSymbol(member);
-                        });
-                    }
-                    if (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Interface) {
-                        forEach(symbol.declarations, declaration => {
-                            if (isClassLike(declaration) || declaration.kind === SyntaxKind.InterfaceDeclaration) {
-                                let clauses = (declaration as (ClassLikeDeclaration|InterfaceDeclaration)).heritageClauses;
-                                forEach(clauses, clause => {
-                                    let types = clause.types;
-                                    forEach(types, typeExpression => {
-                                        let type = resolver.getTypeAtLocation(typeExpression);
-                                        if (type && type.symbol) {
-                                            inspectSymbol(type.symbol);
-                                        }
-                                    });
-                                });
-                            }
-                        });
-                    }
-                }
-    
-                function inspectSymbol(symbol: Symbol) {
-                    let type = resolver.getDefiningTypeOfSymbol(symbol);
-                    if (!type || !type.symbol) {
-                        return;
-                    }
-                    let id = type.symbol.id;
-                    if (id in exported || id in dependentTypes) {
-                        return;
-                    }
-                    dependentTypes[id] = type;
-                    visit(type);
+                    return true;
                 }
             }
         }

@@ -94,7 +94,8 @@ namespace ts {
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
-            isOptionalParameter
+            isOptionalParameter,
+            getTypeWalker
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -2020,6 +2021,138 @@ namespace ts {
                 buildSignatureDisplay,
                 buildReturnTypeDisplay
             });
+        }
+
+        function getTypeWalker(accept: (type: Type) => boolean = () => true): TypeWalker {
+            let visited: Type[] = [];
+            let visitedSymbols: Symbol[] = [];
+            function visitType(type: Type): void {
+                if (contains(visited, type)) {
+                    return;
+                }
+                visited.push(type);
+                if (!accept(type)) {
+                    return;
+                }
+
+                // Visit the type's related types, if any
+                if (type.flags & TypeFlags.Reference) {
+                    visitTypeReference(type as TypeReference);
+                }
+                else if (type.flags & TypeFlags.TypeParameter) {
+                    visitTypeParameter(type as TypeParameter);
+                }
+                else if (type.flags & TypeFlags.Tuple) {
+                    visitTupleType(type as TupleType);
+                }
+                else if (type.flags & TypeFlags.UnionOrIntersection) {
+                    visitUnionOrIntersectionType(type as UnionOrIntersectionType);
+                }
+                else if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                    visitInterfaceType(type as InterfaceType);
+                }
+                else if (type.flags & TypeFlags.Anonymous) {
+                    visitObjectType(type as ObjectType);
+                }
+            }
+
+            function visitTypeList(types: Type[]): void {
+                for (let i = 0; i < types.length; i++) {
+                    visitType(types[i]);
+                }
+            }
+
+            function visitTypeReference(type: TypeReference): void {
+                visitType(type.target);
+                let typeArguments: Type[] = type.typeArguments || emptyArray;
+                if (type.target === globalArrayType) { // Shortcut
+                    visitType(typeArguments[0]);
+                }
+                else {
+                    visitTypeList(typeArguments);
+                }
+            }
+
+            function visitTypeParameter(type: TypeParameter): void {
+                visitType(type.constraint);
+            }
+
+            function visitTupleType(type: TupleType): void {
+                visitTypeList(type.elementTypes);
+            }
+
+            function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
+                visitTypeList(type.types);
+            }
+
+            function visitSignature(signature: Signature): void {
+                visitType(signature.typePredicate.type);
+                visitTypeList(signature.typeParameters);
+            }
+
+            function visitInterfaceType(interfaceT: InterfaceType): void {
+                visitObjectType(interfaceT);
+                if (interfaceT.typeParameters) {
+                    visitTypeList(interfaceT.typeParameters);
+                }
+                if (interfaceT.resolvedBaseTypes) {
+                    visitTypeList(interfaceT.resolvedBaseTypes);
+                }
+            }
+
+            function visitObjectType(type: ObjectType): void {
+                let resolved = resolveStructuredTypeMembers(type);
+
+                if (resolved.stringIndexType) {
+                    visitType(resolved.stringIndexType);
+                }
+                if (resolved.numberIndexType) {
+                    visitType(resolved.numberIndexType);
+                }
+                for (let signature of resolved.callSignatures) {
+                    visitSignature(signature);
+                }
+                for (let signature of resolved.constructSignatures) {
+                    visitSignature(signature);
+                }
+                for (let p of resolved.properties) {
+                    visitTypeFromSymbol(p);
+                }
+            }
+
+            function visitTypeFromSymbol(symbol: Symbol): void {
+                if (contains(visitedSymbols, symbol)) {
+                    return;
+                }
+                visitedSymbols.push(symbol);
+                let t = getTypeOfSymbol(symbol);
+                visitType(t); // Should handle members on classes and such
+                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
+                    let signatures = getSignaturesOfType(t, SignatureKind.Call);
+                    for (let signature of signatures) {
+                        visitSignature(signature);
+                    }
+                }
+                if (symbol.flags & SymbolFlags.Class) {
+                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
+                    for (let signature of signatures) {
+                        visitSignature(signature);
+                    }
+                }
+                if (symbol.flags & SymbolFlags.HasExports) {
+                    forEachValue(symbol.exports, visitTypeFromSymbol);
+                }
+            }
+
+            return {
+                visitType,
+                visitTypeFromSymbol,
+                reset: (newCallback: (type: Type) => boolean = () => true) => {
+                    accept = newCallback;
+                    visited = [];
+                    visitedSymbols = [];
+                }
+            };
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
@@ -14850,7 +14983,8 @@ namespace ts {
                     }
                 },
                 getTypeAtLocation: getTypeOfNode,
-                resolveEntityName
+                resolveEntityName,
+                getTypeWalker
             };
         }
 
