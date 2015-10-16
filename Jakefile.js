@@ -238,7 +238,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
         }
 
         if (preserveConstEnums || useDebugMode) {
-            options += " --preserveConstEnums --deconstConstEnums";
+            options += " --preserveConstEnums";
         }
 
         if (outDir) {
@@ -368,7 +368,7 @@ compileFile(/*outfile*/configureNightlyJs,
             /*noOutFile*/ false,
             /*generateDeclarations*/ false,
             /*outDir*/ undefined,
-            /*preserveConstEnums*/ true,
+            /*preserveConstEnums*/ undefined,
             /*keepComments*/ false,
             /*noResolve*/ false,
             /*stripInternal*/ false);
