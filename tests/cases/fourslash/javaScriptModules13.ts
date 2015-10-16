@@ -6,8 +6,6 @@
 // @Filename: myMod.js
 //// if (true) {
 ////     module.exports = { a: 10 };
-//// } else {
-////     module.exports = { b: 10 };
 //// }
 //// var invisible = true;
 
@@ -26,4 +24,3 @@ verify.not.completionListContains('invisible');
 
 edit.insert('x.');
 verify.completionListContains('a');
-verify.completionListContains('b');

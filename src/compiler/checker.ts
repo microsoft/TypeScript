@@ -1087,20 +1087,6 @@ namespace ts {
                             visit(resolveExternalModuleName(node, (<ExportDeclaration>node).moduleSpecifier));
                         }
                     }
-
-                    // CommonJS 'module.exports = expr' assignments
-                    let commonJsModuleExports = symbol.exports["__jsExports"];
-                    if (commonJsModuleExports) {
-                        for (var i = 0; i < commonJsModuleExports.declarations.length; i++) {
-                            let properties = getPropertiesOfType(checkExpression((<BinaryExpression>commonJsModuleExports.declarations[i]).right));
-                            if (i === 0) {
-                                result  = createSymbolTable(properties);
-                            }
-                            else {
-                                mergeSymbolTable(result, createSymbolTable(properties));
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -2586,6 +2572,10 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.ExportAssignment) {
                     return links.type = checkExpression((<ExportAssignment>declaration).expression);
                 }
+                // Handle module.exports = expr
+                if (declaration.kind === SyntaxKind.BinaryExpression) {
+                    return links.type = checkExpression((<BinaryExpression>declaration).right);
+                }
                 // Handle exports.p = expr
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
                     return checkExpressionCached((<BinaryExpression>declaration.parent).right);
@@ -3839,9 +3829,9 @@ namespace ts {
         function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
             let moduleSym = resolveExternalModuleName(name, name);
             if (moduleSym) {
-                let moduleSymSym = resolveExternalModuleSymbol(moduleSym);
-                if (moduleSymSym) {
-                    return getTypeOfSymbol(moduleSymSym);
+                let resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                if (resolvedModuleSymbol) {
+                    return getTypeOfSymbol(resolvedModuleSymbol);
                 }
             }
 

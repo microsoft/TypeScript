@@ -166,13 +166,12 @@ namespace ts {
                     return "__export";
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
+                case SyntaxKind.BinaryExpression:
+                    // Binary expression case is for JS module 'module.exports = expr'
+                    return "export=";
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
-
-                case SyntaxKind.BinaryExpression:
-                    Debug.assert(isModuleExportsAssignment(node));
-                    return "__jsExports";
             }
         }
 
@@ -936,9 +935,7 @@ namespace ts {
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
 
                 case SyntaxKind.CallExpression:
-                    // We're only inspecting call expressions to detect CommonJS modules, so we can skip
-                    // this check if we've already seen the module indicator
-                    if (isJavaScriptFile && !file.commonJsModuleIndicator) {
+                    if (isJavaScriptFile) {
                         bindCallExpression(<CallExpression>node);
                     }
                     break;
@@ -984,12 +981,13 @@ namespace ts {
             bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName) }"`);
         }
 
-        function bindExportAssignment(node: ExportAssignment) {
+        function bindExportAssignment(node: ExportAssignment|BinaryExpression) {
+            let boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
-            else if (node.expression.kind === SyntaxKind.Identifier) {
+            else if (boundExpression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -1033,11 +1031,13 @@ namespace ts {
         function bindModuleExportsAssignment(node: BinaryExpression) {
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
-            declareSymbol(file.symbol.exports, file.symbol, node, SymbolFlags.None, SymbolFlags.None);
+            bindExportAssignment(node);
         }
 
         function bindCallExpression(node: CallExpression) {
-            if (isRequireCall(node)) {
+            // We're only inspecting call expressions to detect CommonJS modules, so we can skip
+            // this check if we've already seen the module indicator
+            if (!file.commonJsModuleIndicator && isRequireCall(node)) {
                 setCommonJsModuleIndicator(node);
             }
         }
