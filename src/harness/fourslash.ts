@@ -100,6 +100,8 @@ namespace FourSlash {
         end: number;
     }
 
+    export import IndentStyle = ts.IndentStyle;
+
     let entityMap: ts.Map<string> = {
         "&": "&amp;",
         "\"": "&quot;",
@@ -309,6 +311,7 @@ namespace FourSlash {
                 TabSize: 4,
                 NewLineCharacter: Harness.IO.newLine(),
                 ConvertTabsToSpaces: true,
+                IndentStyle: ts.IndentStyle.Smart,
                 InsertSpaceAfterCommaDelimiter: true,
                 InsertSpaceAfterSemicolonInForStatements: true,
                 InsertSpaceBeforeAndAfterBinaryOperators: true,
@@ -588,14 +591,21 @@ namespace FourSlash {
             }
         }
 
-        public verifyCompletionListItemsCountIsGreaterThan(count: number) {
+        public verifyCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
             this.taoInvalidReason = "verifyCompletionListItemsCountIsGreaterThan NYI";
 
             let completions = this.getCompletionListAtCaret();
             let itemsCount = completions.entries.length;
 
-            if (itemsCount <= count) {
-                this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+            if (negative) {
+                if (itemsCount > count) {
+                    this.raiseError(`Expected completion list items count to not be greater than ${count}, but is actually ${itemsCount}`);
+                }
+            }
+            else {
+                if (itemsCount <= count) {
+                    this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
+                }
             }
         }
 
@@ -1695,24 +1705,28 @@ namespace FourSlash {
             }
         }
 
-        private getIndentation(fileName: string, position: number): number {
-            return this.languageService.getIndentationAtPosition(fileName, position, this.formatCodeOptions);
+        private getIndentation(fileName: string, position: number, indentStyle: ts.IndentStyle): number {
+
+            let formatOptions = ts.clone(this.formatCodeOptions);
+            formatOptions.IndentStyle = indentStyle;
+
+            return this.languageService.getIndentationAtPosition(fileName, position, formatOptions);
         }
 
-        public verifyIndentationAtCurrentPosition(numberOfSpaces: number) {
+        public verifyIndentationAtCurrentPosition(numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart) {
             this.taoInvalidReason = "verifyIndentationAtCurrentPosition NYI";
 
-            let actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition);
+            let actual = this.getIndentation(this.activeFile.fileName, this.currentCaretPosition, indentStyle);
             let lineCol = this.getLineColStringAtPosition(this.currentCaretPosition);
             if (actual !== numberOfSpaces) {
                 this.raiseError(`verifyIndentationAtCurrentPosition failed at ${lineCol} - expected: ${numberOfSpaces}, actual: ${actual}`);
             }
         }
 
-        public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number) {
+        public verifyIndentationAtPosition(fileName: string, position: number, numberOfSpaces: number, indentStyle: ts.IndentStyle = ts.IndentStyle.Smart) {
             this.taoInvalidReason = "verifyIndentationAtPosition NYI";
 
-            let actual = this.getIndentation(fileName, position);
+            let actual = this.getIndentation(fileName, position, indentStyle);
             let lineCol = this.getLineColStringAtPosition(position);
             if (actual !== numberOfSpaces) {
                 this.raiseError(`verifyIndentationAtPosition failed at ${lineCol} - expected: ${numberOfSpaces}, actual: ${actual}`);

@@ -1,0 +1,15 @@
+tests/cases/conformance/es6/modules/multipleDefaultExports04.ts(2,25): error TS2393: Duplicate function implementation.
+tests/cases/conformance/es6/modules/multipleDefaultExports04.ts(5,25): error TS2393: Duplicate function implementation.
+
+
+==== tests/cases/conformance/es6/modules/multipleDefaultExports04.ts (2 errors) ====
+    
+    export default function f() {
+                            ~
+!!! error TS2393: Duplicate function implementation.
+    }
+    
+    export default function f() {
+                            ~
+!!! error TS2393: Duplicate function implementation.
+    }
