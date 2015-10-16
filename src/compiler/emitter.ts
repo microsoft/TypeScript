@@ -79,10 +79,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
         let transformationChain = getTransformationChain(compilerOptions);
         let sourceFiles: SourceFile[];
-        let transformationResolver: TransformationResolver;
+        let substitutions: TransformationSubstitutions;
 
         if (targetSourceFile === undefined) {
-            ({ sourceFiles, transformationResolver } = transformFilesIfNeeded(resolver, host, host.getSourceFiles(), transformationChain));
+            ({ sourceFiles, substitutions } = transformFilesIfNeeded(resolver, host, host.getSourceFiles(), transformationChain));
             forEach(sourceFiles, sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
@@ -98,11 +98,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
-                ({ sourceFiles: [targetSourceFile], transformationResolver } = transformFilesIfNeeded(resolver, host, [targetSourceFile], transformationChain));
+                ({ sourceFiles: [targetSourceFile], substitutions } = transformFilesIfNeeded(resolver, host, [targetSourceFile], transformationChain));
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
-                ({ sourceFiles, transformationResolver } = transformFilesIfNeeded(resolver, host, host.getSourceFiles(), transformationChain));
+                ({ sourceFiles, substitutions } = transformFilesIfNeeded(resolver, host, host.getSourceFiles(), transformationChain));
                 emitFile(compilerOptions.outFile || compilerOptions.out);
             }
         }
@@ -8003,11 +8003,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             if (compilerOptions.experimentalTransforms) {
-                let result = sourceFile
-                    ? printFile(resolver, transformationResolver, host, [sourceFile], jsFilePath)
-                    : printFile(resolver, transformationResolver, host, sourceFiles, jsFilePath);
-
-                writeFile(host, diagnostics, result.fileName, result.text, compilerOptions.emitBOM);
+                let nodes = sourceFile ? [sourceFile] : sourceFiles;
+                let text = printNodes(resolver, substitutions, host, filter(nodes, isNonDeclarationFile));
+                writeFile(host, diagnostics, jsFilePath, text, compilerOptions.emitBOM);
             }
             else {
                 emitJavaScript(jsFilePath, sourceFile);

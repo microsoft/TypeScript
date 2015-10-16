@@ -8,44 +8,49 @@ const FORCE_TRANSFORMS = false;
 namespace ts {
     export let transformTime = 0;
 
-    export type TransformationChain = (node: SourceFile, transformer: Transformer) => SourceFile;
+    /**
+     * Represents a phase in a transformation chain. Used to initialize the transformation and
+     * return the transformation for the phase.
+     */
+    export type TransformationPhase = (transformer: Transformer) => Transformation;
 
-    interface LexicalEnvironment {
-        tempFlags: TempFlags;
-        hoistedVariableDeclarations: VariableDeclaration[];
-        hoistedFunctionDeclarations: FunctionDeclaration[];
-    }
+    /**
+     * Represents a chain of transformation phases. Used to initialize the transformation
+     * chain and return a transformation used to run each transformation for each phase
+     * of the chain.
+     */
+    export type TransformationChain = (transformer: Transformer) => Transformation;
 
-    const enum VisitFlags {
-        StatementBranch = 1 << 1,
-        ConciseBody = 1 << 2,
-        LexicalEnvironment = 1 << 3,
-        LexicalEnvironmentStarted = 1 << 4,
-        LexicalEnvironmentEnded = 1 << 5,
-    }
+    /**
+     * Represents a transformation.
+     */
+    export type Transformation = (node: SourceFile) => SourceFile;
 
+    /**
+     * Gets the default transformation chain for the provided set of compiler options.
+     */
     export function getTransformationChain(options: CompilerOptions): TransformationChain {
         let jsx = options.jsx;
         let languageVersion = options.target || ScriptTarget.ES3;
         let moduleKind = options.module || ModuleKind.None;
+        let phases: TransformationPhase[] = [];
 
-        let transforms: TransformationChain[] = [];
-
-        // Add the TypeScript and Module transforms to the chain.
-        transforms.push(transformTypeScript);
+        // Add the TypeScript and Module phases to the chain.
+        phases.push(createTypeScriptTransformation);
         // // transforms.push(transformModule);
 
-        // // Add the JSX transform to the chain.
-        // if (jsx === JsxEmit.React) {
-        //     transforms.push(transformJsx);
-        // }
+        // Add the JSX transform to the chain.
+        if (jsx === JsxEmit.React) {
+            phases.push(createJsxTransformation);
+        }
 
-        // // Add the ES6 transform to the chain.
-        // if (languageVersion < ScriptTarget.ES6) {
-        //     transforms.push(transformES6);
-        // }
+        // Add the ES6 transform to the chain.
+        if (languageVersion < ScriptTarget.ES6) {
+            phases.push(createES6Transformation);
+        }
 
-        return chainTransformations(transforms);
+        // Chain the transformation phases
+        return chainTransformationPhases(phases);
     }
 
     export function transformFilesIfNeeded(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): TransformationResult {
@@ -58,6 +63,20 @@ namespace ts {
     }
 
     export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): TransformationResult {
+        interface LexicalEnvironment {
+            tempFlags: TempFlags;
+            hoistedVariableDeclarations: VariableDeclaration[];
+            hoistedFunctionDeclarations: FunctionDeclaration[];
+        }
+
+        const enum VisitFlags {
+            StatementBranch = 1 << 1,
+            ConciseBody = 1 << 2,
+            LexicalEnvironment = 1 << 3,
+            LexicalEnvironmentStarted = 1 << 4,
+            LexicalEnvironmentEnded = 1 << 5,
+        }
+
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -131,9 +150,9 @@ function __export(m) {
         let updatedNode: Node;
         let updatedNodes: Node[];
         let helpersEmitted: NodeCheckFlags;
-        let assignmentSubstitutions: ((node: BinaryExpression) => Expression)[] = [];
-        let bindingIdentifierSubstitutions: ((node: Identifier) => Identifier)[] = [];
-        let expressionIdentifierSubstitutions: ((node: Identifier) => LeftHandSideExpression)[] = [];
+        let assignmentSubstitution: (node: BinaryExpression) => Expression;
+        let bindingIdentifierSubstitution: (node: Identifier) => Identifier;
+        let expressionIdentifierSubstitution: (node: Identifier) => LeftHandSideExpression;
         let transformer: Transformer = {
             getEmitResolver: () => resolver,
             getCompilerOptions: () => compilerOptions,
@@ -182,12 +201,14 @@ function __export(m) {
             }
         };
 
+        let transformation = transformationChain(transformer);
+
         return {
             sourceFiles: map(sourceFiles, transformSourceFile),
-            transformationResolver: {
-                getAssignmentSubstitution,
-                getBindingIdentifierSubstitution,
-                getExpressionIdentifierSubstitution,
+            substitutions: {
+                assignmentSubstitution,
+                bindingIdentifierSubstitution,
+                expressionIdentifierSubstitution,
             }
         };
 
@@ -203,7 +224,7 @@ function __export(m) {
             nodeStack = createNodeStack();
             helpersEmitted = undefined;
 
-            let visited = transformationChain(sourceFile, transformer);
+            let visited = transformation(sourceFile);
             if (visited !== sourceFile) {
                 visited.identifiers = assign(assign(clone(sourceFile.identifiers), generatedNameSet), tempVariableNameSet);
                 updateFrom(sourceFile, visited);
@@ -219,32 +240,28 @@ function __export(m) {
             return visited;
         }
 
-        function getAssignmentSubstitution(sourceFile: SourceFile): (node: BinaryExpression) => Expression {
-            return assignmentSubstitutions[getNodeId(getOriginalNode(sourceFile))] || identitySubstitution;
+        function getAssignmentSubstitution(): (node: BinaryExpression) => Expression {
+            return assignmentSubstitution;
         }
 
-        function setAssignmentSubstitution(sourceFile: SourceFile, substitution: (node: BinaryExpression) => Expression) {
-            assignmentSubstitutions[getNodeId(getOriginalNode(sourceFile))] = substitution;
+        function setAssignmentSubstitution(substitution: (node: BinaryExpression) => Expression) {
+            assignmentSubstitution = substitution;
         }
 
-        function getBindingIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => Identifier {
-            return bindingIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] || identitySubstitution;
+        function getBindingIdentifierSubstitution(): (node: Identifier) => Identifier {
+            return bindingIdentifierSubstitution;
         }
 
-        function setBindingIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => Identifier): void {
-            bindingIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] = substitution;
+        function setBindingIdentifierSubstitution(substitution: (node: Identifier) => Identifier): void {
+            bindingIdentifierSubstitution = substitution;
         }
 
-        function getExpressionIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => LeftHandSideExpression {
-            return expressionIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] || identitySubstitution;
+        function getExpressionIdentifierSubstitution(): (node: Identifier) => LeftHandSideExpression {
+            return expressionIdentifierSubstitution;
         }
 
-        function setExpressionIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => LeftHandSideExpression) {
-            expressionIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] = substitution;
-        }
-
-        function identitySubstitution<T extends Node>(node: T): T {
-            return node;
+        function setExpressionIdentifierSubstitution(substitution: (node: Identifier) => LeftHandSideExpression) {
+            expressionIdentifierSubstitution = substitution;
         }
 
         // Return the next available name in the pattern _a ... _z, _0, _1, ...
@@ -929,57 +946,74 @@ function __export(m) {
         }
     }
 
-    export function chainTransformations(transformations: TransformationChain[]): TransformationChain {
-        switch (transformations.length) {
-            case 0: return identityTransformation;
-            case 1: return createUnaryTransformationChain(transformations[0]);
-            case 2: return createBinaryTransformationChain(transformations[0], transformations[1]);
-            case 3: return createTrinaryTransformationChain(transformations[0], transformations[1], transformations[2]);
-            default: return createNaryTransformationChain(transformations);
+    export function chainTransformationPhases(phases: TransformationPhase[]): TransformationChain {
+        switch (phases.length) {
+            case 0: return identityTransformationChain;
+            case 1: return buildUnaryChain(phases[0]);
+            case 2: return buildBinaryChain(phases[0], phases[1]);
+            case 3: return buildTrinaryChain(phases[0], phases[1], phases[2]);
+            default: return buildNaryChain(phases);
         }
     }
 
-    function runTransformation(chain: TransformationChain, node: SourceFile, transformer: Transformer) {
-        let start = new Date().getTime();
-        let transformed = chain(node, transformer);
-        transformTime += new Date().getTime() - start;
-        return transformed;
+    function buildPhase(phase: TransformationPhase, transformer: Transformer) {
+        if (phase) {
+            let start = new Date().getTime();
+            let transformation = phase(transformer);
+            transformTime += new Date().getTime() - start;
+            return transformation;
+        }
+
+        return undefined;
     }
 
-    function createUnaryTransformationChain(only: TransformationChain): TransformationChain {
-        return (node, transformer) => {
-            if (only) node = runTransformation(only, node, transformer);
-            return node;
-        };
-    }
-
-    function createBinaryTransformationChain(first: TransformationChain, second: TransformationChain): TransformationChain {
-        return (node, transformer) => {
-            if (first) node = runTransformation(first, node, transformer);
-            if (second) node = runTransformation(second, node, transformer);
-            return node;
-        };
-    }
-
-    function createTrinaryTransformationChain(first: TransformationChain, second: TransformationChain, third: TransformationChain): TransformationChain {
-        return (node, transformer) => {
-            if (first) node = runTransformation(first, node, transformer);
-            if (second) node = runTransformation(second, node, transformer);
-            if (third) node = runTransformation(third, node, transformer);
-            return node;
-        };
-    }
-
-    function createNaryTransformationChain(transformations: TransformationChain[]): TransformationChain {
-        return (node, transformer) => {
-            for (let transformation of transformations) {
-                if (transformation) node = runTransformation(transformation, node, transformer);
-            }
-            return node;
-        };
-    }
-
-    function identityTransformation(node: SourceFile, transformer: Transformer) {
+    function runStep(node: SourceFile, step: Transformation) {
+        if (step) {
+            let start = new Date().getTime();
+            let transformed = step(node);
+            transformTime += new Date().getTime() - start;
+            return transformed;
+        }
         return node;
+    }
+
+    function identityTransformationChain(transformer: Transformer) {
+        return identityTransformationStep;
+    }
+
+    function identityTransformationStep(node: SourceFile) {
+        return node;
+    }
+
+    function buildUnaryChain(only: TransformationPhase): TransformationChain {
+        return transformer => buildUnaryTransformation(buildPhase(only, transformer));
+    }
+
+    function buildUnaryTransformation(only: Transformation): Transformation {
+        return node => runStep(node, only);
+    }
+
+    function buildBinaryChain(first: TransformationPhase, second: TransformationPhase): TransformationChain {
+        return transformer => buildBinaryTransformation(buildPhase(first, transformer), buildPhase(second, transformer));
+    }
+
+    function buildBinaryTransformation(first: Transformation, second: Transformation): Transformation {
+        return node => runStep(runStep(node, first), second);
+    }
+
+    function buildTrinaryChain(first: TransformationPhase, second: TransformationPhase, third: TransformationPhase): TransformationChain {
+        return transformer => buildTrinaryTransformation(buildPhase(first, transformer), buildPhase(second, transformer), buildPhase(third, transformer));
+    }
+
+    function buildTrinaryTransformation(first: Transformation, second: Transformation, third: Transformation): Transformation {
+        return node => runStep(runStep(runStep(node, first), second), third);
+    }
+
+    function buildNaryChain(phases: TransformationPhase[]): TransformationChain {
+        return transformer => buildNaryTransformation(phases.map(phase => buildPhase(phase, transformer)));
+    }
+
+    function buildNaryTransformation(steps: Transformation[]): Transformation {
+        return node => steps.reduce(runStep, node);
     }
 }

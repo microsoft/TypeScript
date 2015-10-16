@@ -1,15 +1,7 @@
 /// <reference path="../checker.ts" />
 /*@internal*/
 namespace ts {
-    export function transformTypeScript(node: SourceFile, transformer: Transformer): SourceFile {
-        if (node.transformFlags & TransformFlags.ContainsTypeScript) {
-            return transformTypeScriptWorker(node, transformer);
-        }
-
-        return node;
-    }
-
-    function transformTypeScriptWorker(node: SourceFile, transformer: Transformer): SourceFile {
+    export function createTypeScriptTransformation(transformer: Transformer): Transformation {
         // create local aliases for transformer methods
         let {
             startLexicalEnvironment,
@@ -41,16 +33,41 @@ namespace ts {
         let compilerOptions = transformer.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let moduleKind = compilerOptions.module || ModuleKind.None;
-        let currentSourceFile = node;
+        let currentSourceFile: SourceFile;
         let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
         let exportFunctionForFile: string;
-        let savedSubstituteExpressionIdentifier = transformer.getExpressionIdentifierSubstitution(node);
-        transformer.setExpressionIdentifierSubstitution(node, substituteExpressionIdentifier);
+        let savedSubstituteExpressionIdentifier = transformer.getExpressionIdentifierSubstitution();
+        transformer.setExpressionIdentifierSubstitution(substituteExpressionIdentifier);
 
-        // Mark that we are about to visit a new lexical environment.
-        return visitSourceFile(node, visitor);
+        return transformTypeScript;
+
+        function transformTypeScript(node: SourceFile): SourceFile {
+            if (node.transformFlags & TransformFlags.ContainsTypeScript) {
+                return transformTypeScriptWorker(node);
+            }
+
+            return node;
+        }
+
+        function transformTypeScriptWorker(node: SourceFile): SourceFile {
+            externalImports = undefined;
+            exportSpecifiers = undefined;
+            exportEquals = undefined;
+            exportFunctionForFile = undefined;
+            currentSourceFile = node;
+
+            node = visitSourceFile(node, visitor);
+
+            externalImports = undefined;
+            exportSpecifiers = undefined;
+            exportEquals = undefined;
+            exportFunctionForFile = undefined;
+            currentSourceFile = undefined;
+
+            return node;
+        }
 
         /**
         * Transforms a node from TypeScript to ES6 if it requires any transformations.
@@ -1019,7 +1036,7 @@ namespace ts {
                 return createPropertyAccessExpression2(getGeneratedNameForNode(container), node, node);
             }
 
-            return savedSubstituteExpressionIdentifier(node);
+            return savedSubstituteExpressionIdentifier ? savedSubstituteExpressionIdentifier(node) : node;
         }
 
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration, write: (node: Statement) => void): void {

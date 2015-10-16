@@ -2974,16 +2974,16 @@ namespace ts {
     }
 
     // @internal
-    export interface TransformationResolver {
-        getAssignmentSubstitution(sourceFile: SourceFile): (node: BinaryExpression) => Expression;
-        getExpressionIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => LeftHandSideExpression;
-        getBindingIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => Identifier;
+    export interface TransformationSubstitutions {
+        assignmentSubstitution: (node: BinaryExpression) => Expression;
+        expressionIdentifierSubstitution: (node: Identifier) => LeftHandSideExpression;
+        bindingIdentifierSubstitution: (node: Identifier) => Identifier;
     }
 
     // @internal
     export interface TransformationResult {
         sourceFiles: SourceFile[];
-        transformationResolver?: TransformationResolver;
+        substitutions?: TransformationSubstitutions;
     }
 
     // @internal
@@ -3015,14 +3015,14 @@ namespace ts {
         emitEmitHelpers(write: (node: Statement) => void): void;
         emitExportStarHelper(write: (node: Statement) => void): void;
 
-        getAssignmentSubstitution(sourceFile: SourceFile): (node: BinaryExpression) => Expression;
-        setAssignmentSubstitution(sourceFile: SourceFile, substitution: (node: BinaryExpression) => Expression): void;
+        getAssignmentSubstitution(): (node: BinaryExpression) => Expression;
+        setAssignmentSubstitution(substitution: (node: BinaryExpression) => Expression): void;
 
-        getExpressionIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => LeftHandSideExpression;
-        setExpressionIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => LeftHandSideExpression): void;
+        getExpressionIdentifierSubstitution(): (node: Identifier) => LeftHandSideExpression;
+        setExpressionIdentifierSubstitution(substitution: (node: Identifier) => LeftHandSideExpression): void;
 
-        getBindingIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => Identifier;
-        setBindingIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => Identifier): void;
+        getBindingIdentifierSubstitution(): (node: Identifier) => Identifier;
+        setBindingIdentifierSubstitution(substitution: (node: Identifier) => Identifier): void;
 
         startLexicalEnvironment(): void;
         endLexicalEnvironment(out: ((node: Statement) => void) | Statement[]): void;

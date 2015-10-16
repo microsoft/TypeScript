@@ -7,6 +7,10 @@ namespace ts {
     const brackets = createBracketsMap();
     const delimiters = createDelimiterMap();
 
+    export interface PrintHost extends ScriptReferenceHost {
+        getNewLine(): string;
+    }
+
     /**
      * Pretty-prints a set of input source files to an output string.
      * @param resolver The emit resolver.
@@ -14,21 +18,17 @@ namespace ts {
      * @param sourceFiles The input source files.
      * @param fileName The output file name.
      */
-    export function printFile(resolver: EmitResolver, transformationResolver: TransformationResolver, host: EmitHost, sourceFiles: SourceFile[], fileName: string) {
-        console.log("called printFile!");
-
+    export function printNodes(resolver: EmitResolver, substitutions: TransformationSubstitutions, host: PrintHost, nodes: Node[]) {
         let writer = createTextWriter(host.getNewLine());
         let { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
+        let { assignmentSubstitution, bindingIdentifierSubstitution, expressionIdentifierSubstitution } = substitutions;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let currentSourceFile: SourceFile;
         let parentNode: Node;
         let currentNode: Node;
-        let assignmentSubstitution: (node: BinaryExpression) => Expression;
-        let expressionIdentifierSubstitution: (node: Identifier) => LeftHandSideExpression;
-        let bindingIdentifierSubstitution: (node: Identifier) => Identifier;
 
         /** Emit a node */
         let emit = emitNode;
@@ -52,19 +52,16 @@ namespace ts {
         /** Called after coming out of the scope */
         let scopeEmitEnd = function() { };
 
-        /** Sourcemap data that will get encoded */
-        let sourceMapData: SourceMapData;
-
         if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
             // initializeEmitterWithSourceMaps();
         }
 
-        for (let sourceFile of sourceFiles) {
-            emit(sourceFile);
+        for (let node of nodes) {
+            emit(node);
         }
 
         writeLine();
-        return { fileName, text: writer.getText(), sourceMapData };
+        return writer.getText();
 
         function emitNode(node: Node) {
             if (node) {
@@ -77,7 +74,7 @@ namespace ts {
         }
 
         function tryEmitSubstitute<T extends Node>(node: T, substitution: (node: T) => Node) {
-            let substitute = substitution(node);
+            let substitute = substitution ? substitution(node) : node;
             if (substitute && substitute !== node) {
                 let savedCurrentNode = currentNode;
                 emitNodeWorker(currentNode = substitute);
@@ -1525,9 +1522,6 @@ namespace ts {
 
         function emitSourceFile(node: SourceFile) {
             currentSourceFile = node;
-            assignmentSubstitution = transformationResolver.getAssignmentSubstitution(currentSourceFile);
-            bindingIdentifierSubstitution = transformationResolver.getBindingIdentifierSubstitution(currentSourceFile);
-            expressionIdentifierSubstitution = transformationResolver.getExpressionIdentifierSubstitution(currentSourceFile);
 
             writeLine();
             emitShebang();
@@ -1535,9 +1529,6 @@ namespace ts {
             emitList(node, node.statements, ListFormat.SourceFileStatements);
 
             currentSourceFile = undefined;
-            assignmentSubstitution = undefined;
-            bindingIdentifierSubstitution = undefined;
-            expressionIdentifierSubstitution = undefined;
         }
 
         //

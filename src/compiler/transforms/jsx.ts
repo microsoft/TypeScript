@@ -1,15 +1,7 @@
 /// <reference path="../checker.ts" />
 /*@internal*/
 namespace ts {
-    export function transformJsx(node: SourceFile, transformer: Transformer): SourceFile {
-        if (node.transformFlags & TransformFlags.ContainsJsx) {
-            return transformJsxWorker(node, transformer);
-        }
-
-        return node;
-    }
-
-    function transformJsxWorker(node: SourceFile, transformer: Transformer): SourceFile {
+    export function createJsxTransformation(transformer: Transformer): Transformation {
         // create local aliases for transformer methods
         let {
             tryPushNode,
@@ -21,7 +13,19 @@ namespace ts {
             accept,
         } = transformer;
 
-        return visitSourceFile(node, visitor);
+        return transformJsx;
+
+        function transformJsx(node: SourceFile): SourceFile {
+            if (node.transformFlags & TransformFlags.ContainsJsx) {
+                return transformJsxWorker(node);
+            }
+
+            return node;
+        }
+
+        function transformJsxWorker(node: SourceFile): SourceFile {
+            return visitSourceFile(node, visitor);
+        }
 
         function visitor(node: Node, write: (node: Node) => void): void {
             if (node.transformFlags & TransformFlags.Jsx) {

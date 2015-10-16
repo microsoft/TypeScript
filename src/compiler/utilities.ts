@@ -363,6 +363,10 @@ namespace ts {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
 
+    export function isNonDeclarationFile(file: SourceFile): boolean {
+        return (file.flags & NodeFlags.DeclarationFile) === 0;
+    }
+
     export function isConstEnumDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.EnumDeclaration && isConst(node);
     }

@@ -1,15 +1,8 @@
 /// <reference path="../checker.ts" />
 /*@internal*/
 namespace ts {
-    export function transformES6(node: SourceFile, transformer: Transformer): SourceFile {
-        if (node.transformFlags & TransformFlags.ContainsES6) {
-            return transformES6Worker(node, transformer);
-        }
-
-        return node;
-    }
-
-    function transformES6Worker(node: SourceFile, transformer: Transformer): SourceFile {
+    export function createES6Transformation(transformer: Transformer): Transformation {
+        // create local aliases for transformer methods
         let {
             startLexicalEnvironment,
             endLexicalEnvironment,
@@ -41,8 +34,24 @@ namespace ts {
         let compilerOptions = transformer.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let resolver = transformer.getEmitResolver();
-        let currentSourceFile = node;
-        return visitSourceFile(node, visitor);
+        let currentSourceFile: SourceFile;
+
+        return transformES6;
+
+        function transformES6(node: SourceFile): SourceFile {
+            if (node.transformFlags & TransformFlags.ContainsES6) {
+                return transformES6Worker(node);
+            }
+
+            return node;
+        }
+
+        function transformES6Worker(node: SourceFile): SourceFile {
+            currentSourceFile = node;
+            node = visitSourceFile(node, visitor);
+            currentSourceFile = undefined;
+            return node;
+        }
 
         /**
          * Transforms a node from ES6 to ES5 if it requires any transformations.
