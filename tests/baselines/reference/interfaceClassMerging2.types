@@ -55,17 +55,17 @@ var bar = new Bar();
 >new Bar() : Bar
 >Bar : typeof Bar
 
-bar.classFooMethod().interfaceFooMethod().classBarMethod().classFooMethod();
->bar.classFooMethod().interfaceFooMethod().classBarMethod().classFooMethod() : Bar
->bar.classFooMethod().interfaceFooMethod().classBarMethod().classFooMethod : () => Bar
->bar.classFooMethod().interfaceFooMethod().classBarMethod() : Bar
->bar.classFooMethod().interfaceFooMethod().classBarMethod : () => Bar
->bar.classFooMethod().interfaceFooMethod() : Bar
->bar.classFooMethod().interfaceFooMethod : () => Bar
->bar.classFooMethod() : Bar
->bar.classFooMethod : () => Bar
+bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod() : Bar
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod : () => Bar
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod() : Bar
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod : () => Bar
+>bar.interfaceBarMethod().interfaceFooMethod() : Bar
+>bar.interfaceBarMethod().interfaceFooMethod : () => Bar
+>bar.interfaceBarMethod() : Bar
+>bar.interfaceBarMethod : () => Bar
 >bar : Bar
->classFooMethod : () => Bar
+>interfaceBarMethod : () => Bar
 >interfaceFooMethod : () => Bar
 >classBarMethod : () => Bar
 >classFooMethod : () => Bar

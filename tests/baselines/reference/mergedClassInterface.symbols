@@ -13,16 +13,16 @@ interface C2 { }
 declare class C2 { }
 >C2 : Symbol(C2, Decl(file1.ts, 4, 16), Decl(file1.ts, 6, 16))
 
-class C3 { } // error -- cannot merge non-ambient class and interface
+class C3 { }
 >C3 : Symbol(C3, Decl(file1.ts, 8, 20), Decl(file1.ts, 10, 12))
 
-interface C3 { } // error -- cannot merge non-ambient class and interface
+interface C3 { }
 >C3 : Symbol(C3, Decl(file1.ts, 8, 20), Decl(file1.ts, 10, 12))
 
-interface C4 { } // error -- cannot merge non-ambient class and interface
+interface C4 { }
 >C4 : Symbol(C4, Decl(file1.ts, 12, 16), Decl(file1.ts, 14, 16))
 
-class C4 { } // error -- cannot merge non-ambient class and interface
+class C4 { }
 >C4 : Symbol(C4, Decl(file1.ts, 12, 16), Decl(file1.ts, 14, 16))
 
 interface C5 {

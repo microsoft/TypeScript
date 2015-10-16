@@ -8,7 +8,7 @@ tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.
     class C { foo: string; }
               ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
-    interface C { foo: string; } // error
+    interface C { foo: string; }
                   ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
     
@@ -19,7 +19,7 @@ tests/cases/conformance/classes/classDeclarations/classAndInterfaceWithSameName.
 !!! error TS2300: Duplicate identifier 'bar'.
         }
     
-        interface D { // error
+        interface D {
             bar: string;
             ~~~
 !!! error TS2300: Duplicate identifier 'bar'.

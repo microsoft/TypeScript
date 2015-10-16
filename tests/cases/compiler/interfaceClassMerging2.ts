@@ -27,7 +27,7 @@ class Bar extends Foo {
 
 
 var bar = new Bar();
-bar.classFooMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
 
 
 var foo = new Foo();

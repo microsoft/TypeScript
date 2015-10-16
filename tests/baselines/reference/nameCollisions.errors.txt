@@ -82,8 +82,8 @@ tests/cases/compiler/nameCollisions.ts(37,11): error TS2300: Duplicate identifie
         interface fi { } // ok
     
         class cli { }
-        interface cli { } // error
+        interface cli { }
     
         interface cli2 { }
-        class cli2 { } // error
+        class cli2 { }
     }

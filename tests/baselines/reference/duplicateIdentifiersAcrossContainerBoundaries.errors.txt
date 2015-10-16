@@ -9,7 +9,7 @@ tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts(41,16): er
         export interface I { }
     }
     module M {
-        export class I { } // error
+        export class I { }
     }
     
     module M {

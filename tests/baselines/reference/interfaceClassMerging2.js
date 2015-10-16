@@ -28,7 +28,7 @@ class Bar extends Foo {
 
 
 var bar = new Bar();
-bar.classFooMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
 
 
 var foo = new Foo();
@@ -61,6 +61,6 @@ var Bar = (function (_super) {
     return Bar;
 })(Foo);
 var bar = new Bar();
-bar.classFooMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
 var foo = new Foo();
 foo = bar;
