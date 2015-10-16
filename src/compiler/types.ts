@@ -2103,6 +2103,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES6 = 5,
+        ES2015 = ES6,
     }
 
     export const enum JsxEmit {
@@ -2128,12 +2129,13 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES2015 = ES6,
         Latest = ES6,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX
+        JSX,
     }
 
     export interface ParsedCommandLine {

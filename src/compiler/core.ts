@@ -739,13 +739,12 @@ namespace ts {
     export function isSupportedSourceFileName(fileName: string) {
         if (!fileName) { return false; }
 
-        let dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex < 0) {
-            return false;
+        for (let extension of supportedExtensions) {
+            if (fileExtensionIs(fileName, extension)) {
+                return true;
+            }
         }
-
-        let extension = fileName.slice(dotIndex, fileName.length);
-        return supportedExtensions.indexOf(extension) >= 0;
+        return false;
     }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
@@ -846,7 +845,7 @@ namespace ts {
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         let copiedList: T[] = [];
         for (var i = 0, len = list.length; i < len; i++) {
-            if (list[i] != item) {
+            if (list[i] !== item) {
                 copiedList.push(list[i]);
             }
         }
