@@ -1,0 +1,24 @@
+=== tests/cases/compiler/deconstConstEnums1.ts ===
+
+const enum Foo {
+>Foo : Foo
+
+	Item1,
+>Item1 : Foo
+
+	Item2
+>Item2 : Foo
+}
+
+let a = Foo.Item1;
+>a : Foo
+>Foo.Item1 : Foo
+>Foo : typeof Foo
+>Item1 : Foo
+
+let b = Foo.Item2;
+>b : Foo
+>Foo.Item2 : Foo
+>Foo : typeof Foo
+>Item2 : Foo
+

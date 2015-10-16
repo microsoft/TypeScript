@@ -148,7 +148,12 @@ namespace ts {
         {
             name: "preserveConstEnums",
             type: "boolean",
-            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+            description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code,
+        },
+        {
+            name: "deconstConstEnums",
+            type: "boolean",
+            description: Diagnostics.Indicates_that_const_enum_delcarations_are_to_be_emitted_as_enum_declarations_Requires_preserveConstEnums,
         },
         {
             name: "project",

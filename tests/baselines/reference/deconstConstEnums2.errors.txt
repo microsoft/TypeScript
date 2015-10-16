@@ -1,0 +1,13 @@
+error TS5052: Option 'deconstConstEnums' cannot be specified without specifying option 'preserveConstEnums'.
+
+
+!!! error TS5052: Option 'deconstConstEnums' cannot be specified without specifying option 'preserveConstEnums'.
+==== tests/cases/compiler/deconstConstEnums2.ts (0 errors) ====
+    
+    const enum Foo {
+    	Item1,
+    	Item2
+    }
+    
+    let a = Foo.Item1;
+    let b = Foo.Item2;

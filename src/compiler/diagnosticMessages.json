@@ -2125,6 +2125,10 @@
         "category": "Message",
         "code": 6020
     },
+    "Indicates that const enum delcarations are to be emitted as enum declarations. Requires --preserveConstEnums.": {
+        "category": "Message",
+        "code": 6021
+    },
     "Syntax: {0}": {
         "category": "Message",
         "code": 6023
