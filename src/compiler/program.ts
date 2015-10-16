@@ -1071,11 +1071,6 @@ namespace ts {
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
-
-            if (options.experimentalAsyncFunctions &&
-                options.target !== ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
-            }
         }
     }
 }

@@ -572,6 +572,10 @@ namespace Harness.LanguageService {
             return { close() { } };
         }
 
+        watchDirectory(path: string, callback: (path: string) => void, recursive?: boolean): ts.FileWatcher {
+            return { close() { } };
+        }
+
         close(): void {
         }
 
@@ -614,7 +618,9 @@ namespace Harness.LanguageService {
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
             let serverHost = new SessionServerHost(clientHost);
-            let server = new ts.server.Session(serverHost, Buffer.byteLength, process.hrtime, serverHost);
+            let server = new ts.server.Session(serverHost,
+                Buffer ? Buffer.byteLength : (string: string, encoding?: string) => string.length,
+                process.hrtime, serverHost);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);
