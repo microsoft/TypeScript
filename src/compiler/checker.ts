@@ -8652,7 +8652,7 @@ namespace ts {
                 let classSymbol = getSymbolOfNode(node);
                 return getTypeOfSymbol(classSymbol);
             }
-            
+
             if (node.kind === SyntaxKind.Parameter) {
                 // For a parameter decorator, the `target` is the parent type of the
                 // parameter's containing method.
@@ -8662,7 +8662,7 @@ namespace ts {
                     return getTypeOfSymbol(classSymbol);
                 }
             }
-            
+
             if (node.kind === SyntaxKind.PropertyDeclaration ||
                 node.kind === SyntaxKind.MethodDeclaration ||
                 node.kind === SyntaxKind.GetAccessor ||
@@ -8699,7 +8699,7 @@ namespace ts {
                 Debug.fail("Class decorators should not have a second synthetic argument.");
                 return unknownType;
             }
-            
+
             if (node.kind === SyntaxKind.Parameter) {
                 node = node.parent;
                 if (node.kind === SyntaxKind.Constructor) {
@@ -8710,7 +8710,7 @@ namespace ts {
                 // For a non-constructor parameter decorator, the `propertyKey` will be either
                 // a string or a symbol, based on the name of the parameter's containing method.
             }
-            
+
             if (node.kind === SyntaxKind.PropertyDeclaration ||
                 node.kind === SyntaxKind.MethodDeclaration ||
                 node.kind === SyntaxKind.GetAccessor ||
@@ -8759,17 +8759,17 @@ namespace ts {
                 Debug.fail("Class decorators should not have a third synthetic argument.");
                 return unknownType;
             }
-            
+
             if (node.kind === SyntaxKind.Parameter) {
                 // The `parameterIndex` for a parameter decorator is always a number
                 return numberType;
             }
-            
+
             if (node.kind === SyntaxKind.PropertyDeclaration) {
                 Debug.fail("Property decorators should not have a third synthetic argument.");
                 return unknownType;
             }
-            
+
             if (node.kind === SyntaxKind.MethodDeclaration ||
                 node.kind === SyntaxKind.GetAccessor ||
                 node.kind === SyntaxKind.SetAccessor) {
@@ -8782,7 +8782,7 @@ namespace ts {
             Debug.fail("Unsupported decorator target.");
             return unknownType;
         }
-        
+
         /**
           * Returns the effective argument type for the provided argument to a decorator.
           */
