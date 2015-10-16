@@ -360,7 +360,8 @@ namespace ts {
             let newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
             let canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
 
-            if (!arrayIsEqualTo(newFileNames.sort(), canonicalRootFileNames.sort())) {
+            // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
+            if (!arrayIsEqualTo(newFileNames, canonicalRootFileNames, /*equaler*/ undefined, /*sortBeforeComparison*/ true)) {
                 setCachedProgram(undefined);
                 startTimerForRecompilation();
             }
