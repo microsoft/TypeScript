@@ -992,7 +992,7 @@ namespace ts {
 
         /** Pushes a node onto the stack if it is not already at the top of the stack. */
         function tryPushNode(node: Node): boolean {
-            if (currentNode !== node) {
+            if (currentNode === node) {
                 return false;
             }
 
