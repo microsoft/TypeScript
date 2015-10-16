@@ -1724,6 +1724,10 @@
         "category": "Error",
         "code": 2656
     },
+    "JSX expressions must have one parent element": {
+        "category": "Error",
+        "code": 2657
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

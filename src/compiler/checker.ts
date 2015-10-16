@@ -7510,9 +7510,6 @@ namespace ts {
                     case SyntaxKind.JsxSelfClosingElement:
                         checkJsxSelfClosingElement(<JsxSelfClosingElement>child);
                         break;
-                    default:
-                        // No checks for JSX Text
-                        Debug.assert(child.kind === SyntaxKind.JsxText);
                 }
             }
 
