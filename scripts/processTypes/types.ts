@@ -4,7 +4,7 @@ import { hasProperty, getProperty } from "./utilities";
 
 const typeInfoForSymbol: TypeInfo[] = [];
 const typeInfoForName: Map<TypeInfo> = {};
-const typeInfoForUnion: Map<TypeInfo> = {};
+const typeInfoForUnion: Map<UnionTypeInfo> = {};
 const typeInfoForTypeReference: Map<GenericTypeInfo> = {};
 const subTypeRelationships: TypeInfo[][] = [];
 const aliasRelationships: TypeInfo[][] = [];
@@ -12,7 +12,7 @@ const unionRelationships: TypeInfo[][] = [];
 const propertyInfoForSymbol: PropertyInfo[] = [];
 const annotationPattern = /@(\w+\s*[^\r\n]*)/g;
 const symbolToAnnotations: Annotation[][] = [];
-const annotationConstructors: Map<{ constructor: typeof Annotation; inherited: boolean; allowMultiple: boolean; }> = {};
+const annotationConstructors: Map<AnnotationConstructorEntry> = {};
 const options = getCompilerOptions();
 const host = ts.createCompilerHost(options);
 
@@ -20,9 +20,31 @@ let globalArrayType: TypeInfo;
 let checker: ts.TypeChecker;
 let program: ts.Program;
 
+export const enum AnnotationTargets {
+    Class = 1 << 0,
+    Interface = 1 << 1,
+    TypeAlias = 1 << 2,
+    Property = 1 << 3,
+    All = Class | Interface | TypeAlias | Property,
+}
+
+interface AnnotationConstructorEntry {
+    name: string;
+    constructor: typeof Annotation;
+    inherited: boolean;
+    allowMultiple: boolean;
+    targets: AnnotationTargets;
+}
+
 export interface EnumValue<T extends number> {
     symbol: Symbol;
     value: T;
+}
+
+export interface Annotated {
+    getAnnotations(inherited: boolean): Annotation[];
+    findAllAnnotations<T extends Annotation>(inherited: boolean, match: (annotation: Annotation) => annotation is T): T[];
+    findFirstAnnotation<T extends Annotation>(inherited: boolean, match: (annotation: Annotation) => annotation is T): T;
 }
 
 export abstract class TypeInfo implements Annotated {
@@ -310,13 +332,16 @@ abstract class GenericTypeInfo extends TypeInfo {
     private typeArguments: TypeInfo[];
     private target: TypeInfo;
 
-    constructor(symbol: Symbol, name: string, typeParameters: TypeInfo[] = []) {
+    constructor(symbol: Symbol, name: string) {
         super(symbol, name);
-        this.typeParameters = typeParameters;
     }
 
     public get hasGenericTypeParameters() { return this.typeParameters && this.typeParameters.length > 0; }
     public get isConstructedGenericType() { return this.typeArguments && this.typeArguments.length > 0; }
+
+    public setGenericTypeParameters(typeParameters: TypeInfo[]) {
+        this.typeParameters = typeParameters;
+    }
 
     public getGenericTypeParameters() {
         return this.typeParameters || [];
@@ -374,8 +399,13 @@ class InterfaceInfo extends GenericTypeInfo {
 
     public subTypes: TypeInfo[] = [];
 
-    constructor(symbol: Symbol, name: string, typeParameters: TypeInfo[], superTypes: TypeInfo[]) {
-        super(symbol, name, typeParameters);
+    constructor(symbol: Symbol, name: string) {
+        super(symbol, name);
+    }
+
+    public get isInterface() { return true; }
+
+    public setSuperTypes(superTypes: TypeInfo[]) {
         this.superTypes = superTypes || [];
 
         for (let superType of this.superTypes) {
@@ -383,47 +413,56 @@ class InterfaceInfo extends GenericTypeInfo {
         }
     }
 
-    public get isInterface() { return true; }
-
     public getSuperTypes() {
-        return this.superTypes;
+        return this.superTypes || [];
     }
 
     protected createType() {
-        return new InterfaceInfo(this.symbol, this.name, this.getGenericTypeParameters(), this.getSuperTypes());
+        let type = new InterfaceInfo(this.symbol, this.name);
+        type.setGenericTypeParameters(this.getGenericTypeParameters());
+        type.setSuperTypes(this.getSuperTypes());
+        return type;
     }
 }
 
 class TypeAliasInfo extends GenericTypeInfo {
     private aliasedType: TypeInfo;
 
-    constructor(symbol: Symbol, name: string, typeParameters: TypeInfo[], aliasedType: TypeInfo) {
-        super(symbol, name, typeParameters);
-        this.aliasedType = aliasedType;
-
-        recordAliasRelationship(this, aliasedType);
+    constructor(symbol: Symbol, name: string) {
+        super(symbol, name);
     }
 
     public get isTypeAlias() { return true; }
+
+    public setAliasedType(aliasedType: TypeInfo) {
+        this.aliasedType = aliasedType;
+        recordAliasRelationship(this, aliasedType);
+    }
 
     public getAliasedType() {
         return this.aliasedType;
     }
 
     protected createType() {
-        return new TypeAliasInfo(this.symbol, this.name, this.getGenericTypeParameters(), this.aliasedType);
+        let type = new TypeAliasInfo(this.symbol, this.name);
+        type.setGenericTypeParameters(this.getGenericTypeParameters());
+        type.setAliasedType(this.getAliasedType());
+        return type;
     }
 }
 
 class TypeParameterInfo extends TypeInfo {
     private constraint: TypeInfo;
 
-    constructor(symbol: Symbol, name: string, constraint?: TypeInfo) {
+    constructor(symbol: Symbol, name: string) {
         super(symbol, name);
-        this.constraint = constraint;
     }
 
     public get isGenericTypeParameter() { return true; }
+
+    public setConstraint(constraint: TypeInfo) {
+        this.constraint = constraint;
+    }
 
     public getConstraint() {
         return this.constraint;
@@ -433,8 +472,13 @@ class TypeParameterInfo extends TypeInfo {
 class UnionTypeInfo extends TypeInfo {
     private constituentTypes: TypeInfo[];
 
-    constructor(constituentTypes: TypeInfo[]) {
+    constructor() {
         super(/*symbol*/ undefined, /*name*/ undefined);
+    }
+
+    public get isUnionType() { return true; }
+
+    public setConstituentTypes(constituentTypes: TypeInfo[]) {
         this.constituentTypes = constituentTypes || [];
 
         for (let constituentType of this.constituentTypes) {
@@ -442,14 +486,12 @@ class UnionTypeInfo extends TypeInfo {
         }
     }
 
-    public get isUnionType() { return true; }
-
     public getConstituentTypes() {
-        return this.constituentTypes.slice(0);
+        return this.constituentTypes ? this.constituentTypes.slice(0) : [];
     }
 
     public toString() {
-        return this.constituentTypes.join(" | ");
+        return this.getConstituentTypes().join(" | ");
     }
 }
 
@@ -556,6 +598,7 @@ export class PropertyInfo implements Annotated {
 export class Annotation {
     public static inherited = true;
     public static allowMultiple = true;
+    public static targets = AnnotationTargets.All;
     public name: string;
     public arguments: any[];
     constructor(_arguments: any[]) {
@@ -594,9 +637,9 @@ export function getTypes(ns: string) {
 
 function getGlobalArrayType() {
     if (!globalArrayType) {
-        globalArrayType = new InterfaceInfo(/*symbol*/ undefined, "Array", [
-            new TypeParameterInfo(/*symbol*/ undefined, "T")
-        ], []);
+        let type = new InterfaceInfo(/*symbol*/ undefined, "Array");
+        type.setGenericTypeParameters([new TypeParameterInfo(/*symbol*/ undefined, "T")]);
+        globalArrayType = type;
     }
     return globalArrayType;
 }
@@ -634,32 +677,32 @@ function getInterfaceExtendsClause(decl: ts.InterfaceDeclaration): ts.Expression
 }
 
 function getDeclaredTypeInfoOfInterface(symbol: Symbol, decl: ts.InterfaceDeclaration) {
-    let typeInfo = typeInfoForSymbol[getSymbolId(symbol)];
+    let typeInfo = <InterfaceInfo>typeInfoForSymbol[getSymbolId(symbol)];
     if (!typeInfo) {
-        let typeParameters: TypeInfo[] = decl.typeParameters ? decl.typeParameters.map(getTypeInfoOfTypeParameter) : [];
-        let superTypes: TypeInfo[] = getInterfaceExtendsClause(decl).map(getTypeInfoOfTypeNode);
-        typeInfo = typeInfoForSymbol[getSymbolId(symbol)] = new InterfaceInfo(symbol, symbol.name, typeParameters, superTypes);
+        typeInfo = typeInfoForSymbol[getSymbolId(symbol)] = new InterfaceInfo(symbol, symbol.name);
+        typeInfo.setGenericTypeParameters(decl.typeParameters ? decl.typeParameters.map(getTypeInfoOfTypeParameter) : undefined);
+        typeInfo.setSuperTypes(getInterfaceExtendsClause(decl).map(getTypeInfoOfTypeNode));
         fillTypeInfoFromType(typeInfo, checker.getDeclaredTypeOfSymbol(symbol), symbol);
     }
     return typeInfo;
 }
 
 function getDeclaredTypeInfoOfTypeAlias(symbol: Symbol, decl: ts.TypeAliasDeclaration) {
-    let typeInfo = typeInfoForSymbol[getSymbolId(symbol)];
+    let typeInfo = <TypeAliasInfo>typeInfoForSymbol[getSymbolId(symbol)];
     if (!typeInfo) {
-        let typeParameters: TypeInfo[] = decl.typeParameters ? decl.typeParameters.map(getTypeInfoOfTypeParameter) : [];
-        let aliasedType = getTypeInfoOfTypeNode(decl.type);
-        typeInfo = typeInfoForSymbol[getSymbolId(symbol)] = new TypeAliasInfo(symbol, symbol.name, typeParameters, aliasedType);
+        typeInfo = typeInfoForSymbol[getSymbolId(symbol)] = new TypeAliasInfo(symbol, symbol.name);
+        typeInfo.setGenericTypeParameters(decl.typeParameters ? decl.typeParameters.map(getTypeInfoOfTypeParameter) : undefined);
+        typeInfo.setAliasedType(getTypeInfoOfTypeNode(decl.type));
         fillTypeInfoFromType(typeInfo, checker.getDeclaredTypeOfSymbol(symbol), symbol);
     }
     return typeInfo;
 }
 
 function getDeclaredTypeInfoOfTypeParameter(symbol: Symbol, decl: ts.TypeParameterDeclaration) {
-    let typeInfo = typeInfoForSymbol[getSymbolId(symbol)];
+    let typeInfo = <TypeParameterInfo>typeInfoForSymbol[getSymbolId(symbol)];
     if (!typeInfo) {
-        let constraint = decl.constraint ? getTypeInfoOfTypeNode(decl.constraint) : undefined;
-        typeInfo = typeInfoForSymbol[getSymbolId(symbol)] = new TypeParameterInfo(symbol, symbol.name, constraint);
+        typeInfo = typeInfoForSymbol[getSymbolId(symbol)] = new TypeParameterInfo(symbol, symbol.name);
+        typeInfo.setConstraint(decl.constraint ? getTypeInfoOfTypeNode(decl.constraint) : undefined);
     }
     return typeInfo;
 }
@@ -748,10 +791,11 @@ function getTypeInfoOfUnionTypeNode(typeNode: ts.UnionTypeNode): TypeInfo {
     let constituentTypes = typeNode.types.map(getTypeInfoOfTypeNode);
     constituentTypes.sort((a, b) => a.toString().localeCompare(b.toString()));
     let key = formatTypeInfoKey(constituentTypes);
-    let typeInfo: TypeInfo = getProperty(typeInfoForUnion, key);
+    let typeInfo = getProperty(typeInfoForUnion, key);
     if (!typeInfo) {
-        typeInfo = new UnionTypeInfo(constituentTypes);
-        typeInfoForUnion[key] = typeInfo;
+        typeInfo = typeInfoForUnion[key] = new UnionTypeInfo();
+        typeInfo.setConstituentTypes(constituentTypes);
+
         let type = checker.getTypeAtLocation(typeNode);
         fillTypeInfoFromType(typeInfo, type, getSymbolOfType(type));
     }
@@ -992,12 +1036,6 @@ function getObjectLiteralValue(location: Node, expr: ts.ObjectLiteralExpression)
     return obj;
 }
 
-export interface Annotated {
-    getAnnotations(inherited: boolean): Annotation[];
-    findAllAnnotations<T extends Annotation>(inherited: boolean, match: (annotation: Annotation) => annotation is T): T[];
-    findFirstAnnotation<T extends Annotation>(inherited: boolean, match: (annotation: Annotation) => annotation is T): T;
-}
-
 function formatTypeInfoKey(types: TypeInfo[]) {
     return types.map(type => type.id).join("-");
 }
@@ -1017,12 +1055,13 @@ function recordUnionRelationship(unionType: TypeInfo, constituentType: TypeInfo)
     unionTypes.push(unionType);
 }
 
-export function annotation(name: string, options?: { inherited?: boolean; allowMultiple?: boolean; }) {
+export function annotation(name: string, options?: { inherited?: boolean; allowMultiple?: boolean; targets?: AnnotationTargets; }) {
     return function<T extends typeof Annotation>(constructor: T) {
         symbolToAnnotations.length = 0;
         let inherited = options && "inherited" in options ? options.inherited : false;
         let allowMultiple = options && "allowMultiple" in options ? options.allowMultiple : true;
-        annotationConstructors[name] = { constructor, inherited, allowMultiple, };
+        let targets = options && "targets" in options ? options.targets : AnnotationTargets.All;
+        annotationConstructors[name] = { name, constructor, inherited, allowMultiple, targets };
         return constructor;
     }
 }
@@ -1102,13 +1141,14 @@ function findAllAnnotationsOf<T extends Annotation>(info: Annotated, inherited: 
     return annotations;
 }
 
-function parseAnnotations(location: Node, range: ts.CommentRange, annotations: Annotation[], seen: Map<boolean>) {
-    let sourceFile = getSourceFileOfNode(location);
+function parseAnnotations(declaration: Node, range: ts.CommentRange, annotations: Annotation[], seen: Map<boolean>) {
+    let sourceFile = getSourceFileOfNode(declaration);
     let text = sourceFile.text;
     let comment = text.substring(range.pos, range.end);
     let annotationMatch: RegExpExecArray;
     while (annotationMatch = annotationPattern.exec(comment)) {
-        let annotation = parseAnnotation(location, annotationMatch[1]);
+        let pos = range.pos + annotationMatch.index;
+        let annotation = parseAnnotation(declaration, annotationMatch[1], pos);
         if (annotation) {
             let entry = getProperty(annotationConstructors, annotation.name);
             if (entry && !entry.allowMultiple && hasProperty(seen, annotation.name)) {
@@ -1122,7 +1162,7 @@ function parseAnnotations(location: Node, range: ts.CommentRange, annotations: A
     }
 }
 
-function parseAnnotation(location: Node, annotationSource: string) {
+function parseAnnotation(annotatedDeclaration: Node, annotationSource: string, annotationPos: number) {
     let evalSourceFile = ts.createSourceFile("eval.ts", annotationSource, ts.ScriptTarget.Latest, true);
     let statements = evalSourceFile.statements;
     if (statements.length === 0) {
@@ -1136,7 +1176,7 @@ function parseAnnotation(location: Node, annotationSource: string) {
 
     let expr = (<ts.ExpressionStatement>stmt).expression;
     if (isIdentifier(expr)) {
-        return createAnnotation(expr.text, []);
+        return createAnnotation(annotatedDeclaration, expr.text, [], annotationPos);
     }
     else if (isCallExpression(expr)) {
         if (expr.expression.kind !== SyntaxKind.Identifier) {
@@ -1145,21 +1185,51 @@ function parseAnnotation(location: Node, annotationSource: string) {
 
         let _arguments: any[] = [];
         for (let argument of expr.arguments) {
-            _arguments.push(getLiteralValue(location, argument));
+            _arguments.push(getLiteralValue(annotatedDeclaration, argument));
         }
 
-        return createAnnotation((<ts.Identifier>expr.expression).text, _arguments);
+        return createAnnotation(annotatedDeclaration, (<ts.Identifier>expr.expression).text, _arguments, annotationPos);
     }
     else {
         return undefined;
     }
 }
 
-function createAnnotation(name: string, _arguments: any[]): Annotation {
+function syntaxKindToString(kind: SyntaxKind) {
+    let syntaxKind = resolveQualifiedName("ts.SyntaxKind", SymbolFlags.Enum);
+    let syntaxKindEnum = <ts.EnumDeclaration>syntaxKind.valueDeclaration;
+    for (let symbol of getSymbols(syntaxKind.exports, SymbolFlags.EnumMember)) {
+        if (checker.getConstantValue(<ts.EnumMember>symbol.valueDeclaration) === kind) {
+            return symbol.name;
+        }
+    }
+    return "";
+}
+
+function createAnnotation(annotatedDeclaration: Node, name: string, _arguments: any[], annotationPos: number): Annotation {
     let entry = getProperty(annotationConstructors, name);
+    if (entry && !isValidAnnotationTarget(annotatedDeclaration, entry)) {
+        let sourceFile = getSourceFileOfNode(annotatedDeclaration);
+        let lineAndCharacter = ts.getLineAndCharacterOfPosition(sourceFile, annotationPos);
+        let kindName = syntaxKindToString(annotatedDeclaration.kind);
+        console.error(`${sourceFile.fileName}(${lineAndCharacter.line}, ${lineAndCharacter.character}): @${name} is not supported on a(n) ${kindName}.`);
+        return undefined;
+    }
+
     let annotation = entry ? new entry.constructor(_arguments) : new Annotation(_arguments);
     annotation.name = name;
     return annotation;
+}
+
+function isValidAnnotationTarget({ kind }: Node, { name, targets }: AnnotationConstructorEntry) {
+    if (targets) {
+        return (targets & AnnotationTargets.Class && kind === SyntaxKind.ClassDeclaration)
+            || (targets & AnnotationTargets.Interface && kind === SyntaxKind.InterfaceDeclaration)
+            || (targets & AnnotationTargets.TypeAlias && kind === SyntaxKind.TypeAliasDeclaration)
+            || (targets & AnnotationTargets.Property && kind === SyntaxKind.PropertySignature);
+    }
+
+    return true;
 }
 
 function isTypeReferenceNode(node: Node): node is ts.TypeReferenceNode {

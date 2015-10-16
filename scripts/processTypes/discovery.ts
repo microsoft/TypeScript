@@ -1,6 +1,6 @@
 import { SyntaxKind, Symbol, SymbolFlags, Map, } from "./typescript-internal";
 import { hasProperty, getProperty } from "./utilities";
-import { getType, getTypes, makeArrayType, resolveQualifiedName, annotation, EnumValue, Annotation, TypeInfo, PropertyInfo } from "./types";
+import { getType, getTypes, makeArrayType, resolveQualifiedName, annotation, EnumValue, Annotation, AnnotationTargets, TypeInfo, PropertyInfo } from "./types";
 
 export interface DiscoveryResult {
     createableNodes: SyntaxNode[];
@@ -12,8 +12,6 @@ export interface DiscoveryResult {
 export interface SyntaxType {
     type: TypeInfo;
     typeName: string;
-    superTypes: SyntaxType[];
-    directSyntaxNodes: SyntaxNode[];
     syntaxNodes?: SyntaxNode[];
     testFunctionName?: string;
 }
@@ -46,6 +44,8 @@ export interface SyntaxMember {
 export function discover(): DiscoveryResult {
     const typesReferencedByProperties: boolean[] = [];
     const syntaxTypeForTypeInfo: SyntaxType[] = [];
+    const syntaxNodesForType: SyntaxNode[][] = [];
+    const syntaxNodesForTypeFlat: SyntaxNode[][] = [];
     const createableNodes: SyntaxNode[] = [];
     const updateableNodes: SyntaxNode[] = [];
     const testableNodes: SyntaxNode[] = [];
@@ -83,29 +83,22 @@ export function discover(): DiscoveryResult {
         let syntaxType = syntaxTypeForTypeInfo[type.id];
         if (!syntaxType) {
             if (nodeType.isAssignableFrom(type)) {
-                let superTypes: SyntaxType[] = [];
-                let directSyntaxNodes: SyntaxNode[] = [];
                 let typeName = type.toString();
 
                 syntaxType = {
                     type,
                     typeName,
-                    superTypes,
-                    directSyntaxNodes
                 };
 
                 syntaxTypes.push(syntaxType);
                 syntaxTypeForTypeInfo[type.id] = syntaxType;
 
                 for (let superType of type.getSuperTypes()) {
-                    let superSyntaxType = discoverType(superType);
-                    if (superSyntaxType) {
-                        superTypes.push(superSyntaxType);
-                    }
+                    discoverType(superType);
                 }
 
                 for (let kind of type.findAllAnnotations(/*inherited*/ false, KindAnnotation.match)) {
-                    directSyntaxNodes.push(discoverKind(type, kind));
+                    discoverKind(type, kind);
                 }
             }
         }
@@ -246,6 +239,8 @@ export function discover(): DiscoveryResult {
             localNames[testFunctionName] = testFunctionName;
         }
 
+        let typeNodes = syntaxNodesForType[type.id] || (syntaxNodesForType[type.id] = []);
+        typeNodes.push(syntaxNode);
         return syntaxNode;
     }
 
@@ -307,11 +302,7 @@ export function discover(): DiscoveryResult {
 
     function discoverTestableType(syntaxType: SyntaxType) {
         if (syntaxType.type !== nodeType && !syntaxType.syntaxNodes) {
-            syntaxType.syntaxNodes = [];
-
-            let includeAliasAndUnionConstituents = !syntaxType.type.findFirstAnnotation(/*inherited*/ false, KindAnnotation.match);
-
-            discoverSyntaxNodes(syntaxType.type, syntaxType.syntaxNodes, [], includeAliasAndUnionConstituents);
+            syntaxType.syntaxNodes = discoverSyntaxNodes(syntaxType.type);
             if (syntaxType.syntaxNodes.length > 0) {
                 let testFunctionName = discoverIsAnyNodeFunctionName(syntaxType.type);
                 if (testFunctionName) {
@@ -322,39 +313,46 @@ export function discover(): DiscoveryResult {
         }
     }
 
-    function discoverSyntaxNodes(type: TypeInfo, syntaxNodes: SyntaxNode[], seen: boolean[], includeAliasAndUnionConstituents?: boolean) {
-        copySyntaxNodes(type, syntaxNodes, seen);
+    /*
+        // EntityName is a union type of Identifier | QualifiedName.
+        // We want anything that can be an identifier and anything that can be a qualified name.
+        isEntityName(node: Node): node is EntityName {
 
-        for (let aliasType of type.getAliases()) {
-            copySyntaxNodes(aliasType, syntaxNodes, seen);
         }
+    */
 
-        if (type.isInterface) {
-            for (let subType of type.getSubTypes()) {
-                discoverSyntaxNodes(subType, syntaxNodes, seen);
-            }
-        }
+    function discoverSyntaxNodes(type: TypeInfo) {
+        let syntaxNodesFlat = syntaxNodesForTypeFlat[type.id];
+        if (!syntaxNodesFlat) {
+            syntaxNodesFlat = syntaxNodesForTypeFlat[type.id] = [];
 
-        if (includeAliasAndUnionConstituents) {
+            let seen: boolean[] = [];
+            copySyntaxNodes(syntaxNodesForType[type.id], syntaxNodesFlat, seen);
+
             if (type.isTypeAlias) {
-                discoverSyntaxNodes(type.getAliasedType(), syntaxNodes, seen);
+                let aliasedType = type.getAliasedType();
+                copySyntaxNodes(discoverSyntaxNodes(aliasedType), syntaxNodesFlat, seen);
             }
-
-            if (type.isUnionType) {
+            else if (type.isInterface) {
+                for (let subType of type.getSubTypes()) {
+                    copySyntaxNodes(discoverSyntaxNodes(subType), syntaxNodesFlat, seen);
+                }
+            }
+            else if (type.isUnionType) {
                 for (let constituentType of type.getConstituentTypes()) {
-                    discoverSyntaxNodes(constituentType, syntaxNodes, seen);
+                    copySyntaxNodes(discoverSyntaxNodes(constituentType), syntaxNodesFlat, seen);
                 }
             }
         }
+        return syntaxNodesFlat;
     }
 
-    function copySyntaxNodes(type: TypeInfo, syntaxNodes: SyntaxNode[], seen: boolean[]) {
-        let syntaxType = syntaxTypeForTypeInfo[type.id];
-        if (syntaxType) {
-            for (let syntaxNode of syntaxType.directSyntaxNodes) {
+    function copySyntaxNodes(source: SyntaxNode[], dest: SyntaxNode[], seen: boolean[]) {
+        if (source) {
+            for (let syntaxNode of source) {
                 if (!seen[syntaxNode.kind]) {
                     seen[syntaxNode.kind] = true;
-                    syntaxNodes.push(syntaxNode);
+                    dest.push(syntaxNode);
                 }
             }
         }
@@ -390,7 +388,7 @@ export interface KindOptions {
     test: boolean | string;
 }
 
-@annotation("kind", { inherited: false })
+@annotation("kind", { inherited: false, targets: AnnotationTargets.Interface })
 export class KindAnnotation extends Annotation {
     public kind: SyntaxKind;
     public kindSymbol: Symbol;
@@ -418,7 +416,7 @@ export const enum FactoryHiddenState {
     Visible
 }
 
-@annotation("factoryhidden", { inherited: true, allowMultiple: true })
+@annotation("factoryhidden", { inherited: true, allowMultiple: true, targets: AnnotationTargets.Interface | AnnotationTargets.Property })
 export class FactoryHiddenAnnotation extends Annotation {
     public propertyName: string;
     public hidden: boolean;
@@ -510,7 +508,7 @@ export class FactoryHiddenAnnotation extends Annotation {
     }
 }
 
-@annotation("factoryorder", { inherited: true })
+@annotation("factoryorder", { inherited: true, targets: AnnotationTargets.Interface })
 export class FactoryOrderAnnotation extends Annotation {
     public propertyNames: string[];
     constructor(propertyNames: string[]) {
@@ -523,7 +521,7 @@ export class FactoryOrderAnnotation extends Annotation {
     }
 }
 
-@annotation("factoryparam", { inherited: true, allowMultiple: true })
+@annotation("factoryparam", { inherited: true, allowMultiple: true, targets: AnnotationTargets.Interface | AnnotationTargets.Property })
 export class FactoryParamAnnotation extends Annotation {
     public propertyName: string;
     constructor([propertyName, ..._arguments]: [string, any]) {
@@ -540,7 +538,7 @@ export class FactoryParamAnnotation extends Annotation {
     }
 }
 
-@annotation("nodetest", { inherited: false, allowMultiple: false })
+@annotation("nodetest", { inherited: false, allowMultiple: false, targets: AnnotationTargets.Interface | AnnotationTargets.TypeAlias })
 export class NodeTestAnnotation extends Annotation {
     public functionName: string;
     constructor([functionName, ..._arguments]: [string, any]) {
