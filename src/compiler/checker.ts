@@ -12875,11 +12875,6 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
 
-            // Interfaces cannot be merged with non-ambient classes.
-            if (getSymbolOfNode(node).flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
-                error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
-            }
-
             forEach(node.members, checkSourceElement);
         }
 
@@ -13163,16 +13158,6 @@ namespace ts {
                             checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         }
                         checkIndexConstraints(type);
-                    }
-                }
-
-                // Interfaces cannot merge with non-ambient classes.
-                if (symbol && symbol.declarations) {
-                    for (let declaration of symbol.declarations) {
-                        if (declaration.kind === SyntaxKind.ClassDeclaration && !isInAmbientContext(declaration)) {
-                            error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
-                            break;
-                        }
                     }
                 }
             }
