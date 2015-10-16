@@ -8646,39 +8646,36 @@ namespace ts {
           */
         function getEffectiveDecoratorFirstArgumentType(node: Node): Type {
             // The first argument to a decorator is its `target`.
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // For a class decorator, the `target` is the type of the class (e.g. the
-                    // "static" or "constructor" side of the class)
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                // For a class decorator, the `target` is the type of the class (e.g. the
+                // "static" or "constructor" side of the class)
+                let classSymbol = getSymbolOfNode(node);
+                return getTypeOfSymbol(classSymbol);
+            }
+            
+            if (node.kind === SyntaxKind.Parameter) {
+                // For a parameter decorator, the `target` is the parent type of the
+                // parameter's containing method.
+                node = node.parent;
+                if (node.kind === SyntaxKind.Constructor) {
                     let classSymbol = getSymbolOfNode(node);
                     return getTypeOfSymbol(classSymbol);
-
-                case SyntaxKind.Parameter:
-                    // For a parameter decorator, the `target` is the parent type of the
-                    // parameter's containing method.
-                    node = node.parent;
-                    if (node.kind === SyntaxKind.Constructor) {
-                        let classSymbol = getSymbolOfNode(node);
-                        return getTypeOfSymbol(classSymbol);
-                    }
-
-                // fall-through
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // For a property or method decorator, the `target` is the
-                    // "static"-side type of the parent of the member if the member is
-                    // declared "static"; otherwise, it is the "instance"-side type of the
-                    // parent of the member.
-                    return getParentTypeOfClassElement(<ClassElement>node);
-
-                default:
-                    Debug.fail("Unsupported decorator target.");
-                    return unknownType;
+                }
             }
+            
+            if (node.kind === SyntaxKind.PropertyDeclaration ||
+                node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // For a property or method decorator, the `target` is the
+                // "static"-side type of the parent of the member if the member is
+                // declared "static"; otherwise, it is the "instance"-side type of the
+                // parent of the member.
+                return getParentTypeOfClassElement(<ClassElement>node);
+            }
+
+            Debug.fail("Unsupported decorator target.");
+            return unknownType;
         }
 
         /**
@@ -8698,57 +8695,54 @@ namespace ts {
           */
         function getEffectiveDecoratorSecondArgumentType(node: Node) {
             // The second argument to a decorator is its `propertyKey`
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    Debug.fail("Class decorators should not have a second synthetic argument.");
-                    return unknownType;
-
-                case SyntaxKind.Parameter:
-                    node = node.parent;
-                    if (node.kind === SyntaxKind.Constructor) {
-                        // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
-                        return anyType;
-                    }
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                Debug.fail("Class decorators should not have a second synthetic argument.");
+                return unknownType;
+            }
+            
+            if (node.kind === SyntaxKind.Parameter) {
+                node = node.parent;
+                if (node.kind === SyntaxKind.Constructor) {
+                    // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
+                    return anyType;
+                }
 
                 // For a non-constructor parameter decorator, the `propertyKey` will be either
                 // a string or a symbol, based on the name of the parameter's containing method.
-
-                // fall-through
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // The `propertyKey` for a property or method decorator will be a
-                    // string literal type if the member name is an identifier, number, or string;
-                    // otherwise, if the member name is a computed property name it will
-                    // be either string or symbol.
-                    let element = <ClassElement>node;
-                    switch (element.name.kind) {
-                        case SyntaxKind.Identifier:
-                        case SyntaxKind.NumericLiteral:
-                        case SyntaxKind.StringLiteral:
-                            return getStringLiteralType(<StringLiteral>element.name);
-
-                        case SyntaxKind.ComputedPropertyName:
-                            let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
-                            if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
-                                return nameType;
-                            }
-                            else {
-                                return stringType;
-                            }
-
-                        default:
-                            Debug.fail("Unsupported property name.");
-                            return unknownType;
-                    }
-
-
-                default:
-                    Debug.fail("Unsupported decorator target.");
-                    return unknownType;
             }
+            
+            if (node.kind === SyntaxKind.PropertyDeclaration ||
+                node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // The `propertyKey` for a property or method decorator will be a
+                // string literal type if the member name is an identifier, number, or string;
+                // otherwise, if the member name is a computed property name it will
+                // be either string or symbol.
+                let element = <ClassElement>node;
+                switch (element.name.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.StringLiteral:
+                        return getStringLiteralType(<StringLiteral>element.name);
+
+                    case SyntaxKind.ComputedPropertyName:
+                        let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
+                        if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
+                            return nameType;
+                        }
+                        else {
+                            return stringType;
+                        }
+
+                    default:
+                        Debug.fail("Unsupported property name.");
+                        return unknownType;
+                }
+            }
+
+            Debug.fail("Unsupported decorator target.");
+            return unknownType;
         }
 
         /**
@@ -8761,33 +8755,34 @@ namespace ts {
         function getEffectiveDecoratorThirdArgumentType(node: Node) {
             // The third argument to a decorator is either its `descriptor` for a method decorator
             // or its `parameterIndex` for a paramter decorator
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    Debug.fail("Class decorators should not have a third synthetic argument.");
-                    return unknownType;
-
-                case SyntaxKind.Parameter:
-                    // The `parameterIndex` for a parameter decorator is always a number
-                    return numberType;
-
-                case SyntaxKind.PropertyDeclaration:
-                    Debug.fail("Property decorators should not have a third synthetic argument.");
-                    return unknownType;
-
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
-                    // for the type of the member.
-                    let propertyType = getTypeOfNode(node);
-                    return createTypedPropertyDescriptorType(propertyType);
-
-                default:
-                    Debug.fail("Unsupported decorator target.");
-                    return unknownType;
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                Debug.fail("Class decorators should not have a third synthetic argument.");
+                return unknownType;
             }
-        }
+            
+            if (node.kind === SyntaxKind.Parameter) {
+                // The `parameterIndex` for a parameter decorator is always a number
+                return numberType;
+            }
+            
+            if (node.kind === SyntaxKind.PropertyDeclaration) {
+                Debug.fail("Property decorators should not have a third synthetic argument.");
+                return unknownType;
+            }
+            
+            if (node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
+                // for the type of the member.
+                let propertyType = getTypeOfNode(node);
+                return createTypedPropertyDescriptorType(propertyType);
+            }
 
+            Debug.fail("Unsupported decorator target.");
+            return unknownType;
+        }
+        
         /**
           * Returns the effective argument type for the provided argument to a decorator.
           */
