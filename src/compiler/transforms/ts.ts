@@ -46,6 +46,8 @@ namespace ts {
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
         let exportFunctionForFile: string;
+        let savedSubstituteExpressionIdentifier = transformer.getExpressionIdentifierSubstitution(node);
+        transformer.setExpressionIdentifierSubstitution(node, substituteExpressionIdentifier);
 
         // Mark that we are about to visit a new lexical environment.
         return visitSourceFile(node, visitor);
@@ -869,21 +871,6 @@ namespace ts {
             }
 
             transformBindingElementToExpressionWithParenthesisIfNeeded(node, write, /*parenthesizeObjectLiteralAssignment*/ true);
-
-            let name = node.name;
-            if (isBindingPattern(name)) {
-                let expr = mapNode(name, transformBindingPatternToExpression);
-                let initializer = visitNode(node.initializer, visitor, isExpressionNode);
-                let assignExpr = createAssignmentExpression(expr, initializer);
-                let parenExpr = createParenthesizedExpression(assignExpr);
-                write(parenExpr);
-            }
-            else {
-                let qualifiedName = getModuleMemberName(name);
-                let initializer = visitNode(node.initializer, visitor, isExpressionNode);
-                let assignExpr = createAssignmentExpression(qualifiedName, initializer);
-                write(assignExpr);
-            }
         }
 
         /**
@@ -1024,6 +1011,15 @@ namespace ts {
 
         function isModuleMergedWithClass(node: ModuleDeclaration) {
             return !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
+        }
+
+        function substituteExpressionIdentifier(node: Identifier): LeftHandSideExpression {
+            let container = resolver.getReferencedExportContainer(node);
+            if (isModuleDeclaration(container)) {
+                return createPropertyAccessExpression2(getGeneratedNameForNode(container), node, node);
+            }
+
+            return savedSubstituteExpressionIdentifier(node);
         }
 
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration, write: (node: Statement) => void): void {

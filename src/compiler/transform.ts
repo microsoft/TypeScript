@@ -33,31 +33,31 @@ namespace ts {
 
         // Add the TypeScript and Module transforms to the chain.
         transforms.push(transformTypeScript);
-        // transforms.push(transformModule);
+        // // transforms.push(transformModule);
 
-        // Add the JSX transform to the chain.
-        if (jsx === JsxEmit.React) {
-            transforms.push(transformJsx);
-        }
+        // // Add the JSX transform to the chain.
+        // if (jsx === JsxEmit.React) {
+        //     transforms.push(transformJsx);
+        // }
 
-        // Add the ES6 transform to the chain.
-        if (languageVersion < ScriptTarget.ES6) {
-            transforms.push(transformES6);
-        }
+        // // Add the ES6 transform to the chain.
+        // if (languageVersion < ScriptTarget.ES6) {
+        //     transforms.push(transformES6);
+        // }
 
         return chainTransformations(transforms);
     }
 
-    export function transformFilesIfNeeded(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain) {
+    export function transformFilesIfNeeded(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): TransformationResult {
         let compilerOptions = host.getCompilerOptions();
         if (compilerOptions.experimentalTransforms) {
             return transformFiles(resolver, host, sourceFiles, transformationChain);
         }
 
-        return sourceFiles;
+        return { sourceFiles };
     }
 
-    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain) {
+    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): TransformationResult {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -114,8 +114,8 @@ function __export(m) {
         let transformFlags: TransformFlags;
         let generatedNameSet: Map<string>;
         let tempVariableNameSet: Map<string>;
-        let nodeToGeneratedName: string[];
-        let nodeToGeneratedIdentifier: Identifier[];
+        let nodeToGeneratedName: string[] = [];
+        let nodeToGeneratedIdentifier: Identifier[] = [];
         let lexicalEnvironmentStackSize: number;
         let lexicalEnvironmentStack: LexicalEnvironment[] = [];
         let tempFlags: TempFlags;
@@ -131,6 +131,9 @@ function __export(m) {
         let updatedNode: Node;
         let updatedNodes: Node[];
         let helpersEmitted: NodeCheckFlags;
+        let assignmentSubstitutions: ((node: BinaryExpression) => Expression)[] = [];
+        let bindingIdentifierSubstitutions: ((node: Identifier) => Identifier)[] = [];
+        let expressionIdentifierSubstitutions: ((node: Identifier) => LeftHandSideExpression)[] = [];
         let transformer: Transformer = {
             getEmitResolver: () => resolver,
             getCompilerOptions: () => compilerOptions,
@@ -154,6 +157,12 @@ function __export(m) {
             hoistFunctionDeclaration,
             emitEmitHelpers,
             emitExportStarHelper,
+            getAssignmentSubstitution,
+            setAssignmentSubstitution,
+            getBindingIdentifierSubstitution,
+            setBindingIdentifierSubstitution,
+            getExpressionIdentifierSubstitution,
+            setExpressionIdentifierSubstitution,
             startLexicalEnvironment,
             endLexicalEnvironment,
             pipeNode,
@@ -173,7 +182,14 @@ function __export(m) {
             }
         };
 
-        return map(sourceFiles, transformSourceFile);
+        return {
+            sourceFiles: map(sourceFiles, transformSourceFile),
+            transformationResolver: {
+                getAssignmentSubstitution,
+                getBindingIdentifierSubstitution,
+                getExpressionIdentifierSubstitution,
+            }
+        };
 
         function transformSourceFile(sourceFile: SourceFile) {
             if (isDeclarationFile(sourceFile)) {
@@ -183,8 +199,6 @@ function __export(m) {
             currentSourceFile = sourceFile;
             generatedNameSet = {};
             tempVariableNameSet = {};
-            nodeToGeneratedName = [];
-            nodeToGeneratedIdentifier = [];
             lexicalEnvironmentStackSize = 0;
             nodeStack = createNodeStack();
             helpersEmitted = undefined;
@@ -198,13 +212,39 @@ function __export(m) {
             currentSourceFile = undefined;
             generatedNameSet = undefined;
             tempVariableNameSet = undefined;
-            nodeToGeneratedName = undefined;
-            nodeToGeneratedIdentifier = undefined;
             lexicalEnvironmentStackSize = undefined;
             nodeStack = undefined;
             helpersEmitted = undefined;
 
             return visited;
+        }
+
+        function getAssignmentSubstitution(sourceFile: SourceFile): (node: BinaryExpression) => Expression {
+            return assignmentSubstitutions[getNodeId(getOriginalNode(sourceFile))] || identitySubstitution;
+        }
+
+        function setAssignmentSubstitution(sourceFile: SourceFile, substitution: (node: BinaryExpression) => Expression) {
+            assignmentSubstitutions[getNodeId(getOriginalNode(sourceFile))] = substitution;
+        }
+
+        function getBindingIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => Identifier {
+            return bindingIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] || identitySubstitution;
+        }
+
+        function setBindingIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => Identifier): void {
+            bindingIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] = substitution;
+        }
+
+        function getExpressionIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => LeftHandSideExpression {
+            return expressionIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] || identitySubstitution;
+        }
+
+        function setExpressionIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => LeftHandSideExpression) {
+            expressionIdentifierSubstitutions[getNodeId(getOriginalNode(sourceFile))] = substitution;
+        }
+
+        function identitySubstitution<T extends Node>(node: T): T {
+            return node;
         }
 
         // Return the next available name in the pattern _a ... _z, _0, _1, ...

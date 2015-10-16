@@ -1251,7 +1251,11 @@ namespace ts {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent) {
-            return getSourceTextOfNodeFromSourceFile(sourceFile, node);
+            let text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
+            if (languageVersion < ScriptTarget.ES6 && isBinaryOrOctalIntegerLiteral(node, text)) {
+                return node.text;
+            }
+            return text;
         }
 
         // If we can't reach the original source text, use the canonical form if it's a number,
@@ -1272,6 +1276,19 @@ namespace ts {
         }
 
         Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
+    }
+
+    function isBinaryOrOctalIntegerLiteral(node: LiteralExpression, text: string) {
+        if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
+            switch (text.charCodeAt(1)) {
+                case CharacterCodes.b:
+                case CharacterCodes.B:
+                case CharacterCodes.o:
+                case CharacterCodes.O:
+                    return true;
+            }
+        }
+        return false;
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {

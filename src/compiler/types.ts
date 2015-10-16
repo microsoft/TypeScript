@@ -507,7 +507,6 @@ namespace ts {
     // @factoryhidden("jsDocComment", true)
     // @factoryhidden("nextContainer", true)
     // @factoryorder("decorators", "modifiers")
-    // @nofactoryanynodetest
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
@@ -547,7 +546,8 @@ namespace ts {
     // @kind(SyntaxKind.PrivateKeyword, { create: false, update: false, test: false })
     // @kind(SyntaxKind.ProtectedKeyword, { create: false, update: false, test: false })
     // @kind(SyntaxKind.StaticKeyword, { create: false, update: false, test: false })
-    export type Modifier = Node;
+    export interface Modifier extends Node {
+    }
 
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression {
@@ -731,10 +731,12 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.ObjectBindingPattern)
-    export type ObjectBindingPattern = BindingPattern;
+    export interface ObjectBindingPattern extends BindingPattern {
+    }
 
     // @kind(SyntaxKind.ArrayBindingPattern)
-    export type ArrayBindingPattern = BindingPattern;
+    export interface ArrayBindingPattern extends BindingPattern {
+    }
 
     /**
      * Several node kinds share function-like features such as a signature,
@@ -823,14 +825,16 @@ namespace ts {
     // @factoryhidden("questionToken")
     // @factoryhidden("asteriskToken")
     // @factoryorder("decorators", "modifiers", "name", "parameters", "type", "body")
-    export type GetAccessorDeclaration = AccessorDeclaration;
+    export interface GetAccessorDeclaration extends AccessorDeclaration {
+    }
 
     // @kind(SyntaxKind.SetAccessor)
     // @factoryhidden("typeParameters")
     // @factoryhidden("questionToken")
     // @factoryhidden("asteriskToken")
     // @factoryorder("decorators", "modifiers", "name", "parameters", "type", "body")
-    export type SetAccessorDeclaration = AccessorDeclaration;
+    export interface SetAccessorDeclaration extends AccessorDeclaration {
+    }
 
     // @kind(SyntaxKind.IndexSignature)
     // @factoryhidden("typeParameters")
@@ -852,13 +856,15 @@ namespace ts {
     // @factoryhidden("name")
     // @factoryhidden("decorators")
     // @factoryhidden("modifiers")
-    export type FunctionTypeNode = FunctionOrConstructorTypeNode;
+    export interface FunctionTypeNode extends FunctionOrConstructorTypeNode {
+    }
 
     // @kind(SyntaxKind.ConstructorType)
     // @factoryhidden("name")
     // @factoryhidden("decorators")
     // @factoryhidden("modifiers")
-    export type ConstructorTypeNode = FunctionOrConstructorTypeNode;
+    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNode {
+    }
 
     // @kind(SyntaxKind.TypeReference)
     export interface TypeReferenceNode extends TypeNode {
@@ -931,11 +937,10 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.OmittedExpression)
-    export type OmittedExpression = Expression;
+    export interface OmittedExpression extends Expression { }
 
     // @kind(SyntaxKind.RawExpression)
-    export interface RawExpression extends LiteralExpression {
-    }
+    export interface RawExpression extends LiteralExpression { }
 
     export interface UnaryExpression extends Expression {
         _unaryExpressionBrand: any;
@@ -1216,10 +1221,10 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.EmptyStatement)
-    export type EmptyStatement = Statement;
+    export interface EmptyStatement extends Statement { }
 
     // @kind(SyntaxKind.DebuggerStatement)
-    export type DebuggerStatement = Statement;
+    export interface DebuggerStatement extends Statement { }
 
     // @kind(SyntaxKind.MissingDeclaration)
     // @factoryhidden("name", true)
@@ -1287,15 +1292,17 @@ namespace ts {
         expression: Expression;
     }
 
-    export interface BreakOrContinueStatement extends Statement {
+    // @kind(SyntaxKind.BreakStatement)
+    export interface BreakStatement extends Statement {
         label?: Identifier;
     }
 
-    // @kind(SyntaxKind.BreakStatement)
-    export type BreakStatement = BreakOrContinueStatement;
-
     // @kind(SyntaxKind.ContinueStatement)
-    export type ContinueStatement = BreakOrContinueStatement;
+    export interface ContinueStatement extends Statement {
+        label?: Identifier;
+    }
+
+    export type BreakOrContinueStatement = BreakStatement | ContinueStatement;
 
     // @kind(SyntaxKind.ReturnStatement)
     export interface ReturnStatement extends Statement {
@@ -1492,28 +1499,35 @@ namespace ts {
         moduleSpecifier?: Expression;
     }
 
-    export interface NamedImportsOrExports extends Node {
-        elements: NodeArray<ImportOrExportSpecifier>;
+    // @kind(SyntaxKind.NamedImports)
+    export interface NamedImports extends Node {
+        elements: NodeArray<ImportSpecifier>;
     }
 
-    // @kind(SyntaxKind.NamedImports)
-    export type NamedImports = NamedImportsOrExports;
-
     // @kind(SyntaxKind.NamedExports)
-    export type NamedExports = NamedImportsOrExports;
+    export interface NamedExports extends Node {
+        elements: NodeArray<ExportSpecifier>;
+    }
 
+    export type NamedImportsOrExports = NamedImports | NamedExports;
+
+    // @kind(SyntaxKind.ImportSpecifier)
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
-    export interface ImportOrExportSpecifier extends Declaration {
+    export interface ImportSpecifier extends Declaration {
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
-    // @kind(SyntaxKind.ImportSpecifier)
-    export type ImportSpecifier = ImportOrExportSpecifier;
-
     // @kind(SyntaxKind.ExportSpecifier)
-    export type ExportSpecifier = ImportOrExportSpecifier;
+    // @factoryhidden("decorators", true)
+    // @factoryhidden("modifiers", true)
+    export interface ExportSpecifier extends Declaration {
+        propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
+        name: Identifier;           // Declared name
+    }
+
+    export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
 
     // @kind(SyntaxKind.ExportAssignment)
     // @factoryhidden("name", true)
@@ -2960,6 +2974,19 @@ namespace ts {
     }
 
     // @internal
+    export interface TransformationResolver {
+        getAssignmentSubstitution(sourceFile: SourceFile): (node: BinaryExpression) => Expression;
+        getExpressionIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => LeftHandSideExpression;
+        getBindingIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => Identifier;
+    }
+
+    // @internal
+    export interface TransformationResult {
+        sourceFiles: SourceFile[];
+        transformationResolver?: TransformationResolver;
+    }
+
+    // @internal
     export interface Transformer {
         getEmitResolver(): EmitResolver;
         getCompilerOptions(): CompilerOptions;
@@ -2987,6 +3014,15 @@ namespace ts {
 
         emitEmitHelpers(write: (node: Statement) => void): void;
         emitExportStarHelper(write: (node: Statement) => void): void;
+
+        getAssignmentSubstitution(sourceFile: SourceFile): (node: BinaryExpression) => Expression;
+        setAssignmentSubstitution(sourceFile: SourceFile, substitution: (node: BinaryExpression) => Expression): void;
+
+        getExpressionIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => LeftHandSideExpression;
+        setExpressionIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => LeftHandSideExpression): void;
+
+        getBindingIdentifierSubstitution(sourceFile: SourceFile): (node: Identifier) => Identifier;
+        setBindingIdentifierSubstitution(sourceFile: SourceFile, substitution: (node: Identifier) => Identifier): void;
 
         startLexicalEnvironment(): void;
         endLexicalEnvironment(out: ((node: Statement) => void) | Statement[]): void;

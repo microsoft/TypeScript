@@ -666,7 +666,7 @@ namespace ts {
         if (name) node.name = name;
         return node;
     }
-    export function createNamedImports(elements?: Array<ImportOrExportSpecifier>, location?: TextRange, flags?: NodeFlags): NamedImports {
+    export function createNamedImports(elements?: Array<ImportSpecifier>, location?: TextRange, flags?: NodeFlags): NamedImports {
         let node = createNode<NamedImports>(SyntaxKind.NamedImports, location, flags); 
         if (elements) node.elements = createNodeArray(elements);
         return node;
@@ -692,7 +692,7 @@ namespace ts {
         if (moduleSpecifier) node.moduleSpecifier = moduleSpecifier;
         return node;
     }
-    export function createNamedExports(elements?: Array<ImportOrExportSpecifier>, location?: TextRange, flags?: NodeFlags): NamedExports {
+    export function createNamedExports(elements?: Array<ExportSpecifier>, location?: TextRange, flags?: NodeFlags): NamedExports {
         let node = createNode<NamedExports>(SyntaxKind.NamedExports, location, flags); 
         if (elements) node.elements = createNodeArray(elements);
         return node;
@@ -1557,7 +1557,7 @@ namespace ts {
         }
         return node;
     }
-    export function updateNamedImports(node: NamedImports, elements: Array<ImportOrExportSpecifier>): NamedImports {
+    export function updateNamedImports(node: NamedImports, elements: Array<ImportSpecifier>): NamedImports {
         if (elements !== node.elements) {
             let newNode = createNamedImports(elements);
             return updateFrom(node, newNode);
@@ -1585,7 +1585,7 @@ namespace ts {
         }
         return node;
     }
-    export function updateNamedExports(node: NamedExports, elements: Array<ImportOrExportSpecifier>): NamedExports {
+    export function updateNamedExports(node: NamedExports, elements: Array<ExportSpecifier>): NamedExports {
         if (elements !== node.elements) {
             let newNode = createNamedExports(elements);
             return updateFrom(node, newNode);
@@ -2338,11 +2338,108 @@ namespace ts {
         }
         return false;
     }
+    export function isExpressionNode(node: Node): node is Expression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.RawExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxExpression:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isEntityName(node: Node): node is EntityName {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isDeclarationNameNode(node: Node): node is DeclarationName {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.ComputedPropertyName:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.RawExpression:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isPropertyName(node: Node): node is PropertyName {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ComputedPropertyName:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.RawExpression:
+                    return true;
+            }
+        }
+        return false;
+    }
     export function isStatementNode(node: Node): node is Statement {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.EmptyStatement:
-                case SyntaxKind.DebuggerStatement:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MissingDeclaration:
                 case SyntaxKind.ClassDeclaration:
@@ -2355,6 +2452,8 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.Block:
                 case SyntaxKind.RawStatement:
+                case SyntaxKind.EmptyStatement:
+                case SyntaxKind.DebuggerStatement:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.VariableStatement:
                 case SyntaxKind.ExpressionStatement:
@@ -2373,23 +2472,6 @@ namespace ts {
                 case SyntaxKind.ThrowStatement:
                 case SyntaxKind.TryStatement:
                 case SyntaxKind.ImportDeclaration:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isUnaryExpression(node: Node): node is UnaryExpression {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.NewExpression:
-                case SyntaxKind.PostfixUnaryExpression:
-                case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.DeleteExpression:
-                case SyntaxKind.TypeOfExpression:
-                case SyntaxKind.VoidExpression:
-                case SyntaxKind.AwaitExpression:
-                case SyntaxKind.TypeAssertionExpression:
                     return true;
             }
         }
@@ -2486,10 +2568,9 @@ namespace ts {
         }
         return false;
     }
-    export function isExpressionNode(node: Node): node is Expression {
+    export function isUnaryExpression(node: Node): node is UnaryExpression {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.OmittedExpression:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
@@ -2524,14 +2605,6 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                 case SyntaxKind.AwaitExpression:
                 case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.YieldExpression:
-                case SyntaxKind.BinaryExpression:
-                case SyntaxKind.ConditionalExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.SpreadElementExpression:
-                case SyntaxKind.AsExpression:
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxExpression:
                     return true;
             }
         }
@@ -2548,6 +2621,58 @@ namespace ts {
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.RawExpression:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isConciseBody(node: Node): node is ConciseBody {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                case SyntaxKind.Identifier:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.RawExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.TemplateExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.PostfixUnaryExpression:
+                case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.DeleteExpression:
+                case SyntaxKind.TypeOfExpression:
+                case SyntaxKind.VoidExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.OmittedExpression:
+                case SyntaxKind.YieldExpression:
+                case SyntaxKind.BinaryExpression:
+                case SyntaxKind.ConditionalExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.SpreadElementExpression:
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.Block:
                     return true;
             }
         }
@@ -2580,10 +2705,21 @@ namespace ts {
         }
         return false;
     }
+    export function isJsxChild(node: Node): node is JsxChild {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxText:
+                    return true;
+            }
+        }
+        return false;
+    }
     export function isExpressionOrVariableDeclarationList(node: Node): node is Expression | VariableDeclarationList {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.OmittedExpression:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
@@ -2618,6 +2754,7 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                 case SyntaxKind.AwaitExpression:
                 case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.OmittedExpression:
                 case SyntaxKind.YieldExpression:
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.ConditionalExpression:
@@ -2627,6 +2764,26 @@ namespace ts {
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.VariableDeclarationList:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isModuleBody(node: Node): node is ModuleBody {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.ModuleBlock:
+                case SyntaxKind.ModuleDeclaration:
                     return true;
             }
         }
@@ -2652,6 +2809,8 @@ namespace ts {
     export function isEntityNameOrExternalModuleReference(node: Node): node is EntityName | ExternalModuleReference {
         if (node) {
             switch (node.kind) {
+                case SyntaxKind.Identifier:
+                case SyntaxKind.QualifiedName:
                 case SyntaxKind.ExternalModuleReference:
                     return true;
             }
@@ -2663,16 +2822,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.NamespaceImport:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isImportOrExportSpecifier(node: Node): node is ImportOrExportSpecifier {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.ExportSpecifier:
                     return true;
             }
         }
@@ -3186,7 +3335,7 @@ namespace ts {
                 case SyntaxKind.NamespaceImport:
                     return updateNamespaceImport(<NamespaceImport>node, (<NamespaceImport>node).name);
                 case SyntaxKind.NamedImports:
-                    return updateNamedImports(<NamedImports>node, transformer.visitNodes((<NamedImports>node).elements, visitor, isImportOrExportSpecifier));
+                    return updateNamedImports(<NamedImports>node, transformer.visitNodes((<NamedImports>node).elements, visitor, isImportSpecifier));
                 case SyntaxKind.ImportSpecifier:
                     return updateImportSpecifier(<ImportSpecifier>node, (<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name);
                 case SyntaxKind.ExportAssignment:
@@ -3194,7 +3343,7 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                     return updateExportDeclaration(<ExportDeclaration>node, transformer.visitNodes((<ExportDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ExportDeclaration>node).modifiers, visitor, isModifier), (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier);
                 case SyntaxKind.NamedExports:
-                    return updateNamedExports(<NamedExports>node, transformer.visitNodes((<NamedExports>node).elements, visitor, isImportOrExportSpecifier));
+                    return updateNamedExports(<NamedExports>node, transformer.visitNodes((<NamedExports>node).elements, visitor, isExportSpecifier));
                 case SyntaxKind.ExportSpecifier:
                     return updateExportSpecifier(<ExportSpecifier>node, (<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name);
                 case SyntaxKind.MissingDeclaration:
