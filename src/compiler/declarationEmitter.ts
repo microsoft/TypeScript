@@ -215,15 +215,21 @@ namespace ts {
                 }
                 let exportedSymbol = exportedMembers[index];
                 let symbol = type.symbol;
-                if (symbol) { // use the name from the exported symbol, but the id from the internal one
-                    if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.SourceFile) { // export= import case (effectively entrypoint redirection)
+
+                // use the name from the exported symbol, but the id from the internal one
+                if (symbol) {
+
+                    // export= import case (effectively entrypoint redirection)
+                    if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
                         reentry = symbol.valueDeclaration as SourceFile;
                     }
-                    else if (exportedSymbol.name === "export=") { // Special case all the things
+                    // Special case all the things
+                    else if (exportedSymbol.name === "export=") {
                         exportEquals = type;
                     }
                     else if (exportedSymbol.name === "default") {
-                        createDefaultExportAlias = () => { // delay making the alias until after all exported names are collected
+                        // delay making the alias until after all exported names are collected
+                        createDefaultExportAlias = () => {
                             let name = "default_1";
                             while (!!symbolNameSet[name]) {
                                 name += "_1";
@@ -356,7 +362,7 @@ namespace ts {
                             forEach(symbol.declarations, d => {
                                 let containingDeclaration: Node = d;
                                 while ((containingDeclaration = containingDeclaration.parent) && (!containingDeclaration.symbol || !(containingDeclaration.symbol.flags & (SymbolFlags.HasMembers | SymbolFlags.HasExports))));
-                                if (containingDeclaration !== d && containingDeclaration.symbol && containingDeclaration.kind !== SyntaxKind.SourceFile && containingDeclaration.kind !== SyntaxKind.ModuleDeclaration) {
+                                if (containingDeclaration && containingDeclaration !== d && containingDeclaration.symbol && containingDeclaration.kind !== SyntaxKind.SourceFile && containingDeclaration.kind !== SyntaxKind.ModuleDeclaration) {
                                     walker.visitTypeFromSymbol(containingDeclaration.symbol);
                                 }
                             });
