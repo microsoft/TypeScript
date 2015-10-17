@@ -1359,6 +1359,7 @@ declare namespace ts {
         UMD = 3,
         System = 4,
         ES6 = 5,
+        ES2015 = 5,
     }
     const enum JsxEmit {
         None = 0,
@@ -1377,6 +1378,7 @@ declare namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES2015 = 2,
         Latest = 2,
     }
     const enum LanguageVariant {
