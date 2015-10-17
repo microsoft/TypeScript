@@ -2027,6 +2027,9 @@ namespace ts {
             let visited: Type[] = [];
             let visitedSymbols: Symbol[] = [];
             function visitType(type: Type): void {
+                if (!type) {
+                    return;
+                }
                 if (contains(visited, type)) {
                     return;
                 }

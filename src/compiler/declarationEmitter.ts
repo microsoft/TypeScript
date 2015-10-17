@@ -320,7 +320,7 @@ namespace ts {
             forEach(undoActions, undo => undo()); // So we don't ruin the tree
 
             return;
-        
+
             function collectExportedTypes(file: SourceFile, exportedMembers: Symbol[]): Map<Type> {
                 return arrayToMap(filter(map(exportedMembers, exported => {
                     let type = resolver.getDefiningTypeOfSymbol(exported);
@@ -352,6 +352,14 @@ namespace ts {
                                 return true;
                             }
                             dependentTypes[id] = type;
+                            // Add containing declarations if we've navigated to a nested type.
+                            forEach(symbol.declarations, d => {
+                                let containingDeclaration: Node = d;
+                                while ((containingDeclaration = containingDeclaration.parent) && (!containingDeclaration.symbol || !(containingDeclaration.symbol.flags & (SymbolFlags.HasMembers | SymbolFlags.HasExports))));
+                                if (containingDeclaration !== d && containingDeclaration.symbol && containingDeclaration.kind !== SyntaxKind.SourceFile && containingDeclaration.kind !== SyntaxKind.ModuleDeclaration) {
+                                    walker.visitTypeFromSymbol(containingDeclaration.symbol);
+                                }
+                            });
                         }
                     }
                     return true;
