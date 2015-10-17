@@ -222,6 +222,7 @@ namespace ts {
                     // export= import case (effectively entrypoint redirection)
                     if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
                         reentry = symbol.valueDeclaration as SourceFile;
+                        return true; // Break early
                     }
                     // Special case all the things
                     else if (exportedSymbol.name === "export=") {
