@@ -47,10 +47,25 @@ e.g. to run all compiler baseline tests:
 jake runtests tests=compiler
 ```
 
-or to run specifc test: `tests\cases\compiler\2dArrays.ts` 
+or to run a specific test: `tests\cases\compiler\2dArrays.ts` 
 
 ```Shell
 jake runtests tests=2dArrays
+```
+
+## Debugging the tests
+
+To debug the tests, invoke the runtests-browser using jake.
+You will probably only want to debug one test at a time:
+
+```Shell
+jake runtests-browser tests=2dArrays
+```
+
+You can specify which browser to use for debugging. Currently Chrome and IE are supported:
+
+```Shell
+jake runtests-browser tests=2dArrays browser=chrome
 ```
 
 ## Adding a Test
