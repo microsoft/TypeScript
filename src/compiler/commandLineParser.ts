@@ -76,10 +76,12 @@ namespace ts {
                 "amd": ModuleKind.AMD,
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
+                "es6": ModuleKind.ES6,
+                "es2015": ModuleKind.ES2015,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_or_umd,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_or_umd
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es6
         },
         {
             name: "newLine",
@@ -204,7 +206,12 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
+            type: {
+                "es3": ScriptTarget.ES3,
+                "es5": ScriptTarget.ES5,
+                "es6": ScriptTarget.ES6,
+                "es2015": ScriptTarget.ES2015,
+            },
             description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
             paramType: Diagnostics.VERSION,
             error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
@@ -220,11 +227,6 @@ namespace ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
-        },
-        {
-            name: "experimentalAsyncFunctions",
-            type: "boolean",
-            description: Diagnostics.Enables_experimental_support_for_ES7_async_functions
         },
         {
             name: "experimentalDecorators",
@@ -393,7 +395,7 @@ namespace ts {
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
-        return parseConfigFileText(fileName, text);
+        return parseConfigFileTextToJson(fileName, text);
     }
 
     /**
@@ -401,7 +403,7 @@ namespace ts {
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
-    export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
@@ -416,7 +418,7 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
 
         return {
@@ -452,6 +454,9 @@ namespace ts {
                             }
                             if (opt.isFilePath) {
                                 value = normalizePath(combinePaths(basePath, value));
+                                if (value === "") {
+                                    value = ".";
+                                }
                             }
                             options[opt.name] = value;
                         }
@@ -474,7 +479,7 @@ namespace ts {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));                    
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));
                 }
             }
             else {

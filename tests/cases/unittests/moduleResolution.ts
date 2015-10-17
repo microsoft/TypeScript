@@ -114,23 +114,22 @@ module ts {
             let containingFile = { name: "/a/b/c/d/e.ts" };
             let moduleFile = { name: "/a/b/node_modules/foo.ts" };
             let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
-            assert.equal(resolution.resolvedModule, undefined);
+            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/b/c/d/node_modules/foo.ts",
+                "/a/b/c/d/node_modules/foo.tsx",
                 "/a/b/c/d/node_modules/foo.d.ts",
                 "/a/b/c/d/node_modules/foo/package.json",
+                "/a/b/c/d/node_modules/foo/index.ts",
+                "/a/b/c/d/node_modules/foo/index.tsx",
                 "/a/b/c/d/node_modules/foo/index.d.ts",
+                "/a/b/c/node_modules/foo.ts",
+                "/a/b/c/node_modules/foo.tsx",
                 "/a/b/c/node_modules/foo.d.ts",
                 "/a/b/c/node_modules/foo/package.json",
-                "/a/b/c/node_modules/foo/index.d.ts",
-                "/a/b/node_modules/foo.d.ts",
-                "/a/b/node_modules/foo/package.json",
-                "/a/b/node_modules/foo/index.d.ts",
-                "/a/node_modules/foo.d.ts",
-                "/a/node_modules/foo/package.json",
-                "/a/node_modules/foo/index.d.ts",
-                "/node_modules/foo.d.ts",
-                "/node_modules/foo/package.json",
-                "/node_modules/foo/index.d.ts"
+                "/a/b/c/node_modules/foo/index.ts",
+                "/a/b/c/node_modules/foo/index.tsx",
+                "/a/b/c/node_modules/foo/index.d.ts"
             ])
         });
 
@@ -149,18 +148,100 @@ module ts {
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
             assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
                 "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/foo.ts",
+                "/a/node_modules/b/c/node_modules/foo.tsx",
                 "/a/node_modules/b/c/node_modules/foo.d.ts",
                 "/a/node_modules/b/c/node_modules/foo/package.json",
+                "/a/node_modules/b/c/node_modules/foo/index.ts",
+                "/a/node_modules/b/c/node_modules/foo/index.tsx",
                 "/a/node_modules/b/c/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/node_modules/foo.ts",
+                "/a/node_modules/b/node_modules/foo.tsx",
                 "/a/node_modules/b/node_modules/foo.d.ts",
                 "/a/node_modules/b/node_modules/foo/package.json",
+                "/a/node_modules/b/node_modules/foo/index.ts",
+                "/a/node_modules/b/node_modules/foo/index.tsx",
                 "/a/node_modules/b/node_modules/foo/index.d.ts",
+                "/a/node_modules/foo.ts",
+                "/a/node_modules/foo.tsx",
                 "/a/node_modules/foo.d.ts",
-                "/a/node_modules/foo/package.json"
+                "/a/node_modules/foo/package.json",
+                "/a/node_modules/foo/index.ts",
+                "/a/node_modules/foo/index.tsx"
             ]);
         });
+    });
+    
+    describe("Module resolution - relative imports", () => {
+       it("should find all modules", () => {
+           const options: CompilerOptions = { module: ModuleKind.CommonJS };
+           const files: Map<string> = {
+               "/a/b/c/first/shared.ts": `
+class A {}
+export = A`,
+               "/a/b/c/first/second/class_a.ts": `
+import Shared = require('../shared');
+import C = require('../../third/class_c');
+class B {}
+export = B;`,
+               "/a/b/c/third/class_c.ts":`
+import Shared = require('../first/shared');
+class C {}
+export = C;
+                `
+           };
+           const currentDirectory = "/a/b/c/first/second";
+           const host: CompilerHost = {
+               getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
+                   let path = normalizePath(combinePaths(currentDirectory, fileName));
+                   return hasProperty(files, path) ? createSourceFile(fileName, files[path], languageVersion) : undefined;
+               },
+                getDefaultLibFileName: () => "lib.d.ts",
+                writeFile: (fileName, content): void => { throw new Error("NotImplemented"); },
+                getCurrentDirectory: () => currentDirectory,
+                getCanonicalFileName: fileName => fileName.toLowerCase(),
+                getNewLine: () => "\r\n",
+                useCaseSensitiveFileNames: () => false,
+                fileExists: fileName => {
+                   let path = normalizePath(combinePaths(currentDirectory, fileName));
+                   return hasProperty(files, path);
+                },
+                readFile: (fileName): string => { throw new Error("NotImplemented"); }
+           };
+
+           const program = createProgram(["class_a.ts"], options, host);
+
+           assert.equal(program.getSourceFiles().length, 3);
+           const syntacticDiagnostics = program.getSyntacticDiagnostics();
+           assert.equal(syntacticDiagnostics.length, 0, `expect no syntactic diagnostics, got: ${JSON.stringify(syntacticDiagnostics.map(diagnosticToString))}`);
+           const semanticDiagnostics = program.getSemanticDiagnostics();
+           assert.equal(semanticDiagnostics.length, 0, `expect no semantic diagnostics, got: ${JSON.stringify(semanticDiagnostics.map(diagnosticToString))}`);
+
+           // try to get file using a relative name
+           const fileC = program.getSourceFile("../../../c/third/class_c.ts");
+           assert.isTrue(fileC !== undefined, `expected to get file by relative name, got ${fileC}`);
+       });
+       
+        function diagnosticToString(diagnostic: Diagnostic) {
+            let output = "";
+    
+            if (diagnostic.file) {
+                let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+    
+                output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            }
+    
+            let category = DiagnosticCategory[diagnostic.category].toLowerCase();
+            output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+    
+            return output;
+        }
     });
 }

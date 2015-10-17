@@ -788,9 +788,11 @@ namespace ts {
         if (initializer) node.initializer = initializer;
         return node;
     }
-    export function createShorthandPropertyAssignment(name?: Identifier, location?: TextRange, flags?: NodeFlags): ShorthandPropertyAssignment {
+    export function createShorthandPropertyAssignment(name?: Identifier, equalsToken?: Node, objectAssignmentInitializer?: Expression, location?: TextRange, flags?: NodeFlags): ShorthandPropertyAssignment {
         let node = createNode<ShorthandPropertyAssignment>(SyntaxKind.ShorthandPropertyAssignment, location, flags); 
         if (name) node.name = name;
+        if (equalsToken) node.equalsToken = equalsToken;
+        if (objectAssignmentInitializer) node.objectAssignmentInitializer = objectAssignmentInitializer;
         return node;
     }
     export function createEnumMember(name?: DeclarationName, initializer?: Expression, location?: TextRange, flags?: NodeFlags): EnumMember {
@@ -1697,9 +1699,9 @@ namespace ts {
         }
         return node;
     }
-    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier): ShorthandPropertyAssignment {
-        if (name !== node.name) {
-            let newNode = createShorthandPropertyAssignment(name);
+    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, equalsToken: Node, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment {
+        if (name !== node.name || equalsToken !== node.equalsToken || objectAssignmentInitializer !== node.objectAssignmentInitializer) {
+            let newNode = createShorthandPropertyAssignment(name, equalsToken, objectAssignmentInitializer);
             return updateFrom(node, newNode);
         }
         return node;
@@ -2368,8 +2370,8 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.CallExpression:
-                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -2598,8 +2600,8 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.CallExpression:
-                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -2656,8 +2658,8 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.CallExpression:
-                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -2747,8 +2749,8 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.CallExpression:
-                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
+                case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.DeleteExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.VoidExpression:
@@ -3102,7 +3104,7 @@ namespace ts {
                 case SyntaxKind.PropertyAssignment:
                     return createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer, location, flags);
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, location, flags);
+                    return createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, (<ShorthandPropertyAssignment>node).equalsToken, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer, location, flags);
                 case SyntaxKind.EnumMember:
                     return createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, location, flags);
                 case SyntaxKind.SourceFile:
@@ -3375,7 +3377,7 @@ namespace ts {
                 case SyntaxKind.PropertyAssignment:
                     return updatePropertyAssignment(<PropertyAssignment>node, (<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer);
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, (<ShorthandPropertyAssignment>node).name);
+                    return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, (<ShorthandPropertyAssignment>node).name, (<ShorthandPropertyAssignment>node).equalsToken, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
                 case SyntaxKind.EnumMember:
                     return updateEnumMember(<EnumMember>node, (<EnumMember>node).name, (<EnumMember>node).initializer);
                 case SyntaxKind.SourceFile:

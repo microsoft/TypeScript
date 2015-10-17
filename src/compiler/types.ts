@@ -64,6 +64,7 @@ namespace ts {
         PlusToken,
         MinusToken,
         AsteriskToken,
+        AsteriskAsteriskToken,
         SlashToken,
         PercentToken,
         PlusPlusToken,
@@ -86,6 +87,7 @@ namespace ts {
         PlusEqualsToken,
         MinusEqualsToken,
         AsteriskEqualsToken,
+        AsteriskAsteriskEqualsToken,
         SlashEqualsToken,
         PercentEqualsToken,
         LessThanLessThanEqualsToken,
@@ -380,9 +382,10 @@ namespace ts {
         OctalLiteral =      0x00010000,  // Octal numeric literal
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
-        GeneratedRest =     0x00080000,  // Synthetic node generated during transformation
-        GeneratedSuper =    0x00100000,  // Synthetic node generated during transformation
-        GeneratedNamespace =0x00200000,  // Synthetic node generated during transformation
+        ContainsThis =      0x00080000,  // Interface contains references to "this"
+        GeneratedRest =     0x00100000,  // Synthetic node generated during transformation
+        GeneratedSuper =    0x00200000,  // Synthetic node generated during transformation
+        GeneratedNamespace =0x00400000,  // Synthetic node generated during transformation
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -702,6 +705,10 @@ namespace ts {
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
+        // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
+        // it is grammar error to appear in actual object initializer
+        equalsToken?: Node;
+        objectAssignmentInitializer?: Expression;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -946,15 +953,19 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
+    export interface IncrementExpression extends UnaryExpression {
+        _incrementExpressionBrand: any;
+    }
+
     // @kind(SyntaxKind.PrefixUnaryExpression)
-    export interface PrefixUnaryExpression extends UnaryExpression {
+    export interface PrefixUnaryExpression extends IncrementExpression {
         // @factoryparam
         operator: SyntaxKind;
         operand: UnaryExpression;
     }
 
     // @kind(SyntaxKind.PostfixUnaryExpression)
-    export interface PostfixUnaryExpression extends PostfixExpression {
+    export interface PostfixUnaryExpression extends IncrementExpression {
         operand: LeftHandSideExpression;
         // @factoryparam
         operator: SyntaxKind;
@@ -964,7 +975,7 @@ namespace ts {
         _postfixExpressionBrand: any;
     }
 
-    export interface LeftHandSideExpression extends PostfixExpression {
+    export interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
     }
 
@@ -1788,7 +1799,7 @@ namespace ts {
         /**
          * Get a list of root file names that were passed to a 'createProgram'
          */
-        getRootFileNames(): string[]
+        getRootFileNames(): string[];
 
         /**
          * Get a list of files in the program
@@ -1968,6 +1979,7 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
+        reportInaccessibleThisError(): void;
     }
 
     export const enum TypeFormatFlags {
@@ -2068,7 +2080,6 @@ namespace ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
@@ -2270,6 +2281,7 @@ namespace ts {
         /* @internal */
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
+        ThisType                = 0x02000000,  // This type
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2315,6 +2327,7 @@ namespace ts {
         typeParameters: TypeParameter[];           // Type parameters (undefined if non-generic)
         outerTypeParameters: TypeParameter[];      // Outer type parameters (undefined if none)
         localTypeParameters: TypeParameter[];      // Local type parameters (undefined if none)
+        thisType: TypeParameter;                   // The "this" type (undefined if none)
         /* @internal */
         resolvedBaseConstructorType?: Type;        // Resolved base constructor type of class
         /* @internal */
@@ -2329,10 +2342,17 @@ namespace ts {
         declaredNumberIndexType: Type;             // Declared numeric index type
     }
 
-    // Type references (TypeFlags.Reference)
+    // Type references (TypeFlags.Reference). When a class or interface has type parameters or
+    // a "this" type, references to the class or interface are made using type references. The
+    // typeArguments property specififes the types to substitute for the type parameters of the
+    // class or interface and optionally includes an extra element that specifies the type to
+    // substitute for "this" in the resulting instantiation. When no extra argument is present,
+    // the type reference itself is substituted for "this". The typeArguments property is undefined
+    // if the class or interface has no type parameters and the reference isn't specifying an
+    // explicit "this" argument.
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments: Type[];  // Type reference type arguments
+        typeArguments: Type[];  // Type reference type arguments (undefined if none)
     }
 
     // Generic class and interface types
@@ -2342,7 +2362,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];           // Element types
+        elementTypes: Type[];  // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -2356,6 +2376,13 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType { }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
+
+    /* @internal */
+    // An instantiated anonymous type has a target and a mapper
+    export interface AnonymousType extends ObjectType {
+        target?: AnonymousType;  // Instantiation target
+        mapper?: TypeMapper;     // Instantiation mapper
+    }
 
     /* @internal */
     // Resolved object, union, or intersection type
@@ -2532,7 +2559,6 @@ namespace ts {
         watch?: boolean;
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
-        experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
         /* @internal */ experimentalTransforms?: boolean;
@@ -2550,6 +2576,8 @@ namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
+        ES6 = 5,
+        ES2015 = ES6,
     }
 
     export const enum JsxEmit {
@@ -2575,12 +2603,13 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES2015 = ES6,
         Latest = ES6,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX
+        JSX,
     }
 
     export interface ParsedCommandLine {

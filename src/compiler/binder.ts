@@ -92,6 +92,7 @@ namespace ts {
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
+        let seenThisKeyword: boolean;
 
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
@@ -190,8 +191,9 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
+            let isDefaultExport = node.flags & NodeFlags.Default;
             // The exported symbol for an export default function/class node is always named "default"
-            let name = node.flags & NodeFlags.Default && parent ? "default" : getDeclarationName(node);
+            let name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -232,6 +234,13 @@ namespace ts {
                     let message = symbol.flags & SymbolFlags.BlockScopedVariable
                         ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                         : Diagnostics.Duplicate_identifier_0;
+
+                    forEach(symbol.declarations, declaration => {
+                        if (declaration.flags & NodeFlags.Default) {
+                            message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                        }
+                    });
+
                     forEach(symbol.declarations, declaration => {
                         file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
                     });
@@ -335,7 +344,14 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
-            forEachChild(node, bind);
+            if (node.kind === SyntaxKind.InterfaceDeclaration) {
+                seenThisKeyword = false;
+                forEachChild(node, bind);
+                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
+            }
+            else {
+                forEachChild(node, bind);
+            }
 
             container = saveContainer;
             parent = saveParent;
@@ -886,6 +902,9 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+                case SyntaxKind.ThisKeyword:
+                    seenThisKeyword = true;
+                    return;
 
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);

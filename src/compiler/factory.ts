@@ -84,6 +84,14 @@ namespace ts {
         return array ? createNodeArray(array.slice(0), /*location*/ array) : undefined;
     }
 
+    export function createSynthesizedNode<T extends Node>(kind: SyntaxKind, startsOnNewLine?: boolean): T {
+        let node = createNode<T>(kind);
+        if (startsOnNewLine) {
+            startOnNewLine(node);
+        }
+        return node;
+    }
+
     export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): T {
         let node = <T>new (getNodeConstructor(kind))();
         if (location) {
@@ -94,6 +102,10 @@ namespace ts {
             node.flags = flags;
         }
         return node;
+    }
+
+    export function createSynthesizedNodeArray<T extends Node>(elements?: T[]) {
+        return createNodeArray<T>(elements);
     }
 
     export function createNodeArray<T extends Node>(elements?: T[], location?: TextRange) {

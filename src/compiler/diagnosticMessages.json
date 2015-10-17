@@ -195,7 +195,7 @@
         "category": "Error",
         "code": 1063
     },
-    "Ambient enum elements can only have integer literal initializers.": {
+    "In ambient enum declarations member initializer must be constant expression.": {
         "category": "Error",
         "code": 1066
     },
@@ -549,7 +549,7 @@
     },
     "An implementation cannot be declared in ambient contexts.": {
         "category": "Error",
-        "code": 1184
+        "code": 1183
     },
     "Modifiers cannot appear here.": {
         "category": "Error",
@@ -619,21 +619,17 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"' or 'import d from \"mod\"' instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.": {
+    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
-    },
-    "Decorators are only available when targeting ECMAScript 5 and higher.": {
-        "category": "Error",
-        "code": 1205
     },
     "Decorators are not valid here.": {
         "category": "Error",
@@ -747,24 +743,6 @@
         "category": "Error",
         "code": 1235
     },
-    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
-        "category": "Error",
-        "code": 1236
-    },
-
-
-    "'with' statements are not allowed in an async function block.": {
-        "category": "Error",
-        "code": 1300
-    },
-    "'await' expression is only allowed within an async function.": {
-        "category": "Error",
-        "code": 1308
-    },
-    "Async functions are only available when targeting ECMAScript 6 and higher.": {
-        "category": "Error",
-        "code": 1311
-    },
     "The return type of a property decorator function must be either 'void' or 'any'.": {
         "category": "Error",
         "code": 1236
@@ -805,6 +783,23 @@
         "category": "Error",
         "code": 1245
     },
+
+    "'with' statements are not allowed in an async function block.": {
+        "category": "Error",
+        "code": 1300
+    },
+    "'await' expression is only allowed within an async function.": {
+        "category": "Error",
+        "code": 1308
+    },
+    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+        "category": "Error",
+        "code": 1311
+    },
+    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+        "category": "Error",
+        "code": 1312
+    },    
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1301,7 +1296,7 @@
         "category": "Error",
         "code": 2434
     },
-    "Ambient modules cannot be nested in other modules.": {
+    "Ambient modules cannot be nested in other modules or namespaces.": {
         "category": "Error",
         "code": 2435
     },
@@ -1652,6 +1647,18 @@
     "Initializer provides no value for this binding element and the binding element has no default value.": {
         "category": "Error",
         "code": 2525
+    },
+    "A 'this' type is available only in a non-static member of a class or interface.": {
+        "category": "Error",
+        "code": 2526
+    },
+    "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2527
+    },
+    "A module cannot have multiple default exports.": {
+        "category": "Error",
+        "code": 2528
     },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
@@ -2055,7 +2062,7 @@
     },
     "A 'tsconfig.json' file is already defined at: '{0}'.": {
         "category": "Error",
-        "code": 5053
+        "code": 5054
     },
 
     "Concatenate and emit output to single file.": {
@@ -2102,7 +2109,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system' or 'umd'": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
         "category": "Message",
         "code": 6016
     },
@@ -2186,7 +2193,7 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system' or 'umd'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
         "category": "Error",
         "code": 6046
     },
@@ -2270,10 +2277,6 @@
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
-    },
-    "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower.": {
-        "category": "Message",
-        "code": 6067
     },
     "Enables experimental support for ES7 async functions.": {
         "category": "Message",
@@ -2466,5 +2469,13 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17006
+    },
+    "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17007
     }
 }
