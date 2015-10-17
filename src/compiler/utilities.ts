@@ -1072,6 +1072,56 @@ namespace ts {
         }
     }
 
+    export const enum Associativity {
+        Left,
+        Right
+    }
+
+    export function getExpressionAssociativity(expr: Expression) {
+        return getOperatorAssociativity(expr.kind, getOperator(expr), isNewExpression(expr) && !expr.arguments);
+    }
+
+    export function getBinaryOperatorAssociativity(operator: SyntaxKind) {
+        return getOperatorAssociativity(SyntaxKind.BinaryExpression, operator);
+    }
+
+    export function getOperatorAssociativity(kind: SyntaxKind, operator: SyntaxKind, isNewExpressionWithoutArguments?: boolean) {
+        switch (kind) {
+            case SyntaxKind.NewExpression:
+                return isNewExpressionWithoutArguments ? Associativity.Right : Associativity.Left;
+
+            case SyntaxKind.PrefixUnaryExpression:
+            case SyntaxKind.TypeOfExpression:
+            case SyntaxKind.VoidExpression:
+            case SyntaxKind.DeleteExpression:
+            case SyntaxKind.AwaitExpression:
+            case SyntaxKind.ConditionalExpression:
+            case SyntaxKind.YieldExpression:
+                return Associativity.Right;
+
+            case SyntaxKind.BinaryExpression:
+                switch (operator) {
+                    case SyntaxKind.AsteriskAsteriskToken:
+                    case SyntaxKind.EqualsToken:
+                    case SyntaxKind.PlusEqualsToken:
+                    case SyntaxKind.MinusEqualsToken:
+                    case SyntaxKind.AsteriskAsteriskEqualsToken:
+                    case SyntaxKind.AsteriskEqualsToken:
+                    case SyntaxKind.SlashEqualsToken:
+                    case SyntaxKind.PercentEqualsToken:
+                    case SyntaxKind.LessThanLessThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+                    case SyntaxKind.AmpersandEqualsToken:
+                    case SyntaxKind.CaretEqualsToken:
+                    case SyntaxKind.BarEqualsToken:
+                        return Associativity.Right;
+                }
+        }
+
+        return Associativity.Left;
+    }
+
     export function getExpressionPrecedence(expr: Expression) {
         return getOperatorPrecedence(expr.kind, getOperator(expr), isNewExpression(expr) && !expr.arguments)
     }

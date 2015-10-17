@@ -135,22 +135,7 @@ namespace ts {
 
         return modifiers;
     }
-
-    // export function createSourceFileNode(): SourceFile {
-    //     let node = <SourceFile>createNode(SyntaxKind.SourceFile);
-    //     return node;
-    // }
-
-    // export function updateSourceFileNode(node: SourceFile, statements: NodeArray<Statement>, endOfFileToken: Node): SourceFile {
-    //     if (statements !== node.statements || endOfFileToken !== node.endOfFileToken) {
-    //         let newNode = createNode<SourceFile>(SyntaxKind.SourceFile);
-    //         newNode.statements = statements;
-    //         newNode.endOfFileToken = endOfFileToken;
-    //         return updateFrom(node, newNode);
-    //     }
-    //     return node;
-    // }
-
+    
     export function createNumericLiteral2(value: number, location?: TextRange, flags?: NodeFlags): LiteralExpression {
         let node = createNumericLiteral(String(value), location, flags);
         return node;
@@ -168,28 +153,52 @@ namespace ts {
         return nodeIsSynthesized(node) ? node : cloneNode(node);
     }
 
-    export function parenthesizeForBinary(expr: Expression, operator: SyntaxKind) {
+    const enum BinaryOperandSide {
+        Left,
+        Right
+    }
+
+    function parenthesizeForBinary(operand: Expression, operator: SyntaxKind, side: BinaryOperandSide) {
         // When diagnosing whether the expression needs parentheses, the decision should be based
         // on the innermost expression in a chain of nested type assertions.
-        while (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
-            expr = (<AssertionExpression>expr).expression;
+        while (operand.kind === SyntaxKind.TypeAssertionExpression || operand.kind === SyntaxKind.AsExpression) {
+            operand = (<AssertionExpression>operand).expression;
         }
 
         // If the resulting expression is already parenthesized, we do not need to do any further processing.
-        if (isParenthesizedExpression(expr)) {
-            return expr;
+        if (isParenthesizedExpression(operand)) {
+            return operand;
         }
 
-        let exprPrecedence = getExpressionPrecedence(expr);
+        return needsParenthesesForBinary(operand, operator, side)
+            ? createParenthesizedExpression(operand)
+            : operand;
+    }
+
+    function needsParenthesesForBinary(operand: Expression, operator: SyntaxKind, side: BinaryOperandSide) {
+        let operandPrecedence = getExpressionPrecedence(operand);
         let operatorPrecedence = getBinaryOperatorPrecedence(operator);
-        if (exprPrecedence < operatorPrecedence) {
-            // lower precedence, the expression needs parenthesis
-            return createParenthesizedExpression(expr);
+        switch (compareValues(operandPrecedence, operatorPrecedence)) {
+            case Comparison.LessThan:
+                return true;
+            case Comparison.EqualTo:
+                return isRightAssociativeOperandOnLeftHandSide(operand, side)
+                    || isModuloOperandOnRightHandSide(operand, operator, side);
+            case Comparison.GreaterThan:
+                return false;
         }
-        else {
-            // higher precedence.
-            return expr;
-        }
+    }
+
+    function isRightAssociativeOperandOnLeftHandSide(operand: Expression, side: BinaryOperandSide) {
+        return side === BinaryOperandSide.Left
+            && getExpressionAssociativity(operand) === Associativity.Right;
+    }
+
+    function isModuloOperandOnRightHandSide(operand: Expression, operator: SyntaxKind, side: BinaryOperandSide) {
+        return side === BinaryOperandSide.Right
+            && operator !== SyntaxKind.PercentToken
+            && isBinaryExpression(operand)
+            && operand.operatorToken.kind === SyntaxKind.PercentToken;
     }
 
     export function parenthesizeForAccess(expr: Expression): LeftHandSideExpression {
@@ -262,7 +271,7 @@ namespace ts {
     }
 
     export function createBinaryExpression2(left: Expression, operator: SyntaxKind, right: Expression, location?: TextRange) {
-        return createBinaryExpression(parenthesizeForBinary(left, operator), createNode(operator), parenthesizeForBinary(right, operator), location);
+        return createBinaryExpression(parenthesizeForBinary(left, operator, BinaryOperandSide.Left), createNode(operator), parenthesizeForBinary(right, operator, BinaryOperandSide.Right), location);
     }
 
     export function createConditionalExpression2(condition: Expression, whenTrue: Expression, whenFalse: Expression, location?: TextRange, flags?: NodeFlags) {
