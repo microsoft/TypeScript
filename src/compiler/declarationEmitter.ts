@@ -241,8 +241,12 @@ namespace ts {
                         }
                     }
                     else if (symbol.name !== exportedSymbol.name) {
-                        createSynthIdentifiers(symbol, exportedSymbol.name);
-                        createSymbolEntry(exportedSymbol.name, symbol.id);
+                        // check if this symbol is defined by another exported symbol
+                        if (!contains(exportedMembers, symbol)) {
+                            // If so, _don't_ mangle its name! (Because we don't need to)
+                            createSynthIdentifiers(symbol, exportedSymbol.name);
+                            createSymbolEntry(exportedSymbol.name, symbol.id);
+                        }
                     }
                     else {
                         createSymbolEntry(exportedSymbol.name, symbol.id);
