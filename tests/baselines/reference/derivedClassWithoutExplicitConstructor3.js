@@ -49,7 +49,7 @@ var d3 = new D2(new Date(), new Date()); // ok
 //// [derivedClassWithoutExplicitConstructor3.js]
 // automatic constructors with a class hieararchy of depth > 2
 var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    if (b) Object.setPrototypeOf ? Object.setPrototypeOf(d, b) : d.__proto__ = b;
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };

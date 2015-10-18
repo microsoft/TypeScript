@@ -4852,7 +4852,7 @@ In addition, the '__extends' function below is emitted at the beginning of the J
 
 ```TypeScript
 var __extends = this.__extends || function(d, b) {  
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];  
+    if (b) Object.setPrototypeOf ? Object.setPrototypeOf(d, b) : d.__proto__ = b;  
     function f() { this.constructor = d; }  
     f.prototype = b.prototype;  
     d.prototype = new f();  
