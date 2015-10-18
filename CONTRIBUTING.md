@@ -68,6 +68,11 @@ You can specify which browser to use for debugging. Currently Chrome and IE are 
 jake runtests-browser tests=2dArrays browser=chrome
 ```
 
+You can debug with VS Code or Node instead with `jake runtests debug=true`:
+
+```Shell
+jake runtests tests=2dArrays debug=true
+```
 ## Adding a Test
 To add a new testcase, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
 
