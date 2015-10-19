@@ -634,7 +634,7 @@ namespace ts {
             // For JavaScript files, we don't want to report the normal typescript semantic errors.
             // Instead, we just report errors for using TypeScript-only constructs from within a
             // JavaScript file.
-            if (isJavaScript(sourceFile.fileName)) {
+            if (isInJavaScriptFile(sourceFile)) {
                 return getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken);
             }
 
@@ -855,6 +855,8 @@ namespace ts {
                 return;
             }
 
+            let isJavaScriptFile = isSourceFileJavaScript(file);
+
             let imports: LiteralExpression[];
             for (let node of file.statements) {
                 collect(node, /* allowRelativeModuleNames */ true);
@@ -879,6 +881,20 @@ namespace ts {
                             (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
                         }
                         break;
+                    case SyntaxKind.CallExpression:
+                        if (isJavaScriptFile && isRequireCall(node)) {
+
+                            let jsImports = (<CallExpression>node).arguments;
+                            if (jsImports) {
+                                imports = (imports || []);
+                                for (var i = 0; i < jsImports.length; i++) {
+                                    if (jsImports[i].kind === SyntaxKind.StringLiteral) {
+                                        imports.push(<StringLiteral>jsImports[i]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
                     case SyntaxKind.ModuleDeclaration:
                         if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                             // TypeScript 1.0 spec (April 2014): 12.1.6
@@ -894,6 +910,10 @@ namespace ts {
                             });
                         }
                         break;
+                }
+
+                if (isSourceFileJavaScript(file)) {
+                    forEachChild(node, node => collect(node, allowRelativeModuleNames));
                 }
             }
         }

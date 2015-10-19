@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @jsExtensions: js
 // @Filename: Foo.js
 /////** @/*1*/ */
 ////var v1;

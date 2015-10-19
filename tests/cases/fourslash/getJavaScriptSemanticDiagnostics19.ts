@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @jsExtensions: js
 // @Filename: a.js
 //// enum E { }
 

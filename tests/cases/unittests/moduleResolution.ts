@@ -33,6 +33,8 @@ module ts {
             : { dir: path.substr(0, index), rel: path.substr(index + 1) };
     }
 
+    const supportedJsExtensions = supportedTypeScriptExtensions.concat("js", "jsx");
+
     describe("Node module resolution - relative paths", () => {
         
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
@@ -107,6 +109,24 @@ module ts {
                 "/a/b/foo/index.tsx",
             ]);
         });
+
+        it("module name as directory (with js and jsx) - load index.d.ts", () => {
+            let containingFile = { name: "/a/b/c.ts" };
+            let packageJson = { name: "/a/b/foo/package.json", content: JSON.stringify({ main: "/c/d" }) };
+            let indexFile = { name: "/a/b/foo/index.d.ts" };
+            let resolution = nodeModuleNameResolver("./foo", containingFile.name, supportedJsExtensions, createModuleResolutionHost(containingFile, packageJson, indexFile));
+            assert.equal(resolution.resolvedModule.resolvedFileName, indexFile.name);
+            assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
+            assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/b/foo.ts",
+                "/a/b/foo.tsx",
+                "/a/b/foo.d.ts",
+                "/a/b/foo.js",
+                "/a/b/foo.jsx",
+                "/a/b/foo/index.ts",
+                "/a/b/foo/index.tsx",
+            ]);
+        });
     });
     
     describe("Node module resolution - non-relative paths", () => {
@@ -130,6 +150,37 @@ module ts {
                 "/a/b/c/node_modules/foo/index.ts",
                 "/a/b/c/node_modules/foo/index.tsx",
                 "/a/b/c/node_modules/foo/index.d.ts"
+            ])
+        });
+
+        it("load module as file (with js and jsx) - ts files not loaded", () => {
+            let containingFile = { name: "/a/b/c/d/e.ts" };
+            let moduleFile = { name: "/a/b/node_modules/foo.ts" };
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, supportedJsExtensions, createModuleResolutionHost(containingFile, moduleFile));
+            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
+            assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/b/c/d/node_modules/foo.ts",
+                "/a/b/c/d/node_modules/foo.tsx",
+                "/a/b/c/d/node_modules/foo.d.ts",
+                "/a/b/c/d/node_modules/foo.js",
+                "/a/b/c/d/node_modules/foo.jsx",
+                "/a/b/c/d/node_modules/foo/package.json",
+                "/a/b/c/d/node_modules/foo/index.ts",
+                "/a/b/c/d/node_modules/foo/index.tsx",
+                "/a/b/c/d/node_modules/foo/index.d.ts",
+                "/a/b/c/d/node_modules/foo/index.js",
+                "/a/b/c/d/node_modules/foo/index.jsx",
+                "/a/b/c/node_modules/foo.ts",
+                "/a/b/c/node_modules/foo.tsx",
+                "/a/b/c/node_modules/foo.d.ts",
+                "/a/b/c/node_modules/foo.js",
+                "/a/b/c/node_modules/foo.jsx",
+                "/a/b/c/node_modules/foo/package.json",
+                "/a/b/c/node_modules/foo/index.ts",
+                "/a/b/c/node_modules/foo/index.tsx",
+                "/a/b/c/node_modules/foo/index.d.ts",
+                "/a/b/c/node_modules/foo/index.js",
+                "/a/b/c/node_modules/foo/index.jsx"
             ])
         });
 
@@ -172,6 +223,57 @@ module ts {
                 "/a/node_modules/foo.ts",
                 "/a/node_modules/foo.tsx",
                 "/a/node_modules/foo.d.ts",
+                "/a/node_modules/foo/package.json",
+                "/a/node_modules/foo/index.ts",
+                "/a/node_modules/foo/index.tsx"
+            ]);
+        });
+
+        it("load module as directory (with js and jsx)", () => {
+            let containingFile = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
+            let moduleFile = { name: "/a/node_modules/foo/index.d.ts" };
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, supportedJsExtensions, createModuleResolutionHost(containingFile, moduleFile));
+            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
+            assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
+            assert.deepEqual(resolution.failedLookupLocations, [
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.js",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo.jsx",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.js",
+                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.jsx",
+                "/a/node_modules/b/c/node_modules/foo.ts",
+                "/a/node_modules/b/c/node_modules/foo.tsx",
+                "/a/node_modules/b/c/node_modules/foo.d.ts",
+                "/a/node_modules/b/c/node_modules/foo.js",
+                "/a/node_modules/b/c/node_modules/foo.jsx",
+                "/a/node_modules/b/c/node_modules/foo/package.json",
+                "/a/node_modules/b/c/node_modules/foo/index.ts",
+                "/a/node_modules/b/c/node_modules/foo/index.tsx",
+                "/a/node_modules/b/c/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/c/node_modules/foo/index.js",
+                "/a/node_modules/b/c/node_modules/foo/index.jsx",
+                "/a/node_modules/b/node_modules/foo.ts",
+                "/a/node_modules/b/node_modules/foo.tsx",
+                "/a/node_modules/b/node_modules/foo.d.ts",
+                "/a/node_modules/b/node_modules/foo.js",
+                "/a/node_modules/b/node_modules/foo.jsx",
+                "/a/node_modules/b/node_modules/foo/package.json",
+                "/a/node_modules/b/node_modules/foo/index.ts",
+                "/a/node_modules/b/node_modules/foo/index.tsx",
+                "/a/node_modules/b/node_modules/foo/index.d.ts",
+                "/a/node_modules/b/node_modules/foo/index.js",
+                "/a/node_modules/b/node_modules/foo/index.jsx",
+                "/a/node_modules/foo.ts",
+                "/a/node_modules/foo.tsx",
+                "/a/node_modules/foo.d.ts",
+                "/a/node_modules/foo.js",
+                "/a/node_modules/foo.jsx",
                 "/a/node_modules/foo/package.json",
                 "/a/node_modules/foo/index.ts",
                 "/a/node_modules/foo/index.tsx"
