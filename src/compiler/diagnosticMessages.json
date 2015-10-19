@@ -1620,10 +1620,6 @@
         "category": "Error",
         "code":2517
     },
-    "Only an ambient class can be merged with an interface.": {
-        "category": "Error",
-        "code": 2518
-    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
