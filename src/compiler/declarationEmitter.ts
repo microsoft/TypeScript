@@ -216,10 +216,14 @@ namespace ts {
             let declarations = collectExportedDeclarations(exportedMembers);
             let dependentDeclarations = collectDependentDeclarations(exportedMembers);
 
+            let alias = createDefaultExportAlias();
             forEachValue(dependentDeclarations, d => {
                 let symbol = d.symbol;
                 if (symbol.name in symbolNameSet) {
                     let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
+                    while (!!symbolNameSet[generatedName]) {
+                        generatedName = `${symbol.name}_${++symbolNameSet[symbol.name]}`;
+                    }
                     symbolNameSet[symbol.name]++;
                     createSymbolEntry(generatedName, symbol.id);
                     createSynthIdentifiers(symbol, generatedName); 
@@ -229,7 +233,6 @@ namespace ts {
                 }
             });
 
-            let alias = createDefaultExportAlias();
             let emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
                 let realSourceFile = currentSourceFile;
                 currentSourceFile = getSourceFileOfNode(d);
@@ -327,8 +330,7 @@ namespace ts {
                                                 write(symbolGeneratedNameMap[symbol.id]);
                                             }
                                             else {
-                                                // This probably? should never happen
-                                                writeTextOfNode(currentSourceFile, d.propertyName);
+                                                Debug.fail("Encountered export alias of untraversed type when flattening.");
                                             }
                                             write(" as ");
                                             writeTextOfNode(currentSourceFile, d.name);
