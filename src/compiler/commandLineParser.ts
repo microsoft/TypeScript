@@ -460,16 +460,13 @@ namespace ts {
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
         let options: CompilerOptions = {};
-        let optionNameMap: Map<CommandLineOption> = {};
         let errors: Diagnostic[] = [];
 
         if (!jsonOptions) {
             return { options, errors };
         }
 
-        forEach(optionDeclarations, option => {
-            optionNameMap[option.name] = option;
-        });
+        let optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
         for (let id in jsonOptions) {
             if (hasProperty(optionNameMap, id)) {
