@@ -535,6 +535,16 @@ namespace FourSlash {
             }
         }
 
+        public verifyGetEmitOutputContentsForCurrentFile(expected: { fileName: string; content: string; }[]): void {
+            let emit = this.languageService.getEmitOutput(this.activeFile.fileName);
+            this.taoInvalidReason = "verifyGetEmitOutputContentsForCurrentFile impossible";
+            assert.equal(emit.outputFiles.length, expected.length, "Number of emit output files");
+            for (let i = 0; i < emit.outputFiles.length; i++) {
+                assert.equal(emit.outputFiles[i].name, expected[i].fileName, "FileName");
+                assert.equal(emit.outputFiles[i].text, expected[i].content, "Content");
+            }
+        }
+
         public verifyMemberListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
             this.scenarioActions.push("<ShowCompletionList />");
             this.scenarioActions.push(`<VerifyCompletionContainsItem ItemName="${symbol}"/>`);

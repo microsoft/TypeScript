@@ -39,6 +39,8 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
+        isEmitBlocked(emitFileName: string): boolean;
+
         writeFile: WriteFileCallback;
     }
 
@@ -1756,17 +1758,60 @@ namespace ts {
         };
     }
 
+    export function getExtensionsToRemoveForEmitPath(compilerOptons: CompilerOptions) {
+        return getSupportedExtensions(compilerOptons).concat("jsx", "js");
+    }
+
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
         let compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir),
+                getExtensionsToRemoveForEmitPath(compilerOptions));
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
+            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName, getExtensionsToRemoveForEmitPath(compilerOptions));
         }
 
         return emitOutputFilePathWithoutExtension + extension;
+    }
+
+    export function getEmitFileNames(sourceFile: SourceFile, host: EmitHost) {
+        if (!isDeclarationFile(sourceFile)) {
+            let options = host.getCompilerOptions();
+            let jsFilePath: string;
+            if (shouldEmitToOwnFile(sourceFile, options)) {
+                let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
+                    sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+                return {
+                    jsFilePath,
+                    declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+                };
+            }
+            else if (options.outFile || options.out) {
+                return getBundledEmitFileNames(options);
+            }
+        }
+        return {
+            jsFilePath: undefined,
+            declarationFilePath: undefined
+        };
+    }
+
+    export function getBundledEmitFileNames(options: CompilerOptions) {
+        let jsFilePath = options.outFile || options.out;
+        return {
+            jsFilePath,
+            declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+        };
+    }
+
+    function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
+        return options.declaration ? removeFileExtension(jsFilePath, getExtensionsToRemoveForEmitPath(options)) + ".d.ts" : undefined;
+    }
+
+    export function hasFile(sourceFiles: SourceFile[], fileName: string) {
+        return forEach(sourceFiles, file => file.fileName === fileName);
     }
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
@@ -1801,12 +1846,17 @@ namespace ts {
         if (!isDeclarationFile(sourceFile)) {
             if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
                 // 1. in-browser single file compilation scenario
-                // 2. non .js file
-                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
+                // 2. non supported extension file
+                return compilerOptions.isolatedModules ||
+                    forEach(getSupportedExtensions(compilerOptions), extension => fileExtensionIs(sourceFile.fileName, extension));
             }
             return false;
         }
         return false;
+    }
+
+    export function getSupportedExtensions(options?: CompilerOptions): string[] {
+        return options && options.jsExtensions ? supportedTypeScriptExtensions.concat(options.jsExtensions) : supportedTypeScriptExtensions;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
@@ -2083,12 +2133,17 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
+    export function hasExtension(fileName: string): boolean {
+        return getBaseFileName(fileName).indexOf(".") >= 0;
+    }
+
     export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+        // Treat file as typescript if the extension is not supportedTypeScript
+        return hasExtension(fileName) && !forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+        return fileExtensionIs(fileName, "tsx");
     }
 
     /**

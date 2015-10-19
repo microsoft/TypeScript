@@ -14,10 +14,10 @@ namespace ts {
 
     export const version = "1.8.0";
 
-    export function findConfigFile(searchPath: string): string {
+    export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         let fileName = "tsconfig.json";
         while (true) {
-            if (sys.fileExists(fileName)) {
+            if (fileExists(fileName)) {
                 return fileName;
             }
             let parentPath = getDirectoryPath(searchPath);
@@ -42,38 +42,38 @@ namespace ts {
             : compilerOptions.module === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
 
         switch (moduleResolution) {
-            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, host);
+            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, getSupportedExtensions(compilerOptions), host);
             case ModuleResolutionKind.Classic: return classicNameResolver(moduleName, containingFile, compilerOptions, host);
         }
     }
 
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, supportedExtensions: string[], host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         let containingDirectory = getDirectoryPath(containingFile);
 
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             let failedLookupLocations: string[] = [];
             let candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
+            let resolvedFileName = loadNodeModuleFromFile(candidate, supportedExtensions, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            resolvedFileName = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
+            resolvedFileName = loadNodeModuleFromDirectory(candidate, supportedExtensions, failedLookupLocations, host);
             return resolvedFileName
                 ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            return loadModuleFromNodeModules(moduleName, containingDirectory, host);
+            return loadModuleFromNodeModules(moduleName, containingDirectory, supportedExtensions, host);
         }
     }
 
-    function loadNodeModuleFromFile(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
-        return forEach(moduleFileExtensions, tryLoad);
+    function loadNodeModuleFromFile(candidate: string, supportedExtensions: string[], failedLookupLocation: string[], host: ModuleResolutionHost): string {
+        return forEach(supportedExtensions, tryLoad);
 
         function tryLoad(ext: string): string {
-            let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
+            let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + "." + ext;
             if (host.fileExists(fileName)) {
                 return fileName;
             }
@@ -84,7 +84,7 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadNodeModuleFromDirectory(candidate: string, supportedExtensions: string[], failedLookupLocation: string[], host: ModuleResolutionHost): string {
         let packageJsonPath = combinePaths(candidate, "package.json");
         if (host.fileExists(packageJsonPath)) {
 
@@ -100,7 +100,7 @@ namespace ts {
             }
 
             if (jsonContent.typings) {
-                let result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
+                let result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), supportedExtensions, failedLookupLocation, host);
                 if (result) {
                     return result;
                 }
@@ -111,10 +111,10 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(combinePaths(candidate, "index"), failedLookupLocation, host);
+        return loadNodeModuleFromFile(combinePaths(candidate, "index"), supportedExtensions, failedLookupLocation, host);
     }
 
-    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, supportedExtensions: string[], host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         let failedLookupLocations: string[] = [];
         directory = normalizeSlashes(directory);
         while (true) {
@@ -122,12 +122,12 @@ namespace ts {
             if (baseName !== "node_modules") {
                 let nodeModulesFolder = combinePaths(directory, "node_modules");
                 let candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
+                let result = loadNodeModuleFromFile(candidate, supportedExtensions, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(candidate, supportedExtensions, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -164,14 +164,14 @@ namespace ts {
         let referencedSourceFile: string;
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
-            referencedSourceFile = forEach(supportedExtensions, extension => {
-                if (extension === ".tsx" && !compilerOptions.jsx) {
+            referencedSourceFile = forEach(getSupportedExtensions(compilerOptions), extension => {
+                if (extension === "tsx" && !compilerOptions.jsx) {
                     // resolve .tsx files only if jsx support is enabled 
                     // 'logical not' handles both undefined and None cases
                     return undefined;
                 }
 
-                let candidate = searchName + extension;
+                let candidate = searchName + "." + extension;
                 if (host.fileExists(candidate)) {
                     return candidate;
                 }
@@ -330,6 +330,7 @@ namespace ts {
         let files: SourceFile[] = [];
         let fileProcessingDiagnostics = createDiagnosticCollection();
         let programDiagnostics = createDiagnosticCollection();
+        let hasEmitBlockingDiagnostics: Map<boolean> = {}; // Map storing if there is emit blocking diagnostics for given input
 
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
@@ -356,28 +357,26 @@ namespace ts {
                 (oldOptions.noResolve !== options.noResolve) ||
                 (oldOptions.target !== options.target) ||
                 (oldOptions.noLib !== options.noLib) ||
-                (oldOptions.jsx !== options.jsx)) {
+                (oldOptions.jsx !== options.jsx) ||
+                (oldOptions.jsExtensions !== options.jsExtensions)) {
                 oldProgram = undefined;
             }
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            forEach(rootNames, name => processRootFile(name, false));
+            let supportedExtensions = getSupportedExtensions(options);
+            forEach(rootNames, name => processRootFile(name, false, supportedExtensions));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
             if (!skipDefaultLib) {
-                processRootFile(host.getDefaultLibFileName(options), true);
+                processRootFile(host.getDefaultLibFileName(options), true, supportedExtensions);
             }
         }
 
-        verifyCompilerOptions();
-
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
-
-        programTime += new Date().getTime() - start;
 
         program = {
             getRootFileNames: () => rootNames,
@@ -401,6 +400,11 @@ namespace ts {
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics
         };
+
+        verifyCompilerOptions();
+
+        programTime += new Date().getTime() - start;
+
         return program;
 
         function getClassifiableNames() {
@@ -517,6 +521,7 @@ namespace ts {
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
+                isEmitBlocked: emitFileName => hasProperty(hasEmitBlockingDiagnostics, emitFileName),
             };
         }
 
@@ -626,6 +631,13 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            // For JavaScript files, we don't want to report the normal typescript semantic errors.
+            // Instead, we just report errors for using TypeScript-only constructs from within a
+            // JavaScript file.
+            if (isJavaScript(sourceFile.fileName)) {
+                return getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken);
+            }
+
             return runWithCancellationToken(() => {
                 let typeChecker = getDiagnosticsProducingTypeChecker();
 
@@ -636,6 +648,165 @@ namespace ts {
                 let programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
                 return bindDiagnostics.concat(checkDiagnostics).concat(fileProcessingDiagnosticsInFile).concat(programDiagnosticsInFile);
+            });
+        }
+
+        function getJavaScriptSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return runWithCancellationToken(() => {
+                let diagnostics: Diagnostic[] = [];
+                walk(sourceFile);
+
+                return diagnostics;
+
+                function walk(node: Node): boolean {
+                    if (!node) {
+                        return false;
+                    }
+
+                    switch (node.kind) {
+                        case SyntaxKind.ImportEqualsDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.ExportAssignment:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.ClassDeclaration:
+                            let classDeclaration = <ClassDeclaration>node;
+                            if (checkModifiers(classDeclaration.modifiers) ||
+                                checkTypeParameters(classDeclaration.typeParameters)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.HeritageClause:
+                            let heritageClause = <HeritageClause>node;
+                            if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
+                                diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.InterfaceDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.ModuleDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.TypeAliasDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.MethodDeclaration:
+                        case SyntaxKind.MethodSignature:
+                        case SyntaxKind.Constructor:
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                        case SyntaxKind.FunctionExpression:
+                        case SyntaxKind.FunctionDeclaration:
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.FunctionDeclaration:
+                            let functionDeclaration = <FunctionLikeDeclaration>node;
+                            if (checkModifiers(functionDeclaration.modifiers) ||
+                                checkTypeParameters(functionDeclaration.typeParameters) ||
+                                checkTypeAnnotation(functionDeclaration.type)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.VariableStatement:
+                            let variableStatement = <VariableStatement>node;
+                            if (checkModifiers(variableStatement.modifiers)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.VariableDeclaration:
+                            let variableDeclaration = <VariableDeclaration>node;
+                            if (checkTypeAnnotation(variableDeclaration.type)) {
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.CallExpression:
+                        case SyntaxKind.NewExpression:
+                            let expression = <CallExpression>node;
+                            if (expression.typeArguments && expression.typeArguments.length > 0) {
+                                let start = expression.typeArguments.pos;
+                                diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
+                                    Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.Parameter:
+                            let parameter = <ParameterDeclaration>node;
+                            if (parameter.modifiers) {
+                                let start = parameter.modifiers.pos;
+                                diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
+                                    Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            if (parameter.questionToken) {
+                                diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
+                                return true;
+                            }
+                            if (parameter.type) {
+                                diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                                return true;
+                            }
+                            break;
+                        case SyntaxKind.PropertyDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.EnumDeclaration:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.TypeAssertionExpression:
+                            let typeAssertionExpression = <TypeAssertion>node;
+                            diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
+                            return true;
+                        case SyntaxKind.Decorator:
+                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
+                            return true;
+                    }
+
+                    return forEachChild(node, walk);
+                }
+
+                function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
+                    if (typeParameters) {
+                        let start = typeParameters.pos;
+                        diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
+                        return true;
+                    }
+                    return false;
+                }
+
+                function checkTypeAnnotation(type: TypeNode): boolean {
+                    if (type) {
+                        diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                function checkModifiers(modifiers: ModifiersArray): boolean {
+                    if (modifiers) {
+                        for (let modifier of modifiers) {
+                            switch (modifier.kind) {
+                                case SyntaxKind.PublicKeyword:
+                                case SyntaxKind.PrivateKeyword:
+                                case SyntaxKind.ProtectedKeyword:
+                                case SyntaxKind.DeclareKeyword:
+                                    diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                    return true;
+
+                                // These are all legal modifiers.
+                                case SyntaxKind.StaticKeyword:
+                                case SyntaxKind.ExportKeyword:
+                                case SyntaxKind.ConstKeyword:
+                                case SyntaxKind.DefaultKeyword:
+                                case SyntaxKind.AbstractKeyword:
+                            }
+                        }
+                    }
+
+                    return false;
+                }
             });
         }
 
@@ -667,8 +838,8 @@ namespace ts {
             return getBaseFileName(fileName).indexOf(".") >= 0;
         }
 
-        function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib);
+        function processRootFile(fileName: string, isDefaultLib: boolean, supportedExtensions: string[]) {
+            processSourceFile(normalizePath(fileName), isDefaultLib, supportedExtensions);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -727,7 +898,7 @@ namespace ts {
             }
         }
 
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, supportedExtensions: string[], refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
@@ -735,7 +906,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, isDefaultLib, supportedExtensions, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -745,13 +916,14 @@ namespace ts {
                 }
             }
             else {
-                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, refFile, refPos, refEnd);
+                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, isDefaultLib, supportedExtensions, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(getSupportedExtensions(options), extension => findSourceFile(fileName + "." + extension, isDefaultLib, supportedExtensions, refFile, refPos, refEnd))) {
+                        // (TODO: shkamat) Should this message be different given we support multiple extensions
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -770,7 +942,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, isDefaultLib: boolean, supportedExtensions: string[], refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(fileName)) {
                 // We've already looked for this file, use cached result
                 return getSourceFileFromCache(fileName, /*useAbsolutePath*/ false);
@@ -805,11 +977,11 @@ namespace ts {
 
                 let basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
-                    processReferencedFiles(file, basePath);
+                    processReferencedFiles(file, basePath, supportedExtensions);
                 }
 
                 // always process imported modules to record module name resolutions
-                processImportedModules(file, basePath);
+                processImportedModules(file, basePath, supportedExtensions);
 
                 if (isDefaultLib) {
                     file.isDefaultLib = true;
@@ -840,14 +1012,14 @@ namespace ts {
             }
         }
 
-        function processReferencedFiles(file: SourceFile, basePath: string) {
+        function processReferencedFiles(file: SourceFile, basePath: string, supportedExtensions: string[]) {
             forEach(file.referencedFiles, ref => {
                 let referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, /* isDefaultLib */ false, supportedExtensions, file, ref.pos, ref.end);
             });
         }
 
-        function processImportedModules(file: SourceFile, basePath: string) {
+        function processImportedModules(file: SourceFile, basePath: string, supportedExtensions: string[]) {
             collectExternalModuleReferences(file);
             if (file.imports.length) {
                 file.resolvedModules = {};
@@ -857,13 +1029,13 @@ namespace ts {
                     let resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        const importedFile = findModuleSourceFile(resolution.resolvedFileName, file.imports[i]);
+                        const importedFile = findModuleSourceFile(resolution.resolvedFileName, file.imports[i], supportedExtensions);
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {
                                 let start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
                             }
-                            else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
+                            else if (!fileExtensionIs(importedFile.fileName, "d.ts")) {
                                 let start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_can_only_be_in_d_ts_files_Please_contact_the_package_author_to_update_the_package_definition));
                             }
@@ -881,8 +1053,8 @@ namespace ts {
             }
             return;
 
-            function findModuleSourceFile(fileName: string, nameLiteral: Expression) {
-                return findSourceFile(fileName, /* isDefaultLib */ false, file, skipTrivia(file.text, nameLiteral.pos), nameLiteral.end);
+            function findModuleSourceFile(fileName: string, nameLiteral: Expression, supportedExtensions: string[]) {
+                return findSourceFile(fileName, /* isDefaultLib */ false, supportedExtensions, file, skipTrivia(file.text, nameLiteral.pos), nameLiteral.end);
             }
         }
 
@@ -1071,6 +1243,55 @@ namespace ts {
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
+
+            if (!options.noEmit) {
+                let emitHost = getEmitHost();
+                let emitFilesSeen: Map<SourceFile[]> = {};
+
+                // Build map of files seen
+                for (let file of files) {
+                    let { jsFilePath, declarationFilePath } = getEmitFileNames(file, emitHost);
+                    if (jsFilePath) {
+                        let filesEmittingJsFilePath = lookUp(emitFilesSeen, jsFilePath);
+                        if (!filesEmittingJsFilePath) {
+                            emitFilesSeen[jsFilePath] = [file];
+                            if (options.declaration) {
+                                emitFilesSeen[declarationFilePath] = [file];
+                            }
+                        }
+                        else {
+                            filesEmittingJsFilePath.push(file);
+                        }
+                    }
+                }
+
+                // Verify that all the emit files are unique and dont overwrite input files
+                forEachKey(emitFilesSeen, emitFilePath => {
+                    // Report error if the output overwrites input file
+                    if (hasFile(files, emitFilePath)) {
+                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_which_is_one_of_the_input_files);
+                    }
+
+                    // Report error if multiple files write into same file (except if specified by --out or --outFile)
+                    if (emitFilePath !== (options.outFile || options.out)) {
+                        // Not --out or --outFile emit, There should be single file emitting to this file
+                        if (emitFilesSeen[emitFilePath].length > 1) {
+                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_since_one_or_more_input_files_would_emit_into_it);
+                        }
+                    }
+                    else {
+                        // --out or --outFile, error if there exist file emitting to single file colliding with --out
+                        if (forEach(emitFilesSeen[emitFilePath], sourceFile => shouldEmitToOwnFile(sourceFile, options))) {
+                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_since_one_or_more_input_files_would_emit_into_it);
+                        }
+                    }
+                });
+            }
+        }
+
+        function createEmitBlockingDiagnostics(emitFileName: string, message: DiagnosticMessage) {
+            hasEmitBlockingDiagnostics[emitFileName] = true;
+            programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
         }
     }
 }

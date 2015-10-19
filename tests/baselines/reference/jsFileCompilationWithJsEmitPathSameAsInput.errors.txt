@@ -1,0 +1,14 @@
+error TS5055: Cannot write file 'tests/cases/compiler/a.js' which is one of the input files.
+error TS5056: Cannot write file 'tests/cases/compiler/a.js' since one or more input files would emit into it.
+
+
+!!! error TS5055: Cannot write file 'tests/cases/compiler/a.js' which is one of the input files.
+!!! error TS5056: Cannot write file 'tests/cases/compiler/a.js' since one or more input files would emit into it.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class c {
+    }
+    
+==== tests/cases/compiler/a.js (0 errors) ====
+    function foo() {
+    }
+    

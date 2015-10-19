@@ -704,7 +704,7 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
-        if (!path) {
+        if (path === undefined) {
             return undefined;
         }
         let i = path.lastIndexOf(directorySeparator);
@@ -721,25 +721,19 @@ namespace ts {
 
     export function fileExtensionIs(path: string, extension: string): boolean {
         let pathLen = path.length;
-        let extLen = extension.length;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+        let extLen = extension.length + 1;
+        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === "." + extension;
     }
 
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
-    /**
-     *  List of extensions that will be used to look for external modules.
-     *  This list is kept separate from supportedExtensions to for cases when we'll allow to include .js files in compilation,
-     *  but still would like to load only TypeScript files as modules 
-     */
-    export const moduleFileExtensions = supportedExtensions;
+    export const supportedTypeScriptExtensions = ["ts", "tsx", "d.ts"];
 
-    export function isSupportedSourceFileName(fileName: string) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
         if (!fileName) { return false; }
 
-        for (let extension of supportedExtensions) {
+        for (let extension of getSupportedExtensions(compilerOptions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -747,11 +741,13 @@ namespace ts {
         return false;
     }
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
-    export function removeFileExtension(path: string): string {
+    export function removeFileExtension(path: string, supportedExtensions: string[]): string {
+        // Sort the extensions in descending order of their length
+        let extensionsToRemove = supportedExtensions.slice(0, supportedExtensions.length) // Get duplicate array
+            .sort((ext1, ext2) => compareValues(ext2.length, ext1.length)); // Sort in descending order of extension length
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
-                return path.substr(0, path.length - ext.length);
+                return path.substr(0, path.length - ext.length - 1);
             }
         }
         return path;

@@ -176,7 +176,9 @@ namespace Utils {
             ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
 
             for (let childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator") {
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
+                    // for now ignore jsdoc comments
+                    childName === "jsDocComment") {
                     continue;
                 }
                 let child = (<any>node)[childName];
@@ -1004,23 +1006,17 @@ namespace Harness {
                     }
                     let option = getCommandLineOption(name);
                     if (option) {
-                        switch (option.type) {
-                            case "boolean":
-                                options[option.name] = value.toLowerCase() === "true";
-                                break;
-                            case "string":
-                                options[option.name] = value;
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            default:
-                                let map = <ts.Map<number>>option.type;
-                                let key = value.toLowerCase();
-                                if (ts.hasProperty(map, key)) {
-                                    options[option.name] = map[key];
-                                }
-                                else {
-                                    throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
-                                }
+                        if (option.type === "boolean") {
+                            options[option.name] = value.toLowerCase() === "true";
+                        }
+                        else {
+                            let { hasError, value: parsedValue } = ts.parseOption(option, value, options[option.name]);
+                            if (hasError) {
+                                throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
+                            }
+                            else {
+                                options[option.name] = parsedValue;
+                            }
                         }
                     }
                     else {
@@ -1191,7 +1187,7 @@ namespace Harness {
                             sourceFileName = outFile;
                         }
 
-                        let dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
+                        let dTsFileName = ts.removeFileExtension(sourceFileName, ts.getExtensionsToRemoveForEmitPath(options)) + ".d.ts";
 
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
@@ -1551,7 +1547,7 @@ namespace Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = testUnitData.length > 0 ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 || currentFileName ? currentFileName : Path.getFileName(fileName);
 
             // EOF, push whatever remains
             let newTestFile2 = {
@@ -1670,7 +1666,7 @@ namespace Harness {
             let encoded_actual =  Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
-                let errMsg = "The baseline file " + relativeFileName + " has changed";
+                let errMsg = "The baseline file " + relativeFileName + " has changed.\nExpected:\n" + expected + "\nActual:\n" + encoded_actual;
                 throw new Error(errMsg);
             }
         }

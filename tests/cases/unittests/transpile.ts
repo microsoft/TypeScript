@@ -64,7 +64,7 @@ module ts {
             let transpileModuleResultWithSourceMap = transpileModule(input, transpileOptions);
             assert.isTrue(transpileModuleResultWithSourceMap.sourceMapText !== undefined);
             
-            let expectedSourceMapFileName = removeFileExtension(getBaseFileName(normalizeSlashes(transpileOptions.fileName))) + ".js.map";
+            let expectedSourceMapFileName = removeFileExtension(getBaseFileName(normalizeSlashes(transpileOptions.fileName)), ts.getExtensionsToRemoveForEmitPath(transpileOptions.compilerOptions)) + ".js.map";
             let expectedSourceMappingUrlLine = `//# sourceMappingURL=${expectedSourceMapFileName}`;
                         
             if (testSettings.expectedOutput !== undefined) {

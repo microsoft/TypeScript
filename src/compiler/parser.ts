@@ -536,6 +536,10 @@ namespace ts {
             return result;
         }
 
+        function getLanguageVariant(fileName: string) {
+            return isTsx(fileName) || isJavaScript(fileName) ?  LanguageVariant.JSX  : LanguageVariant.Standard;
+        }
+
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor) {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
@@ -553,7 +557,7 @@ namespace ts {
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(isTsx(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
+            scanner.setLanguageVariant(getLanguageVariant(fileName));
         }
 
         function clearState() {
@@ -665,8 +669,8 @@ namespace ts {
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
-            sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = isTsx(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
+            sourceFile.flags = fileExtensionIs(sourceFile.fileName, "d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
 
             return sourceFile;
         }

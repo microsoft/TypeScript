@@ -6,10 +6,10 @@
     ],
     "out": "bin/test.js",
     "sourceMap": true,
-    "mapRoot": "tests/cases/projects/outputdir_module_simple/mapFiles",
-    "resolveMapRoot": true,
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "tests/cases/projects/outputdir_module_simple/mapFiles",
+    "resolveMapRoot": true,
     "resolvedInputFiles": [
         "lib.d.ts",
         "m1.ts",
