@@ -1,13 +1,13 @@
 // Checking class with other things in type space not value space
 
 // class then interface
-class c11 { // error
+class c11 {
     foo() {
         return 1;
     }
 }
 
-interface c11 { // error
+interface c11 {
     bar(): void;
 }
 
