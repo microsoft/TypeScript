@@ -83,14 +83,11 @@ jake runtests tests=2dArrays debug=true
 
 To add a new test case, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
 
-These files support metadata tags in the format  `// @metaDataName: value`. The supported names and values are:
-
-* `comments`, `sourcemap`, `noimplicitany`, `declaration`: `true` or `false` (corresponds to the compiler command-line options of the same name)
-* `target`: `ES3`, `ES5`, `ES6`, `ES2015`, or `ES7` (same as compiler)
-* `outFile`, `out`, `outDir`: path (same as compiler)
-* `module`: `local`, `commonjs`, or `amd`, `umd`, `system`, `es6` (`local` corresponds to not passing any compiler `--module` flag)
-* `fileName`: path
-  * These tags delimit sections of a file to be used as separate compilation units. They are useful for tests relating to modules. See below for examples.
+These files support metadata tags in the format  `// @metaDataName: value`.
+The supported names and values are the same as those supported in the compiler itself, with the addition of the `fileName` flag.
+`fileName` tags delimit sections of a file to be used as separate compilation units.
+They are useful for tests relating to modules.
+See below for examples.
 
 **Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder. 
 **Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
