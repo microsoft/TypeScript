@@ -33,7 +33,8 @@ Your pull request should:
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Running the Tests
-To run all tests, invoke the runtests target using jake:
+
+To run all tests, invoke the `runtests` target using jake:
 
 ```Shell
 jake runtests
@@ -59,7 +60,7 @@ jake runtests tests=2dArrays
 
 ## Debugging the tests
 
-To debug the tests, invoke the runtests-browser using jake.
+To debug the tests, invoke the `runtests-browser` task from jake.
 You will probably only want to debug one test at a time:
 
 ```Shell
@@ -80,7 +81,7 @@ jake runtests tests=2dArrays debug=true
 
 ## Adding a Test
 
-To add a new testcase, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
+To add a new test case, simply place a `.ts` file in `tests\cases\compiler` containing code that exemplifies the bugfix or change you are making.
 
 These files support metadata tags in the format  `// @metaDataName: value`. The supported names and values are:
 
