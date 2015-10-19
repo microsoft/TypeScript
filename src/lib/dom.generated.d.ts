@@ -2194,11 +2194,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createElement(tagName: "xmp"): HTMLBlockElement;
     createElement(tagName: string): HTMLElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "a"): SVGAElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "altGlyph"): SVGAltGlyphElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "animate"): SVGAnimateElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "animateMotion"): SVGAnimateMotionElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "animateTransform"): SVGAnimateTransformElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "animation"): SVGAnimationElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "circle"): SVGCircleElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "clipPath"): SVGClipPathElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "defs"): SVGDefsElement;
@@ -2241,7 +2236,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "radialGradient"): SVGRadialGradientElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "rect"): SVGRectElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "script"): SVGScriptElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "set"): SVGSetElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "stop"): SVGStopElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "style"): SVGStyleElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "switch"): SVGSwitchElement;
@@ -2251,11 +2245,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "title"): SVGTitleElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "use"): SVGUseElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "view"): SVGViewElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "cursor"): SVG_SVGCursorElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "glyph"): SVG_SVGGlyphElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "hkern"): SVG_SVGHKernElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "mpath"): SVG_SVGMPathElement;
-    createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "vkern"): SVG_SVGVKernElement;
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: string): SVGElement;
     createElementNS(namespaceURI: string, qualifiedName: string): Element;
     createExpression(expression: string, resolver: XPathNSResolver): XPathExpression;
