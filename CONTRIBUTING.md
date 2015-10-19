@@ -87,7 +87,7 @@ These files support metadata tags in the format  `// @metaDataName: value`. The 
 * `comments`, `sourcemap`, `noimplicitany`, `declaration`: `true` or `false` (corresponds to the compiler command-line options of the same name)
 * `target`: `ES3`, `ES5`, `ES6`, `ES2015`, or `ES7` (same as compiler)
 * `outFile`, `out`, `outDir`: path (same as compiler)
-* `module`: `local`, `commonjs`, or `amd`, `umd`, `system`, `es6` (local corresponds to not passing any compiler `--module` flag)
+* `module`: `local`, `commonjs`, or `amd`, `umd`, `system`, `es6` (`local` corresponds to not passing any compiler `--module` flag)
 * `fileName`: path
   * These tags delimit sections of a file to be used as separate compilation units. They are useful for tests relating to modules. See below for examples.
 
