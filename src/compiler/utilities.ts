@@ -1039,7 +1039,7 @@ namespace ts {
         return isInJavaScriptFile(file);
     }
 
-    function isInJavaScriptFile(node: Node): boolean {
+    export function isInJavaScriptFile(node: Node): boolean {
         return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
     }
 
@@ -1053,7 +1053,8 @@ namespace ts {
         return expression.kind === SyntaxKind.CallExpression &&
                 (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
                 (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-                (<CallExpression>expression).arguments.length === 1;
+                (<CallExpression>expression).arguments.length === 1 &&
+                (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
     }
 
     /**

@@ -2577,7 +2577,7 @@ namespace ts {
                     return links.type = checkExpression((<BinaryExpression>declaration).right);
                 }
                 // Handle exports.p = expr
-                if (declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
                     return checkExpressionCached((<BinaryExpression>declaration.parent).right);
                 }
                 // Handle variable, parameter or property
@@ -9377,11 +9377,9 @@ namespace ts {
                 }
             }
 
-            let exprType = checkExpression(node.expression);
-            if (exprType === cjsRequireType) {
-                if (node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
-                    return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
-                }
+            // In JavaScript files, calls to any identifier 'require' are treated as external module imports
+            if (isInJavaScriptFile(node) && isRequireCall(node)) {
+                return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
             }
 
             return getReturnTypeOfSignature(signature);
@@ -14924,14 +14922,6 @@ namespace ts {
                     mergeSymbolTable(globals, file.locals);
                 }
             });
-
-            // Initialize special symbols
-            if (compilerOptions.allowNonTsExtensions) {
-                let req = getExportedSymbolFromNamespace("CommonJS", "require");
-                if (req) {
-                    globals["require"] = req;
-                }
-            }
 
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
