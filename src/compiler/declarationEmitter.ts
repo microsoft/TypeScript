@@ -182,7 +182,7 @@ namespace ts {
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
         };
-        
+
         function emitFlattenedTypeDefinitions(entrypoint: SourceFile): void {
             let undoActions: (() => void)[] = [];
             let aliasEmits: (() => void)[] = [];
@@ -226,7 +226,7 @@ namespace ts {
                     }
                     symbolNameSet[symbol.name]++;
                     createSymbolEntry(generatedName, symbol.id);
-                    createSynthIdentifiers(symbol, generatedName); 
+                    createSynthIdentifiers(symbol, generatedName);
                 }
                 else {
                     createSymbolEntry(symbol.name, symbol.id);
@@ -251,7 +251,7 @@ namespace ts {
                 writeModuleElement(d);
                 d.flags = oldFlags;
                 currentSourceFile = realSourceFile;
-            }
+            };
             let privateDeclarations = 0;
             forEachValue(dependentDeclarations, d => {
                 privateDeclarations++;
@@ -365,7 +365,7 @@ namespace ts {
                         })(exported, type);
                         continue;
                     }
-    
+
                     if (type.symbol) {
                         let symbol = type.symbol;
                         if (symbol.name !== exported.name) {
@@ -394,7 +394,8 @@ namespace ts {
                     if (symbol) {
                         if (symbol.valueDeclaration && symbol.valueDeclaration.flags && symbol.valueDeclaration.flags & NodeFlags.Private) {
                             return false;
-                        } else {
+                        }
+                        else {
                             // Add containing declarations if we've navigated to a nested type.
                             forEach(symbol.declarations, d => {
                                 // No need to collect declarations not in our own code
