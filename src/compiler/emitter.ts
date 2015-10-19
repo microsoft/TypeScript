@@ -3891,7 +3891,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(": ");
             }
 
-            function emitLabelledStatement(node: LabeledStatement) {
+            function emitLabeledStatement(node: LabeledStatement) {
                 if (!isIterationStatement(node.statement, /* lookInLabeledStatements */ false) || !shouldConvertLoopBody(<IterationStatement>node.statement)) {
                     emitLabelAndColon(node);
                 }
@@ -7889,7 +7889,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.DefaultClause:
                         return emitCaseOrDefaultClause(<CaseOrDefaultClause>node);
                     case SyntaxKind.LabeledStatement:
-                        return emitLabelledStatement(<LabeledStatement>node);
+                        return emitLabeledStatement(<LabeledStatement>node);
                     case SyntaxKind.ThrowStatement:
                         return emitThrowStatement(<ThrowStatement>node);
                     case SyntaxKind.TryStatement:
