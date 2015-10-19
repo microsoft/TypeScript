@@ -1910,10 +1910,6 @@ namespace ts {
         return false;
     }
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.jsExtensions ? supportedTypeScriptExtensions.concat(options.jsExtensions) : supportedTypeScriptExtensions;
-    }
-
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
         let firstAccessor: AccessorDeclaration;
         let secondAccessor: AccessorDeclaration;
