@@ -991,7 +991,7 @@ namespace ts {
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = parseConfigFileText(fileName, text);
+                    let result = parseConfigFileTextToJson(fileName, text);
 
                     if (result.error) {
                         return {
@@ -1001,7 +1001,7 @@ namespace ts {
                         };
                     }
 
-                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    var configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
