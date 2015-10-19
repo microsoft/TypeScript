@@ -5,7 +5,7 @@
 
 // @Filename: index.ts
 export * from "./a";
-export {Detail} from "./b";
+export {Detail, Detail as DetailMock, Detail as DetailReal} from "./b";
 
 export interface Inner {
 	item4: number;
