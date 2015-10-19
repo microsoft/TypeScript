@@ -729,6 +729,10 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTypeScriptExtensions = ["ts", "tsx", "d.ts"];
+    
+    export function getSupportedExtensions(options?: CompilerOptions): string[] {
+        return options && options.jsExtensions ? supportedTypeScriptExtensions.concat(options.jsExtensions) : supportedTypeScriptExtensions;
+    }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
         if (!fileName) { return false; }
