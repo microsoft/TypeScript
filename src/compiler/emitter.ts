@@ -386,49 +386,61 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         }
 
         interface ConvertedLoopState {
-            // set of labels that occured inside the converted loop
-            // used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
+            /*
+             * set of labels that occured inside the converted loop
+             * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
+             */
             labels?: Map<string>;
-            // collection of labeled jumps that transfer control outside the converted loop.
-            // maps store association 'label -> labelMarker' where
-            // - label - value of label as it apprear in code
-            // - label marker - return value that should be interpreted by calling code as 'jump to <label>' 
+            /*
+             * collection of labeled jumps that transfer control outside the converted loop.
+             * maps store association 'label -> labelMarker' where
+             * - label - value of label as it apprear in code
+             * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
+             */ 
             labeledNonLocalBreaks?: Map<string>;
             labeledNonLocalContinues?: Map<string>;
 
-            // set of non-labeled jumps that transfer control outside the converted loop
-            // used to emit dispatching logic in the caller of converted loop
+            /*
+             * set of non-labeled jumps that transfer control outside the converted loop
+             * used to emit dispatching logic in the caller of converted loop
+             */
             nonLocalJumps?: Jump;
 
-            // set of non-labeled jumps that should be interpreted as local
-            // i.e. if converted loop contains normal loop or switch statement then inside this loop break should be treated as local jump
+            /*
+             * set of non-labeled jumps that should be interpreted as local
+             * i.e. if converted loop contains normal loop or switch statement then inside this loop break should be treated as local jump
+             */
             allowedNonLabeledJumps?: Jump;
 
-            // alias for 'arguments' object from the calling code stack frame
-            // i.e.
-            // for (let x;;) <statement that captures x in closure and uses 'arguments'>
-            // should be converted to
-            // var loop = function(x) { <code where 'arguments' is replaced witg 'arguments_1'> }
-            // var arguments_1 = arguments
-            // for (var x;;) loop(x);
-            // otherwise semantics of the code will be different since 'arguments' inside converted loop body 
-            // will refer to function that holds converted loop.
-            // This value is set on demand.
+            /*
+             * alias for 'arguments' object from the calling code stack frame
+             * i.e.
+             * for (let x;;) <statement that captures x in closure and uses 'arguments'>
+             * should be converted to
+             * var loop = function(x) { <code where 'arguments' is replaced witg 'arguments_1'> }
+             * var arguments_1 = arguments
+             * for (var x;;) loop(x);
+             * otherwise semantics of the code will be different since 'arguments' inside converted loop body 
+             * will refer to function that holds converted loop.
+             * This value is set on demand.
+             */
             argumentsName?: string;
 
-            // list of non-block scoped variable declarations that appear inside converted loop
-            // such variable declarations should be moved outside the loop body 
-            // for (let x;;) {
-            //     var y = 1;
-            //     ... 
-            // }
-            // should be converted to
-            // var loop = function(x) {
-            //    y = 1;
-            //    ...
-            // }
-            // var y;
-            // for (var x;;) loop(x);
+            /*
+             * list of non-block scoped variable declarations that appear inside converted loop
+             * such variable declarations should be moved outside the loop body 
+             * for (let x;;) {
+             *     var y = 1;
+             *     ... 
+             * }
+             * should be converted to
+             * var loop = function(x) {
+             *    y = 1;
+             *    ...
+             * }
+             * var y;
+             * for (var x;;) loop(x);
+             */
             hoistedLocalVariables?: Identifier[];
         }
 
@@ -3187,7 +3199,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 convertedLoopState = {};
 
                 if (convertedOuterLoopState) {
-                    // convertedOuterLoopState !== undefined means that this converted loop is nested in another converted loop
+                    // convertedOuterLoopState !== undefined means that this converted loop is nested in another converted loop.
                     // if outer converted loop has already accumulated some state - pass it through
                     if (convertedOuterLoopState.argumentsName) {
                         // outer loop has already used 'arguments' so we've already have some name to alias it
@@ -3219,8 +3231,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         convertedOuterLoopState.argumentsName = convertedLoopState.argumentsName;
                     }
                     else {
-                        // this is top level converted loop and 
-                        // create an alias for 'arguments' object
+                        // this is top level converted loop and we need to create an alias for 'arguments' object
                         write(`var ${convertedLoopState.argumentsName} = arguments;`);
                         writeLine();
                     }
@@ -3237,12 +3248,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write("var ");
                         let seen: Map<string>;
                         for (const id of convertedLoopState.hoistedLocalVariables) {
+                           // Don't initialize seen unless we have at least one element.
+                           // Emit a comma to separate for all but the first element.
                            if (!seen) {
                                seen = {};
                            }
                            else {
                                write(", ");
                            }
+
                            if (!hasProperty(seen, id.text)) {
                                emit(id);
                                seen[id.text] = id.text;
@@ -3674,12 +3688,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitReturnStatement(node: ReturnStatement) {
                 if (convertedLoopState) {
                     convertedLoopState.nonLocalJumps |= Jump.Return;
-                    write(`return { value: `);
+                    write("return { value: ");
                     if (node.expression) {
                         emit(node.expression);
                     }
                     else {
-                        write("undefined");
+                        write("void 0");
                     }
                     write(" };");
                     return;

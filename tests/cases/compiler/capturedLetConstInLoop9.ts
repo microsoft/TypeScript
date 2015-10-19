@@ -120,3 +120,20 @@ function foo2() {
         }
     }
 }
+
+class C {
+    constructor(private N: number) { }
+    foo() {
+        for (let i = 0; i < 100; i++) {
+            let f = () => this.N * i;
+        }
+    }
+}
+
+function foo3 () {
+    let x = arguments.length;
+    for (let y of []) {
+        let z = arguments.length;
+        (function() { return y + z + arguments.length; });
+    }
+}

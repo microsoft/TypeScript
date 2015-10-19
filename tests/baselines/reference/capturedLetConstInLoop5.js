@@ -287,7 +287,7 @@ function foo0(x) {
         (function () { return x_1 + v; });
         (function () { return x_1 + v; });
         if (x_1 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -304,7 +304,7 @@ function foo00(x) {
         (function () { return x_2 + v; });
         (function () { return x_2 + v; });
         if (x_2 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -320,7 +320,7 @@ function foo1(x) {
         (function () { return x_3 + v; });
         (function () { return x_3 + v; });
         if (x_3 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -337,7 +337,7 @@ function foo2(x) {
         (function () { return x_4 + v; });
         (function () { return x_4 + v; });
         if (x_4 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -353,7 +353,7 @@ function foo3(x) {
         (function () { return x_5 + v; });
         (function () { return x_5 + v; });
         if (x_5 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -370,7 +370,7 @@ function foo4(x) {
         (function () { return x_6 + v; });
         (function () { return x_6 + v; });
         if (x_6 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -386,7 +386,7 @@ function foo5(x) {
         (function () { return x_7 + y + v; });
         (function () { return x_7 + y + v; });
         if (x_7 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -403,7 +403,7 @@ function foo6(x) {
         (function () { return x_8 + y + v; });
         (function () { return x_8 + y + v; });
         if (x_8 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -421,7 +421,7 @@ function foo7(x) {
         (function () { return x_9 + y + v; });
         (function () { return x_9 + y + v; });
         if (x_9 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -438,7 +438,7 @@ function foo8(x) {
         (function () { return x_10 + y + v; });
         (function () { return x_10 + y + v; });
         if (x_10 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -455,7 +455,7 @@ function foo0_c(x) {
         (function () { return x_11 + v; });
         (function () { return x_11 + v; });
         if (x_11 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -472,7 +472,7 @@ function foo00_c(x) {
         (function () { return x_12 + v; });
         (function () { return x_12 + v; });
         if (x_12 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -488,7 +488,7 @@ function foo1_c(x) {
         (function () { return x_13 + v; });
         (function () { return x_13 + v; });
         if (x_13 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -505,7 +505,7 @@ function foo2_c(x) {
         (function () { return x_14 + v; });
         (function () { return x_14 + v; });
         if (x_14 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -521,7 +521,7 @@ function foo3_c(x) {
         (function () { return x_15 + v; });
         (function () { return x_15 + v; });
         if (x_15 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -538,7 +538,7 @@ function foo4_c(x) {
         (function () { return x_16 + v; });
         (function () { return x_16 + v; });
         if (x_16 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -554,7 +554,7 @@ function foo5_c(x) {
         (function () { return x_17 + y + v; });
         (function () { return x_17 + y + v; });
         if (x_17 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -571,7 +571,7 @@ function foo6_c(x) {
         (function () { return x_18 + y + v; });
         (function () { return x_18 + y + v; });
         if (x_18 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -588,7 +588,7 @@ function foo7_c(x) {
         (function () { return x_19 + y + v; });
         (function () { return x_19 + y + v; });
         if (x_19 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;
@@ -605,7 +605,7 @@ function foo8_c(x) {
         (function () { return x_20 + y + v; });
         (function () { return x_20 + y + v; });
         if (x_20 == 1) {
-            return { value: undefined };
+            return { value: void 0 };
         }
     };
     var v;

@@ -218,3 +218,54 @@ function foo2() {
         }
     }
 }
+
+class C {
+>C : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 122, 1))
+
+    constructor(private N: number) { }
+>N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
+
+    foo() {
+>foo : Symbol(foo, Decl(capturedLetConstInLoop9_ES6.ts, 125, 38))
+
+        for (let i = 0; i < 100; i++) {
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
+
+            let f = () => this.N * i;
+>f : Symbol(f, Decl(capturedLetConstInLoop9_ES6.ts, 128, 15))
+>this.N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
+>this : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 122, 1))
+>N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
+        }
+    }
+}
+
+function foo3 () {
+>foo3 : Symbol(foo3, Decl(capturedLetConstInLoop9_ES6.ts, 131, 1))
+
+    let x = arguments.length;
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 134, 7))
+>arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+
+    for (let y of []) {
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 135, 12))
+
+        let z = arguments.length;
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 136, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+
+        (function() { return y + z + arguments.length; });
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 135, 12))
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 136, 11))
+>arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+    }
+}

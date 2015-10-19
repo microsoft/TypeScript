@@ -32,6 +32,9 @@ function foo() {
                 if (x == 2) {
                     return "123"
                 }
+                if (x == 3) {
+                    return;
+                }
             }
             if (x == 1) {
                 break;
@@ -50,7 +53,10 @@ function foo() {
             }
             if (x == 2) {
                 return "456";
-            }            
+            }
+            if (x == 3) {
+                return;
+            }
         }
     }
 }
@@ -89,6 +95,9 @@ function foo_c() {
                 if (x == 2) {
                     return "123"
                 }
+                if (x == 3) {
+                    return;
+                }
             }
             if (x == 1) {
                 break;
@@ -107,7 +116,10 @@ function foo_c() {
             }
             if (x == 2) {
                 return "456";
-            }            
+            }
+            if (x == 3) {
+                return;
+            }
         }
     }
 }

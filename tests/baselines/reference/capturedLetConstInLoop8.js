@@ -33,6 +33,9 @@ function foo() {
                 if (x == 2) {
                     return "123"
                 }
+                if (x == 3) {
+                    return;
+                }
             }
             if (x == 1) {
                 break;
@@ -51,7 +54,10 @@ function foo() {
             }
             if (x == 2) {
                 return "456";
-            }            
+            }
+            if (x == 3) {
+                return;
+            }
         }
     }
 }
@@ -90,6 +96,9 @@ function foo_c() {
                 if (x == 2) {
                     return "123"
                 }
+                if (x == 3) {
+                    return;
+                }
             }
             if (x == 1) {
                 break;
@@ -108,7 +117,10 @@ function foo_c() {
             }
             if (x == 2) {
                 return "456";
-            }            
+            }
+            if (x == 3) {
+                return;
+            }
         }
     }
 }
@@ -145,6 +157,9 @@ function foo() {
                 if (x == 2) {
                     return { value: "123" };
                 }
+                if (x == 3) {
+                    return { value: void 0 };
+                }
             };
             ll1: for (var y = 0; y < 1; ++y) {
                 var state_1 = _loop_2(y);
@@ -176,6 +191,9 @@ function foo() {
             }
             if (x == 2) {
                 return { value: "456" };
+            }
+            if (x == 3) {
+                return { value: void 0 };
             }
         };
         l1: for (var x = 0; x < 1; ++x) {
@@ -221,6 +239,9 @@ function foo_c() {
                 if (x == 2) {
                     return { value: "123" };
                 }
+                if (x == 3) {
+                    return { value: void 0 };
+                }
             };
             ll1: for (var y = 0; y < 1;) {
                 var state_3 = _loop_4(y);
@@ -252,6 +273,9 @@ function foo_c() {
             }
             if (x == 2) {
                 return { value: "456" };
+            }
+            if (x == 3) {
+                return { value: void 0 };
             }
         };
         l1: for (var x = 0; x < 1;) {

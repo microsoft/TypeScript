@@ -123,6 +123,23 @@ function foo2() {
     }
 }
 
+class C {
+    constructor(private N: number) { }
+    foo() {
+        for (let i = 0; i < 100; i++) {
+            let f = () => this.N * i;
+        }
+    }
+}
+
+function foo3 () {
+    let x = arguments.length;
+    for (let y of []) {
+        let z = arguments.length;
+        (function() { return y + z + arguments.length; });
+    }
+}
+
 //// [capturedLetConstInLoop9_ES6.js]
 for (let x = 0; x < 1; ++x) {
     let x;
@@ -217,5 +234,22 @@ function foo2() {
                 case 2: continue;
             }
         }
+    }
+}
+class C {
+    constructor(N) {
+        this.N = N;
+    }
+    foo() {
+        for (let i = 0; i < 100; i++) {
+            let f = () => this.N * i;
+        }
+    }
+}
+function foo3() {
+    let x = arguments.length;
+    for (let y of []) {
+        let z = arguments.length;
+        (function () { return y + z + arguments.length; });
     }
 }

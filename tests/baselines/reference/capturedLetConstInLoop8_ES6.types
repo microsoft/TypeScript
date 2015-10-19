@@ -1,5 +1,4 @@
 === tests/cases/compiler/capturedLetConstInLoop8_ES6.ts ===
-
 function foo() {
 >foo : () => string
 
@@ -116,6 +115,13 @@ function foo() {
                     return "123"
 >"123" : string
                 }
+                if (x == 3) {
+>x == 3 : boolean
+>x : number
+>3 : number
+
+                    return;
+                }
             }
             if (x == 1) {
 >x == 1 : boolean
@@ -162,7 +168,14 @@ function foo() {
 
                 return "456";
 >"456" : string
-            }            
+            }
+            if (x == 3) {
+>x == 3 : boolean
+>x : number
+>3 : number
+
+                return;
+            }
         }
     }
 }
@@ -277,6 +290,13 @@ function foo_c() {
                     return "123"
 >"123" : string
                 }
+                if (x == 3) {
+>x == 3 : boolean
+>x : number
+>3 : number
+
+                    return;
+                }
             }
             if (x == 1) {
 >x == 1 : boolean
@@ -323,7 +343,14 @@ function foo_c() {
 
                 return "456";
 >"456" : string
-            }            
+            }
+            if (x == 3) {
+>x == 3 : boolean
+>x : number
+>3 : number
+
+                return;
+            }
         }
     }
 }

@@ -296,3 +296,65 @@ function foo2() {
         }
     }
 }
+
+class C {
+>C : C
+
+    constructor(private N: number) { }
+>N : number
+
+    foo() {
+>foo : () => void
+
+        for (let i = 0; i < 100; i++) {
+>i : number
+>0 : number
+>i < 100 : boolean
+>i : number
+>100 : number
+>i++ : number
+>i : number
+
+            let f = () => this.N * i;
+>f : () => number
+>() => this.N * i : () => number
+>this.N * i : number
+>this.N : number
+>this : this
+>N : number
+>i : number
+        }
+    }
+}
+
+function foo3 () {
+>foo3 : () => void
+
+    let x = arguments.length;
+>x : number
+>arguments.length : number
+>arguments : IArguments
+>length : number
+
+    for (let y of []) {
+>y : any
+>[] : undefined[]
+
+        let z = arguments.length;
+>z : number
+>arguments.length : number
+>arguments : IArguments
+>length : number
+
+        (function() { return y + z + arguments.length; });
+>(function() { return y + z + arguments.length; }) : () => any
+>function() { return y + z + arguments.length; } : () => any
+>y + z + arguments.length : any
+>y + z : any
+>y : any
+>z : number
+>arguments.length : number
+>arguments : IArguments
+>length : number
+    }
+}

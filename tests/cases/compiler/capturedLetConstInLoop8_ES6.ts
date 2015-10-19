@@ -1,5 +1,4 @@
 // @target: ES6
-
 function foo() {
     l0:
     for (let z = 0; z < 1; ++z) {
@@ -34,6 +33,9 @@ function foo() {
                 if (x == 2) {
                     return "123"
                 }
+                if (x == 3) {
+                    return;
+                }
             }
             if (x == 1) {
                 break;
@@ -52,7 +54,10 @@ function foo() {
             }
             if (x == 2) {
                 return "456";
-            }            
+            }
+            if (x == 3) {
+                return;
+            }
         }
     }
 }
@@ -91,6 +96,9 @@ function foo_c() {
                 if (x == 2) {
                     return "123"
                 }
+                if (x == 3) {
+                    return;
+                }
             }
             if (x == 1) {
                 break;
@@ -109,7 +117,10 @@ function foo_c() {
             }
             if (x == 2) {
                 return "456";
-            }            
+            }
+            if (x == 3) {
+                return;
+            }
         }
     }
 }
