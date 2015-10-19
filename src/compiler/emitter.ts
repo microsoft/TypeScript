@@ -396,7 +396,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * maps store association 'label -> labelMarker' where
              * - label - value of label as it apprear in code
              * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
-             */ 
+             */
             labeledNonLocalBreaks?: Map<string>;
             labeledNonLocalContinues?: Map<string>;
 
