@@ -247,7 +247,8 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (!noOutFile) {
             options += " --out " + outFile;
-        } else {
+        }
+        else {
             options += " --module commonjs"
         }
 

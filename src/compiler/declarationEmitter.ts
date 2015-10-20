@@ -731,7 +731,7 @@ namespace ts {
             }
             let match: RegExpMatchArray;
             if ((!root) && node.moduleSpecifier.kind === SyntaxKind.StringLiteral && (match = getTextOfNode(node.moduleSpecifier).match(/('|")(\.\/|\.\.\/)/))) {
-                write(makeModulePathSemiabsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
+                write(makeModulePathSemiAbsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
             }
             else {
                 writeTextOfNode(currentSourceFile, node.moduleSpecifier);
@@ -773,7 +773,7 @@ namespace ts {
                 write(" from ");
                 let match: RegExpMatchArray;
                 if ((!root) && node.moduleSpecifier.kind === SyntaxKind.StringLiteral && (match = getTextOfNode(node.moduleSpecifier).match(/('|")(\.\/|\.\.\/)/))) {
-                    write(makeModulePathSemiabsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
+                    write(makeModulePathSemiAbsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node.moduleSpecifier);
