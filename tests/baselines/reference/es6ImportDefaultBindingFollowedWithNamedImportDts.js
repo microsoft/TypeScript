@@ -88,15 +88,3 @@ export declare class a12 {
 }
 export declare class x11 {
 }
-//// [client.d.ts]
-import { a } from "./server";
-export declare var x1: a;
-import { a11 as b } from "./server";
-export declare var x2: b;
-import { x, a12 as y } from "./server";
-export declare var x4: x;
-export declare var x5: y;
-import { x11 as z } from "./server";
-export declare var x3: z;
-import { m } from "./server";
-export declare var x6: m;

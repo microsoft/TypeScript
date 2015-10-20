@@ -5,7 +5,4 @@ FileName : out.js
 var noErrors = true;
 // File not emitted, and contains semantic errors
 var semanticError = "string";
-FileName : out.d.ts
-declare var noErrors: boolean;
-declare var semanticError: boolean;
 

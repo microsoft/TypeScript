@@ -26,13 +26,3 @@ function baz3(_a) { }
 function baz4(_a) {
     var _a = { x: 10 };
 }
-
-
-//// [declarationEmitDestructuring4.d.ts]
-declare function baz([]: any[]): void;
-declare function baz1([]?: number[]): void;
-declare function baz2([[]]?: [number[]]): void;
-declare function baz3({}: {}): void;
-declare function baz4({}?: {
-    x: number;
-}): void;

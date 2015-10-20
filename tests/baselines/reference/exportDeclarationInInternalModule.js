@@ -56,20 +56,3 @@ var Bbb;
     __export(require()); // this line causes the nullref
 })(Bbb || (Bbb = {}));
 var a;
-
-
-//// [exportDeclarationInInternalModule.d.ts]
-declare class Bbb {
-}
-declare class Aaa extends Bbb {
-}
-declare module Aaa {
-    class SomeType {
-    }
-}
-declare module Bbb {
-    class SomeType {
-    }
-    export * from Aaa;
-}
-declare var a: Bbb.SomeType;

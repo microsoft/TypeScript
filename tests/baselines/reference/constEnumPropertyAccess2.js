@@ -31,16 +31,3 @@ var g;
 g = "string";
 function foo(x) { }
 2 /* B */ = 3;
-
-
-//// [constEnumPropertyAccess2.d.ts]
-declare const enum G {
-    A = 1,
-    B = 2,
-    C = 3,
-    D = 2,
-}
-declare var z: typeof G;
-declare var z1: any;
-declare var g: G;
-declare function foo(x: G): void;

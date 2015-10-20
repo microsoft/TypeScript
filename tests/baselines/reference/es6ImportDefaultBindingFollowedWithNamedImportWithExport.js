@@ -47,10 +47,3 @@ export declare var x: number;
 export declare var m: number;
 declare var _default: {};
 export default _default;
-//// [client.d.ts]
-export declare var x1: number;
-export declare var x1: number;
-export declare var x1: number;
-export declare var x1: number;
-export declare var x1: number;
-export declare var x1: number;
