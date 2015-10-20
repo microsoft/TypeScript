@@ -198,6 +198,7 @@ namespace ts {
             let aliasEmits: (() => void)[] = [];
             let symbolNameSet: Map<number> = {};
             let imports: Map<Declaration[]> = {};
+            let importEquals: Map<Declaration[]> = {};
             let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
 
             // Handle an export=import as soon as possible
@@ -221,20 +222,20 @@ namespace ts {
                 symbolNameSet[name] = 1;
                 symbolGeneratedNameMap[id] = name;
             };
-            let generateName = (symbol: Symbol): string => {
-                if (symbol.name in symbolNameSet) {
-                    let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
+            let generateName = (symbol: Symbol, name: string = symbol.name): string => {
+                if (name in symbolNameSet) {
+                    let generatedName = `${name}_${symbolNameSet[name]}`;
                     while (!!symbolNameSet[generatedName]) {
-                        generatedName = `${symbol.name}_${++symbolNameSet[symbol.name]}`;
+                        generatedName = `${name}_${++symbolNameSet[name]}`;
                     }
-                    symbolNameSet[symbol.name]++;
+                    symbolNameSet[name]++;
                     createSymbolEntry(generatedName, symbol.id);
                     createSyntheticIdentifiers(symbol, generatedName);
                     return generatedName;
                 }
                 else {
-                    createSymbolEntry(symbol.name, symbol.id);
-                    return symbol.name;
+                    createSymbolEntry(name, symbol.id);
+                    return name;
                 }
             };
             let createDefaultExportAlias = (): string => {
@@ -257,13 +258,11 @@ namespace ts {
                 generateName(d.symbol);
             });
 
-            // TODO: Handle external dts where we use their export= complex type (requiring `import v = require()` or `import * as v from ""`)
-            // TODO: Map module identifiers back to module names (rather than using absolute paths)
-            forEachKey(imports, filename => {
+            forEachKey(imports, fileName => {
                 write("import {");
                 writeLine();
                 increaseIndent();
-                forEach(imports[filename], declaration => {
+                forEach(imports[fileName], declaration => {
                     let symbol = declaration.symbol;
                     if (!symbol) {
                         return;
@@ -275,7 +274,30 @@ namespace ts {
                 });
                 decreaseIndent();
                 // Handle module identifiers
-                write(filename.match(/^('|")/) ? `} from ${filename}` : `} from "${filename}"`);
+                write(fileName.match(/^('|")/) ? `} from ${fileName}` : `} from "${fileName}";`);
+                writeLine();
+            });
+            forEachKey(importEquals, fileName => {
+                let declarations = importEquals[fileName];
+                let name: string;
+                forEach(declarations, declaration => {
+                    let symbol = declaration.symbol;
+                    if (name) {
+                        createSymbolEntry(name, symbol.id);
+                        createSyntheticIdentifiers(symbol, name);
+                    }
+                    else {
+                        name = generateName(symbol, "Import");
+                    }
+                });
+                if (!name) {
+                    Debug.fail("Found dependency on an export= when flattening, but no symbols from it were used");
+                }
+                if (fileName.match(/^('|")/)) {
+                    write(`import * as ${name} from ${fileName};`);
+                } else {
+                    write(`import * as ${name} from "${fileName}";`);
+                }
                 writeLine();
             });
 
@@ -318,7 +340,8 @@ namespace ts {
                     writeLine();
                 });
                 decreaseIndent();
-                write("}");
+                write("};");
+                writeLine();
             }
             forEach(undoActions, undo => undo()); // So we don't ruin the tree
 
@@ -499,14 +522,24 @@ namespace ts {
                                     if (isExternalModule(sourceFile)) {
                                         // First, try to reverse lookup a module identifier
                                         let fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
-                                        imports[fileName] = imports[fileName] || [];
                                         // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
                                         let declarationStack = findDeclarationStack(d);
                                         // Get the topmost declaration from that stack of nodes
                                         let declaration = declarationStack.pop();
-                                        // Add that outer declaration to the list of things which need to be imported from an external source
-                                        if (!contains(imports[fileName], declaration)) {
-                                            imports[fileName].push(declaration);
+                                        // Check for an export=
+                                        if (sourceFile.symbol.exports["export="]) {
+                                            importEquals[fileName] = importEquals[fileName] || [];
+                                            // Add the declaration to the list of those refed by this file
+                                            if (!contains(importEquals[fileName], declaration)) {
+                                                importEquals[fileName].push(declaration);
+                                            }
+                                        }
+                                        else {
+                                            imports[fileName] = imports[fileName] || [];
+                                            // Add that outer declaration to the list of things which need to be imported from an external source
+                                            if (!contains(imports[fileName], declaration)) {
+                                                imports[fileName].push(declaration);
+                                            }
                                         }
                                     }
                                     else {
