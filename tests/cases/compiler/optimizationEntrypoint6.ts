@@ -16,7 +16,7 @@ declare module "bar" {
 // @Filename: main.ts
 export * from "./interop/index";
 export default 2+2;
-export class Meh {}
+export class Baz {}
 
 // @Filename: interop/index.ts
 export * from "./foodep";
