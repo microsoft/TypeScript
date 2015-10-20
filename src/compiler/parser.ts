@@ -3454,19 +3454,43 @@ namespace ts {
 
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             let opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
+            let result: JsxElement | JsxSelfClosingElement;
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
-                return finishNode(node);
+                result = finishNode(node);
             }
             else {
                 Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
                 // Nothing else to do for self-closing elements
-                return <JsxSelfClosingElement>opening;
+                result = <JsxSelfClosingElement>opening;
             }
+
+            // If the user writes the invalid code '<div></div><div></div>' in an expression context (i.e. not wrapped in
+            // an enclosing tag), we'll naively try to parse   ^ this as a 'less than' operator and the remainder of the tag
+            // as garbage, which will cause the formatter to badly mangle the JSX. Perform a speculative parse of a JSX
+            // element if we see a < token so that we can wrap it in a synthetic binary expression so the formatter
+            // does less damage and we can report a better error.
+            // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
+            // of one sort or another.
+            if (inExpressionContext && token === SyntaxKind.LessThanToken) {
+                let invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/true));
+                if (invalidElement) {
+                    parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
+                    let badNode = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, result.pos);
+                    badNode.end = invalidElement.end;
+                    badNode.left = result;
+                    badNode.right = invalidElement;
+                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined);
+                    badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
+                    return <JsxElement><Node>badNode;
+                }
+            }
+
+            return result;
         }
 
         function parseJsxText(): JsxText {
