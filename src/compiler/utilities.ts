@@ -1841,6 +1841,7 @@ namespace ts {
                     sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
                 return {
                     jsFilePath,
+                    sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
                     declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
                 };
             }
@@ -1850,16 +1851,23 @@ namespace ts {
         }
         return {
             jsFilePath: undefined,
+            sourceMapFilePath: undefined,
             declarationFilePath: undefined
         };
     }
 
     export function getBundledEmitFileNames(options: CompilerOptions) {
         let jsFilePath = options.outFile || options.out;
+
         return {
             jsFilePath,
+            sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
             declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
         };
+    }
+
+    function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+        return options.sourceMap ? jsFilePath + ".map" : undefined;
     }
 
     function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
