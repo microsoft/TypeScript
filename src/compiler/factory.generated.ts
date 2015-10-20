@@ -3165,49 +3165,49 @@ namespace ts {
         if (node) {
             switch (node.kind) {
                 case SyntaxKind.QualifiedName:
-                    return updateQualifiedName(<QualifiedName>node, (<QualifiedName>node).left, (<QualifiedName>node).right);
+                    return updateQualifiedName(<QualifiedName>node, transformer.visitNode((<QualifiedName>node).left, visitor, isEntityName), transformer.visitNode((<QualifiedName>node).right, visitor, isIdentifier));
                 case SyntaxKind.ComputedPropertyName:
-                    return updateComputedPropertyName(<ComputedPropertyName>node, (<ComputedPropertyName>node).expression);
+                    return updateComputedPropertyName(<ComputedPropertyName>node, transformer.visitNode((<ComputedPropertyName>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.TypeParameter:
-                    return updateTypeParameter(<TypeParameterDeclaration>node, (<TypeParameterDeclaration>node).name, (<TypeParameterDeclaration>node).constraint, (<TypeParameterDeclaration>node).expression);
+                    return updateTypeParameter(<TypeParameterDeclaration>node, transformer.visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier), transformer.visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNodeNode), transformer.visitNode((<TypeParameterDeclaration>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.Parameter:
-                    return updateParameter(<ParameterDeclaration>node, transformer.visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier), (<ParameterDeclaration>node).name, (<ParameterDeclaration>node).questionToken, (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer);
+                    return updateParameter(<ParameterDeclaration>node, transformer.visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ParameterDeclaration>node).name, visitor, isBindingPatternOrIdentifier), (<ParameterDeclaration>node).questionToken, transformer.visitNode((<ParameterDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitNode((<ParameterDeclaration>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.Decorator:
-                    return updateDecorator(<Decorator>node, (<Decorator>node).expression);
+                    return updateDecorator(<Decorator>node, transformer.visitNode((<Decorator>node).expression, visitor, isLeftHandSideExpression));
                 case SyntaxKind.PropertySignature:
-                    return updatePropertySignature(<PropertySignature>node, transformer.visitNodes((<PropertySignature>node).decorators, visitor, isDecorator), transformer.visitNodes((<PropertySignature>node).modifiers, visitor, isModifier), (<PropertySignature>node).name, (<PropertySignature>node).type);
+                    return updatePropertySignature(<PropertySignature>node, transformer.visitNodes((<PropertySignature>node).decorators, visitor, isDecorator), transformer.visitNodes((<PropertySignature>node).modifiers, visitor, isModifier), transformer.visitNode((<PropertySignature>node).name, visitor, isPropertyName), transformer.visitNode((<PropertySignature>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.PropertyDeclaration:
-                    return updatePropertyDeclaration(<PropertyDeclaration>node, transformer.visitNodes((<PropertyDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<PropertyDeclaration>node).modifiers, visitor, isModifier), (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).type, (<PropertyDeclaration>node).initializer);
+                    return updatePropertyDeclaration(<PropertyDeclaration>node, transformer.visitNodes((<PropertyDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<PropertyDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName), transformer.visitNode((<PropertyDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitNode((<PropertyDeclaration>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.MethodSignature:
-                    return updateMethodSignature(<MethodSignature>node, transformer.visitNodes((<MethodSignature>node).decorators, visitor, isDecorator), transformer.visitNodes((<MethodSignature>node).modifiers, visitor, isModifier), (<MethodSignature>node).name, transformer.visitNodes((<MethodSignature>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<MethodSignature>node).parameters, visitor, isParameter), (<MethodSignature>node).type);
+                    return updateMethodSignature(<MethodSignature>node, transformer.visitNodes((<MethodSignature>node).decorators, visitor, isDecorator), transformer.visitNodes((<MethodSignature>node).modifiers, visitor, isModifier), transformer.visitNode((<MethodSignature>node).name, visitor, isPropertyName), transformer.visitNodes((<MethodSignature>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<MethodSignature>node).parameters, visitor, isParameter), transformer.visitNode((<MethodSignature>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.MethodDeclaration:
-                    return updateMethodDeclaration(<MethodDeclaration>node, transformer.visitNodes((<MethodDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier), (<MethodDeclaration>node).name, transformer.visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<MethodDeclaration>node).parameters, visitor, isParameter), (<MethodDeclaration>node).type, (<MethodDeclaration>node).body);
+                    return updateMethodDeclaration(<MethodDeclaration>node, transformer.visitNodes((<MethodDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<MethodDeclaration>node).name, visitor, isPropertyName), transformer.visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<MethodDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<MethodDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<MethodDeclaration>node).body, visitor));
                 case SyntaxKind.Constructor:
-                    return updateConstructor(<ConstructorDeclaration>node, transformer.visitNodes((<ConstructorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ConstructorDeclaration>node).modifiers, visitor, isModifier), transformer.visitNodes((<ConstructorDeclaration>node).parameters, visitor, isParameter), (<ConstructorDeclaration>node).type, (<ConstructorDeclaration>node).body);
+                    return updateConstructor(<ConstructorDeclaration>node, transformer.visitNodes((<ConstructorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ConstructorDeclaration>node).modifiers, visitor, isModifier), transformer.visitNodes((<ConstructorDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<ConstructorDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<ConstructorDeclaration>node).body, visitor));
                 case SyntaxKind.GetAccessor:
-                    return updateGetAccessor(<GetAccessorDeclaration>node, transformer.visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier), (<GetAccessorDeclaration>node).name, transformer.visitNodes((<GetAccessorDeclaration>node).parameters, visitor, isParameter), (<GetAccessorDeclaration>node).type, (<GetAccessorDeclaration>node).body);
+                    return updateGetAccessor(<GetAccessorDeclaration>node, transformer.visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName), transformer.visitNodes((<GetAccessorDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<GetAccessorDeclaration>node).body, visitor));
                 case SyntaxKind.SetAccessor:
-                    return updateSetAccessor(<SetAccessorDeclaration>node, transformer.visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier), (<SetAccessorDeclaration>node).name, transformer.visitNodes((<SetAccessorDeclaration>node).parameters, visitor, isParameter), (<SetAccessorDeclaration>node).type, (<SetAccessorDeclaration>node).body);
+                    return updateSetAccessor(<SetAccessorDeclaration>node, transformer.visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<SetAccessorDeclaration>node).name, visitor, isPropertyName), transformer.visitNodes((<SetAccessorDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<SetAccessorDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<SetAccessorDeclaration>node).body, visitor));
                 case SyntaxKind.CallSignature:
-                    return updateCallSignature(<CallSignatureDeclaration>node, transformer.visitNodes((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<CallSignatureDeclaration>node).parameters, visitor, isParameter), (<CallSignatureDeclaration>node).type);
+                    return updateCallSignature(<CallSignatureDeclaration>node, transformer.visitNodes((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<CallSignatureDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<CallSignatureDeclaration>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.ConstructSignature:
-                    return updateConstructSignature(<ConstructSignatureDeclaration>node, transformer.visitNodes((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ConstructSignatureDeclaration>node).parameters, visitor, isParameter), (<ConstructSignatureDeclaration>node).type);
+                    return updateConstructSignature(<ConstructSignatureDeclaration>node, transformer.visitNodes((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ConstructSignatureDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.IndexSignature:
-                    return updateIndexSignature(<IndexSignatureDeclaration>node, transformer.visitNodes((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier), transformer.visitNodes((<IndexSignatureDeclaration>node).parameters, visitor, isParameter), (<IndexSignatureDeclaration>node).type);
+                    return updateIndexSignature(<IndexSignatureDeclaration>node, transformer.visitNodes((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier), transformer.visitNodes((<IndexSignatureDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.TypePredicate:
-                    return updateTypePredicate(<TypePredicateNode>node, (<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type);
+                    return updateTypePredicate(<TypePredicateNode>node, transformer.visitNode((<TypePredicateNode>node).parameterName, visitor, isIdentifier), transformer.visitNode((<TypePredicateNode>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.TypeReference:
-                    return updateTypeReference(<TypeReferenceNode>node, (<TypeReferenceNode>node).typeName, transformer.visitNodes((<TypeReferenceNode>node).typeArguments, visitor, isTypeNodeNode));
+                    return updateTypeReference(<TypeReferenceNode>node, transformer.visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName), transformer.visitNodes((<TypeReferenceNode>node).typeArguments, visitor, isTypeNodeNode));
                 case SyntaxKind.FunctionType:
-                    return updateFunctionType(<FunctionTypeNode>node, transformer.visitNodes((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionTypeNode>node).parameters, visitor, isParameter), (<FunctionTypeNode>node).type);
+                    return updateFunctionType(<FunctionTypeNode>node, transformer.visitNodes((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionTypeNode>node).parameters, visitor, isParameter), transformer.visitNode((<FunctionTypeNode>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.ConstructorType:
-                    return updateConstructorType(<ConstructorTypeNode>node, transformer.visitNodes((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ConstructorTypeNode>node).parameters, visitor, isParameter), (<ConstructorTypeNode>node).type);
+                    return updateConstructorType(<ConstructorTypeNode>node, transformer.visitNodes((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ConstructorTypeNode>node).parameters, visitor, isParameter), transformer.visitNode((<ConstructorTypeNode>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.TypeQuery:
-                    return updateTypeQuery(<TypeQueryNode>node, (<TypeQueryNode>node).exprName);
+                    return updateTypeQuery(<TypeQueryNode>node, transformer.visitNode((<TypeQueryNode>node).exprName, visitor, isEntityName));
                 case SyntaxKind.TypeLiteral:
                     return updateTypeLiteral(<TypeLiteralNode>node, transformer.visitNodes((<TypeLiteralNode>node).members, visitor, isTypeElement));
                 case SyntaxKind.ArrayType:
-                    return updateArrayType(<ArrayTypeNode>node, (<ArrayTypeNode>node).elementType);
+                    return updateArrayType(<ArrayTypeNode>node, transformer.visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNodeNode));
                 case SyntaxKind.TupleType:
                     return updateTupleType(<TupleTypeNode>node, transformer.visitNodes((<TupleTypeNode>node).elementTypes, visitor, isTypeNodeNode));
                 case SyntaxKind.UnionType:
@@ -3215,213 +3215,213 @@ namespace ts {
                 case SyntaxKind.IntersectionType:
                     return updateIntersectionType(<IntersectionTypeNode>node, transformer.visitNodes((<IntersectionTypeNode>node).types, visitor, isTypeNodeNode));
                 case SyntaxKind.ParenthesizedType:
-                    return updateParenthesizedType(<ParenthesizedTypeNode>node, (<ParenthesizedTypeNode>node).type);
+                    return updateParenthesizedType(<ParenthesizedTypeNode>node, transformer.visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.ObjectBindingPattern:
                     return updateObjectBindingPattern(<ObjectBindingPattern>node, transformer.visitNodes((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
                 case SyntaxKind.ArrayBindingPattern:
                     return updateArrayBindingPattern(<ArrayBindingPattern>node, transformer.visitNodes((<ArrayBindingPattern>node).elements, visitor, isBindingElement));
                 case SyntaxKind.BindingElement:
-                    return updateBindingElement(<BindingElement>node, (<BindingElement>node).propertyName, (<BindingElement>node).name, (<BindingElement>node).initializer);
+                    return updateBindingElement(<BindingElement>node, transformer.visitNode((<BindingElement>node).propertyName, visitor, isIdentifier), transformer.visitNode((<BindingElement>node).name, visitor, isBindingPatternOrIdentifier), transformer.visitNode((<BindingElement>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.ArrayLiteralExpression:
                     return updateArrayLiteralExpression(<ArrayLiteralExpression>node, transformer.visitNodes((<ArrayLiteralExpression>node).elements, visitor, isExpressionNode));
                 case SyntaxKind.ObjectLiteralExpression:
                     return updateObjectLiteralExpression(<ObjectLiteralExpression>node, transformer.visitNodes((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElement));
                 case SyntaxKind.PropertyAccessExpression:
-                    return updatePropertyAccessExpression(<PropertyAccessExpression>node, (<PropertyAccessExpression>node).expression, (<PropertyAccessExpression>node).name);
+                    return updatePropertyAccessExpression(<PropertyAccessExpression>node, transformer.visitNode((<PropertyAccessExpression>node).expression, visitor, isLeftHandSideExpression), transformer.visitNode((<PropertyAccessExpression>node).name, visitor, isIdentifier));
                 case SyntaxKind.ElementAccessExpression:
-                    return updateElementAccessExpression(<ElementAccessExpression>node, (<ElementAccessExpression>node).expression, (<ElementAccessExpression>node).argumentExpression);
+                    return updateElementAccessExpression(<ElementAccessExpression>node, transformer.visitNode((<ElementAccessExpression>node).expression, visitor, isLeftHandSideExpression), transformer.visitNode((<ElementAccessExpression>node).argumentExpression, visitor, isExpressionNode));
                 case SyntaxKind.CallExpression:
-                    return updateCallExpression(<CallExpression>node, (<CallExpression>node).expression, transformer.visitNodes((<CallExpression>node).typeArguments, visitor, isTypeNodeNode), transformer.visitNodes((<CallExpression>node).arguments, visitor, isExpressionNode));
+                    return updateCallExpression(<CallExpression>node, transformer.visitNode((<CallExpression>node).expression, visitor, isLeftHandSideExpression), transformer.visitNodes((<CallExpression>node).typeArguments, visitor, isTypeNodeNode), transformer.visitNodes((<CallExpression>node).arguments, visitor, isExpressionNode));
                 case SyntaxKind.NewExpression:
-                    return updateNewExpression(<NewExpression>node, (<NewExpression>node).expression, transformer.visitNodes((<NewExpression>node).typeArguments, visitor, isTypeNodeNode), transformer.visitNodes((<NewExpression>node).arguments, visitor, isExpressionNode));
+                    return updateNewExpression(<NewExpression>node, transformer.visitNode((<NewExpression>node).expression, visitor, isLeftHandSideExpression), transformer.visitNodes((<NewExpression>node).typeArguments, visitor, isTypeNodeNode), transformer.visitNodes((<NewExpression>node).arguments, visitor, isExpressionNode));
                 case SyntaxKind.TaggedTemplateExpression:
-                    return updateTaggedTemplateExpression(<TaggedTemplateExpression>node, (<TaggedTemplateExpression>node).tag, (<TaggedTemplateExpression>node).template);
+                    return updateTaggedTemplateExpression(<TaggedTemplateExpression>node, transformer.visitNode((<TaggedTemplateExpression>node).tag, visitor, isLeftHandSideExpression), transformer.visitNode((<TaggedTemplateExpression>node).template, visitor, isLiteralExpressionOrTemplateExpression));
                 case SyntaxKind.TypeAssertionExpression:
-                    return updateTypeAssertionExpression(<TypeAssertion>node, (<TypeAssertion>node).type, (<TypeAssertion>node).expression);
+                    return updateTypeAssertionExpression(<TypeAssertion>node, transformer.visitNode((<TypeAssertion>node).type, visitor, isTypeNodeNode), transformer.visitNode((<TypeAssertion>node).expression, visitor, isUnaryExpression));
                 case SyntaxKind.ParenthesizedExpression:
-                    return updateParenthesizedExpression(<ParenthesizedExpression>node, (<ParenthesizedExpression>node).expression);
+                    return updateParenthesizedExpression(<ParenthesizedExpression>node, transformer.visitNode((<ParenthesizedExpression>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.FunctionExpression:
-                    return updateFunctionExpression(<FunctionExpression>node, transformer.visitNodes((<FunctionExpression>node).decorators, visitor, isDecorator), transformer.visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier), (<FunctionExpression>node).name, transformer.visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionExpression>node).parameters, visitor, isParameter), (<FunctionExpression>node).type, (<FunctionExpression>node).body);
+                    return updateFunctionExpression(<FunctionExpression>node, transformer.visitNodes((<FunctionExpression>node).decorators, visitor, isDecorator), transformer.visitNodes((<FunctionExpression>node).modifiers, visitor, isModifier), transformer.visitNode((<FunctionExpression>node).name, visitor, isIdentifier), transformer.visitNodes((<FunctionExpression>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionExpression>node).parameters, visitor, isParameter), transformer.visitNode((<FunctionExpression>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<FunctionExpression>node).body, visitor));
                 case SyntaxKind.ArrowFunction:
-                    return updateArrowFunction(<ArrowFunction>node, transformer.visitNodes((<ArrowFunction>node).decorators, visitor, isDecorator), transformer.visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier), transformer.visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ArrowFunction>node).parameters, visitor, isParameter), (<ArrowFunction>node).type, (<ArrowFunction>node).body);
+                    return updateArrowFunction(<ArrowFunction>node, transformer.visitNodes((<ArrowFunction>node).decorators, visitor, isDecorator), transformer.visitNodes((<ArrowFunction>node).modifiers, visitor, isModifier), transformer.visitNodes((<ArrowFunction>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ArrowFunction>node).parameters, visitor, isParameter), transformer.visitNode((<ArrowFunction>node).type, visitor, isTypeNodeNode), transformer.visitConciseBody((<ArrowFunction>node).body, visitor));
                 case SyntaxKind.DeleteExpression:
-                    return updateDeleteExpression(<DeleteExpression>node, (<DeleteExpression>node).expression);
+                    return updateDeleteExpression(<DeleteExpression>node, transformer.visitNode((<DeleteExpression>node).expression, visitor, isUnaryExpression));
                 case SyntaxKind.TypeOfExpression:
-                    return updateTypeOfExpression(<TypeOfExpression>node, (<TypeOfExpression>node).expression);
+                    return updateTypeOfExpression(<TypeOfExpression>node, transformer.visitNode((<TypeOfExpression>node).expression, visitor, isUnaryExpression));
                 case SyntaxKind.VoidExpression:
-                    return updateVoidExpression(<VoidExpression>node, (<VoidExpression>node).expression);
+                    return updateVoidExpression(<VoidExpression>node, transformer.visitNode((<VoidExpression>node).expression, visitor, isUnaryExpression));
                 case SyntaxKind.AwaitExpression:
-                    return updateAwaitExpression(<AwaitExpression>node, (<AwaitExpression>node).expression);
+                    return updateAwaitExpression(<AwaitExpression>node, transformer.visitNode((<AwaitExpression>node).expression, visitor, isUnaryExpression));
                 case SyntaxKind.PrefixUnaryExpression:
-                    return updatePrefixUnaryExpression(<PrefixUnaryExpression>node, (<PrefixUnaryExpression>node).operand);
+                    return updatePrefixUnaryExpression(<PrefixUnaryExpression>node, transformer.visitNode((<PrefixUnaryExpression>node).operand, visitor, isUnaryExpression));
                 case SyntaxKind.PostfixUnaryExpression:
-                    return updatePostfixUnaryExpression(<PostfixUnaryExpression>node, (<PostfixUnaryExpression>node).operand);
+                    return updatePostfixUnaryExpression(<PostfixUnaryExpression>node, transformer.visitNode((<PostfixUnaryExpression>node).operand, visitor, isLeftHandSideExpression));
                 case SyntaxKind.BinaryExpression:
-                    return updateBinaryExpression(<BinaryExpression>node, (<BinaryExpression>node).left, (<BinaryExpression>node).right);
+                    return updateBinaryExpression(<BinaryExpression>node, transformer.visitNode((<BinaryExpression>node).left, visitor, isExpressionNode), transformer.visitNode((<BinaryExpression>node).right, visitor, isExpressionNode));
                 case SyntaxKind.ConditionalExpression:
-                    return updateConditionalExpression(<ConditionalExpression>node, (<ConditionalExpression>node).condition, (<ConditionalExpression>node).whenTrue, (<ConditionalExpression>node).whenFalse);
+                    return updateConditionalExpression(<ConditionalExpression>node, transformer.visitNode((<ConditionalExpression>node).condition, visitor, isExpressionNode), transformer.visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpressionNode), transformer.visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpressionNode));
                 case SyntaxKind.TemplateExpression:
-                    return updateTemplateExpression(<TemplateExpression>node, (<TemplateExpression>node).head, transformer.visitNodes((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
+                    return updateTemplateExpression(<TemplateExpression>node, transformer.visitNode((<TemplateExpression>node).head, visitor, isLiteralExpression), transformer.visitNodes((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
                 case SyntaxKind.YieldExpression:
-                    return updateYieldExpression(<YieldExpression>node, (<YieldExpression>node).expression);
+                    return updateYieldExpression(<YieldExpression>node, transformer.visitNode((<YieldExpression>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.SpreadElementExpression:
-                    return updateSpreadElementExpression(<SpreadElementExpression>node, (<SpreadElementExpression>node).expression);
+                    return updateSpreadElementExpression(<SpreadElementExpression>node, transformer.visitNode((<SpreadElementExpression>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.ClassExpression:
-                    return updateClassExpression(<ClassExpression>node, transformer.visitNodes((<ClassExpression>node).decorators, visitor, isDecorator), transformer.visitNodes((<ClassExpression>node).modifiers, visitor, isModifier), (<ClassExpression>node).name, transformer.visitNodes((<ClassExpression>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ClassExpression>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<ClassExpression>node).members, visitor, isClassElement));
+                    return updateClassExpression(<ClassExpression>node, transformer.visitNodes((<ClassExpression>node).decorators, visitor, isDecorator), transformer.visitNodes((<ClassExpression>node).modifiers, visitor, isModifier), transformer.visitNode((<ClassExpression>node).name, visitor, isIdentifier), transformer.visitNodes((<ClassExpression>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ClassExpression>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<ClassExpression>node).members, visitor, isClassElement));
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, (<ExpressionWithTypeArguments>node).expression, transformer.visitNodes((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNodeNode));
+                    return updateExpressionWithTypeArguments(<ExpressionWithTypeArguments>node, transformer.visitNode((<ExpressionWithTypeArguments>node).expression, visitor, isLeftHandSideExpression), transformer.visitNodes((<ExpressionWithTypeArguments>node).typeArguments, visitor, isTypeNodeNode));
                 case SyntaxKind.AsExpression:
-                    return updateAsExpression(<AsExpression>node, (<AsExpression>node).expression, (<AsExpression>node).type);
+                    return updateAsExpression(<AsExpression>node, transformer.visitNode((<AsExpression>node).expression, visitor, isExpressionNode), transformer.visitNode((<AsExpression>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.TemplateSpan:
-                    return updateTemplateSpan(<TemplateSpan>node, (<TemplateSpan>node).expression, (<TemplateSpan>node).literal);
+                    return updateTemplateSpan(<TemplateSpan>node, transformer.visitNode((<TemplateSpan>node).expression, visitor, isExpressionNode), transformer.visitNode((<TemplateSpan>node).literal, visitor, isLiteralExpression));
                 case SyntaxKind.Block:
                     return updateBlock(<Block>node, transformer.visitNodes((<Block>node).statements, visitor, isStatementNode));
                 case SyntaxKind.VariableStatement:
-                    return updateVariableStatement(<VariableStatement>node, transformer.visitNodes((<VariableStatement>node).decorators, visitor, isDecorator), transformer.visitNodes((<VariableStatement>node).modifiers, visitor, isModifier), (<VariableStatement>node).declarationList);
+                    return updateVariableStatement(<VariableStatement>node, transformer.visitNodes((<VariableStatement>node).decorators, visitor, isDecorator), transformer.visitNodes((<VariableStatement>node).modifiers, visitor, isModifier), transformer.visitNode((<VariableStatement>node).declarationList, visitor, isVariableDeclarationList));
                 case SyntaxKind.ExpressionStatement:
-                    return updateExpressionStatement(<ExpressionStatement>node, (<ExpressionStatement>node).expression);
+                    return updateExpressionStatement(<ExpressionStatement>node, transformer.visitNode((<ExpressionStatement>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.IfStatement:
-                    return updateIfStatement(<IfStatement>node, (<IfStatement>node).expression, (<IfStatement>node).thenStatement, (<IfStatement>node).elseStatement);
+                    return updateIfStatement(<IfStatement>node, transformer.visitNode((<IfStatement>node).expression, visitor, isExpressionNode), transformer.visitStatement((<IfStatement>node).thenStatement, visitor), transformer.visitStatement((<IfStatement>node).elseStatement, visitor));
                 case SyntaxKind.DoStatement:
-                    return updateDoStatement(<DoStatement>node, (<DoStatement>node).statement, (<DoStatement>node).expression);
+                    return updateDoStatement(<DoStatement>node, transformer.visitStatement((<DoStatement>node).statement, visitor), transformer.visitNode((<DoStatement>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.WhileStatement:
-                    return updateWhileStatement(<WhileStatement>node, (<WhileStatement>node).expression, (<WhileStatement>node).statement);
+                    return updateWhileStatement(<WhileStatement>node, transformer.visitNode((<WhileStatement>node).expression, visitor, isExpressionNode), transformer.visitStatement((<WhileStatement>node).statement, visitor));
                 case SyntaxKind.ForStatement:
-                    return updateForStatement(<ForStatement>node, (<ForStatement>node).initializer, (<ForStatement>node).condition, (<ForStatement>node).incrementor, (<ForStatement>node).statement);
+                    return updateForStatement(<ForStatement>node, transformer.visitNode((<ForStatement>node).initializer, visitor, isExpressionOrVariableDeclarationList), transformer.visitNode((<ForStatement>node).condition, visitor, isExpressionNode), transformer.visitNode((<ForStatement>node).incrementor, visitor, isExpressionNode), transformer.visitStatement((<ForStatement>node).statement, visitor));
                 case SyntaxKind.ForInStatement:
-                    return updateForInStatement(<ForInStatement>node, (<ForInStatement>node).initializer, (<ForInStatement>node).expression, (<ForInStatement>node).statement);
+                    return updateForInStatement(<ForInStatement>node, transformer.visitNode((<ForInStatement>node).initializer, visitor, isExpressionOrVariableDeclarationList), transformer.visitNode((<ForInStatement>node).expression, visitor, isExpressionNode), transformer.visitStatement((<ForInStatement>node).statement, visitor));
                 case SyntaxKind.ForOfStatement:
-                    return updateForOfStatement(<ForOfStatement>node, (<ForOfStatement>node).initializer, (<ForOfStatement>node).expression, (<ForOfStatement>node).statement);
+                    return updateForOfStatement(<ForOfStatement>node, transformer.visitNode((<ForOfStatement>node).initializer, visitor, isExpressionOrVariableDeclarationList), transformer.visitNode((<ForOfStatement>node).expression, visitor, isExpressionNode), transformer.visitStatement((<ForOfStatement>node).statement, visitor));
                 case SyntaxKind.ContinueStatement:
-                    return updateContinueStatement(<ContinueStatement>node, (<ContinueStatement>node).label);
+                    return updateContinueStatement(<ContinueStatement>node, transformer.visitNode((<ContinueStatement>node).label, visitor, isIdentifier));
                 case SyntaxKind.BreakStatement:
-                    return updateBreakStatement(<BreakStatement>node, (<BreakStatement>node).label);
+                    return updateBreakStatement(<BreakStatement>node, transformer.visitNode((<BreakStatement>node).label, visitor, isIdentifier));
                 case SyntaxKind.ReturnStatement:
-                    return updateReturnStatement(<ReturnStatement>node, (<ReturnStatement>node).expression);
+                    return updateReturnStatement(<ReturnStatement>node, transformer.visitNode((<ReturnStatement>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.WithStatement:
-                    return updateWithStatement(<WithStatement>node, (<WithStatement>node).expression, (<WithStatement>node).statement);
+                    return updateWithStatement(<WithStatement>node, transformer.visitNode((<WithStatement>node).expression, visitor, isExpressionNode), transformer.visitStatement((<WithStatement>node).statement, visitor));
                 case SyntaxKind.SwitchStatement:
-                    return updateSwitchStatement(<SwitchStatement>node, (<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock);
+                    return updateSwitchStatement(<SwitchStatement>node, transformer.visitNode((<SwitchStatement>node).expression, visitor, isExpressionNode), transformer.visitNode((<SwitchStatement>node).caseBlock, visitor, isCaseBlock));
                 case SyntaxKind.LabeledStatement:
-                    return updateLabeledStatement(<LabeledStatement>node, (<LabeledStatement>node).label, (<LabeledStatement>node).statement);
+                    return updateLabeledStatement(<LabeledStatement>node, transformer.visitNode((<LabeledStatement>node).label, visitor, isIdentifier), transformer.visitStatement((<LabeledStatement>node).statement, visitor));
                 case SyntaxKind.ThrowStatement:
-                    return updateThrowStatement(<ThrowStatement>node, (<ThrowStatement>node).expression);
+                    return updateThrowStatement(<ThrowStatement>node, transformer.visitNode((<ThrowStatement>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.TryStatement:
-                    return updateTryStatement(<TryStatement>node, (<TryStatement>node).tryBlock, (<TryStatement>node).catchClause, (<TryStatement>node).finallyBlock);
+                    return updateTryStatement(<TryStatement>node, transformer.visitNode((<TryStatement>node).tryBlock, visitor, isBlock), transformer.visitNode((<TryStatement>node).catchClause, visitor, isCatchClause), transformer.visitNode((<TryStatement>node).finallyBlock, visitor, isBlock));
                 case SyntaxKind.VariableDeclaration:
-                    return updateVariableDeclaration(<VariableDeclaration>node, (<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer);
+                    return updateVariableDeclaration(<VariableDeclaration>node, transformer.visitNode((<VariableDeclaration>node).name, visitor, isBindingPatternOrIdentifier), transformer.visitNode((<VariableDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitNode((<VariableDeclaration>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.VariableDeclarationList:
                     return updateVariableDeclarationList(<VariableDeclarationList>node, transformer.visitNodes((<VariableDeclarationList>node).declarations, visitor, isVariableDeclaration));
                 case SyntaxKind.FunctionDeclaration:
-                    return updateFunctionDeclaration(<FunctionDeclaration>node, transformer.visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier), (<FunctionDeclaration>node).name, transformer.visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionDeclaration>node).parameters, visitor, isParameter), (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body);
+                    return updateFunctionDeclaration(<FunctionDeclaration>node, transformer.visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<FunctionDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<FunctionDeclaration>node).body, visitor));
                 case SyntaxKind.ClassDeclaration:
-                    return updateClassDeclaration(<ClassDeclaration>node, transformer.visitNodes((<ClassDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ClassDeclaration>node).modifiers, visitor, isModifier), (<ClassDeclaration>node).name, transformer.visitNodes((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<ClassDeclaration>node).members, visitor, isClassElement));
+                    return updateClassDeclaration(<ClassDeclaration>node, transformer.visitNodes((<ClassDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ClassDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ClassDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<ClassDeclaration>node).members, visitor, isClassElement));
                 case SyntaxKind.InterfaceDeclaration:
-                    return updateInterfaceDeclaration(<InterfaceDeclaration>node, transformer.visitNodes((<InterfaceDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<InterfaceDeclaration>node).modifiers, visitor, isModifier), (<InterfaceDeclaration>node).name, transformer.visitNodes((<InterfaceDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<InterfaceDeclaration>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<InterfaceDeclaration>node).members, visitor, isTypeElement));
+                    return updateInterfaceDeclaration(<InterfaceDeclaration>node, transformer.visitNodes((<InterfaceDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<InterfaceDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<InterfaceDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<InterfaceDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<InterfaceDeclaration>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<InterfaceDeclaration>node).members, visitor, isTypeElement));
                 case SyntaxKind.TypeAliasDeclaration:
-                    return updateTypeAliasDeclaration(<TypeAliasDeclaration>node, transformer.visitNodes((<TypeAliasDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<TypeAliasDeclaration>node).modifiers, visitor, isModifier), (<TypeAliasDeclaration>node).name, transformer.visitNodes((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameter), (<TypeAliasDeclaration>node).type);
+                    return updateTypeAliasDeclaration(<TypeAliasDeclaration>node, transformer.visitNodes((<TypeAliasDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<TypeAliasDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<TypeAliasDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNode((<TypeAliasDeclaration>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.EnumDeclaration:
-                    return updateEnumDeclaration(<EnumDeclaration>node, transformer.visitNodes((<EnumDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<EnumDeclaration>node).modifiers, visitor, isModifier), (<EnumDeclaration>node).name, transformer.visitNodes((<EnumDeclaration>node).members, visitor, isEnumMember));
+                    return updateEnumDeclaration(<EnumDeclaration>node, transformer.visitNodes((<EnumDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<EnumDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<EnumDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<EnumDeclaration>node).members, visitor, isEnumMember));
                 case SyntaxKind.ModuleDeclaration:
-                    return updateModuleDeclaration(<ModuleDeclaration>node, transformer.visitNodes((<ModuleDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ModuleDeclaration>node).modifiers, visitor, isModifier), (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body);
+                    return updateModuleDeclaration(<ModuleDeclaration>node, transformer.visitNodes((<ModuleDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ModuleDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ModuleDeclaration>node).name, visitor, isIdentifierOrLiteralExpression), transformer.visitModuleBody((<ModuleDeclaration>node).body, visitor));
                 case SyntaxKind.ModuleBlock:
                     return updateModuleBlock(<ModuleBlock>node, transformer.visitNodes((<ModuleBlock>node).statements, visitor, isStatementNode));
                 case SyntaxKind.CaseBlock:
                     return updateCaseBlock(<CaseBlock>node, transformer.visitNodes((<CaseBlock>node).clauses, visitor, isCaseOrDefaultClause));
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return updateImportEqualsDeclaration(<ImportEqualsDeclaration>node, transformer.visitNodes((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier), (<ImportEqualsDeclaration>node).name, (<ImportEqualsDeclaration>node).moduleReference);
+                    return updateImportEqualsDeclaration(<ImportEqualsDeclaration>node, transformer.visitNodes((<ImportEqualsDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ImportEqualsDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ImportEqualsDeclaration>node).name, visitor, isIdentifier), transformer.visitNode((<ImportEqualsDeclaration>node).moduleReference, visitor, isEntityNameOrExternalModuleReference));
                 case SyntaxKind.ImportDeclaration:
-                    return updateImportDeclaration(<ImportDeclaration>node, transformer.visitNodes((<ImportDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ImportDeclaration>node).modifiers, visitor, isModifier), (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier);
+                    return updateImportDeclaration(<ImportDeclaration>node, transformer.visitNodes((<ImportDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ImportDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ImportDeclaration>node).importClause, visitor, isImportClause), transformer.visitNode((<ImportDeclaration>node).moduleSpecifier, visitor, isExpressionNode));
                 case SyntaxKind.ImportClause:
-                    return updateImportClause(<ImportClause>node, (<ImportClause>node).name, (<ImportClause>node).namedBindings);
+                    return updateImportClause(<ImportClause>node, transformer.visitNode((<ImportClause>node).name, visitor, isIdentifier), transformer.visitNode((<ImportClause>node).namedBindings, visitor, isNamedImportsOrNamespaceImport));
                 case SyntaxKind.NamespaceImport:
-                    return updateNamespaceImport(<NamespaceImport>node, (<NamespaceImport>node).name);
+                    return updateNamespaceImport(<NamespaceImport>node, transformer.visitNode((<NamespaceImport>node).name, visitor, isIdentifier));
                 case SyntaxKind.NamedImports:
                     return updateNamedImports(<NamedImports>node, transformer.visitNodes((<NamedImports>node).elements, visitor, isImportSpecifier));
                 case SyntaxKind.ImportSpecifier:
-                    return updateImportSpecifier(<ImportSpecifier>node, (<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name);
+                    return updateImportSpecifier(<ImportSpecifier>node, transformer.visitNode((<ImportSpecifier>node).propertyName, visitor, isIdentifier), transformer.visitNode((<ImportSpecifier>node).name, visitor, isIdentifier));
                 case SyntaxKind.ExportAssignment:
-                    return updateExportAssignment(<ExportAssignment>node, transformer.visitNodes((<ExportAssignment>node).decorators, visitor, isDecorator), transformer.visitNodes((<ExportAssignment>node).modifiers, visitor, isModifier), (<ExportAssignment>node).expression);
+                    return updateExportAssignment(<ExportAssignment>node, transformer.visitNodes((<ExportAssignment>node).decorators, visitor, isDecorator), transformer.visitNodes((<ExportAssignment>node).modifiers, visitor, isModifier), transformer.visitNode((<ExportAssignment>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.ExportDeclaration:
-                    return updateExportDeclaration(<ExportDeclaration>node, transformer.visitNodes((<ExportDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ExportDeclaration>node).modifiers, visitor, isModifier), (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier);
+                    return updateExportDeclaration(<ExportDeclaration>node, transformer.visitNodes((<ExportDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ExportDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ExportDeclaration>node).exportClause, visitor, isNamedExports), transformer.visitNode((<ExportDeclaration>node).moduleSpecifier, visitor, isExpressionNode));
                 case SyntaxKind.NamedExports:
                     return updateNamedExports(<NamedExports>node, transformer.visitNodes((<NamedExports>node).elements, visitor, isExportSpecifier));
                 case SyntaxKind.ExportSpecifier:
-                    return updateExportSpecifier(<ExportSpecifier>node, (<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name);
+                    return updateExportSpecifier(<ExportSpecifier>node, transformer.visitNode((<ExportSpecifier>node).propertyName, visitor, isIdentifier), transformer.visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
                 case SyntaxKind.MissingDeclaration:
                     return updateMissingDeclaration(<MissingDeclaration>node, transformer.visitNodes((<MissingDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<MissingDeclaration>node).modifiers, visitor, isModifier));
                 case SyntaxKind.ExternalModuleReference:
-                    return updateExternalModuleReference(<ExternalModuleReference>node, (<ExternalModuleReference>node).expression);
+                    return updateExternalModuleReference(<ExternalModuleReference>node, transformer.visitNode((<ExternalModuleReference>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.JsxElement:
-                    return updateJsxElement(<JsxElement>node, (<JsxElement>node).openingElement, transformer.visitNodes((<JsxElement>node).children, visitor, isJsxChild), (<JsxElement>node).closingElement);
+                    return updateJsxElement(<JsxElement>node, transformer.visitNode((<JsxElement>node).openingElement, visitor, isJsxOpeningElement), transformer.visitNodes((<JsxElement>node).children, visitor, isJsxChild), transformer.visitNode((<JsxElement>node).closingElement, visitor, isJsxClosingElement));
                 case SyntaxKind.JsxSelfClosingElement:
-                    return updateJsxSelfClosingElement(<JsxSelfClosingElement>node, (<JsxSelfClosingElement>node).tagName, transformer.visitNodes((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributeOrJsxSpreadAttribute));
+                    return updateJsxSelfClosingElement(<JsxSelfClosingElement>node, transformer.visitNode((<JsxSelfClosingElement>node).tagName, visitor, isEntityName), transformer.visitNodes((<JsxSelfClosingElement>node).attributes, visitor, isJsxAttributeOrJsxSpreadAttribute));
                 case SyntaxKind.JsxOpeningElement:
-                    return updateJsxOpeningElement(<JsxOpeningElement>node, (<JsxOpeningElement>node).tagName, transformer.visitNodes((<JsxOpeningElement>node).attributes, visitor, isJsxAttributeOrJsxSpreadAttribute));
+                    return updateJsxOpeningElement(<JsxOpeningElement>node, transformer.visitNode((<JsxOpeningElement>node).tagName, visitor, isEntityName), transformer.visitNodes((<JsxOpeningElement>node).attributes, visitor, isJsxAttributeOrJsxSpreadAttribute));
                 case SyntaxKind.JsxClosingElement:
-                    return updateJsxClosingElement(<JsxClosingElement>node, (<JsxClosingElement>node).tagName);
+                    return updateJsxClosingElement(<JsxClosingElement>node, transformer.visitNode((<JsxClosingElement>node).tagName, visitor, isEntityName));
                 case SyntaxKind.JsxAttribute:
-                    return updateJsxAttribute(<JsxAttribute>node, (<JsxAttribute>node).name, (<JsxAttribute>node).initializer);
+                    return updateJsxAttribute(<JsxAttribute>node, transformer.visitNode((<JsxAttribute>node).name, visitor, isIdentifier), transformer.visitNode((<JsxAttribute>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.JsxSpreadAttribute:
-                    return updateJsxSpreadAttribute(<JsxSpreadAttribute>node, (<JsxSpreadAttribute>node).expression);
+                    return updateJsxSpreadAttribute(<JsxSpreadAttribute>node, transformer.visitNode((<JsxSpreadAttribute>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.JsxExpression:
-                    return updateJsxExpression(<JsxExpression>node, (<JsxExpression>node).expression);
+                    return updateJsxExpression(<JsxExpression>node, transformer.visitNode((<JsxExpression>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.CaseClause:
-                    return updateCaseClause(<CaseClause>node, (<CaseClause>node).expression, transformer.visitNodes((<CaseClause>node).statements, visitor, isStatementNode));
+                    return updateCaseClause(<CaseClause>node, transformer.visitNode((<CaseClause>node).expression, visitor, isExpressionNode), transformer.visitNodes((<CaseClause>node).statements, visitor, isStatementNode));
                 case SyntaxKind.DefaultClause:
                     return updateDefaultClause(<DefaultClause>node, transformer.visitNodes((<DefaultClause>node).statements, visitor, isStatementNode));
                 case SyntaxKind.HeritageClause:
                     return updateHeritageClause(<HeritageClause>node, transformer.visitNodes((<HeritageClause>node).types, visitor, isExpressionWithTypeArguments));
                 case SyntaxKind.CatchClause:
-                    return updateCatchClause(<CatchClause>node, (<CatchClause>node).variableDeclaration, (<CatchClause>node).block);
+                    return updateCatchClause(<CatchClause>node, transformer.visitNode((<CatchClause>node).variableDeclaration, visitor, isVariableDeclaration), transformer.visitNode((<CatchClause>node).block, visitor, isBlock));
                 case SyntaxKind.PropertyAssignment:
-                    return updatePropertyAssignment(<PropertyAssignment>node, (<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer);
+                    return updatePropertyAssignment(<PropertyAssignment>node, transformer.visitNode((<PropertyAssignment>node).name, visitor, isPropertyName), transformer.visitNode((<PropertyAssignment>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, (<ShorthandPropertyAssignment>node).name, (<ShorthandPropertyAssignment>node).equalsToken, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
+                    return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, transformer.visitNode((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier), (<ShorthandPropertyAssignment>node).equalsToken, transformer.visitNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpressionNode));
                 case SyntaxKind.EnumMember:
-                    return updateEnumMember(<EnumMember>node, (<EnumMember>node).name, (<EnumMember>node).initializer);
+                    return updateEnumMember(<EnumMember>node, transformer.visitNode((<EnumMember>node).name, visitor, isDeclarationNameNode), transformer.visitNode((<EnumMember>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.SourceFile:
                     return updateSourceFileNode(<SourceFile>node, transformer.visitNodes((<SourceFile>node).statements, visitor, isStatementNode), (<SourceFile>node).endOfFileToken);
                 case SyntaxKind.JSDocTypeExpression:
-                    return updateJSDocTypeExpression(<JSDocTypeExpression>node, (<JSDocTypeExpression>node).type);
+                    return updateJSDocTypeExpression(<JSDocTypeExpression>node, transformer.visitNode((<JSDocTypeExpression>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocArrayType:
-                    return updateJSDocArrayType(<JSDocArrayType>node, (<JSDocArrayType>node).elementType);
+                    return updateJSDocArrayType(<JSDocArrayType>node, transformer.visitNode((<JSDocArrayType>node).elementType, visitor, isJSDocType));
                 case SyntaxKind.JSDocUnionType:
                     return updateJSDocUnionType(<JSDocUnionType>node, transformer.visitNodes((<JSDocUnionType>node).types, visitor, isJSDocType));
                 case SyntaxKind.JSDocTupleType:
                     return updateJSDocTupleType(<JSDocTupleType>node, transformer.visitNodes((<JSDocTupleType>node).types, visitor, isJSDocType));
                 case SyntaxKind.JSDocNullableType:
-                    return updateJSDocNullableType(<JSDocNullableType>node, (<JSDocNullableType>node).type);
+                    return updateJSDocNullableType(<JSDocNullableType>node, transformer.visitNode((<JSDocNullableType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocNonNullableType:
-                    return updateJSDocNonNullableType(<JSDocNonNullableType>node, (<JSDocNonNullableType>node).type);
+                    return updateJSDocNonNullableType(<JSDocNonNullableType>node, transformer.visitNode((<JSDocNonNullableType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocRecordType:
                     return updateJSDocRecordType(<JSDocRecordType>node, transformer.visitNodes((<JSDocRecordType>node).members, visitor, isJSDocRecordMember));
                 case SyntaxKind.JSDocRecordMember:
-                    return updateJSDocRecordMember(<JSDocRecordMember>node, (<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type);
+                    return updateJSDocRecordMember(<JSDocRecordMember>node, transformer.visitNode((<JSDocRecordMember>node).name, visitor, isIdentifierOrLiteralExpression), transformer.visitNode((<JSDocRecordMember>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocTypeReference:
-                    return updateJSDocTypeReference(<JSDocTypeReference>node, (<JSDocTypeReference>node).name, transformer.visitNodes((<JSDocTypeReference>node).typeArguments, visitor, isJSDocType));
+                    return updateJSDocTypeReference(<JSDocTypeReference>node, transformer.visitNode((<JSDocTypeReference>node).name, visitor, isEntityName), transformer.visitNodes((<JSDocTypeReference>node).typeArguments, visitor, isJSDocType));
                 case SyntaxKind.JSDocOptionalType:
-                    return updateJSDocOptionalType(<JSDocOptionalType>node, (<JSDocOptionalType>node).type);
+                    return updateJSDocOptionalType(<JSDocOptionalType>node, transformer.visitNode((<JSDocOptionalType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocFunctionType:
-                    return updateJSDocFunctionType(<JSDocFunctionType>node, transformer.visitNodes((<JSDocFunctionType>node).parameters, visitor, isParameter), (<JSDocFunctionType>node).type);
+                    return updateJSDocFunctionType(<JSDocFunctionType>node, transformer.visitNodes((<JSDocFunctionType>node).parameters, visitor, isParameter), transformer.visitNode((<JSDocFunctionType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocVariadicType:
-                    return updateJSDocVariadicType(<JSDocVariadicType>node, (<JSDocVariadicType>node).type);
+                    return updateJSDocVariadicType(<JSDocVariadicType>node, transformer.visitNode((<JSDocVariadicType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocConstructorType:
-                    return updateJSDocConstructorType(<JSDocConstructorType>node, (<JSDocConstructorType>node).type);
+                    return updateJSDocConstructorType(<JSDocConstructorType>node, transformer.visitNode((<JSDocConstructorType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocThisType:
-                    return updateJSDocThisType(<JSDocThisType>node, (<JSDocThisType>node).type);
+                    return updateJSDocThisType(<JSDocThisType>node, transformer.visitNode((<JSDocThisType>node).type, visitor, isJSDocType));
                 case SyntaxKind.JSDocComment:
                     return updateJSDocComment(<JSDocComment>node, transformer.visitNodes((<JSDocComment>node).tags, visitor, isJSDocTag));
                 case SyntaxKind.JSDocTag:
-                    return updateJSDocTag(<JSDocTag>node, (<JSDocTag>node).tagName);
+                    return updateJSDocTag(<JSDocTag>node, transformer.visitNode((<JSDocTag>node).tagName, visitor, isIdentifier));
                 case SyntaxKind.JSDocParameterTag:
-                    return updateJSDocParameterTag(<JSDocParameterTag>node, (<JSDocParameterTag>node).preParameterName, (<JSDocParameterTag>node).typeExpression, (<JSDocParameterTag>node).postParameterName, (<JSDocParameterTag>node).tagName);
+                    return updateJSDocParameterTag(<JSDocParameterTag>node, transformer.visitNode((<JSDocParameterTag>node).preParameterName, visitor, isIdentifier), transformer.visitNode((<JSDocParameterTag>node).typeExpression, visitor, isJSDocTypeExpression), transformer.visitNode((<JSDocParameterTag>node).postParameterName, visitor, isIdentifier), transformer.visitNode((<JSDocParameterTag>node).tagName, visitor, isIdentifier));
                 case SyntaxKind.JSDocReturnTag:
-                    return updateJSDocReturnTag(<JSDocReturnTag>node, (<JSDocReturnTag>node).typeExpression, (<JSDocReturnTag>node).tagName);
+                    return updateJSDocReturnTag(<JSDocReturnTag>node, transformer.visitNode((<JSDocReturnTag>node).typeExpression, visitor, isJSDocTypeExpression), transformer.visitNode((<JSDocReturnTag>node).tagName, visitor, isIdentifier));
                 case SyntaxKind.JSDocTypeTag:
-                    return updateJSDocTypeTag(<JSDocTypeTag>node, (<JSDocTypeTag>node).typeExpression, (<JSDocTypeTag>node).tagName);
+                    return updateJSDocTypeTag(<JSDocTypeTag>node, transformer.visitNode((<JSDocTypeTag>node).typeExpression, visitor, isJSDocTypeExpression), transformer.visitNode((<JSDocTypeTag>node).tagName, visitor, isIdentifier));
                 case SyntaxKind.JSDocTemplateTag:
-                    return updateJSDocTemplateTag(<JSDocTemplateTag>node, transformer.visitNodes((<JSDocTemplateTag>node).typeParameters, visitor, isTypeParameter), (<JSDocTemplateTag>node).tagName);
+                    return updateJSDocTemplateTag(<JSDocTemplateTag>node, transformer.visitNodes((<JSDocTemplateTag>node).typeParameters, visitor, isTypeParameter), transformer.visitNode((<JSDocTemplateTag>node).tagName, visitor, isIdentifier));
             }
         }
         return node;

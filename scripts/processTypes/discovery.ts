@@ -129,26 +129,26 @@ export function discover(): DiscoveryResult {
                 let propertyName = property.name;
                 let parameterName = property.name === "arguments" ? "_arguments" : property.name;
                 let parameterType: TypeInfo;
-                let nodeType: TypeInfo;
+                let elementType: TypeInfo;
                 if (isModifiersArray) {
-                    nodeType = modifierType;
-                    parameterType = makeArrayType(nodeType);
+                    elementType = modifierType;
+                    parameterType = makeArrayType(elementType);
                 }
                 else if (isNodeArray) {
-                    nodeType = property.propertyType.getGenericTypeArguments()[0];
-                    parameterType = makeArrayType(nodeType);
+                    elementType = property.propertyType.getGenericTypeArguments()[0];
+                    parameterType = makeArrayType(elementType);
                 }
                 else if (isNode) {
-                    nodeType = property.propertyType;
-                    parameterType = nodeType;
+                    elementType = property.propertyType;
+                    parameterType = elementType;
                 }
                 else {
                     parameterType = property.propertyType;
                 }
 
-                if (nodeType) {
-                    typesReferencedByProperties[nodeType.id] = true;
-                    discoverType(nodeType);
+                if (elementType) {
+                    typesReferencedByProperties[elementType.id] = true;
+                    discoverType(elementType);
                 }
 
                 let parameterTypeName = parameterType.toString();
@@ -175,7 +175,7 @@ export function discover(): DiscoveryResult {
                                 testFunctionName = "isModifier";
                             }
                             else if (isNodeArray || isNode) {
-                                testFunctionName = getIsAnyNodeFunctionName(nodeType);
+                                testFunctionName = getIsAnyNodeFunctionName(elementType);
                             }
                             break;
                     }
