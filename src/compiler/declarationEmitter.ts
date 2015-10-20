@@ -295,7 +295,8 @@ namespace ts {
                 }
                 if (fileName.match(/^('|")/)) {
                     write(`import * as ${name} from ${fileName};`);
-                } else {
+                }
+                else {
                     write(`import * as ${name} from "${fileName}";`);
                 }
                 writeLine();
