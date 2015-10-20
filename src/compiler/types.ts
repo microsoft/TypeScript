@@ -64,6 +64,7 @@ namespace ts {
         PlusToken,
         MinusToken,
         AsteriskToken,
+        AsteriskAsteriskToken,
         SlashToken,
         PercentToken,
         PlusPlusToken,
@@ -86,6 +87,7 @@ namespace ts {
         PlusEqualsToken,
         MinusEqualsToken,
         AsteriskEqualsToken,
+        AsteriskAsteriskEqualsToken,
         SlashEqualsToken,
         PercentEqualsToken,
         LessThanLessThanEqualsToken,
@@ -711,12 +713,16 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
-    export interface PrefixUnaryExpression extends UnaryExpression {
+    export interface IncrementExpression extends UnaryExpression {
+        _incrementExpressionBrand: any;
+    }
+
+    export interface PrefixUnaryExpression extends IncrementExpression {
         operator: SyntaxKind;
         operand: UnaryExpression;
     }
 
-    export interface PostfixUnaryExpression extends PostfixExpression {
+    export interface PostfixUnaryExpression extends IncrementExpression {
         operand: LeftHandSideExpression;
         operator: SyntaxKind;
     }
@@ -725,7 +731,7 @@ namespace ts {
         _postfixExpressionBrand: any;
     }
 
-    export interface LeftHandSideExpression extends PostfixExpression {
+    export interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
     }
 
@@ -1299,7 +1305,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost extends ModuleResolutionHost {
+    export interface ParseConfigHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -2092,7 +2098,6 @@ namespace ts {
         watch?: boolean;
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
-        experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
         optimizationEntrypoint?: string;
@@ -2111,6 +2116,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES6 = 5,
+        ES2015 = ES6,
     }
 
     export const enum JsxEmit {
@@ -2136,12 +2142,13 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES2015 = ES6,
         Latest = ES6,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX
+        JSX,
     }
 
     export interface ParsedCommandLine {

@@ -783,10 +783,6 @@
         "category": "Error",
         "code": 1245
     },
-    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
-        "category": "Error",
-        "code": 1246
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1624,10 +1620,6 @@
         "category": "Error",
         "code":2517
     },
-    "Only an ambient class can be merged with an interface.": {
-        "category": "Error",
-        "code": 2518
-    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
@@ -2281,10 +2273,6 @@
         "category": "Message",
         "code": 6066
     },
-    "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower.": {
-        "category": "Message",
-        "code": 6067
-    },
     "Enables experimental support for ES7 async functions.": {
         "category": "Message",
         "code": 6068
@@ -2488,5 +2476,13 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17006
+    },
+    "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17007
     }
 }
