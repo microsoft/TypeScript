@@ -1608,12 +1608,14 @@ namespace ts {
     /* @internal */
     export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, declarationFilePath, sourceFile);
-        if (!emitDeclarationResult.reportedDeclarationError && !host.isDeclarationEmitBlocked(declarationFilePath, sourceFile)) {
+        let emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isDeclarationEmitBlocked(declarationFilePath, sourceFile);
+        if (!emitSkipped) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             let compilerOptions = host.getCompilerOptions();
             writeFile(host, diagnostics, declarationFilePath, declarationOutput, compilerOptions.emitBOM);
         }
+        return emitSkipped;
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
             let appliedSyncOutputPos = 0;

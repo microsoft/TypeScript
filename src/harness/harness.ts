@@ -1121,7 +1121,7 @@ namespace Harness {
 
                 let emitResult = program.emit();
 
-                let errors = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+                let errors = ts.getPreEmitDiagnostics(program);
                 this.lastErrors = errors;
 
                 let result = new CompilerResult(fileOutputs, errors, program, Harness.IO.getCurrentDirectory(), emitResult.sourceMaps);
@@ -1666,7 +1666,7 @@ namespace Harness {
             let encoded_actual =  Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
-                let errMsg = "The baseline file " + relativeFileName + " has changed.\nExpected:\n" + expected + "\nActual:\n" + encoded_actual;
+                let errMsg = "The baseline file " + relativeFileName + " has changed.";
                 throw new Error(errMsg);
             }
         }
