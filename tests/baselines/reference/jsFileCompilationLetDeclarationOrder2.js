@@ -13,8 +13,3 @@ var b = 30;
 a = 10;
 var a = 10;
 b = 30;
-
-
-//// [out.d.ts]
-declare let b: number;
-declare let a: number;

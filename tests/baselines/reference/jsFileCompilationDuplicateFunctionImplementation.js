@@ -18,6 +18,3 @@ function foo() {
 function foo() {
     return 30;
 }
-
-
-//// [out.d.ts]

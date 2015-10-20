@@ -25,5 +25,3 @@ define(["require", "exports", "server"], function (require, exports, server_1) {
 //// [server.d.ts]
 declare var a: number;
 export default a;
-//// [client.d.ts]
-export declare var x: number;

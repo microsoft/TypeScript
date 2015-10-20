@@ -22,5 +22,3 @@ define(["require", "exports", "server"], function (require, exports, nameSpaceBi
 
 //// [server.d.ts]
 export declare var a: number;
-//// [client.d.ts]
-export declare var x: number;
