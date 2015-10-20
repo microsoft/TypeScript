@@ -383,20 +383,72 @@ namespace ts {
             // return undefined if we can't find a symbol.
         }
 
-        /** Returns true if node1 is defined before node 2**/
-        function isDefinedBefore(node1: Node, node2: Node): boolean {
-            let file1 = getSourceFileOfNode(node1);
-            let file2 = getSourceFileOfNode(node2);
-            if (file1 === file2) {
-                return node1.pos <= node2.pos;
+        function isBlockScopedNameDeclaredBeforeUse(declaration: Declaration, usage: Node): boolean {
+            const declarationFile = getSourceFileOfNode(declaration);
+            const useFile = getSourceFileOfNode(usage);
+            if (declarationFile !== useFile) {
+                if (modulekind || (!compilerOptions.outFile && !compilerOptions.out)) {
+                    // nodes are in different files and order cannot be determines
+                    return true;
+                }
+
+                const sourceFiles = host.getSourceFiles();
+                return indexOf(sourceFiles, declarationFile) <= indexOf(sourceFiles, useFile);
             }
 
-            if (!compilerOptions.outFile && !compilerOptions.out) {
-                return true;
+            if (declaration.pos <= usage.pos) {
+                // declaration is before usage
+                // still might be illegal if usage is in the initializer of the variable declaration
+                return declaration.kind !== SyntaxKind.VariableDeclaration ||
+                    !isImmediatelyUsedInInitializerOfBlockScopedVariable(<VariableDeclaration>declaration, usage);
             }
 
-            let sourceFiles = host.getSourceFiles();
-            return sourceFiles.indexOf(file1) <= sourceFiles.indexOf(file2);
+            // declaration is after usage
+            // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
+            return isUsedInFunctionOrNonStaticProperty(declaration, usage);
+
+            function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
+                const container = getEnclosingBlockScopeContainer(declaration);
+
+                if (declaration.parent.parent.kind === SyntaxKind.VariableStatement ||
+                    declaration.parent.parent.kind === SyntaxKind.ForStatement) {
+                    // variable statement/for statement case,
+                    // use site should not be inside variable declaration (initializer of declaration or binding element)
+                    return isSameScopeDescendentOf(usage, declaration, container);
+                }
+                else if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
+                    declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
+                    // ForIn/ForOf case - use site should not be used in expression part
+                    let expression = (<ForInStatement | ForOfStatement>declaration.parent.parent).expression;
+                    return isSameScopeDescendentOf(usage, expression, container);
+                }
+            }
+
+            function isUsedInFunctionOrNonStaticProperty(declaration: Declaration, usage: Node): boolean {
+                const container = getEnclosingBlockScopeContainer(declaration);
+                let current = usage;
+                while (current) {
+                    if (current === container) {
+                        return false;
+                    }
+
+                    if (isFunctionLike(current)) {
+                        return true;
+                    }
+
+                    const initializerOfNonStaticProperty = current.parent &&
+                        current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                        (current.parent.flags & NodeFlags.Static) === 0 &&
+                        (<PropertyDeclaration>current.parent).initializer === current;
+
+                    if (initializerOfNonStaticProperty) {
+                        return true;
+                    }
+
+                    current = current.parent;
+                }
+                return false;
+            }
         }
 
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
@@ -610,8 +662,11 @@ namespace ts {
                 // block - scope variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block- scoped
-                if (meaning & SymbolFlags.BlockScopedVariable && result.flags & SymbolFlags.BlockScopedVariable) {
-                    checkResolvedBlockScopedVariable(result, errorLocation);
+                if (meaning & SymbolFlags.BlockScopedVariable) {
+                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
+                    if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable) {
+                        checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
+                    }
                 }
             }
             return result;
@@ -624,34 +679,7 @@ namespace ts {
 
             Debug.assert(declaration !== undefined, "Block-scoped variable declaration is undefined");
 
-            // first check if usage is lexically located after the declaration
-            let isUsedBeforeDeclaration = !isDefinedBefore(declaration, errorLocation);
-            if (!isUsedBeforeDeclaration) {
-                // lexical check succeeded however code still can be illegal.
-                // - block scoped variables cannot be used in its initializers
-                //   let x = x; // illegal but usage is lexically after definition
-                // - in ForIn/ForOf statements variable cannot be contained in expression part
-                //   for (let x in x)
-                //   for (let x of x)
-
-                // climb up to the variable declaration skipping binding patterns
-                let variableDeclaration = <VariableDeclaration>getAncestor(declaration, SyntaxKind.VariableDeclaration);
-                let container = getEnclosingBlockScopeContainer(variableDeclaration);
-
-                if (variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement) {
-                    // variable statement/for statement case,
-                    // use site should not be inside variable declaration (initializer of declaration or binding element)
-                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, variableDeclaration, container);
-                }
-                else if (variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                    // ForIn/ForOf case - use site should not be used in expression part
-                    let expression = (<ForInStatement | ForOfStatement>variableDeclaration.parent.parent).expression;
-                    isUsedBeforeDeclaration = isSameScopeDescendentOf(errorLocation, expression, container);
-                }
-            }
-            if (isUsedBeforeDeclaration) {
+            if (!isBlockScopedNameDeclaredBeforeUse(<Declaration>getAncestor(declaration, SyntaxKind.VariableDeclaration), errorLocation)) {
                 error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
             }
         }
@@ -3686,7 +3714,9 @@ namespace ts {
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             let links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
-                let classType = declaration.kind === SyntaxKind.Constructor ? getDeclaredTypeOfClassOrInterface((<ClassDeclaration>declaration.parent).symbol) : undefined;
+                let classType = declaration.kind === SyntaxKind.Constructor ?
+                    getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
+                    : undefined;
                 let typeParameters = classType ? classType.localTypeParameters :
                     declaration.typeParameters ? getTypeParametersFromDeclaration(declaration.typeParameters) : undefined;
                 let parameters: Symbol[] = [];
@@ -4867,7 +4897,7 @@ namespace ts {
                     if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                         // Report structural errors only if we haven't reported any errors yet
                         let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                        if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
+                        if (result = objectTypeRelatedTo(apparentType, source, target, reportStructuralErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -4889,7 +4919,7 @@ namespace ts {
                             return result;
                         }
                     }
-                    return objectTypeRelatedTo(<ObjectType>source, <ObjectType>target, /*reportErrors*/ false);
+                    return objectTypeRelatedTo(source, source, target, /*reportErrors*/ false);
                 }
                 if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
                     return typeParameterIdenticalTo(<TypeParameter>source, <TypeParameter>target);
@@ -5043,11 +5073,11 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(apparentSource: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
-                let id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
+                let id = relation !== identityRelation || apparentSource.id < target.id ? apparentSource.id + "," + target.id : target.id + "," + apparentSource.id;
                 let related = relation[id];
                 if (related !== undefined) {
                     // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
@@ -5074,28 +5104,28 @@ namespace ts {
                     maybeStack = [];
                     expandingFlags = 0;
                 }
-                sourceStack[depth] = source;
+                sourceStack[depth] = apparentSource;
                 targetStack[depth] = target;
                 maybeStack[depth] = {};
                 maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 let saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
+                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(apparentSource, sourceStack, depth)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
                 let result: Ternary;
                 if (expandingFlags === 3) {
                     result = Ternary.Maybe;
                 }
                 else {
-                    result = propertiesRelatedTo(source, target, reportErrors);
+                    result = propertiesRelatedTo(apparentSource, target, reportErrors);
                     if (result) {
-                        result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
+                        result &= signaturesRelatedTo(apparentSource, target, SignatureKind.Call, reportErrors);
                         if (result) {
-                            result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
+                            result &= signaturesRelatedTo(apparentSource, target, SignatureKind.Construct, reportErrors);
                             if (result) {
-                                result &= stringIndexTypesRelatedTo(source, target, reportErrors);
+                                result &= stringIndexTypesRelatedTo(apparentSource, originalSource, target, reportErrors);
                                 if (result) {
-                                    result &= numberIndexTypesRelatedTo(source, target, reportErrors);
+                                    result &= numberIndexTypesRelatedTo(apparentSource, originalSource, target, reportErrors);
                                 }
                             }
                         }
@@ -5426,12 +5456,17 @@ namespace ts {
                 return result;
             }
 
-            function stringIndexTypesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function stringIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.String);
-                if (targetType && !(targetType.flags & TypeFlags.Any)) {
+                if (targetType) {
+                    if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
+                        // non-primitive assignment to any is always allowed, eg 
+                        //   `var x: { [index: string]: any } = { property: 12 };`
+                        return Ternary.True;
+                    }
                     let sourceType = getIndexTypeOfType(source, IndexKind.String);
                     if (!sourceType) {
                         if (reportErrors) {
@@ -5451,12 +5486,17 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function numberIndexTypesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function numberIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
-                if (targetType && !(targetType.flags & TypeFlags.Any)) {
+                if (targetType) {
+                    if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
+                        // non-primitive assignment to any is always allowed, eg 
+                        //   `var x: { [index: number]: any } = { property: 12 };`
+                        return Ternary.True;
+                    }
                     let sourceStringType = getIndexTypeOfType(source, IndexKind.String);
                     let sourceNumberType = getIndexTypeOfType(source, IndexKind.Number);
                     if (!(sourceStringType || sourceNumberType)) {
@@ -7981,6 +8021,11 @@ namespace ts {
                 return true;
             }
             // An instance property must be accessed through an instance of the enclosing class
+            if (type.flags & TypeFlags.ThisType) {
+                // get the original type -- represented as the type constraint of the 'this' type
+                type = getConstraintOfTypeParameter(<TypeParameter>type);
+            }
+
             // TODO: why is the first part of this check here?
             if (!(getTargetType(type).flags & (TypeFlags.Class | TypeFlags.Interface) && hasBaseType(<InterfaceType>type, enclosingClass))) {
                 error(node, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1, symbolToString(prop), typeToString(enclosingClass));
@@ -8613,39 +8658,36 @@ namespace ts {
           */
         function getEffectiveDecoratorFirstArgumentType(node: Node): Type {
             // The first argument to a decorator is its `target`.
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // For a class decorator, the `target` is the type of the class (e.g. the
-                    // "static" or "constructor" side of the class)
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                // For a class decorator, the `target` is the type of the class (e.g. the
+                // "static" or "constructor" side of the class)
+                let classSymbol = getSymbolOfNode(node);
+                return getTypeOfSymbol(classSymbol);
+            }
+
+            if (node.kind === SyntaxKind.Parameter) {
+                // For a parameter decorator, the `target` is the parent type of the
+                // parameter's containing method.
+                node = node.parent;
+                if (node.kind === SyntaxKind.Constructor) {
                     let classSymbol = getSymbolOfNode(node);
                     return getTypeOfSymbol(classSymbol);
-
-                case SyntaxKind.Parameter:
-                    // For a parameter decorator, the `target` is the parent type of the
-                    // parameter's containing method.
-                    node = node.parent;
-                    if (node.kind === SyntaxKind.Constructor) {
-                        let classSymbol = getSymbolOfNode(node);
-                        return getTypeOfSymbol(classSymbol);
-                    }
-
-                // fall-through
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // For a property or method decorator, the `target` is the
-                    // "static"-side type of the parent of the member if the member is
-                    // declared "static"; otherwise, it is the "instance"-side type of the
-                    // parent of the member.
-                    return getParentTypeOfClassElement(<ClassElement>node);
-
-                default:
-                    Debug.fail("Unsupported decorator target.");
-                    return unknownType;
+                }
             }
+
+            if (node.kind === SyntaxKind.PropertyDeclaration ||
+                node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // For a property or method decorator, the `target` is the
+                // "static"-side type of the parent of the member if the member is
+                // declared "static"; otherwise, it is the "instance"-side type of the
+                // parent of the member.
+                return getParentTypeOfClassElement(<ClassElement>node);
+            }
+
+            Debug.fail("Unsupported decorator target.");
+            return unknownType;
         }
 
         /**
@@ -8665,57 +8707,54 @@ namespace ts {
           */
         function getEffectiveDecoratorSecondArgumentType(node: Node) {
             // The second argument to a decorator is its `propertyKey`
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    Debug.fail("Class decorators should not have a second synthetic argument.");
-                    return unknownType;
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                Debug.fail("Class decorators should not have a second synthetic argument.");
+                return unknownType;
+            }
 
-                case SyntaxKind.Parameter:
-                    node = node.parent;
-                    if (node.kind === SyntaxKind.Constructor) {
-                        // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
-                        return anyType;
-                    }
+            if (node.kind === SyntaxKind.Parameter) {
+                node = node.parent;
+                if (node.kind === SyntaxKind.Constructor) {
+                    // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
+                    return anyType;
+                }
 
                 // For a non-constructor parameter decorator, the `propertyKey` will be either
                 // a string or a symbol, based on the name of the parameter's containing method.
-
-                // fall-through
-
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // The `propertyKey` for a property or method decorator will be a
-                    // string literal type if the member name is an identifier, number, or string;
-                    // otherwise, if the member name is a computed property name it will
-                    // be either string or symbol.
-                    let element = <ClassElement>node;
-                    switch (element.name.kind) {
-                        case SyntaxKind.Identifier:
-                        case SyntaxKind.NumericLiteral:
-                        case SyntaxKind.StringLiteral:
-                            return getStringLiteralType(<StringLiteral>element.name);
-
-                        case SyntaxKind.ComputedPropertyName:
-                            let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
-                            if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
-                                return nameType;
-                            }
-                            else {
-                                return stringType;
-                            }
-
-                        default:
-                            Debug.fail("Unsupported property name.");
-                            return unknownType;
-                    }
-
-
-                default:
-                    Debug.fail("Unsupported decorator target.");
-                    return unknownType;
             }
+
+            if (node.kind === SyntaxKind.PropertyDeclaration ||
+                node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // The `propertyKey` for a property or method decorator will be a
+                // string literal type if the member name is an identifier, number, or string;
+                // otherwise, if the member name is a computed property name it will
+                // be either string or symbol.
+                let element = <ClassElement>node;
+                switch (element.name.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.NumericLiteral:
+                    case SyntaxKind.StringLiteral:
+                        return getStringLiteralType(<StringLiteral>element.name);
+
+                    case SyntaxKind.ComputedPropertyName:
+                        let nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
+                        if (allConstituentTypesHaveKind(nameType, TypeFlags.ESSymbol)) {
+                            return nameType;
+                        }
+                        else {
+                            return stringType;
+                        }
+
+                    default:
+                        Debug.fail("Unsupported property name.");
+                        return unknownType;
+                }
+            }
+
+            Debug.fail("Unsupported decorator target.");
+            return unknownType;
         }
 
         /**
@@ -8728,31 +8767,32 @@ namespace ts {
         function getEffectiveDecoratorThirdArgumentType(node: Node) {
             // The third argument to a decorator is either its `descriptor` for a method decorator
             // or its `parameterIndex` for a paramter decorator
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    Debug.fail("Class decorators should not have a third synthetic argument.");
-                    return unknownType;
-
-                case SyntaxKind.Parameter:
-                    // The `parameterIndex` for a parameter decorator is always a number
-                    return numberType;
-
-                case SyntaxKind.PropertyDeclaration:
-                    Debug.fail("Property decorators should not have a third synthetic argument.");
-                    return unknownType;
-
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
-                    // for the type of the member.
-                    let propertyType = getTypeOfNode(node);
-                    return createTypedPropertyDescriptorType(propertyType);
-
-                default:
-                    Debug.fail("Unsupported decorator target.");
-                    return unknownType;
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                Debug.fail("Class decorators should not have a third synthetic argument.");
+                return unknownType;
             }
+
+            if (node.kind === SyntaxKind.Parameter) {
+                // The `parameterIndex` for a parameter decorator is always a number
+                return numberType;
+            }
+
+            if (node.kind === SyntaxKind.PropertyDeclaration) {
+                Debug.fail("Property decorators should not have a third synthetic argument.");
+                return unknownType;
+            }
+
+            if (node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
+                // for the type of the member.
+                let propertyType = getTypeOfNode(node);
+                return createTypedPropertyDescriptorType(propertyType);
+            }
+
+            Debug.fail("Unsupported decorator target.");
+            return unknownType;
         }
 
         /**
@@ -10066,7 +10106,9 @@ namespace ts {
             let rightType = checkExpression(right, contextualMapper);
             switch (operator) {
                 case SyntaxKind.AsteriskToken:
+                case SyntaxKind.AsteriskAsteriskToken:
                 case SyntaxKind.AsteriskEqualsToken:
+                case SyntaxKind.AsteriskAsteriskEqualsToken:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                 case SyntaxKind.PercentToken:
@@ -10085,7 +10127,7 @@ namespace ts {
                 case SyntaxKind.CaretEqualsToken:
                 case SyntaxKind.AmpersandToken:
                 case SyntaxKind.AmpersandEqualsToken:
-                    // TypeScript 1.0 spec (April 2014): 4.15.1
+                    // TypeScript 1.0 spec (April 2014): 4.19.1
                     // These operators require their operands to be of type Any, the Number primitive type,
                     // or an enum type. Operands of an enum type are treated
                     // as having the primitive type Number. If one operand is the null or undefined value,
@@ -10114,7 +10156,7 @@ namespace ts {
                     return numberType;
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
-                    // TypeScript 1.0 spec (April 2014): 4.15.2
+                    // TypeScript 1.0 spec (April 2014): 4.19.2
                     // The binary + operator requires both operands to be of the Number primitive type or an enum type,
                     // or at least one of the operands to be of type Any or the String primitive type.
 
@@ -11016,7 +11058,13 @@ namespace ts {
 
         function getEffectiveDeclarationFlags(n: Node, flagsToCheck: NodeFlags): NodeFlags {
             let flags = getCombinedNodeFlags(n);
-            if (n.parent.kind !== SyntaxKind.InterfaceDeclaration && isInAmbientContext(n)) {
+
+            // children of classes (even ambient classes) should not be marked as ambient or export
+            // because those flags have no useful semantics there.
+            if (n.parent.kind !== SyntaxKind.InterfaceDeclaration &&
+                n.parent.kind !== SyntaxKind.ClassDeclaration &&
+                n.parent.kind !== SyntaxKind.ClassExpression &&
+                isInAmbientContext(n)) {
                 if (!(flags & NodeFlags.Ambient)) {
                     // It is nested in an ambient context, which means it is automatically exported
                     flags |= NodeFlags.Export;
@@ -11756,10 +11804,6 @@ namespace ts {
             checkSignatureDeclaration(node);
             let isAsync = isAsyncFunctionLike(node);
             if (isAsync) {
-                if (!compilerOptions.experimentalAsyncFunctions) {
-                    error(node, Diagnostics.Experimental_support_for_async_functions_is_a_feature_that_is_subject_to_change_in_a_future_release_Specify_experimentalAsyncFunctions_to_remove_this_warning);
-                }
-
                 emitAwaiter = true;
             }
 
@@ -12843,11 +12887,6 @@ namespace ts {
             }
             checkClassLikeDeclaration(node);
 
-            // Interfaces cannot be merged with non-ambient classes.
-            if (getSymbolOfNode(node).flags & SymbolFlags.Interface && !isInAmbientContext(node)) {
-                error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
-            }
-
             forEach(node.members, checkSourceElement);
         }
 
@@ -13133,16 +13172,6 @@ namespace ts {
                         checkIndexConstraints(type);
                     }
                 }
-
-                // Interfaces cannot merge with non-ambient classes.
-                if (symbol && symbol.declarations) {
-                    for (let declaration of symbol.declarations) {
-                        if (declaration.kind === SyntaxKind.ClassDeclaration && !isInAmbientContext(declaration)) {
-                            error(node, Diagnostics.Only_an_ambient_class_can_be_merged_with_an_interface);
-                            break;
-                        }
-                    }
-                }
             }
             forEach(getInterfaceBaseTypeNodes(node), heritageElement => {
                 if (!isSupportedExpressionWithTypeArguments(heritageElement)) {
@@ -13348,7 +13377,7 @@ namespace ts {
                             }
 
                             // illegal case: forward reference
-                            if (!isDefinedBefore(propertyDecl, member)) {
+                            if (!isBlockScopedNameDeclaredBeforeUse(propertyDecl, member)) {
                                 reportError = false;
                                 error(e, Diagnostics.A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums);
                                 return undefined;
@@ -13897,6 +13926,7 @@ namespace ts {
                     break;
                 case SyntaxKind.ClassExpression:
                     forEach((<ClassExpression>node).members, checkSourceElement);
+                    forEachChild(node, checkFunctionAndClassExpressionBodies);
                     break;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
