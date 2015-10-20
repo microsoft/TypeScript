@@ -1620,7 +1620,7 @@ namespace ts {
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
-    }
+    };
 
     // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
     // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
@@ -1650,7 +1650,7 @@ namespace ts {
         Double,
         Single
     }
-    
+
     export var QuotationMarkLookup: Map<string> = {
         [QuotationMark.Double]: "\"",
         [QuotationMark.Single]: "'",
