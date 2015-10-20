@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/primitives/string/extendStringInterface.ts ===
 interface String {
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(extendStringInterface.ts, 0, 0))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(extendStringInterface.ts, 0, 0))
 
     doStuff(): string;
 >doStuff : Symbol(doStuff, Decl(extendStringInterface.ts, 0, 18))

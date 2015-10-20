@@ -64,6 +64,7 @@ namespace ts {
         PlusToken,
         MinusToken,
         AsteriskToken,
+        AsteriskAsteriskToken,
         SlashToken,
         PercentToken,
         PlusPlusToken,
@@ -86,6 +87,7 @@ namespace ts {
         PlusEqualsToken,
         MinusEqualsToken,
         AsteriskEqualsToken,
+        AsteriskAsteriskEqualsToken,
         SlashEqualsToken,
         PercentEqualsToken,
         LessThanLessThanEqualsToken,
@@ -562,6 +564,10 @@ namespace ts {
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
+        // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
+        // it is grammar error to appear in actual object initializer
+        equalsToken?: Node;
+        objectAssignmentInitializer?: Expression;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -707,12 +713,16 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
-    export interface PrefixUnaryExpression extends UnaryExpression {
+    export interface IncrementExpression extends UnaryExpression {
+        _incrementExpressionBrand: any;
+    }
+
+    export interface PrefixUnaryExpression extends IncrementExpression {
         operator: SyntaxKind;
         operand: UnaryExpression;
     }
 
-    export interface PostfixUnaryExpression extends PostfixExpression {
+    export interface PostfixUnaryExpression extends IncrementExpression {
         operand: LeftHandSideExpression;
         operator: SyntaxKind;
     }
@@ -721,7 +731,7 @@ namespace ts {
         _postfixExpressionBrand: any;
     }
 
-    export interface LeftHandSideExpression extends PostfixExpression {
+    export interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
     }
 
@@ -1598,7 +1608,6 @@ namespace ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
@@ -1880,7 +1889,7 @@ namespace ts {
     }
 
     export interface TupleType extends ObjectType {
-        elementTypes: Type[];           // Element types
+        elementTypes: Type[];  // Element types
     }
 
     export interface UnionOrIntersectionType extends Type {
@@ -1894,6 +1903,13 @@ namespace ts {
     export interface UnionType extends UnionOrIntersectionType { }
 
     export interface IntersectionType extends UnionOrIntersectionType { }
+
+    /* @internal */
+    // An instantiated anonymous type has a target and a mapper
+    export interface AnonymousType extends ObjectType {
+        target?: AnonymousType;  // Instantiation target
+        mapper?: TypeMapper;     // Instantiation mapper
+    }
 
     /* @internal */
     // Resolved object, union, or intersection type
@@ -2070,7 +2086,6 @@ namespace ts {
         watch?: boolean;
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
-        experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
         /* @internal */ stripInternal?: boolean;

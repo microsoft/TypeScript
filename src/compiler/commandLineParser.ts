@@ -223,11 +223,6 @@ namespace ts {
             description: Diagnostics.Watch_input_files,
         },
         {
-            name: "experimentalAsyncFunctions",
-            type: "boolean",
-            description: Diagnostics.Enables_experimental_support_for_ES7_async_functions
-        },
-        {
             name: "experimentalDecorators",
             type: "boolean",
             description: Diagnostics.Enables_experimental_support_for_ES7_decorators
@@ -389,7 +384,7 @@ namespace ts {
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
-        return parseConfigFileText(fileName, text);
+        return parseConfigFileTextToJson(fileName, text);
     }
 
     /**
@@ -397,7 +392,7 @@ namespace ts {
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
-    export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
@@ -412,7 +407,7 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
 
         return {
@@ -448,6 +443,9 @@ namespace ts {
                             }
                             if (opt.isFilePath) {
                                 value = normalizePath(combinePaths(basePath, value));
+                                if (value === "") {
+                                    value = ".";
+                                }
                             }
                             options[opt.name] = value;
                         }

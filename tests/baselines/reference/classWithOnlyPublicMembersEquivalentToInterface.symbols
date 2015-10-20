@@ -20,11 +20,11 @@ class C {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 7, 5))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: number]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 8, 5))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: number;
 }
@@ -44,11 +44,11 @@ interface I {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 16, 5))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: number]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 17, 5))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: number;
 }

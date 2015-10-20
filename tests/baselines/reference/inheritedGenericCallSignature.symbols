@@ -13,7 +13,7 @@ interface I1<T> {
 
 
 interface Object {}
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11), Decl(inheritedGenericCallSignature.ts, 5, 1))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(inheritedGenericCallSignature.ts, 5, 1))
 
  
 
@@ -34,7 +34,7 @@ interface I2<T> extends I1<T[]> {
 var x: I2<Date>;
 >x : Symbol(x, Decl(inheritedGenericCallSignature.ts, 20, 3))
 >I2 : Symbol(I2, Decl(inheritedGenericCallSignature.ts, 8, 19))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
  
 
@@ -44,7 +44,7 @@ var y = x(undefined);
 >undefined : Symbol(undefined)
 
 y.length;  // should not error
->y.length : Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
+>y.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(inheritedGenericCallSignature.ts, 24, 3))
->length : Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
+>length : Symbol(Array.length, Decl(lib.d.ts, --, --))
 

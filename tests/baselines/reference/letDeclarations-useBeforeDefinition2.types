@@ -1,0 +1,10 @@
+=== tests/cases/compiler/file1.ts ===
+
+l;
+>l : number
+
+=== tests/cases/compiler/file2.ts ===
+const l = 0;
+>l : number
+>0 : number
+

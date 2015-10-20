@@ -3,7 +3,7 @@ var x: {
 >x : Symbol(x, Decl(parserSymbolProperty9.ts, 0, 3))
 
     [Symbol.toPrimitive]: string
->Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, 3926, 18))
+>Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.d.ts, --, --))
 }

@@ -1189,6 +1189,13 @@ namespace ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        IndentStyle: IndentStyle;
+    }
+
+    export enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
     }
 
     export interface FormatCodeOptions extends EditorOptions {
@@ -1850,8 +1857,8 @@ namespace ts {
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
 
-        // Parse
-        let inputFileName = transpileOptions.fileName || "module.ts";
+        // if jsx is specified then treat file as .tsx
+        let inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
         let sourceFile = createSourceFile(inputFileName, input, options.target);
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
@@ -3105,6 +3112,7 @@ namespace ts {
             let node = currentToken;
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
+            let isStartingCloseTag = false;
 
             let location = getTouchingPropertyName(sourceFile, position);
             if (contextToken) {
@@ -3130,9 +3138,14 @@ namespace ts {
                         return undefined;
                     }
                 }
-                else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    if (kind === SyntaxKind.LessThanToken) {
+                        isRightOfOpenTag = true;
+                        location = contextToken;
+                    }
+                    else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
+                        isStartingCloseTag = true;
+                    }
                 }
             }
 
@@ -3152,6 +3165,13 @@ namespace ts {
                 else {
                     symbols = tagSymbols;
                 }
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
+            }
+            else if (isStartingCloseTag) {
+                let tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
+                symbols = [typeChecker.getSymbolAtLocation(tagName)];
+
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
             }
@@ -3311,9 +3331,27 @@ namespace ts {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
-                    isDotOfNumericLiteral(contextToken);
+                    isDotOfNumericLiteral(contextToken) ||
+                    isInJsxText(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function isInJsxText(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.JsxText) {
+                    return true;
+                }
+
+                if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
+                    if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                        return true;
+                    }
+
+                    if (contextToken.parent.kind === SyntaxKind.JsxClosingElement || contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                        return contextToken.parent.parent && contextToken.parent.parent.kind === SyntaxKind.JsxElement;
+                    }
+                }
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -3683,14 +3721,20 @@ namespace ts {
 
                 // Previous token may have been a keyword that was converted to an identifier.
                 switch (contextToken.getText()) {
+                    case "abstract":
+                    case "async":
                     case "class":
-                    case "interface":
+                    case "const":
+                    case "declare":
                     case "enum":
                     case "function":
-                    case "var":
-                    case "static":
+                    case "interface":
                     case "let":
-                    case "const":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "static":
+                    case "var":
                     case "yield":
                         return true;
                 }
@@ -4099,8 +4143,9 @@ namespace ts {
                         let useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (!contains(allSignatures, signature.target || signature)) {
-                            // Get the first signature if there
+                        if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                            // Get the first signature if there is one -- allSignatures may contain
+                            // either the original signature or its target, so check for either
                             signature = allSignatures.length ? allSignatures[0] : undefined;
                         }
 

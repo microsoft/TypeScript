@@ -9,9 +9,9 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
     let blah = arguments[Symbol.iterator];
 >blah : Symbol(blah, Decl(argumentsObjectIterator02_ES6.ts, 2, 7))
 >arguments : Symbol(arguments)
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 3840, 52), Decl(lib.d.ts, 3946, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 3890, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
     let result = [];
 >result : Symbol(result, Decl(argumentsObjectIterator02_ES6.ts, 4, 7))
@@ -21,9 +21,9 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 >blah : Symbol(blah, Decl(argumentsObjectIterator02_ES6.ts, 2, 7))
 
         result.push(arg + arg);
->result.push : Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
+>result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
 >result : Symbol(result, Decl(argumentsObjectIterator02_ES6.ts, 4, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, 1016, 29))
+>push : Symbol(Array.push, Decl(lib.d.ts, --, --))
 >arg : Symbol(arg, Decl(argumentsObjectIterator02_ES6.ts, 5, 12))
 >arg : Symbol(arg, Decl(argumentsObjectIterator02_ES6.ts, 5, 12))
     }
