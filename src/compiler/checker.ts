@@ -2054,6 +2054,17 @@ namespace ts {
         function getTypeWalker(accept: (type: Type) => boolean = () => true): TypeWalker {
             let visited: Type[] = [];
             let visitedSymbols: Symbol[] = [];
+
+            return {
+                visitType,
+                visitTypeFromSymbol,
+                reset: (newCallback: (type: Type) => boolean = () => true) => {
+                    accept = newCallback;
+                    visited = [];
+                    visitedSymbols = [];
+                }
+            };
+
             function visitType(type: Type): void {
                 if (!type) {
                     return;
@@ -2184,16 +2195,6 @@ namespace ts {
                     forEachValue(symbol.exports, visitTypeFromSymbol);
                 }
             }
-
-            return {
-                visitType,
-                visitTypeFromSymbol,
-                reset: (newCallback: (type: Type) => boolean = () => true) => {
-                    accept = newCallback;
-                    visited = [];
-                    visitedSymbols = [];
-                }
-            };
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
