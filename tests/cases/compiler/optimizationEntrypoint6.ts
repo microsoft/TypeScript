@@ -1,24 +1,7 @@
 // @module: amd
 // @outFile: bundled.js
-// @optimizationEntrypoint: tests/cases/compiler/index.ts
+// @optimizationEntrypoint: tests/cases/compiler/main.ts
 // @declaration: true
-// @Filename: index.ts
-export * from "./interop/index";
-export default 2+2;
-
-// @Filename: interop/index.ts
-export * from "./foo";
-export * from "./bar";
-
-// @Filename: interop/foo.ts
-import {Dependency} from "foo";
-
-export class FooDependency extends Dependency {}
-
-// @Filename: interop/bar.ts
-import {Dependency} from "bar";
-
-export class BarDependency extends Dependency {}
 
 // @Filename: typings/foo/index.d.ts
 declare module "foo" {
@@ -29,3 +12,22 @@ declare module "foo" {
 declare module "bar" {
 	export class Dependency {}
 }
+
+// @Filename: main.ts
+export * from "./interop/index";
+export default 2+2;
+export class Meh {}
+
+// @Filename: interop/index.ts
+export * from "./foodep";
+export * from "./bardep";
+
+// @Filename: interop/foodep.ts
+import {Dependency} from "foo";
+
+export class FooDependency extends Dependency {}
+
+// @Filename: interop/bardep.ts
+import {Dependency} from "bar";
+
+export class BarDependency extends Dependency {}
