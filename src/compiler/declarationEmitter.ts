@@ -327,6 +327,10 @@ namespace ts {
             function buildModuleDtsReverseLookupTable(entrypoint: SourceFile, table: Map<string> = {}, visited: Map<SourceFile> = {}) {
                 visited[entrypoint.fileName] = entrypoint;
                 forEachKey(entrypoint.resolvedModules, name => {
+                    // Skip unresolved modules
+                    if (!entrypoint.resolvedModules[name]) {
+                        return;
+                    }
                     // Skip relative paths and rooted paths (look at module identifiers only)
                     let filename = entrypoint.resolvedModules[name].resolvedFileName;
                     if (!name.match(/(\.|\/)/)) {

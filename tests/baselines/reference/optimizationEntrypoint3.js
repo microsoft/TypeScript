@@ -96,6 +96,7 @@ declare class Bar extends Foo<Foo<number>> {
 }
 export = Bar;
 
+
 //// [DtsFileErrors]
 
 
@@ -130,3 +131,4 @@ bundled.d.ts(5,14): error TS4031: Public property 'primary' of exported class ha
 !!! error TS4031: Public property 'primary' of exported class has or is using private name 'Foo'.
     }
     export = Bar;
+    

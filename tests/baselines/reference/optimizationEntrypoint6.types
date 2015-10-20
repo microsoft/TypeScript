@@ -1,0 +1,45 @@
+=== tests/cases/compiler/typings/foo/index.d.ts ===
+
+declare module "foo" {
+	export class Dependency {}
+>Dependency : Dependency
+}
+
+=== tests/cases/compiler/typings/bar/index.d.ts ===
+declare module "bar" {
+	export class Dependency {}
+>Dependency : Dependency
+}
+
+=== tests/cases/compiler/main.ts ===
+///<reference path="./typings/foo/index.d.ts" />
+///<reference path="./typings/bar/index.d.ts" />
+export * from "./interop/index";
+export default 2+2;
+>2+2 : number
+>2 : number
+>2 : number
+
+export class Baz {}
+>Baz : Baz
+
+=== tests/cases/compiler/interop/index.ts ===
+export * from "./foodep";
+No type information for this code.export * from "./bardep";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/interop/foodep.ts ===
+import {Dependency} from "foo";
+>Dependency : typeof Dependency
+
+export class FooDependency extends Dependency {}
+>FooDependency : FooDependency
+>Dependency : Dependency
+
+=== tests/cases/compiler/interop/bardep.ts ===
+import {Dependency} from "bar";
+>Dependency : typeof Dependency
+
+export class BarDependency extends Dependency {}
+>BarDependency : BarDependency
+>Dependency : Dependency
+
