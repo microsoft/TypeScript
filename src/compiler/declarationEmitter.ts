@@ -221,19 +221,6 @@ namespace ts {
                 symbolNameSet[name] = 1;
                 symbolGeneratedNameMap[id] = name;
             };
-            let createDefaultExportAlias = (): string => {
-                let name = "default_1";
-                while (!!symbolNameSet[name]) {
-                    name += "_1";
-                }
-                symbolNameSet[name] = 1;
-                return name;
-            };
-            let writeExportAssignment = (tempname: string): void => undefined;
-
-            let exportEquals: Type;
-            let declarations = collectExportedDeclarations(exportedMembers);
-            let dependentDeclarations = collectDependentDeclarations(exportedMembers);
             let generateName = (symbol: Symbol): string => {
                 if (symbol.name in symbolNameSet) {
                     let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
@@ -249,7 +236,21 @@ namespace ts {
                     createSymbolEntry(symbol.name, symbol.id);
                     return symbol.name;
                 }
-            }
+            };
+            let createDefaultExportAlias = (): string => {
+                let name = "default_1";
+                while (!!symbolNameSet[name]) {
+                    name += "_1";
+                }
+                symbolNameSet[name] = 1;
+                return name;
+            };
+            let writeExportAssignment = (tempname: string): void => undefined;
+
+            let exportEquals: Type;
+            let moduleIdReverseLookup = buildModuleDtsReverseLookupTable(entrypoint);
+            let declarations = collectExportedDeclarations(exportedMembers);
+            let dependentDeclarations = collectDependentDeclarations(exportedMembers);
 
             let alias = createDefaultExportAlias();
             forEachValue(dependentDeclarations, d => {
@@ -322,6 +323,22 @@ namespace ts {
             forEach(undoActions, undo => undo()); // So we don't ruin the tree
 
             return;
+
+            function buildModuleDtsReverseLookupTable(entrypoint: SourceFile, table: Map<string> = {}, visited: Map<SourceFile> = {}) {
+                visited[entrypoint.fileName] = entrypoint;
+                forEachKey(entrypoint.resolvedModules, name => {
+                    // Skip relative paths and rooted paths (look at module identifiers only)
+                    let filename = entrypoint.resolvedModules[name].resolvedFileName;
+                    if (!name.match(/(\.|\/)/)) {
+                        table[filename] = name;
+                    }
+                    let file = host.getSourceFile(filename);
+                    if (!visited[file.fileName]) {
+                        buildModuleDtsReverseLookupTable(file, table, visited);
+                    }
+                });
+                return table;
+            }
 
             function isModuleLevelDeclaration(node: Node) {
                 switch (node.kind) {
@@ -434,7 +451,7 @@ namespace ts {
                             writeExportAssignment = (alias: string) => {
                                 write(`export default ${alias};`);
                                 writeLine();
-                            }
+                            };
                         }
                         continue;
                     }
@@ -476,14 +493,16 @@ namespace ts {
                                 if (isDeclarationFile(sourceFile)) {
                                     // If the declaration is from an external module dts, we need to create an import for it
                                     if (isExternalModule(sourceFile)) {
-                                        imports[sourceFile.fileName] = imports[sourceFile.fileName] || [];
+                                        // First, try to reverse lookup a module identifier
+                                        let fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
+                                        imports[fileName] = imports[fileName] || [];
                                         // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
                                         let declarationStack = findDeclarationStack(d);
                                         // Get the topmost declaration from that stack of nodes
                                         let declaration = declarationStack.pop();
                                         // Add that outer declaration to the list of things which need to be imported from an external source
-                                        if (!contains(imports[sourceFile.fileName], declaration)) {
-                                            imports[sourceFile.fileName].push(declaration);
+                                        if (!contains(imports[fileName], declaration)) {
+                                            imports[fileName].push(declaration);
                                         }
                                     }
                                     else {
