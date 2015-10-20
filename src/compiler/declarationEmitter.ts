@@ -116,6 +116,12 @@ namespace ts {
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
                 noDeclare = false;
+                let emittedReferencedFiles: SourceFile[] = [];
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isDeclarationFile(sourceFile)) {
+                        emitReferences(sourceFile, emittedReferencedFiles);
+                    }
+                });
                 emitFlattenedTypeDefinitions(entrypoint);
             }
             else {
@@ -125,25 +131,12 @@ namespace ts {
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         noDeclare = false;
-                        // Check what references need to be added
-                        if (!compilerOptions.noResolve) {
-                            forEach(sourceFile.referencedFiles, fileReference => {
-                                let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                                // If the reference file is a declaration file or an external module, emit that reference
-                                if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                    !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                    writeReferencePath(referencedFile);
-                                    emittedReferencedFiles.push(referencedFile);
-                                }
-                            });
-                        }
-
+                        emitReferences(sourceFile, emittedReferencedFiles);
                         emitSourceFile(sourceFile);
                     }
                     else if (isExternalModule(sourceFile)) {
                         noDeclare = true;
+                        emitReferences(sourceFile, emittedReferencedFiles);
                         write(`declare module "${sourceFile.moduleName}" {`);
                         writeLine();
                         increaseIndent();
@@ -183,10 +176,28 @@ namespace ts {
             referencePathsOutput,
         };
 
+        function emitReferences(sourceFile: SourceFile, emittedReferencedFiles: FileReference[]) {
+            // Check what references need to be added
+            if (!compilerOptions.noResolve) {
+                forEach(sourceFile.referencedFiles, fileReference => {
+                    let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+
+                    // If the reference file is a declaration file or an external module, emit that reference
+                    if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                        !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+
+                        writeReferencePath(referencedFile);
+                        emittedReferencedFiles.push(referencedFile);
+                    }
+                });
+            }
+        }
+
         function emitFlattenedTypeDefinitions(entrypoint: SourceFile): void {
             let undoActions: (() => void)[] = [];
             let aliasEmits: (() => void)[] = [];
             let symbolNameSet: Map<number> = {};
+            let imports: Map<Declaration[]> = {};
             let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
 
             // Handle an export=import as soon as possible
@@ -195,7 +206,7 @@ namespace ts {
                 return emitFlattenedTypeDefinitions(maybeRedirectionType.symbol.valueDeclaration as SourceFile);
             }
 
-            let createSynthIdentifiers = (symbol: Symbol, generatedName: string) => {
+            let createSyntheticIdentifiers = (symbol: Symbol, generatedName: string) => {
                 forEach(symbol.declarations, declaration => {
                     let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
                     synthId.flags |= NodeFlags.Synthetic;
@@ -223,10 +234,7 @@ namespace ts {
             let exportEquals: Type;
             let declarations = collectExportedDeclarations(exportedMembers);
             let dependentDeclarations = collectDependentDeclarations(exportedMembers);
-
-            let alias = createDefaultExportAlias();
-            forEachValue(dependentDeclarations, d => {
-                let symbol = d.symbol;
+            let generateName = (symbol: Symbol): string => {
                 if (symbol.name in symbolNameSet) {
                     let generatedName = `${symbol.name}_${symbolNameSet[symbol.name]}`;
                     while (!!symbolNameSet[generatedName]) {
@@ -234,11 +242,40 @@ namespace ts {
                     }
                     symbolNameSet[symbol.name]++;
                     createSymbolEntry(generatedName, symbol.id);
-                    createSynthIdentifiers(symbol, generatedName);
+                    createSyntheticIdentifiers(symbol, generatedName);
+                    return generatedName;
                 }
                 else {
                     createSymbolEntry(symbol.name, symbol.id);
+                    return symbol.name;
                 }
+            }
+
+            let alias = createDefaultExportAlias();
+            forEachValue(dependentDeclarations, d => {
+                generateName(d.symbol);
+            });
+
+            // TODO: Handle external dts where we use their export= complex type (requiring `import v = require()` or `import * as v from ""`)
+            // TODO: Map module identifiers back to module names (rather than using absolute paths)
+            forEachKey(imports, filename => {
+                write("import {");
+                writeLine();
+                increaseIndent();
+                forEach(imports[filename], declaration => {
+                    let symbol = declaration.symbol;
+                    if (!symbol) {
+                        return;
+                    }
+                    // Alias the import if need be
+                    let name = generateName(symbol);
+                    write(symbol.name !== name ? `${symbol.name} as ${name},` : `${symbol.name},`);
+                    writeLine();
+                });
+                decreaseIndent();
+                // Handle module identifiers
+                write(filename.match(/^('|")/) ? `} from ${filename}` : `} from "${filename}"`);
+                writeLine();
             });
 
             let emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
@@ -388,7 +425,7 @@ namespace ts {
                             let symbol = type.symbol;
                             if (symbol) {
                                 createSymbolEntry(name, symbol.id);
-                                createSynthIdentifiers(symbol, name);
+                                createSyntheticIdentifiers(symbol, name);
                             }
                             return name;
                         })(exported, type);
@@ -408,7 +445,7 @@ namespace ts {
                             // check if this symbol is defined by another exported symbol
                             if (!contains(exportedMembers, symbol)) {
                                 // If not, mangle its name to the exported symbol's name
-                                createSynthIdentifiers(symbol, exported.name);
+                                createSyntheticIdentifiers(symbol, exported.name);
                             }
                         }
                         createSymbolEntry(symbol.name, symbol.id);
@@ -434,8 +471,36 @@ namespace ts {
                         else {
                             // Add containing declarations if we've navigated to a nested type.
                             forEach(symbol.declarations, d => {
-                                // No need to collect declarations not in our own code
-                                if (isDeclarationFile(getSourceFileOfNode(d))) {
+                                // Collect declarations 
+                                let sourceFile = getSourceFileOfNode(d);
+                                if (isDeclarationFile(sourceFile)) {
+                                    // If the declaration is from an external module dts, we need to create an import for it
+                                    if (isExternalModule(sourceFile)) {
+                                        imports[sourceFile.fileName] = imports[sourceFile.fileName] || [];
+                                        // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
+                                        let declarationStack = findDeclarationStack(d);
+                                        // Get the topmost declaration from that stack of nodes
+                                        let declaration = declarationStack.pop();
+                                        // Add that outer declaration to the list of things which need to be imported from an external source
+                                        if (!contains(imports[sourceFile.fileName], declaration)) {
+                                            imports[sourceFile.fileName].push(declaration);
+                                        }
+                                    }
+                                    else {
+                                        let declarationStack = findDeclarationStack(d);
+                                        // Check if this type comes from an ambient external module declaration
+                                        let moduleDeclaration = declarationStack.pop();
+                                        if (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration) {
+                                            // If so, add said ambient external module to the imports list, and the next declaration in the stack to the set of imports
+                                            let declaration = declarationStack.pop();
+                                            let moduleName = (moduleDeclaration as ModuleDeclaration).name.text;
+                                            imports[moduleName] = imports[moduleName] || [];
+                                            if (!contains(imports[moduleName], declaration)) {
+                                                imports[moduleName].push(declaration);
+                                            }
+                                        }
+                                    }
+                                    // Otherwise we can elide it, as its from the stdlib or a triple-slash reference
                                     return;
                                 }
                                 if (!(d.id in dependentDeclarations || d.id in declarations) && isModuleLevelDeclaration(d)) {
@@ -451,6 +516,18 @@ namespace ts {
                         }
                     }
                     return true;
+                }
+
+                function findDeclarationStack(d: Declaration): Declaration[] {
+                    let outermostNode: Node = d;
+                    let visited: Node[] = [d];
+                    // Find all the nodes between this declaration and the top of the file
+                    // In most cases, this will _never_ even execute a single iteration as the declaration we have is likely already top-level
+                    while (outermostNode.parent && outermostNode.parent.kind !== SyntaxKind.SourceFile) {
+                        outermostNode = outermostNode.parent;
+                        visited.push(outermostNode);
+                    }
+                    return filter(visited, node => isDeclaration(node)) as Declaration[];
                 }
             }
         }
