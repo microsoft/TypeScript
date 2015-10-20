@@ -263,6 +263,7 @@ namespace ts {
 
         function reportInaccessibleThisError() {
             if (errorNameNode) {
+                reportedDeclarationError = true;
                 diagnostics.push(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode)));
             }
