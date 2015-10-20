@@ -160,10 +160,10 @@ export declare class Baz {
 //// [bundled.d.ts]
 import {
     Dependency,
-} from "foo"
+} from "foo";
 import {
     Dependency as Dependency_1,
-} from "bar"
+} from "bar";
 export declare class FooDependency extends Dependency {
 }
 export declare class BarDependency extends Dependency_1 {
@@ -208,12 +208,12 @@ bundled.d.ts(6,8): error TS2307: Cannot find module 'bar'.
 ==== bundled.d.ts (2 errors) ====
     import {
         Dependency,
-    } from "foo"
+    } from "foo";
            ~~~~~
 !!! error TS2307: Cannot find module 'foo'.
     import {
         Dependency as Dependency_1,
-    } from "bar"
+    } from "bar";
            ~~~~~
 !!! error TS2307: Cannot find module 'bar'.
     export declare class FooDependency extends Dependency {

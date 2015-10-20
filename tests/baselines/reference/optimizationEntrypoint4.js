@@ -81,7 +81,8 @@ export declare class Bar {
     field2: typeof Foo_1.field;
 }
 export {
-}
+};
+
 
 //// [DtsFileErrors]
 
@@ -119,4 +120,5 @@ bundled.d.ts(9,20): error TS4031: Public property 'field2' of exported class has
 !!! error TS4031: Public property 'field2' of exported class has or is using private name 'Foo_1'.
     }
     export {
-    }
+    };
+    

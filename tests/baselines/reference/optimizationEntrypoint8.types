@@ -1,0 +1,36 @@
+=== tests/cases/compiler/node_modules/foo/index.d.ts ===
+
+>Import : typeof Foo
+
+declare class Foo {}
+>Foo : Foo
+
+declare namespace Foo {
+	export interface Bar {
+>Bar : Bar
+
+		member: number;
+>member : number
+	}
+}
+export = Foo;
+>Foo : Foo
+
+
+=== tests/cases/compiler/main.ts ===
+import * as Foo from "foo";
+>Foo : typeof Foo
+
+export class Baz extends Foo implements Foo.Bar {
+>Baz : Baz
+>Foo : Foo
+>Foo.Bar : any
+>Foo : typeof Foo
+>Bar : Foo.Bar
+
+	member = 42;
+>member : number
+>42 : number
+}
+
+

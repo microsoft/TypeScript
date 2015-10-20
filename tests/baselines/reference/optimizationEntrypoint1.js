@@ -228,7 +228,8 @@ export {
     Inner_2 as Middle,
     default_2 as CBaseMain,
     Inner_1 as Innermost,
-}
+};
+
 
 //// [DtsFileErrors]
 
@@ -324,4 +325,5 @@ bundled.d.ts(18,14): error TS4031: Public property 'memberc' of exported class h
         Inner_2 as Middle,
         default_2 as CBaseMain,
         Inner_1 as Innermost,
-    }
+    };
+    

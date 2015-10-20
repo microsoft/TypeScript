@@ -165,10 +165,10 @@ export declare class Baz {
 /// <reference path="tests/cases/compiler/typings/bar/index.d.ts" />
 import {
     Dependency,
-} from "foo"
+} from "foo";
 import {
     Dependency as Dependency_1,
-} from "bar"
+} from "bar";
 export declare class FooDependency extends Dependency {
 }
 export declare class BarDependency extends Dependency_1 {
