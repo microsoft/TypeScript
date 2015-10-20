@@ -265,13 +265,10 @@ namespace ts {
                 privateDeclarations++;
                 emitModuleLevelDeclaration(d, /*shouldExport*/false);
             });
-            if (writeExportAssignment) {
-                writeLine();
-                writeExportAssignment(alias);
-            }
             if (!exportEquals) {
                 forEachValue(declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
             }
+            writeExportAssignment(alias);
             if ((privateDeclarations && !exportEquals) || aliasEmits.length) {
                 writeLine();
                 write("export {");
@@ -306,7 +303,9 @@ namespace ts {
 
             function collectExportedDeclarations(exportedMembers: Symbol[]): Map<Declaration> {
                 const result: Map<Declaration> = {};
+                const originalExportAssignment = writeExportAssignment;
                 for (let exported of exportedMembers) {
+                    const type = resolver.getDefiningTypeOfSymbol(exported);
                     for (let declaration of exported.declarations) {
                         if (isModuleLevelDeclaration(declaration)) { // skips export specifiers
                             result[declaration.id] = declaration;
@@ -314,22 +313,22 @@ namespace ts {
                         else {
                             // inline the declaration referred to by an export specifier with the specified name
                             if (declaration.kind === SyntaxKind.ExportSpecifier) {
-                                let d = declaration as ExportSpecifier;
-                                let symbol = d.symbol;
+                                const d = declaration as ExportSpecifier;
+                                const symbol = d.symbol;
                                 // If we already export the symbol being aliased, add a block to add the alias at the end, or inline 
                                 if (contains(exportedMembers, symbol)) {
                                     if (!d.propertyName) {
                                         // Inline the declaration referenced, rather than emitting an alias
-                                        let type = resolver.getDefiningTypeOfSymbol(symbol);
-                                        if (type && type.symbol) {
-                                            exportedMembers.push(type.symbol);
+                                        const innertype = resolver.getDefiningTypeOfSymbol(symbol);
+                                        if (innertype && innertype.symbol) {
+                                            exportedMembers.push(innertype.symbol);
                                         }
                                     }
                                     else {
                                         aliasEmits.push(((d: ExportSpecifier) => () => {
-                                            let oldSourceFile = currentSourceFile;
+                                            const oldSourceFile = currentSourceFile;
                                             currentSourceFile = getSourceFileOfNode(d);
-                                            let symbol = resolver.getDefiningTypeOfSymbol(d.symbol).symbol;
+                                            const symbol = resolver.getDefiningTypeOfSymbol(d.symbol).symbol;
                                             if (symbol && symbol.id in symbolGeneratedNameMap) {
                                                 write(symbolGeneratedNameMap[symbol.id]);
                                             }
@@ -345,7 +344,7 @@ namespace ts {
                             }
                             // Handle export assignments
                             else if (declaration.kind === SyntaxKind.ExportAssignment) {
-                                let assignment = declaration as ExportAssignment;
+                                const assignment = declaration as ExportAssignment;
                                 if (assignment.expression.kind === SyntaxKind.Identifier) {
                                     writeExportAssignment = ((assignment: ExportAssignment) => (alias: string) => {
                                         write(assignment.isExportEquals ? "export = " : "export default ");
@@ -372,10 +371,10 @@ namespace ts {
                         }
                     }
 
-                    let type = resolver.getDefiningTypeOfSymbol(exported);
                     // Special case all the things
                     if (exported.name === "export=") {
                         exportEquals = type;
+                        createDefaultExportAlias = ((value: string) => () => value)(type.symbol.name);
                         continue;
                     }
                     else if (exported.name === "default") {
@@ -393,6 +392,13 @@ namespace ts {
                             }
                             return name;
                         })(exported, type);
+                        if (originalExportAssignment === writeExportAssignment) {
+                            // We're adding an export assignment despite never seeing one in the original file
+                            writeExportAssignment = (alias: string) => {
+                                write(`export default ${alias};`);
+                                writeLine();
+                            }
+                        }
                         continue;
                     }
 
