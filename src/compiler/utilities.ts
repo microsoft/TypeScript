@@ -82,8 +82,7 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean,
-        sortBeforeComparison?: boolean, comparer?: (a: T, b: T) => number): boolean {
+    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -92,11 +91,8 @@ namespace ts {
             return false;
         }
 
-        let newArray1 = sortBeforeComparison ? array1.slice().sort(comparer) : array1;
-        let newArray2 = sortBeforeComparison ? array2.slice().sort(comparer) : array2;
-
         for (let i = 0; i < array1.length; ++i) {
-            let equals = equaler ? equaler(newArray1[i], newArray2[i]) : newArray1[i] === newArray2[i];
+            let equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
             if (!equals) {
                 return false;
             }

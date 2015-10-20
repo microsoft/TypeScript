@@ -361,7 +361,7 @@ namespace ts {
             let canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
 
             // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
-            if (!arrayIsEqualTo(newFileNames, canonicalRootFileNames, /*equaler*/ undefined, /*sortBeforeComparison*/ true)) {
+            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
                 setCachedProgram(undefined);
                 startTimerForRecompilation();
             }
