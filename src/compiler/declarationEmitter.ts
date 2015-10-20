@@ -210,7 +210,15 @@ namespace ts {
                 symbolNameSet[name] = 1;
                 symbolGeneratedNameMap[id] = name;
             };
-            let createDefaultExportAlias = (): string => undefined;
+            let createDefaultExportAlias = (): string => {
+                let name = "default_1";
+                while (!!symbolNameSet[name]) {
+                    name += "_1";
+                }
+                symbolNameSet[name] = 1;
+                return name;
+            };
+            let writeExportAssignment = (tempname: string): void => undefined;
 
             let exportEquals: Type;
             let declarations = collectExportedDeclarations(exportedMembers);
@@ -257,16 +265,12 @@ namespace ts {
                 privateDeclarations++;
                 emitModuleLevelDeclaration(d, /*shouldExport*/false);
             });
-            if (exportEquals) {
+            if (writeExportAssignment) {
                 writeLine();
-                write(`export = ${exportEquals.symbol.name};`);
+                writeExportAssignment(alias);
             }
-            else {
+            if (!exportEquals) {
                 forEachValue(declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
-            }
-            if (alias) {
-                writeLine();
-                write(`export default ${alias};`);
             }
             if ((privateDeclarations && !exportEquals) || aliasEmits.length) {
                 writeLine();
@@ -337,6 +341,32 @@ namespace ts {
                                             currentSourceFile = oldSourceFile;
                                         })(d));
                                     }
+                                }
+                            }
+                            // Handle export assignments
+                            else if (declaration.kind === SyntaxKind.ExportAssignment) {
+                                let assignment = declaration as ExportAssignment;
+                                if (assignment.expression.kind === SyntaxKind.Identifier) {
+                                    writeExportAssignment = ((assignment: ExportAssignment) => (alias: string) => {
+                                        write(assignment.isExportEquals ? "export = " : "export default ");
+                                        write(alias);
+                                        write(";");
+                                        writeLine();
+                                    })(assignment);
+                                }
+                                else {
+                                    writeExportAssignment = ((assignment: ExportAssignment) => (alias: string) => {
+                                        write("declare var ");
+                                        write(alias);
+                                        write(": ");
+                                        resolver.writeTypeOfExpression(assignment.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                                        write(";");
+                                        writeLine();
+                                        write(assignment.isExportEquals ? "export = " : "export default ");
+                                        write(alias);
+                                        write(";");
+                                        writeLine();
+                                    })(assignment);
                                 }
                             }
                         }
