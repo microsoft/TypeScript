@@ -323,27 +323,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
+        let emitSkipped = false;
         let newLine = host.getNewLine();
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    emitFile(getEmitFileNames(sourceFile, host), sourceFile);
+                    emitSkipped = emitFile(getEmitFileNames(sourceFile, host), sourceFile) || emitSkipped;
                 }
             });
 
             if (compilerOptions.outFile || compilerOptions.out) {
-                emitFile(getBundledEmitFileNames(compilerOptions));
+                emitSkipped = emitFile(getBundledEmitFileNames(compilerOptions)) || emitSkipped;
             }
         }
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                emitFile(getEmitFileNames(targetSourceFile, host), targetSourceFile);
+                emitSkipped = emitFile(getEmitFileNames(targetSourceFile, host), targetSourceFile) || emitSkipped;
             }
             else if (!isDeclarationFile(targetSourceFile) &&
                 (compilerOptions.outFile || compilerOptions.out)) {
-                emitFile(getBundledEmitFileNames(compilerOptions));
+                emitSkipped = emitFile(getBundledEmitFileNames(compilerOptions)) || emitSkipped;
             }
         }
 
@@ -351,7 +352,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
 
         return {
-            emitSkipped: false,
+            emitSkipped,
             diagnostics,
             sourceMaps: sourceMapDataList
         };
@@ -7597,13 +7598,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string }, sourceFile?: SourceFile) {
             // Make sure not to write js File and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && (!sourceMapFilePath || !host.isEmitBlocked(sourceMapFilePath))) {
+            let emitSkipped = host.isEmitBlocked(jsFilePath) || (sourceMapFilePath && host.isEmitBlocked(sourceMapFilePath));
+            if (!emitSkipped) {
                 emitJavaScript(jsFilePath, sourceMapFilePath, sourceFile);
             }
 
             if (compilerOptions.declaration) {
-                writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics);
+                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics) || emitSkipped;
             }
+
+            return emitSkipped;
         }
     }
 }
