@@ -40,6 +40,7 @@ namespace ts {
         getNewLine(): string;
 
         isEmitBlocked(emitFileName: string): boolean;
+        isDeclarationEmitBlocked(emitFileName: string, sourceFile?: SourceFile): boolean;
 
         writeFile: WriteFileCallback;
     }
