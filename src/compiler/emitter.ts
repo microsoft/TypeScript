@@ -7601,7 +7601,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitJavaScript(jsFilePath, sourceFile);
             }
 
-            if (compilerOptions.declaration && !host.isEmitBlocked(declarationFilePath)) {
+            if (compilerOptions.declaration) {
                 writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics);
             }
         }

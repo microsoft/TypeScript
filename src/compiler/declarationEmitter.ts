@@ -1607,9 +1607,7 @@ namespace ts {
     /* @internal */
     export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
         let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, declarationFilePath, sourceFile);
-        // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
-        // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.reportedDeclarationError) {
+        if (!emitDeclarationResult.reportedDeclarationError && !host.isDeclarationEmitBlocked(declarationFilePath, sourceFile)) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             let compilerOptions = host.getCompilerOptions();
