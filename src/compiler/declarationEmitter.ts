@@ -268,7 +268,7 @@ namespace ts {
                 writeLine();
                 write(`export default ${alias};`);
             }
-            if (aliasEmits.length) {
+            if ((privateDeclarations && !exportEquals) || aliasEmits.length) {
                 writeLine();
                 write("export {");
                 writeLine();

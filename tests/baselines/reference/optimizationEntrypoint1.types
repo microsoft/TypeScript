@@ -1,8 +1,12 @@
 === tests/cases/compiler/index.ts ===
 
 export * from "./a";
-export {Detail} from "./b";
+export {Detail, Detail as DetailMock, Detail as DetailReal} from "./b";
 >Detail : any
+>Detail : any
+>DetailMock : any
+>Detail : any
+>DetailReal : any
 
 export interface Inner {
 >Inner : Inner
@@ -11,15 +15,37 @@ export interface Inner {
 >item4 : number
 }
 
-=== tests/cases/compiler/a.ts ===
-import {Main as BaseMain, Inner as Middle} from "./b";
->Main : typeof BaseMain
->BaseMain : typeof BaseMain
+export interface default_1 { // make sure generated names don't clash
+>default_1 : default_1
+
+	number: number;
+>number : number
+}
+
+export {default as BBaseMain, Inner as Middle} from "./b";
+>default : typeof Main
+>BBaseMain : typeof Main
 >Inner : any
 >Middle : any
 
-export class Main extends BaseMain {
->Main : Main
+export {default as CBaseMain, Inner as Innermost} from "./c";
+>default : typeof (Missing)
+>CBaseMain : typeof (Missing)
+>Inner : any
+>Innermost : any
+
+export {default} from "./a";
+>default : typeof (Missing)
+
+=== tests/cases/compiler/a.ts ===
+import {default as BaseMain, Inner as Middle} from "./b";
+>default : typeof BaseMain
+>BaseMain : typeof BaseMain
+>Inner : any
+>Middle : any
+>default_1_1 : (Missing)
+
+export default class Main extends BaseMain {
 >BaseMain : BaseMain
 
 	memberc: Middle;
@@ -35,15 +61,15 @@ export interface Inner {
 }
 
 === tests/cases/compiler/b.ts ===
-import {Main as BaseMain, Inner as Innermost} from "./c";
->Main : typeof BaseMain
+import {default as BaseMain, Inner as Innermost} from "./c";
+>default : typeof BaseMain
 >BaseMain : typeof BaseMain
 >Inner : any
 >Innermost : any
->Main_2 : (Missing)
 >Inner_2 : (Missing)
 
-export class Main extends BaseMain {
+export default class Main extends BaseMain {
+>Main : Main
 >BaseMain : BaseMain
 
 	member2: Innermost;
@@ -68,8 +94,8 @@ export interface Detail {
 }
 
 === tests/cases/compiler/c.ts ===
-export class Main {
->Main_1 : (Missing)
+export default class Main {
+>default_2 : (Missing)
 >Inner_1 : (Missing)
 
 	member1: string;

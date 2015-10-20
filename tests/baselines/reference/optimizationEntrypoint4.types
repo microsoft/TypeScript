@@ -1,0 +1,32 @@
+=== tests/cases/compiler/index.ts ===
+
+import Foo = require("./foo");
+>Foo : typeof Foo
+
+export class Bar {
+>Bar : Bar
+
+	field2: typeof Foo.field;
+>field2 : { name: string; }
+>Foo.field : { name: string; }
+>Foo : typeof Foo
+>field : { name: string; }
+}
+
+=== tests/cases/compiler/foo.ts ===
+
+>Foo_1 : typeof Foo
+
+class Foo {
+>Foo : Foo
+
+	static field: {name: string}
+>field : { name: string; }
+>name : string
+}
+
+namespace Foo {}
+
+export = Foo;
+>Foo : Foo
+

@@ -1,0 +1,123 @@
+=== tests/cases/compiler/index.ts ===
+
+import * as foo from "./foo";
+>foo : typeof foo
+
+export * from "./foo";
+
+export class Main {
+>Main : Main
+
+	a: foo.A;
+>a : foo.A
+>foo : any
+>A : foo.A
+
+	b: [foo.B];
+>b : [foo.B]
+>foo : any
+>B : foo.B
+
+	c: (foo.C);
+>c : foo.C
+>foo : any
+>C : foo.C
+
+	d: foo.D[];
+>d : foo.D[]
+>foo : any
+>D : foo.D
+
+	e: foo.E | foo.E2;
+>e : foo.E | foo.E2
+>foo : any
+>E : foo.E
+>foo : any
+>E2 : foo.E2
+
+	f: foo.F & foo.F2;
+>f : foo.F & foo.F2
+>foo : any
+>F : foo.F
+>foo : any
+>F2 : foo.F2
+
+	g: foo.GAlias;
+>g : foo.G | foo.A
+>foo : any
+>GAlias : foo.G | foo.A
+
+	h: {item: foo.H};
+>h : { item: foo.H; }
+>item : foo.H
+>foo : any
+>H : foo.H
+
+	i: foo.IAlias;
+>i : foo.I
+>foo : any
+>IAlias : foo.I
+
+	j: foo.J<number>;
+>j : foo.J<number>
+>foo : any
+>J : foo.J<T>
+
+	jj: foo.AnyJ;
+>jj : foo.J<any>
+>foo : any
+>AnyJ : foo.J<any>
+}
+
+=== tests/cases/compiler/foo.ts ===
+
+export class A {}
+>A : A
+
+export class B {}
+>B : B
+
+export class C {}
+>C : C
+
+export class D {}
+>D : D
+
+export class E {}
+>E : E
+
+export class F {}
+>F : F
+
+export class E2 {}
+>E2 : E2
+
+export class F2 {}
+>F2 : F2
+
+export class G {}
+>G : G
+
+export type GAlias = G | A;
+>GAlias : G | A
+>G : G
+>A : A
+
+export class H {}
+>H : H
+
+export class I {}
+>I : I
+
+export type IAlias = I;
+>IAlias : I
+>I : I
+
+export class J<T> {}
+>J : J<T>
+>T : T
+
+export type AnyJ = J<any>;
+>AnyJ : J<any>
+>J : J<T>
+

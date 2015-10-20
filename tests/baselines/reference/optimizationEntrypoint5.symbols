@@ -1,0 +1,123 @@
+=== tests/cases/compiler/index.ts ===
+
+import * as foo from "./foo";
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+
+export * from "./foo";
+
+export class Main {
+>Main : Symbol(Main, Decl(index.ts, 2, 22))
+
+	a: foo.A;
+>a : Symbol(a, Decl(index.ts, 4, 19))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>A : Symbol(foo.A, Decl(foo.ts, 0, 0))
+
+	b: [foo.B];
+>b : Symbol(b, Decl(index.ts, 5, 10))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>B : Symbol(foo.B, Decl(foo.ts, 1, 17))
+
+	c: (foo.C);
+>c : Symbol(c, Decl(index.ts, 6, 12))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>C : Symbol(foo.C, Decl(foo.ts, 2, 17))
+
+	d: foo.D[];
+>d : Symbol(d, Decl(index.ts, 7, 12))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>D : Symbol(foo.D, Decl(foo.ts, 3, 17))
+
+	e: foo.E | foo.E2;
+>e : Symbol(e, Decl(index.ts, 8, 12))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>E : Symbol(foo.E, Decl(foo.ts, 4, 17))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>E2 : Symbol(foo.E2, Decl(foo.ts, 6, 17))
+
+	f: foo.F & foo.F2;
+>f : Symbol(f, Decl(index.ts, 9, 19))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>F : Symbol(foo.F, Decl(foo.ts, 5, 17))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>F2 : Symbol(foo.F2, Decl(foo.ts, 7, 18))
+
+	g: foo.GAlias;
+>g : Symbol(g, Decl(index.ts, 10, 19))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>GAlias : Symbol(foo.GAlias, Decl(foo.ts, 9, 17))
+
+	h: {item: foo.H};
+>h : Symbol(h, Decl(index.ts, 11, 15))
+>item : Symbol(item, Decl(index.ts, 12, 5))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>H : Symbol(foo.H, Decl(foo.ts, 10, 27))
+
+	i: foo.IAlias;
+>i : Symbol(i, Decl(index.ts, 12, 18))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>IAlias : Symbol(foo.IAlias, Decl(foo.ts, 12, 17))
+
+	j: foo.J<number>;
+>j : Symbol(j, Decl(index.ts, 13, 15))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>J : Symbol(foo.J, Decl(foo.ts, 13, 23))
+
+	jj: foo.AnyJ;
+>jj : Symbol(jj, Decl(index.ts, 14, 18))
+>foo : Symbol(foo, Decl(index.ts, 1, 6))
+>AnyJ : Symbol(foo.AnyJ, Decl(foo.ts, 14, 20))
+}
+
+=== tests/cases/compiler/foo.ts ===
+
+export class A {}
+>A : Symbol(A, Decl(foo.ts, 0, 0))
+
+export class B {}
+>B : Symbol(B, Decl(foo.ts, 1, 17))
+
+export class C {}
+>C : Symbol(C, Decl(foo.ts, 2, 17))
+
+export class D {}
+>D : Symbol(D, Decl(foo.ts, 3, 17))
+
+export class E {}
+>E : Symbol(E, Decl(foo.ts, 4, 17))
+
+export class F {}
+>F : Symbol(F, Decl(foo.ts, 5, 17))
+
+export class E2 {}
+>E2 : Symbol(E2, Decl(foo.ts, 6, 17))
+
+export class F2 {}
+>F2 : Symbol(F2, Decl(foo.ts, 7, 18))
+
+export class G {}
+>G : Symbol(G, Decl(foo.ts, 8, 18))
+
+export type GAlias = G | A;
+>GAlias : Symbol(GAlias, Decl(foo.ts, 9, 17))
+>G : Symbol(G, Decl(foo.ts, 8, 18))
+>A : Symbol(A, Decl(foo.ts, 0, 0))
+
+export class H {}
+>H : Symbol(H, Decl(foo.ts, 10, 27))
+
+export class I {}
+>I : Symbol(I, Decl(foo.ts, 11, 17))
+
+export type IAlias = I;
+>IAlias : Symbol(IAlias, Decl(foo.ts, 12, 17))
+>I : Symbol(I, Decl(foo.ts, 11, 17))
+
+export class J<T> {}
+>J : Symbol(J, Decl(foo.ts, 13, 23))
+>T : Symbol(T, Decl(foo.ts, 14, 15))
+
+export type AnyJ = J<any>;
+>AnyJ : Symbol(AnyJ, Decl(foo.ts, 14, 20))
+>J : Symbol(J, Decl(foo.ts, 13, 23))
+
