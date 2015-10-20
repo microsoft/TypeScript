@@ -23,6 +23,8 @@ function main(): void {
     
     var diagnosticMessages: InputDiagnosticMessageTable = JSON.parse(inputStr);
 
+    Object.keys(diagnosticMessages).forEach(Utilities.styleCheck);
+
     var names = Utilities.getObjectKeys(diagnosticMessages);
     var nameMap = buildUniqueNameMap(names);
 
@@ -35,6 +37,14 @@ function main(): void {
     sys.writeFile(fileOutputPath, infoFileOutput);
 }
 
+function error(message: string) {
+    ts.sys.write("\x1b[91m"); // High intensity red.
+    ts.sys.write("Error");
+    ts.sys.write("\x1b[0m");  // Reset formatting.
+    ts.sys.write(': ' + message);
+    ts.sys.write(ts.sys.newLine + ts.sys.newLine);    
+}
+
 function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosticMessageTable) {
     const originalMessageForCode: string[] = [];
     let numConflicts = 0;
@@ -44,11 +54,7 @@ function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosti
 
         if (code in originalMessageForCode) {
             const originalMessage = originalMessageForCode[code];
-            ts.sys.write("\x1b[91m"); // High intensity red.
-            ts.sys.write("Error");
-            ts.sys.write("\x1b[0m");  // Reset formatting.
-            ts.sys.write(`: Diagnostic code '${code}' conflicts between "${originalMessage}" and "${currentMessage}".`);
-            ts.sys.write(ts.sys.newLine + ts.sys.newLine);
+            error(`Diagnostic code '${code}' conflicts between "${originalMessage}" and "${currentMessage}".`);
 
             numConflicts++;
         }
@@ -173,6 +179,12 @@ module NameGenerator {
 }
 
 module Utilities {
+    export function styleCheck(text: string) {
+        if (/\bmay\b/i.test(text)) {
+            error(`Diagnostic message '${text}' cannot use 'may'`);
+        }
+    }
+
     /// Return a list of all indices where a string occurs.
     export function collectMatchingIndices(name: string, proposedNames: string[], isCaseSensitive: boolean): number[] {
         var matchingIndices: number[] = [];

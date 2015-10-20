@@ -2,7 +2,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts(24,77): error
   Index signatures are incompatible.
     Type '{ a: string; b: number; c: string; } | { a: string; b: number; c: number; }' is not assignable to type '{ a: string; b: number; }'.
       Type '{ a: string; b: number; c: string; }' is not assignable to type '{ a: string; b: number; }'.
-        Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
+        Object literal can only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 
 
 ==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts (1 errors) ====
@@ -35,7 +35,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts(24,77): error
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type '{ a: string; b: number; c: string; } | { a: string; b: number; c: number; }' is not assignable to type '{ a: string; b: number; }'.
 !!! error TS2322:       Type '{ a: string; b: number; c: string; }' is not assignable to type '{ a: string; b: number; }'.
-!!! error TS2322:         Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
+!!! error TS2322:         Object literal can only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
     var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
     
     // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]

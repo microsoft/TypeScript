@@ -10,14 +10,14 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(12,8): e
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(12,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(13,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(14,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(20,17): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(20,23): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(21,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(22,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,14): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,20): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(30,22): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(20,17): error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(20,23): error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(21,25): error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(22,19): error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,14): error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,20): error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(30,22): error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{ y: number; }'.
 
 
 ==== tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts (20 errors) ====
@@ -66,15 +66,15 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): 
     function f3() {
         var { } = { x: 0, y: 0 };
                     ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+!!! error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{}'.
                           ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+!!! error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{}'.
         var { x } = { x: 0, y: 0 };
                             ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+!!! error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{ x: any; }'.
         var { y } = { x: 0, y: 0 };
                       ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+!!! error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{ y: any; }'.
         var { x, y } = { x: 0, y: 0 };
     }
     
@@ -83,15 +83,15 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): 
         var x: number, y: number;
         ({ } = { x: 0, y: 0 });
                  ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+!!! error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{}'.
                        ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+!!! error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{}'.
         ({ x } = { x: 0, y: 0 });
                          ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+!!! error TS2353: Object literal can only specify known properties, and 'y' does not exist in type '{ x: number; }'.
         ({ y } = { x: 0, y: 0 });
                    ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
+!!! error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{ y: number; }'.
         ({ x, y } = { x: 0, y: 0 });
     }
     

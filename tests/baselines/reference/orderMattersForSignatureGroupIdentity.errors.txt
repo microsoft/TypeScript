@@ -1,8 +1,8 @@
 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(19,5): error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-  Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+  Object literal can only specify known properties, and 's' does not exist in type '{ n: number; }'.
 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-  Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+  Object literal can only specify known properties, and 's' does not exist in type '{ n: number; }'.
 
 
 ==== tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts (3 errors) ====
@@ -27,7 +27,7 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS234
     v({ s: "", n: 0 }).toLowerCase();
         ~~~~~
 !!! error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-!!! error TS2345:   Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+!!! error TS2345:   Object literal can only specify known properties, and 's' does not exist in type '{ n: number; }'.
     
     var w: A;
     var w: C;
@@ -37,4 +37,4 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS234
     w({ s: "", n: 0 }).toLowerCase();
         ~~~~~
 !!! error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-!!! error TS2345:   Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+!!! error TS2345:   Object literal can only specify known properties, and 's' does not exist in type '{ n: number; }'.

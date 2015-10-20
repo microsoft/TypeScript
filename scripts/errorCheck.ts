@@ -3,7 +3,7 @@ let fs = require('fs');
 let async = require('async');
 let glob = require('glob');
 
-fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
+fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err: any, data: string) => {
     if (err) {
         throw err;
     }
@@ -19,11 +19,11 @@ fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
     let errRegex = /\(\d+,\d+\): error TS([^:]+):/g;
 
     let baseDir = 'tests/baselines/reference/';
-    fs.readdir(baseDir, (err, files) => {
+    fs.readdir(baseDir, (err: any, files: string[]) => {
         files = files.filter(f => f.indexOf('.errors.txt') > 0);
         let tasks: Array<(callback: () => void) => void> = [];
         files.forEach(f => tasks.push(done => {
-            fs.readFile(baseDir + f, 'utf-8', (err, baseline) => {
+            fs.readFile(baseDir + f, 'utf-8', (err: any, baseline: string) => {
                 if (err) throw err;
 
                 let g: string[];
@@ -37,12 +37,12 @@ fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
             });
         }));
 
-        async.parallelLimit(tasks, 25, done => {
+        async.parallelLimit(tasks, 25, () => {
             console.log('== List of errors not present in baselines ==');
             let count = 0;
             for (let k of keys) {
-                if (messages[k]['seen'] !== true) {
-                    console.log(k);
+                if (messages[k]['seen'] !== true && messages[k].category === 'Error') {
+                    console.log(messages[k].code + ': ' + k);
                     count++;
                 }
             }
@@ -51,7 +51,7 @@ fs.readFile('src/compiler/diagnosticMessages.json', 'utf-8', (err, data) => {
     });
 });
 
-fs.readFile('src/compiler/diagnosticInformationMap.generated.ts', 'utf-8', (err, data) => {
+fs.readFile('src/compiler/diagnosticInformationMap.generated.ts', 'utf-8', (err: any, data: string) => {
     let errorRegexp = /\s(\w+): \{ code/g;
     let errorNames: string[] = [];
     let errMatch: string[];
@@ -60,7 +60,7 @@ fs.readFile('src/compiler/diagnosticInformationMap.generated.ts', 'utf-8', (err,
     }
 
     let allSrc: string = '';
-    glob('./src/**/*.ts', {}, (err, files) => {
+    glob('./src/**/*.ts', {}, (err: any, files: string[]) => {
         console.log('Reading ' + files.length + ' source files');
         for (let file of files) {
             if (file.indexOf('diagnosticInformationMap.generated.ts') > 0) {

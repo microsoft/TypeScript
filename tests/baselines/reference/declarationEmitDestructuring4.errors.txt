@@ -1,4 +1,4 @@
-tests/cases/compiler/declarationEmitDestructuring4.ts(9,22): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+tests/cases/compiler/declarationEmitDestructuring4.ts(9,22): error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{}'.
 
 
 ==== tests/cases/compiler/declarationEmitDestructuring4.ts (1 errors) ====
@@ -12,6 +12,6 @@ tests/cases/compiler/declarationEmitDestructuring4.ts(9,22): error TS2353: Objec
     function baz3({}) { }
     function baz4({} = { x: 10 }) { }
                          ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+!!! error TS2353: Object literal can only specify known properties, and 'x' does not exist in type '{}'.
     
     

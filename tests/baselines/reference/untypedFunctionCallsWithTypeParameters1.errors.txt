@@ -1,10 +1,10 @@
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(3,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(5,10): error TS2347: Untyped function calls may not accept type arguments.
-tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(8,10): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(5,10): error TS2347: Untyped function calls cannot accept type arguments.
+tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(8,10): error TS2347: Untyped function calls cannot accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(10,7): error TS2420: Class 'C' incorrectly implements interface 'Function'.
   Property 'apply' is missing in type 'C'.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(18,10): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(22,10): error TS2347: Untyped function calls may not accept type arguments.
+tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(22,10): error TS2347: Untyped function calls cannot accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(28,10): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(35,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,1): error TS2346: Supplied parameters do not match any signature of call target.
@@ -19,12 +19,12 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,1): error TS2
     var y: any = x;
     var r2 = y<string>();
              ~~~~~~~~~~~
-!!! error TS2347: Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls cannot accept type arguments.
     
     var c: Function;
     var r3 = c<number>(); // should be an error
              ~~~~~~~~~~~
-!!! error TS2347: Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls cannot accept type arguments.
     
     class C implements Function {
           ~
@@ -45,7 +45,7 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,1): error TS2
     var c3: C2;
     var r5 = c3<number>(); // error
              ~~~~~~~~~~~~
-!!! error TS2347: Untyped function calls may not accept type arguments.
+!!! error TS2347: Untyped function calls cannot accept type arguments.
     
     interface I {
         (number): number;
