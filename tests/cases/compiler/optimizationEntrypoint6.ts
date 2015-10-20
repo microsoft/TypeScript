@@ -14,6 +14,8 @@ declare module "bar" {
 }
 
 // @Filename: main.ts
+///<reference path="./typings/foo/index.d.ts" />
+///<reference path="./typings/bar/index.d.ts" />
 export * from "./interop/index";
 export default 2+2;
 export class Baz {}
