@@ -1662,9 +1662,9 @@ namespace ts {
      * A generalization of the escape function described by escapeString configuable to handle
      * either single quotes or double quotes
      */
-    export function escapeStringByQuote(s: string, quoteMark: QuotationMark): string {
-        let regex = quoteMark === QuotationMark.Single ? singleQuoteEscapedCharsRegExp : escapedCharsRegExp;
-        let replacementMap = quoteMark === QuotationMark.Single ? singleQuoteEscapedCharsMap : escapedCharsMap;
+    export function escapeStringByQuote(s: string, quotationMark: QuotationMark): string {
+        let regex = quotationMark === QuotationMark.Single ? singleQuoteEscapedCharsRegExp : escapedCharsRegExp;
+        let replacementMap = quotationMark === QuotationMark.Single ? singleQuoteEscapedCharsMap : escapedCharsMap;
 
         s = regex.test(s) ? s.replace(regex, getReplacement) : s;
 
