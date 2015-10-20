@@ -6766,7 +6766,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (resolvePath) {
-                        text = makeModulePathSemiabsolute(host, currentSourceFile, text);
+                        text = makeModulePathSemiAbsolute(host, currentSourceFile, text);
                     }
                     write(text);
                 }
@@ -6813,7 +6813,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let externalModuleName = getExternalModuleNameText(importNode);
 
                     if (resolvePath) {
-                        externalModuleName = makeModulePathSemiabsolute(host, currentSourceFile, externalModuleName);
+                        externalModuleName = makeModulePathSemiAbsolute(host, currentSourceFile, externalModuleName);
                     }
 
                     // Find the name of the module alias, if there is one
