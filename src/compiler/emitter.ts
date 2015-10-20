@@ -376,7 +376,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             return true;
         }
 
-        function emitJavaScript(jsFilePath: string, root?: SourceFile) {
+        function emitJavaScript(jsFilePath: string, sourceMapFilePath: string, root?: SourceFile) {
             let writer = createTextWriter(newLine);
             let { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
@@ -872,24 +872,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (compilerOptions.inlineSourceMap) {
                         // Encode the sourceMap into the sourceMap url
                         let base64SourceMapText = convertToBase64(sourceMapText);
-                        sourceMapUrl = `//# sourceMappingURL=data:application/json;base64,${base64SourceMapText}`;
+                        sourceMapData.jsSourceMappingURL = `data:application/json;base64,${base64SourceMapText}`;
                     }
                     else {
                         // Write source map file
                         writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, sourceMapText, /*writeByteOrderMark*/ false);
-                        sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
                     }
+                    sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
 
                     // Write sourcemap url to the js file and write the js file
                     writeJavaScriptFile(emitOutput + sourceMapUrl, writeByteOrderMark);
                 }
 
                 // Initialize source map data
-                let sourceMapJsFile = getBaseFileName(normalizeSlashes(jsFilePath));
                 sourceMapData = {
-                    sourceMapFilePath: jsFilePath + ".map",
-                    jsSourceMappingURL: sourceMapJsFile + ".map",
-                    sourceMapFile: sourceMapJsFile,
+                    sourceMapFilePath: sourceMapFilePath,
+                    jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined,
+                    sourceMapFile: getBaseFileName(normalizeSlashes(jsFilePath)),
                     sourceMapSourceRoot: compilerOptions.sourceRoot || "",
                     sourceMapSources: [],
                     inputSourceFileNames: [],
@@ -7596,9 +7595,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitFile({ jsFilePath, declarationFilePath}: { jsFilePath: string, declarationFilePath: string }, sourceFile?: SourceFile) {
-            if (!host.isEmitBlocked(jsFilePath)) {
-                emitJavaScript(jsFilePath, sourceFile);
+        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string }, sourceFile?: SourceFile) {
+            // Make sure not to write js File and source map file if any of them cannot be written
+            if (!host.isEmitBlocked(jsFilePath) && (!sourceMapFilePath || !host.isEmitBlocked(sourceMapFilePath))) {
+                emitJavaScript(jsFilePath, sourceMapFilePath, sourceFile);
             }
 
             if (compilerOptions.declaration) {
