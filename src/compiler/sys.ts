@@ -370,20 +370,23 @@ namespace ts {
                 }
             }
 
+            function write(buffer: any, offset = 0) {
+                let toWrite = buffer.length - offset;
+                _fs.write(1, buffer, offset, toWrite, function(err: any, written: number, buffer: any){
+                    offset += written;
+                    if (toWrite > written) {
+                        write(buffer, offset);
+                    }
+                })
+            }
+
             return {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {
                     const buffer = new Buffer(s, "utf8");
-                    let offset = 0;
-                    let toWrite: number = buffer.length;
-                    let written = 0;
-                    // 1 is a standard descriptor for stdout
-                    while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
-                        offset += written;
-                        toWrite -= written;
-                    }
+                    write(buffer);
                 },
                 readFile,
                 writeFile,
