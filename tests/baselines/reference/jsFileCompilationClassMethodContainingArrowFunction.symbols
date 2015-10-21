@@ -1,0 +1,18 @@
+=== tests/cases/compiler/a.js ===
+
+class c {
+>c : Symbol(c, Decl(a.js, 0, 0))
+
+    method(a) {
+>method : Symbol(method, Decl(a.js, 1, 9))
+>a : Symbol(a, Decl(a.js, 2, 11))
+
+        let x = a => this.method(a);
+>x : Symbol(x, Decl(a.js, 3, 11))
+>a : Symbol(a, Decl(a.js, 3, 15))
+>this.method : Symbol(method, Decl(a.js, 1, 9))
+>this : Symbol(c, Decl(a.js, 0, 0))
+>method : Symbol(method, Decl(a.js, 1, 9))
+>a : Symbol(a, Decl(a.js, 3, 15))
+    }
+}
