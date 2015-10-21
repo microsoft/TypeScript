@@ -366,7 +366,7 @@ class ProjectRunner extends RunnerBase {
                         return resolutionInfo;
                     }
 
-                    it(name + ": " + moduleNameToString(moduleKind) , () => {
+                    it(name + ": " + moduleNameToString(moduleKind), () => {
                         // Compile using node
                         compilerResult = batchCompilerProjectTestCase(moduleKind);
                     });

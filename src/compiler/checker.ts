@@ -15015,6 +15015,7 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
+                getSymbolAtLocation,
                 getExportsOfModule: getExportsOfModuleAsArray,
                 getDefiningTypeOfSymbol: (symbol: Symbol) => {
                     let declaredType = getDeclaredTypeOfSymbol(symbol);

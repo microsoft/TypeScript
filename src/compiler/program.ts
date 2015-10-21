@@ -372,29 +372,6 @@ namespace ts {
             }
         }
 
-        // there has to be common source directory if user specified --outdir || --sourceRoot
-        // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
-        if (options.outDir || // there is --outDir specified
-            options.sourceRoot || // there is --sourceRoot specified
-            options.mapRoot) { // there is --mapRoot specified
-
-            if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
-                // If a rootDir is specified and is valid use it as the commonSourceDirectory
-                commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
-            }
-            else {
-                // Compute the commonSourceDirectory from the input files
-                commonSourceDirectory = computeCommonSourceDirectory(files);
-            }
-
-            if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
-                // Make sure directory path ends with directory separator so this string can directly
-                // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                // start with / making it rooted path
-                commonSourceDirectory += directorySeparator;
-            }
-        }
-
         verifyCompilerOptions();
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -540,12 +517,6 @@ namespace ts {
                 getSourceFiles: program.getSourceFiles,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
-                resolveModuleName: (name: string, containingFile?: string) => {
-                    let resolvedModule = resolveModuleNamesWorker([name], containingFile || "dummy.ts")[0];
-                    if (!resolvedModule)
-                        return;
-                    return resolvedModule.resolvedFileName;
-                },
             };
         }
 
@@ -1061,6 +1032,29 @@ namespace ts {
             // Cannot specify module gen that isn't amd or system with --out
             if (outFile && options.module && options.module !== ModuleKind.AMD && options.module !== ModuleKind.System) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+            }
+
+            // there has to be common source directory if user specified --outdir || --sourceRoot
+            // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
+            if (options.outDir || // there is --outDir specified
+                options.sourceRoot || // there is --sourceRoot specified
+                options.mapRoot) { // there is --mapRoot specified
+
+                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, host.getCurrentDirectory());
+                }
+                else {
+                    // Compute the commonSourceDirectory from the input files
+                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                }
+
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+                    // Make sure directory path ends with directory separator so this string can directly
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                    // start with / making it rooted path
+                    commonSourceDirectory += directorySeparator;
+                }
             }
 
             if (options.noEmit) {

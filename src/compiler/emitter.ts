@@ -497,7 +497,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitConcatenatedModule(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
-                let canonicalName = resolveToSemiabsolutePath(host, sourceFile.fileName);
+                let canonicalName = getExternalModuleNameFromPath(host, sourceFile.fileName);
                 sourceFile.moduleName = sourceFile.moduleName || canonicalName;
                 emit(sourceFile);
             }
@@ -6766,7 +6766,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (resolvePath) {
-                        text = makeModulePathSemiAbsolute(host, currentSourceFile, text);
+                        let name = lookupSpecifierName(externalImports[i]);
+                        if (name) {
+                            text = `"${name}"`;
+                        }
                     }
                     write(text);
                 }
@@ -6780,6 +6783,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 decreaseIndent();
                 writeLine();
                 write("});");
+            }
+
+            function lookupSpecifierName(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+                let specifier: Node;
+                if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    specifier = (declaration as ImportEqualsDeclaration).moduleReference;
+                }
+                else {
+                    specifier = (declaration as ImportDeclaration|ExportDeclaration).moduleSpecifier;
+                }
+                let moduleSymbol = resolver.getSymbolAtLocation(specifier);
+                if (!moduleSymbol) {
+                    return;
+                }
+                let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+                if (!moduleDeclaration || isDeclarationFile(moduleDeclaration)) {
+                    return;
+                }
+                return getExternalModuleNameFromPath(host, moduleDeclaration.fileName);
             }
 
             interface AMDDependencyNames {
@@ -6813,7 +6835,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let externalModuleName = getExternalModuleNameText(importNode);
 
                     if (resolvePath) {
-                        externalModuleName = makeModulePathSemiAbsolute(host, currentSourceFile, externalModuleName);
+                        let name = lookupSpecifierName(importNode);
+                        if (name) {
+                            externalModuleName = `"${name}"`;
+                        }
                     }
 
                     // Find the name of the module alias, if there is one

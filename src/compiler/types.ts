@@ -1612,6 +1612,7 @@ namespace ts {
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        getSymbolAtLocation(node: Node): Symbol;
         getExportsOfModule(symbol: Symbol): Symbol[];
         getDefiningTypeOfSymbol(symbol: Symbol): Type;
         getTypeAtLocation(node: Node): Type;

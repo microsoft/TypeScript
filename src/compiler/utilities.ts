@@ -41,7 +41,6 @@ namespace ts {
         getNewLine(): string;
 
         writeFile: WriteFileCallback;
-        resolveModuleName(path: string, containingFile?: string): string;
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
@@ -1609,7 +1608,13 @@ namespace ts {
         }
     }
 
-    let baseCharsMap: Map<string> = {
+    // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
+    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
+    // the language service. These characters should be escaped when printing, and if any characters are added,
+    // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
+    // There is no reason for this other than that JSON.stringify does not handle it either.
+    let escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    let escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -1618,25 +1623,12 @@ namespace ts {
         "\r": "\\r",
         "\n": "\\n",
         "\\": "\\\\",
+        "\"": "\\\"",
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
 
-    // This consists of the first 19 unprintable ASCII characters, canonical escapes, lineSeparator,
-    // paragraphSeparator, and nextLine. The latter three are just desirable to suppress new lines in
-    // the language service. These characters should be escaped when printing, and if any characters are added,
-    // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
-    // There is no reason for this other than that JSON.stringify does not handle it either.
-    let escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    let escapedCharsMap: Map<string> = extend(baseCharsMap, {
-        "\"": "\\\""
-    });
-
-    let singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    let singleQuoteEscapedCharsMap: Map<string> = extend(baseCharsMap, {
-        "\'": "\\\'"
-    });
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
@@ -1644,44 +1636,13 @@ namespace ts {
      * Note that this doesn't actually wrap the input in double quotes.
      */
     export function escapeString(s: string): string {
-        return escapeStringByQuote(s, QuotationMark.Double);
-    }
-
-    export const enum QuotationMark {
-        Double,
-        Single
-    }
-
-    export var QuotationMarkLookup: Map<string> = {
-        [QuotationMark.Double]: "\"",
-        [QuotationMark.Single]: "'",
-        "\"": QuotationMark.Double.toString(),
-        "'": QuotationMark.Single.toString(),
-    };
-
-    /**
-     * A generalization of the escape function described by escapeString configuable to handle
-     * either single quotes or double quotes
-     */
-    export function escapeStringByQuote(s: string, quotationMark: QuotationMark): string {
-        let regex = quotationMark === QuotationMark.Single ? singleQuoteEscapedCharsRegExp : escapedCharsRegExp;
-        let replacementMap = quotationMark === QuotationMark.Single ? singleQuoteEscapedCharsMap : escapedCharsMap;
-
-        s = regex.test(s) ? s.replace(regex, getReplacement) : s;
+        s = escapedCharsRegExp.test(s) ? s.replace(escapedCharsRegExp, getReplacement) : s;
 
         return s;
 
         function getReplacement(c: string) {
-            return replacementMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
+            return escapedCharsMap[c] || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
         }
-    }
-
-    /**
-     * Quotes a given string akin to the abstract Quote operation from ECMA-262 (24.3.2.2) 
-     * with the specified quotation mark
-     */
-    export function quoteString(s: string, quotemark: QuotationMark): string {
-        return QuotationMarkLookup[quotemark] + escapeStringByQuote(s, quotemark) + QuotationMarkLookup[quotemark];
     }
 
     export function isIntrinsicJsxName(name: string) {
@@ -1801,23 +1762,12 @@ namespace ts {
         };
     }
 
-    export function makeModulePathSemiAbsolute(host: EmitHost, currentSourceFile: SourceFile, externalModuleName: string): string {
-        let quotationMark = externalModuleName.charAt(0);
-        let unquotedModuleName = externalModuleName.substring(1, externalModuleName.length - 1);
-        let resolvedFileName = host.resolveModuleName(unquotedModuleName, currentSourceFile.fileName);
-        if (resolvedFileName) {
-            let semiAbsoluteName = resolveToSemiabsolutePath(host, resolvedFileName);
-            externalModuleName = quoteString(semiAbsoluteName, parseInt(QuotationMarkLookup[quotationMark]));
-        }
-        return externalModuleName;
-    }
-
     /**
      * Resolves a local path to a path which is absolute to the base of the emit
      */
-    export function resolveToSemiabsolutePath(host: EmitHost, path: string): string {
+    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
         let dir = host.getCurrentDirectory();
-        let relativePath = getRelativePathToDirectoryOrUrl(dir, path, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
+        let relativePath = getRelativePathToDirectoryOrUrl(dir, fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
         return removeFileExtension(relativePath);
     }
 
