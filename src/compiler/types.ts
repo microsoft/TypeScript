@@ -361,6 +361,7 @@ namespace ts {
     }
 
     export const enum NodeFlags {
+        None =              0,
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
         Public =            0x00000010,  // Property/Method

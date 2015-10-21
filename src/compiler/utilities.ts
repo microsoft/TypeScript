@@ -1505,7 +1505,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind);
+        let node = <SynthesizedNode>createNode(kind, /* pos */ -1, /* end */ -1);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
