@@ -108,11 +108,6 @@ namespace ts {
                 let path = compilerOptions.optimizationEntrypoint;
                 let entrypoint = host.getSourceFile(path);
                 if (!entrypoint) {
-                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, path));
-                    return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
-                }
-                if (!isExternalModule(entrypoint)) {
-                    diagnostics.push(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, path));
                     return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
                 noDeclare = false;

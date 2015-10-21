@@ -1615,7 +1615,6 @@ namespace ts {
         getSymbolAtLocation(node: Node): Symbol;
         getExportsOfModule(symbol: Symbol): Symbol[];
         getDefiningTypeOfSymbol(symbol: Symbol): Type;
-        getTypeAtLocation(node: Node): Type;
         resolveEntityName(entityName: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol;
         getTypeWalker(accept?: (type: Type) => boolean): TypeWalker;
     }

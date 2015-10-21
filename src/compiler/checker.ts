@@ -15027,7 +15027,6 @@ namespace ts {
                         return valueType;
                     }
                 },
-                getTypeAtLocation: getTypeOfNode,
                 resolveEntityName,
                 getTypeWalker
             };
