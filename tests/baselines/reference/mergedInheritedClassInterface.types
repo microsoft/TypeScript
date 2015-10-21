@@ -1,0 +1,77 @@
+=== tests/cases/conformance/classes/classDeclarations/mergedInheritedClassInterface.ts ===
+interface BaseInterface {
+>BaseInterface : BaseInterface
+
+    required: number;
+>required : number
+
+    optional?: number;
+>optional : number
+}
+
+declare class BaseClass {
+>BaseClass : BaseClass
+
+    baseMethod();
+>baseMethod : () => any
+
+    x2: number;
+>x2 : number
+}
+
+interface Child extends BaseInterface {
+>Child : Child
+>BaseInterface : BaseInterface
+
+    x3: number;
+>x3 : number
+}
+
+declare class Child extends BaseClass {
+>Child : Child
+>BaseClass : BaseClass
+
+    x4: number;
+>x4 : number
+
+    method();
+>method : () => any
+}
+
+// checks if properties actually were merged
+var child : Child;
+>child : Child
+>Child : Child
+
+child.required;
+>child.required : number
+>child : Child
+>required : number
+
+child.optional;
+>child.optional : number
+>child : Child
+>optional : number
+
+child.x3;
+>child.x3 : number
+>child : Child
+>x3 : number
+
+child.x4;
+>child.x4 : number
+>child : Child
+>x4 : number
+
+child.baseMethod();
+>child.baseMethod() : any
+>child.baseMethod : () => any
+>child : Child
+>baseMethod : () => any
+
+child.method();
+>child.method() : any
+>child.method : () => any
+>child : Child
+>method : () => any
+
