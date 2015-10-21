@@ -11,7 +11,7 @@ namespace ts.server {
         input: process.stdin,
         output: process.stdout,
         terminal: false,
-    });  
+    });
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -58,7 +58,7 @@ namespace ts.server {
         isVerbose() {
             return this.loggingEnabled() && (this.level == "verbose");
         }
-        
+
 
         msg(s: string, type = "Err") {
             if (this.fd < 0) {
@@ -89,18 +89,18 @@ namespace ts.server {
         }
 
         exit() {
-            this.projectService.log("Exiting...","Info");
+            this.projectService.log("Exiting...", "Info");
             this.projectService.closeLog();
             process.exit(0);
         }
 
         listen() {
-            rl.on('line',(input: string) => {
+            rl.on('line', (input: string) => {
                 var message = input.trim();
                 this.onMessage(message);
             });
 
-            rl.on('close',() => {
+            rl.on('close', () => {
                 this.exit();
             });
         }
@@ -154,6 +154,52 @@ namespace ts.server {
     // TODO: check that this location is writable
 
     var logger = createLoggerFromEnv();
+
+    var messagesToWrite: string[] = [];
+    function addMessage(message: string) {
+        messagesToWrite.push(message);
+        // If the current message list has more than 1 messages, that means
+        // the current writing is not ended yet, so don't start new writeNext
+        // as it may interfere with ongoing writing sessions.
+        if (messagesToWrite.length === 1) {
+            startWrite();
+        }
+    }
+
+    function startWrite() {
+        if (messagesToWrite.length === 0) {
+            return;
+        }
+
+        let messageToWrite = messagesToWrite[0];
+        let buffer = new Buffer(messageToWrite, "utf8");
+        write(buffer);
+    }
+
+    function writeNext() {
+        if (messagesToWrite.length > 0) {
+            messagesToWrite = copyListRemovingItem(messagesToWrite[0], messagesToWrite);
+        }
+        startWrite();
+    }
+
+    function write(buffer: any, offset = 0) {
+        let toWrite = buffer.length - offset;
+        fs.write(1, buffer, offset, toWrite, /*position*/undefined, function(err: any, written: number, buffer: any) {
+            offset += written;
+            if (toWrite > written) {
+                // there are some content left that still need to be written
+                write(buffer, offset);
+            }
+            else {
+                // ready to write the next string
+                writeNext();
+            }
+        })
+    }
+
+    // Override sys.write because fs.writeSync is not reliable on Node 4
+    ts.sys.write = (s: string) => addMessage(s);
 
     var ioSession = new IOSession(ts.sys, logger);
     process.on('uncaughtException', function(err: Error) {
