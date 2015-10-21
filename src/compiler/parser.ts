@@ -2,15 +2,15 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
-    let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
+    let nodeConstructors = new Array<new (pos: number, end: number) => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
-    export function getNodeConstructor(kind: SyntaxKind): new () => Node {
+    export function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
 
-    export function createNode(kind: SyntaxKind): Node {
-        return new (getNodeConstructor(kind))();
+    export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
+        return new (getNodeConstructor(kind))(pos, end);
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
@@ -993,14 +993,10 @@ namespace ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
-            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
-
-            node.pos = pos;
-            node.end = pos;
-            return node;
+            return new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
