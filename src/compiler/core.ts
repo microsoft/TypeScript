@@ -797,13 +797,13 @@ namespace ts {
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: kind => {
             function Node() {
+                this.pos = -1;
+                this.end = -1;
+                this.flags = 0;
+                this.parent = undefined;
             }
             Node.prototype = {
-                kind: kind,
-                pos: -1,
-                end: -1,
-                flags: 0,
-                parent: undefined,
+                kind: kind
             };
             return <any>Node;
         },
