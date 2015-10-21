@@ -5,15 +5,15 @@ interface BaseInterface {
 
 declare class BaseClass {
     baseMethod();
-    x2: number;
+    baseNumber: number;
 }
 
 interface Child extends BaseInterface {
-    x3: number;
+    additional: number;
 }
 
 declare class Child extends BaseClass {
-    x4: number;
+    classNumber: number;
     method();
 }
 
@@ -21,7 +21,8 @@ declare class Child extends BaseClass {
 var child : Child;
 child.required;
 child.optional;
-child.x3;
-child.x4;
+child.additional;
+child.baseNumber;
+child.classNumber;
 child.baseMethod();
 child.method();
