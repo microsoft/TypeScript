@@ -6795,7 +6795,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 let moduleSymbol = resolver.getSymbolAtLocation(specifier);
                 if (!moduleSymbol) {
-                    return;    
+                    return;
                 }
                 let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
                 if (!moduleDeclaration || isDeclarationFile(moduleDeclaration)) {
