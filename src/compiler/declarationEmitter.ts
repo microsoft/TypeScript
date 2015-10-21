@@ -735,9 +735,7 @@ namespace ts {
         }
 
         function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
-            Debug.assert(moduleSpecifier.kind === SyntaxKind.StringLiteral);
-
-            if ((!root) && (compilerOptions.out || compilerOptions.outFile)) {
+            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
                 let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
                 if (moduleSymbol) {
                     let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
