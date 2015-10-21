@@ -739,14 +739,15 @@ namespace ts {
 
             if ((!root) && (compilerOptions.out || compilerOptions.outFile)) {
                 let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
-                if (moduleSymbol && moduleSymbol.valueDeclaration &&
-                    moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile &&
-                    !isDeclarationFile(<SourceFile>moduleSymbol.valueDeclaration)) {
-                    let nonRelativeModuleName = getExternalModuleNameFromPath(host, (moduleSymbol.valueDeclaration as SourceFile).fileName);
-                    write("\"");
-                    write(nonRelativeModuleName);
-                    write("\"");
-                    return;
+                if (moduleSymbol) {
+                    let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+                    if (moduleDeclaration && !isDeclarationFile(moduleDeclaration)) {
+                        let nonRelativeModuleName = getExternalModuleNameFromPath(host, moduleDeclaration.fileName);
+                        write("\"");
+                        write(nonRelativeModuleName);
+                        write("\"");
+                        return;
+                    }
                 }
             }
 

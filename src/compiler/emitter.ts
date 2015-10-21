@@ -6766,7 +6766,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (resolvePath) {
-                        text = `"${lookupSpecifierName(externalImports[i])}"`;
+                        let name = lookupSpecifierName(externalImports[i]);
+                        if (name) {
+                            text = `"${name}"`;
+                        }
                     }
                     write(text);
                 }
@@ -6791,7 +6794,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     specifier = (declaration as ImportDeclaration|ExportDeclaration).moduleSpecifier;
                 }
                 let moduleSymbol = resolver.getSymbolAtLocation(specifier);
-                return getExternalModuleNameFromPath(host, (moduleSymbol.valueDeclaration as SourceFile).fileName);
+                let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+                if (!moduleDeclaration || isDeclarationFile(moduleDeclaration)) {
+                    return;
+                }
+                return getExternalModuleNameFromPath(host, moduleDeclaration.fileName);
             }
 
             interface AMDDependencyNames {
@@ -6825,7 +6832,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let externalModuleName = getExternalModuleNameText(importNode);
 
                     if (resolvePath) {
-                        externalModuleName = `"${lookupSpecifierName(importNode)}"`;
+                        let name = lookupSpecifierName(importNode);
+                        if (name) {
+                            externalModuleName = `"${name}"`;
+                        }
                     }
 
                     // Find the name of the module alias, if there is one
