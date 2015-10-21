@@ -729,15 +729,28 @@ namespace ts {
                 }
                 write(" from ");
             }
-            let match: RegExpMatchArray;
-            if ((!root) && node.moduleSpecifier.kind === SyntaxKind.StringLiteral && (match = getTextOfNode(node.moduleSpecifier).match(/('|")(\.\/|\.\.\/)/))) {
-                write(makeModulePathSemiAbsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
-            }
-            else {
-                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
-            }
+            emitExternalModuleSpecifier(node.moduleSpecifier);
             write(";");
             writer.writeLine();
+        }
+
+        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
+            Debug.assert(moduleSpecifier.kind === SyntaxKind.StringLiteral);
+
+            if ((!root) && (compilerOptions.out || compilerOptions.outFile)) {
+                let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
+                if (moduleSymbol && moduleSymbol.valueDeclaration &&
+                    moduleSymbol.valueDeclaration.kind === SyntaxKind.SourceFile &&
+                    !isDeclarationFile(<SourceFile>moduleSymbol.valueDeclaration)) {
+                    let nonRelativeModuleName = getExternalModuleNameFromPath(host, (moduleSymbol.valueDeclaration as SourceFile).fileName);
+                    write("\"");
+                    write(nonRelativeModuleName);
+                    write("\"");
+                    return;
+                }
+            }
+
+            writeTextOfNode(currentSourceFile, moduleSpecifier);
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
@@ -771,13 +784,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                let match: RegExpMatchArray;
-                if ((!root) && node.moduleSpecifier.kind === SyntaxKind.StringLiteral && (match = getTextOfNode(node.moduleSpecifier).match(/('|")(\.\/|\.\.\/)/))) {
-                    write(makeModulePathSemiAbsolute(host, currentSourceFile, getTextOfNode(node.moduleSpecifier)));
-                }
-                else {
-                    writeTextOfNode(currentSourceFile, node.moduleSpecifier);
-                }
+                emitExternalModuleSpecifier(node.moduleSpecifier);
             }
             write(";");
             writer.writeLine();

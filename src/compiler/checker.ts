@@ -14867,7 +14867,8 @@ namespace ts {
                 collectLinkedAliases,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
-                isOptionalParameter
+                isOptionalParameter,
+                getSymbolAtLocation
             };
         }
 
