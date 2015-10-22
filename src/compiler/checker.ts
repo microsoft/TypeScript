@@ -160,8 +160,6 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
-        let cjsRequireType: Type;
-
         let tupleTypes: Map<TupleType> = {};
         let unionTypes: Map<UnionType> = {};
         let intersectionTypes: Map<IntersectionType> = {};
@@ -4203,13 +4201,9 @@ namespace ts {
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
         function getExportedTypeFromNamespace(namespace: string, name: string): Type {
-            let typeSymbol = getExportedSymbolFromNamespace(namespace, name);
-            return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
-        }
-
-        function getExportedSymbolFromNamespace(namespace: string, name: string): Symbol {
             let namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            return namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type | SymbolFlags.Value);
+            let typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
+            return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
         }
 
         function getGlobalESSymbolConstructorSymbol() {
@@ -14937,8 +14931,6 @@ namespace ts {
             getGlobalPromiseConstructorSymbol = memoize(() => getGlobalValueSymbol("Promise"));
             getGlobalPromiseConstructorLikeType = memoize(() => getGlobalType("PromiseConstructorLike"));
             getGlobalThenableType = memoize(createThenableType);
-
-            cjsRequireType = getExportedTypeFromNamespace("CommonJS", "Require");
 
             // If we're in ES6 mode, load the TemplateStringsArray.
             // Otherwise, default to 'unknown' for the purposes of type checking in LS scenarios.
