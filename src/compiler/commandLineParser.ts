@@ -410,62 +410,18 @@ namespace ts {
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
+      * @param host Instance of ParseConfigHost used to enumerate files in folder.
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
-        let errors: Diagnostic[] = [];
+        let { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
 
         return {
-            options: getCompilerOptions(),
+            options,
             fileNames: getFileNames(),
             errors
         };
-
-        function getCompilerOptions(): CompilerOptions {
-            let options: CompilerOptions = {};
-            let optionNameMap: Map<CommandLineOption> = {};
-            forEach(optionDeclarations, option => {
-                optionNameMap[option.name] = option;
-            });
-            let jsonOptions = json["compilerOptions"];
-            if (jsonOptions) {
-                for (let id in jsonOptions) {
-                    if (hasProperty(optionNameMap, id)) {
-                        let opt = optionNameMap[id];
-                        let optType = opt.type;
-                        let value = jsonOptions[id];
-                        let expectedType = typeof optType === "string" ? optType : "string";
-                        if (typeof value === expectedType) {
-                            if (typeof optType !== "string") {
-                                let key = value.toLowerCase();
-                                if (hasProperty(optType, key)) {
-                                    value = optType[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                    value = 0;
-                                }
-                            }
-                            if (opt.isFilePath) {
-                                value = normalizePath(combinePaths(basePath, value));
-                                if (value === "") {
-                                    value = ".";
-                                }
-                            }
-                            options[opt.name] = value;
-                        }
-                        else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
-                        }
-                    }
-                    else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
-                    }
-                }
-            }
-            return options;
-        }
 
         function getFileNames(): string[] {
             let fileNames: string[] = [];
@@ -500,5 +456,52 @@ namespace ts {
             }
             return fileNames;
         }
+    }
+
+    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
+        let options: CompilerOptions = {};
+        let errors: Diagnostic[] = [];
+
+        if (!jsonOptions) {
+            return { options, errors };
+        }
+
+        let optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+
+        for (let id in jsonOptions) {
+            if (hasProperty(optionNameMap, id)) {
+                let opt = optionNameMap[id];
+                let optType = opt.type;
+                let value = jsonOptions[id];
+                let expectedType = typeof optType === "string" ? optType : "string";
+                if (typeof value === expectedType) {
+                    if (typeof optType !== "string") {
+                        let key = value.toLowerCase();
+                        if (hasProperty(optType, key)) {
+                            value = optType[key];
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                            value = 0;
+                        }
+                    }
+                    if (opt.isFilePath) {
+                        value = normalizePath(combinePaths(basePath, value));
+                        if (value === "") {
+                            value = ".";
+                        }
+                    }
+                    options[opt.name] = value;
+                }
+                else {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                }
+            }
+            else {
+                errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+            }
+        }
+
+        return { options, errors };
     }
 }

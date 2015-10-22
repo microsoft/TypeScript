@@ -30,6 +30,8 @@ tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2304: Cannot find name 'i3'.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
+  Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2304: Cannot find name 'i4'.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -66,12 +68,14 @@ tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2304: Cannot find name 'i7'.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
+  Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(204,22): error TS2304: Cannot find name 'i8'.
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (61 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -280,6 +284,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     //var obj40: i4 = function foo() { };
     var obj41: i4 = <i4> anyVar;
     var obj42: i4 = new <i4> anyVar;
+        ~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'i4'.
+!!! error TS2322:   Index signature is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -402,6 +409,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     //var obj84: i8 = function foo() { };
     var obj85: i8 = <i8> anyVar;
     var obj86: i8 = new <i8> anyVar;
+        ~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'i8'.
+!!! error TS2322:   Index signature is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~

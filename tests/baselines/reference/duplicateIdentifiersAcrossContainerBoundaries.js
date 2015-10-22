@@ -3,7 +3,7 @@ module M {
     export interface I { }
 }
 module M {
-    export class I { } // error
+    export class I { }
 }
 
 module M {
@@ -60,7 +60,7 @@ var M;
         }
         return I;
     })();
-    M.I = I; // error
+    M.I = I;
 })(M || (M = {}));
 var M;
 (function (M) {
