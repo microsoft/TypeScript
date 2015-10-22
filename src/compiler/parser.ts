@@ -2745,18 +2745,34 @@ namespace ts {
             }
         }
 
-        function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
-            Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
+        function fillSimpleArrowFunctionSignature(awaitContext: boolean, signature: SignatureDeclaration, identifier?: Identifier) {
+            let savedAwaitContext = inAwaitContext();
+            if (awaitContext) {
+                setAwaitContext(true);
+            }
 
-            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            if (identifier === undefined) {
+                identifier = parseIdentifier();
+            }
 
             let parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter, identifier.pos);
             parameter.name = identifier;
             finishNode(parameter);
 
-            node.parameters = <NodeArray<ParameterDeclaration>>[parameter];
-            node.parameters.pos = parameter.pos;
-            node.parameters.end = parameter.end;
+            signature.parameters = <NodeArray<ParameterDeclaration>>[parameter];
+            signature.parameters.pos = parameter.pos;
+            signature.parameters.end = parameter.end;
+
+            if (awaitContext) {
+                setAwaitContext(savedAwaitContext);
+            }
+        }
+
+        function parseSimpleArrowFunctionExpression(identifier: Identifier): Expression {
+            Debug.assert(token === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
+
+            let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction, identifier.pos);
+            fillSimpleArrowFunctionSignature(/*awaitContext*/ false, node, identifier);
 
             node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>");
             node.body = parseArrowFunctionExpressionBody(/*isAsync*/ false);
@@ -2765,7 +2781,7 @@ namespace ts {
         }
 
         function tryParseParenthesizedArrowFunctionExpression(): Expression {
-            let triState = isParenthesizedArrowFunctionExpression();
+            let triState = isParenthesizedOrAsyncArrowFunctionExpression();
             if (triState === Tristate.False) {
                 // It's definitely not a parenthesized arrow function expression.
                 return undefined;
@@ -2776,7 +2792,7 @@ namespace ts {
             // it out, but don't allow any ambiguity, and return 'undefined' if this could be an
             // expression instead.
             let arrowFunction = triState === Tristate.True
-                ? parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ true)
+                ? parseParenthesizedOrAsyncArrowFunctionExpressionHead(/*allowAmbiguity*/ true)
                 : tryParse(parsePossibleParenthesizedArrowFunctionExpressionHead);
 
             if (!arrowFunction) {
@@ -2801,9 +2817,9 @@ namespace ts {
         //  False       -> There *cannot* be a parenthesized arrow function here.
         //  Unknown     -> There *might* be a parenthesized arrow function here.
         //                 Speculatively look ahead to be sure, and rollback if not.
-        function isParenthesizedArrowFunctionExpression(): Tristate {
+        function isParenthesizedOrAsyncArrowFunctionExpression(): Tristate {
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken || token === SyntaxKind.AsyncKeyword) {
-                return lookAhead(isParenthesizedArrowFunctionExpressionWorker);
+                return lookAhead(isParenthesizedOrAsyncArrowFunctionExpressionWorker);
             }
 
             if (token === SyntaxKind.EqualsGreaterThanToken) {
@@ -2816,10 +2832,17 @@ namespace ts {
             return Tristate.False;
         }
 
-        function isParenthesizedArrowFunctionExpressionWorker() {
+        function isParenthesizedOrAsyncArrowFunctionExpressionWorker() {
             if (token === SyntaxKind.AsyncKeyword) {
                 nextToken();
                 if (scanner.hasPrecedingLineBreak()) {
+                    return Tristate.False;
+                }
+                if (doInAwaitContext(isIdentifier)) {
+                    nextToken();
+                    if (token === SyntaxKind.EqualsGreaterThanToken) {
+                        return Tristate.True;
+                    }
                     return Tristate.False;
                 }
                 if (token !== SyntaxKind.OpenParenToken && token !== SyntaxKind.LessThanToken) {
@@ -2924,22 +2947,29 @@ namespace ts {
         }
 
         function parsePossibleParenthesizedArrowFunctionExpressionHead(): ArrowFunction {
-            return parseParenthesizedArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
+            return parseParenthesizedOrAsyncArrowFunctionExpressionHead(/*allowAmbiguity*/ false);
         }
 
-        function parseParenthesizedArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
+        function parseParenthesizedOrAsyncArrowFunctionExpressionHead(allowAmbiguity: boolean): ArrowFunction {
             let node = <ArrowFunction>createNode(SyntaxKind.ArrowFunction);
             setModifiers(node, parseModifiersForArrowFunction());
             let isAsync = !!(node.flags & NodeFlags.Async);
 
-            // Arrow functions are never generators.
-            //
-            // If we're speculatively parsing a signature for a parenthesized arrow function, then
-            // we have to have a complete parameter list.  Otherwise we might see something like
-            // a => (b => c)
-            // And think that "(b =>" was actually a parenthesized arrow function with a missing
-            // close paren.
-            fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ !allowAmbiguity, node);
+            if (isAsync && doInAwaitContext(isIdentifier)) {
+                // If this is an identifier preceeded by an async keyword, then this is
+                // an AsyncArrowFunction with an AsyncBindingIdentifier
+                fillSimpleArrowFunctionSignature(/*awaitContext*/ true, node);
+            }
+            else {
+                // Arrow functions are never generators.
+                //
+                // If we're speculatively parsing a signature for a parenthesized arrow function, then
+                // we have to have a complete parameter list.  Otherwise we might see something like
+                // a => (b => c)
+                // And think that "(b =>" was actually a parenthesized arrow function with a missing
+                // close paren.
+                fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ isAsync, /*requireCompleteParameterList*/ !allowAmbiguity, node);
+            }
 
             // If we couldn't get parameters, we definitely could not parse out an arrow function.
             if (!node.parameters) {

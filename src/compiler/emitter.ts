@@ -4154,9 +4154,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitSignatureParametersForArrow(node: FunctionLikeDeclaration) {
                 // Check whether the parameter list needs parentheses and preserve no-parenthesis
-                if (node.parameters.length === 1 && node.pos === node.parameters[0].pos) {
-                    emit(node.parameters[0]);
-                    return;
+                if (node.parameters.length === 1) {
+                    let startPos = node.modifiers ? node.modifiers.end : node.pos;
+                    if (startPos === node.parameters[0].pos) {
+                        emit(node.parameters[0]);
+                        return;
+                    }
                 }
 
                 emitSignatureParameters(node);
