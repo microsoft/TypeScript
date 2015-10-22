@@ -627,7 +627,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
+    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
     },
@@ -2044,7 +2044,7 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
     },
@@ -2105,11 +2105,11 @@
         "category": "Message",
         "code": 6010
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)": {
-        "category": "Message",
-        "code": 6015
-    },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
+  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+    "category": "Message",
+    "code": 6015
+  },
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
     },
@@ -2193,14 +2193,14 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es2015'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'.": {
-        "category": "Error",
-        "code": 6047
-    },
+  "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
+    "category": "Error",
+    "code": 6047
+  },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
         "code": 6048
