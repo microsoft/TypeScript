@@ -29,13 +29,13 @@ export {default as BBaseMain, Inner as Middle} from "./b";
 >Middle : any
 
 export {default as CBaseMain, Inner as Innermost} from "./c";
->default : typeof (Missing)
->CBaseMain : typeof (Missing)
+>default : typeof Main
+>CBaseMain : typeof Main
 >Inner : any
 >Innermost : any
 
 export {default} from "./a";
->default : typeof (Missing)
+>default : typeof Main
 
 === tests/cases/compiler/a.ts ===
 import {default as BaseMain, Inner as Middle} from "./b";
@@ -43,9 +43,9 @@ import {default as BaseMain, Inner as Middle} from "./b";
 >BaseMain : typeof BaseMain
 >Inner : any
 >Middle : any
->default_1_1 : (Missing)
 
 export default class Main extends BaseMain {
+>Main : Main
 >BaseMain : BaseMain
 
 	memberc: Middle;
@@ -66,7 +66,6 @@ import {default as BaseMain, Inner as Innermost} from "./c";
 >BaseMain : typeof BaseMain
 >Inner : any
 >Innermost : any
->Inner_2 : (Missing)
 
 export default class Main extends BaseMain {
 >Main : Main
@@ -82,6 +81,8 @@ export default class Main extends BaseMain {
 }
 
 export interface Inner {
+>Inner : Inner
+
 	item2: number;
 >item2 : number
 }
@@ -95,14 +96,15 @@ export interface Detail {
 
 === tests/cases/compiler/c.ts ===
 export default class Main {
->default_2 : (Missing)
->Inner_1 : (Missing)
+>Main : Main
 
 	member1: string;
 >member1 : string
 }
 
 export interface Inner {
+>Inner : Inner
+
 	item: number;
 >item : number
 }

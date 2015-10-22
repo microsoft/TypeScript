@@ -101,7 +101,7 @@ define("tests/cases/compiler/node_modules/bar/index", ["require", "exports"], fu
     })();
     exports.Dependency = Dependency;
 });
-define("tests/cases/compiler/interop/foodep", ["require", "exports", "tests/cases/compiler/node_modules/foo/index"], function (require, exports, foo_1) {
+define("tests/cases/compiler/interop/foodep", ["require", "exports", "foo"], function (require, exports, foo_1) {
     var FooDependency = (function (_super) {
         __extends(FooDependency, _super);
         function FooDependency() {
@@ -111,7 +111,7 @@ define("tests/cases/compiler/interop/foodep", ["require", "exports", "tests/case
     })(foo_1.Dependency);
     exports.FooDependency = FooDependency;
 });
-define("tests/cases/compiler/interop/bardep", ["require", "exports", "tests/cases/compiler/node_modules/bar/index"], function (require, exports, bar_1) {
+define("tests/cases/compiler/interop/bardep", ["require", "exports", "bar"], function (require, exports, bar_1) {
     var BarDependency = (function (_super) {
         __extends(BarDependency, _super);
         function BarDependency() {

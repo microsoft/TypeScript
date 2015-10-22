@@ -45,7 +45,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 define("tests/cases/compiler/node_modules/foo/index", ["require", "exports"], function (require, exports) {
     return Foo;
 });
-define("tests/cases/compiler/main", ["require", "exports", "tests/cases/compiler/node_modules/foo/index"], function (require, exports, Foo) {
+define("tests/cases/compiler/main", ["require", "exports", "foo"], function (require, exports, Foo) {
     var Baz = (function (_super) {
         __extends(Baz, _super);
         function Baz() {
@@ -64,8 +64,8 @@ export declare class Baz extends Foo implements Foo.Bar {
     member: number;
 }
 //// [bundled.d.ts]
-import * as Import from "foo";
-export declare class Baz extends Import implements Import.Bar {
+import * as foo from "foo";
+export declare class Baz extends foo implements foo.Bar {
     member: number;
 }
 
@@ -73,7 +73,7 @@ export declare class Baz extends Import implements Import.Bar {
 //// [DtsFileErrors]
 
 
-bundled.d.ts(1,25): error TS2307: Cannot find module 'foo'.
+bundled.d.ts(1,22): error TS2307: Cannot find module 'foo'.
 
 
 ==== tests/cases/compiler/node_modules/foo/index.d.ts (0 errors) ====
@@ -94,10 +94,10 @@ bundled.d.ts(1,25): error TS2307: Cannot find module 'foo'.
     }
     
 ==== bundled.d.ts (1 errors) ====
-    import * as Import from "foo";
-                            ~~~~~
+    import * as foo from "foo";
+                         ~~~~~
 !!! error TS2307: Cannot find module 'foo'.
-    export declare class Baz extends Import implements Import.Bar {
+    export declare class Baz extends foo implements foo.Bar {
         member: number;
     }
     

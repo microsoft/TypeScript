@@ -1,11 +1,11 @@
 === tests/cases/compiler/node_modules/foo/index.d.ts ===
 
->Import : typeof Foo
-
 declare class Foo {}
 >Foo : Foo
 
 declare namespace Foo {
+>Foo : typeof Foo
+
 	export interface Bar {
 >Bar : Bar
 

@@ -179,7 +179,7 @@ namespace ts {
                     let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
                     // If the reference file is a declaration file or an external module, emit that reference
-                    if (referencedFile && (isDeclaration(referencedFile) &&
+                    if (referencedFile && (isDeclarationFile(referencedFile) &&
                         !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
                         writeReferencePath(referencedFile);
@@ -1215,7 +1215,7 @@ namespace ts {
             else {
                 write("module ");
             }
-            if (node.name.kind === SyntaxKind.Identifier) {
+            if (node.name && node.name.kind === SyntaxKind.Identifier) {
                 emitIdentifier(node.name);
             }
             else {
@@ -1224,7 +1224,7 @@ namespace ts {
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
-                if (node.name.kind === SyntaxKind.Identifier) {
+                if (node.name && node.name.kind === SyntaxKind.Identifier) {
                     emitIdentifier(node.name);
                 }
                 else {
@@ -1285,7 +1285,7 @@ namespace ts {
 
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
-            if (node.name.kind === SyntaxKind.Identifier) {
+            if (node.name && node.name.kind === SyntaxKind.Identifier) {
                 emitIdentifier(node.name as Identifier);
             }
             else {
@@ -1502,12 +1502,8 @@ namespace ts {
                     // If this node is a computed name, it can only be a symbol, because we've already skipped
                     // it if it's not a well known symbol. In that case, the text of the name will be exactly
                     // what we want, namely the name expression enclosed in brackets.
-                    if (node.name.kind === SyntaxKind.Identifier) {
-                        emitIdentifier(node.name as Identifier);
-                    }
-                    else {
-                        emitBindingPattern(node.name as BindingPattern);
-                    }
+                    emitIdentifier(node.name as Identifier);
+
                     // If optional property emit ?
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
                         write("?");
@@ -1644,7 +1640,7 @@ namespace ts {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(node);
-                if (node.name.kind === SyntaxKind.Identifier) {
+                if (node.name && node.name.kind === SyntaxKind.Identifier) {
                     emitIdentifier(node.name as Identifier);
                 }
                 else {
@@ -1739,7 +1735,7 @@ namespace ts {
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
-                    if (node.name.kind === SyntaxKind.Identifier) {
+                    if (node.name && node.name.kind === SyntaxKind.Identifier) {
                         emitIdentifier(node.name as Identifier);
                     }
                     else {
@@ -1750,7 +1746,7 @@ namespace ts {
                     write("constructor");
                 }
                 else {
-                    if (node.name.kind === SyntaxKind.Identifier) {
+                    if (node.name && node.name.kind === SyntaxKind.Identifier) {
                         emitIdentifier(node.name as Identifier);
                     }
                     else {
@@ -2052,6 +2048,9 @@ namespace ts {
         }
 
         function emitIdentifier(node: Identifier) {
+            if (!node) {
+                return;
+            }
             let symbol = resolver.getSymbolAtLocation(node);
             if (symbol && symbol.id in symbolGeneratedNameMap) {
                 write(symbolGeneratedNameMap[symbol.id]);

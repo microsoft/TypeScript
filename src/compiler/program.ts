@@ -1079,7 +1079,7 @@ namespace ts {
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
-            
+
             let entrypointPath = options.optimizationEntrypoint;
             if (entrypointPath) {
                 if (entrypointPath && !(outFile && options.module)) {

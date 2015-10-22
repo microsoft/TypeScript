@@ -43,9 +43,9 @@ import {default as BaseMain, Inner as Middle} from "./b";
 >BaseMain : Symbol(BaseMain, Decl(a.ts, 0, 8))
 >Inner : Symbol(Middle, Decl(a.ts, 0, 28))
 >Middle : Symbol(Middle, Decl(a.ts, 0, 28))
->default_1_1 : Symbol((Missing), Decl(a.ts, 0, 57))
 
 export default class Main extends BaseMain {
+>Main : Symbol(Main, Decl(a.ts, 0, 57))
 >BaseMain : Symbol(BaseMain, Decl(a.ts, 0, 8))
 
 	memberc: Middle;
@@ -66,7 +66,6 @@ import {default as BaseMain, Inner as Innermost} from "./c";
 >BaseMain : Symbol(BaseMain, Decl(b.ts, 0, 8))
 >Inner : Symbol(Innermost, Decl(b.ts, 0, 28))
 >Innermost : Symbol(Innermost, Decl(b.ts, 0, 28))
->Inner_2 : Symbol((Missing), Decl(b.ts, 5, 1))
 
 export default class Main extends BaseMain {
 >Main : Symbol(Main, Decl(b.ts, 0, 60))
@@ -82,6 +81,8 @@ export default class Main extends BaseMain {
 }
 
 export interface Inner {
+>Inner : Symbol(Inner, Decl(b.ts, 5, 1))
+
 	item2: number;
 >item2 : Symbol(item2, Decl(b.ts, 7, 24))
 }
@@ -95,14 +96,15 @@ export interface Detail {
 
 === tests/cases/compiler/c.ts ===
 export default class Main {
->default_2 : Symbol((Missing), Decl(c.ts, 0, 0))
->Inner_1 : Symbol((Missing), Decl(c.ts, 2, 1))
+>Main : Symbol(Main, Decl(c.ts, 0, 0))
 
 	member1: string;
 >member1 : Symbol(member1, Decl(c.ts, 0, 27))
 }
 
 export interface Inner {
+>Inner : Symbol(Inner, Decl(c.ts, 2, 1))
+
 	item: number;
 >item : Symbol(item, Decl(c.ts, 4, 24))
 }

@@ -15,8 +15,6 @@ export class Bar {
 
 === tests/cases/compiler/foo.ts ===
 
->Foo_1 : typeof Foo
-
 class Foo {
 >Foo : Foo
 
@@ -26,6 +24,7 @@ class Foo {
 }
 
 namespace Foo {}
+>Foo : typeof Foo
 
 export = Foo;
 >Foo : Foo
