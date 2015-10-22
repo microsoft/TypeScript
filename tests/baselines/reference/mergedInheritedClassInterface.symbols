@@ -15,27 +15,27 @@ declare class BaseClass {
     baseMethod();
 >baseMethod : Symbol(baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 25))
 
-    x2: number;
->x2 : Symbol(x2, Decl(mergedInheritedClassInterface.ts, 6, 17))
+    baseNumber: number;
+>baseNumber : Symbol(baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 17))
 }
 
 interface Child extends BaseInterface {
 >Child : Symbol(Child, Decl(mergedInheritedClassInterface.ts, 8, 1), Decl(mergedInheritedClassInterface.ts, 12, 1))
 >BaseInterface : Symbol(BaseInterface, Decl(mergedInheritedClassInterface.ts, 0, 0))
 
-    x3: number;
->x3 : Symbol(x3, Decl(mergedInheritedClassInterface.ts, 10, 39))
+    additional: number;
+>additional : Symbol(additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
 }
 
 declare class Child extends BaseClass {
 >Child : Symbol(Child, Decl(mergedInheritedClassInterface.ts, 8, 1), Decl(mergedInheritedClassInterface.ts, 12, 1))
 >BaseClass : Symbol(BaseClass, Decl(mergedInheritedClassInterface.ts, 3, 1))
 
-    x4: number;
->x4 : Symbol(x4, Decl(mergedInheritedClassInterface.ts, 14, 39))
+    classNumber: number;
+>classNumber : Symbol(classNumber, Decl(mergedInheritedClassInterface.ts, 14, 39))
 
     method();
->method : Symbol(method, Decl(mergedInheritedClassInterface.ts, 15, 15))
+>method : Symbol(method, Decl(mergedInheritedClassInterface.ts, 15, 24))
 }
 
 // checks if properties actually were merged
@@ -53,15 +53,20 @@ child.optional;
 >child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 20, 3))
 >optional : Symbol(BaseInterface.optional, Decl(mergedInheritedClassInterface.ts, 1, 21))
 
-child.x3;
->child.x3 : Symbol(Child.x3, Decl(mergedInheritedClassInterface.ts, 10, 39))
+child.additional;
+>child.additional : Symbol(Child.additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
 >child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 20, 3))
->x3 : Symbol(Child.x3, Decl(mergedInheritedClassInterface.ts, 10, 39))
+>additional : Symbol(Child.additional, Decl(mergedInheritedClassInterface.ts, 10, 39))
 
-child.x4;
->child.x4 : Symbol(Child.x4, Decl(mergedInheritedClassInterface.ts, 14, 39))
+child.baseNumber;
+>child.baseNumber : Symbol(BaseClass.baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 17))
 >child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 20, 3))
->x4 : Symbol(Child.x4, Decl(mergedInheritedClassInterface.ts, 14, 39))
+>baseNumber : Symbol(BaseClass.baseNumber, Decl(mergedInheritedClassInterface.ts, 6, 17))
+
+child.classNumber;
+>child.classNumber : Symbol(Child.classNumber, Decl(mergedInheritedClassInterface.ts, 14, 39))
+>child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 20, 3))
+>classNumber : Symbol(Child.classNumber, Decl(mergedInheritedClassInterface.ts, 14, 39))
 
 child.baseMethod();
 >child.baseMethod : Symbol(BaseClass.baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 25))
@@ -69,7 +74,7 @@ child.baseMethod();
 >baseMethod : Symbol(BaseClass.baseMethod, Decl(mergedInheritedClassInterface.ts, 5, 25))
 
 child.method();
->child.method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 15))
+>child.method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 24))
 >child : Symbol(child, Decl(mergedInheritedClassInterface.ts, 20, 3))
->method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 15))
+>method : Symbol(Child.method, Decl(mergedInheritedClassInterface.ts, 15, 24))
 

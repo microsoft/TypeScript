@@ -15,24 +15,24 @@ declare class BaseClass {
     baseMethod();
 >baseMethod : () => any
 
-    x2: number;
->x2 : number
+    baseNumber: number;
+>baseNumber : number
 }
 
 interface Child extends BaseInterface {
 >Child : Child
 >BaseInterface : BaseInterface
 
-    x3: number;
->x3 : number
+    additional: number;
+>additional : number
 }
 
 declare class Child extends BaseClass {
 >Child : Child
 >BaseClass : BaseClass
 
-    x4: number;
->x4 : number
+    classNumber: number;
+>classNumber : number
 
     method();
 >method : () => any
@@ -53,15 +53,20 @@ child.optional;
 >child : Child
 >optional : number
 
-child.x3;
->child.x3 : number
+child.additional;
+>child.additional : number
 >child : Child
->x3 : number
+>additional : number
 
-child.x4;
->child.x4 : number
+child.baseNumber;
+>child.baseNumber : number
 >child : Child
->x4 : number
+>baseNumber : number
+
+child.classNumber;
+>child.classNumber : number
+>child : Child
+>classNumber : number
 
 child.baseMethod();
 >child.baseMethod() : any
