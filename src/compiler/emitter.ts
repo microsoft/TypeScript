@@ -2770,7 +2770,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              *   we we emit variable statement 'var' should be dropped.
              */
             function isSourceFileLevelDeclarationInSystemJsModule(node: Node, isExported: boolean): boolean {
-                if (!node || languageVersion >= ScriptTarget.ES6 || !isCurrentFileSystemExternalModule()) {
+                if (!node || !isCurrentFileSystemExternalModule()) {
                     return false;
                 }
 
