@@ -1410,9 +1410,16 @@ namespace ts {
         }
 
         function popImplicitLabel(implicitLabelIndex: number, outerState: Reachability): void {
-            Debug.assert(labelStack.length === implicitLabelIndex + 1, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
+            if (labelStack.length !== implicitLabelIndex + 1) {
+                Debug.assert(false, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
+            }
+
             let i = implicitLabels.pop();
-            Debug.assert(implicitLabelIndex === i, `i: ${i}, index: ${implicitLabelIndex}`);
+
+            if (implicitLabelIndex !== i) {
+                Debug.assert(false, `i: ${i}, index: ${implicitLabelIndex}`);
+            }
+
             setCurrentStateAtLabel(labelStack.pop(), outerState, /*name*/ undefined);
         }
 
