@@ -361,6 +361,7 @@ namespace ts {
     }
 
     export const enum NodeFlags {
+        None =              0,
         Export =            1 << 1,  // Declarations
         Ambient =           1 << 2,  // Declarations
         Public =            1 << 3,  // Property/Method
@@ -381,7 +382,6 @@ namespace ts {
         ContainsThis =      1 << 18,  // Interface contains references to "this"
         HasImplicitReturn =     1 << 19,  // If function implicitly returns on one of codepaths (initialized by binding)
         HasExplicitReturn =     1 << 20,  // If function has explicit reachable return on one of codepaths (initialized by binding)
-
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
         BlockScoped = Let | Const,

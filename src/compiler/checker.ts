@@ -4948,34 +4948,34 @@ namespace ts {
                         resolved.stringIndexType || resolved.numberIndexType || getPropertyOfType(type, name)) {
                         return true;
                     }
-                    return false;
                 }
-                if (type.flags & TypeFlags.UnionOrIntersection) {
+                else if (type.flags & TypeFlags.UnionOrIntersection) {
                     for (let t of (<UnionOrIntersectionType>type).types) {
                         if (isKnownProperty(t, name)) {
                             return true;
                         }
                     }
-                    return false;
                 }
-                return true;
+                return false;
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                for (let prop of getPropertiesOfObjectType(source)) {
-                    if (!isKnownProperty(target, prop.name)) {
-                        if (reportErrors) {
-                            // We know *exactly* where things went wrong when comparing the types.
-                            // Use this property as the error node as this will be more helpful in
-                            // reasoning about what went wrong.
-                            errorNode = prop.valueDeclaration;
-                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                        symbolToString(prop),
-                                        typeToString(target));
+                if (someConstituentTypeHasKind(target, TypeFlags.ObjectType)) {
+                    for (let prop of getPropertiesOfObjectType(source)) {
+                        if (!isKnownProperty(target, prop.name)) {
+                            if (reportErrors) {
+                                // We know *exactly* where things went wrong when comparing the types.
+                                // Use this property as the error node as this will be more helpful in
+                                // reasoning about what went wrong.
+                                errorNode = prop.valueDeclaration;
+                                reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                    symbolToString(prop), typeToString(target));
+                            }
+                            return true;
                         }
-                        return true;
                     }
                 }
+                return false;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
@@ -7524,9 +7524,6 @@ namespace ts {
                     case SyntaxKind.JsxSelfClosingElement:
                         checkJsxSelfClosingElement(<JsxSelfClosingElement>child);
                         break;
-                    default:
-                        // No checks for JSX Text
-                        Debug.assert(child.kind === SyntaxKind.JsxText);
                 }
             }
 
