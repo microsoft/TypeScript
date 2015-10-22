@@ -689,61 +689,56 @@ namespace ts {
 
             let imports: LiteralExpression[];
             for (let node of file.statements) {
-                collect(node, /* allowRelativeModuleNames */ true);
+                collect(node, /* allowRelativeModuleNames */ true, /* collectOnlyRequireCalls */ false);
             }
 
             file.imports = imports || emptyArray;
 
-            function collect(node: Node, allowRelativeModuleNames: boolean): void {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ExportDeclaration:
-                        let moduleNameExpr = getExternalModuleName(node);
-                        if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
-                            break;
-                        }
-                        if (!(<LiteralExpression>moduleNameExpr).text) {
-                            break;
-                        }
+            return;
 
-                        if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
-                            (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
-                        }
-                        break;
-                    case SyntaxKind.CallExpression:
-                        if (isJavaScriptFile && isRequireCall(node)) {
-
-                            let jsImports = (<CallExpression>node).arguments;
-                            if (jsImports) {
-                                imports = (imports || []);
-                                for (var i = 0; i < jsImports.length; i++) {
-                                    if (jsImports[i].kind === SyntaxKind.StringLiteral) {
-                                        imports.push(<StringLiteral>jsImports[i]);
-                                    }
-                                }
+            function collect(node: Node, allowRelativeModuleNames: boolean, collectOnlyRequireCalls: boolean): void {
+                if (!collectOnlyRequireCalls) {
+                    switch (node.kind) {
+                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ExportDeclaration:
+                            let moduleNameExpr = getExternalModuleName(node);
+                            if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
+                                break;
                             }
-                        }
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
-                            // TypeScript 1.0 spec (April 2014): 12.1.6
-                            // An AmbientExternalModuleDeclaration declares an external module. 
-                            // This type of declaration is permitted only in the global module.
-                            // The StringLiteral must specify a top - level external module name.
-                            // Relative external module names are not permitted
-                            forEachChild((<ModuleDeclaration>node).body, node => {
+                            if (!(<LiteralExpression>moduleNameExpr).text) {
+                                break;
+                            }
+
+                            if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
+                                (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                            }
+                            break;
+                        case SyntaxKind.ModuleDeclaration:
+                            if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6
-                                // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                // only through top - level external module names. Relative external module names are not permitted.
-                                collect(node, /* allowRelativeModuleNames */ false);
-                            });
-                        }
-                        break;
+                                // An AmbientExternalModuleDeclaration declares an external module. 
+                                // This type of declaration is permitted only in the global module.
+                                // The StringLiteral must specify a top - level external module name.
+                                // Relative external module names are not permitted
+                                forEachChild((<ModuleDeclaration>node).body, node => {
+                                    // TypeScript 1.0 spec (April 2014): 12.1.6
+                                    // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
+                                    // only through top - level external module names. Relative external module names are not permitted.
+                                    collect(node, /* allowRelativeModuleNames */ false, collectOnlyRequireCalls);
+                                });
+                            }
+                            break;
+                    }
                 }
 
-                if (isSourceFileJavaScript(file)) {
-                    forEachChild(node, node => collect(node, allowRelativeModuleNames));
+                if (isJavaScriptFile) {
+                    if (isRequireCall(node)) {
+                        (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                    }
+                    else {
+                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /* collectOnlyRequireCalls */ true));
+                    }
                 }
             }
         }
