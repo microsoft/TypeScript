@@ -269,7 +269,7 @@ namespace ts {
                         createSymbolEntry(name, symbol.id);
                     }
                     else {
-                        name = generateName(symbol, "Import");
+                        name = generateName(symbol, makeIdentifierFromModuleName(fileName));
                     }
                 });
                 if (!name) {
