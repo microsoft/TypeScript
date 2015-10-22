@@ -7031,7 +7031,7 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
-        function getContextualTypeForJsxExpression(expr: JsxExpression|JsxSpreadAttribute): Type {
+        function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
             // Contextual type only applies to JSX expressions that are in attribute assignments (not in 'Children' positions)
             if (expr.parent.kind === SyntaxKind.JsxAttribute) {
                 let attrib = <JsxAttribute>expr.parent;
@@ -7539,7 +7539,7 @@ namespace ts {
         /**
          * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
          */
-        function isJsxIntrinsicIdentifier(tagName: Identifier|QualifiedName) {
+        function isJsxIntrinsicIdentifier(tagName: Identifier | QualifiedName) {
             if (tagName.kind === SyntaxKind.QualifiedName) {
                 return false;
             }
@@ -7625,7 +7625,7 @@ namespace ts {
         /// If this is a class-based tag (otherwise returns undefined), returns the symbol of the class
         /// type or factory function.
         /// Otherwise, returns unknownSymbol.
-        function getJsxElementTagSymbol(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+        function getJsxElementTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
             let flags: JsxFlags = JsxFlags.UnknownElement;
             let links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
@@ -7638,7 +7638,7 @@ namespace ts {
             }
             return links.resolvedSymbol;
 
-            function lookupIntrinsicTag(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+            function lookupIntrinsicTag(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
                 let intrinsicElementsType = getJsxIntrinsicElementsType();
                 if (intrinsicElementsType !== unknownType) {
                     // Property case
@@ -7666,7 +7666,7 @@ namespace ts {
                 }
             }
 
-            function lookupClassTag(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+            function lookupClassTag(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
                 let valueSymbol: Symbol = resolveJsxTagName(node);
 
                 // Look up the value in the current scope
@@ -7680,7 +7680,7 @@ namespace ts {
                 return valueSymbol || unknownSymbol;
             }
 
-            function resolveJsxTagName(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+            function resolveJsxTagName(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
                 if (node.tagName.kind === SyntaxKind.Identifier) {
                     let tag = <Identifier>node.tagName;
                     let sym = getResolvedSymbol(tag);
@@ -15547,7 +15547,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarJsxElement(node: JsxOpeningElement|JsxSelfClosingElement) {
+        function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
             const seen: Map<boolean> = {};
             for (let attr of node.attributes) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {

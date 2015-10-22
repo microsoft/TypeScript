@@ -1404,10 +1404,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(span.literal);
             }
 
-            function jsxEmitReact(node: JsxElement|JsxSelfClosingElement) {
+            function jsxEmitReact(node: JsxElement | JsxSelfClosingElement) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
-                function emitTagName(name: Identifier|QualifiedName) {
+                function emitTagName(name: Identifier | QualifiedName) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
                         write("\"");
                         emit(name);
@@ -1557,7 +1557,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
+            function jsxEmitPreserve(node: JsxElement | JsxSelfClosingElement) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emit(node.name);
                     if (node.initializer) {
@@ -1572,7 +1572,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("}");
                 }
 
-                function emitAttributes(attribs: NodeArray<JsxAttribute|JsxSpreadAttribute>) {
+                function emitAttributes(attribs: NodeArray<JsxAttribute | JsxSpreadAttribute>) {
                     for (let i = 0, n = attribs.length; i < n; i++) {
                         if (i > 0) {
                             write(" ");
@@ -1588,7 +1588,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement|JsxSelfClosingElement) {
+                function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement | JsxSelfClosingElement) {
                     write("<");
                     emit(node.tagName);
                     if (node.attributes.length > 0 || (node.kind === SyntaxKind.JsxSelfClosingElement)) {
@@ -7246,7 +7246,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.JsxElement:
                     case SyntaxKind.JsxSelfClosingElement:
-                        return emitJsxElement(<JsxElement|JsxSelfClosingElement>node);
+                        return emitJsxElement(<JsxElement | JsxSelfClosingElement>node);
                     case SyntaxKind.JsxText:
                         return emitJsxText(<JsxText>node);
                     case SyntaxKind.JsxExpression:
