@@ -124,14 +124,15 @@ namespace ts {
                 let emittedReferencedFiles: SourceFile[] = [];
                 let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
                 forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isDeclarationFile(sourceFile)) {
+                        emitReferences(sourceFile, emittedReferencedFiles);
+                    }
                     if (!isExternalModuleOrDeclarationFile(sourceFile)) {
                         noDeclare = false;
-                        emitReferences(sourceFile, emittedReferencedFiles);
                         emitSourceFile(sourceFile);
                     }
                     else if (isExternalModule(sourceFile)) {
                         noDeclare = true;
-                        emitReferences(sourceFile, emittedReferencedFiles);
                         write(`declare module "${sourceFile.moduleName}" {`);
                         writeLine();
                         increaseIndent();
@@ -178,7 +179,7 @@ namespace ts {
                     let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
                     // If the reference file is a declaration file or an external module, emit that reference
-                    if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                    if (referencedFile && (isDeclaration(referencedFile) &&
                         !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
                         writeReferencePath(referencedFile);
