@@ -202,17 +202,6 @@ namespace ts {
                 return emitFlattenedTypeDefinitions(maybeRedirectionType.symbol.valueDeclaration as SourceFile);
             }
 
-            let createSyntheticIdentifiers = (symbol: Symbol, generatedName: string) => {
-                forEach(symbol.declarations, declaration => {
-                    let synthId = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
-                    synthId.flags |= NodeFlags.Synthetic;
-                    synthId.text = generatedName;
-                    synthId.parent = declaration;
-                    let oldName = declaration.name;
-                    undoActions.push(() => declaration.name = oldName);
-                    declaration.name = synthId;
-                });
-            };
             let createSymbolEntry = (name: string, id: number) => {
                 symbolNameSet[name] = 1;
                 symbolGeneratedNameMap[id] = name;
@@ -225,7 +214,6 @@ namespace ts {
                     }
                     symbolNameSet[name]++;
                     createSymbolEntry(generatedName, symbol.id);
-                    createSyntheticIdentifiers(symbol, generatedName);
                     return generatedName;
                 }
                 else {
@@ -279,7 +267,6 @@ namespace ts {
                     let symbol = declaration.symbol;
                     if (name) {
                         createSymbolEntry(name, symbol.id);
-                        createSyntheticIdentifiers(symbol, name);
                     }
                     else {
                         name = generateName(symbol, "Import");
@@ -413,7 +400,7 @@ namespace ts {
                                                 Debug.fail("Encountered export alias of untraversed type when flattening.");
                                             }
                                             write(" as ");
-                                            writeTextOfNode(currentSourceFile, d.name);
+                                            emitIdentifier(d.name);
                                             currentSourceFile = oldSourceFile;
                                         })(d));
                                     }
@@ -465,7 +452,6 @@ namespace ts {
                             let symbol = type.symbol;
                             if (symbol) {
                                 createSymbolEntry(name, symbol.id);
-                                createSyntheticIdentifiers(symbol, name);
                             }
                             return name;
                         })(exported, type);
@@ -481,13 +467,6 @@ namespace ts {
 
                     if (type.symbol) {
                         let symbol = type.symbol;
-                        if (symbol.name !== exported.name) {
-                            // check if this symbol is defined by another exported symbol
-                            if (!contains(exportedMembers, symbol)) {
-                                // If not, mangle its name to the exported symbol's name
-                                createSyntheticIdentifiers(symbol, exported.name);
-                            }
-                        }
                         createSymbolEntry(symbol.name, symbol.id);
                     }
                     createSymbolEntry(exported.name, exported.id);
@@ -840,14 +819,14 @@ namespace ts {
                     return;
                 }
                 if (entityName.kind === SyntaxKind.Identifier) {
-                    writeTextOfNode(currentSourceFile, entityName);
+                    emitIdentifier(entityName as Identifier);
                 }
                 else {
                     let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
                     let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
                     writeEntityName(left);
                     write(".");
-                    writeTextOfNode(currentSourceFile, right);
+                    emitIdentifier(right);
                 }
             }
 
@@ -882,7 +861,7 @@ namespace ts {
             }
 
             function emitTypePredicate(type: TypePredicateNode) {
-                writeTextOfNode(currentSourceFile, type.parameterName);
+                emitIdentifier(type.parameterName);
                 write(" is ");
                 emitType(type.type);
             }
@@ -957,7 +936,7 @@ namespace ts {
         function emitExportAssignment(node: ExportAssignment) {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
-                writeTextOfNode(currentSourceFile, node.expression);
+                emitIdentifier(node.expression as Identifier);
             }
             else {
                 // Expression
@@ -1096,7 +1075,7 @@ namespace ts {
                 write("export ");
             }
             write("import ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             write(" = ");
             if (isInternalModuleImportEqualsDeclaration(node)) {
                 emitTypeWithNewGetSymbolAccessibilityDiagnostic(<EntityName>node.moduleReference, getImportEntityNameVisibilityError);
@@ -1142,7 +1121,7 @@ namespace ts {
             if (node.importClause) {
                 let currentWriterPos = writer.getTextPos();
                 if (node.importClause.name && resolver.isDeclarationVisible(node.importClause)) {
-                    writeTextOfNode(currentSourceFile, node.importClause.name);
+                    emitIdentifier(node.importClause.name);
                 }
                 if (node.importClause.namedBindings && isVisibleNamedBinding(node.importClause.namedBindings)) {
                     if (currentWriterPos !== writer.getTextPos()) {
@@ -1151,7 +1130,7 @@ namespace ts {
                     }
                     if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         write("* as ");
-                        writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
+                        emitIdentifier((node.importClause.namedBindings as NamespaceImport).name);
                     }
                     else {
                         write("{ ");
@@ -1181,15 +1160,20 @@ namespace ts {
                 }
             }
 
-            writeTextOfNode(currentSourceFile, moduleSpecifier);
+            if (moduleSpecifier.kind === SyntaxKind.Identifier) {
+                emitIdentifier(moduleSpecifier as Identifier);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, moduleSpecifier);
+            }
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
             if (node.propertyName) {
-                writeTextOfNode(currentSourceFile, node.propertyName);
+                emitIdentifier(node.propertyName);
                 write(" as ");
             }
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
         }
 
         function emitExportSpecifier(node: ExportSpecifier) {
@@ -1230,11 +1214,21 @@ namespace ts {
             else {
                 write("module ");
             }
-            writeTextOfNode(currentSourceFile, node.name);
+            if (node.name.kind === SyntaxKind.Identifier) {
+                emitIdentifier(node.name);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node.name);
+            }
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
-                writeTextOfNode(currentSourceFile, node.name);
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    emitIdentifier(node.name);
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.name);
+                }
             }
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
@@ -1254,7 +1248,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             emitTypeParameters(node.typeParameters);
             write(" = ");
             emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
@@ -1278,7 +1272,7 @@ namespace ts {
                 write("const ");
             }
             write("enum ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             write(" {");
             writeLine();
             increaseIndent();
@@ -1290,7 +1284,12 @@ namespace ts {
 
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
-            writeTextOfNode(currentSourceFile, node.name);
+            if (node.name.kind === SyntaxKind.Identifier) {
+                emitIdentifier(node.name as Identifier);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node.name);
+            }
             let enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
@@ -1309,7 +1308,7 @@ namespace ts {
                 increaseIndent();
                 emitJsDocComments(node);
                 decreaseIndent();
-                writeTextOfNode(currentSourceFile, node.name);
+                emitIdentifier(node.name);
                 // If there is constraint present and this is not a type parameter of the private method emit the constraint
                 if (node.constraint && !isPrivateMethodTypeParameter(node)) {
                     write(" extends ");
@@ -1440,7 +1439,7 @@ namespace ts {
             }
 
             write("class ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
@@ -1464,7 +1463,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("interface ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
@@ -1502,7 +1501,12 @@ namespace ts {
                     // If this node is a computed name, it can only be a symbol, because we've already skipped
                     // it if it's not a well known symbol. In that case, the text of the name will be exactly
                     // what we want, namely the name expression enclosed in brackets.
-                    writeTextOfNode(currentSourceFile, node.name);
+                    if (node.name.kind === SyntaxKind.Identifier) {
+                        emitIdentifier(node.name as Identifier);
+                    }
+                    else {
+                        emitBindingPattern(node.name as BindingPattern);
+                    }
                     // If optional property emit ?
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
                         write("?");
@@ -1589,7 +1593,7 @@ namespace ts {
                         emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
                     else {
-                        writeTextOfNode(currentSourceFile, bindingElement.name);
+                        emitIdentifier(bindingElement.name as Identifier);
                         writeTypeOfDeclaration(bindingElement, /*type*/ undefined, getBindingElementTypeVisibilityError);
                     }
                 }
@@ -1639,7 +1643,12 @@ namespace ts {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(node);
-                writeTextOfNode(currentSourceFile, node.name);
+                if (node.name.kind === SyntaxKind.Identifier) {
+                    emitIdentifier(node.name as Identifier);
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.name);
+                }
                 if (!(node.flags & NodeFlags.Private)) {
                     accessorWithTypeAnnotation = node;
                     let type = getTypeAnnotationFromAccessor(node);
@@ -1729,13 +1738,23 @@ namespace ts {
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
-                    writeTextOfNode(currentSourceFile, node.name);
+                    if (node.name.kind === SyntaxKind.Identifier) {
+                        emitIdentifier(node.name as Identifier);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node.name);
+                    }
                 }
                 else if (node.kind === SyntaxKind.Constructor) {
                     write("constructor");
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node.name);
+                    if (node.name.kind === SyntaxKind.Identifier) {
+                        emitIdentifier(node.name as Identifier);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node.name);
+                    }
                     if (hasQuestionToken(node)) {
                         write("?");
                     }
@@ -1875,7 +1894,7 @@ namespace ts {
                 emitBindingPattern(<BindingPattern>node.name);
             }
             else {
-                writeTextOfNode(currentSourceFile, node.name);
+                emitIdentifier(node.name as Identifier);
             }
             if (resolver.isOptionalParameter(node)) {
                 write("?");
@@ -2001,7 +2020,7 @@ namespace ts {
                         // Example:
                         //      original: function foo({y: [a,b,c]}) {}
                         //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
-                        writeTextOfNode(currentSourceFile, bindingElement.propertyName);
+                        emitIdentifier(bindingElement.propertyName);
                         write(": ");
                     }
                     if (bindingElement.name) {
@@ -2024,10 +2043,20 @@ namespace ts {
                             if (bindingElement.dotDotDotToken) {
                                 write("...");
                             }
-                            writeTextOfNode(currentSourceFile, bindingElement.name);
+                            emitIdentifier(bindingElement.name as Identifier);
                         }
                     }
                 }
+            }
+        }
+
+        function emitIdentifier(node: Identifier) {
+            let symbol = resolver.getSymbolAtLocation(node);
+            if (symbol && symbol.id in symbolGeneratedNameMap) {
+                write(symbolGeneratedNameMap[symbol.id]);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node);
             }
         }
 

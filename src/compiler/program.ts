@@ -1079,18 +1079,20 @@ namespace ts {
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
-
-            if (options.optimizationEntrypoint && !(outFile && options.module)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_with_both_options_1_and_2, "optimizationEntrypoint", "module", "outFile"));
-            }
             
-            let path = options.optimizationEntrypoint;
-            let entrypoint = getSourceFile(path);
-            if (!entrypoint) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_not_found, path));
-            }
-            if (!isExternalModule(entrypoint)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, path));
+            let entrypointPath = options.optimizationEntrypoint;
+            if (entrypointPath) {
+                if (entrypointPath && !(outFile && options.module)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_with_both_options_1_and_2, "optimizationEntrypoint", "module", "outFile"));
+                }
+
+                let entrypoint = getSourceFile(entrypointPath);
+                if (!entrypoint) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_not_found, entrypointPath));
+                }
+                if (!isExternalModule(entrypoint)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, entrypointPath));
+                }
             }
         }
     }

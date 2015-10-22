@@ -13,7 +13,6 @@ namespace ts {
         leadingCommentRanges?: CommentRange[];
         trailingCommentRanges?: CommentRange[];
         startsOnNewLine: boolean;
-        text?: string;
     }
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
@@ -1739,10 +1738,6 @@ namespace ts {
         }
 
         function writeTextOfNode(sourceFile: SourceFile, node: Node) {
-            if (node && node.flags & NodeFlags.Synthetic) {
-                write((node as SynthesizedNode).text);
-                return;
-            }
             write(getSourceTextOfNodeFromSourceFile(sourceFile, node));
         }
 
