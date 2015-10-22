@@ -3,7 +3,7 @@
 
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING = "Place spaces around the '|' and '&' type operators";;
+    public static FAILURE_STRING = "Place spaces around the '|' and '&' type operators";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new TypeOperatorSpacingWalker(sourceFile, this.getOptions()));
