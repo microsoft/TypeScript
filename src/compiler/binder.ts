@@ -92,13 +92,17 @@ namespace ts {
         IsContainerWithLocals = IsContainer | HasLocals
     }
 
+    const binder = createBinder();
+
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
         let start = new Date().getTime();
-        bindSourceFileWorker(file, options);
+        binder(file, options);
         bindTime += new Date().getTime() - start;
     }
 
-    function bindSourceFileWorker(file: SourceFile, options: CompilerOptions) {
+    function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
+        let file: SourceFile;
+        let options: CompilerOptions;
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
@@ -115,19 +119,37 @@ namespace ts {
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
-        let inStrictMode = !!file.externalModuleIndicator;
+        let inStrictMode: boolean;
 
         let symbolCount = 0;
-        let Symbol = objectAllocator.getSymbolConstructor();
-        let classifiableNames: Map<string> = {};
+        let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
+        let classifiableNames: Map<string>;
 
-        if (!file.locals) {
-            bind(file);
-            file.symbolCount = symbolCount;
-            file.classifiableNames = classifiableNames;
+        function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
+            file = f;
+            options = opts;
+            inStrictMode = !!file.externalModuleIndicator;
+            classifiableNames = {};
+            Symbol = objectAllocator.getSymbolConstructor();
+
+            if (!file.locals) {
+                bind(file);
+                file.symbolCount = symbolCount;
+                file.classifiableNames = classifiableNames;
+            }
+
+            parent = undefined;
+            container = undefined;
+            blockScopeContainer = undefined;
+            lastContainer = undefined;
+            seenThisKeyword = false;
+            hasExplicitReturn = false;
+            labelStack = undefined;
+            labelIndexMap = undefined;
+            implicitLabels = undefined;
         }
 
-        return;
+        return bindSourceFile;
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
@@ -360,31 +382,23 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
-            if (node.kind === SyntaxKind.InterfaceDeclaration) {
-                seenThisKeyword = false;
-                bindWithReachabilityChecks(node);
-                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
-            }
-            else {
-                bindWithReachabilityChecks(node);
-            }
-
-            container = saveContainer;
-            parent = saveParent;
-            blockScopeContainer = savedBlockScopeContainer;
-        }
-
-        function bindWithReachabilityChecks(node: Node): void {
             let savedReachabilityState: Reachability;
             let savedLabelStack: Reachability[];
             let savedLabels: Map<number>;
             let savedImplicitLabels: number[];
             let savedHasExplicitReturn: boolean;
 
-            // reset all reachability check related flags on node (for incremental scenarios)
-            node.flags &= ~NodeFlags.ReachabilityCheckFlags;
+            const kind = node.kind;
+            let flags = node.flags;
 
-            let saveState = node.kind === SyntaxKind.SourceFile || node.kind === SyntaxKind.ModuleBlock || isFunctionLike(node);
+            // reset all reachability check related flags on node (for incremental scenarios)
+            flags &= ~NodeFlags.ReachabilityCheckFlags;
+
+            if (kind === SyntaxKind.InterfaceDeclaration) {
+                seenThisKeyword = false;
+            }
+
+            let saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
             if (saveState) {
                 savedReachabilityState = currentReachabilityState;
                 savedLabelStack = labelStack;
@@ -399,12 +413,18 @@ namespace ts {
 
             bindReachableStatement(node);
 
-            if (currentReachabilityState === Reachability.Reachable && isFunctionLike(node) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
-                node.flags |= NodeFlags.HasImplicitReturn;
+            if (currentReachabilityState === Reachability.Reachable && isFunctionLikeKind(kind) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                flags |= NodeFlags.HasImplicitReturn;
                 if (hasExplicitReturn) {
-                    node.flags |= NodeFlags.HasExplicitReturn;
+                    flags |= NodeFlags.HasExplicitReturn;
                 }
             }
+
+            if (kind === SyntaxKind.InterfaceDeclaration) {
+                flags = seenThisKeyword ? flags | NodeFlags.ContainsThis : flags & ~NodeFlags.ContainsThis;
+            }
+
+            node.flags = flags;
 
             if (saveState) {
                 hasExplicitReturn = savedHasExplicitReturn;
@@ -413,6 +433,10 @@ namespace ts {
                 labelIndexMap = savedLabels;
                 implicitLabels = savedImplicitLabels;
             }
+
+            container = saveContainer;
+            parent = saveParent;
+            blockScopeContainer = savedBlockScopeContainer;
         }
 
         /**
