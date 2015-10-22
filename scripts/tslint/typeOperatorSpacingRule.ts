@@ -3,7 +3,7 @@
 
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING = "Place spaces around the '|' and '&' type operators";
+    public static FAILURE_STRING = "The '|' and '&' operators must be surrounded by single spaces";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new TypeOperatorSpacingWalker(sourceFile, this.getOptions()));
@@ -12,15 +12,16 @@ export class Rule extends Lint.Rules.AbstractRule {
 
 class TypeOperatorSpacingWalker extends Lint.RuleWalker {
     public visitNode(node: ts.Node) {
-        if(node.kind === ts.SyntaxKind.UnionType || node.kind === ts.SyntaxKind.IntersectionType) {
-            let typeNode = <ts.UnionOrIntersectionTypeNode>node;
-            let expectedStart = typeNode.types[0].end + 2; // space, | or &
-            for (let i = 1; i < typeNode.types.length; i++) {
-                if(expectedStart !== typeNode.types[i].pos || typeNode.types[i].getLeadingTriviaWidth() !== 1) {
-                    const failure = this.createFailure(typeNode.types[i].pos, typeNode.types[i].getWidth(), Rule.FAILURE_STRING);
+        if (node.kind === ts.SyntaxKind.UnionType || node.kind === ts.SyntaxKind.IntersectionType) {
+            let types = (<ts.UnionOrIntersectionTypeNode>node).types;
+            let expectedStart = types[0].end + 2; // space, | or &
+            for (let i = 1; i < types.length; i++) {
+                let currentType = types[i];
+                if (expectedStart !== currentType.pos || currentType.getLeadingTriviaWidth() !== 1) {
+                    const failure = this.createFailure(currentType.pos, currentType.getWidth(), Rule.FAILURE_STRING);
                     this.addFailure(failure);
                 }
-                expectedStart = typeNode.types[i].end + 2;
+                expectedStart = currentType.end + 2;
             }
         }
         super.visitNode(node);
