@@ -209,7 +209,6 @@ namespace ts {
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         let currentDirectory: string;
         let existingDirectories: Map<boolean> = {};
-        let existingFiles: Map<boolean> = {};
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
@@ -250,14 +249,6 @@ namespace ts {
             return false;
         }
 
-        function fileExists(fileName: string): boolean {
-            if (hasProperty(existingFiles, fileName)) {
-                return existingFiles[fileName];
-            }
-
-            return existingFiles[fileName] = sys.fileExists(fileName);
-        }
-
         function ensureDirectoriesExist(directoryPath: string) {
             if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
                 let parentDirectory = getDirectoryPath(directoryPath);
@@ -290,7 +281,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine,
-            fileExists,
+            fileExists: fileName => sys.fileExists(fileName),
             readFile: fileName => sys.readFile(fileName)
         };
     }

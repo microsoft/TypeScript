@@ -159,6 +159,9 @@ namespace ts {
         let timerHandleForRecompilation: number;                    // Handle for 0.25s wait timer to trigger recompilation
         let timerHandleForDirectoryChanges: number;                 // Handle for 0.25s wait timer to trigger directory change handler
 
+        let cachedExistingFiles: Map<boolean>;
+        let hostFileExists: typeof compilerHost.fileExists;
+
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
@@ -274,7 +277,13 @@ namespace ts {
                 compilerHost = createCompilerHost(compilerOptions);
                 hostGetSourceFile = compilerHost.getSourceFile;
                 compilerHost.getSourceFile = getSourceFile;
+
+                hostFileExists = compilerHost.fileExists;
+                compilerHost.fileExists = fileExists;
             }
+
+            // reset the cache of existing files
+            cachedExistingFiles = {};
 
             let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -284,6 +293,13 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+        }
+
+        function fileExists(fileName: string): boolean {
+            if (hasProperty(cachedExistingFiles, fileName)) {
+                return cachedExistingFiles[fileName];
+            }
+            return cachedExistingFiles[fileName] = hostFileExists(fileName);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
