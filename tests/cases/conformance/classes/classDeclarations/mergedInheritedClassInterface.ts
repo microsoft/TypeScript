@@ -3,8 +3,8 @@ interface BaseInterface {
     optional?: number;
 }
 
-declare class BaseClass {
-    baseMethod();
+class BaseClass {
+    baseMethod() { }
     baseNumber: number;
 }
 
@@ -12,9 +12,19 @@ interface Child extends BaseInterface {
     additional: number;
 }
 
-declare class Child extends BaseClass {
+class Child extends BaseClass {
     classNumber: number;
-    method();
+    method() { }
+}
+
+interface ChildNoBaseClass extends BaseInterface {
+    additional2: string;
+}
+class ChildNoBaseClass {
+    classString: string;
+    method2() { }
+}
+class Grandchild extends ChildNoBaseClass {
 }
 
 // checks if properties actually were merged
@@ -26,3 +36,10 @@ child.baseNumber;
 child.classNumber;
 child.baseMethod();
 child.method();
+
+var grandchild: Grandchild;
+grandchild.required;
+grandchild.optional;
+grandchild.additional2;
+grandchild.classString;
+grandchild.method2();
