@@ -111,23 +111,23 @@ interface A { // T
     a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(a12, Decl(subtypingWithConstructSignatures5.ts, 20, 75))
 >x : Symbol(x, Decl(subtypingWithConstructSignatures5.ts, 21, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(subtypingWithConstructSignatures5.ts, 0, 0))
 >y : Symbol(y, Decl(subtypingWithConstructSignatures5.ts, 21, 29))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithConstructSignatures5.ts, 4, 43))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures5.ts, 3, 27))
 
     a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >a13 : Symbol(a13, Decl(subtypingWithConstructSignatures5.ts, 21, 68))
 >x : Symbol(x, Decl(subtypingWithConstructSignatures5.ts, 22, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(subtypingWithConstructSignatures5.ts, 0, 0))
 >y : Symbol(y, Decl(subtypingWithConstructSignatures5.ts, 22, 29))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures5.ts, 3, 27))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures5.ts, 3, 27))
 
     a14: new (x: { a: string; b: number }) => Object;
@@ -135,7 +135,7 @@ interface A { // T
 >x : Symbol(x, Decl(subtypingWithConstructSignatures5.ts, 23, 14))
 >a : Symbol(a, Decl(subtypingWithConstructSignatures5.ts, 23, 18))
 >b : Symbol(b, Decl(subtypingWithConstructSignatures5.ts, 23, 29))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 interface B extends A {
@@ -280,23 +280,23 @@ interface I extends B {
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
 >a12 : Symbol(a12, Decl(subtypingWithConstructSignatures5.ts, 43, 47))
 >T : Symbol(T, Decl(subtypingWithConstructSignatures5.ts, 44, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(subtypingWithConstructSignatures5.ts, 0, 0))
 >x : Symbol(x, Decl(subtypingWithConstructSignatures5.ts, 44, 37))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(subtypingWithConstructSignatures5.ts, 0, 0))
 >y : Symbol(y, Decl(subtypingWithConstructSignatures5.ts, 44, 52))
 >T : Symbol(T, Decl(subtypingWithConstructSignatures5.ts, 44, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures5.ts, 3, 27))
 
     a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
 >a13 : Symbol(a13, Decl(subtypingWithConstructSignatures5.ts, 44, 77))
 >T : Symbol(T, Decl(subtypingWithConstructSignatures5.ts, 45, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithConstructSignatures5.ts, 3, 27))
 >x : Symbol(x, Decl(subtypingWithConstructSignatures5.ts, 45, 40))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(subtypingWithConstructSignatures5.ts, 0, 0))
 >y : Symbol(y, Decl(subtypingWithConstructSignatures5.ts, 45, 55))
 >T : Symbol(T, Decl(subtypingWithConstructSignatures5.ts, 45, 14))

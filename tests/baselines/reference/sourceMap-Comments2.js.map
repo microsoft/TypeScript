@@ -1,0 +1,2 @@
+//// [sourceMap-Comments2.js.map]
+{"version":3,"file":"sourceMap-Comments2.js","sourceRoot":"","sources":["sourceMap-Comments2.ts"],"names":["foo","bar","baz","qat"],"mappings":"AAAA,aAAa,GAAW,EAAE,GAAW;IACjCA,MAAMA,CAACA;AACXA,CAACA;AAED;;GAEG;AACH,aAAa,GAAW,EAAE,GAAW;IACjCC,MAAMA,CAACA;AACXA,CAACA;AAED,uBAAuB;AACvB,aAAa,GAAW,EAAE,GAAW;IACjCC,MAAMA,CAACA;AACXA,CAACA;AAED,aAAa,GAAW,EAAE,GAAW;IACjCC,MAAMA,CAACA;AACXA,CAACA"}

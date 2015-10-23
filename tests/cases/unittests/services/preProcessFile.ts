@@ -50,6 +50,7 @@ describe('PreProcessFile:', function () {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 37 }, { fileName: "refFile2.ts", pos: 38, end: 73 },
                         { fileName: "refFile3.ts", pos: 74, end: 109 }, { fileName: "..\\refFile4d.ts", pos: 110, end: 150 }],
                     importedFiles: <ts.FileReference[]>[],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 });
         }),
@@ -59,6 +60,7 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 });
         }),
@@ -69,6 +71,7 @@ describe('PreProcessFile:', function () {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
                         { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 });
         }),
@@ -78,6 +81,7 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: <ts.FileReference[]>[],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 });
         }),
@@ -87,6 +91,7 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: <ts.FileReference[]>[],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 });
         }),
@@ -96,6 +101,7 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }, { fileName: "refFile2.ts", pos: 36, end: 71 }],
                     importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 });
         }),
@@ -105,6 +111,7 @@ describe('PreProcessFile:', function () {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }],
                     importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 })
         });
@@ -129,6 +136,7 @@ describe('PreProcessFile:', function () {
                         { fileName: "m6", pos: 160, end: 162 },
                         { fileName: "m7", pos: 199, end: 201 }
                     ],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 })
         });
@@ -147,9 +155,38 @@ describe('PreProcessFile:', function () {
                         { fileName: "m3", pos: 63, end: 65 },
                         { fileName: "m4", pos: 101, end: 103 },
                     ],
+                    ambientExternalModules: undefined,
                     isLibFile: false
                 })
         });
+        
+        it("Correctly return ambient external modules", () => {
+           test(`
+               declare module A {}
+               declare module "B" {}
+               function foo() {
+               }
+               `, false, {
+                   referencedFiles: [],
+                   importedFiles: [],
+                   ambientExternalModules: ["B"],
+                   isLibFile: false
+               })  
+        });
+
+        it("Correctly handles export import declarations", function () {
+            test("export import a = require(\"m1\");",
+                true,
+                {
+                    referencedFiles: [],
+                    importedFiles: [
+                        { fileName: "m1", pos: 26, end: 28 }
+                    ],
+                    ambientExternalModules: undefined,
+                    isLibFile: false
+                })
+        });
+
     });
 });
 

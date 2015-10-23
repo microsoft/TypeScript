@@ -24,6 +24,7 @@ namespace ts {
             set,
             contains,
             remove,
+            clear,
             forEachValue: forEachValueInMap
         };
 
@@ -50,6 +51,10 @@ namespace ts {
 
         function normalizeKey(key: string) {
             return getCanonicalFileName(normalizeSlashes(key));
+        }
+
+        function clear() {
+            files = {};
         }
     }
 
@@ -112,7 +117,7 @@ namespace ts {
         return count;
     }
 
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[]{
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         let result: T[];
         if (array) {
             result = [];
@@ -125,7 +130,7 @@ namespace ts {
         return result;
     }
 
-    export function map<T, U>(array: T[], f: (x: T) => U): U[]{
+    export function map<T, U>(array: T[], f: (x: T) => U): U[] {
         let result: U[];
         if (array) {
             result = [];
@@ -143,7 +148,7 @@ namespace ts {
         return array1.concat(array2);
     }
 
-    export function deduplicate<T>(array: T[]): T[]{
+    export function deduplicate<T>(array: T[]): T[] {
         let result: T[];
         if (array) {
             result = [];
@@ -282,14 +287,14 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T>(first: Map<T>, second: Map<T>): Map<T> {
-        let result: Map<T> = {};
+    export function extend<T1, T2>(first: Map<T1>, second: Map<T2>): Map<T1 & T2> {
+        let result: Map<T1 & T2> = {};
         for (let id in first) {
-            result[id] = first[id];
+            (result as any)[id] = first[id];
         }
         for (let id in second) {
             if (!hasProperty(result, id)) {
-                result[id] = second[id];
+                (result as any)[id] = second[id];
             }
         }
         return result;
@@ -432,8 +437,12 @@ namespace ts {
     }
 
     export function concatenateDiagnosticMessageChains(headChain: DiagnosticMessageChain, tailChain: DiagnosticMessageChain): DiagnosticMessageChain {
-        Debug.assert(!headChain.next);
-        headChain.next = tailChain;
+        let lastChain = headChain;
+        while (lastChain.next) {
+            lastChain = lastChain.next;
+        }
+
+        lastChain.next = tailChain;
         return headChain;
     }
 
@@ -481,7 +490,7 @@ namespace ts {
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
     }
 
-    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[]{
+    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
         return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
     }
 
@@ -695,6 +704,9 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
+        if (!path) {
+            return undefined;
+        }
         let i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
@@ -716,7 +728,24 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".tsx", ".ts", ".d.ts"];
+    export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
+    /**
+     *  List of extensions that will be used to look for external modules.
+     *  This list is kept separate from supportedExtensions to for cases when we'll allow to include .js files in compilation,
+     *  but still would like to load only TypeScript files as modules 
+     */
+    export const moduleFileExtensions = supportedExtensions;
+
+    export function isSupportedSourceFileName(fileName: string) {
+        if (!fileName) { return false; }
+
+        for (let extension of supportedExtensions) {
+            if (fileExtensionIs(fileName, extension)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
@@ -746,7 +775,7 @@ namespace ts {
     };
 
     export interface ObjectAllocator {
-        getNodeConstructor(kind: SyntaxKind): new () => Node;
+        getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
@@ -767,15 +796,13 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: kind => {
-            function Node() {
+            function Node(pos: number, end: number) {
+                this.pos = pos;
+                this.end = end;
+                this.flags = NodeFlags.None;
+                this.parent = undefined;
             }
-            Node.prototype = {
-                kind: kind,
-                pos: -1,
-                end: -1,
-                flags: 0,
-                parent: undefined,
-            };
+            Node.prototype = { kind };
             return <any>Node;
         },
         getSymbolConstructor: () => <any>Symbol,
@@ -790,7 +817,7 @@ namespace ts {
         VeryAggressive = 3,
     }
 
-    export module Debug {
+    export namespace Debug {
         let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
@@ -811,5 +838,15 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(false, message);
         }
+    }
+
+    export function copyListRemovingItem<T>(item: T, list: T[]) {
+        let copiedList: T[] = [];
+        for (let e of list) {
+            if (e !== item) {
+                copiedList.push(e);
+            }
+        }
+        return copiedList;
     }
 }

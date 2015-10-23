@@ -9,7 +9,7 @@ declare module bar {
     interface alpha { }
 }
 
-import f = require('reuseInnerModuleMember_0');
+import f = require('./reuseInnerModuleMember_0');
 module bar {
     var x: alpha;
 }

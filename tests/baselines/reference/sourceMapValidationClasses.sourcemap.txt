@@ -479,26 +479,26 @@ sourceFile:sourceMapValidationClasses.ts
 3 >                ^^^^^^^^
 4 >                        ^^^
 5 >                           ^^
-6 >                             ^^
-7 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                         
+6 >                             ^
+7 >                              ^
+8 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >) {
   >        
 2 >            var 
 3 >                greeters
 4 >                        : Greeter[] = 
 5 >                           []
-6 >                             ; 
-7 >                               /* inline block comment */
-8 >                                                         
+6 >                             ;
+7 >                               
+8 >                               /* inline block comment */
 1 >Emitted(25, 13) Source(22, 9) + SourceIndex(0) name (Foo.Bar.foo2)
 2 >Emitted(25, 17) Source(22, 13) + SourceIndex(0) name (Foo.Bar.foo2)
 3 >Emitted(25, 25) Source(22, 21) + SourceIndex(0) name (Foo.Bar.foo2)
 4 >Emitted(25, 28) Source(22, 35) + SourceIndex(0) name (Foo.Bar.foo2)
 5 >Emitted(25, 30) Source(22, 37) + SourceIndex(0) name (Foo.Bar.foo2)
-6 >Emitted(25, 32) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
-7 >Emitted(25, 58) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
-8 >Emitted(25, 58) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
+6 >Emitted(25, 31) Source(22, 38) + SourceIndex(0) name (Foo.Bar.foo2)
+7 >Emitted(25, 32) Source(22, 39) + SourceIndex(0) name (Foo.Bar.foo2)
+8 >Emitted(25, 58) Source(22, 65) + SourceIndex(0) name (Foo.Bar.foo2)
 ---
 >>>            greeters[0] = new Greeter(greeting);
 1 >^^^^^^^^^^^^
@@ -514,7 +514,7 @@ sourceFile:sourceMapValidationClasses.ts
 11>                                              ^
 12>                                               ^
 13>                                                ^^^^^^^^^^^^^->
-1 > /* inline block comment */
+1 >
   >        
 2 >            greeters
 3 >                    [
@@ -737,16 +737,12 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>        // This is simple signle line comment
 1->^^^^^^^^
-2 >        
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-  >    // This is simple signle line comment
   >    
-2 >        
-3 >        // This is simple signle line comment
-1->Emitted(33, 9) Source(33, 5) + SourceIndex(0) name (Foo.Bar)
-2 >Emitted(33, 9) Source(32, 5) + SourceIndex(0) name (Foo.Bar)
-3 >Emitted(33, 46) Source(32, 42) + SourceIndex(0) name (Foo.Bar)
+2 >        // This is simple signle line comment
+1->Emitted(33, 9) Source(32, 5) + SourceIndex(0) name (Foo.Bar)
+2 >Emitted(33, 46) Source(32, 42) + SourceIndex(0) name (Foo.Bar)
 ---
 >>>        for (var j = 0; j < b.length; j++) {
 1 >^^^^^^^^

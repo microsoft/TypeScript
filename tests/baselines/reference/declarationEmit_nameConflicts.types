@@ -1,5 +1,5 @@
 === tests/cases/compiler/declarationEmit_nameConflicts_0.ts ===
-import im = require('declarationEmit_nameConflicts_1');
+import im = require('./declarationEmit_nameConflicts_1');
 >im : typeof im
 
 export module M {

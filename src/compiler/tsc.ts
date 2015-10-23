@@ -86,7 +86,6 @@ namespace ts {
 
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-
             output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
@@ -100,6 +99,19 @@ namespace ts {
         for (let i = 0; i < diagnostics.length; i++) {
             reportDiagnostic(diagnostics[i]);
         }
+    }
+
+    function reportWatchDiagnostic(diagnostic: Diagnostic) {
+        let output = new Date().toLocaleTimeString() + " - ";
+
+        if (diagnostic.file) {
+            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+        }
+
+        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+
+        sys.write(output);
     }
 
     function padLeft(s: string, length: number) {
@@ -135,14 +147,17 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         let commandLine = parseCommandLine(args);
-        let configFileName: string;                 // Configuration file name (if any)
-        let configFileWatcher: FileWatcher;         // Configuration file watcher
-        let cachedProgram: Program;                 // Program cached from last compilation
-        let rootFileNames: string[];                // Root fileNames for compilation
-        let compilerOptions: CompilerOptions;       // Compiler options for compilation
-        let compilerHost: CompilerHost;             // Compiler host
-        let hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
-        let timerHandle: number;                    // Handle for 0.25s wait timer
+        let configFileName: string;                                 // Configuration file name (if any)
+        let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
+        let configFileWatcher: FileWatcher;                         // Configuration file watcher
+        let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
+        let cachedProgram: Program;                                 // Program cached from last compilation
+        let rootFileNames: string[];                                // Root fileNames for compilation
+        let compilerOptions: CompilerOptions;                       // Compiler options for compilation
+        let compilerHost: CompilerHost;                             // Compiler host
+        let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
+        let timerHandleForRecompilation: number;                    // Handle for 0.25s wait timer to trigger recompilation
+        let timerHandleForDirectoryChanges: number;                 // Handle for 0.25s wait timer to trigger directory change handler
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
@@ -157,6 +172,11 @@ namespace ts {
         if (commandLine.errors.length > 0) {
             reportDiagnostics(commandLine.errors);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+
+        if (commandLine.options.init) {
+            writeConfigFile(commandLine.options, commandLine.fileNames);
+            return sys.exit(ExitStatus.Success);
         }
 
         if (commandLine.options.version) {
@@ -201,28 +221,49 @@ namespace ts {
             if (configFileName) {
                 configFileWatcher = sys.watchFile(configFileName, configFileChanged);
             }
+            if (sys.watchDirectory && configFileName) {
+                let directory = ts.getDirectoryPath(configFileName);
+                directoryWatcher = sys.watchDirectory(
+                    // When the configFileName is just "tsconfig.json", the watched directory should be 
+                    // the current direcotry; if there is a given "project" parameter, then the configFileName
+                    // is an absolute file name.
+                    directory == "" ? "." : directory,
+                    watchedDirectoryChanged, /*recursive*/ true);
+            }
         }
 
         performCompilation();
+
+        function parseConfigFile(): ParsedCommandLine {
+            if (!cachedConfigFileText) {
+                try {
+                    cachedConfigFileText = sys.readFile(configFileName);
+                }
+                catch (e) {
+                    let error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+                    reportWatchDiagnostic(error);
+                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                    return;
+                }
+            }
+
+            let result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
+            let configObject = result.config;
+            let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
+            if (configParseResult.errors.length > 0) {
+                reportDiagnostics(configParseResult.errors);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
+            return configParseResult;
+        }
 
         // Invoked to perform initial compilation or re-compilation in watch mode
         function performCompilation() {
 
             if (!cachedProgram) {
                 if (configFileName) {
-
-                    let result = readConfigFile(configFileName);
-                    if (result.error) {
-                        reportDiagnostic(result.error);
-                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    }
-
-                    let configObject = result.config;
-                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
-                    if (configParseResult.errors.length > 0) {
-                        reportDiagnostics(configParseResult.errors);
-                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    }
+                    let configParseResult = parseConfigFile();
                     rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
@@ -242,7 +283,7 @@ namespace ts {
             }
 
             setCachedProgram(compileResult.program);
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -258,7 +299,7 @@ namespace ts {
             let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, () => sourceFileChanged(sourceFile));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -280,31 +321,65 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile) {
+        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
-            startTimer();
+            if (removed) {
+                let index = rootFileNames.indexOf(sourceFile.fileName);
+                if (index >= 0) {
+                    rootFileNames.splice(index, 1);
+                }
+            }
+            startTimerForRecompilation();
         }
 
         // If the configuration file changes, forget cached program and start the recompilation timer
         function configFileChanged() {
             setCachedProgram(undefined);
-            startTimer();
+            cachedConfigFileText = undefined;
+            startTimerForRecompilation();
+        }
+
+        function watchedDirectoryChanged(fileName: string) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+                return;
+            }
+
+            startTimerForHandlingDirectoryChanges();
+        }
+
+        function startTimerForHandlingDirectoryChanges() {
+            if (timerHandleForDirectoryChanges) {
+                clearTimeout(timerHandleForDirectoryChanges);
+            }
+            timerHandleForDirectoryChanges = setTimeout(directoryChangeHandler, 250);
+        }
+
+        function directoryChangeHandler() {
+            let parsedCommandLine = parseConfigFile();
+            let newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
+            let canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
+
+            // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
+            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
+                setCachedProgram(undefined);
+                startTimerForRecompilation();
+            }
         }
 
         // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
-        function startTimer() {
-            if (timerHandle) {
-                clearTimeout(timerHandle);
+        function startTimerForRecompilation() {
+            if (timerHandleForRecompilation) {
+                clearTimeout(timerHandleForRecompilation);
             }
-            timerHandle = setTimeout(recompile, 250);
+            timerHandleForRecompilation = setTimeout(recompile, 250);
         }
 
         function recompile() {
-            timerHandle = undefined;
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
+            timerHandleForRecompilation = undefined;
+            reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
     }
@@ -356,7 +431,7 @@ namespace ts {
 
         function compileProgram(): ExitStatus {
             let diagnostics: Diagnostic[];
-            
+
             // First get and report any syntactic errors.
             diagnostics = program.getSyntacticDiagnostics();
 
@@ -487,6 +562,70 @@ namespace ts {
 
         function makePadding(paddingLength: number): string {
             return Array(paddingLength + 1).join(" ");
+        }
+    }
+
+    function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
+        let currentDirectory = sys.getCurrentDirectory();
+        let file = combinePaths(currentDirectory, "tsconfig.json");
+        if (sys.fileExists(file)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+        }
+        else {
+            let compilerOptions = extend(options, defaultInitCompilerOptions);
+            let configurations: any = {
+                compilerOptions: serializeCompilerOptions(compilerOptions),
+                exclude: ["node_modules"]
+            };
+
+            if (fileNames && fileNames.length) {
+                // only set the files property if we have at least one file
+                configurations.files = fileNames;
+            }
+
+            sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+        }
+
+        return;
+
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            let result: Map<string | number | boolean> = {};
+            let optionsNameMap = getOptionNameMap().optionNameMap;
+
+            for (let name in options) {
+                if (hasProperty(options, name)) {
+                    let value = options[name];
+                    switch (name) {
+                        case "init":
+                        case "watch":
+                        case "version":
+                        case "help":
+                        case "project":
+                            break;
+                        default:
+                            let optionDefinition = optionsNameMap[name.toLowerCase()];
+                            if (optionDefinition) {
+                                if (typeof optionDefinition.type === "string") {
+                                    // string, number or boolean
+                                    result[name] = value;
+                                }
+                                else {
+                                    // Enum
+                                    let typeMap = <Map<number>>optionDefinition.type;
+                                    for (let key in typeMap) {
+                                        if (hasProperty(typeMap, key)) {
+                                            if (typeMap[key] === value)
+                                                result[name] = key;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

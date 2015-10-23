@@ -1,0 +1,11 @@
+=== tests/cases/compiler/excessPropertyErrorsSuppressed.ts ===
+
+var x: { a: string } = { a: "hello", b: 42 };  // No error
+>x : { a: string; }
+>a : string
+>{ a: "hello", b: 42 } : { a: string; b: number; }
+>a : string
+>"hello" : string
+>b : number
+>42 : number
+

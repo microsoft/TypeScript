@@ -10,15 +10,15 @@ export class A {
 // empty
 
 //// [exportStarFromEmptyModule_module3.ts]
-export * from "exportStarFromEmptyModule_module2";
-export * from "exportStarFromEmptyModule_module1";
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
 
 export class A {
     static q;
 }
 
 //// [exportStarFromEmptyModule_module4.ts]
-import * as X from "exportStarFromEmptyModule_module3";
+import * as X from "./exportStarFromEmptyModule_module3";
 var s: X.A;
 X.A.q;
 X.A.r; // Error
@@ -36,8 +36,8 @@ exports.A = A;
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(require("exportStarFromEmptyModule_module2"));
-__export(require("exportStarFromEmptyModule_module1"));
+__export(require("./exportStarFromEmptyModule_module2"));
+__export(require("./exportStarFromEmptyModule_module1"));
 var A = (function () {
     function A() {
     }
@@ -45,7 +45,7 @@ var A = (function () {
 })();
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
-var X = require("exportStarFromEmptyModule_module3");
+var X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
 X.A.r; // Error
@@ -57,8 +57,8 @@ export declare class A {
 }
 //// [exportStarFromEmptyModule_module2.d.ts]
 //// [exportStarFromEmptyModule_module3.d.ts]
-export * from "exportStarFromEmptyModule_module2";
-export * from "exportStarFromEmptyModule_module1";
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
 export declare class A {
     static q: any;
 }

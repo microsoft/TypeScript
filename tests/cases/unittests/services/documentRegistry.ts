@@ -30,10 +30,15 @@ describe("DocumentRegistry", () => {
 
         assert(f1 !== f3, "Changed target: Expected to have different instances of document");
 
-        compilerOptions.module = ts.ModuleKind.CommonJS;
+        compilerOptions.preserveConstEnums = true;
         var f4 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
 
-        assert(f3 === f4, "Changed module: Expected to have the same instance of the document");
+        assert(f3 === f4, "Changed preserveConstEnums: Expected to have the same instance of the document");
+
+        compilerOptions.module = ts.ModuleKind.System;
+        var f5 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
+
+        assert(f4 !== f5, "Changed module: Expected to have different instances of the document");
     });
 
     it("Acquiring document gets correct version 1", () => {

@@ -6,14 +6,14 @@ export class Model {
 }
 
 //// [aliasUsageInObjectLiteral_moduleA.ts]
-import Backbone = require("aliasUsageInObjectLiteral_backbone");
+import Backbone = require("./aliasUsageInObjectLiteral_backbone");
 export class VisualizationModel extends Backbone.Model {
     // interesting stuff here
 }
 
 //// [aliasUsageInObjectLiteral_main.ts]
-import Backbone = require("aliasUsageInObjectLiteral_backbone");
-import moduleA = require("aliasUsageInObjectLiteral_moduleA");
+import Backbone = require("./aliasUsageInObjectLiteral_backbone");
+import moduleA = require("./aliasUsageInObjectLiteral_moduleA");
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 }
@@ -34,7 +34,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Backbone = require("aliasUsageInObjectLiteral_backbone");
+var Backbone = require("./aliasUsageInObjectLiteral_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
@@ -44,7 +44,7 @@ var VisualizationModel = (function (_super) {
 })(Backbone.Model);
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInObjectLiteral_main.js]
-var moduleA = require("aliasUsageInObjectLiteral_moduleA");
+var moduleA = require("./aliasUsageInObjectLiteral_moduleA");
 var a = { x: moduleA };
 var b = { x: moduleA };
 var c = { y: { z: moduleA } };

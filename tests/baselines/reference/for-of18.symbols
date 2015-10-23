@@ -22,9 +22,9 @@ class StringIterator {
         };
     }
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
         return this;
 >this : Symbol(StringIterator, Decl(for-of18.ts, 1, 33))

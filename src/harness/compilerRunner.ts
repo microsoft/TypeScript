@@ -1,6 +1,7 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
 /// <reference path="typeWriter.ts" />
+/* tslint:disable:no-null */
 
 const enum CompilerTestType {
     Conformance,
@@ -32,7 +33,8 @@ class CompilerBaselineRunner extends RunnerBase {
         }
         else if (testType === CompilerTestType.Test262) {
             this.testSuiteName = "test262";
-        } else {
+        }
+        else {
             this.testSuiteName = "compiler"; // default to this for historical reasons
         }
         this.basePath += "/" + this.testSuiteName;
@@ -44,10 +46,10 @@ class CompilerBaselineRunner extends RunnerBase {
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
             let content: string;
-            let testCaseContent: { settings: Harness.TestCaseParser.CompilerSetting[]; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
+            let testCaseContent: { settings: Harness.TestCaseParser.CompilerSettings; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
 
             let units: Harness.TestCaseParser.TestUnitData[];
-            let tcSettings: Harness.TestCaseParser.CompilerSetting[];
+            let tcSettings: Harness.TestCaseParser.CompilerSettings;
 
             let lastUnit: Harness.TestCaseParser.TestUnitData;
             let rootDir: string;
@@ -61,15 +63,12 @@ class CompilerBaselineRunner extends RunnerBase {
             let otherFiles: { unitName: string; content: string }[];
             let harnessCompiler: Harness.Compiler.HarnessCompiler;
 
-            let createNewInstance = false;
-
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
                 content = Harness.IO.readFile(fileName);
                 testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
                 units = testCaseContent.testUnitData;
                 tcSettings = testCaseContent.settings;
-                createNewInstance = false;
                 lastUnit = units[units.length - 1];
                 rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 harnessCompiler = Harness.Compiler.getCompiler();
@@ -85,7 +84,8 @@ class CompilerBaselineRunner extends RunnerBase {
                             otherFiles.push({ unitName: rootDir + unit.name, content: unit.content });
                         }
                     });
-                } else {
+                }
+                else {
                     toBeCompiled = units.map(unit => {
                         return { unitName: rootDir + unit.name, content: unit.content };
                     });
@@ -98,27 +98,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 }, function (settings) {
                         harnessCompiler.setCompilerSettings(tcSettings);
                     });
-            });
-
-            beforeEach(() => {
-                /* The compiler doesn't handle certain flags flipping during a single compilation setting. Tests on these flags will need
-                   a fresh compiler instance for themselves and then create a fresh one for the next test. Would be nice to get dev fixes
-                   eventually to remove this limitation. */
-                for (let i = 0; i < tcSettings.length; ++i) {
-                    // noImplicitAny is passed to getCompiler, but target is just passed in the settings blob to setCompilerSettings
-                    if (!createNewInstance && (tcSettings[i].flag == "noimplicitany" || tcSettings[i].flag === "target")) {
-                        harnessCompiler = Harness.Compiler.getCompiler();
-                        harnessCompiler.setCompilerSettings(tcSettings);
-                        createNewInstance = true;
-                    }
-                }
-            });
-
-            afterEach(() => {
-                if (createNewInstance) {
-                    harnessCompiler = Harness.Compiler.getCompiler();
-                    createNewInstance = false;
-                }
             });
 
             after(() => {
@@ -217,7 +196,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                         if (jsCode.length > 0) {
                             return tsCode + "\r\n\r\n" + jsCode;
-                        } else {
+                        }
+                        else {
                             return null;
                         }
                     });
@@ -402,10 +382,6 @@ class CompilerBaselineRunner extends RunnerBase {
             else {
                 this.tests.forEach(test => this.checkTestCodeOutput(test));
             }
-
-            describe("Cleanup after compiler baselines", () => {
-                let harnessCompiler = Harness.Compiler.getCompiler();
-            });
         });
     }
 

@@ -1,0 +1,93 @@
+=== tests/cases/compiler/constIndexedAccess.ts ===
+
+const enum numbers {
+>numbers : numbers
+
+    zero,
+>zero : numbers
+
+    one
+>one : numbers
+}
+
+interface indexAccess {
+>indexAccess : indexAccess
+
+    0: string;
+    1: number;
+}
+
+let test: indexAccess;
+>test : indexAccess
+>indexAccess : indexAccess
+
+let s = test[0];
+>s : string
+>test[0] : string
+>test : indexAccess
+>0 : number
+
+let n = test[1];
+>n : number
+>test[1] : number
+>test : indexAccess
+>1 : number
+
+let s1 = test[numbers.zero];
+>s1 : string
+>test[numbers.zero] : string
+>test : indexAccess
+>numbers.zero : numbers
+>numbers : typeof numbers
+>zero : numbers
+
+let n1 = test[numbers.one];
+>n1 : number
+>test[numbers.one] : number
+>test : indexAccess
+>numbers.one : numbers
+>numbers : typeof numbers
+>one : numbers
+
+let s2 = test[numbers["zero"]];
+>s2 : string
+>test[numbers["zero"]] : string
+>test : indexAccess
+>numbers["zero"] : numbers
+>numbers : typeof numbers
+>"zero" : string
+
+let n2 = test[numbers["one"]];
+>n2 : number
+>test[numbers["one"]] : number
+>test : indexAccess
+>numbers["one"] : numbers
+>numbers : typeof numbers
+>"one" : string
+
+enum numbersNotConst {
+>numbersNotConst : numbersNotConst
+
+    zero,
+>zero : numbersNotConst
+
+    one
+>one : numbersNotConst
+}
+
+let s3 = test[numbersNotConst.zero];
+>s3 : any
+>test[numbersNotConst.zero] : any
+>test : indexAccess
+>numbersNotConst.zero : numbersNotConst
+>numbersNotConst : typeof numbersNotConst
+>zero : numbersNotConst
+
+let n3 = test[numbersNotConst.one];
+>n3 : any
+>test[numbersNotConst.one] : any
+>test : indexAccess
+>numbersNotConst.one : numbersNotConst
+>numbersNotConst : typeof numbersNotConst
+>one : numbersNotConst
+

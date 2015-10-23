@@ -20,11 +20,13 @@ declare var Foo, React;
 <Foo handler={Main}></Foo>;
 >Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
 >handler : Symbol(unknown)
+>Main : Symbol(Main, Decl(app.tsx, 0, 6))
 >Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
 
 // Should see mod_1['default'] in emit here
 <Foo {...Main}></Foo>;
 >Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
+>Main : Symbol(Main, Decl(app.tsx, 0, 6))
 >Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
 
 

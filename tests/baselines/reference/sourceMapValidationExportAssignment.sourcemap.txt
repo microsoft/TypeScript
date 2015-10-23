@@ -59,21 +59,18 @@ sourceFile:sourceMapValidationExportAssignment.ts
 ---
 >>>    return a;
 1->^^^^
-2 >    
-3 >    ^^^^^^^
-4 >           ^
-5 >            ^
+2 >    ^^^^^^^
+3 >           ^
+4 >            ^
 1->
-  >export = a;
-2 >    
-3 >    export = 
-4 >           a
-5 >            ;
-1->Emitted(7, 5) Source(4, 12) + SourceIndex(0)
-2 >Emitted(7, 5) Source(4, 1) + SourceIndex(0)
-3 >Emitted(7, 12) Source(4, 10) + SourceIndex(0)
-4 >Emitted(7, 13) Source(4, 11) + SourceIndex(0)
-5 >Emitted(7, 14) Source(4, 12) + SourceIndex(0)
+  >
+2 >    export = 
+3 >           a
+4 >            ;
+1->Emitted(7, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(7, 12) Source(4, 10) + SourceIndex(0)
+3 >Emitted(7, 13) Source(4, 11) + SourceIndex(0)
+4 >Emitted(7, 14) Source(4, 12) + SourceIndex(0)
 ---
 >>>});
 >>>//# sourceMappingURL=sourceMapValidationExportAssignment.js.map

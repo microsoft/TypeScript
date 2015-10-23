@@ -60,10 +60,12 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
+        
+        getModuleResolutionsForFile?(fileName: string): string;
     }
 
     /** Public interface of the the of a config service shim instance.*/
-    export interface CoreServicesShimHost extends Logger {
+    export interface CoreServicesShimHost extends Logger, ModuleResolutionHost {
         /**
          * Returns a JSON-encoded value of the type: string[]
          *
@@ -270,8 +272,21 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
-
+        
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
+        
         constructor(private shimHost: LanguageServiceShimHost) {
+            // if shimHost is a COM object then property check will become method call with no arguments.
+            // 'in' does not have this effect. 
+            if ("getModuleResolutionsForFile" in this.shimHost) {
+                this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
+                    let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                    return map(moduleNames, name => {
+                        const result = lookUp(resolutionsInFile, name);
+                        return result ? { resolvedFileName: result } : undefined;
+                    });
+                };
+            }
         }
 
         public log(s: string): void {
@@ -409,6 +424,14 @@ namespace ts {
                 encoded = this.shimHost.readDirectory(rootDir, extension);
             }
             return JSON.parse(encoded);
+        }
+        
+        public fileExists(fileName: string): boolean {
+            return this.shimHost.fileExists(fileName);
+        }
+        
+        public readFile(fileName: string): string {
+            return this.shimHost.readFile(fileName);
         }
     }
 
@@ -752,7 +775,10 @@ namespace ts {
             return this.forwardJSONCall(
                 "getDocumentHighlights('" + fileName + "', " + position + ")",
                 () => {
-                    return this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    var results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    // workaround for VS document higlighting issue - keep only items from the initial file
+                    let normalizedName = normalizeSlashes(fileName).toLowerCase();
+                    return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
         }
 
@@ -915,6 +941,17 @@ namespace ts {
         private forwardJSONCall(actionDescription: string, action: () => any): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
+        
+        public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
+            return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
+                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                return {
+                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName: undefined,
+                    failedLookupLocations: result.failedLookupLocations
+                };
+            }); 
+        }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
@@ -924,6 +961,7 @@ namespace ts {
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
+                        ambientExternalModules: result.ambientExternalModules,
                         isLibFile: result.isLibFile
                     };
 
@@ -952,7 +990,7 @@ namespace ts {
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = parseConfigFileText(fileName, text);
+                    let result = parseConfigFileTextToJson(fileName, text);
 
                     if (result.error) {
                         return {
@@ -962,7 +1000,7 @@ namespace ts {
                         };
                     }
 
-                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    var configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
@@ -1066,4 +1104,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-let toolsVersion = "1.5";
+const toolsVersion = "1.6";

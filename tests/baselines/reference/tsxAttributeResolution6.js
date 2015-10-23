@@ -20,10 +20,10 @@ declare module JSX {
 
 //// [tsxAttributeResolution6.jsx]
 // Error
-<test1 s=/>;
+<test1 s/>;
 <test1 n='true'/>;
 <test2 />;
 // OK
-<test1 n=/>;
+<test1 n/>;
 <test1 n={false}/>;
-<test2 n=/>;
+<test2 n/>;

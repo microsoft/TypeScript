@@ -1,5 +1,6 @@
 ///<reference path="harness.ts" />
 ///<reference path="runnerbase.ts" />
+/* tslint:disable:no-null */
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -62,7 +63,7 @@ class ProjectRunner extends RunnerBase {
 
         let testFileText: string = null;
         try {
-            testFileText = ts.sys.readFile(testCaseFileName);
+            testFileText = Harness.IO.readFile(testCaseFileName);
         }
         catch (e) {
             assert(false, "Unable to open testcase file: " + testCaseFileName + ": " + e.message);
@@ -98,7 +99,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function cleanProjectUrl(url: string) {
-            let diskProjectPath = ts.normalizeSlashes(ts.sys.resolvePath(testCase.projectRoot));
+            let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(testCase.projectRoot));
             let projectRootUrl = "file:///" + diskProjectPath;
             let normalizedProjectRoot = ts.normalizeSlashes(testCase.projectRoot);
             diskProjectPath = diskProjectPath.substr(0, diskProjectPath.lastIndexOf(normalizedProjectRoot));
@@ -122,7 +123,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getCurrentDirectory() {
-            return ts.sys.resolvePath(testCase.projectRoot);
+            return Harness.IO.resolvePath(testCase.projectRoot);
         }
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: () => string[],
@@ -158,11 +159,12 @@ class ProjectRunner extends RunnerBase {
                 return {
                     declaration: !!testCase.declaration,
                     sourceMap: !!testCase.sourceMap,
-                    out: testCase.out,
+                    outFile: testCase.out,
                     outDir: testCase.outDir,
-                    mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? ts.sys.resolvePath(testCase.mapRoot) : testCase.mapRoot,
-                    sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? ts.sys.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
+                    mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
+                    sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
                     noResolve: testCase.noResolve,
                     rootDir: testCase.rootDir
                 };
@@ -190,13 +192,15 @@ class ProjectRunner extends RunnerBase {
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
-                    useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
-                    getNewLine: () => ts.sys.newLine
+                    useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
+                    getNewLine: () => Harness.IO.newLine(),
+                    fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
+                    readFile: fileName => Harness.IO.readFile(fileName)
                 };
             }
         }
 
-        function batchCompilerProjectTestCase(moduleKind: ts.ModuleKind): BatchCompileProjectTestCaseResult{
+        function batchCompilerProjectTestCase(moduleKind: ts.ModuleKind): BatchCompileProjectTestCaseResult {
             let nonSubfolderDiskFiles = 0;
 
             let outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
@@ -214,7 +218,7 @@ class ProjectRunner extends RunnerBase {
             function getSourceFileText(fileName: string): string {
                 let text: string = undefined;
                 try {
-                    text = ts.sys.readFile(ts.isRootedDiskPath(fileName)
+                    text = Harness.IO.readFile(ts.isRootedDiskPath(fileName)
                         ? fileName
                         : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
                 }
@@ -261,14 +265,14 @@ class ProjectRunner extends RunnerBase {
                 // Actual writing of file as in tc.ts
                 function ensureDirectoryStructure(directoryname: string) {
                     if (directoryname) {
-                        if (!ts.sys.directoryExists(directoryname)) {
+                        if (!Harness.IO.directoryExists(directoryname)) {
                             ensureDirectoryStructure(ts.getDirectoryPath(directoryname));
-                            ts.sys.createDirectory(directoryname);
+                            Harness.IO.createDirectory(directoryname);
                         }
                     }
                 }
                 ensureDirectoryStructure(ts.getDirectoryPath(ts.normalizePath(outputFilePath)));
-                ts.sys.writeFile(outputFilePath, data, writeByteOrderMark);
+                Harness.IO.writeFile(outputFilePath, data);
 
                 outputFiles.push({ emittedFileName: fileName, code: data, fileName: diskRelativeName, writeByteOrderMark: writeByteOrderMark });
             }
@@ -297,7 +301,7 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
                 }
                 else {
-                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.out) + ".d.ts";
+                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
                     let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
@@ -389,7 +393,7 @@ class ProjectRunner extends RunnerBase {
 
                                 Harness.Baseline.runBaseline("Baseline of emitted result (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + outputFile.fileName, () => {
                                     try {
-                                        return ts.sys.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
+                                        return Harness.IO.readFile(getProjectOutputFolder(outputFile.fileName, compilerResult.moduleKind));
                                     }
                                     catch (e) {
                                         return undefined;

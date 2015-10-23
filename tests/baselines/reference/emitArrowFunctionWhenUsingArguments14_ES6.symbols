@@ -4,9 +4,9 @@ function f() {
 >f : Symbol(f, Decl(emitArrowFunctionWhenUsingArguments14_ES6.ts, 0, 0))
 
     if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11), Decl(lib.d.ts, 1704, 60))
->random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
 
         let arguments = 100;
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments14_ES6.ts, 3, 11))

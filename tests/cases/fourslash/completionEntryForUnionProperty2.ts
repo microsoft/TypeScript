@@ -1,12 +1,12 @@
 ///<reference path="fourslash.ts" />
 
 ////interface One {
-////    commonProperty: number;
+////    commonProperty: string;
 ////    commonFunction(): number;
 ////}
 ////
 ////interface Two {
-////    commonProperty: string
+////    commonProperty: number;
 ////    commonFunction(): number;
 ////}
 ////
@@ -15,6 +15,6 @@
 ////x.commonProperty./**/
 
 goTo.marker();
-verify.memberListContains("toString", "(property) toString: ((radix?: number) => string) | (() => string)");
-verify.memberListContains("valueOf", "(method) valueOf(): number | string");
+verify.memberListContains("toString", "(method) toString(): string");
+verify.memberListContains("valueOf", "(method) valueOf(): string | number");
 verify.memberListCount(2);

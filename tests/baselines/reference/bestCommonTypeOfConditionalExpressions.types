@@ -46,8 +46,8 @@ var r = true ? 1 : 2;
 >2 : number
 
 var r3 = true ? 1 : {};
->r3 : number | {}
->true ? 1 : {} : number | {}
+>r3 : {}
+>true ? 1 : {} : {}
 >true : boolean
 >1 : number
 >{} : {}
@@ -67,8 +67,8 @@ var r5 = true ? b : a; // typeof b
 >a : { x: number; y?: number; }
 
 var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => void
->r6 : ((x: number) => void) | ((x: Object) => void)
->true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
+>r6 : (x: number) => void
+>true ? (x: number) => { } : (x: Object) => { } : (x: number) => void
 >true : boolean
 >(x: number) => { } : (x: number) => void
 >x : number
@@ -80,7 +80,7 @@ var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { };
 >r7 : (x: Object) => void
 >x : Object
 >Object : Object
->true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
+>true ? (x: number) => { } : (x: Object) => { } : (x: number) => void
 >true : boolean
 >(x: number) => { } : (x: number) => void
 >x : number
@@ -89,8 +89,8 @@ var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { };
 >Object : Object
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
->r8 : ((x: Object) => void) | ((x: number) => void)
->true ? (x: Object) => { } : (x: number) => { } : ((x: Object) => void) | ((x: number) => void)
+>r8 : (x: Object) => void
+>true ? (x: Object) => { } : (x: number) => { } : (x: Object) => void
 >true : boolean
 >(x: Object) => { } : (x: Object) => void
 >x : Object
@@ -107,8 +107,8 @@ var r10: Base = true ? derived : derived2; // no error since we use the contextu
 >derived2 : Derived2
 
 var r11 = true ? base : derived2;
->r11 : Base | Derived2
->true ? base : derived2 : Base | Derived2
+>r11 : Base
+>true ? base : derived2 : Base
 >true : boolean
 >base : Base
 >derived2 : Derived2

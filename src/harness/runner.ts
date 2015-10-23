@@ -20,8 +20,10 @@
 /// <reference path="rwcRunner.ts" />
 /// <reference path="harness.ts" />
 
+/* tslint:disable:no-null */
+
 let runners: RunnerBase[] = [];
-let iterations: number = 1;
+let iterations = 1;
 
 function runTests(runners: RunnerBase[]) {
     for (let i = iterations; i > 0; i--) {
@@ -68,6 +70,9 @@ if (testConfigFile !== "") {
                 case "fourslash-shims":
                     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
                     break;
+                case "fourslash-shims-pp":
+                    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
+                    break;
                 case "fourslash-server":
                     runners.push(new FourSlashRunner(FourSlashTestType.Server));
                     break;
@@ -98,10 +103,9 @@ if (runners.length === 0) {
     // language services
     runners.push(new FourSlashRunner(FourSlashTestType.Native));
     runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
     runners.push(new FourSlashRunner(FourSlashTestType.Server));
     // runners.push(new GeneratedFourslashRunner());
 }
-
-ts.sys.newLine = "\r\n";
 
 runTests(runners);

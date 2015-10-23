@@ -9,8 +9,8 @@ interface ClassificationEntry {
 
 describe('Colorization', function () {
     // Use the shim adapter to ensure test coverage of the shim layer for the classifier
-    var languageServiceAdabtor = new Harness.LanguageService.ShimLanugageServiceAdapter();
-    var classifier = languageServiceAdabtor.getClassifier();
+    var languageServiceAdapter = new Harness.LanguageService.ShimLanugageServiceAdapter(/*preprocessToResolve*/ false);
+    var classifier = languageServiceAdapter.getClassifier();
 
     function getEntryAtPosistion(result: ts.ClassificationResult, position: number) {
         var entryPosition = 0;

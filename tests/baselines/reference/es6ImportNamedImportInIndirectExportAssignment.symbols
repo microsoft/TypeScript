@@ -9,13 +9,13 @@ export module a {
 }
 
 === tests/cases/compiler/es6ImportNamedImportInIndirectExportAssignment_1.ts ===
-import { a } from "es6ImportNamedImportInIndirectExportAssignment_0";
+import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
 >a : Symbol(a, Decl(es6ImportNamedImportInIndirectExportAssignment_1.ts, 0, 8))
 
 import x = a;
->x : Symbol(x, Decl(es6ImportNamedImportInIndirectExportAssignment_1.ts, 0, 69))
+>x : Symbol(x, Decl(es6ImportNamedImportInIndirectExportAssignment_1.ts, 0, 71))
 >a : Symbol(a, Decl(es6ImportNamedImportInIndirectExportAssignment_0.ts, 0, 0))
 
 export = x;
->x : Symbol(x, Decl(es6ImportNamedImportInIndirectExportAssignment_1.ts, 0, 69))
+>x : Symbol(x, Decl(es6ImportNamedImportInIndirectExportAssignment_1.ts, 0, 71))
 

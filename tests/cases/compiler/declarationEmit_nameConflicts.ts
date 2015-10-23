@@ -5,7 +5,7 @@ module f { export class c { } }
 export = f;
 
 // @Filename: declarationEmit_nameConflicts_0.ts
-import im = require('declarationEmit_nameConflicts_1');
+import im = require('./declarationEmit_nameConflicts_1');
 export module M {
     export function f() { }
     export class C { }

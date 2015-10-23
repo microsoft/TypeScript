@@ -71,6 +71,17 @@ namespace ts.formatting {
                 rules.push(this.globalRules.NoSpaceBetweenParens);
             }
 
+            if ( options.InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets ) {
+                rules.push( this.globalRules.SpaceAfterOpenBracket );
+                rules.push( this.globalRules.SpaceBeforeCloseBracket );
+                rules.push( this.globalRules.NoSpaceBetweenBrackets );
+            }
+            else {
+                rules.push( this.globalRules.NoSpaceAfterOpenBracket );
+                rules.push( this.globalRules.NoSpaceBeforeCloseBracket );
+                rules.push( this.globalRules.NoSpaceBetweenBrackets );
+            }
+
             if (options.InsertSpaceAfterSemicolonInForStatements) {
                 rules.push(this.globalRules.SpaceAfterSemicolonInFor);
             }

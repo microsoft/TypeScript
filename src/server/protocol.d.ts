@@ -31,6 +31,12 @@ declare namespace ts.server.protocol {
           */
         arguments?: any;
     }
+    
+    /**
+      * Request to reload the project structure for all the opened files 
+      */
+    export interface ReloadProjectsRequest extends Message {
+    }
 
     /** 
       * Server-initiated event message 
@@ -452,6 +458,9 @@ declare namespace ts.server.protocol {
         
         /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+
+        /** Defines space handling after opening and before closing non empty brackets. Default value is false. */
+        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         
         /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
         placeOpenBraceOnNewLineForFunctions?: boolean;

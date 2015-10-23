@@ -6,6 +6,7 @@
 /////*InsertSpaceAfterKeywordsInControlFlowStatements*/if     (true) { }
 /////*InsertSpaceAfterFunctionKeywordForAnonymousFunctions*/(function               () { })
 /////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  )
+/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,]
 /////*PlaceOpenBraceOnNewLineForFunctions*/class   foo   { 
 ////}
 /////*PlaceOpenBraceOnNewLineForControlBlocks*/if (true)   {
@@ -17,6 +18,7 @@ runTest("InsertSpaceBeforeAndAfterBinaryOperators", "1 + 2 - 3", "1+2-3");
 runTest("InsertSpaceAfterKeywordsInControlFlowStatements", "if (true) { }", "if(true) { }");
 runTest("InsertSpaceAfterFunctionKeywordForAnonymousFunctions", "(function () { })", "(function() { })");
 runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )", "    (1)");
+runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ]", "[1];[];[];[, ]");
 runTest("PlaceOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
 runTest("PlaceOpenBraceOnNewLineForControlBlocks", "if ( true )", "if ( true ) {");
 

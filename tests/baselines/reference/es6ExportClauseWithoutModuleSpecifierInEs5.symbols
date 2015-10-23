@@ -20,21 +20,21 @@ export module uninstantiated {
 }
 
 === tests/cases/compiler/client.ts ===
-export { c } from "server";
+export { c } from "./server";
 >c : Symbol(c, Decl(client.ts, 0, 8))
 
-export { c as c2 } from "server";
+export { c as c2 } from "./server";
 >c : Symbol(c2, Decl(client.ts, 1, 8))
 >c2 : Symbol(c2, Decl(client.ts, 1, 8))
 
-export { i, m as instantiatedModule } from "server";
+export { i, m as instantiatedModule } from "./server";
 >i : Symbol(i, Decl(client.ts, 2, 8))
 >m : Symbol(instantiatedModule, Decl(client.ts, 2, 11))
 >instantiatedModule : Symbol(instantiatedModule, Decl(client.ts, 2, 11))
 
-export { uninstantiated } from "server";
+export { uninstantiated } from "./server";
 >uninstantiated : Symbol(uninstantiated, Decl(client.ts, 3, 8))
 
-export { x } from "server";
+export { x } from "./server";
 >x : Symbol(x, Decl(client.ts, 4, 8))
 

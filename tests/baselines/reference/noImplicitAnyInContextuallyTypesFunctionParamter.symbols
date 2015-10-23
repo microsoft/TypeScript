@@ -4,11 +4,11 @@ var regexMatchList = ['', ''];
 >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 3))
 
 regexMatchList.forEach(match => ''.replace(match, ''));
->regexMatchList.forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>regexMatchList.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >regexMatchList : Symbol(regexMatchList, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 1, 3))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, 1108, 95))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 2, 23))
->''.replace : Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
->replace : Symbol(String.replace, Decl(lib.d.ts, 329, 44), Decl(lib.d.ts, 336, 63), Decl(lib.d.ts, 343, 102), Decl(lib.d.ts, 350, 63))
+>''.replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >match : Symbol(match, Decl(noImplicitAnyInContextuallyTypesFunctionParamter.ts, 2, 23))
 

@@ -1,7 +1,10 @@
 tests/cases/conformance/jsx/tsxErrorRecovery1.tsx(5,19): error TS1109: Expression expected.
+tests/cases/conformance/jsx/tsxErrorRecovery1.tsx(8,11): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/tsxErrorRecovery1.tsx(8,12): error TS1005: '}' expected.
+tests/cases/conformance/jsx/tsxErrorRecovery1.tsx(9,1): error TS17002: Expected corresponding JSX closing tag for 'div'.
 
 
-==== tests/cases/conformance/jsx/tsxErrorRecovery1.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/tsxErrorRecovery1.tsx (4 errors) ====
     
     declare namespace JSX { interface Element { } }
     
@@ -12,4 +15,10 @@ tests/cases/conformance/jsx/tsxErrorRecovery1.tsx(5,19): error TS1109: Expressio
     }
     // Shouldn't see any errors down here
     var y = { a: 1 };
+              ~
+!!! error TS2304: Cannot find name 'a'.
+               ~
+!!! error TS1005: '}' expected.
     
+    
+!!! error TS17002: Expected corresponding JSX closing tag for 'div'.

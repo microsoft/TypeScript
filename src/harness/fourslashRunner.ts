@@ -1,10 +1,12 @@
 ///<reference path="fourslash.ts" />
 ///<reference path="harness.ts"/>
 ///<reference path="runnerbase.ts" />
+/* tslint:disable:no-null */
 
 const enum FourSlashTestType {
     Native,
     Shims,
+    ShimsWithPreprocess,
     Server
 }
 
@@ -22,6 +24,10 @@ class FourSlashRunner extends RunnerBase {
             case FourSlashTestType.Shims:
                 this.basePath = "tests/cases/fourslash/shims";
                 this.testSuiteName = "fourslash-shims";
+                break;
+            case FourSlashTestType.ShimsWithPreprocess:
+                this.basePath = "tests/cases/fourslash/shims-pp";
+                this.testSuiteName = "fourslash-shims-pp";
                 break;
             case FourSlashTestType.Server:
                 this.basePath = "tests/cases/fourslash/server";
@@ -82,7 +88,8 @@ class FourSlashRunner extends RunnerBase {
                 FourSlash.xmlData.forEach(xml => {
                     if (xml.invalidReason !== null) {
                         lines.push("<!-- Skipped " + xml.originalName + ", reason: " + xml.invalidReason + " -->");
-                    } else {
+                    }
+                    else {
                         lines.push("        <Scenario Name=\"" + xml.originalName + "\">");
                         xml.actions.forEach(action => {
                             lines.push("            " + action);
