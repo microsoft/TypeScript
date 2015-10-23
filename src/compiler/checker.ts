@@ -95,7 +95,7 @@ namespace ts {
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
             isOptionalParameter,
-            getTypeWalker
+            getSymbolWalker
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -2051,14 +2051,14 @@ namespace ts {
             });
         }
 
-        function getTypeWalker(accept: (type: Type) => boolean = () => true): TypeWalker {
+        function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
             let visited: Type[] = [];
             let visitedSymbols: Symbol[] = [];
 
             return {
                 visitType,
                 visitTypeFromSymbol,
-                reset: (newCallback: (type: Type) => boolean = () => true) => {
+                reset: (newCallback: (symbol: Symbol) => boolean = () => true) => {
                     accept = newCallback;
                     visited = [];
                     visitedSymbols = [];
@@ -2073,8 +2073,10 @@ namespace ts {
                     return;
                 }
                 visited.push(type);
-                if (!accept(type)) {
-                    return;
+                if (type.symbol) {
+                    if (!accept(type.symbol)) {
+                        return;
+                    }
                 }
 
                 // Visit the type's related types, if any
@@ -2177,22 +2179,32 @@ namespace ts {
                     return;
                 }
                 visitedSymbols.push(symbol);
+                if (!accept(symbol)) {
+                    return;
+                }
                 let t = getTypeOfSymbol(symbol);
                 visitType(t); // Should handle members on classes and such
-                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
-                    let signatures = getSignaturesOfType(t, SignatureKind.Call);
-                    for (let signature of signatures) {
-                        visitSignature(signature);
-                    }
-                }
-                if (symbol.flags & SymbolFlags.Class) {
-                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
-                    for (let signature of signatures) {
-                        visitSignature(signature);
-                    }
-                }
                 if (symbol.flags & SymbolFlags.HasExports) {
                     forEachValue(symbol.exports, visitTypeFromSymbol);
+                }
+                forEach(symbol.declarations, d => {
+                    // Type queries are too far resolved when we just visit the symbol's type
+                    // So to get the intervening symbols, we need to check if there's a type
+                    // query node on any of the symbol's declarations and get symbols there
+                    if ((d as any).type && (d as any).type.kind === SyntaxKind.TypeQuery) {
+                        let query = (d as any).type as TypeQueryNode;
+                        let entity = leftmostSymbol(query.exprName);
+                        visitTypeFromSymbol(entity);
+                    }
+                });
+
+                function leftmostSymbol(expr: QualifiedName | Identifier): Symbol {
+                    if (expr.kind === SyntaxKind.Identifier) {
+                        return getResolvedSymbol(expr as Identifier);
+                    }
+                    else {
+                        return leftmostSymbol((expr as QualifiedName).left);
+                    }
                 }
             }
         }
@@ -15028,7 +15040,7 @@ namespace ts {
                     }
                 },
                 resolveEntityName,
-                getTypeWalker
+                getSymbolWalker
             };
         }
 

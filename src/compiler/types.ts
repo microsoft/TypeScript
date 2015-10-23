@@ -1440,7 +1440,7 @@ namespace ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
-        getTypeWalker(accept?: (type: Type) => boolean): TypeWalker;
+        getSymbolWalker(accept?: (type: Symbol) => boolean): SymbolWalker;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -1616,13 +1616,13 @@ namespace ts {
         getExportsOfModule(symbol: Symbol): Symbol[];
         getDefiningTypeOfSymbol(symbol: Symbol): Type;
         resolveEntityName(entityName: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol;
-        getTypeWalker(accept?: (type: Type) => boolean): TypeWalker;
+        getSymbolWalker(accept?: (type: Symbol) => boolean): SymbolWalker;
     }
 
-    export interface TypeWalker {
+    export interface SymbolWalker {
         visitType(type: Type): void;
         visitTypeFromSymbol(symbol: Symbol): void;
-        reset(accept?: (type: Type) => boolean): void;
+        reset(accept?: (type: Symbol) => boolean): void;
     }
 
     export const enum SymbolFlags {

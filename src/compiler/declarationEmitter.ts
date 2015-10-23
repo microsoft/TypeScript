@@ -288,6 +288,9 @@ namespace ts {
             let emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
                 let realSourceFile = currentSourceFile;
                 currentSourceFile = getSourceFileOfNode(d);
+                if (d.kind === SyntaxKind.VariableDeclaration) {
+                    d = d.parent.parent as Declaration;
+                }
                 let oldFlags = d.flags;
                 if (shouldExport) {
                     d.flags |= NodeFlags.Export;
@@ -356,6 +359,7 @@ namespace ts {
                     case SyntaxKind.TypeAliasDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.VariableStatement:
+                    case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
@@ -477,75 +481,74 @@ namespace ts {
 
             function collectDependentDeclarations(exportedMembers: Symbol[]): Map<Declaration> {
                 const dependentDeclarations: Map<Declaration> = {};
-                const walker = resolver.getTypeWalker(inspectType);
+                const walker = resolver.getSymbolWalker(inspectSymbol);
                 forEach(exportedMembers, symbol => walker.visitTypeFromSymbol(symbol));
 
                 return dependentDeclarations;
 
-                function inspectType(type: Type): boolean {
-                    let symbol = type.symbol;
-                    if (symbol) {
-                        if (symbol.valueDeclaration && symbol.valueDeclaration.flags && symbol.valueDeclaration.flags & NodeFlags.Private) {
-                            return false;
-                        }
-                        else {
-                            // Add containing declarations if we've navigated to a nested type.
-                            forEach(symbol.declarations, d => {
-                                // Collect declarations 
-                                let sourceFile = getSourceFileOfNode(d);
-                                if (isDeclarationFile(sourceFile)) {
-                                    // If the declaration is from an external module dts, we need to create an import for it
-                                    if (isExternalModule(sourceFile)) {
-                                        // First, try to reverse lookup a module identifier
-                                        let fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
-                                        // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
-                                        let declarationStack = findDeclarationStack(d);
-                                        // Get the topmost declaration from that stack of nodes
-                                        let declaration = declarationStack.pop();
-                                        // Check for an export=
-                                        if (sourceFile.symbol.exports["export="]) {
-                                            importEquals[fileName] = importEquals[fileName] || [];
-                                            // Add the declaration to the list of those refed by this file
-                                            if (!contains(importEquals[fileName], declaration)) {
-                                                importEquals[fileName].push(declaration);
-                                            }
-                                        }
-                                        else {
-                                            imports[fileName] = imports[fileName] || [];
-                                            // Add that outer declaration to the list of things which need to be imported from an external source
-                                            if (!contains(imports[fileName], declaration)) {
-                                                imports[fileName].push(declaration);
-                                            }
+                function inspectSymbol(symbol: Symbol): boolean {
+                    if (symbol.valueDeclaration && symbol.valueDeclaration.flags && symbol.valueDeclaration.flags & NodeFlags.Private) {
+                        return false;
+                    }
+                    else {
+                        // Add containing declarations if we've navigated to a nested type.
+                        forEach(symbol.declarations, d => {
+                            // Collect declarations 
+                            let sourceFile = getSourceFileOfNode(d);
+                            // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
+                            let declarationStack = findDeclarationStack(d);
+                            if (isDeclarationFile(sourceFile)) {
+                                // If the declaration is from an external module dts, we need to create an import for it
+                                if (isExternalModule(sourceFile)) {
+                                    // First, try to reverse lookup a module identifier
+                                    let fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
+                                    // Get the topmost declaration from that stack of nodes
+                                    let declaration = declarationStack.pop();
+                                    // Check for an export=
+                                    if (sourceFile.symbol.exports["export="]) {
+                                        importEquals[fileName] = importEquals[fileName] || [];
+                                        // Add the declaration to the list of those refed by this file
+                                        if (!contains(importEquals[fileName], declaration)) {
+                                            importEquals[fileName].push(declaration);
                                         }
                                     }
                                     else {
-                                        let declarationStack = findDeclarationStack(d);
-                                        // Check if this type comes from an ambient external module declaration
-                                        let moduleDeclaration = declarationStack.pop();
-                                        if (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration) {
-                                            // If so, add said ambient external module to the imports list, and the next declaration in the stack to the set of imports
-                                            let declaration = declarationStack.pop();
-                                            let moduleName = (moduleDeclaration as ModuleDeclaration).name.text;
-                                            imports[moduleName] = imports[moduleName] || [];
-                                            if (!contains(imports[moduleName], declaration)) {
-                                                imports[moduleName].push(declaration);
-                                            }
+                                        imports[fileName] = imports[fileName] || [];
+                                        // Add that outer declaration to the list of things which need to be imported from an external source
+                                        if (!contains(imports[fileName], declaration)) {
+                                            imports[fileName].push(declaration);
                                         }
                                     }
-                                    // Otherwise we can elide it, as its from the stdlib or a triple-slash reference
-                                    return;
                                 }
-                                if (!(d.id in dependentDeclarations || d.id in declarations) && isModuleLevelDeclaration(d)) {
-                                    // Don't need to collect declarations which are not module-level
-                                    dependentDeclarations[d.id] = d;
+                                else {
+                                    // Check if this type comes from an ambient external module declaration
+                                    let moduleDeclaration = declarationStack.pop();
+                                    if (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration) {
+                                        // If so, add said ambient external module to the imports list, and the next declaration in the stack to the set of imports
+                                        let declaration = declarationStack.pop();
+                                        let moduleName = (moduleDeclaration as ModuleDeclaration).name.text;
+                                        imports[moduleName] = imports[moduleName] || [];
+                                        if (!contains(imports[moduleName], declaration)) {
+                                            imports[moduleName].push(declaration);
+                                        }
+                                    }
                                 }
-                                let containingDeclaration: Node = d;
-                                while ((containingDeclaration = containingDeclaration.parent) && (!containingDeclaration.symbol || !(containingDeclaration.symbol.flags & (SymbolFlags.HasMembers | SymbolFlags.HasExports))));
-                                if (containingDeclaration && containingDeclaration !== d && containingDeclaration.symbol && containingDeclaration.kind !== SyntaxKind.SourceFile && containingDeclaration.kind !== SyntaxKind.ModuleDeclaration) {
-                                    walker.visitTypeFromSymbol(containingDeclaration.symbol);
-                                }
-                            });
-                        }
+                                // Otherwise we can elide it, as its from the stdlib or a triple-slash reference
+                                return;
+                            }
+                            if (!(d.id in dependentDeclarations || d.id in declarations) && isModuleLevelDeclaration(d)) {
+                                // Don't need to collect declarations which are not module-level
+                                dependentDeclarations[d.id] = d;
+                            }
+                            let outtermostDeclaration = declarationStack.pop();
+                            if (outtermostDeclaration && outtermostDeclaration !== d &&
+                                outtermostDeclaration.kind !== SyntaxKind.ModuleDeclaration &&
+                                isModuleLevelDeclaration(outtermostDeclaration) &&
+                                (!(outtermostDeclaration.id in dependentDeclarations || outtermostDeclaration.id in declarations))) {
+                                dependentDeclarations[outtermostDeclaration.id] = outtermostDeclaration;
+                                walker.visitTypeFromSymbol(outtermostDeclaration.symbol)
+                            }
+                        });
                     }
                     return true;
                 }
