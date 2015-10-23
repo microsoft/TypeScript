@@ -627,7 +627,46 @@ function deleteTemporaryProjectOutput() {
 }
 
 var testTimeout = 20000;
-desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+task("runalltests", ["build-rules", "tests", builtLocalDirectory], function() {
+    cleanTestDirs();
+    var debug = process.env.debug || process.env.d;
+    tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
+    var testConfigFile = 'test.config';
+    if(fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+
+    if(tests || light) {
+        writeTestConfigFile(tests, light, testConfigFile);
+    }
+
+    if (tests && tests.toLocaleLowerCase() === "rwc") {
+        testTimeout = 100000;
+    }
+
+    colors = process.env.colors || process.env.color
+    colors = colors ? ' --no-colors ' : ' --colors ';
+    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
+    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
+    var subsets = ['compiler', 'conformance', 'project', 'fourslash']
+    var res = subsets.map(function (sub) { return "^" + sub + ".*$"; });
+    res.push("^(?!" + subsets.join("|") + ").*$");
+    res.forEach(function (re) {
+        tests = ' -g "' + re + '"';
+        // pass different name.global.js files to mocha? for exmaple, each name.global.js would set a different option for the harness runner
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+        console.log(cmd);
+        exec(cmd, function() {
+            deleteTemporaryProjectOutput();
+            complete();
+        });
+    })
+}, {async: true});
+
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
