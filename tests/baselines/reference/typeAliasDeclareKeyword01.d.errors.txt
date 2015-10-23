@@ -1,0 +1,8 @@
+tests/cases/compiler/typeAliasDeclareKeyword01.d.ts(1,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+
+
+==== tests/cases/compiler/typeAliasDeclareKeyword01.d.ts (1 errors) ====
+    type Foo = number;
+    ~~~~
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+    declare type Bar = string;
