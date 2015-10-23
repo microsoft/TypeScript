@@ -75,36 +75,3 @@ var v = 3;
 var Foo;
 (function (Foo) {
 })(Foo || (Foo = {}));
-
-
-//// [file1.d.ts]
-interface I {
-}
-declare class C1 {
-}
-declare class C2 {
-}
-declare function f(): void;
-declare var v: number;
-declare class Foo {
-    static x: number;
-}
-declare module N {
-    module F {
-    }
-}
-//// [file2.d.ts]
-declare class I {
-}
-interface C1 {
-}
-declare function C2(): void;
-declare class f {
-}
-declare var v: number;
-declare module Foo {
-    var x: number;
-}
-declare module N {
-    function F(): any;
-}

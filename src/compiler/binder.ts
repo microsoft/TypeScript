@@ -77,13 +77,13 @@ namespace ts {
         IsContainerWithLocals = IsContainer | HasLocals
     }
 
-    export function bindSourceFile(file: SourceFile) {
+    export function bindSourceFile(file: SourceFile, compilerOptions: CompilerOptions) {
         let start = new Date().getTime();
-        bindSourceFileWorker(file);
+        bindSourceFileWorker(file, compilerOptions);
         bindTime += new Date().getTime() - start;
     }
 
-    function bindSourceFileWorker(file: SourceFile) {
+    function bindSourceFileWorker(file: SourceFile, compilerOptions: CompilerOptions) {
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
@@ -978,7 +978,7 @@ namespace ts {
         }
 
         function bindSourceFileAsExternalModule() {
-            bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName) }"`);
+            bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName, getSupportedExtensions(compilerOptions))}"`);
         }
 
         function bindExportAssignment(node: ExportAssignment|BinaryExpression) {

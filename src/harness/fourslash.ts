@@ -230,7 +230,7 @@ namespace FourSlash {
                 tryAdd(referenceFilePath);
             }
             else {
-                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + ext));
+                tryAdd(referenceFilePath) || ts.forEach(extensions, ext => tryAdd(referenceFilePath + "." + ext));
             }
 
             function tryAdd(path: string) {
@@ -300,7 +300,7 @@ namespace FourSlash {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
                     // so convert them before making appropriate comparison
                     let importedFilePath = this.basePath + "/" + importedFile.fileName;
-                    this.addMatchedInputFile(importedFilePath, compilationOptions.allowNonTsExtensions ? ts.supportedJsExtensions : ts.supportedExtensions);
+                    this.addMatchedInputFile(importedFilePath, ts.getSupportedExtensions(compilationOptions));
                 });
 
                 // Check if no-default-lib flag is false and if so add default library
@@ -544,6 +544,16 @@ namespace FourSlash {
             let actual = emit.outputFiles[0].text;
             if (actual !== expected) {
                 this.raiseError(`Expected emit output to be "${expected}", but got "${actual}"`);
+            }
+        }
+
+        public verifyGetEmitOutputContentsForCurrentFile(expected: { fileName: string; content: string; }[]): void {
+            let emit = this.languageService.getEmitOutput(this.activeFile.fileName);
+            this.taoInvalidReason = "verifyGetEmitOutputContentsForCurrentFile impossible";
+            assert.equal(emit.outputFiles.length, expected.length, "Number of emit output files");
+            for (let i = 0; i < emit.outputFiles.length; i++) {
+                assert.equal(emit.outputFiles[i].name, expected[i].fileName, "FileName");
+                assert.equal(emit.outputFiles[i].text, expected[i].content, "Content");
             }
         }
 

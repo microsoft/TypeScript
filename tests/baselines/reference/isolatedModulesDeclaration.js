@@ -1,10 +1,6 @@
-//// [isolatedModulesDeclaration.ts]
+//// [file1.ts]
 
 export var x;
 
-//// [isolatedModulesDeclaration.js]
+//// [file1.js]
 export var x;
-
-
-//// [isolatedModulesDeclaration.d.ts]
-export declare var x: any;

@@ -2,7 +2,7 @@
 
 // Assignments to 'exports.p' define a property 'p'
 
-// @allowNonTsExtensions: true
+// @jsExtensions: js
 // @Filename: myMod.js
 //// exports.n = 3;
 //// exports.s = 'foo';

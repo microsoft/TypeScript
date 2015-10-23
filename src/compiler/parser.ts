@@ -537,6 +537,10 @@ namespace ts {
             return result;
         }
 
+        function getLanguageVariant(fileName: string, isJavaScriptFile: boolean) {
+            return isTsx(fileName) || isJavaScriptFile ?  LanguageVariant.JSX  : LanguageVariant.Standard;
+        }
+
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, isJavaScriptFile: boolean, _syntaxCursor: IncrementalParser.SyntaxCursor) {
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
@@ -554,7 +558,7 @@ namespace ts {
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(isTsx(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
+            scanner.setLanguageVariant(getLanguageVariant(fileName, isJavaScriptFile));
         }
 
         function clearState() {
@@ -572,10 +576,6 @@ namespace ts {
 
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
-
-            if (contextFlags & ParserContextFlags.JavaScriptFile) {
-                sourceFile.parserContextFlags = ParserContextFlags.JavaScriptFile;
-            }
 
             // Prime the scanner.
             token = nextToken();
@@ -670,8 +670,11 @@ namespace ts {
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
-            sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = isTsx(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
+            sourceFile.flags = fileExtensionIs(sourceFile.fileName, "d.ts") ? NodeFlags.DeclarationFile : 0;
+            if (contextFlags & ParserContextFlags.JavaScriptFile) {
+                sourceFile.parserContextFlags = ParserContextFlags.JavaScriptFile;
+            }
+            sourceFile.languageVariant = getLanguageVariant(fileName, isInJavaScriptFile(sourceFile));
 
             return sourceFile;
         }

@@ -1,0 +1,8 @@
+EmitSkipped: true
+Diagnostics:
+  Cannot write file 'tests/cases/fourslash/b.js' which is one of the input files.
+
+EmitSkipped: false
+FileName : tests/cases/fourslash/a.js
+function foo2() { return 30; } // no error - should emit a.js
+

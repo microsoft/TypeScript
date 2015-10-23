@@ -1,0 +1,3 @@
+//// [a.js.map]
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":["c","c.constructor"],"mappings":"AACA;IAAAA;IACAC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC"}//// [b.js.js.map]
+{"version":3,"file":"b.js.js","sourceRoot":"","sources":["b.js.map"],"names":["foo"],"mappings":"AAAA;AACAA,CAACA"}

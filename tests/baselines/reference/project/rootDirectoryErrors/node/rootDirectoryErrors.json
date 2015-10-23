@@ -5,9 +5,9 @@
         "FolderA/FolderB/fileB.ts"
     ],
     "outDir": "outdir/simple",
+    "rootDir": "FolderA/FolderB/FolderC",
     "declaration": true,
     "baselineCheck": true,
-    "rootDir": "FolderA/FolderB/FolderC",
     "resolvedInputFiles": [
         "lib.d.ts",
         "FolderA/FolderB/FolderC/fileC.ts",
@@ -15,8 +15,6 @@
     ],
     "emittedFiles": [
         "outdir/simple/FolderC/fileC.js",
-        "outdir/simple/FolderC/fileC.d.ts",
-        "outdir/simple/fileB.js",
-        "outdir/simple/fileB.d.ts"
+        "outdir/simple/fileB.js"
     ]
 }

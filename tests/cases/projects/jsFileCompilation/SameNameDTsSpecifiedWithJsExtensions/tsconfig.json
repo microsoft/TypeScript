@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "jsExtensions": [ "js" ] },
+  "files": [ "a.d.ts" ]
+}

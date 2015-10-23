@@ -2,7 +2,7 @@
 
 // Assignments to 'module.exports' create an external module
 
-// @allowNonTsExtensions: true
+// @jsExtensions: js
 // @Filename: myMod.js
 //// if (true) {
 ////     module.exports = { a: 10 };

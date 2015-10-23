@@ -203,7 +203,7 @@ namespace ts {
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
             let searchPath = normalizePath(sys.getCurrentDirectory());
-            configFileName = findConfigFile(searchPath);
+            configFileName = findConfigFile(searchPath, sys.fileExists);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
@@ -249,7 +249,7 @@ namespace ts {
 
             let result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
             let configObject = result.config;
-            let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
+            let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -265,7 +265,7 @@ namespace ts {
                 if (configFileName) {
                     let configParseResult = parseConfigFile();
                     rootFileNames = configParseResult.fileNames;
-                    compilerOptions = extend(commandLine.options, configParseResult.options);
+                    compilerOptions = configParseResult.options;
                 }
                 else {
                     rootFileNames = commandLine.fileNames;
@@ -341,7 +341,7 @@ namespace ts {
         }
 
         function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, commandLine.options)) {
                 return;
             }
 
@@ -588,8 +588,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
-            let result: Map<string | number | boolean> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValueType> {
+            let result: Map<CompilerOptionsValueType> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (let name in options) {
@@ -606,8 +606,8 @@ namespace ts {
                             let optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
                                 if (typeof optionDefinition.type === "string") {
-                                    // string, number or boolean
-                                    result[name] = value;
+                                    // string, number, boolean or string[]
+                                    result[name] = <string | number | boolean | string[]>value;
                                 }
                                 else {
                                     // Enum

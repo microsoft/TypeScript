@@ -323,30 +323,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
+        let emitSkipped = false;
         let newLine = host.getNewLine();
-        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
-        let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
+                    emitSkipped = emitFile(getEmitFileNames(sourceFile, host), sourceFile) || emitSkipped;
                 }
             });
 
             if (compilerOptions.outFile || compilerOptions.out) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+                emitSkipped = emitFile(getBundledEmitFileNames(compilerOptions)) || emitSkipped;
             }
         }
         else {
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
-                emitFile(jsFilePath, targetSourceFile);
+                emitSkipped = emitFile(getEmitFileNames(targetSourceFile, host), targetSourceFile) || emitSkipped;
             }
-            else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+            else if (!isDeclarationFile(targetSourceFile) &&
+                (compilerOptions.outFile || compilerOptions.out)) {
+                emitSkipped = emitFile(getBundledEmitFileNames(compilerOptions)) || emitSkipped;
             }
         }
 
@@ -354,7 +352,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
 
         return {
-            emitSkipped: false,
+            emitSkipped,
             diagnostics,
             sourceMaps: sourceMapDataList
         };
@@ -379,7 +377,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             return true;
         }
 
-        function emitJavaScript(jsFilePath: string, root?: SourceFile) {
+        function emitJavaScript(jsFilePath: string, sourceMapFilePath: string, root?: SourceFile) {
             let writer = createTextWriter(newLine);
             let { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
@@ -875,24 +873,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (compilerOptions.inlineSourceMap) {
                         // Encode the sourceMap into the sourceMap url
                         let base64SourceMapText = convertToBase64(sourceMapText);
-                        sourceMapUrl = `//# sourceMappingURL=data:application/json;base64,${base64SourceMapText}`;
+                        sourceMapData.jsSourceMappingURL = `data:application/json;base64,${base64SourceMapText}`;
                     }
                     else {
                         // Write source map file
                         writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, sourceMapText, /*writeByteOrderMark*/ false);
-                        sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
                     }
+                    sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
 
                     // Write sourcemap url to the js file and write the js file
                     writeJavaScriptFile(emitOutput + sourceMapUrl, writeByteOrderMark);
                 }
 
                 // Initialize source map data
-                let sourceMapJsFile = getBaseFileName(normalizeSlashes(jsFilePath));
                 sourceMapData = {
-                    sourceMapFilePath: jsFilePath + ".map",
-                    jsSourceMappingURL: sourceMapJsFile + ".map",
-                    sourceMapFile: sourceMapJsFile,
+                    sourceMapFilePath: sourceMapFilePath,
+                    jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined,
+                    sourceMapFile: getBaseFileName(normalizeSlashes(jsFilePath)),
                     sourceMapSourceRoot: compilerOptions.sourceRoot || "",
                     sourceMapSources: [],
                     inputSourceFileNames: [],
@@ -7599,12 +7596,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            emitJavaScript(jsFilePath, sourceFile);
+        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string }, sourceFile?: SourceFile) {
+            // Make sure not to write js File and source map file if any of them cannot be written
+            let emitSkipped = host.isEmitBlocked(jsFilePath) || (sourceMapFilePath && host.isEmitBlocked(sourceMapFilePath));
+            if (!emitSkipped) {
+                emitJavaScript(jsFilePath, sourceMapFilePath, sourceFile);
+            }
 
             if (compilerOptions.declaration) {
-                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics) || emitSkipped;
             }
+
+            return emitSkipped;
         }
     }
 }

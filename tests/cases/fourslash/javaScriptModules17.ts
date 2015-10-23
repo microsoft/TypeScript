@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @jsExtensions: js
 // @Filename: myMod.js
 //// module.exports = { n: 3, s: 'foo', b: true };
 

@@ -32,12 +32,12 @@ namespace ts {
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         let diagnostics: Diagnostic[] = [];
-        let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
+        let { declarationFilePath } = getEmitFileNames(targetSourceFile, host);
+        emitDeclarations(host, resolver, diagnostics, declarationFilePath, targetSourceFile);
         return diagnostics;
     }
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], declarationFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
 
@@ -263,6 +263,7 @@ namespace ts {
 
         function reportInaccessibleThisError() {
             if (errorNameNode) {
+                reportedDeclarationError = true;
                 diagnostics.push(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode)));
             }
@@ -1591,12 +1592,10 @@ namespace ts {
         function writeReferencePath(referencedFile: SourceFile) {
             let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
                 ? referencedFile.fileName // Declaration file, use declaration file name
-                : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts"; // Global out file
+                :  getEmitFileNames(referencedFile, host).declarationFilePath; // declaration file name
 
             declFileName = getRelativePathToDirectoryOrUrl(
-                getDirectoryPath(normalizeSlashes(jsFilePath)),
+                getDirectoryPath(normalizeSlashes(declarationFilePath)),
                 declFileName,
                 host.getCurrentDirectory(),
                 host.getCanonicalFileName,
@@ -1607,15 +1606,16 @@ namespace ts {
     }
 
     /* @internal */
-    export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
-        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
-        // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
-        // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.reportedDeclarationError) {
+    export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
+        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, declarationFilePath, sourceFile);
+        let emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isDeclarationEmitBlocked(declarationFilePath, sourceFile);
+        if (!emitSkipped) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
+            let compilerOptions = host.getCompilerOptions();
+            writeFile(host, diagnostics, declarationFilePath, declarationOutput, compilerOptions.emitBOM);
         }
+        return emitSkipped;
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
             let appliedSyncOutputPos = 0;

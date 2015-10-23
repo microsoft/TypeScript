@@ -17,4 +17,3 @@ module.exports = a;
 //// [es6ImportDefaultBindingInEs5_0.d.ts]
 declare var a: number;
 export = a;
-//// [es6ImportDefaultBindingInEs5_1.d.ts]

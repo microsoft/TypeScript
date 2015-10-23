@@ -17,5 +17,3 @@ exports.x = nameSpaceBinding.a;
 
 //// [server.d.ts]
 export declare var a: number;
-//// [client.d.ts]
-export declare var x: number;

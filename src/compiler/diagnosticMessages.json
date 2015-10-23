@@ -2060,6 +2060,14 @@
         "category": "Error",
         "code": 5054
     },
+    "Cannot write file '{0}' which is one of the input files.": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Cannot write file '{0}' since one or more input files would emit into it.": {
+        "category": "Error",
+        "code": 5056
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2173,6 +2181,10 @@
         "category": "Message",
         "code": 6038
     },
+    "EXTENSION[S]": {
+        "category": "Message",
+        "code": 6039
+    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2257,6 +2269,10 @@
         "category": "Error",
         "code": 6063
     },
+    "Argument for '--jsExtensions' option must be either extension or comma separated list of extensions.": {
+        "category": "Error",
+        "code": 6064
+    },
 
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
@@ -2293,6 +2309,10 @@
     "Suppress excess property checks for object literals.": {
         "category": "Message",
         "code": 6072
+    },
+    "Specifies extensions to treat as javascript file. To specify multiple extensions, either use this option multiple times or provide comma separated list.": {
+        "category": "Message",
+        "code": 6073
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

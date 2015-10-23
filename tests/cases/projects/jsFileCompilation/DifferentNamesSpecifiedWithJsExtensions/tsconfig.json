@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "out": "test.js",
+    "jsExtensions": [ "js" ]
+  },
+  "files": [ "a.ts", "b.js" ]
+}

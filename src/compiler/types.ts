@@ -1361,6 +1361,7 @@ namespace ts {
         getTypeChecker(): TypeChecker;
 
         /* @internal */ getCommonSourceDirectory(): string;
+        /* @internal */ isDeclarationEmitBlocked(emitFileName: string, sourceFile?: SourceFile, cancellationToken?: CancellationToken): boolean;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
@@ -2091,13 +2092,16 @@ namespace ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
+        jsExtensions?: string[];
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
 
-        [option: string]: string | number | boolean;
+        [option: string]: CompilerOptionsValueType;
     }
+
+    export type CompilerOptionsValueType = string | number | boolean | string[];
 
     export const enum ModuleKind {
         None = 0,
@@ -2165,7 +2169,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number>;             // an object literal mapping named values to actual values
+        type: Map<number> | string;     // an object literal mapping named values to actual values | string if it is string[]
         error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
     }
 
