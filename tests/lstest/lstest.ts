@@ -1,5 +1,7 @@
 /// <reference path="..\..\src\compiler\sys.ts"/>
+/// <reference path="..\..\src\compiler\commandLineParser.ts"/>
 /// <reference path="..\..\src\services\services.ts"/>
+/// <reference path="..\..\src\services\shims.ts"/>
 
 interface FileInfo {
     name: string;
