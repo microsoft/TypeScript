@@ -155,51 +155,37 @@ namespace ts.server {
 
     var logger = createLoggerFromEnv();
 
-    var messagesToWrite: string[] = [];
-    function addMessage(message: string) {
-        messagesToWrite.push(message);
-        // If the current message list has more than 1 messages, that means
-        // the current writing is not ended yet, so don't start new writeNext
-        // as it may interfere with ongoing writing sessions.
-        if (messagesToWrite.length === 1) {
-            startWrite();
+    let pending: string[] = [];
+    function queueMessage(s: string) {
+        pending.push(s);
+        if (pending.length === 1) {
+            drain();
         }
     }
 
-    function startWrite() {
-        if (messagesToWrite.length === 0) {
-            return;
-        }
-
-        let messageToWrite = messagesToWrite[0];
-        let buffer = new Buffer(messageToWrite, "utf8");
-        write(buffer);
+    function drain() {
+        Debug.assert(pending.length > 0);
+        writeBuffer(new Buffer(pending[0], "utf8"), 0);
     }
 
-    function writeNext() {
-        if (messagesToWrite.length > 0) {
-            messagesToWrite = copyListRemovingItem(messagesToWrite[0], messagesToWrite);
-        }
-        startWrite();
-    }
-
-    function write(buffer: any, offset = 0) {
-        let toWrite = buffer.length - offset;
-        fs.write(1, buffer, offset, toWrite, /*position*/undefined, function(err: any, written: number, buffer: any) {
-            offset += written;
+    function writeBuffer(buffer: Buffer, offset: number) {
+        const toWrite = buffer.length - offset;
+        fs.write(1, buffer, offset, toWrite, undefined, (err, written, buffer) => {
             if (toWrite > written) {
-                // there are some content left that still need to be written
-                write(buffer, offset);
+                writeBuffer(buffer, offset + written);
             }
             else {
-                // ready to write the next string
-                writeNext();
+                Debug.assert(pending.length > 0);
+                pending.shift();
+                if (pending.length > 0) {
+                    drain();
+                }
             }
-        })
+        });
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    ts.sys.write = (s: string) => addMessage(s);
+    ts.sys.write = (s: string) => queueMessage(s);
 
     var ioSession = new IOSession(ts.sys, logger);
     process.on('uncaughtException', function(err: Error) {
