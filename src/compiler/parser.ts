@@ -13,6 +13,12 @@ namespace ts {
         return new (getNodeConstructor(kind))(pos, end);
     }
 
+    interface ContextualError {
+        node?: Node
+        callback?: (node?: Node) => void,
+        count: number
+    }
+
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
         if (node) {
             return cbNode(node);
@@ -526,6 +532,9 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
+        // For more detailed errors, a contextual error node & callback may be used 
+        let contextualError: ContextualError = {count: 0};
+
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
 
@@ -804,7 +813,10 @@ namespace ts {
         function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
             let lastError = lastOrUndefined(parseDiagnostics);
-            if ((!lastError || start !== lastError.start) && (contextFlags & ParserContextFlags.NoError) === 0) {
+            if (contextualError.callback) {
+                contextualError.count++;
+            }
+            else if (!lastError || start !== lastError.start) {
                 parseDiagnostics.push(createFileDiagnostic(sourceFile, start, length, message, arg0));
             }
 
@@ -923,6 +935,51 @@ namespace ts {
             return token > SyntaxKind.LastReservedWord;
         }
 
+        module errors {
+            export function invalidTypeReferenceOrTypePredicate(typeName: Identifier | QualifiedName): void {
+                if (typeName.flags & NodeFlags.Missing) {
+                    onInvalidTypeReference(typeName);
+                }
+                if ((<QualifiedName>typeName).right && ((<QualifiedName>typeName).right.flags & NodeFlags.Missing)) {
+                    onInvalidTypeQualifiedName()
+                }
+            }
+
+            function onInvalidTypeReference(node: Identifier | QualifiedName): void {
+                let needsParentheses = true;
+                if (isStartOfFunctionType()) {
+                    parseFunctionOrConstructorType(SyntaxKind.FunctionType);
+                }
+                else if (token === SyntaxKind.NewKeyword) {
+                    parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
+                }
+                else {
+                    needsParentheses = false;
+                }
+                if (needsParentheses) {
+                    let hint = "(" + sourceFile.text.substring(node.pos, scanner.getStartPos()).trim() + ")";
+                    parseErrorAtPosition(node.pos, scanner.getStartPos() - node.pos, Diagnostics.Invalid_type_To_avoid_ambiguity_add_parentheses_Colon_0, hint);
+                }
+                else {
+                    parseErrorAtCurrentToken(Diagnostics.Type_expected);
+                }
+            }
+
+            function onInvalidTypeQualifiedName(): void {
+                if (scanner.isReservedWord()) {
+                    parseErrorAtCurrentToken(Diagnostics.Identifier_expected_reserved_word_0_not_allowed_here, tokenToString(token));
+                }
+                else {
+                    if (scanner.hasPrecedingLineBreak()) {
+                        parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
+                    }
+                    else {
+                        parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+                    }
+                }
+            }
+        }
+
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
             if (token === kind) {
                 if (shouldAdvance) {
@@ -1013,7 +1070,21 @@ namespace ts {
                 parseErrorBeforeNextFinishedNode = false;
                 node.parserContextFlags |= ParserContextFlags.ThisNodeHasError;
             }
+            return node;
+        }
 
+        function finishNodeContextualError<T extends Node>(node: T, end ?: number): T {
+            finishNode(node, end);
+
+            // If contextual error count, try to use callback for more detailed errors
+            if (contextualError.count) {
+                if (contextualError.callback) {
+                    let errorCallback = contextualError.callback;
+                    contextualError.callback = undefined;
+                    errorCallback(contextualError.node);
+                }
+                contextualError.count = 0;
+            }
             return node;
         }
 
@@ -1815,13 +1886,6 @@ namespace ts {
             return entity;
         }
 
-        function parseEntityNameNoError(allowReservedWords: boolean): EntityName {
-            contextFlags |= ParserContextFlags.NoError;
-            let entity = parseEntityName(allowReservedWords);
-            contextFlags &= ~ParserContextFlags.NoError;
-            return entity;
-        }
-
         function parseRightSideOfDot(allowReservedWords: boolean): Identifier {
             // Technically a keyword is valid here as all identifiers and keywords are identifier names.
             // However, often we'll encounter this in error situations when the identifier or keyword
@@ -1929,64 +1993,27 @@ namespace ts {
         // TYPES
 
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
-            let typeName = parseEntityNameNoError(/*allowReservedWords*/ false);
+            contextualError.callback = errors.invalidTypeReferenceOrTypePredicate
+
+            let typeName = parseEntityName(/*allowReservedWords*/ false);
+            contextualError.node = typeName;
 
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                 nextToken();
-                let pnode = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
-                pnode.parameterName = <Identifier>typeName;
-                pnode.type = parseType();
-                return finishNode(pnode);
+                let predicateNode = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
+                predicateNode.parameterName = <Identifier>typeName;
+                predicateNode.type = parseType();
+                return finishNode(predicateNode);
             }
 
             let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
-            if (typeName.flags & NodeFlags.Missing) {
-                errorOnInvalidTypeReference(typeName);
-            }
-            else {
-                node.typeName = typeName;
+            node.typeName = typeName;
+            if ((typeName.flags & NodeFlags.Missing) === 0) {
                 if (token === SyntaxKind.LessThanToken && !scanner.hasPrecedingLineBreak()) {
                     node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
                 }
             }
-            if ((<QualifiedName>typeName).right && ((<QualifiedName>typeName).right.flags & NodeFlags.Missing)) {
-                errorOnInvalidTypeQualifiedName()
-            }
-            return finishNode(node);
-        }
-
-        function errorOnInvalidTypeReference(node: Identifier | QualifiedName): void {
-            let needsParentheses = true;
-            if (isStartOfFunctionType()) {
-                parseFunctionOrConstructorType(SyntaxKind.FunctionType);
-            }
-            else if (token === SyntaxKind.NewKeyword) {
-                parseFunctionOrConstructorType(SyntaxKind.ConstructorType);
-            }
-            else {
-                needsParentheses = false;
-            }
-            if (needsParentheses) {
-                let hint = "(" + sourceFile.text.substring(node.pos, scanner.getStartPos()).trim() + ")";
-                parseErrorAtPosition(node.pos, scanner.getStartPos() - node.pos, Diagnostics.Invalid_type_To_avoid_ambiguity_add_parentheses_Colon_0, hint);
-            }
-            else {
-                parseErrorAtCurrentToken(Diagnostics.Type_expected);
-            }
-        }
-
-        function errorOnInvalidTypeQualifiedName(): void {
-            if (scanner.isReservedWord()) {
-                parseErrorAtCurrentToken(Diagnostics.Identifier_expected_reserved_word_0_not_allowed_here, tokenToString(token));
-            }
-            else {
-                if (scanner.hasPrecedingLineBreak()) {
-                    parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                }
-                else {
-                    parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
-                }
-            }
+            return finishNodeContextualError(node);
         }
 
         function parseTypeQuery(): TypeQueryNode {
