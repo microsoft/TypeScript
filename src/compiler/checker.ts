@@ -2867,7 +2867,7 @@ namespace ts {
         }
 
         function resolveBaseTypesOfClass(type: InterfaceType): void {
-            type.resolvedBaseTypes = type.resolvedBaseTypes || [];
+            type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             let baseContructorType = getBaseConstructorTypeOfClass(type);
             if (!(baseContructorType.flags & TypeFlags.ObjectType)) {
                 return;
@@ -2903,11 +2903,16 @@ namespace ts {
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return;
             }
-            type.resolvedBaseTypes.push(baseType);
+            if (type.resolvedBaseTypes === emptyArray) {
+                type.resolvedBaseTypes = [baseType];
+            }
+            else {
+                type.resolvedBaseTypes.push(baseType);
+            }
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
-            type.resolvedBaseTypes = type.resolvedBaseTypes || [];
+            type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             for (let declaration of type.symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                     for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
@@ -2915,7 +2920,12 @@ namespace ts {
                         if (baseType !== unknownType) {
                             if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
                                 if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                    type.resolvedBaseTypes.push(baseType);
+                                    if (type.resolvedBaseTypes === emptyArray) {
+                                        type.resolvedBaseTypes = [baseType];
+                                    }
+                                    else {
+                                        type.resolvedBaseTypes.push(baseType);
+                                    }
                                 }
                                 else {
                                     error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
