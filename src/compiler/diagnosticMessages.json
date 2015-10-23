@@ -799,7 +799,11 @@
     "'=' can only be used in an object literal property inside a destructuring assignment.": {
         "category": "Error",
         "code": 1312
-    },    
+    },
+    "The body of an 'if' statement cannot be the empty statement.": {
+        "category": "Error",
+        "code": 1313
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
