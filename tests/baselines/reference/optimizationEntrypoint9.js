@@ -103,6 +103,7 @@ export declare class B extends A {
 declare class A {
     member: typeof GlobalFoo;
 }
+declare var GlobalFoo: Foo;
 declare class Foo {
     member: Bar;
 }
@@ -115,8 +116,7 @@ export {
 //// [DtsFileErrors]
 
 
-all.d.ts(3,20): error TS2304: Cannot find name 'GlobalFoo'.
-all.d.ts(8,32): error TS4020: Extends clause of exported class 'B' has or is using private name 'A'.
+all.d.ts(9,32): error TS4020: Extends clause of exported class 'B' has or is using private name 'A'.
 tests/cases/compiler/ref/a.d.ts(3,20): error TS2304: Cannot find name 'GlobalFoo'.
 tests/cases/compiler/ref/a.d.ts(3,20): error TS4031: Public property 'member' of exported class has or is using private name 'GlobalFoo'.
 
@@ -131,13 +131,12 @@ tests/cases/compiler/ref/a.d.ts(3,20): error TS4031: Public property 'member' of
 !!! error TS4031: Public property 'member' of exported class has or is using private name 'GlobalFoo'.
     }
     
-==== all.d.ts (2 errors) ====
+==== all.d.ts (1 errors) ====
     /// <reference path="tests/cases/compiler/ref/c.d.ts" />
     declare class A {
         member: typeof GlobalFoo;
-                       ~~~~~~~~~
-!!! error TS2304: Cannot find name 'GlobalFoo'.
     }
+    declare var GlobalFoo: Foo;
     declare class Foo {
         member: Bar;
     }
