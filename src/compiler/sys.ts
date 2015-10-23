@@ -407,7 +407,7 @@ namespace ts {
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     return _fs.watch(
                         path,
-                        { persistent: true, recursive: !!recursive },
+                        { persisten: true, recursive: !!recursive },
                         (eventName: string, relativeFileName: string) => {
                             // In watchDirectory we only care about adding and removing files (when event name is
                             // "rename"); changes made within files are handled by corresponding fileWatchers (when

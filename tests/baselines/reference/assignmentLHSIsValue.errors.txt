@@ -22,23 +22,9 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(4
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(50,20): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(51,11): error TS1005: ';' expected.
 tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(54,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(57,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(59,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(60,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(61,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(62,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(63,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(64,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(65,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(66,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(67,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(68,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(69,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(70,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (38 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (24 errors) ====
     // expected error for all the LHS of assignments
     var value;
     
@@ -144,44 +130,16 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
     
     // parentheses, the containted expression is value
     (this) = value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (M) = value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (C) = value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (E) = value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (foo) = value;
-    ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (null) = value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (true) = value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (0) = value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     ('') = value;
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (/d+/) = value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     ({}) = value;
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     ([]) = value;
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (function baz() { }) = value;
-    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (foo()) = value;
-    ~~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.

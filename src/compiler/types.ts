@@ -167,6 +167,15 @@ namespace ts {
         FromKeyword,
         OfKeyword, // LastKeyword and LastToken
 
+        // Primitive types
+        I8Keyword,
+        U8Keyword,
+        I16Keyword,
+        U16Keyword,
+        I32Keyword,
+        U32Keyword,
+        FloatKeyword,
+
         // Parse tree nodes
 
         // Names
@@ -227,6 +236,7 @@ namespace ts {
         YieldExpression,
         SpreadElementExpression,
         ClassExpression,
+        StructExpression,
         OmittedExpression,
         ExpressionWithTypeArguments,
         AsExpression,
@@ -248,6 +258,7 @@ namespace ts {
         ContinueStatement,
         BreakStatement,
         ReturnStatement,
+        StructKeyword,
         WithStatement,
         SwitchStatement,
         LabeledStatement,
@@ -257,6 +268,7 @@ namespace ts {
         VariableDeclaration,
         VariableDeclarationList,
         FunctionDeclaration,
+        StructDeclaration,
         ClassDeclaration,
         InterfaceDeclaration,
         TypeAliasDeclaration,
@@ -361,7 +373,6 @@ namespace ts {
     }
 
     export const enum NodeFlags {
-        None =              0,
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
         Public =            0x00000010,  // Property/Method
@@ -724,7 +735,7 @@ namespace ts {
     }
 
     export interface PostfixUnaryExpression extends IncrementExpression {
-        operand: LeftHandSideExpression;
+        operand: Expression;
         operator: SyntaxKind;
     }
 
@@ -835,6 +846,7 @@ namespace ts {
     export interface ElementAccessExpression extends MemberExpression {
         expression: LeftHandSideExpression;
         argumentExpression?: Expression;
+        isStructArray?: boolean;
     }
 
     export interface CallExpression extends LeftHandSideExpression {
@@ -921,6 +933,8 @@ namespace ts {
 
     export interface Block extends Statement {
         statements: NodeArray<Statement>;
+        helperStatements?: NodeArray<Statement>;
+        helperVarCount? : number;
     }
 
     export interface VariableStatement extends Statement {
@@ -1033,6 +1047,23 @@ namespace ts {
 
     export interface ClassElement extends Declaration {
         _classElementBrand: any;
+    }
+
+    export interface StructLikeDeclaration extends Declaration {
+        name?: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        heritageClauses?: NodeArray<HeritageClause>;
+        members: NodeArray<ClassElement>;
+    }
+
+    export interface StructDeclaration extends StructLikeDeclaration, Statement {
+    }
+
+    export interface StructExpression extends StructLikeDeclaration, PrimaryExpression {
+    }
+
+    export interface StructElement extends Declaration {
+        _structElementBrand: any;
     }
 
     export interface InterfaceDeclaration extends Declaration, Statement {
@@ -1249,6 +1280,9 @@ namespace ts {
         statements: NodeArray<Statement>;
         endOfFileToken: Node;
 
+        helperStatements?: NodeArray<Statement>;
+        helperVarCount? : number;
+
         fileName: string;
         text: string;
 
@@ -1306,7 +1340,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost {
+    export interface ParseConfigHost extends ModuleResolutionHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -1602,6 +1636,7 @@ namespace ts {
         isDeclarationVisible(node: Declaration): boolean;
         collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
+        writeStructProperty(node: ClassElement, writer: EmitTextWriter): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -1621,6 +1656,7 @@ namespace ts {
         Property                = 0x00000004,  // Property or enum member
         EnumMember              = 0x00000008,  // Enum member
         Function                = 0x00000010,  // Function
+        Struct                  = 0x40000000,  // Struct
         Class                   = 0x00000020,  // Class
         Interface               = 0x00000040,  // Interface
         ConstEnum               = 0x00000080,  // Const enum
@@ -1650,8 +1686,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type = Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
+        Value = Variable | Property | EnumMember | Function | Struct | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
+        Type = Struct | Class | Interface | Enum | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias,
         Namespace = ValueModule | NamespaceModule,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -1668,11 +1704,12 @@ namespace ts {
         PropertyExcludes = Value,
         EnumMemberExcludes = Value,
         FunctionExcludes = Value & ~(Function | ValueModule),
+        StructExcludes = (Value | Type) & ~ValueModule,
         ClassExcludes = (Value | Type) & ~(ValueModule | Interface), // class-interface mergability done in checker.ts
-        InterfaceExcludes = Type & ~(Interface | Class),
+        InterfaceExcludes = Type & ~(Interface | Struct | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
+        ValueModuleExcludes = Value & ~(Function | Struct | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
@@ -1681,14 +1718,14 @@ namespace ts {
         TypeAliasExcludes = Type,
         AliasExcludes = Alias,
 
-        ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Alias,
+        ModuleMember = Variable | Function | Struct | Class | Interface | Enum | Module | TypeAlias | Alias,
 
-        ExportHasLocal = Function | Class | Enum | ValueModule,
+        ExportHasLocal = Function | Struct | Class | Enum | ValueModule,
 
-        HasExports = Class | Enum | Module,
-        HasMembers = Class | Interface | TypeLiteral | ObjectLiteral,
+        HasExports = Struct | Class | Enum | Module,
+        HasMembers = Struct | Class | Interface | TypeLiteral | ObjectLiteral,
 
-        BlockScoped = BlockScopedVariable | Class | Enum,
+        BlockScoped = BlockScopedVariable | Struct | Class | Enum,
 
         PropertyOrAccessor = Property | Accessor,
         Export = ExportNamespace | ExportType | ExportValue,
@@ -1696,7 +1733,7 @@ namespace ts {
         /* @internal */
         // The set of things we consider semantically classifiable.  Used to speed up the LS during
         // classification.
-        Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module,
+        Classifiable = Struct | Class | Enum | TypeAlias | Interface | TypeParameter | Module,
     }
 
     export interface Symbol {
@@ -1752,6 +1789,7 @@ namespace ts {
         ContextChecked              = 0x00000400,  // Contextual types have been assigned
         LexicalArguments            = 0x00000800,
         CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
+        EmitMathFround              = 0x00002000,  // Emit Math.fround if using float
 
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed          = 0x00002000,
@@ -1790,6 +1828,7 @@ namespace ts {
         StringLiteral           = 0x00000100,  // String literal type
         TypeParameter           = 0x00000200,  // Type parameter
         Class                   = 0x00000400,  // Class
+        Struct                  = 0x80000000,  // Struct
         Interface               = 0x00000800,  // Interface
         Reference               = 0x00001000,  // Generic type reference
         Tuple                   = 0x00002000,  // Tuple
@@ -1807,23 +1846,37 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
-        ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
-        ThisType                = 0x02000000,  // This type
+        //ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
+        ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
+        ThisType                = 0x01000000,  // This type
+
+        I8                      = 0x02000000,
+        U8                      = 0x04000000,
+        I16                     = 0x08000000,
+        U16                     = 0x10000000,
+        I32                     = 0x20000000,
+        U32                     = 0x40000000,
+        Float                   = 0x80000000,
 
         /* @internal */
-        Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
+        Intrinsic = Any | String | Number | Boolean | I8 | U8 | I16 | U16 | I32 | U32 | Float | ESSymbol | Void | Undefined | Null,
         /* @internal */
-        Primitive = String | Number | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
+        Primitive = String | Number | I8 | U8 | I16 | U16 | I32 | U32 | Float | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
-        NumberLike = Number | Enum,
+        NumberLike = Number | Enum | I8 | U8 | I16 | U16 | I32 | U32 | Float,
         ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+
+        PrimitiveType = I8 | U8 | I16 | U16 | I32 | U32 | Float,
+        DoublePrecisionFloat = Number,
+        SinglePrecisionFloat = Float,
+        RealNumber = Number | Float,
+
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
         RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
         /* @internal */
-        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
+        PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -1980,6 +2033,13 @@ namespace ts {
     export const enum IndexKind {
         String,
         Number,
+        I8,
+        U8,
+        I16,
+        U16,
+        I32,
+        U32,
+        Float,
     }
 
     /* @internal */
@@ -2310,7 +2370,7 @@ namespace ts {
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
-        // to determine location of bundled typings for node module 
+        // to determine location of bundled typings for node module
         readFile(fileName: string): string;
     }
 
@@ -2318,7 +2378,7 @@ namespace ts {
         resolvedFileName: string;
         /*
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
-         * - be a .d.ts file 
+         * - be a .d.ts file
          * - use top level imports\exports
          * - don't use tripleslash references
          */
@@ -2341,11 +2401,11 @@ namespace ts {
         getNewLine(): string;
 
         /*
-         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of 
-         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler 
+         * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
+         * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
          * will appply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).
-         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just 
-         * 'throw new Error("NotImplemented")'  
+         * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
+         * 'throw new Error("NotImplemented")'
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
     }

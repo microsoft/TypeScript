@@ -1,14 +1,13 @@
 tests/cases/compiler/indexTypeCheck.ts(2,2): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/indexTypeCheck.ts(3,2): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/indexTypeCheck.ts(17,2): error TS2413: Numeric index type 'number' is not assignable to string index type 'string'.
-tests/cases/compiler/indexTypeCheck.ts(22,2): error TS2413: Numeric index type 'Orange' is not assignable to string index type 'Yellow'.
 tests/cases/compiler/indexTypeCheck.ts(27,2): error TS2413: Numeric index type 'number' is not assignable to string index type 'string'.
 tests/cases/compiler/indexTypeCheck.ts(32,3): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/indexTypeCheck.ts(36,3): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/indexTypeCheck.ts(51,1): error TS2342: An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-==== tests/cases/compiler/indexTypeCheck.ts (8 errors) ====
+==== tests/cases/compiler/indexTypeCheck.ts (7 errors) ====
     interface Red {
     	[n:number]; // ok
     	~~~~~~~~~~~
@@ -37,8 +36,6 @@ tests/cases/compiler/indexTypeCheck.ts(51,1): error TS2342: An index expression 
     
     interface Green {
     	[n:number]: Orange; // error
-    	~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'Orange' is not assignable to string index type 'Yellow'.
     	[s:string]: Yellow; // ok
     }
     

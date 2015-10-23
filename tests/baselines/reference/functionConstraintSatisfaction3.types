@@ -37,8 +37,8 @@ var c: { (): string; (x): string };
 >x : any
 
 var r1 = foo((x) => x);
->r1 : (x: string) => string
->foo((x) => x) : (x: string) => string
+>r1 : {}
+>foo((x) => x) : {}
 >foo : <T extends (x: string) => string>(x: T) => T
 >(x) => x : (x: string) => string
 >x : string
@@ -53,8 +53,8 @@ var r2 = foo((x: string) => x);
 >x : string
 
 var r3 = foo(function (x) { return x });
->r3 : (x: string) => string
->foo(function (x) { return x }) : (x: string) => string
+>r3 : {}
+>foo(function (x) { return x }) : {}
 >foo : <T extends (x: string) => string>(x: T) => T
 >function (x) { return x } : (x: string) => string
 >x : string

@@ -44,8 +44,8 @@ var r = foo(new Function());
 >Function : FunctionConstructor
 
 var r1 = foo((x) => x);
->r1 : (x: any) => any
->foo((x) => x) : (x: any) => any
+>r1 : {}
+>foo((x) => x) : {}
 >foo : <T extends Function>(x: T) => T
 >(x) => x : (x: any) => any
 >x : any
@@ -60,8 +60,8 @@ var r2 = foo((x: string[]) => x);
 >x : string[]
 
 var r3 = foo(function (x) { return x });
->r3 : (x: any) => any
->foo(function (x) { return x }) : (x: any) => any
+>r3 : {}
+>foo(function (x) { return x }) : {}
 >foo : <T extends Function>(x: T) => T
 >function (x) { return x } : (x: any) => any
 >x : any

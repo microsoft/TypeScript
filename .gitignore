@@ -35,6 +35,7 @@ rwc-report.html
 *.swp
 build.json
 *.actual
+mytests
 tests/webhost/*.d.ts
 tests/webhost/webtsc.js
 tests/*.js

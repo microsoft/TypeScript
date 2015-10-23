@@ -2,15 +2,15 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
-    let nodeConstructors = new Array<new (pos: number, end: number) => Node>(SyntaxKind.Count);
+    let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
-    export function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node {
+    export function getNodeConstructor(kind: SyntaxKind): new () => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
 
-    export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
-        return new (getNodeConstructor(kind))(pos, end);
+    export function createNode(kind: SyntaxKind): Node {
+        return new (getNodeConstructor(kind))();
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
@@ -259,6 +259,14 @@ namespace ts {
                     visitNodes(cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
                     visitNodes(cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
                     visitNodes(cbNodes, (<ClassLikeDeclaration>node).members);
+            case SyntaxKind.StructDeclaration:
+            case SyntaxKind.StructExpression:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<StructLikeDeclaration>node).name) ||
+                    visitNodes(cbNodes, (<StructLikeDeclaration>node).typeParameters) ||
+                    visitNodes(cbNodes, (<StructLikeDeclaration>node).heritageClauses) ||
+                    visitNodes(cbNodes, (<StructLikeDeclaration>node).members);
             case SyntaxKind.InterfaceDeclaration:
                 return visitNodes(cbNodes, node.decorators) ||
                     visitNodes(cbNodes, node.modifiers) ||
@@ -993,10 +1001,14 @@ namespace ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
+            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
-            return new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(pos, pos);
+
+            node.pos = pos;
+            node.end = pos;
+            return node;
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
@@ -1151,7 +1163,7 @@ namespace ts {
 
         function nextTokenIsClassOrFunction(): boolean {
             nextToken();
-            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.FunctionKeyword;
+            return token === SyntaxKind.ClassKeyword || token === SyntaxKind.StructKeyword || token === SyntaxKind.FunctionKeyword;
         }
 
         // True if positioned at the start of a list element
@@ -1176,6 +1188,8 @@ namespace ts {
                     return token === SyntaxKind.CaseKeyword || token === SyntaxKind.DefaultKeyword;
                 case ParsingContext.TypeMembers:
                     return isStartOfTypeMember();
+                case ParsingContext.StructMembers:
+                    return lookAhead(isStructMemberStart);
                 case ParsingContext.ClassMembers:
                     // We allow semicolons as class elements (as specified by ES6) as long as we're
                     // not in error recovery.  If we're in error recovery, we don't want an errant
@@ -1294,6 +1308,7 @@ namespace ts {
                 case ParsingContext.SwitchClauses:
                 case ParsingContext.TypeMembers:
                 case ParsingContext.ClassMembers:
+                case ParsingContext.StructMembers:
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
@@ -1482,6 +1497,9 @@ namespace ts {
                 case ParsingContext.ClassMembers:
                     return isReusableClassMember(node);
 
+                case ParsingContext.StructMembers:
+                    return isReusableStructMember(node);
+
                 case ParsingContext.SwitchClauses:
                     return isReusableSwitchClause(node);
 
@@ -1579,6 +1597,31 @@ namespace ts {
             return false;
         }
 
+        function isReusableStructMember(node: Node) {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.SemicolonClassElement:
+                        return true;
+                    case SyntaxKind.MethodDeclaration:
+                        // Method declarations are not necessarily reusable.  An object-literal
+                        // may have a method calls "constructor(...)" and we must reparse that
+                        // into an actual .ConstructorDeclaration.
+                        let methodDeclaration = <MethodDeclaration>node;
+                        let nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
+                            (<Identifier>methodDeclaration.name).originalKeywordKind === SyntaxKind.ConstructorKeyword;
+
+                        return !nameIsConstructor;
+                }
+            }
+
+            return false;
+        }
+
         function isReusableSwitchClause(node: Node) {
             if (node) {
                 switch (node.kind) {
@@ -1620,6 +1663,7 @@ namespace ts {
                     case SyntaxKind.ExportAssignment:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.StructDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
@@ -1701,6 +1745,7 @@ namespace ts {
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
                 case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+                case ParsingContext.StructMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
                 case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
                 case ParsingContext.HeritageClauseElement: return Diagnostics.Expression_expected;
                 case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
@@ -2365,6 +2410,13 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.I8Keyword:
+                case SyntaxKind.I16Keyword:
+                case SyntaxKind.I32Keyword:
+                case SyntaxKind.U8Keyword:
+                case SyntaxKind.U16Keyword:
+                case SyntaxKind.U32Keyword:
+                case SyntaxKind.FloatKeyword:
                 case SyntaxKind.SymbolKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     let node = tryParse(parseKeywordAndNoDot);
@@ -2390,6 +2442,13 @@ namespace ts {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
+                case SyntaxKind.I8Keyword:
+                case SyntaxKind.I16Keyword:
+                case SyntaxKind.I32Keyword:
+                case SyntaxKind.U8Keyword:
+                case SyntaxKind.U16Keyword:
+                case SyntaxKind.U32Keyword:
+                case SyntaxKind.FloatKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
@@ -2524,6 +2583,7 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.ClassKeyword:
+                case SyntaxKind.StructKeyword:
                 case SyntaxKind.NewKeyword:
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
@@ -2574,6 +2634,7 @@ namespace ts {
             return token !== SyntaxKind.OpenBraceToken &&
                 token !== SyntaxKind.FunctionKeyword &&
                 token !== SyntaxKind.ClassKeyword &&
+                token !== SyntaxKind.StructKeyword &&
                 token !== SyntaxKind.AtToken &&
                 isStartOfExpression();
         }
@@ -2966,6 +3027,7 @@ namespace ts {
             if (token !== SyntaxKind.SemicolonToken &&
                 token !== SyntaxKind.FunctionKeyword &&
                 token !== SyntaxKind.ClassKeyword &&
+                token !== SyntaxKind.StructKeyword &&
                 isStartOfStatement() &&
                 !isStartOfExpressionStatement()) {
                 // Check if we got a plain statement (i.e. no expression-statements, no function/class expressions/declarations)
@@ -3201,7 +3263,7 @@ namespace ts {
 
         /**
          * Parse ES7 unary expression and await expression
-         * 
+         *
          * ES7 UnaryExpression:
          *      1) SimpleUnaryExpression[?yield]
          *      2) IncrementExpression[?yield] ** UnaryExpression[?yield]
@@ -3450,43 +3512,19 @@ namespace ts {
 
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             let opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
-            let result: JsxElement | JsxSelfClosingElement;
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
-                result = finishNode(node);
+                return finishNode(node);
             }
             else {
                 Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
                 // Nothing else to do for self-closing elements
-                result = <JsxSelfClosingElement>opening;
+                return <JsxSelfClosingElement>opening;
             }
-
-            // If the user writes the invalid code '<div></div><div></div>' in an expression context (i.e. not wrapped in
-            // an enclosing tag), we'll naively try to parse   ^ this as a 'less than' operator and the remainder of the tag
-            // as garbage, which will cause the formatter to badly mangle the JSX. Perform a speculative parse of a JSX
-            // element if we see a < token so that we can wrap it in a synthetic binary expression so the formatter
-            // does less damage and we can report a better error.
-            // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
-            // of one sort or another.
-            if (inExpressionContext && token === SyntaxKind.LessThanToken) {
-                let invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/true));
-                if (invalidElement) {
-                    parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
-                    let badNode = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, result.pos);
-                    badNode.end = invalidElement.end;
-                    badNode.left = result;
-                    badNode.right = invalidElement;
-                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined);
-                    badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
-                    return <JsxElement><Node>badNode;
-                }
-            }
-
-            return result;
         }
 
         function parseJsxText(): JsxText {
@@ -3532,7 +3570,7 @@ namespace ts {
             return result;
         }
 
-        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement {
+        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement|JsxSelfClosingElement {
             let fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
@@ -3823,6 +3861,8 @@ namespace ts {
                     return parseFunctionExpression();
                 case SyntaxKind.ClassKeyword:
                     return parseClassExpression();
+                case SyntaxKind.StructKeyword:
+                    return parseStructExpression();
                 case SyntaxKind.FunctionKeyword:
                     return parseFunctionExpression();
                 case SyntaxKind.NewKeyword:
@@ -4295,6 +4335,7 @@ namespace ts {
                     case SyntaxKind.ConstKeyword:
                     case SyntaxKind.FunctionKeyword:
                     case SyntaxKind.ClassKeyword:
+                    case SyntaxKind.StructKeyword:
                     case SyntaxKind.EnumKeyword:
                         return true;
 
@@ -4372,6 +4413,7 @@ namespace ts {
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.ClassKeyword:
+                case SyntaxKind.StructKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.IfKeyword:
                 case SyntaxKind.DoKeyword:
@@ -4446,6 +4488,8 @@ namespace ts {
                     return parseFunctionDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
                 case SyntaxKind.ClassKeyword:
                     return parseClassDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
+                case SyntaxKind.StructKeyword:
+                    return parseStructDeclaration(scanner.getStartPos(), /*decorators*/ undefined, /*modifiers*/ undefined);
                 case SyntaxKind.IfKeyword:
                     return parseIfStatement();
                 case SyntaxKind.DoKeyword:
@@ -4511,6 +4555,8 @@ namespace ts {
                     return parseFunctionDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.ClassKeyword:
                     return parseClassDeclaration(fullStart, decorators, modifiers);
+                case SyntaxKind.StructKeyword:
+                    return parseStructDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.InterfaceKeyword:
                     return parseInterfaceDeclaration(fullStart, decorators, modifiers);
                 case SyntaxKind.TypeKeyword:
@@ -4851,6 +4897,74 @@ namespace ts {
             return false;
         }
 
+        function isStructMemberStart(): boolean {
+            let idToken: SyntaxKind;
+
+            if (token === SyntaxKind.AtToken) {
+                return true;
+            }
+
+            // Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
+            while (isModifier(token)) {
+                idToken = token;
+                // If the idToken is a class modifier (protected, private, public, and static), it is
+                // certain that we are starting to parse class member. This allows better error recovery
+                // Example:
+                //      public foo() ...     // true
+                //      public @dec blah ... // true; we will then report an error later
+                //      export public ...    // true; we will then report an error later
+                if (isClassMemberModifier(idToken)) {
+                    return true;
+                }
+
+                nextToken();
+            }
+
+            if (token === SyntaxKind.AsteriskToken) {
+                return true;
+            }
+
+            // Try to get the first property-like token following all modifiers.
+            // This can either be an identifier or the 'get' or 'set' keywords.
+            if (isLiteralPropertyName()) {
+                idToken = token;
+                nextToken();
+            }
+
+            // Index signatures and computed properties are class members; we can parse.
+            if (token === SyntaxKind.OpenBracketToken) {
+                return true;
+            }
+
+            // If we were able to get any potential identifier...
+            if (idToken !== undefined) {
+                // If we have a non-keyword identifier, or if we have an accessor, then it's safe to parse.
+                if (!isKeyword(idToken) || idToken === SyntaxKind.SetKeyword || idToken === SyntaxKind.GetKeyword) {
+                    return true;
+                }
+
+                // If it *is* a keyword, but not an accessor, check a little farther along
+                // to see if it should actually be parsed as a class member.
+                switch (token) {
+                    case SyntaxKind.OpenParenToken:     // Method declaration
+                    case SyntaxKind.LessThanToken:      // Generic Method declaration
+                    case SyntaxKind.ColonToken:         // Type Annotation for declaration
+                    case SyntaxKind.EqualsToken:        // Initializer for declaration
+                    case SyntaxKind.QuestionToken:      // Not valid, but permitted so that it gets caught later on.
+                        return true;
+                    default:
+                        // Covers
+                        //  - Semicolons     (declaration termination)
+                        //  - Closing braces (end-of-class, must be declaration)
+                        //  - End-of-files   (not valid, but permitted so that it gets caught later on)
+                        //  - Line-breaks    (enabling *automatic semicolon insertion*)
+                        return canParseSemicolon();
+                }
+            }
+
+            return false;
+        }
+
         function parseDecorators(): NodeArray<Decorator> {
             let decorators: NodeArray<Decorator>;
             while (true) {
@@ -4971,8 +5085,20 @@ namespace ts {
                 SyntaxKind.ClassExpression);
         }
 
+        function parseStructExpression(): StructExpression {
+            return <StructExpression>parseStructDeclarationOrExpression(
+                /*fullStart*/ scanner.getStartPos(),
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                SyntaxKind.ClassExpression);
+        }
+
         function parseClassDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassDeclaration {
             return <ClassDeclaration>parseClassDeclarationOrExpression(fullStart, decorators, modifiers, SyntaxKind.ClassDeclaration);
+        }
+
+        function parseStructDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): StructDeclaration {
+            return <StructDeclaration>parseStructDeclarationOrExpression(fullStart, decorators, modifiers, SyntaxKind.StructDeclaration);
         }
 
         function parseClassDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): ClassLikeDeclaration {
@@ -4997,12 +5123,45 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseStructDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): StructLikeDeclaration {
+            let node = <ClassLikeDeclaration>createNode(kind, fullStart);
+            node.decorators = decorators;
+            setModifiers(node, modifiers);
+            parseExpected(SyntaxKind.StructKeyword);
+            node.name = parseNameOfStructDeclarationOrExpression();
+            node.typeParameters = parseTypeParameters();
+            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
+
+            if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                // ClassTail[Yield,Await] : (Modified) See 14.5
+                //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
+                node.members = parseClassMembers();
+                parseExpected(SyntaxKind.CloseBraceToken);
+            }
+            else {
+                node.members = createMissingList<ClassElement>();
+            }
+
+            return finishNode(node);
+        }
+
         function parseNameOfClassDeclarationOrExpression(): Identifier {
             // implements is a future reserved word so
             // 'class implements' might mean either
             // - class expression with omitted name, 'implements' starts heritage clause
-            // - class with name 'implements' 
-            // 'isImplementsClause' helps to disambiguate between these two cases 
+            // - class with name 'implements'
+            // 'isImplementsClause' helps to disambiguate between these two cases
+            return isIdentifier() && !isImplementsClause()
+                ? parseIdentifier()
+                : undefined;
+        }
+
+        function parseNameOfStructDeclarationOrExpression(): Identifier {
+            // implements is a future reserved word so
+            // 'struct implements' might mean either
+            // - struct expression with omitted name, 'implements' starts heritage clause
+            // - struct with name 'implements'
+            // 'isImplementsClause' helps to disambiguate between these two cases
             return isIdentifier() && !isImplementsClause()
                 ? parseIdentifier()
                 : undefined;
@@ -5457,6 +5616,7 @@ namespace ts {
             SwitchClauseStatements,    // Statements in switch clause
             TypeMembers,               // Members in interface or type literal
             ClassMembers,              // Members in class declaration
+            StructMembers,             // Members in struct declaration
             EnumMembers,               // Members in enum declaration
             HeritageClauseElement,     // Elements in a heritage clause
             VariableDeclarations,      // Variable declarations in variable statement
@@ -5612,6 +5772,13 @@ namespace ts {
                     case SyntaxKind.StringKeyword:
                     case SyntaxKind.NumberKeyword:
                     case SyntaxKind.BooleanKeyword:
+                    case SyntaxKind.I8Keyword:
+                    case SyntaxKind.I16Keyword:
+                    case SyntaxKind.I32Keyword:
+                    case SyntaxKind.U8Keyword:
+                    case SyntaxKind.U16Keyword:
+                    case SyntaxKind.U32Keyword:
+                    case SyntaxKind.FloatKeyword:
                     case SyntaxKind.SymbolKeyword:
                     case SyntaxKind.VoidKeyword:
                         return parseTokenNode<JSDocType>();

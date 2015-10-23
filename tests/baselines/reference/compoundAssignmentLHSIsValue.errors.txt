@@ -44,37 +44,20 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(88,11): error TS1005: ';' expected.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(91,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(92,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(95,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(96,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(97,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(98,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(99,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(100,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(101,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(102,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(103,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(104,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(105,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(106,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(107,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(108,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(109,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(110,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(111,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(112,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(113,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(114,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(115,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(116,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(117,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(118,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(119,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(120,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(121,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(122,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (74 errors) ====
+==== tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts (57 errors) ====
     // expected error for all the LHS of compound assignments (arithmetic and addition)
     var value;
     
@@ -262,86 +245,52 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     
     // parentheses, the containted expression is value
     (this) *= value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (this) += value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (M) *= value;
     ~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (M) += value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (C) *= value;
     ~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (C) += value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (E) *= value;
     ~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (E) += value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (foo) *= value;
     ~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (foo) += value;
-    ~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (null) *= value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (null) += value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (true) *= value;
     ~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (true) += value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (0) *= value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (0) += value;
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     ('') *= value;
     ~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     ('') += value;
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (/d+/) *= value;
     ~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (/d+/) += value;
-    ~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     ({}) *= value;
     ~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     ({}) += value;
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     ([]) *= value;
     ~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     ([]) += value;
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (function baz1() { }) *= value;
     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (function baz2() { }) += value;
-    ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     (foo()) *= value;
     ~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     (foo()) += value;
-    ~~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.

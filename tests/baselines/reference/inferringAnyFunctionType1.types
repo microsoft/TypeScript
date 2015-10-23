@@ -12,8 +12,8 @@ function f<T extends { "0": (p1: number) => number }>(p: T): T {
 }
 
 var v = f([x => x]);
->v : [(x: number) => number]
->f([x => x]) : [(x: number) => number]
+>v : [{}]
+>f([x => x]) : [{}]
 >f : <T extends { "0": (p1: number) => number; }>(p: T) => T
 >[x => x] : [(x: number) => number]
 >x => x : (x: number) => number

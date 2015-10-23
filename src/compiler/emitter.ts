@@ -282,6 +282,18 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };`;
 
+        const froundHelper = `
+if (Math.fround === undefined) {
+     Math.fround = function(x) {
+          if (isNaN(x)) return NaN;
+          x = Number(x);
+          if (x === 0) return x;
+          if (!isFinite(x)) return x;
+          return new Float32Array([x])[0];
+     }
+}
+        `;
+
         // emit output for the __decorate helper function
         const decorateHelper = `
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -397,6 +409,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let computedPropertyNamesToGeneratedNames: string[];
 
             let extendsEmitted = false;
+            let froundEmitted = false;
             let decorateEmitted = false;
             let paramEmitted = false;
             let awaiterEmitted = false;
@@ -1404,10 +1417,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(span.literal);
             }
 
-            function jsxEmitReact(node: JsxElement | JsxSelfClosingElement) {
+            function jsxEmitReact(node: JsxElement|JsxSelfClosingElement) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
-                function emitTagName(name: Identifier | QualifiedName) {
+                function emitTagName(name: Identifier|QualifiedName) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
                         write("\"");
                         emit(name);
@@ -1557,7 +1570,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function jsxEmitPreserve(node: JsxElement | JsxSelfClosingElement) {
+            function jsxEmitPreserve(node: JsxElement|JsxSelfClosingElement) {
                 function emitJsxAttribute(node: JsxAttribute) {
                     emit(node.name);
                     if (node.initializer) {
@@ -1572,7 +1585,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write("}");
                 }
 
-                function emitAttributes(attribs: NodeArray<JsxAttribute | JsxSpreadAttribute>) {
+                function emitAttributes(attribs: NodeArray<JsxAttribute|JsxSpreadAttribute>) {
                     for (let i = 0, n = attribs.length; i < n; i++) {
                         if (i > 0) {
                             write(" ");
@@ -1588,7 +1601,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement | JsxSelfClosingElement) {
+                function emitJsxOpeningOrSelfClosingElement(node: JsxOpeningElement|JsxSelfClosingElement) {
                     write("<");
                     emit(node.tagName);
                     if (node.attributes.length > 0 || (node.kind === SyntaxKind.JsxSelfClosingElement)) {
@@ -1769,39 +1782,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(".");
                     }
                 }
-                else {
-                    if (modulekind !== ModuleKind.ES6) {
-                        let declaration = resolver.getReferencedImportDeclaration(node);
-                        if (declaration) {
-                            if (declaration.kind === SyntaxKind.ImportClause) {
-                                // Identifier references default import
-                                write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
-                                write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
-                                return;
-                            }
-                            else if (declaration.kind === SyntaxKind.ImportSpecifier) {
-                                // Identifier references named import
-                                write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
-                                let name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
-                                let identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
-                                if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
-                                    write(`["default"]`);
-                                }
-                                else {
-                                    write(".");
-                                    write(identifier);
-                                }
-                                return;
-                            }
-                        }
-                    }
-
-                    if (languageVersion !== ScriptTarget.ES6) {
-                        let declaration = resolver.getReferencedNestedRedeclaration(node);
-                        if (declaration) {
-                            write(getGeneratedNameForNode(declaration.name));
+                else if (modulekind !== ModuleKind.ES6) {
+                    let declaration = resolver.getReferencedImportDeclaration(node);
+                    if (declaration) {
+                        if (declaration.kind === SyntaxKind.ImportClause) {
+                            // Identifier references default import
+                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
+                            write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
                             return;
                         }
+                        else if (declaration.kind === SyntaxKind.ImportSpecifier) {
+                            // Identifier references named import
+                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
+                            let name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
+                            let identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
+                            if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
+                                write(`["default"]`);
+                            }
+                            else {
+                                write(".");
+                                write(identifier);
+                            }
+                            return;
+                        }
+                    }
+                    declaration = resolver.getReferencedNestedRedeclaration(node);
+                    if (declaration) {
+                        write(getGeneratedNameForNode(declaration.name));
+                        return;
                     }
                 }
 
@@ -2454,10 +2462,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
-                emit(node.expression);
-                write("[");
-                emit(node.argumentExpression);
-                write("]");
+
+                if(node.isStructArray) {
+                    write("(");
+                    emit(node.expression);
+                    write("._TO.array(")
+                    emit(node.argumentExpression);
+                    write("))()");
+                } else {
+                    emit(node.expression);
+                    write("[");
+                    emit(node.argumentExpression);
+                    write("]");
+                }
             }
 
             function hasSpreadElement(elements: Expression[]) {
@@ -3325,8 +3342,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
-                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                let line1 = getLineOfLocalPosition(currentSourceFile, node1.end);
+                let line2 = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return (line1 === -1 || line2 === -1) ? true : line1 === line2;
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -4548,7 +4566,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitTrailingComments(property);
             }
 
-            function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration) {
+            function emitMemberFunctionsForES5AndLower(node: ClassLikeDeclaration, isStruct?: boolean) {
                 forEach(node.members, member => {
                     if (member.kind === SyntaxKind.SemicolonClassElement) {
                         writeLine();
@@ -4563,7 +4581,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitLeadingComments(member);
                         emitStart(member);
                         emitStart((<MethodDeclaration>member).name);
-                        emitClassMemberPrefix(node, member);
+
+                        if (isStruct !== undefined) {
+                            emitStructMemberPrefix(node, member);
+                        } else {
+                            emitClassMemberPrefix(node, member);
+                        }
+
                         emitMemberAccessForPropertyName((<MethodDeclaration>member).name);
                         emitEnd((<MethodDeclaration>member).name);
                         write(" = ");
@@ -4802,6 +4826,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitClassLikeDeclarationForES6AndHigher(node);
                 }
+                if (modulekind !== ModuleKind.ES6 && node.parent === currentSourceFile && node.name) {
+                    emitExportMemberAssignments(node.name);
+                }
+            }
+
+            function emitStructExpression(node: StructExpression) {
+                return emitStructLikeDeclaration(node);
+            }
+
+            function emitStructDeclaration(node: StructDeclaration) {
+                return emitStructLikeDeclaration(node);
+            }
+
+            function emitStructLikeDeclaration(node: StructLikeDeclaration) {
+                emitStructLikeDeclarationBelowES6(node);
                 if (modulekind !== ModuleKind.ES6 && node.parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments(node.name);
                 }
@@ -5051,6 +5090,140 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     emitExportMemberAssignment(<ClassDeclaration>node);
+                }
+            }
+
+            function writeStructProperty(node: ClassElement) {
+                emitDeclarationName(node);
+                write(": ");
+
+                resolver.writeStructProperty(node, writer);
+            }
+
+            function emitStructProperties(node: StructLikeDeclaration) {
+                for (var i = 0; i < node.members.length; i++) {
+                    if(node.members[i].kind == SyntaxKind.PropertyDeclaration && !(node.members[i].flags & NodeFlags.Static)) {
+                        increaseIndent();
+
+                        writeStructProperty(node.members[i]);
+
+                        if (i < node.members.length - 1) {
+                            write(",");
+                        }
+                        writeLine();
+                        decreaseIndent();
+                    }
+                }
+            }
+
+            function emitStructLikeDeclarationBelowES6(node: StructLikeDeclaration) {
+                write("var ");
+                emitDeclarationName(node);
+                write(" = (function (");
+                write(") {");
+                writeLine();
+
+                increaseIndent();
+
+                write("var ");
+                write("_" + node.name.text);
+                write(" = new TypedObject.StructType({");
+                writeLine();
+                emitStructProperties(node);
+                writeLine();
+                write("});");
+                writeLine();
+
+                emitConstructorOfStruct();
+                emitMemberFunctionsForES5AndLower(node, true);
+
+                writeLine();
+                write("return " + node.name.text + ";");
+
+                decreaseIndent();
+                writeLine();
+                write("})();");
+                writeLine();
+
+                emitTrailingComments(node);
+
+                function emitConstructorOfStruct() {
+                    var ctor = getFirstConstructorWithBody(node);
+                    if (ctor) {
+                        emitLeadingComments(ctor);
+                    }
+
+                    writeLine();
+
+                    write("function _ctor");
+                    emitSignatureParameters(ctor);
+                    write(" {");
+                    scopeEmitStart(node, "constructor");
+                    increaseIndent();
+                    if (ctor) {
+                        emitDetachedComments((<Block>ctor.body).statements);
+                    }
+                    emitCaptureThisForNodeIfNecessary(node);
+                    if (ctor) {
+                        emitDefaultValueAssignments(ctor);
+                        emitRestParameter(ctor);
+                        emitParameterPropertyAssignments(ctor);
+                    }
+
+                    //emitMemberAssignments(node, /*nonstatic*/0);
+                    if (ctor) {
+                        var statements: Node[] = (<Block>ctor.body).statements;
+                        emitLines(statements);
+                    }
+                    writeLine();
+                    if (ctor) {
+                        emitLeadingCommentsOfPosition((<Block>ctor.body).statements.end);
+                    }
+                    decreaseIndent();
+                    emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
+                    scopeEmitEnd();
+                    emitEnd(<Node>ctor || node);
+                    if (ctor) {
+                        emitTrailingComments(ctor);
+                    }
+                    writeLine();
+
+                    emitStart(<Node>ctor || node);
+
+                    write("function " + node.name.text);
+                    emitSignatureParameters(ctor);
+                    write(" {");
+                    writeLine();
+                    increaseIndent();
+
+                    writeLine();
+                    write("var obj = new _");
+                    write(node.name.text + "();");
+                    writeLine();
+
+                    write("_ctor.call(obj");
+
+                    if (ctor) {
+                        if(ctor.parameters.length > 0) write(" ,");
+                    }
+
+                    write(");");
+                    writeLine();
+                    write("return obj;");
+                    writeLine();
+                    decreaseIndent();
+                    write("}");
+
+                    writeLine();
+                    write(node.name.text + "._TO = _" + node.name.text + ";");
+                }
+            }
+
+            function emitStructMemberPrefix(node: StructLikeDeclaration, member: Node) {
+                write("_");
+                emitDeclarationName(node);
+                if (!(member.flags & NodeFlags.Static)) {
+                    write(".prototype");
                 }
             }
 
@@ -7078,6 +7251,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         extendsEmitted = true;
                     }
 
+                    if (!froundEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitMathFround) {
+                        writeLines(froundHelper);
+                        froundEmitted = true;
+                    }
+
                     if (!decorateEmitted && resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitDecorate) {
                         writeLines(decorateHelper);
                         if (compilerOptions.emitDecoratorMetadata) {
@@ -7246,7 +7424,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return emitTemplateSpan(<TemplateSpan>node);
                     case SyntaxKind.JsxElement:
                     case SyntaxKind.JsxSelfClosingElement:
-                        return emitJsxElement(<JsxElement | JsxSelfClosingElement>node);
+                        return emitJsxElement(<JsxElement|JsxSelfClosingElement>node);
                     case SyntaxKind.JsxText:
                         return emitJsxText(<JsxText>node);
                     case SyntaxKind.JsxExpression:
@@ -7359,6 +7537,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         return emitClassExpression(<ClassExpression>node);
                     case SyntaxKind.ClassDeclaration:
                         return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.StructExpression:
+                        return emitStructExpression(<StructExpression>node);
+                    case SyntaxKind.StructDeclaration:
+                        return emitStructDeclaration(<StructDeclaration>node);
                     case SyntaxKind.InterfaceDeclaration:
                         return emitInterfaceDeclaration(<InterfaceDeclaration>node);
                     case SyntaxKind.EnumDeclaration:

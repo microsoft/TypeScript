@@ -4,7 +4,6 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
   Types of property 'x' are incompatible.
@@ -16,7 +15,6 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(44,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(48,5): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -25,12 +23,10 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(55,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(56,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(62,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(63,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(69,1): error TS2364: Invalid left-hand side of assignment expression.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(70,1): error TS2364: Invalid left-hand side of assignment expression.
 
 
-==== tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts (24 errors) ====
+==== tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts (20 errors) ====
     var x: number;
     x = 3; // OK
     (x) = 3; // OK
@@ -61,8 +57,6 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     ~
 !!! error TS2364: Invalid left-hand side of assignment expression.
     (M) = { y: 3 }; // Error
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     
     module M2 {
         export module M3 {
@@ -99,8 +93,6 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     ~~
 !!! error TS2364: Invalid left-hand side of assignment expression.
     (fn) = () => 3; // Should be error
-    ~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     
     function fn2(x: number, y: { t: number }) {
         x = 3;
@@ -142,8 +134,6 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     ~
 !!! error TS2364: Invalid left-hand side of assignment expression.
     (E) = undefined; // Error
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     
     class C {
     
@@ -153,6 +143,4 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     ~
 !!! error TS2364: Invalid left-hand side of assignment expression.
     (C) = undefined; // Error
-    ~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
     

@@ -174,7 +174,9 @@ namespace ts {
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        let node = <NodeObject> new (getNodeConstructor(kind))(pos, end);
+        let node = <NodeObject> new (getNodeConstructor(kind))();
+        node.pos = pos;
+        node.end = end;
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -7965,14 +7967,14 @@ namespace ts {
     function initializeServices() {
         objectAllocator = {
             getNodeConstructor: kind => {
-                function Node(pos: number, end: number) {
-                    this.pos = pos;
-                    this.end = end;
-                    this.flags = NodeFlags.None;
-                    this.parent = undefined;
+                function Node() {
                 }
                 let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
                 proto.kind = kind;
+                proto.pos = -1;
+                proto.end = -1;
+                proto.flags = 0;
+                proto.parent = undefined;
                 Node.prototype = proto;
                 return <any>Node;
             },

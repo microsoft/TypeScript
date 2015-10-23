@@ -166,6 +166,7 @@ namespace ts {
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.StructDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
             }
         }
@@ -356,6 +357,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.StructExpression:
+                case SyntaxKind.StructDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeLiteral:
@@ -439,6 +442,10 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                     return declareClassMember(node, symbolFlags, symbolExcludes);
 
+                case SyntaxKind.StructExpression:
+                case SyntaxKind.StructDeclaration:
+                    return declareStructMember(node, symbolFlags, symbolExcludes);
+
                 case SyntaxKind.EnumDeclaration:
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
 
@@ -477,6 +484,12 @@ namespace ts {
         }
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+            return node.flags & NodeFlags.Static
+                ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
+                : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
+        }
+
+        function declareStructMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return node.flags & NodeFlags.Static
                 ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
                 : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
@@ -534,7 +547,7 @@ namespace ts {
                 }
                 else {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
-                    if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum)) {
+                    if (node.symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.Struct | SymbolFlags.RegularEnum)) {
                         // if module was already merged with some function, class or non-const enum
                         // treat is a non-const-enum-only
                         node.symbol.constEnumOnlyModule = false;
@@ -922,6 +935,9 @@ namespace ts {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
+                case SyntaxKind.StructExpression:
+                case SyntaxKind.StructDeclaration:
+                    return bindStructLikeDeclaration(<StructLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.TypeAliasDeclaration:
@@ -983,6 +999,42 @@ namespace ts {
             if (node.name) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
+        }
+
+        function bindStructLikeDeclaration(node: StructLikeDeclaration) {
+            if (node.kind === SyntaxKind.StructDeclaration) {
+                bindBlockScopedDeclaration(node, SymbolFlags.Struct, SymbolFlags.StructExcludes);
+            }
+            else {
+                let bindingName = node.name ? node.name.text : "__struct";
+                bindAnonymousDeclaration(node, SymbolFlags.Struct, bindingName);
+                // Add name of class expression into the map for semantic classifier
+                if (node.name) {
+                    classifiableNames[node.name.text] = node.name.text;
+                }
+            }
+
+            let symbol = node.symbol;
+
+            // TypeScript 1.0 spec (April 2014): 8.4
+            // Every class automatically contains a static property member named 'prototype', the
+            // type of which is an instantiation of the class type with type Any supplied as a type
+            // argument for each type parameter. It is an error to explicitly declare a static
+            // property member with the name 'prototype'.
+            //
+            // Note: we check for this here because this class may be merging into a module.  The
+            // module might have an exported variable called 'prototype'.  We can't allow that as
+            // that would clash with the built-in 'prototype' for the class.
+            let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
+            if (hasProperty(symbol.exports, prototypeSymbol.name)) {
+                if (node.name) {
+                    node.name.parent = node;
+                }
+                file.bindDiagnostics.push(createDiagnosticForNode(symbol.exports[prototypeSymbol.name].declarations[0],
+                    Diagnostics.Duplicate_identifier_0, prototypeSymbol.name));
+            }
+            symbol.exports[prototypeSymbol.name] = prototypeSymbol;
+            prototypeSymbol.parent = symbol;
         }
 
         function bindClassLikeDeclaration(node: ClassLikeDeclaration) {

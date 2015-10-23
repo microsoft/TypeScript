@@ -1,4 +1,5 @@
 tests/cases/compiler/intTypeCheck.ts(35,6): error TS2304: Cannot find name 'p'.
+tests/cases/compiler/intTypeCheck.ts(43,11): error TS2427: Interface name cannot be 'i8'
 tests/cases/compiler/intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.
 tests/cases/compiler/intTypeCheck.ts(99,5): error TS2322: Type 'Object' is not assignable to type 'i1'.
@@ -30,8 +31,6 @@ tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2304: Cannot find name 'i3'.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
-  Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2304: Cannot find name 'i4'.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -67,15 +66,18 @@ tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2304: Cannot find name 'i7'.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(196,5): error TS2322: Type '{}' is not assignable to type 'i8'.
+tests/cases/compiler/intTypeCheck.ts(197,5): error TS2322: Type 'Object' is not assignable to type 'i8'.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(199,5): error TS2322: Type 'Base' is not assignable to type 'i8'.
+tests/cases/compiler/intTypeCheck.ts(201,5): error TS2322: Type '() => void' is not assignable to type 'i8'.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
-  Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(204,22): error TS2304: Cannot find name 'i8'.
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (67 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -121,6 +123,8 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     interface i6 extends i2 { }
     interface i7 extends i3 { }
     interface i8 extends i4 { }
+              ~~
+!!! error TS2427: Interface name cannot be 'i8'
     interface i9 { }
     
     class Base { foo() { } }
@@ -284,9 +288,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     //var obj40: i4 = function foo() { };
     var obj41: i4 = <i4> anyVar;
     var obj42: i4 = new <i4> anyVar;
-        ~~~~~
-!!! error TS2322: Type 'boolean' is not assignable to type 'i4'.
-!!! error TS2322:   Index signature is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -399,19 +400,26 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     //
     var obj77: i8;
     var obj78: i8 = {};
+        ~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'i8'.
     var obj79: i8 = new Object();
+        ~~~~~
+!!! error TS2322: Type 'Object' is not assignable to type 'i8'.
     var obj80: i8 = new obj77;
                     ~~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var obj81: i8 = new Base;
+        ~~~~~
+!!! error TS2322: Type 'Base' is not assignable to type 'i8'.
     var obj82: i8 = null;
     var obj83: i8 = function () { };
+        ~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'i8'.
     //var obj84: i8 = function foo() { };
     var obj85: i8 = <i8> anyVar;
     var obj86: i8 = new <i8> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i8'.
-!!! error TS2322:   Index signature is missing in type 'Boolean'.
                         ~
 !!! error TS1109: Expression expected.
                          ~~

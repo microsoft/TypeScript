@@ -274,9 +274,7 @@ namespace Utils {
 
                     case "flags":
                         // Print out flags with their enum names.
-                        if (n.flags) {
-                            o[propertyName] = getNodeFlagName(n.flags);
-                        }
+                        o[propertyName] = getNodeFlagName(n.flags);
                         break;
 
                     case "parserContextFlags":

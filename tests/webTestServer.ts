@@ -5,7 +5,6 @@ import fs = require("fs");
 import path = require("path");
 import url = require("url");
 import child_process = require("child_process");
-import os = require('os');
 
 /// Command line processing ///
 
@@ -264,20 +263,7 @@ http.createServer(function (req: http.ServerRequest, res: http.ServerResponse) {
 
 var browserPath: string;
 if ((browser && browser === 'chrome')) {
-    let defaultChromePath = "";
-    switch (os.platform()) {
-        case "win32":
-        case "win64":
-            defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
-            break;
-        case "linux":
-            defaultChromePath = "/opt/google/chrome/chrome"
-            break;
-        default:
-            console.log(`default Chrome location is unknown for platform '${os.platform()}'`);
-            break;
-    }
-
+    var defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
     if (fs.existsSync(defaultChromePath)) {
         browserPath = defaultChromePath;
     } else {

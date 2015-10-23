@@ -72,10 +72,14 @@ namespace ts {
         "extends": SyntaxKind.ExtendsKeyword,
         "false": SyntaxKind.FalseKeyword,
         "finally": SyntaxKind.FinallyKeyword,
+        "float": SyntaxKind.FloatKeyword,
         "for": SyntaxKind.ForKeyword,
         "from": SyntaxKind.FromKeyword,
         "function": SyntaxKind.FunctionKeyword,
         "get": SyntaxKind.GetKeyword,
+        "i8" : SyntaxKind.I8Keyword,
+        "i16" : SyntaxKind.I16Keyword,
+        "i32" : SyntaxKind.I32Keyword,
         "if": SyntaxKind.IfKeyword,
         "implements": SyntaxKind.ImplementsKeyword,
         "import": SyntaxKind.ImportKeyword,
@@ -98,6 +102,7 @@ namespace ts {
         "set": SyntaxKind.SetKeyword,
         "static": SyntaxKind.StaticKeyword,
         "string": SyntaxKind.StringKeyword,
+        "struct": SyntaxKind.StructKeyword,
         "super": SyntaxKind.SuperKeyword,
         "switch": SyntaxKind.SwitchKeyword,
         "symbol": SyntaxKind.SymbolKeyword,
@@ -107,6 +112,9 @@ namespace ts {
         "try": SyntaxKind.TryKeyword,
         "type": SyntaxKind.TypeKeyword,
         "typeof": SyntaxKind.TypeOfKeyword,
+        "u8" : SyntaxKind.U8Keyword,
+        "u16" : SyntaxKind.U16Keyword,
+        "u32" : SyntaxKind.U32Keyword,
         "var": SyntaxKind.VarKeyword,
         "void": SyntaxKind.VoidKeyword,
         "while": SyntaxKind.WhileKeyword,
@@ -340,7 +348,6 @@ namespace ts {
             // We want the index of the previous line start, so we subtract 1.
             // Review 2's-complement if this is confusing.
             lineNumber = ~lineNumber - 1;
-            Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
         }
         return {
             line: lineNumber,
@@ -567,12 +574,12 @@ namespace ts {
     }
 
     /**
-     * Extract comments from text prefixing the token closest following `pos`. 
+     * Extract comments from text prefixing the token closest following `pos`.
      * The return value is an array containing a TextRange for each comment.
      * Single-line comment ranges include the beginning '//' characters but not the ending line break.
      * Multi - line comment ranges include the beginning '/* and ending '<asterisk>/' characters.
      * The return value is undefined if no comments were found.
-     * @param trailing 
+     * @param trailing
      * If false, whitespace is skipped until the first line break and comments between that location
      * and the next token are returned.
      * If true, comments occurring between the given position and the next line break are returned.
