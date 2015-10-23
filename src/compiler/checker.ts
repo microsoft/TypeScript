@@ -111,13 +111,13 @@ namespace ts {
         let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
         let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
-        var i8Type = createIntrinsicType(TypeFlags.I8, "i8");
-        var u8Type = createIntrinsicType(TypeFlags.U8, "u8");
-        var i16Type = createIntrinsicType(TypeFlags.I16, "i16");
-        var u16Type = createIntrinsicType(TypeFlags.U16, "u16");
-        var i32Type = createIntrinsicType(TypeFlags.I32, "i32");
-        var u32Type = createIntrinsicType(TypeFlags.U32, "u32");
-        var floatType = createIntrinsicType(TypeFlags.Float, "float");
+        let i8Type = createIntrinsicType(TypeFlags.I8, "i8");
+        let u8Type = createIntrinsicType(TypeFlags.U8, "u8");
+        let i16Type = createIntrinsicType(TypeFlags.I16, "i16");
+        let u16Type = createIntrinsicType(TypeFlags.U16, "u16");
+        let i32Type = createIntrinsicType(TypeFlags.I32, "i32");
+        let u32Type = createIntrinsicType(TypeFlags.U32, "u32");
+        let floatType = createIntrinsicType(TypeFlags.Float, "float");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -126,7 +126,7 @@ namespace ts {
         let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
         // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
-        //anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
+        // anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -154,17 +154,6 @@ namespace ts {
         let globalIterableType: GenericType;
         let globalIteratorType: GenericType;
         let globalIterableIteratorType: GenericType;
-
-        var globalIntType : ObjectType;
-        var globalUintType : ObjectType;
-        var globalI8Type : ObjectType;
-        var globalU8Type : ObjectType;
-        var globalI16Type : ObjectType;
-        var globalU16Type : ObjectType;
-        var globalI32Type : ObjectType;
-        var globalU32Type : ObjectType;
-        var globalFloatType : ObjectType;
-        var globalDoubleType : ObjectType;
 
         let anyArrayType: Type;
         let getGlobalClassDecoratorType: () => ObjectType;
@@ -6068,9 +6057,9 @@ namespace ts {
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference.
-                    //if (source.flags & TypeFlags.ContainsAnyFunctionType) {
+                    // if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                     //    return;
-                    //}
+                    // }
 
                     let typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
@@ -7174,7 +7163,7 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
-        function getContextualTypeForJsxExpression(expr: JsxExpression|JsxSpreadAttribute): Type {
+        function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
             // Contextual type only applies to JSX expressions that are in attribute assignments (not in 'Children' positions)
             if (expr.parent.kind === SyntaxKind.JsxAttribute) {
                 let attrib = <JsxAttribute>expr.parent;
@@ -7685,7 +7674,7 @@ namespace ts {
         /**
          * Returns true iff React would emit this tag name as a string rather than an identifier or qualified name
          */
-        function isJsxIntrinsicIdentifier(tagName: Identifier|QualifiedName) {
+        function isJsxIntrinsicIdentifier(tagName: Identifier | QualifiedName) {
             if (tagName.kind === SyntaxKind.QualifiedName) {
                 return false;
             }
@@ -7771,7 +7760,7 @@ namespace ts {
         /// If this is a class-based tag (otherwise returns undefined), returns the symbol of the class
         /// type or factory function.
         /// Otherwise, returns unknownSymbol.
-        function getJsxElementTagSymbol(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+        function getJsxElementTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
             let flags: JsxFlags = JsxFlags.UnknownElement;
             let links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
@@ -7784,7 +7773,7 @@ namespace ts {
             }
             return links.resolvedSymbol;
 
-            function lookupIntrinsicTag(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+            function lookupIntrinsicTag(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
                 let intrinsicElementsType = getJsxIntrinsicElementsType();
                 if (intrinsicElementsType !== unknownType) {
                     // Property case
@@ -7812,7 +7801,7 @@ namespace ts {
                 }
             }
 
-            function lookupClassTag(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+            function lookupClassTag(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
                 let valueSymbol: Symbol = resolveJsxTagName(node);
 
                 // Look up the value in the current scope
@@ -7826,7 +7815,7 @@ namespace ts {
                 return valueSymbol || unknownSymbol;
             }
 
-            function resolveJsxTagName(node: JsxOpeningLikeElement|JsxClosingElement): Symbol {
+            function resolveJsxTagName(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
                 if (node.tagName.kind === SyntaxKind.Identifier) {
                     let tag = <Identifier>node.tagName;
                     let sym = getResolvedSymbol(tag);
@@ -8243,7 +8232,7 @@ namespace ts {
                 }
             }
 
-            var symbol = getResolvedSymbol(<Identifier>(node.expression));
+            let symbol = getResolvedSymbol(<Identifier>(node.expression));
             if (symbol && (symbol.flags & SymbolFlags.Struct)) {
                 node.isStructArray = true;
             }
@@ -8703,7 +8692,8 @@ namespace ts {
 
                     if (argType.flags & TypeFlags.PrimitiveType) {
                         args[i] = convertToLower(argType, argType, arg, true);
-                    } else if (paramType.flags & TypeFlags.PrimitiveType) {
+                    }
+                    else if (paramType.flags & TypeFlags.PrimitiveType) {
                         args[i] = convertToLower(paramType, argType, arg);
                     }
                 }
@@ -10044,8 +10034,8 @@ namespace ts {
 
         function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {
             let operandType = checkExpression(node.operand);
-            var primType : boolean = false;
-            if(operandType.flags & TypeFlags.PrimitiveType) primType = true;
+            let primType = false;
+            if (operandType.flags & TypeFlags.PrimitiveType) primType = true;
 
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -10066,38 +10056,39 @@ namespace ts {
                             Diagnostics.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_property_or_indexer,
                             Diagnostics.The_operand_of_an_increment_or_decrement_operator_cannot_be_a_constant);
                     }
-                    if(primType) {
-                        var newOp : SyntaxKind = node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusToken : SyntaxKind.MinusToken;
-                        var newNode = createBinaryNode(node.operand, SyntaxKind.EqualsToken, createLitNode(node.operand, newOp, "1"));
-                        var retType = checkBinaryExpression(<BinaryExpression>newNode);
+                    if (primType) {
+                        let newOp: SyntaxKind = node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusToken : SyntaxKind.MinusToken;
+                        let newNode = createBinaryNode(node.operand, SyntaxKind.EqualsToken, createLitNode(node.operand, newOp, "1"));
+                        let retType = checkBinaryExpression(<BinaryExpression>newNode);
                         node.operator = SyntaxKind.Unknown;
                         node.operand = createParenNode(newNode);
                         return retType;
-                    } else {
+                    }
+                    else {
                         return numberType;
                     }
             }
             return unknownType;
         }
 
-        function checkDuplicationOfName(name : string, block : Node) : boolean {
-            var symbol = resolveName(block, name, SymbolFlags.Variable, undefined, "");
+        function checkDuplicationOfName(name: string, block: Node): boolean {
+            let symbol = resolveName(block, name, SymbolFlags.Variable, undefined, "");
             return symbol !== undefined;
         }
 
-        function getNextHelperVarName(block : Block | SourceFile) : string {
-            if(block.helperVarCount === undefined) block.helperVarCount = 0;
-            var count : Number = block.helperVarCount++;
+        function getNextHelperVarName(block: Block | SourceFile): string {
+            if (block.helperVarCount === undefined) block.helperVarCount = 0;
+            let count: Number = block.helperVarCount++;
 
-            var name = "_$" + count.toString();
-            while(checkDuplicationOfName(name, block)) {
+            let name = "_$" + count.toString();
+            while (checkDuplicationOfName(name, block)) {
                 count = block.helperVarCount++;
                 name = "_$" + count.toString();
             }
             return name;
         }
 
-        function createVariableDeclarationStatement(varName : string, varType? : Type) : VariableStatement{
+        function createVariableDeclarationStatement(varName: string, varType?: Type): VariableStatement {
             let ret = <VariableStatement>createNode(SyntaxKind.VariableStatement);
             let varDecl = <VariableDeclaration>createNode(SyntaxKind.VariableDeclaration);
 
@@ -10106,7 +10097,6 @@ namespace ts {
 
             let varNameIdentifier = <Identifier>createNode(SyntaxKind.Identifier);
             varNameIdentifier.text = varName;
-            //varNameIdentifier.parent = varDecl;
 
             varDecl.name = varNameIdentifier;
             varDecl.parent = declList;
@@ -10115,18 +10105,18 @@ namespace ts {
             return ret;
         }
 
-        function createPostIncrementExpression(tempVarIdentifier : Identifier, incExp : Node) {
-            //return: (t = incExp, incExp = incExp + 1, t)
+        function createPostIncrementExpression(tempVarIdentifier: Identifier, incExp: Node) {
+            // return: (t = incExp, incExp = incExp + 1, t)
 
-            var nodeLeft = createBinaryNode(tempVarIdentifier, SyntaxKind.EqualsToken, incExp);
+            let nodeLeft = createBinaryNode(tempVarIdentifier, SyntaxKind.EqualsToken, incExp);
 
-            var nodeMid1 = createLitNode(incExp, SyntaxKind.PlusToken, "1");
-            var nodeMid0 = createBinaryNode(incExp, SyntaxKind.EqualsToken, nodeMid1);
+            let nodeMid1 = createLitNode(incExp, SyntaxKind.PlusToken, "1");
+            let nodeMid0 = createBinaryNode(incExp, SyntaxKind.EqualsToken, nodeMid1);
             checkExpression(nodeMid0);
 
-            var nodeRight = tempVarIdentifier;
+            let nodeRight = tempVarIdentifier;
 
-            var ret = createBinaryNode(nodeLeft, SyntaxKind.CommaToken, nodeMid0);
+            let ret = createBinaryNode(nodeLeft, SyntaxKind.CommaToken, nodeMid0);
             ret = createParenNode(createBinaryNode(ret, SyntaxKind.CommaToken, nodeRight));
             return ret;
         }
@@ -10134,29 +10124,30 @@ namespace ts {
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             let operandType = checkExpression(node.operand);
 
-            var primType : boolean = false;
-            if(operandType.flags & TypeFlags.PrimitiveType) primType = true;
+            let primType = false;
+            if (operandType.flags & TypeFlags.PrimitiveType) primType = true;
 
-            if(primType && node.operator != SyntaxKind.Unknown) {
-                var block = node.parent;
-                while(block != undefined) {
-                    var blockInstance : Block | SourceFile;
+            if (primType && node.operator != SyntaxKind.Unknown) {
+                let block = node.parent;
+                while (block != undefined) {
+                    let blockInstance: Block | SourceFile;
                     if (block.kind === SyntaxKind.Block) {
                         blockInstance = <Block>(block);
-                    } else if(block.kind === SyntaxKind.SourceFile) {
+                    }
+                    else if (block.kind === SyntaxKind.SourceFile) {
                         blockInstance = <SourceFile>(block);
                     }
-                    if(blockInstance != undefined && blockInstance.statements != undefined) {
-                        var helperVarName = getNextHelperVarName(blockInstance);
-                        var varDecl = createVariableDeclarationStatement(helperVarName);
+                    if (blockInstance != undefined && blockInstance.statements != undefined) {
+                        let helperVarName = getNextHelperVarName(blockInstance);
+                        let varDecl = createVariableDeclarationStatement(helperVarName);
                         varDecl.parent = blockInstance;
 
-                        if(blockInstance.helperStatements === undefined) {
+                        if (blockInstance.helperStatements === undefined) {
                             blockInstance.helperStatements = <NodeArray<Statement>>[];
                         }
                         blockInstance.helperStatements.push(varDecl);
 
-                        var nameId = <Identifier>(varDecl.declarationList.declarations[0].name);
+                        let nameId = <Identifier>(varDecl.declarationList.declarations[0].name);
                         node.operand = createPostIncrementExpression(nameId, node.operand);
                         node.operator = SyntaxKind.Unknown;
                         break;
@@ -10359,29 +10350,34 @@ namespace ts {
             return sourceType;
         }
 
-        function getSizeOfPrimType(type : Type) : number {
-            if(type.flags & (TypeFlags.U8 | type.flags & TypeFlags.I8)) {
+        function getSizeOfPrimType(type: Type): number {
+            if (type.flags & (TypeFlags.U8 | type.flags & TypeFlags.I8)) {
                 return 1;
-            } else if(type.flags & (TypeFlags.U16 | type.flags & TypeFlags.I16)) {
+            }
+            else if (type.flags & (TypeFlags.U16 | type.flags & TypeFlags.I16)) {
                 return 2;
-            } else if(type.flags & (TypeFlags.U32 | type.flags & TypeFlags.I32 | type.flags & TypeFlags.Float)) {
+            }
+            else if (type.flags & (TypeFlags.U32 | type.flags & TypeFlags.I32 | type.flags & TypeFlags.Float)) {
                 return 4;
-            } else if(type.flags & (TypeFlags.Number | TypeFlags.Enum)) {
+            }
+            else if (type.flags & (TypeFlags.Number | TypeFlags.Enum)) {
                 return 8;
-            } else {
+            }
+            else {
                 return 8;
             }
         }
 
-        function isSigned(type : Type) {
-            if(type.flags & (TypeFlags.U8 | type.flags & TypeFlags.U16 | type.flags & TypeFlags.U32)) {
+        function isSigned(type: Type) {
+            if (type.flags & (TypeFlags.U8 | type.flags & TypeFlags.U16 | type.flags & TypeFlags.U32)) {
                 return false;
-            } else {
+            }
+            else {
                 return true;
             }
         }
 
-        function createLitNode(node : Node, op : SyntaxKind, lit : string) {
+        function createLitNode(node: Node, op: SyntaxKind, lit: string) {
             let newer = <BinaryExpression>createNode(SyntaxKind.BinaryExpression);
 
             let literal = <LiteralExpression>createNode(SyntaxKind.NumericLiteral);
@@ -10394,14 +10390,14 @@ namespace ts {
             return newer;
         }
 
-        function createParenNode(node : Node) {
+        function createParenNode(node: Node) {
             let newer = <ParenthesizedExpression>createNode(SyntaxKind.ParenthesizedExpression);
             newer.expression = <Expression>(node);
             return newer;
         }
 
-        function createBinaryNode(node : Node, op : SyntaxKind, nodeRight : Node) : Expression{
-            var newer = <BinaryExpression>(new (objectAllocator.getNodeConstructor(SyntaxKind.BinaryExpression))());
+        function createBinaryNode(node: Node, op: SyntaxKind, nodeRight: Node): Expression {
+            let newer = <BinaryExpression>(new (objectAllocator.getNodeConstructor(SyntaxKind.BinaryExpression))());
             newer.pos = node.pos;
             newer.end = node.end;
 
@@ -10412,8 +10408,8 @@ namespace ts {
             return newer;
         }
 
-        function isAssignmentOp(op : SyntaxKind) {
-            switch(op){
+        function isAssignmentOp(op: SyntaxKind) {
+            switch (op) {
                 case SyntaxKind.EqualsToken:
                 case SyntaxKind.PlusEqualsToken:
                 case SyntaxKind.MinusEqualsToken:
@@ -10432,8 +10428,8 @@ namespace ts {
             }
         }
 
-        function splitAssignmentOp(op : SyntaxKind) {
-            switch(op){
+        function splitAssignmentOp(op: SyntaxKind) {
+            switch (op) {
                 case SyntaxKind.PlusEqualsToken:
                     return SyntaxKind.PlusToken;
                 case SyntaxKind.MinusEqualsToken:
@@ -10461,13 +10457,14 @@ namespace ts {
             }
         }
 
-        function getNumericLiteralValue(originNode : Node) : number {
-            var val : number;
-            if(originNode.kind == SyntaxKind.NumericLiteral) {
-                var text = (<LiteralExpression>(originNode)).text;
+        function getNumericLiteralValue(originNode: Node): number {
+            let val: number;
+            if (originNode.kind == SyntaxKind.NumericLiteral) {
+                let text = (<LiteralExpression>(originNode)).text;
                 val = parseFloat(text);
-            } else {
-                var unaryNode = <UnaryExpression>originNode;
+            }
+            else {
+                let unaryNode = <UnaryExpression>originNode;
                 /*
                 if(unaryNode.operand.kind == SyntaxKind.NumericLiteral){
                     var text = (<LiteralExpression>(unaryNode.operand)).text;
@@ -10489,26 +10486,28 @@ namespace ts {
             return val;
         }
 
-        function canIgnoreConvertNumericLit(targetType : Type, originType : Type, originNode : Expression) {
+        function canIgnoreConvertNumericLit(targetType: Type, originType: Type, originNode: Expression) {
             if (originNode.kind == SyntaxKind.NumericLiteral ||
                 originNode.kind == SyntaxKind.PostfixUnaryExpression) {
-                var val : number = getNumericLiteralValue(originNode);
-                var val2 : number;
+                let val: number = getNumericLiteralValue(originNode);
+                let val2: number;
 
-                var sizeLeft = getSizeOfPrimType(targetType);
-                var signedLeft = isSigned(targetType);
-                var widthLeft = sizeLeft << 3;
-                var sizeRight = getSizeOfPrimType(originType);
-                var signedRight = isSigned(originType);
-                var widthRight = sizeRight << 3;
+                let sizeLeft = getSizeOfPrimType(targetType);
+                let signedLeft = isSigned(targetType);
+                let widthLeft = sizeLeft << 3;
+                let sizeRight = getSizeOfPrimType(originType);
+                let signedRight = isSigned(originType);
+                let widthRight = sizeRight << 3;
 
                 if (widthLeft !== 32 && widthLeft < widthRight) {
                     val2 = val & ((1 << widthLeft) - 1);
                     if (signedLeft) val2 = (val2 << (32 - widthLeft)) >> (32 - widthLeft);
-                } else if (widthLeft !== widthRight || signedLeft != signedRight) {
+                }
+                else if (widthLeft !== widthRight || signedLeft != signedRight) {
                     if (signedLeft) val2 = val | 0;
                     else val2 = val >>> 0;
-                } else {
+                }
+                else {
                     val2 = val;
                 }
 
@@ -10519,15 +10518,14 @@ namespace ts {
             return false;
         }
 
-        function convertDoubleToFloat(originNode : Expression) : Expression {
-
+        function convertDoubleToFloat(originNode: Expression): Expression {
             emitMathFround = true;
 
-            var funcName = <Identifier>(new (objectAllocator.getNodeConstructor(SyntaxKind.Identifier))());
+            let funcName = <Identifier>(new (objectAllocator.getNodeConstructor(SyntaxKind.Identifier))());
             funcName.text = "Math.fround";
             funcName.pos = funcName.end = -1;
 
-            var newer = <CallExpression>(new (objectAllocator.getNodeConstructor(SyntaxKind.CallExpression))());
+            let newer = <CallExpression>(new (objectAllocator.getNodeConstructor(SyntaxKind.CallExpression))());
             newer.expression = funcName;
             newer.arguments = <NodeArray<Expression>>[];
             newer.arguments.push(originNode);
@@ -10537,35 +10535,35 @@ namespace ts {
             return newer;
         }
 
-        function convertToLower(targetType : Type, originType : Type, originNode : Expression, forceConv : boolean = false) : Expression {
-            if(originType.flags & TypeFlags.RealNumber &&
+        function convertToLower(targetType: Type, originType: Type, originNode: Expression, forceConv = false): Expression {
+            if (originType.flags & TypeFlags.RealNumber &&
                 targetType.flags & TypeFlags.SinglePrecisionFloat) {
                 return convertDoubleToFloat(originNode);
             }
-            if(!(targetType.flags & TypeFlags.PrimitiveType)) {
+            if (!(targetType.flags & TypeFlags.PrimitiveType)) {
                 return originNode;
             }
-            if(targetType.flags == originType.flags && !forceConv){
-                return originNode;
-            }
-
-            if(canIgnoreConvertNumericLit(targetType, originType, originNode)) {
+            if (targetType.flags == originType.flags && !forceConv) {
                 return originNode;
             }
 
-            if(!forceConv && !isTypeAssignableTo(originType, targetType)) {
+            if (canIgnoreConvertNumericLit(targetType, originType, originNode)) {
                 return originNode;
             }
 
-            var sizeLeft = getSizeOfPrimType(targetType);
-            var signedLeft = isSigned(targetType);
-            var widthLeft = sizeLeft << 3;
-            var mask = (1 << widthLeft) - 1;
-            var shift = 32 - widthLeft;
+            if (!forceConv && !isTypeAssignableTo(originType, targetType)) {
+                return originNode;
+            }
 
-            var widthRight = getSizeOfPrimType(originType) << 3;
+            let sizeLeft = getSizeOfPrimType(targetType);
+            let signedLeft = isSigned(targetType);
+            let widthLeft = sizeLeft << 3;
+            let mask = (1 << widthLeft) - 1;
+            let shift = 32 - widthLeft;
 
-            var retNode : Expression = undefined;
+            let widthRight = getSizeOfPrimType(originType) << 3;
+
+            let retNode: Expression = undefined;
 
             if (widthLeft !== 32 && widthLeft < widthRight) {
                 retNode = createLitNode(originNode, SyntaxKind.AmpersandToken, new Number(mask).toString());
@@ -10575,7 +10573,8 @@ namespace ts {
                     retNode = createLitNode(retNode, SyntaxKind.LessThanLessThanToken, new Number(shift).toString());
                     retNode = createLitNode(retNode, SyntaxKind.GreaterThanGreaterThanToken, new Number(shift).toString());
                 }
-            } else {
+            }
+            else {
                 retNode = createLitNode(originNode,
                     signedLeft ? SyntaxKind.BarToken : SyntaxKind.GreaterThanGreaterThanGreaterThanToken, "0");
             }
@@ -10583,7 +10582,7 @@ namespace ts {
         }
 
         function checkAndMarkExpression(node: Expression, contextualMapper?: TypeMapper): Type {
-            var result = checkExpression(node, contextualMapper);
+            let result = checkExpression(node, contextualMapper);
             getNodeLinks(node).flags |= NodeCheckFlags.TypeChecked;
             return result;
         }
@@ -10593,17 +10592,17 @@ namespace ts {
         }
 
         function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, contextualMapper?: TypeMapper, errorNode?: Node) {
-            function getBestSizeFromNumberLikes(leftType : Type, rightType : Type) : Type {
-                if((leftType.flags & TypeFlags.Enum) || (rightType.flags & TypeFlags.Enum)) {
+            function getBestSizeFromNumberLikes(leftType: Type, rightType: Type): Type {
+                if ((leftType.flags & TypeFlags.Enum) || (rightType.flags & TypeFlags.Enum)) {
                     return numberType;
                 }
-                if(leftType.flags & TypeFlags.Number || rightType.flags & TypeFlags.Number) {
+                if (leftType.flags & TypeFlags.Number || rightType.flags & TypeFlags.Number) {
                     return numberType;
                 }
-                if(leftType.flags & TypeFlags.Float || rightType.flags & TypeFlags.Float) {
+                if (leftType.flags & TypeFlags.Float || rightType.flags & TypeFlags.Float) {
                     return floatType;
                 }
-                if(leftType.flags & TypeFlags.U32 || rightType.flags & TypeFlags.U32) {
+                if (leftType.flags & TypeFlags.U32 || rightType.flags & TypeFlags.U32) {
                     return u32Type;
                 }
                 return i32Type;
@@ -10616,34 +10615,36 @@ namespace ts {
             let leftType = checkExpression(left, contextualMapper);
             let rightType = checkExpression(right, contextualMapper);
 
-            var node = <BinaryExpression>(errorNode);
-            var splitedOp = splitAssignmentOp(operator);
+            let node = <BinaryExpression>(errorNode);
+            let splitedOp = splitAssignmentOp(operator);
 
-            if(leftType.flags & TypeFlags.PrimitiveType && splitedOp != undefined) {
+            if (leftType.flags & TypeFlags.PrimitiveType && splitedOp != undefined) {
                 operator = node.operatorToken.kind = SyntaxKind.EqualsToken;
-                var lowerNode = convertToLower(leftType, rightType, node.right);
+                let lowerNode = convertToLower(leftType, rightType, node.right);
                 node.right = createBinaryNode(node.left, splitedOp, createParenNode(lowerNode));
             }
 
             if (isAssignmentOp(operator)) {
                 if (leftType.flags & TypeFlags.Reference) {
-                    var tRef = <TypeReference>leftType;
+                    let tRef = <TypeReference>leftType;
                     if (tRef.target === globalArrayType && node.right.kind === SyntaxKind.ArrayLiteralExpression
                         && tRef.typeArguments[0].flags & TypeFlags.PrimitiveType) {
-                        for (var i = 0; i < (<ArrayLiteralExpression>node.right).elements.length; ++i) {
-                            var origType = checkAndMarkExpression((<ArrayLiteralExpression>node.right).elements[i]);
+                        for (let i = 0; i < (<ArrayLiteralExpression>node.right).elements.length; ++i) {
+                            let origType = checkAndMarkExpression((<ArrayLiteralExpression>node.right).elements[i]);
                             (<ArrayLiteralExpression>node.right).elements[i] = convertToLower(tRef.typeArguments[0],
                                 origType, (<ArrayLiteralExpression>node.right).elements[i]);
                         }
                     }
-                } else {
-                    var lowerNode = convertToLower(leftType, rightType, node.right);
+                }
+                else {
+                    let lowerNode = convertToLower(leftType, rightType, node.right);
 
-                    if(lowerNode != node.right) {
+                    if (lowerNode != node.right) {
                         node.right = lowerNode;
                         rightType = leftType;
-                    } else {
-                        if(leftType.flags & TypeFlags.PrimitiveType &&
+                    }
+                    else {
+                        if (leftType.flags & TypeFlags.PrimitiveType &&
                             canIgnoreConvertNumericLit(leftType, rightType, node.right)) {
                             rightType = leftType;
                         }
@@ -10701,14 +10702,16 @@ namespace ts {
                     }
 
                     if (leftType.flags & TypeFlags.NumberLike && rightType.flags & TypeFlags.NumberLike) {
-                        var leftSize = getSizeOfPrimType(leftType);
-                        var rightSize = getSizeOfPrimType(rightType);
+                        let leftSize = getSizeOfPrimType(leftType);
+                        let rightSize = getSizeOfPrimType(rightType);
                         if (leftSize != rightSize) {
                             if (canIgnoreConvertNumericLit(leftType, rightType, node.right)) {
                                 return leftType;
-                            } else if (canIgnoreConvertNumericLit(rightType, leftType, node.left)) {
+                            }
+                            else if (canIgnoreConvertNumericLit(rightType, leftType, node.left)) {
                                 return rightType;
-                            } else {
+                            }
+                            else {
                                 return leftSize < rightSize ? rightType : leftType;
                             }
                         }
@@ -12450,21 +12453,21 @@ namespace ts {
                 checkFunctionAndClassExpressionBodies(node);
             }
 
-            if(node.helperStatements !== undefined) {
-                while(node.helperStatements.length > 0){
+            if (node.helperStatements !== undefined) {
+                while (node.helperStatements.length > 0) {
                     node.statements.unshift(node.helperStatements.pop());
                 }
             }
 
-            if(isFunctionBlock(node)) {
-                var func = getContainingFunction(node);
+            if (isFunctionBlock(node)) {
+                let func = getContainingFunction(node);
 
                 for (var i = 0, n = func.parameters.length; i < n; i++) {
-                    var param = func.parameters[i];
+                    let param = func.parameters[i];
 
-                    if(param.type && param.name) {
-                        var type = getTypeFromTypeNode(param.type);
-                        //if(type && type.flags & TypeFlags.PrimitiveType) {
+                    if (param.type && param.name) {
+                        let type = getTypeFromTypeNode(param.type);
+                        // if(type && type.flags & TypeFlags.PrimitiveType) {
                         //    var nameNode : Identifier;
                         //    if (typeof param.name === 'Identifier') {
                         //        nameNode = <Identifier>(param.name);
@@ -12475,7 +12478,7 @@ namespace ts {
                         //    ret.expression.parent = ret;
                         //    ret.parent = node;
                         //    node.statements.unshift(ret);
-                        //}
+                        // }
                     }
                 }
             }
@@ -12643,8 +12646,7 @@ namespace ts {
                         // names of block-scoped and function scoped variables can collide only
                         // if block scoped variable is defined in the function\module\source file scope (because of variable hoisting)
                         let namesShareScope =
-                            container &&
-                            (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
+                            container && (container.kind === SyntaxKind.Block && isFunctionLike(container.parent) ||
                                 container.kind === SyntaxKind.ModuleBlock ||
                                 container.kind === SyntaxKind.ModuleDeclaration ||
                                 container.kind === SyntaxKind.SourceFile);
@@ -12736,11 +12738,11 @@ namespace ts {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
 
-                    if(type.flags & TypeFlags.PrimitiveType) {
+                    if (type.flags & TypeFlags.PrimitiveType) {
 
-                        var initializerType = checkAndMarkExpression(node.initializer);
-                        if(type.flags & TypeFlags.PrimitiveType) {
-                            if(canIgnoreConvertNumericLit(type, initializerType, node.initializer)) {
+                        let initializerType = checkAndMarkExpression(node.initializer);
+                        if (type.flags & TypeFlags.PrimitiveType) {
+                            if (canIgnoreConvertNumericLit(type, initializerType, node.initializer)) {
                                 initializerType = type;
                             }
                         }
@@ -13247,7 +13249,7 @@ namespace ts {
                         }
 
                         if (returnType.flags & TypeFlags.PrimitiveType) {
-                            var returnExpType = checkExpression(node.expression);
+                            let returnExpType = checkExpression(node.expression);
                             node.expression = convertToLower(returnType, returnExpType, node.expression, true);
                         }
                     }
@@ -14475,7 +14477,7 @@ namespace ts {
         }
 
         function hasExportedMembers(moduleSymbol: Symbol) {
-            for (var id in moduleSymbol.exports) {
+            for (let id in moduleSymbol.exports) {
                 if (id !== "export=") {
                     return true;
                 }
@@ -14779,8 +14781,8 @@ namespace ts {
                     potentialThisCollisions.length = 0;
                 }
 
-                if(node.helperStatements !== undefined) {
-                    while(node.helperStatements.length > 0){
+                if (node.helperStatements !== undefined) {
+                    while (node.helperStatements.length > 0) {
                         node.statements.unshift(node.helperStatements.pop());
                     }
                 }
@@ -15541,25 +15543,35 @@ namespace ts {
 
             if (type.flags & TypeFlags.I32) {
                 writer.write("TypedObject.int32");
-            } else if (type.flags & TypeFlags.U32) {
+            }
+            else if (type.flags & TypeFlags.U32) {
                 writer.write("TypedObject.uint32");
-            } else if (type.flags & TypeFlags.U16) {
+            }
+            else if (type.flags & TypeFlags.U16) {
                 writer.write("TypedObject.uint16");
-            } else if (type.flags & TypeFlags.I16) {
+            }
+            else if (type.flags & TypeFlags.I16) {
                 writer.write("TypedObject.int16");
-            } else if (type.flags & TypeFlags.U8) {
+            }
+            else if (type.flags & TypeFlags.U8) {
                 writer.write("TypedObject.uint8");
-            } else if (type.flags & TypeFlags.I8) {
+            }
+            else if (type.flags & TypeFlags.I8) {
                 writer.write("TypedObject.int8");
-            } else if (type.flags & TypeFlags.Float) {
+            }
+            else if (type.flags & TypeFlags.Float) {
                 writer.write("TypedObject.float32");
-            } else if (type.flags & TypeFlags.Number) {
+            }
+            else if (type.flags & TypeFlags.Number) {
                 writer.write("TypedObject.float64");
-            } else if (type.flags & TypeFlags.String) {
+            }
+            else if (type.flags & TypeFlags.String) {
                 writer.write("TypedObject.string");
-            } else if (type.flags & TypeFlags.Any) {
+            }
+            else if (type.flags & TypeFlags.Any) {
                 writer.write("TypedObject.Any");
-            } else {
+            }
+            else {
                 writer.write("TypedObject.Object");
             }
             return true;
@@ -16360,7 +16372,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarJsxElement(node: JsxOpeningElement|JsxSelfClosingElement) {
+        function checkGrammarJsxElement(node: JsxOpeningElement | JsxSelfClosingElement) {
             const seen: Map<boolean> = {};
             for (let attr of node.attributes) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {

@@ -1846,7 +1846,7 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral   = 0x00400000,  // Type is or contains object literal type
         /* @internal */
-        //ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
+        // ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x00800000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x01000000,  // This type
 
