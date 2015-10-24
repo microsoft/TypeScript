@@ -1,0 +1,8 @@
+=== tests/cases/compiler/undefinedAsName.ts ===
+type undefined = string;
+>undefined : string
+
+var x: undefined;
+>x : string
+>undefined : string
+
