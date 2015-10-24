@@ -11,7 +11,7 @@ namespace ts.server {
         input: process.stdin,
         output: process.stdout,
         terminal: false,
-    });  
+    });
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -58,7 +58,7 @@ namespace ts.server {
         isVerbose() {
             return this.loggingEnabled() && (this.level == "verbose");
         }
-        
+
 
         msg(s: string, type = "Err") {
             if (this.fd < 0) {
@@ -89,18 +89,18 @@ namespace ts.server {
         }
 
         exit() {
-            this.projectService.log("Exiting...","Info");
+            this.projectService.log("Exiting...", "Info");
             this.projectService.closeLog();
             process.exit(0);
         }
 
         listen() {
-            rl.on('line',(input: string) => {
+            rl.on('line', (input: string) => {
                 var message = input.trim();
                 this.onMessage(message);
             });
 
-            rl.on('close',() => {
+            rl.on('close', () => {
                 this.exit();
             });
         }
@@ -154,6 +154,38 @@ namespace ts.server {
     // TODO: check that this location is writable
 
     var logger = createLoggerFromEnv();
+
+    let pending: string[] = [];
+    function queueMessage(s: string) {
+        pending.push(s);
+        if (pending.length === 1) {
+            drain();
+        }
+    }
+
+    function drain() {
+        Debug.assert(pending.length > 0);
+        writeBuffer(new Buffer(pending[0], "utf8"), 0);
+    }
+
+    function writeBuffer(buffer: Buffer, offset: number) {
+        const toWrite = buffer.length - offset;
+        fs.write(1, buffer, offset, toWrite, undefined, (err, written, buffer) => {
+            if (toWrite > written) {
+                writeBuffer(buffer, offset + written);
+            }
+            else {
+                Debug.assert(pending.length > 0);
+                pending.shift();
+                if (pending.length > 0) {
+                    drain();
+                }
+            }
+        });
+    }
+
+    // Override sys.write because fs.writeSync is not reliable on Node 4
+    ts.sys.write = (s: string) => queueMessage(s);
 
     var ioSession = new IOSession(ts.sys, logger);
     process.on('uncaughtException', function(err: Error) {
