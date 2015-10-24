@@ -1,0 +1,32 @@
+=== tests/cases/compiler/reservedNameWithStaticProperty.ts ===
+class Length {
+>Length : Length
+
+	static length: string = "pizza";
+>length : string
+>"pizza" : string
+}
+
+class Caller {
+>Caller : Caller
+
+	static caller: string = "potatos";
+>caller : string
+>"potatos" : string
+}
+
+class Arguments {
+>Arguments : Arguments
+
+	static arguments: string = "tomatoes"
+>arguments : string
+>"tomatoes" : string
+}
+
+class Name {
+>Name : Name
+
+	static name: string = "name"
+>name : string
+>"name" : string
+}
