@@ -15917,6 +15917,7 @@ namespace ts {
             //     export_opt   AmbientDeclaration
             //
             if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.TypeAliasDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ExportDeclaration ||
