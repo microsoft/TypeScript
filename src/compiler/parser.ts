@@ -396,6 +396,25 @@ namespace ts {
         return result;
     }
 
+    // @internal
+    export function parseSynthesizedStatements(sourceText: string) {
+        let sourceFile = Parser.parseSourceFile("parseStatement.ts", sourceText, ScriptTarget.Latest, /*syntaxCursor*/ undefined, /*setParentNodes*/ false, /*synthesized*/ true);
+        return sourceFile.statements;
+    }
+
+    // @internal
+    export function parseSynthesizedStatement(sourceText: string) {
+        let statements = parseSynthesizedStatements(sourceText);
+        return firstOrUndefined(statements);
+    }
+
+    // @internal
+    export function parseSynthesizedExpression(sourceText: string) {
+        let statement = parseSynthesizedStatement(`(${sourceText})`);
+        let expression = (<ExpressionStatement>statement).expression;
+        return (<ParenthesizedExpression>expression).expression;
+    }
+
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
     // The SourceFile will be created with the compiler attempting to reuse as many nodes from
@@ -518,10 +537,10 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
+        export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean, synthesized?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
 
-            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
+            let result = parseSourceFileWorker(fileName, languageVersion, setParentNodes, synthesized);
 
             clearState();
 
@@ -561,7 +580,7 @@ namespace ts {
             sourceText = undefined;
         }
 
-        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
+        function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean, synthesized: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
 
             // Prime the scanner.
@@ -581,6 +600,10 @@ namespace ts {
 
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
+            }
+
+            if (synthesized) {
+                makeSynthesized(sourceFile);
             }
 
             // If this is a javascript file, proactively see if we can get JSDoc comments for
@@ -620,6 +643,22 @@ namespace ts {
                         node.jsDocComment = jsDocComment;
                     }
                 }
+            }
+        }
+
+        function makeSynthesized(sourceFile: Node) {
+            visitNode(sourceFile);
+
+            function visitNode(n: Node) {
+                delete n.pos;
+                delete n.end;
+                forEachChild(n, visitNode, visitNodes);
+            }
+
+            function visitNodes(n: NodeArray<Node>) {
+                delete n.pos;
+                delete n.end;
+                forEach(n, visitNode);
             }
         }
 
@@ -3197,7 +3236,7 @@ namespace ts {
 
         /**
          * Parse ES7 unary expression and await expression
-         * 
+         *
          * ES7 UnaryExpression:
          *      1) SimpleUnaryExpression[?yield]
          *      2) IncrementExpression[?yield] ** UnaryExpression[?yield]
@@ -4973,8 +5012,8 @@ namespace ts {
             // implements is a future reserved word so
             // 'class implements' might mean either
             // - class expression with omitted name, 'implements' starts heritage clause
-            // - class with name 'implements' 
-            // 'isImplementsClause' helps to disambiguate between these two cases 
+            // - class with name 'implements'
+            // 'isImplementsClause' helps to disambiguate between these two cases
             return isIdentifier() && !isImplementsClause()
                 ? parseIdentifier()
                 : undefined;

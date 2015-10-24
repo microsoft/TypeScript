@@ -1,4 +1,5 @@
 /// <reference path="../checker.ts" />
+/// <refernece path="./destructuring.ts" />
 /*@internal*/
 namespace ts {
     export function createTypeScriptTransformation(transformer: Transformer): Transformation {
@@ -38,8 +39,8 @@ namespace ts {
         let exportSpecifiers: Map<ExportSpecifier[]>;
         let exportEquals: ExportAssignment;
         let exportFunctionForFile: string;
-        let savedSubstituteExpressionIdentifier = transformer.getExpressionIdentifierSubstitution();
-        transformer.setExpressionIdentifierSubstitution(substituteExpressionIdentifier);
+        let savedExpressionSubstution = transformer.getExpressionSubstitution();
+        transformer.setExpressionSubstitution(substituteExpressionWithFallback);
 
         return transformTypeScript;
 
@@ -58,7 +59,10 @@ namespace ts {
             exportFunctionForFile = undefined;
             currentSourceFile = node;
 
-            node = visitSourceFile(node, visitor);
+            let visited = visitSourceFile(node, visitor);
+            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.EmitHelpersMask) {
+                transformer.setGeneratedNodeFlags(visited, GeneratedNodeFlags.EmitHelpers);
+            }
 
             externalImports = undefined;
             exportSpecifiers = undefined;
@@ -66,7 +70,7 @@ namespace ts {
             exportFunctionForFile = undefined;
             currentSourceFile = undefined;
 
-            return node;
+            return visited;
         }
 
         /**
@@ -465,7 +469,7 @@ namespace ts {
                 parameters = visitNodes(constructor.parameters, visitor, isParameter);
             }
             else if (baseTypeNode) {
-                parameters = [createRestParameter(createIdentifier("args"), /*location*/ undefined, NodeFlags.GeneratedRest)];
+                parameters = [createRestParameter(createIdentifier("args"), /*location*/ undefined, NodeFlags.Generated)];
             }
 
             // transform the body of the constructor
@@ -996,7 +1000,7 @@ namespace ts {
             }
 
             let callExpr = createCallExpression2(parenExpr, [moduleParam]);
-            let callStmt = createExpressionStatement(callExpr, location, NodeFlags.GeneratedNamespace);
+            let callStmt = createExpressionStatement(callExpr, location, NodeFlags.Generated);
             callStmt.original = node;
             write(callStmt);
         }
@@ -1030,13 +1034,24 @@ namespace ts {
             return !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
         }
 
-        function substituteExpressionIdentifier(node: Identifier): LeftHandSideExpression {
+        function substituteExpressionWithFallback(node: Expression): Expression {
+            let substitute = substituteExpression(node) || node;
+            return savedExpressionSubstution ? savedExpressionSubstution(substitute) : substitute;
+        }
+
+        function substituteExpression(node: Expression): Expression {
+            if (isIdentifier(node)) {
+                return substituteExpressionIdentifier(node);
+            }
+            return node;
+        }
+
+        function substituteExpressionIdentifier(node: Identifier): Expression {
             let container = resolver.getReferencedExportContainer(node);
             if (isModuleDeclaration(container)) {
                 return createPropertyAccessExpression2(getGeneratedNameForNode(container), node, node);
             }
-
-            return savedSubstituteExpressionIdentifier ? savedSubstituteExpressionIdentifier(node) : node;
+            return node;
         }
 
         function visitImportEqualsDeclaration(node: ImportEqualsDeclaration, write: (node: Statement) => void): void {
@@ -1646,7 +1661,7 @@ namespace ts {
 
         function createSynthesizedSuperCall() {
             let callExpr = createCallExpression2(createSuperKeyword(), [createSpreadElementExpression(createIdentifier("args"))]);
-            return startOnNewLine(createExpressionStatement(callExpr, /*location*/ undefined, NodeFlags.GeneratedSuper));
+            return startOnNewLine(createExpressionStatement(callExpr, /*location*/ undefined, NodeFlags.Generated));
         }
     }
 }

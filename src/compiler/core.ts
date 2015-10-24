@@ -832,7 +832,7 @@ namespace ts {
     /**
      *  List of extensions that will be used to look for external modules.
      *  This list is kept separate from supportedExtensions to for cases when we'll allow to include .js files in compilation,
-     *  but still would like to load only TypeScript files as modules 
+     *  but still would like to load only TypeScript files as modules
      */
     export const moduleFileExtensions = supportedExtensions;
 
@@ -1163,6 +1163,7 @@ namespace ts {
                     verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }
 
+                debugger;
                 throw new Error("Debug Failure. False expression: " + (message || "") + verboseDebugString);
             }
         }

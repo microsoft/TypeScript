@@ -44,8 +44,12 @@ var compilerSources = [
     "binder.ts",
     "checker.ts",
     "transform.ts",
-    "transforms/jsx.ts",
+    "transforms/destructuring.ts",
     "transforms/ts.ts",
+    "transforms/module/module.ts",
+    "transforms/module/system.ts",
+    "transforms/module/es6.ts",
+    "transforms/jsx.ts",
     "transforms/es6.ts",
     "declarationEmitter.ts",
     "printer.ts",
@@ -70,8 +74,12 @@ var servicesSources = [
     "binder.ts",
     "checker.ts",
     "transform.ts",
-    "transforms/jsx.ts",
+    "transforms/destructuring.ts",
     "transforms/ts.ts",
+    "transforms/module/module.ts",
+    "transforms/module/system.ts",
+    "transforms/module/es6.ts",
+    "transforms/jsx.ts",
     "transforms/es6.ts",
     "declarationEmitter.ts",
     "printer.ts",
@@ -954,7 +962,7 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
 });
 
 function getLinterOptions() {
@@ -1014,7 +1022,7 @@ function lintWatchFile(filename) {
         if (event !== "change") {
             return;
         }
-     
+
         if (!lintSemaphores[filename]) {
             lintSemaphores[filename] = true;
             lintFileAsync(getLinterOptions(), filename, function(err, result) {

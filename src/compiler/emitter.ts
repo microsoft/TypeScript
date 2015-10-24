@@ -1,7 +1,7 @@
 /// <reference path="checker.ts"/>
-/// <reference path="transform.ts" />
 /// <reference path="declarationEmitter.ts"/>
-/// <reference path="printer.ts" />
+/// <reference path="transform.ts"/>
+/// <reference path="printer.ts"/>
 
 /* @internal */
 namespace ts {
@@ -328,13 +328,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let newLine = host.getNewLine();
         let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
-        let transformationChain = getTransformationChain(compilerOptions);
-        let sourceFiles: SourceFile[];
-        let substitutions: TransformationSubstitutions;
 
         if (targetSourceFile === undefined) {
-            ({ sourceFiles, substitutions } = transformFilesIfNeeded(resolver, host, host.getSourceFiles(), transformationChain));
-            forEach(sourceFiles, sourceFile => {
+            forEach(host.getSourceFiles(), sourceFile => {
                 if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
                     let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
                     emitFile(jsFilePath, sourceFile);
@@ -349,11 +345,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
             if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
                 let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
-                ({ sourceFiles: [targetSourceFile], substitutions } = transformFilesIfNeeded(resolver, host, [targetSourceFile], transformationChain));
                 emitFile(jsFilePath, targetSourceFile);
             }
             else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
-                ({ sourceFiles, substitutions } = transformFilesIfNeeded(resolver, host, host.getSourceFiles(), transformationChain));
                 emitFile(compilerOptions.outFile || compilerOptions.out);
             }
         }
@@ -7044,7 +7038,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitDirectivePrologues(statements: Statement[], startWithNewLine: boolean): number {
+            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
                 for (let i = 0; i < statements.length; ++i) {
                     if (isPrologueDirective(statements[i])) {
                         if (startWithNewLine || i > 0) {
@@ -7609,8 +7603,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             if (compilerOptions.experimentalTransforms) {
-                let nodes = sourceFile ? [sourceFile] : sourceFiles;
-                let text = printNodes(resolver, substitutions, host, filter(nodes, isNonDeclarationFile));
+                let nodes = sourceFile ? [sourceFile] : host.getSourceFiles();
+                let text = printFiles(resolver, host, filter(nodes, isNonDeclarationFile), getTransformationChain(compilerOptions));
                 writeFile(host, diagnostics, jsFilePath, text, compilerOptions.emitBOM);
             }
             else {
@@ -7618,7 +7612,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             if (compilerOptions.declaration) {
-                writeDeclarationFile(jsFilePath, getOriginalNodeIf(sourceFile, isSourceFile), host, resolver, diagnostics);
+                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
             }
         }
     }

@@ -1,4 +1,5 @@
 /// <reference path="../checker.ts" />
+/// <refernece path="./destructuring.ts" />
 /*@internal*/
 namespace ts {
     export function createES6Transformation(transformer: Transformer): Transformation {
@@ -329,83 +330,7 @@ namespace ts {
         }
 
         function emitParameterBindingElements(parameter: ParameterDeclaration, write: (node: VariableDeclaration) => void): void {
-            let tempName = getGeneratedNameForNode(parameter);
-            emitBindingElement(parameter, tempName, write);
-        }
-
-        function emitBindingElement(target: BindingElement, value: Expression, write: (node: VariableDeclaration) => void): void {
-            if (target.initializer) {
-                // Combine value and initializer
-                let initializer = visitNode(target.initializer, visitor, isExpressionNode);
-                value = value ? createDefaultValueCheck(value, initializer, /*isVariableDeclarationList*/ true, write) : initializer;
-            }
-            else if (!value) {
-                // Use 'void 0' in absence of value and initializer
-                value = createVoidZeroExpression();
-            }
-
-            let name = target.name;
-            if (isBindingPattern(name)) {
-                const elements = name.elements;
-                const numElements = elements.length;
-                if (numElements !== 1) {
-                    // For anything other than a single-element destructuring we need to generate a temporary
-                    // to ensure value is evaluated exactly once. Additionally, if we have zero elements
-                    // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
-                    // so in that case, we'll intentionally create that temporary.
-                    value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0, /*isVariableDeclarationList*/ true, write);
-                }
-                for (let i = 0; i < elements.length; i++) {
-                    let element = elements[i];
-                    if (name.kind === SyntaxKind.ObjectBindingPattern) {
-                        // Rewrite element to a declaration with an initializer that fetches property
-                        let propName = element.propertyName || <Identifier>element.name;
-                        emitBindingElement(element, createPropertyOrElementAccessExpression(value, propName), write);
-                    }
-                    else if (element.kind !== SyntaxKind.OmittedExpression) {
-                        if (!element.dotDotDotToken) {
-                            // Rewrite element to a declaration that accesses array element at index i
-                            emitBindingElement(element, createElementAccessExpression3(value, i), write);
-                        }
-                        else if (i === elements.length - 1) {
-                            emitBindingElement(element, createSliceCall(value, i), write);
-                        }
-                    }
-                }
-            }
-            else {
-                emitAssignment(name, value, /*isTempVariable*/ false, /*isVariableDeclarationList*/ true, write);
-            }
-        }
-
-        function emitAssignment(left: Identifier, right: Expression, isTempVariable: boolean, isVariableDeclarationList: boolean, write: (node: Expression | VariableDeclaration) => void): void {
-            if (isVariableDeclarationList) {
-                write(createVariableDeclaration2(left, right));
-            }
-            else {
-                write(createAssignmentExpression(left, right));
-            }
-        }
-
-        function ensureIdentifier(value: Expression, reuseIdentifierExpressions: boolean, isVariableDeclarationList: boolean, write: (node: Expression | VariableDeclaration) => void) {
-            if (isIdentifier(value) && reuseIdentifierExpressions) {
-                return value;
-            }
-            else {
-                let temp = createTempVariable(TempFlags.Auto);
-                if (!isVariableDeclarationList) {
-                    hoistVariableDeclaration(temp);
-                }
-
-                emitAssignment(temp, value, /*isTempVariable*/ true, isVariableDeclarationList, write);
-                return temp;
-            }
-        }
-
-        function createDefaultValueCheck(value: Expression, defaultValue: Expression, isVariableDeclarationList: boolean, write: (node: Expression | VariableDeclaration) => void): Expression {
-            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, isVariableDeclarationList, write);
-            let equalityExpr = createStrictEqualityExpression(value, createVoidZeroExpression());
-            return createConditionalExpression2(equalityExpr, defaultValue, value);
+            flattenParameterDestructuring(transformer, parameter, write, visitor);
         }
 
         function emitDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, write: (node: Statement) => void): void {
@@ -421,7 +346,7 @@ namespace ts {
         }
 
         function shouldEmitRestParameter(node: ParameterDeclaration) {
-            return node.dotDotDotToken && !(node.flags & NodeFlags.GeneratedRest);
+            return node.dotDotDotToken && !(node.flags & NodeFlags.Generated);
         }
 
         function emitRestParameter(node: FunctionLikeDeclaration, write: (node: Statement) => void): void {
@@ -560,89 +485,7 @@ namespace ts {
 
         function visitBinaryExpression(node: BinaryExpression, write: (node: Expression) => void): void {
             // If we are here it is because this is a destructuring assignment.
-            if (isEmptyObjectLiteralOrArrayLiteral(node.left)) {
-                write(node.right);
-            }
-            else {
-                let expressions = flattenNode(node, emitDestructuringExpressions);
-                let expression = inlineExpressions(expressions);
-                let parentNode = getParentNode();
-                if (!isExpressionStatement(parentNode) && !isParenthesizedExpression(parentNode)) {
-                    expression = createParenthesizedExpression(expression);
-                }
-                write(expression);
-            }
-        }
-
-        function emitDestructuringExpressions(node: BinaryExpression, write: (node: Expression) => void): void {
-            let target = node.left;
-            let value = node.right;
-            let parentNode = getParentNode();
-            if (isExpressionStatement(parentNode)) {
-                emitDestructuringAssignment(target, value, write);
-            }
-            else {
-                value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, /*isVariableDeclarationList*/ false, write);
-                emitDestructuringAssignment(target, value, write);
-                write(value);
-            }
-        }
-
-        function emitDestructuringAssignment(target: Expression, value: Expression, write: (node: Expression) => void) {
-            if (isBinaryExpression(target) && target.operatorToken.kind === SyntaxKind.EqualsToken) {
-                value = createDefaultValueCheck(value, (<BinaryExpression>target).right, /*isVariableDeclarationList*/ false, write);
-                target = (<BinaryExpression>target).left;
-            }
-            if (isObjectLiteralExpression(target)) {
-                emitObjectLiteralAssignment(target, value, write);
-            }
-            else if (isArrayLiteralExpression(target)) {
-                emitArrayLiteralAssignment(target, value, write);
-            }
-            else if (isIdentifier(target)) {
-                emitAssignment(target, value, /*isTempVariable*/ false, /*isVariableDeclarationList*/ false, write);
-            }
-            else {
-                Debug.fail();
-            }
-        }
-
-        function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression, write: (node: Expression) => void): void {
-            let properties = target.properties;
-            if (properties.length !== 1) {
-                // For anything but a single element destructuring we need to generate a temporary
-                // to ensure value is evaluated exactly once.
-                value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, /*isVariableDeclarationList*/ false, write);
-            }
-
-            for (let p of properties) {
-                if (isPropertyAssignment(p) || isShorthandPropertyAssignment(p)) {
-                    let propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
-                    let expr = createPropertyOrElementAccessExpression(value, propName);
-                    emitDestructuringAssignment((<PropertyAssignment>p).initializer || propName, expr, write);
-                }
-            }
-        }
-
-        function emitArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression, write: (node: Expression) => void): void {
-            let elements = target.elements;
-            if (elements.length !== 1) {
-                // For anything but a single element destructuring we need to generate a temporary
-                // to ensure value is evaluated exactly once.
-                value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, /*isVariableDeclarationList*/ false, write);
-            }
-
-            for (let i = 0; i < elements.length; i++) {
-                let e = elements[i];
-                if (e.kind !== SyntaxKind.OmittedExpression) {
-                    if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                        emitDestructuringAssignment(e, createElementAccessExpression3(value, i), write);
-                    }
-                    else if (i === elements.length - 1) {
-                        emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i), write);
-                    }
-                }
-            }
+            flattenDestructuringAssignment(transformer, node, write, visitor);
         }
 
         function visitVariableStatement(node: VariableStatement, write: (node: Statement) => void): void {
@@ -658,7 +501,7 @@ namespace ts {
 
         function visitVariableDeclaration(node: VariableDeclaration, write: (node: VariableDeclaration) => void): void {
             if (isBindingPattern(node.name)) {
-                emitBindingElement(node, node.initializer, write);
+                flattenVariableDestructuring(transformer, node, write, visitor);
             }
             else {
                 // TODO(rbuckton): Is there any reason we should hit this branch?
@@ -1138,7 +981,7 @@ namespace ts {
         }
 
         function visitExpressionStatement(node: ExpressionStatement, write: (node: Statement) => void): void {
-            if (node.flags & NodeFlags.GeneratedSuper) {
+            if (node.flags & NodeFlags.Generated) {
                 write(createDefaultSuperCall());
             }
             else {

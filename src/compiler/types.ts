@@ -383,9 +383,7 @@ namespace ts {
         Namespace =         0x00020000,  // Namespace declaration
         ExportContext =     0x00040000,  // Export context (initialized by binding)
         ContainsThis =      0x00080000,  // Interface contains references to "this"
-        GeneratedRest =     0x00100000,  // Synthetic node generated during transformation
-        GeneratedSuper =    0x00200000,  // Synthetic node generated during transformation
-        GeneratedNamespace =0x00400000,  // Synthetic node generated during transformation
+        Generated =         0x00100000,  // Synthetic node generated during transformation
 
         Modifier = Export | Ambient | Public | Private | Protected | Static | Abstract | Default | Async,
         AccessibilityModifier = Public | Private | Protected,
@@ -431,14 +429,6 @@ namespace ts {
 
         // Used to know if we've computed data from children and cached it in this node.
         HasAggregatedChildData = 1 << 7
-    }
-
-    /* @internal */
-    export interface TransformResolver {
-        getGeneratedNameForNode(node: Node): string;
-        makeTempVariableName(loopVariable: boolean): string;
-        makeUniqueName(baseName: string): string;
-        getEmitResolver(): EmitResolver;
     }
 
     export const enum JsxFlags {
@@ -702,6 +692,8 @@ namespace ts {
     // @factoryhidden("decorators", true)
     // @factoryhidden("modifiers", true)
     // @factoryhidden("questionToken", true)
+    // @factoryhidden("equalsToken", true)
+    // @factoryhidden("objectAssignmentInitializer", true)
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
@@ -2218,17 +2210,18 @@ namespace ts {
         EmitParam                   = 0x00000020,  // Emit __param helper for decorators
         EmitAwaiter                 = 0x00000040,  // Emit __awaiter
         EmitGenerator               = 0x00000080,  // Emit __generator
-        EmitExportStar              = 0x00000100,  // Emit __export
-        SuperInstance               = 0x00000200,  // Instance 'super' reference
-        SuperStatic                 = 0x00000400,  // Static 'super' reference
-        ContextChecked              = 0x00000800,  // Contextual types have been assigned
-        LexicalArguments            = 0x00001000,
-        CaptureArguments            = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
+        SuperInstance               = 0x00000100,  // Instance 'super' reference
+        SuperStatic                 = 0x00000200,  // Static 'super' reference
+        ContextChecked              = 0x00000400,  // Contextual types have been assigned
+        LexicalArguments            = 0x00000800,
+        CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.
-        EnumValuesComputed          = 0x00004000,
-        BlockScopedBindingInLoop    = 0x00008000,
-        LexicalModuleMergesWithClass= 0x00010000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        EnumValuesComputed          = 0x00002000,
+        BlockScopedBindingInLoop    = 0x00004000,
+        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+
+        EmitHelpersMask = EmitExtends | EmitDecorate | EmitParam | EmitAwaiter | EmitGenerator,
     }
 
     /* @internal */
@@ -3003,10 +2996,12 @@ namespace ts {
     }
 
     // @internal
+    export type Transformation = (node: SourceFile) => SourceFile;
+
+    // @internal
     export interface TransformationSubstitutions {
-        assignmentSubstitution: (node: BinaryExpression) => Expression;
-        expressionIdentifierSubstitution: (node: Identifier) => LeftHandSideExpression;
-        bindingIdentifierSubstitution: (node: Identifier) => Identifier;
+        getGeneratedNodeFlags(node: Node): GeneratedNodeFlags;
+        expressionSubstitution: (node: Expression) => Expression;
     }
 
     // @internal
@@ -3016,59 +3011,371 @@ namespace ts {
     }
 
     // @internal
+    export const enum GeneratedNodeFlags {
+        EmitHelpers = 1 << 0,
+        EmitExportStar = 1 << 1,
+        UMDDefine = 1 << 2,
+        NoLexicalEnvironment = 1 << 3,
+    }
+
+    // @internal
     export interface Transformer {
         getEmitResolver(): EmitResolver;
         getCompilerOptions(): CompilerOptions;
+
+        /**
+         * Generates a name unique to the source file given the provided base.
+         * @param baseName The base name.
+         */
         makeUniqueName(baseName: string): string;
+
+        /**
+         * Generates and caches a name unique to the node within the current lexical environment.
+         * @param The node for which to generate a name.
+         */
         getGeneratedNameForNode(node: Node): Identifier;
+
+        /**
+         * Gets a value indicating whether the provided node has a generated name.
+         * @param node The node to test.
+         */
         nodeHasGeneratedName(node: Node): boolean;
+
+        /**
+         * Generates an Identifier unique to the source file given the provided base.
+         * @param baseName The base name.
+         */
         createUniqueIdentifier(baseName: string): Identifier;
+
+        /**
+         * Generates an Identifier unique within the current lexical environment.
+         * @param flags A value that indicates flags used for temporary variable generation.
+         */
         createTempVariable(flags?: TempFlags): Identifier;
+
+        /**
+         * Creates a temporary variable using an optional base name and records it
+         * within the current lexical environment.
+         *
+         * This is the equivalent of:
+         *  hoistVariableDeclaration(baseName ? createUniqueIdentifier(baseName) : createTempVariable());
+         *
+         * @param baseName An optional base name for the temporary variable.
+         */
         declareLocal(baseName?: string): Identifier;
+
+        /**
+         * Hoists the name of a variable declaration within a lexical environment.
+         *
+         * All hoisted variables are written during a call to endLexicalEnvironment.
+         *
+         * @param name The name of the declaration to hoist.
+         */
         hoistVariableDeclaration(name: Identifier): void;
+
+        /**
+         * Hoists a function declaration within the current lexical environment.
+         *
+         * All hoisted function declarations are written during a call to endLexicalEnvironment.
+         *
+         * @param func The function to hoist.
+         */
         hoistFunctionDeclaration(func: FunctionDeclaration): void;
-        createParentNavigator(): ParentNavigator;
-        getRootNode(): SourceFile;
-        getParentNode(): Node;
-        getCurrentNode(): Node;
-        tryPushNode(node: Node): boolean;
-        pushNode(node: Node): void;
-        popNode(): void;
-        findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
-        findAncestorNode(match: (node: Node) => boolean): Node;
+
+        createParentNavigator(): ParentNavigator; // from NodeStack
+        getRootNode(): SourceFile; // from NodeStack
+        getParentNode(): Node; // from NodeStack
+        getCurrentNode(): Node; // from NodeStack
+        tryPushNode(node: Node): boolean; // from NodeStack
+        pushNode(node: Node): void; // from NodeStack
+        popNode(): void; // from NodeStack
+        setNode(node: Node): void; // from NodeStack
+        findAncestorNode<T extends Node>(match: (node: Node) => node is T): T; // from NodeStack
+        findAncestorNode(match: (node: Node) => boolean): Node; // from NodeStack
+
+        // @deprecated
         getDeclarationName(node: DeclarationStatement): Identifier;
+
+        // @deprecated
         getDeclarationName(node: ClassLikeDeclaration): Identifier;
+
+        // @deprecated
         getDeclarationName(node: Declaration): DeclarationName;
+
+        // @deprecated
         getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement): LeftHandSideExpression;
 
-        emitEmitHelpers(write: (node: Statement) => void): void;
-        emitExportStarHelper(write: (node: Statement) => void): void;
+        setGeneratedNodeFlags(node: Node, flags: GeneratedNodeFlags): void;
+        getGeneratedNodeFlags(node: Node): GeneratedNodeFlags;
 
-        getAssignmentSubstitution(): (node: BinaryExpression) => Expression;
-        setAssignmentSubstitution(substitution: (node: BinaryExpression) => Expression): void;
+        /**
+         * Rather than recurse deeply into a syntax tree to rewrite identifiers for exports
+         * or block-scoped declarations, you can establish a general substitution function to use
+         * for identifiers used in an expression position that will be invoked by the emitter
+         * when writing the final output.
+         *
+         * It is important to establish substitutions when a transformation phase is initialized,
+         * prior to the application of a transformation to any SourceFile.
+         *
+         * It is also important to capture any existing substituion to use as a fallback if the
+         * current transformation does not have work to do for an expression.
+         *
+         * @param substitution The callback used to substitute an identifier during emit.
+         */
+        setExpressionSubstitution(substitution: (node: Expression) => Expression): void;
 
-        getExpressionIdentifierSubstitution(): (node: Identifier) => LeftHandSideExpression;
-        setExpressionIdentifierSubstitution(substitution: (node: Identifier) => LeftHandSideExpression): void;
+        /**
+         * Gets any existing substitution for identifiers in an expression position.
+         */
+        getExpressionSubstitution(): (node: Expression) => Expression;
 
-        getBindingIdentifierSubstitution(): (node: Identifier) => Identifier;
-        setBindingIdentifierSubstitution(substitution: (node: Identifier) => Identifier): void;
-
+        /**
+         * Starts a new lexical environment, used to capture temporary and hoisted variables
+         * and hoisted function declarations.
+         *
+         * This function is the primary means to signify that the current transformation
+         * starts a new varible declaration scope.
+         *
+         * Lexical environments are implicitly started and ended by calls to the visitModuleBody,
+         * visitFunctionBody, visitConciseBody, and visitSourceFile functions.
+         */
         startLexicalEnvironment(): void;
+
+        /**
+         * Ends an existing lexical environment. Any temporary or hoisted variables or
+         * hoisted function declarations are written to the output.
+         *
+         * this function is the primary means to signify that the current transformation
+         * ends a variable declaration scope.
+         *
+         * Lexical environments are implicitly started and ended by calls to the visitModuleBody,
+         * visitFunctionBody, visitConciseBody, and visitSourceFile functions.
+         *
+         * @param out Either an array or a callback two which any declarations are written.
+         */
         endLexicalEnvironment(out: ((node: Statement) => void) | Statement[]): void;
 
-        pipeNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[]): void;
-        pipeNodes<TIn extends Node, TOut extends Node>(node: TIn[], through: (node: TIn, write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[], start?: number, count?: number): void;
-        mapNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void): TOut;
-        mapNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], through: (node: TIn, write: (node: TOut) => void) => void, start?: number, count?: number): TOut[];
-        flattenNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void): TOut[];
+        /**
+         * Visits a syntax node using a general-purpose visitor callback.
+         *
+         * When visiting a single node, it is an error to write more than one output node.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is expected to be 1:1 (one-to-one).
+         *
+         * The node test is used to enforce that the output node matches the expected kind of the
+         * result.
+         *
+         * @param node The Node to visit.
+         * @param visitor A callback executed to write the results of visiting the node or its children.
+         * @param test A node test used to validate the result of visiting the node.
+         */
         visitNode<T extends Node>(node: T, visitor: (node: Node, write: (node: Node) => void) => void, test: (node: Node) => node is T): T;
+
+        /**
+         * Visits an array of syntax nodes using a general-purpose visitor callback.
+         *
+         * When visiting an array of nodes, it is acceptable to write more or less nodes to the output.
+         *
+         * If the same values are written in the same order as the original node array, the original
+         * node array is returned. If more or fewer values are written, or if any value differs from the source in order or reference
+         * equality, a new node array will be returned. This is to provide reference equality for the various update functions
+         * used by the accept function below.
+         *
+         * This function also ensures that each node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is expected to be *:* (many-to-many).
+         *
+         * The node test is used to enforce that each output node matches the expected kind of the
+         * result.
+         *
+         * @param nodes The array of Nodes to visit.
+         * @param visitor A callback executed to write the results of visiting each node or its children.
+         * @param test A node test used to validate the result of visiting each node.
+         * @param start An offset into nodes at which to start visiting.
+         * @param count A the number of nodes to visit.
+         */
         visitNodes<T extends Node>(nodes: T[], visitor: (node: Node, write: (node: Node) => void) => void, test: (node: Node) => node is T, start?: number, count?: number): NodeArray<T>;
+
+        /**
+         * A specialized variant of visitNode that permits writing multiple @{link Statement} nodes to
+         * the output, which are then enclosed enclosed in a Block.
+         *
+         * The cardinality of this function is 1:* (one-to-many).
+         *
+         * @param node The Statement to visit.
+         * @param visitor A callback executed to write the results of visiting the node or its children.
+         */
         visitStatement(node: Statement, visitor: (node: Node, write: (node: Node) => void) => void): Statement;
+
+        /**
+         * A specialized variant of visitNode that introduces a new lexical environment while visiting
+         * the body of a module, emitting any newly introduced temporary variables at the end of the body.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * @param node The ModuleBody to visit.
+         * @param visitor A callback executed to write the results of visiting the node or its children.
+         */
         visitModuleBody(node: ModuleBody, visitor: (node: Node, write: (node: Node) => void) => void): ModuleBody;
+
+        /**
+         * A specialized variant of visitNode that introduces a new lexical environment while visiting
+         * the body of a function, emitting any newly introduced temporary variables at the end of the body.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * @param node The FunctionBody to visit.
+         * @param visitor A callback executed to write the results of visiting the node or its children.
+         */
         visitFunctionBody(node: FunctionBody, visitor: (node: Node, write: (node: Node) => void) => void): FunctionBody;
+
+        /**
+         * A specialized variant of visitNode that introduces a new lexical environment while visiting
+         * the body of an arrow function.
+         *
+         * If the body is a Block, any newly introduced temporary variables will be added to the at the end of the body.
+         *
+         * If the body is an Expression and there are newly introduced temporary variables, the body will be converted
+         * into a Block with a ReturnStatement followed by the temporary declarations.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * @param node The ConciseBody to visit.
+         * @param visitor A callback executed to write the results of visiting the node or its children.
+         */
         visitConciseBody(node: ConciseBody, visitor: (node: Node, write: (node: Node) => void) => void): ConciseBody;
+
+        /**
+         * A specialized variant of visitNode that introduces a new lexical environment while visiting
+         * the body of a SourceFile, emitting any newly introduced temporary variables at the end of the file.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * @param node The SourceFile to visit.
+         * @param visitor A callback executed to write the results of visiting the node or its children.
+         */
         visitSourceFile(node: SourceFile, visitor: (node: Node, write: (node: Node) => void) => void): SourceFile;
+
+        /**
+         * For a given Node, visits each child of the node. If the results of visiting each child result in the
+         * exact same references as their inputs, the original value of the node parameter is returned. If any
+         * result differs from the input, a new Node of the same kind is returned with its children set to
+         * new values. This is to preserve the immutability of a syntax tree.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * @param node The Node to visit.
+         * @param visitor A callback executed to write the results of visiting the children of the node.
+         */
         accept<T extends Node>(node: T, visitor: (node: Node, write: (node: Node) => void) => void): T;
+
+        /**
+         * Pipes a single node through a callback used to write one or more nodes to the output.
+         *
+         * The output can be an array or a callback function used to write the output. Providing a
+         * callback as the output is the primary means to descend into a syntax tree while still
+         * writing output nodes to an outer visitor.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is 1:* (one-to-many).
+         *
+         * @param node The node to visit.
+         * @param through A special-purpose callback used to map a node of one kind to one or more nodes of another kind.
+         * @param out Either an array of nodes, or a callback used to write each node.
+         */
+        pipeNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[]): void;
+
+        /**
+         * Pipes a single node through a callback used to write one or more nodes to the output.
+         *
+         * The output can be an array or a callback function used to write the output. Providing a
+         * callback as the output is the primary means to descend into a syntax tree while still
+         * writing output nodes to an outer visitor.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is *:* (many-to-many).
+         *
+         * @param nodes The nodes to visit.
+         * @param through A special-purpose callback used to map a node of one kind to one or more nodes of another kind.
+         * @param out Either an array of nodes, or a callback used to write each node.
+         * @param start An offset into nodes at which to start visiting.
+         * @param count A the number of nodes to visit.
+         */
+        pipeNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], through: (node: TIn, write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[], start?: number, count?: number): void;
+
+        /**
+         * A specialized variant of visitNode that uses a special-purposed callback function.
+         *
+         * When visiting a single node, it is an error to write more than one output node.
+         *
+         * While essentially the same as visitNode, this function enforces type safety through generics
+         * rather than a node test function, as the provided callback is typed to ensure input and output
+         * types are consistent. The callback is not intended to be a general-purpose routing/matching visitor.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * The return value is the result written via the callback supplied to the "through" parameter.
+         *
+         * @param node The node to visit.
+         * @param through A special-purpose callback used to map a node of one kind to a node of another kind.
+         */
+        mapNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void): TOut;
+
+        /**
+         * A specialized variant of visitNodes that uses a special-purposed callback function.
+         *
+         * While similar to visitNodes, this function always returns a new array in its output.
+         * Also, this function enforces type safety through generics rather than a node test
+         * function, as the provided callback is typed to ensure input and output types are
+         * consistent. The callback is not intended to be a general-purpose routing/matching visitor.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is 1:1 (one-to-one).
+         *
+         * @param nodes The nodes to visit.
+         * @param through A special-purpose callback used to map a node of one kind to one or more nodes of another kind.
+         * @param start An offset into nodes at which to start visiting.
+         * @param count A the number of nodes to visit.
+         */
+        mapNodes<TIn extends Node, TOut extends Node>(nodes: TIn[], through: (node: TIn, write: (node: TOut) => void) => void, start?: number, count?: number): TOut[];
+
+        /**
+         * A specialized version of visitNode/visitNodes that uses a special-purposed callback function.
+         *
+         * While similar to visitNode, it is acceptable to write multiple nodes to the output.
+         *
+         * Also, this function enforces type safety through generics rather than a node test
+         * function, as the provided callback is typed to ensure input and output types are
+         * consistent. The callback is not intended to be a general-purpose routing/matching visitor.
+         *
+         * This function also ensures that the node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is 1:* (one-to-many).
+         *
+         * @param node The node to visit.
+         * @param through A special-purpose callback used to map a node of one kind to one or more nodes of another kind.
+         */
+        flattenNode<TIn extends Node, TOut extends Node>(node: TIn, through: (node: TIn, write: (node: TOut) => void) => void): TOut[];
+
+        createNodes<TOut extends Node>(callback: (write: (node: TOut) => void) => void, out: ((node: TOut) => void) | TOut[]): void;
+        createNodes<TOut extends Node>(callback: (write: (node: TOut) => void) => void): NodeArray<TOut>;
     }
 
     export interface TextSpan {

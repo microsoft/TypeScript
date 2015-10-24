@@ -73,11 +73,17 @@ namespace ts {${each(discovery.createableNodes, syntaxNode => `
     export function cloneNode<TNode extends Node>(node: TNode, location?: TextRange, flags?: NodeFlags): TNode;
     export function cloneNode(node: Node, location?: TextRange, flags: NodeFlags = node.flags): Node {
         if (node) {
+            let clone: Node;
             switch (node.kind) {${each(discovery.createableNodes, syntaxNode => `
                 case SyntaxKind.${syntaxNode.kindName}:
-                    return ${syntaxNode.createFunctionName}(${each(syntaxNode.createParameters, member =>
+                    clone = ${syntaxNode.createFunctionName}(${each(syntaxNode.createParameters, member =>
                         `(<${syntaxNode.typeName}>node).${member.propertyName}, `
-                    )}location, flags);`)}
+                    )}location, flags);
+                    break;`)}
+            }
+            if (clone) {
+                clone.original = node;
+                return clone;
             }
         }
         return node;

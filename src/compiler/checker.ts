@@ -169,7 +169,6 @@ namespace ts {
         let emitParam = false;
         let emitAwaiter = false;
         let emitGenerator = false;
-        let emitExportStar = false;
 
         let resolutionTargets: TypeSystemEntity[] = [];
         let resolutionResults: boolean[] = [];
@@ -13701,8 +13700,6 @@ namespace ts {
                     if (moduleSymbol && moduleSymbol.exports["export="]) {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
-
-                    emitExportStar = true;
                 }
             }
         }
@@ -14055,7 +14052,6 @@ namespace ts {
                 emitParam = false;
                 emitAwaiter = false;
                 emitGenerator = false;
-                emitExportStar = false;
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
@@ -14088,10 +14084,6 @@ namespace ts {
 
                 if (emitGenerator || (emitAwaiter && languageVersion < ScriptTarget.ES6)) {
                     links.flags |= NodeCheckFlags.EmitGenerator;
-                }
-
-                if (emitExportStar) {
-                    links.flags |= NodeCheckFlags.EmitExportStar;
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;

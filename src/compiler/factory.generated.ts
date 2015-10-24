@@ -788,11 +788,9 @@ namespace ts {
         if (initializer) node.initializer = initializer;
         return node;
     }
-    export function createShorthandPropertyAssignment(name?: Identifier, equalsToken?: Node, objectAssignmentInitializer?: Expression, location?: TextRange, flags?: NodeFlags): ShorthandPropertyAssignment {
+    export function createShorthandPropertyAssignment(name?: Identifier, location?: TextRange, flags?: NodeFlags): ShorthandPropertyAssignment {
         let node = createNode<ShorthandPropertyAssignment>(SyntaxKind.ShorthandPropertyAssignment, location, flags); 
         if (name) node.name = name;
-        if (equalsToken) node.equalsToken = equalsToken;
-        if (objectAssignmentInitializer) node.objectAssignmentInitializer = objectAssignmentInitializer;
         return node;
     }
     export function createEnumMember(name?: DeclarationName, initializer?: Expression, location?: TextRange, flags?: NodeFlags): EnumMember {
@@ -1699,9 +1697,9 @@ namespace ts {
         }
         return node;
     }
-    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, equalsToken: Node, objectAssignmentInitializer: Expression): ShorthandPropertyAssignment {
-        if (name !== node.name || equalsToken !== node.equalsToken || objectAssignmentInitializer !== node.objectAssignmentInitializer) {
-            let newNode = createShorthandPropertyAssignment(name, equalsToken, objectAssignmentInitializer);
+    export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier): ShorthandPropertyAssignment {
+        if (name !== node.name) {
+            let newNode = createShorthandPropertyAssignment(name);
             return updateFrom(node, newNode);
         }
         return node;
@@ -2854,309 +2852,465 @@ namespace ts {
     export function cloneNode<TNode extends Node>(node: TNode, location?: TextRange, flags?: NodeFlags): TNode;
     export function cloneNode(node: Node, location?: TextRange, flags: NodeFlags = node.flags): Node {
         if (node) {
+            let clone: Node;
             switch (node.kind) {
                 case SyntaxKind.NumericLiteral:
-                    return createNumericLiteral((<LiteralExpression>node).text, location, flags);
+                    clone = createNumericLiteral((<LiteralExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.StringLiteral:
-                    return createStringLiteral((<StringLiteral>node).text, location, flags);
+                    clone = createStringLiteral((<StringLiteral>node).text, location, flags);
+                    break;
                 case SyntaxKind.RegularExpressionLiteral:
-                    return createRegularExpressionLiteral((<LiteralExpression>node).text, location, flags);
+                    clone = createRegularExpressionLiteral((<LiteralExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return createNoSubstitutionTemplateLiteral((<LiteralExpression>node).text, location, flags);
+                    clone = createNoSubstitutionTemplateLiteral((<LiteralExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.TemplateHead:
-                    return createTemplateHead((<LiteralExpression>node).text, location, flags);
+                    clone = createTemplateHead((<LiteralExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.TemplateMiddle:
-                    return createTemplateMiddle((<LiteralExpression>node).text, location, flags);
+                    clone = createTemplateMiddle((<LiteralExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.TemplateTail:
-                    return createTemplateTail((<LiteralExpression>node).text, location, flags);
+                    clone = createTemplateTail((<LiteralExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.Identifier:
-                    return createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind, location, flags);
+                    clone = createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind, location, flags);
+                    break;
                 case SyntaxKind.FalseKeyword:
-                    return createFalseKeyword(location, flags);
+                    clone = createFalseKeyword(location, flags);
+                    break;
                 case SyntaxKind.NullKeyword:
-                    return createNullKeyword(location, flags);
+                    clone = createNullKeyword(location, flags);
+                    break;
                 case SyntaxKind.SuperKeyword:
-                    return createSuperKeyword(location, flags);
+                    clone = createSuperKeyword(location, flags);
+                    break;
                 case SyntaxKind.ThisKeyword:
-                    return createThisKeyword(location, flags);
+                    clone = createThisKeyword(location, flags);
+                    break;
                 case SyntaxKind.TrueKeyword:
-                    return createTrueKeyword(location, flags);
+                    clone = createTrueKeyword(location, flags);
+                    break;
                 case SyntaxKind.QualifiedName:
-                    return createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right, location, flags);
+                    clone = createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right, location, flags);
+                    break;
                 case SyntaxKind.ComputedPropertyName:
-                    return createComputedPropertyName((<ComputedPropertyName>node).expression, location, flags);
+                    clone = createComputedPropertyName((<ComputedPropertyName>node).expression, location, flags);
+                    break;
                 case SyntaxKind.TypeParameter:
-                    return createTypeParameter((<TypeParameterDeclaration>node).name, (<TypeParameterDeclaration>node).constraint, (<TypeParameterDeclaration>node).expression, location, flags);
+                    clone = createTypeParameter((<TypeParameterDeclaration>node).name, (<TypeParameterDeclaration>node).constraint, (<TypeParameterDeclaration>node).expression, location, flags);
+                    break;
                 case SyntaxKind.Parameter:
-                    return createParameter((<ParameterDeclaration>node).decorators, (<ParameterDeclaration>node).modifiers, (<ParameterDeclaration>node).dotDotDotToken, (<ParameterDeclaration>node).name, (<ParameterDeclaration>node).questionToken, (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer, location, flags);
+                    clone = createParameter((<ParameterDeclaration>node).decorators, (<ParameterDeclaration>node).modifiers, (<ParameterDeclaration>node).dotDotDotToken, (<ParameterDeclaration>node).name, (<ParameterDeclaration>node).questionToken, (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.Decorator:
-                    return createDecorator((<Decorator>node).expression, location, flags);
+                    clone = createDecorator((<Decorator>node).expression, location, flags);
+                    break;
                 case SyntaxKind.PropertySignature:
-                    return createPropertySignature((<PropertySignature>node).decorators, (<PropertySignature>node).modifiers, (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type, location, flags);
+                    clone = createPropertySignature((<PropertySignature>node).decorators, (<PropertySignature>node).modifiers, (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type, location, flags);
+                    break;
                 case SyntaxKind.PropertyDeclaration:
-                    return createPropertyDeclaration((<PropertyDeclaration>node).decorators, (<PropertyDeclaration>node).modifiers, (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).type, (<PropertyDeclaration>node).initializer, location, flags);
+                    clone = createPropertyDeclaration((<PropertyDeclaration>node).decorators, (<PropertyDeclaration>node).modifiers, (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).type, (<PropertyDeclaration>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.MethodSignature:
-                    return createMethodSignature((<MethodSignature>node).decorators, (<MethodSignature>node).modifiers, (<MethodSignature>node).name, (<MethodSignature>node).questionToken, (<MethodSignature>node).typeParameters, (<MethodSignature>node).parameters, (<MethodSignature>node).type, location, flags);
+                    clone = createMethodSignature((<MethodSignature>node).decorators, (<MethodSignature>node).modifiers, (<MethodSignature>node).name, (<MethodSignature>node).questionToken, (<MethodSignature>node).typeParameters, (<MethodSignature>node).parameters, (<MethodSignature>node).type, location, flags);
+                    break;
                 case SyntaxKind.MethodDeclaration:
-                    return createMethodDeclaration((<MethodDeclaration>node).decorators, (<MethodDeclaration>node).modifiers, (<MethodDeclaration>node).asteriskToken, (<MethodDeclaration>node).name, (<MethodDeclaration>node).typeParameters, (<MethodDeclaration>node).parameters, (<MethodDeclaration>node).type, (<MethodDeclaration>node).body, location, flags);
+                    clone = createMethodDeclaration((<MethodDeclaration>node).decorators, (<MethodDeclaration>node).modifiers, (<MethodDeclaration>node).asteriskToken, (<MethodDeclaration>node).name, (<MethodDeclaration>node).typeParameters, (<MethodDeclaration>node).parameters, (<MethodDeclaration>node).type, (<MethodDeclaration>node).body, location, flags);
+                    break;
                 case SyntaxKind.Constructor:
-                    return createConstructor((<ConstructorDeclaration>node).decorators, (<ConstructorDeclaration>node).modifiers, (<ConstructorDeclaration>node).parameters, (<ConstructorDeclaration>node).type, (<ConstructorDeclaration>node).body, location, flags);
+                    clone = createConstructor((<ConstructorDeclaration>node).decorators, (<ConstructorDeclaration>node).modifiers, (<ConstructorDeclaration>node).parameters, (<ConstructorDeclaration>node).type, (<ConstructorDeclaration>node).body, location, flags);
+                    break;
                 case SyntaxKind.GetAccessor:
-                    return createGetAccessor((<GetAccessorDeclaration>node).decorators, (<GetAccessorDeclaration>node).modifiers, (<GetAccessorDeclaration>node).name, (<GetAccessorDeclaration>node).parameters, (<GetAccessorDeclaration>node).type, (<GetAccessorDeclaration>node).body, location, flags);
+                    clone = createGetAccessor((<GetAccessorDeclaration>node).decorators, (<GetAccessorDeclaration>node).modifiers, (<GetAccessorDeclaration>node).name, (<GetAccessorDeclaration>node).parameters, (<GetAccessorDeclaration>node).type, (<GetAccessorDeclaration>node).body, location, flags);
+                    break;
                 case SyntaxKind.SetAccessor:
-                    return createSetAccessor((<SetAccessorDeclaration>node).decorators, (<SetAccessorDeclaration>node).modifiers, (<SetAccessorDeclaration>node).name, (<SetAccessorDeclaration>node).parameters, (<SetAccessorDeclaration>node).type, (<SetAccessorDeclaration>node).body, location, flags);
+                    clone = createSetAccessor((<SetAccessorDeclaration>node).decorators, (<SetAccessorDeclaration>node).modifiers, (<SetAccessorDeclaration>node).name, (<SetAccessorDeclaration>node).parameters, (<SetAccessorDeclaration>node).type, (<SetAccessorDeclaration>node).body, location, flags);
+                    break;
                 case SyntaxKind.CallSignature:
-                    return createCallSignature((<CallSignatureDeclaration>node).typeParameters, (<CallSignatureDeclaration>node).parameters, (<CallSignatureDeclaration>node).type, (<CallSignatureDeclaration>node).questionToken, location, flags);
+                    clone = createCallSignature((<CallSignatureDeclaration>node).typeParameters, (<CallSignatureDeclaration>node).parameters, (<CallSignatureDeclaration>node).type, (<CallSignatureDeclaration>node).questionToken, location, flags);
+                    break;
                 case SyntaxKind.ConstructSignature:
-                    return createConstructSignature((<ConstructSignatureDeclaration>node).typeParameters, (<ConstructSignatureDeclaration>node).parameters, (<ConstructSignatureDeclaration>node).type, (<ConstructSignatureDeclaration>node).questionToken, location, flags);
+                    clone = createConstructSignature((<ConstructSignatureDeclaration>node).typeParameters, (<ConstructSignatureDeclaration>node).parameters, (<ConstructSignatureDeclaration>node).type, (<ConstructSignatureDeclaration>node).questionToken, location, flags);
+                    break;
                 case SyntaxKind.IndexSignature:
-                    return createIndexSignature((<IndexSignatureDeclaration>node).decorators, (<IndexSignatureDeclaration>node).modifiers, (<IndexSignatureDeclaration>node).parameters, (<IndexSignatureDeclaration>node).type, (<IndexSignatureDeclaration>node).questionToken, location, flags);
+                    clone = createIndexSignature((<IndexSignatureDeclaration>node).decorators, (<IndexSignatureDeclaration>node).modifiers, (<IndexSignatureDeclaration>node).parameters, (<IndexSignatureDeclaration>node).type, (<IndexSignatureDeclaration>node).questionToken, location, flags);
+                    break;
                 case SyntaxKind.TypePredicate:
-                    return createTypePredicate((<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type, location, flags);
+                    clone = createTypePredicate((<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type, location, flags);
+                    break;
                 case SyntaxKind.TypeReference:
-                    return createTypeReference((<TypeReferenceNode>node).typeName, (<TypeReferenceNode>node).typeArguments, location, flags);
+                    clone = createTypeReference((<TypeReferenceNode>node).typeName, (<TypeReferenceNode>node).typeArguments, location, flags);
+                    break;
                 case SyntaxKind.FunctionType:
-                    return createFunctionType((<FunctionTypeNode>node).typeParameters, (<FunctionTypeNode>node).parameters, (<FunctionTypeNode>node).type, location, flags);
+                    clone = createFunctionType((<FunctionTypeNode>node).typeParameters, (<FunctionTypeNode>node).parameters, (<FunctionTypeNode>node).type, location, flags);
+                    break;
                 case SyntaxKind.ConstructorType:
-                    return createConstructorType((<ConstructorTypeNode>node).typeParameters, (<ConstructorTypeNode>node).parameters, (<ConstructorTypeNode>node).type, location, flags);
+                    clone = createConstructorType((<ConstructorTypeNode>node).typeParameters, (<ConstructorTypeNode>node).parameters, (<ConstructorTypeNode>node).type, location, flags);
+                    break;
                 case SyntaxKind.TypeQuery:
-                    return createTypeQuery((<TypeQueryNode>node).exprName, location, flags);
+                    clone = createTypeQuery((<TypeQueryNode>node).exprName, location, flags);
+                    break;
                 case SyntaxKind.TypeLiteral:
-                    return createTypeLiteral((<TypeLiteralNode>node).members, location, flags);
+                    clone = createTypeLiteral((<TypeLiteralNode>node).members, location, flags);
+                    break;
                 case SyntaxKind.ArrayType:
-                    return createArrayType((<ArrayTypeNode>node).elementType, location, flags);
+                    clone = createArrayType((<ArrayTypeNode>node).elementType, location, flags);
+                    break;
                 case SyntaxKind.TupleType:
-                    return createTupleType((<TupleTypeNode>node).elementTypes, location, flags);
+                    clone = createTupleType((<TupleTypeNode>node).elementTypes, location, flags);
+                    break;
                 case SyntaxKind.UnionType:
-                    return createUnionType((<UnionTypeNode>node).types, location, flags);
+                    clone = createUnionType((<UnionTypeNode>node).types, location, flags);
+                    break;
                 case SyntaxKind.IntersectionType:
-                    return createIntersectionType((<IntersectionTypeNode>node).types, location, flags);
+                    clone = createIntersectionType((<IntersectionTypeNode>node).types, location, flags);
+                    break;
                 case SyntaxKind.ParenthesizedType:
-                    return createParenthesizedType((<ParenthesizedTypeNode>node).type, location, flags);
+                    clone = createParenthesizedType((<ParenthesizedTypeNode>node).type, location, flags);
+                    break;
                 case SyntaxKind.ObjectBindingPattern:
-                    return createObjectBindingPattern((<ObjectBindingPattern>node).elements, location, flags);
+                    clone = createObjectBindingPattern((<ObjectBindingPattern>node).elements, location, flags);
+                    break;
                 case SyntaxKind.ArrayBindingPattern:
-                    return createArrayBindingPattern((<ArrayBindingPattern>node).elements, location, flags);
+                    clone = createArrayBindingPattern((<ArrayBindingPattern>node).elements, location, flags);
+                    break;
                 case SyntaxKind.BindingElement:
-                    return createBindingElement((<BindingElement>node).propertyName, (<BindingElement>node).dotDotDotToken, (<BindingElement>node).name, (<BindingElement>node).initializer, location, flags);
+                    clone = createBindingElement((<BindingElement>node).propertyName, (<BindingElement>node).dotDotDotToken, (<BindingElement>node).name, (<BindingElement>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return createArrayLiteralExpression((<ArrayLiteralExpression>node).elements, location, flags);
+                    clone = createArrayLiteralExpression((<ArrayLiteralExpression>node).elements, location, flags);
+                    break;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return createObjectLiteralExpression((<ObjectLiteralExpression>node).properties, location, flags);
+                    clone = createObjectLiteralExpression((<ObjectLiteralExpression>node).properties, location, flags);
+                    break;
                 case SyntaxKind.PropertyAccessExpression:
-                    return createPropertyAccessExpression((<PropertyAccessExpression>node).expression, (<PropertyAccessExpression>node).dotToken, (<PropertyAccessExpression>node).name, location, flags);
+                    clone = createPropertyAccessExpression((<PropertyAccessExpression>node).expression, (<PropertyAccessExpression>node).dotToken, (<PropertyAccessExpression>node).name, location, flags);
+                    break;
                 case SyntaxKind.ElementAccessExpression:
-                    return createElementAccessExpression((<ElementAccessExpression>node).expression, (<ElementAccessExpression>node).argumentExpression, location, flags);
+                    clone = createElementAccessExpression((<ElementAccessExpression>node).expression, (<ElementAccessExpression>node).argumentExpression, location, flags);
+                    break;
                 case SyntaxKind.CallExpression:
-                    return createCallExpression((<CallExpression>node).expression, (<CallExpression>node).typeArguments, (<CallExpression>node).arguments, location, flags);
+                    clone = createCallExpression((<CallExpression>node).expression, (<CallExpression>node).typeArguments, (<CallExpression>node).arguments, location, flags);
+                    break;
                 case SyntaxKind.NewExpression:
-                    return createNewExpression((<NewExpression>node).expression, (<NewExpression>node).typeArguments, (<NewExpression>node).arguments, location, flags);
+                    clone = createNewExpression((<NewExpression>node).expression, (<NewExpression>node).typeArguments, (<NewExpression>node).arguments, location, flags);
+                    break;
                 case SyntaxKind.TaggedTemplateExpression:
-                    return createTaggedTemplateExpression((<TaggedTemplateExpression>node).tag, (<TaggedTemplateExpression>node).template, location, flags);
+                    clone = createTaggedTemplateExpression((<TaggedTemplateExpression>node).tag, (<TaggedTemplateExpression>node).template, location, flags);
+                    break;
                 case SyntaxKind.TypeAssertionExpression:
-                    return createTypeAssertionExpression((<TypeAssertion>node).type, (<TypeAssertion>node).expression, location, flags);
+                    clone = createTypeAssertionExpression((<TypeAssertion>node).type, (<TypeAssertion>node).expression, location, flags);
+                    break;
                 case SyntaxKind.ParenthesizedExpression:
-                    return createParenthesizedExpression((<ParenthesizedExpression>node).expression, location, flags);
+                    clone = createParenthesizedExpression((<ParenthesizedExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.FunctionExpression:
-                    return createFunctionExpression((<FunctionExpression>node).decorators, (<FunctionExpression>node).modifiers, (<FunctionExpression>node).asteriskToken, (<FunctionExpression>node).name, (<FunctionExpression>node).typeParameters, (<FunctionExpression>node).parameters, (<FunctionExpression>node).type, (<FunctionExpression>node).body, location, flags);
+                    clone = createFunctionExpression((<FunctionExpression>node).decorators, (<FunctionExpression>node).modifiers, (<FunctionExpression>node).asteriskToken, (<FunctionExpression>node).name, (<FunctionExpression>node).typeParameters, (<FunctionExpression>node).parameters, (<FunctionExpression>node).type, (<FunctionExpression>node).body, location, flags);
+                    break;
                 case SyntaxKind.ArrowFunction:
-                    return createArrowFunction((<ArrowFunction>node).decorators, (<ArrowFunction>node).modifiers, (<ArrowFunction>node).typeParameters, (<ArrowFunction>node).parameters, (<ArrowFunction>node).type, (<ArrowFunction>node).equalsGreaterThanToken, (<ArrowFunction>node).body, location, flags);
+                    clone = createArrowFunction((<ArrowFunction>node).decorators, (<ArrowFunction>node).modifiers, (<ArrowFunction>node).typeParameters, (<ArrowFunction>node).parameters, (<ArrowFunction>node).type, (<ArrowFunction>node).equalsGreaterThanToken, (<ArrowFunction>node).body, location, flags);
+                    break;
                 case SyntaxKind.DeleteExpression:
-                    return createDeleteExpression((<DeleteExpression>node).expression, location, flags);
+                    clone = createDeleteExpression((<DeleteExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.TypeOfExpression:
-                    return createTypeOfExpression((<TypeOfExpression>node).expression, location, flags);
+                    clone = createTypeOfExpression((<TypeOfExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.VoidExpression:
-                    return createVoidExpression((<VoidExpression>node).expression, location, flags);
+                    clone = createVoidExpression((<VoidExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.AwaitExpression:
-                    return createAwaitExpression((<AwaitExpression>node).expression, location, flags);
+                    clone = createAwaitExpression((<AwaitExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.PrefixUnaryExpression:
-                    return createPrefixUnaryExpression((<PrefixUnaryExpression>node).operator, (<PrefixUnaryExpression>node).operand, location, flags);
+                    clone = createPrefixUnaryExpression((<PrefixUnaryExpression>node).operator, (<PrefixUnaryExpression>node).operand, location, flags);
+                    break;
                 case SyntaxKind.PostfixUnaryExpression:
-                    return createPostfixUnaryExpression((<PostfixUnaryExpression>node).operand, (<PostfixUnaryExpression>node).operator, location, flags);
+                    clone = createPostfixUnaryExpression((<PostfixUnaryExpression>node).operand, (<PostfixUnaryExpression>node).operator, location, flags);
+                    break;
                 case SyntaxKind.BinaryExpression:
-                    return createBinaryExpression((<BinaryExpression>node).left, (<BinaryExpression>node).operatorToken, (<BinaryExpression>node).right, location, flags);
+                    clone = createBinaryExpression((<BinaryExpression>node).left, (<BinaryExpression>node).operatorToken, (<BinaryExpression>node).right, location, flags);
+                    break;
                 case SyntaxKind.ConditionalExpression:
-                    return createConditionalExpression((<ConditionalExpression>node).condition, (<ConditionalExpression>node).questionToken, (<ConditionalExpression>node).whenTrue, (<ConditionalExpression>node).colonToken, (<ConditionalExpression>node).whenFalse, location, flags);
+                    clone = createConditionalExpression((<ConditionalExpression>node).condition, (<ConditionalExpression>node).questionToken, (<ConditionalExpression>node).whenTrue, (<ConditionalExpression>node).colonToken, (<ConditionalExpression>node).whenFalse, location, flags);
+                    break;
                 case SyntaxKind.TemplateExpression:
-                    return createTemplateExpression((<TemplateExpression>node).head, (<TemplateExpression>node).templateSpans, location, flags);
+                    clone = createTemplateExpression((<TemplateExpression>node).head, (<TemplateExpression>node).templateSpans, location, flags);
+                    break;
                 case SyntaxKind.YieldExpression:
-                    return createYieldExpression((<YieldExpression>node).asteriskToken, (<YieldExpression>node).expression, location, flags);
+                    clone = createYieldExpression((<YieldExpression>node).asteriskToken, (<YieldExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.SpreadElementExpression:
-                    return createSpreadElementExpression((<SpreadElementExpression>node).expression, location, flags);
+                    clone = createSpreadElementExpression((<SpreadElementExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.ClassExpression:
-                    return createClassExpression((<ClassExpression>node).decorators, (<ClassExpression>node).modifiers, (<ClassExpression>node).name, (<ClassExpression>node).typeParameters, (<ClassExpression>node).heritageClauses, (<ClassExpression>node).members, location, flags);
+                    clone = createClassExpression((<ClassExpression>node).decorators, (<ClassExpression>node).modifiers, (<ClassExpression>node).name, (<ClassExpression>node).typeParameters, (<ClassExpression>node).heritageClauses, (<ClassExpression>node).members, location, flags);
+                    break;
                 case SyntaxKind.OmittedExpression:
-                    return createOmittedExpression(location, flags);
+                    clone = createOmittedExpression(location, flags);
+                    break;
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return createExpressionWithTypeArguments((<ExpressionWithTypeArguments>node).expression, (<ExpressionWithTypeArguments>node).typeArguments, location, flags);
+                    clone = createExpressionWithTypeArguments((<ExpressionWithTypeArguments>node).expression, (<ExpressionWithTypeArguments>node).typeArguments, location, flags);
+                    break;
                 case SyntaxKind.AsExpression:
-                    return createAsExpression((<AsExpression>node).expression, (<AsExpression>node).type, location, flags);
+                    clone = createAsExpression((<AsExpression>node).expression, (<AsExpression>node).type, location, flags);
+                    break;
                 case SyntaxKind.TemplateSpan:
-                    return createTemplateSpan((<TemplateSpan>node).expression, (<TemplateSpan>node).literal, location, flags);
+                    clone = createTemplateSpan((<TemplateSpan>node).expression, (<TemplateSpan>node).literal, location, flags);
+                    break;
                 case SyntaxKind.SemicolonClassElement:
-                    return createSemicolonClassElement(location, flags);
+                    clone = createSemicolonClassElement(location, flags);
+                    break;
                 case SyntaxKind.Block:
-                    return createBlock((<Block>node).statements, location, flags);
+                    clone = createBlock((<Block>node).statements, location, flags);
+                    break;
                 case SyntaxKind.VariableStatement:
-                    return createVariableStatement((<VariableStatement>node).decorators, (<VariableStatement>node).modifiers, (<VariableStatement>node).declarationList, location, flags);
+                    clone = createVariableStatement((<VariableStatement>node).decorators, (<VariableStatement>node).modifiers, (<VariableStatement>node).declarationList, location, flags);
+                    break;
                 case SyntaxKind.EmptyStatement:
-                    return createEmptyStatement(location, flags);
+                    clone = createEmptyStatement(location, flags);
+                    break;
                 case SyntaxKind.ExpressionStatement:
-                    return createExpressionStatement((<ExpressionStatement>node).expression, location, flags);
+                    clone = createExpressionStatement((<ExpressionStatement>node).expression, location, flags);
+                    break;
                 case SyntaxKind.IfStatement:
-                    return createIfStatement((<IfStatement>node).expression, (<IfStatement>node).thenStatement, (<IfStatement>node).elseStatement, location, flags);
+                    clone = createIfStatement((<IfStatement>node).expression, (<IfStatement>node).thenStatement, (<IfStatement>node).elseStatement, location, flags);
+                    break;
                 case SyntaxKind.DoStatement:
-                    return createDoStatement((<DoStatement>node).statement, (<DoStatement>node).expression, location, flags);
+                    clone = createDoStatement((<DoStatement>node).statement, (<DoStatement>node).expression, location, flags);
+                    break;
                 case SyntaxKind.WhileStatement:
-                    return createWhileStatement((<WhileStatement>node).expression, (<WhileStatement>node).statement, location, flags);
+                    clone = createWhileStatement((<WhileStatement>node).expression, (<WhileStatement>node).statement, location, flags);
+                    break;
                 case SyntaxKind.ForStatement:
-                    return createForStatement((<ForStatement>node).initializer, (<ForStatement>node).condition, (<ForStatement>node).incrementor, (<ForStatement>node).statement, location, flags);
+                    clone = createForStatement((<ForStatement>node).initializer, (<ForStatement>node).condition, (<ForStatement>node).incrementor, (<ForStatement>node).statement, location, flags);
+                    break;
                 case SyntaxKind.ForInStatement:
-                    return createForInStatement((<ForInStatement>node).initializer, (<ForInStatement>node).expression, (<ForInStatement>node).statement, location, flags);
+                    clone = createForInStatement((<ForInStatement>node).initializer, (<ForInStatement>node).expression, (<ForInStatement>node).statement, location, flags);
+                    break;
                 case SyntaxKind.ForOfStatement:
-                    return createForOfStatement((<ForOfStatement>node).initializer, (<ForOfStatement>node).expression, (<ForOfStatement>node).statement, location, flags);
+                    clone = createForOfStatement((<ForOfStatement>node).initializer, (<ForOfStatement>node).expression, (<ForOfStatement>node).statement, location, flags);
+                    break;
                 case SyntaxKind.ContinueStatement:
-                    return createContinueStatement((<ContinueStatement>node).label, location, flags);
+                    clone = createContinueStatement((<ContinueStatement>node).label, location, flags);
+                    break;
                 case SyntaxKind.BreakStatement:
-                    return createBreakStatement((<BreakStatement>node).label, location, flags);
+                    clone = createBreakStatement((<BreakStatement>node).label, location, flags);
+                    break;
                 case SyntaxKind.ReturnStatement:
-                    return createReturnStatement((<ReturnStatement>node).expression, location, flags);
+                    clone = createReturnStatement((<ReturnStatement>node).expression, location, flags);
+                    break;
                 case SyntaxKind.WithStatement:
-                    return createWithStatement((<WithStatement>node).expression, (<WithStatement>node).statement, location, flags);
+                    clone = createWithStatement((<WithStatement>node).expression, (<WithStatement>node).statement, location, flags);
+                    break;
                 case SyntaxKind.SwitchStatement:
-                    return createSwitchStatement((<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock, location, flags);
+                    clone = createSwitchStatement((<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock, location, flags);
+                    break;
                 case SyntaxKind.LabeledStatement:
-                    return createLabeledStatement((<LabeledStatement>node).label, (<LabeledStatement>node).statement, location, flags);
+                    clone = createLabeledStatement((<LabeledStatement>node).label, (<LabeledStatement>node).statement, location, flags);
+                    break;
                 case SyntaxKind.ThrowStatement:
-                    return createThrowStatement((<ThrowStatement>node).expression, location, flags);
+                    clone = createThrowStatement((<ThrowStatement>node).expression, location, flags);
+                    break;
                 case SyntaxKind.TryStatement:
-                    return createTryStatement((<TryStatement>node).tryBlock, (<TryStatement>node).catchClause, (<TryStatement>node).finallyBlock, location, flags);
+                    clone = createTryStatement((<TryStatement>node).tryBlock, (<TryStatement>node).catchClause, (<TryStatement>node).finallyBlock, location, flags);
+                    break;
                 case SyntaxKind.DebuggerStatement:
-                    return createDebuggerStatement(location, flags);
+                    clone = createDebuggerStatement(location, flags);
+                    break;
                 case SyntaxKind.VariableDeclaration:
-                    return createVariableDeclaration((<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer, location, flags);
+                    clone = createVariableDeclaration((<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.VariableDeclarationList:
-                    return createVariableDeclarationList((<VariableDeclarationList>node).declarations, location, flags);
+                    clone = createVariableDeclarationList((<VariableDeclarationList>node).declarations, location, flags);
+                    break;
                 case SyntaxKind.FunctionDeclaration:
-                    return createFunctionDeclaration((<FunctionDeclaration>node).decorators, (<FunctionDeclaration>node).modifiers, (<FunctionDeclaration>node).asteriskToken, (<FunctionDeclaration>node).name, (<FunctionDeclaration>node).typeParameters, (<FunctionDeclaration>node).parameters, (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body, location, flags);
+                    clone = createFunctionDeclaration((<FunctionDeclaration>node).decorators, (<FunctionDeclaration>node).modifiers, (<FunctionDeclaration>node).asteriskToken, (<FunctionDeclaration>node).name, (<FunctionDeclaration>node).typeParameters, (<FunctionDeclaration>node).parameters, (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body, location, flags);
+                    break;
                 case SyntaxKind.ClassDeclaration:
-                    return createClassDeclaration((<ClassDeclaration>node).decorators, (<ClassDeclaration>node).modifiers, (<ClassDeclaration>node).name, (<ClassDeclaration>node).typeParameters, (<ClassDeclaration>node).heritageClauses, (<ClassDeclaration>node).members, location, flags);
+                    clone = createClassDeclaration((<ClassDeclaration>node).decorators, (<ClassDeclaration>node).modifiers, (<ClassDeclaration>node).name, (<ClassDeclaration>node).typeParameters, (<ClassDeclaration>node).heritageClauses, (<ClassDeclaration>node).members, location, flags);
+                    break;
                 case SyntaxKind.InterfaceDeclaration:
-                    return createInterfaceDeclaration((<InterfaceDeclaration>node).decorators, (<InterfaceDeclaration>node).modifiers, (<InterfaceDeclaration>node).name, (<InterfaceDeclaration>node).typeParameters, (<InterfaceDeclaration>node).heritageClauses, (<InterfaceDeclaration>node).members, location, flags);
+                    clone = createInterfaceDeclaration((<InterfaceDeclaration>node).decorators, (<InterfaceDeclaration>node).modifiers, (<InterfaceDeclaration>node).name, (<InterfaceDeclaration>node).typeParameters, (<InterfaceDeclaration>node).heritageClauses, (<InterfaceDeclaration>node).members, location, flags);
+                    break;
                 case SyntaxKind.TypeAliasDeclaration:
-                    return createTypeAliasDeclaration((<TypeAliasDeclaration>node).decorators, (<TypeAliasDeclaration>node).modifiers, (<TypeAliasDeclaration>node).name, (<TypeAliasDeclaration>node).typeParameters, (<TypeAliasDeclaration>node).type, location, flags);
+                    clone = createTypeAliasDeclaration((<TypeAliasDeclaration>node).decorators, (<TypeAliasDeclaration>node).modifiers, (<TypeAliasDeclaration>node).name, (<TypeAliasDeclaration>node).typeParameters, (<TypeAliasDeclaration>node).type, location, flags);
+                    break;
                 case SyntaxKind.EnumDeclaration:
-                    return createEnumDeclaration((<EnumDeclaration>node).decorators, (<EnumDeclaration>node).modifiers, (<EnumDeclaration>node).name, (<EnumDeclaration>node).members, location, flags);
+                    clone = createEnumDeclaration((<EnumDeclaration>node).decorators, (<EnumDeclaration>node).modifiers, (<EnumDeclaration>node).name, (<EnumDeclaration>node).members, location, flags);
+                    break;
                 case SyntaxKind.ModuleDeclaration:
-                    return createModuleDeclaration((<ModuleDeclaration>node).decorators, (<ModuleDeclaration>node).modifiers, (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body, location, flags);
+                    clone = createModuleDeclaration((<ModuleDeclaration>node).decorators, (<ModuleDeclaration>node).modifiers, (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body, location, flags);
+                    break;
                 case SyntaxKind.ModuleBlock:
-                    return createModuleBlock((<ModuleBlock>node).statements, location, flags);
+                    clone = createModuleBlock((<ModuleBlock>node).statements, location, flags);
+                    break;
                 case SyntaxKind.CaseBlock:
-                    return createCaseBlock((<CaseBlock>node).clauses, location, flags);
+                    clone = createCaseBlock((<CaseBlock>node).clauses, location, flags);
+                    break;
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return createImportEqualsDeclaration((<ImportEqualsDeclaration>node).decorators, (<ImportEqualsDeclaration>node).modifiers, (<ImportEqualsDeclaration>node).name, (<ImportEqualsDeclaration>node).moduleReference, location, flags);
+                    clone = createImportEqualsDeclaration((<ImportEqualsDeclaration>node).decorators, (<ImportEqualsDeclaration>node).modifiers, (<ImportEqualsDeclaration>node).name, (<ImportEqualsDeclaration>node).moduleReference, location, flags);
+                    break;
                 case SyntaxKind.ImportDeclaration:
-                    return createImportDeclaration((<ImportDeclaration>node).decorators, (<ImportDeclaration>node).modifiers, (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier, location, flags);
+                    clone = createImportDeclaration((<ImportDeclaration>node).decorators, (<ImportDeclaration>node).modifiers, (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier, location, flags);
+                    break;
                 case SyntaxKind.ImportClause:
-                    return createImportClause((<ImportClause>node).name, (<ImportClause>node).namedBindings, location, flags);
+                    clone = createImportClause((<ImportClause>node).name, (<ImportClause>node).namedBindings, location, flags);
+                    break;
                 case SyntaxKind.NamespaceImport:
-                    return createNamespaceImport((<NamespaceImport>node).name, location, flags);
+                    clone = createNamespaceImport((<NamespaceImport>node).name, location, flags);
+                    break;
                 case SyntaxKind.NamedImports:
-                    return createNamedImports((<NamedImports>node).elements, location, flags);
+                    clone = createNamedImports((<NamedImports>node).elements, location, flags);
+                    break;
                 case SyntaxKind.ImportSpecifier:
-                    return createImportSpecifier((<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name, location, flags);
+                    clone = createImportSpecifier((<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name, location, flags);
+                    break;
                 case SyntaxKind.ExportAssignment:
-                    return createExportAssignment((<ExportAssignment>node).decorators, (<ExportAssignment>node).modifiers, (<ExportAssignment>node).expression, location, flags);
+                    clone = createExportAssignment((<ExportAssignment>node).decorators, (<ExportAssignment>node).modifiers, (<ExportAssignment>node).expression, location, flags);
+                    break;
                 case SyntaxKind.ExportDeclaration:
-                    return createExportDeclaration((<ExportDeclaration>node).decorators, (<ExportDeclaration>node).modifiers, (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier, location, flags);
+                    clone = createExportDeclaration((<ExportDeclaration>node).decorators, (<ExportDeclaration>node).modifiers, (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier, location, flags);
+                    break;
                 case SyntaxKind.NamedExports:
-                    return createNamedExports((<NamedExports>node).elements, location, flags);
+                    clone = createNamedExports((<NamedExports>node).elements, location, flags);
+                    break;
                 case SyntaxKind.ExportSpecifier:
-                    return createExportSpecifier((<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name, location, flags);
+                    clone = createExportSpecifier((<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name, location, flags);
+                    break;
                 case SyntaxKind.MissingDeclaration:
-                    return createMissingDeclaration((<MissingDeclaration>node).decorators, (<MissingDeclaration>node).modifiers, (<MissingDeclaration>node).questionToken, location, flags);
+                    clone = createMissingDeclaration((<MissingDeclaration>node).decorators, (<MissingDeclaration>node).modifiers, (<MissingDeclaration>node).questionToken, location, flags);
+                    break;
                 case SyntaxKind.ExternalModuleReference:
-                    return createExternalModuleReference((<ExternalModuleReference>node).expression, location, flags);
+                    clone = createExternalModuleReference((<ExternalModuleReference>node).expression, location, flags);
+                    break;
                 case SyntaxKind.JsxElement:
-                    return createJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children, (<JsxElement>node).closingElement, location, flags);
+                    clone = createJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children, (<JsxElement>node).closingElement, location, flags);
+                    break;
                 case SyntaxKind.JsxSelfClosingElement:
-                    return createJsxSelfClosingElement((<JsxSelfClosingElement>node).tagName, (<JsxSelfClosingElement>node).attributes, location, flags);
+                    clone = createJsxSelfClosingElement((<JsxSelfClosingElement>node).tagName, (<JsxSelfClosingElement>node).attributes, location, flags);
+                    break;
                 case SyntaxKind.JsxOpeningElement:
-                    return createJsxOpeningElement((<JsxOpeningElement>node).tagName, (<JsxOpeningElement>node).attributes, location, flags);
+                    clone = createJsxOpeningElement((<JsxOpeningElement>node).tagName, (<JsxOpeningElement>node).attributes, location, flags);
+                    break;
                 case SyntaxKind.JsxText:
-                    return createJsxText(location, flags);
+                    clone = createJsxText(location, flags);
+                    break;
                 case SyntaxKind.JsxClosingElement:
-                    return createJsxClosingElement((<JsxClosingElement>node).tagName, location, flags);
+                    clone = createJsxClosingElement((<JsxClosingElement>node).tagName, location, flags);
+                    break;
                 case SyntaxKind.JsxAttribute:
-                    return createJsxAttribute((<JsxAttribute>node).name, (<JsxAttribute>node).initializer, location, flags);
+                    clone = createJsxAttribute((<JsxAttribute>node).name, (<JsxAttribute>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.JsxSpreadAttribute:
-                    return createJsxSpreadAttribute((<JsxSpreadAttribute>node).expression, location, flags);
+                    clone = createJsxSpreadAttribute((<JsxSpreadAttribute>node).expression, location, flags);
+                    break;
                 case SyntaxKind.JsxExpression:
-                    return createJsxExpression((<JsxExpression>node).expression, location, flags);
+                    clone = createJsxExpression((<JsxExpression>node).expression, location, flags);
+                    break;
                 case SyntaxKind.CaseClause:
-                    return createCaseClause((<CaseClause>node).expression, (<CaseClause>node).statements, location, flags);
+                    clone = createCaseClause((<CaseClause>node).expression, (<CaseClause>node).statements, location, flags);
+                    break;
                 case SyntaxKind.DefaultClause:
-                    return createDefaultClause((<DefaultClause>node).statements, location, flags);
+                    clone = createDefaultClause((<DefaultClause>node).statements, location, flags);
+                    break;
                 case SyntaxKind.HeritageClause:
-                    return createHeritageClause((<HeritageClause>node).token, (<HeritageClause>node).types, location, flags);
+                    clone = createHeritageClause((<HeritageClause>node).token, (<HeritageClause>node).types, location, flags);
+                    break;
                 case SyntaxKind.CatchClause:
-                    return createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block, location, flags);
+                    clone = createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block, location, flags);
+                    break;
                 case SyntaxKind.PropertyAssignment:
-                    return createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer, location, flags);
+                    clone = createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, (<ShorthandPropertyAssignment>node).equalsToken, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer, location, flags);
+                    clone = createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, location, flags);
+                    break;
                 case SyntaxKind.EnumMember:
-                    return createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, location, flags);
+                    clone = createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, location, flags);
+                    break;
                 case SyntaxKind.SourceFile:
-                    return createSourceFileNode((<SourceFile>node).statements, (<SourceFile>node).endOfFileToken, (<SourceFile>node).fileName, (<SourceFile>node).text, (<SourceFile>node).amdDependencies, (<SourceFile>node).moduleName, (<SourceFile>node).referencedFiles, (<SourceFile>node).languageVariant, (<SourceFile>node).renamedDependencies, (<SourceFile>node).hasNoDefaultLib, (<SourceFile>node).languageVersion, (<SourceFile>node).externalModuleIndicator, (<SourceFile>node).isDefaultLib, (<SourceFile>node).identifiers, (<SourceFile>node).parseDiagnostics, (<SourceFile>node).bindDiagnostics, (<SourceFile>node).lineMap, (<SourceFile>node).classifiableNames, (<SourceFile>node).resolvedModules, (<SourceFile>node).imports, location, flags);
+                    clone = createSourceFileNode((<SourceFile>node).statements, (<SourceFile>node).endOfFileToken, (<SourceFile>node).fileName, (<SourceFile>node).text, (<SourceFile>node).amdDependencies, (<SourceFile>node).moduleName, (<SourceFile>node).referencedFiles, (<SourceFile>node).languageVariant, (<SourceFile>node).renamedDependencies, (<SourceFile>node).hasNoDefaultLib, (<SourceFile>node).languageVersion, (<SourceFile>node).externalModuleIndicator, (<SourceFile>node).isDefaultLib, (<SourceFile>node).identifiers, (<SourceFile>node).parseDiagnostics, (<SourceFile>node).bindDiagnostics, (<SourceFile>node).lineMap, (<SourceFile>node).classifiableNames, (<SourceFile>node).resolvedModules, (<SourceFile>node).imports, location, flags);
+                    break;
                 case SyntaxKind.JSDocTypeExpression:
-                    return createJSDocTypeExpression((<JSDocTypeExpression>node).type, location, flags);
+                    clone = createJSDocTypeExpression((<JSDocTypeExpression>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocAllType:
-                    return createJSDocAllType(location, flags);
+                    clone = createJSDocAllType(location, flags);
+                    break;
                 case SyntaxKind.JSDocUnknownType:
-                    return createJSDocUnknownType(location, flags);
+                    clone = createJSDocUnknownType(location, flags);
+                    break;
                 case SyntaxKind.JSDocArrayType:
-                    return createJSDocArrayType((<JSDocArrayType>node).elementType, location, flags);
+                    clone = createJSDocArrayType((<JSDocArrayType>node).elementType, location, flags);
+                    break;
                 case SyntaxKind.JSDocUnionType:
-                    return createJSDocUnionType((<JSDocUnionType>node).types, location, flags);
+                    clone = createJSDocUnionType((<JSDocUnionType>node).types, location, flags);
+                    break;
                 case SyntaxKind.JSDocTupleType:
-                    return createJSDocTupleType((<JSDocTupleType>node).types, location, flags);
+                    clone = createJSDocTupleType((<JSDocTupleType>node).types, location, flags);
+                    break;
                 case SyntaxKind.JSDocNullableType:
-                    return createJSDocNullableType((<JSDocNullableType>node).type, location, flags);
+                    clone = createJSDocNullableType((<JSDocNullableType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocNonNullableType:
-                    return createJSDocNonNullableType((<JSDocNonNullableType>node).type, location, flags);
+                    clone = createJSDocNonNullableType((<JSDocNonNullableType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocRecordType:
-                    return createJSDocRecordType((<JSDocRecordType>node).members, location, flags);
+                    clone = createJSDocRecordType((<JSDocRecordType>node).members, location, flags);
+                    break;
                 case SyntaxKind.JSDocRecordMember:
-                    return createJSDocRecordMember((<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type, location, flags);
+                    clone = createJSDocRecordMember((<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocTypeReference:
-                    return createJSDocTypeReference((<JSDocTypeReference>node).name, (<JSDocTypeReference>node).typeArguments, location, flags);
+                    clone = createJSDocTypeReference((<JSDocTypeReference>node).name, (<JSDocTypeReference>node).typeArguments, location, flags);
+                    break;
                 case SyntaxKind.JSDocOptionalType:
-                    return createJSDocOptionalType((<JSDocOptionalType>node).type, location, flags);
+                    clone = createJSDocOptionalType((<JSDocOptionalType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocFunctionType:
-                    return createJSDocFunctionType((<JSDocFunctionType>node).parameters, (<JSDocFunctionType>node).type, location, flags);
+                    clone = createJSDocFunctionType((<JSDocFunctionType>node).parameters, (<JSDocFunctionType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocVariadicType:
-                    return createJSDocVariadicType((<JSDocVariadicType>node).type, location, flags);
+                    clone = createJSDocVariadicType((<JSDocVariadicType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocConstructorType:
-                    return createJSDocConstructorType((<JSDocConstructorType>node).type, location, flags);
+                    clone = createJSDocConstructorType((<JSDocConstructorType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocThisType:
-                    return createJSDocThisType((<JSDocThisType>node).type, location, flags);
+                    clone = createJSDocThisType((<JSDocThisType>node).type, location, flags);
+                    break;
                 case SyntaxKind.JSDocComment:
-                    return createJSDocComment((<JSDocComment>node).tags, location, flags);
+                    clone = createJSDocComment((<JSDocComment>node).tags, location, flags);
+                    break;
                 case SyntaxKind.JSDocTag:
-                    return createJSDocTag((<JSDocTag>node).atToken, (<JSDocTag>node).tagName, location, flags);
+                    clone = createJSDocTag((<JSDocTag>node).atToken, (<JSDocTag>node).tagName, location, flags);
+                    break;
                 case SyntaxKind.JSDocParameterTag:
-                    return createJSDocParameterTag((<JSDocParameterTag>node).preParameterName, (<JSDocParameterTag>node).typeExpression, (<JSDocParameterTag>node).postParameterName, (<JSDocParameterTag>node).atToken, (<JSDocParameterTag>node).tagName, location, flags);
+                    clone = createJSDocParameterTag((<JSDocParameterTag>node).preParameterName, (<JSDocParameterTag>node).typeExpression, (<JSDocParameterTag>node).postParameterName, (<JSDocParameterTag>node).atToken, (<JSDocParameterTag>node).tagName, location, flags);
+                    break;
                 case SyntaxKind.JSDocReturnTag:
-                    return createJSDocReturnTag((<JSDocReturnTag>node).typeExpression, (<JSDocReturnTag>node).atToken, (<JSDocReturnTag>node).tagName, location, flags);
+                    clone = createJSDocReturnTag((<JSDocReturnTag>node).typeExpression, (<JSDocReturnTag>node).atToken, (<JSDocReturnTag>node).tagName, location, flags);
+                    break;
                 case SyntaxKind.JSDocTypeTag:
-                    return createJSDocTypeTag((<JSDocTypeTag>node).typeExpression, (<JSDocTypeTag>node).atToken, (<JSDocTypeTag>node).tagName, location, flags);
+                    clone = createJSDocTypeTag((<JSDocTypeTag>node).typeExpression, (<JSDocTypeTag>node).atToken, (<JSDocTypeTag>node).tagName, location, flags);
+                    break;
                 case SyntaxKind.JSDocTemplateTag:
-                    return createJSDocTemplateTag((<JSDocTemplateTag>node).typeParameters, (<JSDocTemplateTag>node).atToken, (<JSDocTemplateTag>node).tagName, location, flags);
+                    clone = createJSDocTemplateTag((<JSDocTemplateTag>node).typeParameters, (<JSDocTemplateTag>node).atToken, (<JSDocTemplateTag>node).tagName, location, flags);
+                    break;
                 case SyntaxKind.RawExpression:
-                    return createRawExpression((<RawExpression>node).text, location, flags);
+                    clone = createRawExpression((<RawExpression>node).text, location, flags);
+                    break;
                 case SyntaxKind.RawStatement:
-                    return createRawStatement((<RawStatement>node).text, location, flags);
+                    clone = createRawStatement((<RawStatement>node).text, location, flags);
+                    break;
+            }
+            if (clone) {
+                clone.original = node;
+                return clone;
             }
         }
         return node;
@@ -3377,7 +3531,7 @@ namespace ts {
                 case SyntaxKind.PropertyAssignment:
                     return updatePropertyAssignment(<PropertyAssignment>node, transformer.visitNode((<PropertyAssignment>node).name, visitor, isPropertyName), transformer.visitNode((<PropertyAssignment>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, transformer.visitNode((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier), (<ShorthandPropertyAssignment>node).equalsToken, transformer.visitNode((<ShorthandPropertyAssignment>node).objectAssignmentInitializer, visitor, isExpressionNode));
+                    return updateShorthandPropertyAssignment(<ShorthandPropertyAssignment>node, transformer.visitNode((<ShorthandPropertyAssignment>node).name, visitor, isIdentifier));
                 case SyntaxKind.EnumMember:
                     return updateEnumMember(<EnumMember>node, transformer.visitNode((<EnumMember>node).name, visitor, isDeclarationNameNode), transformer.visitNode((<EnumMember>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.SourceFile:

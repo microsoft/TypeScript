@@ -1242,8 +1242,11 @@ namespace ts {
             //         & ~(node.excludeTransformFlags = TransformFlags.CallOrArrayLiteralExcludes);
 
             case SyntaxKind.ExpressionStatement:
-                if (node.flags & NodeFlags.GeneratedSuper) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
+                if (node.flags & NodeFlags.Generated) {
+                    let expression = (<ExpressionStatement>node).expression;
+                    if (isCallExpression(expression) && isSuperKeyword(expression.expression)) {
+                        transformFlags |= TransformFlags.ThisNodeIsES6;
+                    }
                 }
 
                 break;
@@ -1465,7 +1468,7 @@ namespace ts {
             //     break;
 
             case SyntaxKind.ImportEqualsDeclaration:
-                // An ImportEqualsDeclaration with a namespace reference is TypeScript.
+                // An ImportEqualsDeclaration is TypeScriptwith a namespace reference is TypeScript.
                 if (!isExternalModuleImportEqualsDeclaration(node)) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }

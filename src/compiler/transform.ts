@@ -1,12 +1,25 @@
 /// <reference path="checker.ts" />
-/// <reference path="transforms/jsx.ts" />
 /// <reference path="transforms/ts.ts" />
+/// <reference path="transforms/module/module.ts" />
+/// <reference path="transforms/module/system.ts" />
+/// <reference path="transforms/module/es6.ts" />
+/// <reference path="transforms/jsx.ts" />
 /// <reference path="transforms/es6.ts" />
 const FORCE_TRANSFORMS = false;
 
 /* @internal */
 namespace ts {
     export let transformTime = 0;
+
+    const moduleTransformationPhaseMap: Map<TransformationPhase> = {
+        [ModuleKind.ES2015]: createES6ModuleTransformation,
+        [ModuleKind.ES6]: createES6ModuleTransformation,
+        [ModuleKind.System]: createSystemModuleTransformation,
+        [ModuleKind.AMD]: createModuleTransformation,
+        [ModuleKind.CommonJS]: createModuleTransformation,
+        [ModuleKind.UMD]: createModuleTransformation,
+        [ModuleKind.None]: createModuleTransformation,
+    };
 
     /**
      * Represents a phase in a transformation chain. Used to initialize the transformation and
@@ -22,22 +35,19 @@ namespace ts {
     export type TransformationChain = (transformer: Transformer) => Transformation;
 
     /**
-     * Represents a transformation.
-     */
-    export type Transformation = (node: SourceFile) => SourceFile;
-
-    /**
      * Gets the default transformation chain for the provided set of compiler options.
      */
-    export function getTransformationChain(options: CompilerOptions): TransformationChain {
-        let jsx = options.jsx;
-        let languageVersion = options.target || ScriptTarget.ES3;
-        let moduleKind = options.module || ModuleKind.None;
+    export function getTransformationChain(compilerOptions: CompilerOptions): TransformationChain {
+        let jsx = compilerOptions.jsx;
+        let languageVersion = getLanguageVersion(compilerOptions);
+        let moduleKind = getModuleKind(compilerOptions);
         let phases: TransformationPhase[] = [];
 
         // Add the TypeScript and Module phases to the chain.
         phases.push(createTypeScriptTransformation);
-        // // transforms.push(transformModule);
+
+        // Add the module transformation to the chain.
+        phases.push(moduleTransformationPhaseMap[moduleKind]);
 
         // Add the JSX transform to the chain.
         if (jsx === JsxEmit.React) {
@@ -77,57 +87,6 @@ namespace ts {
             LexicalEnvironmentEnded = 1 << 5,
         }
 
-        // emit output for the __extends helper function
-        const extendsHelper = `
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};`;
-
-        // emit output for the __decorate helper function
-        const decorateHelper = `
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
-};`;
-
-        // emit output for the __metadata helper function
-        const metadataHelper = `
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};`;
-
-        // emit output for the __param helper function
-        const paramHelper = `
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};`;
-
-        const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
-    return new Promise(function (resolve, reject) {
-        generator = generator.apply(thisArg, _arguments);
-        function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
-        function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
-        function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
-        function step(verb, value) {
-            var result = generator[verb](value);
-            result.done ? resolve(result.value) : cast(result.value).then(onfulfill, onreject);
-        }
-        step("next", void 0);
-    });
-};`;
-
-        const exportStarHelper = `
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}`;
-
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let transformFlags: TransformFlags;
@@ -150,9 +109,8 @@ function __export(m) {
         let updatedNode: Node;
         let updatedNodes: Node[];
         let helpersEmitted: NodeCheckFlags;
-        let assignmentSubstitution: (node: BinaryExpression) => Expression;
-        let bindingIdentifierSubstitution: (node: Identifier) => Identifier;
-        let expressionIdentifierSubstitution: (node: Identifier) => LeftHandSideExpression;
+        let expressionSubstitution: (node: Expression) => Expression;
+        let generatedNodeFlags: GeneratedNodeFlags[] = [];
         let transformer: Transformer = {
             getEmitResolver: () => resolver,
             getCompilerOptions: () => compilerOptions,
@@ -163,6 +121,7 @@ function __export(m) {
             tryPushNode: node => nodeStack.tryPushNode(node),
             pushNode: node => nodeStack.pushNode(node),
             popNode: () => nodeStack.popNode(),
+            setNode: node => nodeStack.setNode(node),
             findAncestorNode: (match: (node: Node) => boolean) => nodeStack.findAncestorNode(match),
             getDeclarationName,
             getClassMemberPrefix,
@@ -174,16 +133,13 @@ function __export(m) {
             declareLocal,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
-            emitEmitHelpers,
-            emitExportStarHelper,
-            getAssignmentSubstitution,
-            setAssignmentSubstitution,
-            getBindingIdentifierSubstitution,
-            setBindingIdentifierSubstitution,
-            getExpressionIdentifierSubstitution,
-            setExpressionIdentifierSubstitution,
+            getGeneratedNodeFlags,
+            setGeneratedNodeFlags,
+            getExpressionSubstitution,
+            setExpressionSubstitution,
             startLexicalEnvironment,
             endLexicalEnvironment,
+            createNodes,
             pipeNode,
             pipeNodes,
             mapNode,
@@ -197,7 +153,12 @@ function __export(m) {
             visitFunctionBody,
             visitConciseBody,
             accept(node: Node, visitor: (node: Node, write: (node: Node) => void) => void) {
-                return acceptTransformer(transformer, node, visitor);
+                let wasPushed = node && nodeStack.tryPushNode(node);
+                node = acceptTransformer(transformer, node, visitor);
+                if (wasPushed) {
+                    nodeStack.popNode();
+                }
+                return node;
             }
         };
 
@@ -206,11 +167,29 @@ function __export(m) {
         return {
             sourceFiles: map(sourceFiles, transformSourceFile),
             substitutions: {
-                assignmentSubstitution,
-                bindingIdentifierSubstitution,
-                expressionIdentifierSubstitution,
+                getGeneratedNodeFlags,
+                expressionSubstitution,
             }
         };
+
+        function getGeneratedNodeFlags(node: Node) {
+            let lastNode: Node;
+            while (node) {
+                let nodeId = getNodeId(node);
+                if (nodeId in generatedNodeFlags) {
+                    return generatedNodeFlags[nodeId];
+                }
+
+                lastNode = node;
+                node = node.original;
+            }
+
+            return undefined;
+        }
+
+        function setGeneratedNodeFlags(node: Node, flags: GeneratedNodeFlags) {
+            generatedNodeFlags[getNodeId(node)] = flags;
+        }
 
         function transformSourceFile(sourceFile: SourceFile) {
             if (isDeclarationFile(sourceFile)) {
@@ -240,28 +219,12 @@ function __export(m) {
             return visited;
         }
 
-        function getAssignmentSubstitution(): (node: BinaryExpression) => Expression {
-            return assignmentSubstitution;
+        function getExpressionSubstitution(): (node: Expression) => Expression {
+            return expressionSubstitution;
         }
 
-        function setAssignmentSubstitution(substitution: (node: BinaryExpression) => Expression) {
-            assignmentSubstitution = substitution;
-        }
-
-        function getBindingIdentifierSubstitution(): (node: Identifier) => Identifier {
-            return bindingIdentifierSubstitution;
-        }
-
-        function setBindingIdentifierSubstitution(substitution: (node: Identifier) => Identifier): void {
-            bindingIdentifierSubstitution = substitution;
-        }
-
-        function getExpressionIdentifierSubstitution(): (node: Identifier) => LeftHandSideExpression {
-            return expressionIdentifierSubstitution;
-        }
-
-        function setExpressionIdentifierSubstitution(substitution: (node: Identifier) => LeftHandSideExpression) {
-            expressionIdentifierSubstitution = substitution;
+        function setExpressionSubstitution(substitution: (node: Expression) => Expression) {
+            expressionSubstitution = substitution;
         }
 
         // Return the next available name in the pattern _a ... _z, _0, _1, ...
@@ -467,43 +430,6 @@ function __export(m) {
             hoistedFunctionDeclarations.push(func);
         }
 
-        function emitEmitHelpers(write: (node: Statement) => void) {
-            if (compilerOptions.noEmitHelpers) {
-                return;
-            }
-
-            if (languageVersion < ScriptTarget.ES6 && shouldEmitHelper(NodeCheckFlags.EmitExtends)) {
-                write(createRawStatement(extendsHelper));
-                helpersEmitted |= NodeCheckFlags.EmitExtends;
-            }
-
-            if (shouldEmitHelper(NodeCheckFlags.EmitDecorate)) {
-                write(createRawStatement(decorateHelper));
-                helpersEmitted |= NodeCheckFlags.EmitDecorate;
-            }
-
-            if (shouldEmitHelper(NodeCheckFlags.EmitParam)) {
-                write(createRawStatement(paramHelper));
-                helpersEmitted |= NodeCheckFlags.EmitParam;
-            }
-
-            if (shouldEmitHelper(NodeCheckFlags.EmitAwaiter)) {
-                write(createRawStatement(awaiterHelper));
-                helpersEmitted |= NodeCheckFlags.EmitAwaiter;
-            }
-        }
-
-        function emitExportStarHelper(write: (node: Statement) => void) {
-            if (shouldEmitHelper(NodeCheckFlags.EmitExportStar)) {
-                write(createRawStatement(exportStarHelper));
-            }
-        }
-
-        function shouldEmitHelper(flags: NodeCheckFlags) {
-            return !(helpersEmitted & flags)
-                && !!(resolver.getNodeCheckFlags(currentSourceFile) & flags);
-        }
-
         function aggregateTransformFlags(node: Node) {
             if (!node) {
                 return;
@@ -656,7 +582,6 @@ function __export(m) {
         }
 
         function readNode(): Node {
-            Debug.assert(!!updatedNode, "Not enough nodes written to output.");
             return updatedNode;
         }
 
@@ -670,6 +595,53 @@ function __export(m) {
             else {
                 return createNodeArray(originalNodes);
             }
+        }
+
+        function createNodes<TOut extends Node>(callback: (write: (node: TOut) => void) => void, out?: ((node: TOut) => void) | TOut[]): NodeArray<TOut> {
+            let write: (node: Node) => void;
+            let readNodes: () => NodeArray<Node>;
+            let outputArray: TOut[];
+            if (typeof out === "function") {
+                write = out as (node: Node) => void;
+            }
+            else {
+                write = writeNodeToNodeArray;
+                readNodes = readNodeArray;
+                outputArray = out as TOut[] || [];
+            }
+
+            // Preserve the previous environment on the call stack.
+            let savedOriginalNodes = originalNodes;
+            let savedWriteOffset = writeOffset;
+            let savedUpdatedNode = updatedNode;
+            let savedUpdatedNodes = updatedNodes;
+            let savedNodeTest = nodeTest;
+            let savedCurrentVisitFlags = currentVisitFlags;
+
+            // Set the new environment.
+            originalNodes = undefined;
+            writeOffset = undefined;
+            updatedNode = undefined;
+            updatedNodes = outputArray;
+            nodeTest = undefined;
+            currentVisitFlags = undefined;
+            requestedVisitFlags = undefined;
+
+            // Execute the callback
+            callback(write);
+
+            // Read the result
+            let resultNodes = readNodes ? readNodes() : undefined;
+
+            // Restore the previous environment.
+            originalNodes = savedOriginalNodes;
+            writeOffset = savedWriteOffset;
+            updatedNode = savedUpdatedNode;
+            updatedNodes = savedUpdatedNodes;
+            nodeTest = savedNodeTest;
+            currentVisitFlags = savedCurrentVisitFlags;
+
+            return resultNodes as NodeArray<TOut>;
         }
 
         function visitNodeOrNodes(node: Node, nodes: Node[], start: number, count: number, visitor: (node: Node, write: (node: Node) => void) => void,

@@ -406,7 +406,7 @@ namespace ts {
         return !!(getCombinedNodeFlags(navigable) & NodeFlags.Let);
     }
 
-    export function isPrologueDirective(node: Statement): boolean {
+    export function isPrologueDirective(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionStatement && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
     }
 
@@ -417,6 +417,11 @@ namespace ts {
         }
 
         return node;
+    }
+
+    export function getOriginalNodeId(node: Node) {
+        node = getOriginalNode(node);
+        return node ? getNodeId(node) : 0;
     }
 
     export function getOriginalNodeIf<T extends Node>(node: T, nodeTest: (node: Node) => node is T): T {
@@ -2763,5 +2768,36 @@ namespace ts {
         }
 
         return arrayIsEqualTo(array1.sort(), array2.sort());
+    }
+
+    export function getLanguageVersion(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getModuleKind(compilerOptions: CompilerOptions) {
+        if (compilerOptions.module) {
+            return compilerOptions.module;
+        }
+
+        switch (getLanguageVersion(compilerOptions)) {
+            case ScriptTarget.ES6: return ModuleKind.ES6;
+            case ScriptTarget.ES2015: return ModuleKind.ES2015;
+        }
+        return ModuleKind.None;
+    }
+
+    export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+        if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
+            return <ImportEqualsDeclaration>node;
+        }
+
+        let importClause = (<ImportDeclaration>node).importClause;
+        if (importClause && importClause.namedBindings && importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+            return <NamespaceImport>importClause.namedBindings;
+        }
+    }
+
+    export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+        return isImportDeclaration(node) && node.importClause && !!node.importClause.name;
     }
 }
