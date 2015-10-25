@@ -9414,7 +9414,9 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 for (let element of (<BindingPattern>node.name).elements) {
                     if (element.kind !== SyntaxKind.OmittedExpression) {
-                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        if (element.name.kind === SyntaxKind.Identifier) {
+                            getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        }
                         assignBindingElementTypes(element);
                     }
                 }
