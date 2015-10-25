@@ -15912,10 +15912,12 @@ namespace ts {
             //  DeclarationElement:
             //     ExportAssignment
             //     export_opt   InterfaceDeclaration
+            //     export_opt   TypeAliasDeclaration
             //     export_opt   ImportDeclaration
             //     export_opt   ExternalImportDeclaration
             //     export_opt   AmbientDeclaration
             //
+            // TODO: The spec needs to be amended to reflect this grammar.
             if (node.kind === SyntaxKind.InterfaceDeclaration ||
                 node.kind === SyntaxKind.TypeAliasDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
