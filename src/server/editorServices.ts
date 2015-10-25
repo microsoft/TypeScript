@@ -1267,11 +1267,15 @@ namespace ts.server {
                             if (info.isOpen) {
                                 if (this.openFileRoots.indexOf(info) >= 0) {
                                     this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                    if (info.defaultProject && !info.defaultProject.isConfiguredProject()) {
+                                        this.removeProject(info.defaultProject);
+                                    }
                                 }
                                 if (this.openFilesReferenced.indexOf(info) >= 0) {
                                     this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
                                 }
                                 this.openFileRootsConfigured.push(info);
+                                info.defaultProject = project;
                             }
                         }
                         project.addRoot(info);
