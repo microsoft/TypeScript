@@ -937,8 +937,8 @@ namespace ts {
             return token > SyntaxKind.LastReservedWord;
         }
 
-        module errors {
-            export function invalidTypeReferenceOrTypePredicate(node: TypeReferenceNode | TypePredicateNode): void {
+            // ERRORS
+            function invalidTypeReferenceOrTypePredicate(node: TypeReferenceNode | TypePredicateNode): void {
                 if (node.kind === SyntaxKind.TypePredicate) {
                     if ((<TypePredicateNode>node).type.parserContextFlags & ParserContextFlags.ThisNodeHasError) {
                         parseErrorAtPosition((<TypePredicateNode>node).type.pos, 0, Diagnostics.Type_expected);
@@ -987,7 +987,6 @@ namespace ts {
                     }
                 }
             }
-        }
 
         function parseExpected(kind: SyntaxKind, diagnosticMessage?: DiagnosticMessage, shouldAdvance = true): boolean {
             if (token === kind) {
@@ -2001,7 +2000,7 @@ namespace ts {
         // TYPES
 
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
-            contextualError.callback = errors.invalidTypeReferenceOrTypePredicate;
+            contextualError.callback = invalidTypeReferenceOrTypePredicate;
 
             let typeName = parseEntityName(/*allowReservedWords*/ false);
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
