@@ -156,36 +156,24 @@ namespace ts.server {
     var logger = createLoggerFromEnv();
 
     let pending: string[] = [];
-    function queueMessage(s: string) {
-        pending.push(s);
-        if (pending.length === 1) {
-            drain();
+    let canWrite = true;
+    function writeMessage(s: string) {
+        if (!canWrite) {
+            pending.push(s);
+        }
+        else {
+            canWrite = false;
+            process.stdout.write(new Buffer(s, "utf8"), () => {
+                canWrite = true;
+                if (pending.length) {
+                    writeMessage(pending.shift());
+                }
+            })
         }
     }
 
-    function drain() {
-        Debug.assert(pending.length > 0);
-        writeBuffer(new Buffer(pending[0], "utf8"), 0);
-    }
-
-    function writeBuffer(buffer: Buffer, offset: number) {
-        const toWrite = buffer.length - offset;
-        fs.write(1, buffer, offset, toWrite, undefined, (err, written, buffer) => {
-            if (toWrite > written) {
-                writeBuffer(buffer, offset + written);
-            }
-            else {
-                Debug.assert(pending.length > 0);
-                pending.shift();
-                if (pending.length > 0) {
-                    drain();
-                }
-            }
-        });
-    }
-
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    ts.sys.write = (s: string) => queueMessage(s);
+    ts.sys.write = (s: string) => writeMessage(s);
 
     var ioSession = new IOSession(ts.sys, logger);
     process.on('uncaughtException', function(err: Error) {
