@@ -628,7 +628,7 @@ function deleteTemporaryProjectOutput() {
 
 var testTimeout = 20000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
-task("runalltests", ["build-rules", "tests", builtLocalDirectory], function() {
+task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -648,10 +648,10 @@ task("runalltests", ["build-rules", "tests", builtLocalDirectory], function() {
 
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
-    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
+    reporter = process.env.reporter || process.env.r || 'min';
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var subsets = ['compiler', 'conformance', 'project', 'fourslash']
+    var subsets = ['compiler', 'conformance', 'Projects', 'fourslash']
     var res = subsets.map(function (sub) { return "^" + sub + ".*$"; });
     res.push("^(?!" + subsets.join("|") + ").*$");
     res.forEach(function (re) {
