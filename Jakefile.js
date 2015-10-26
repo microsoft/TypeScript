@@ -626,9 +626,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-var testTimeout = 20000;
-desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
+function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -638,7 +636,7 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests || light) {
+    if (tests || light) {
         writeTestConfigFile(tests, light, testConfigFile);
     }
 
@@ -648,20 +646,48 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
-    tests = tests ? ' -g ' + tests : '';
-    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
+    reporter = process.env.reporter || process.env.r || defaultReporter;
+
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
-    exec(cmd, function() {
-        deleteTemporaryProjectOutput();
-        var lint = jake.Task['lint'];
-        lint.addListener('complete', function () {
-            complete();
+    var subsetRegexes;
+    if(defaultSubsets.length === 0) {
+        subsetRegexes = [tests]
+    }
+    else {
+        var subsets = tests ? tests.split("|") : defaultSubsets;
+        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
+        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
+    }
+    subsetRegexes.forEach(function (subsetRegex) {
+        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+        console.log(cmd);
+        exec(cmd, function () {
+            deleteTemporaryProjectOutput();
+            if (postLint) {
+                var lint = jake.Task['lint'];
+                lint.addListener('complete', function () {
+                    complete();
+                });
+                lint.invoke();
+            }
+            else {
+                complete();
+            }
         });
-        lint.invoke();
     });
+}
+
+var testTimeout = 20000;
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+}, {async: true});
+
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
