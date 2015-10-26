@@ -14905,7 +14905,9 @@ namespace ts {
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
-            globals[undefinedSymbol.name] = undefinedSymbol;
+            if (!globals[undefinedSymbol.name]) {
+                globals[undefinedSymbol.name] = undefinedSymbol;
+            }
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
