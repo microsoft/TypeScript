@@ -12,7 +12,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,43): error TS2304: Cannot find name 'any'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,23): error TS2304: Cannot find name 'IPromise'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,45): error TS2304: Cannot find name 'IPromise'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,54): error TS1005: '>' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,54): error TS1005: '}' expected.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts (15 errors) ====
@@ -53,4 +53,4 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
                                                 ~~~~~~~~
 !!! error TS2304: Cannot find name 'IPromise'.
                                                          
-!!! error TS1005: '>' expected.
+!!! error TS1005: '}' expected.

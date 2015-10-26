@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts(1,9): error TS2503: Cannot find namespace 'x'.
-tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts(1,11): error TS17007: Identifier expected, reserved word 'void' not allowed here.
+tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts(1,11): error TS17009: Identifier expected, reserved word 'void' not allowed here.
 tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts(1,15): error TS1109: Expression expected.
 
 
@@ -8,6 +8,6 @@ tests/cases/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts(1,15): 
             ~
 !!! error TS2503: Cannot find namespace 'x'.
               ~~~~
-!!! error TS17007: Identifier expected, reserved word 'void' not allowed here.
+!!! error TS17009: Identifier expected, reserved word 'void' not allowed here.
                   ~
 !!! error TS1109: Expression expected.
