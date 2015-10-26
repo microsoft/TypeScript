@@ -2013,6 +2013,7 @@ namespace ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        message: string;
     }
 
     /**
