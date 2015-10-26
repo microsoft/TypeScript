@@ -163,12 +163,14 @@ namespace ts.server {
         }
         else {
             canWrite = false;
-            process.stdout.write(new Buffer(s, "utf8"), () => {
-                canWrite = true;
-                if (pending.length) {
-                    writeMessage(pending.shift());
-                }
-            })
+            process.stdout.write(new Buffer(s, "utf8"), setCanWriteFlagAndWriteMessageIfNecessary);
+        }
+    }
+
+    function setCanWriteFlagAndWriteMessageIfNecessary() {
+        canWrite = true;
+        if (pending.length) {
+            writeMessage(pending.shift());
         }
     }
 
