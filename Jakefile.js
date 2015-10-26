@@ -626,9 +626,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-var testTimeout = 20000;
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
-task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
+function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -638,7 +636,7 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests || light) {
+    if (tests || light) {
         writeTestConfigFile(tests, light, testConfigFile);
     }
 
@@ -648,59 +646,48 @@ task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], functio
 
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
-    reporter = process.env.reporter || process.env.r || 'min';
+    reporter = process.env.reporter || process.env.r || defaultReporter;
+
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var subsets = ['compiler', 'conformance', 'Projects', 'fourslash']
-    var res = subsets.map(function (sub) { return "^" + sub + ".*$"; });
-    res.push("^(?!" + subsets.join("|") + ").*$");
-    res.forEach(function (re) {
-        tests = ' -g "' + re + '"';
-        // pass different name.global.js files to mocha? for exmaple, each name.global.js would set a different option for the harness runner
+    var subsetRegexes;
+    if(defaultSubsets.length === 0) {
+        subsetRegexes = [tests]
+    }
+    else {
+        var subsets = tests ? tests.split("|") : defaultSubsets;
+        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
+        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
+    }
+    subsetRegexes.forEach(function (subsetRegex) {
+        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
         var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
         console.log(cmd);
-        exec(cmd, function() {
+        exec(cmd, function () {
             deleteTemporaryProjectOutput();
-            complete();
+            if (postLint) {
+                var lint = jake.Task['lint'];
+                lint.addListener('complete', function () {
+                    complete();
+                });
+                lint.invoke();
+            }
+            else {
+                complete();
+            }
         });
-    })
+    });
+}
+
+var testTimeout = 20000;
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
 }, {async: true});
 
 desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    cleanTestDirs();
-    var debug = process.env.debug || process.env.d;
-    tests = process.env.test || process.env.tests || process.env.t;
-    var light = process.env.light || false;
-    var testConfigFile = 'test.config';
-    if(fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
-
-    if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
-    }
-
-    if (tests && tests.toLocaleLowerCase() === "rwc") {
-        testTimeout = 100000;
-    }
-
-    colors = process.env.colors || process.env.color
-    colors = colors ? ' --no-colors ' : ' --colors ';
-    tests = tests ? ' -g ' + tests : '';
-    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
-    // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
-    // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
-    exec(cmd, function() {
-        deleteTemporaryProjectOutput();
-        var lint = jake.Task['lint'];
-        lint.addListener('complete', function () {
-            complete();
-        });
-        lint.invoke();
-    });
+    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
