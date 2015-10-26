@@ -122,8 +122,8 @@ namespace ts {
 
         let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        let anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
-        let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
+        let anySignature = createSignature(undefined, undefined, emptyArray, undefined, anyType, undefined, 0, false, false);
+        let unknownSignature = createSignature(undefined, undefined, emptyArray, undefined, unknownType, undefined, 0, false, false);
 
         let globals: SymbolTable = {};
 
@@ -3247,12 +3247,13 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
+        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[], kind: SignatureKind,
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             let sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
+            sig.kind = kind;
             sig.resolvedReturnType = resolvedReturnType;
             sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
@@ -3262,13 +3263,13 @@ namespace ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.typePredicate,
+            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.kind, sig.resolvedReturnType, sig.typePredicate,
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             if (!getBaseTypes(classType).length) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, SignatureKind.Construct, classType, undefined, 0, false, false)];
             }
             let baseConstructorType = getBaseConstructorTypeOfClass(classType);
             let baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -3788,7 +3789,26 @@ namespace ts {
                     }
                 }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate,
+                let kind: SignatureKind;
+                switch (declaration.kind) {
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.ConstructSignature:
+                    case SyntaxKind.ConstructorType:
+                        kind = SignatureKind.Construct;
+                        break;
+                    default:
+                        if (declaration.symbol.inferredConstructor) {
+                            kind = SignatureKind.Construct;
+                            let proto = declaration.symbol.members["prototype"];
+                            returnType = createAnonymousType(createSymbol(SymbolFlags.None, "__jsClass"), proto.members, emptyArray, emptyArray, undefined, undefined);
+                        }
+                        else {
+                            kind = SignatureKind.Call;
+                        }
+                        break;
+                }
+
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, kind, returnType, typePredicate,
                     minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
@@ -3905,7 +3925,7 @@ namespace ts {
             // object type literal or interface (using the new keyword). Each way of declaring a constructor
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
-                let isConstructor = signature.declaration.kind === SyntaxKind.Constructor || signature.declaration.kind === SyntaxKind.ConstructSignature;
+                let isConstructor = signature.kind === SignatureKind.Construct;
                 let type = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.FromSignature);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
@@ -4611,6 +4631,7 @@ namespace ts {
             }
             let result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
+                signature.kind,
                 instantiateType(signature.resolvedReturnType, mapper),
                 freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
@@ -9359,13 +9380,7 @@ namespace ts {
                 return voidType;
             }
             if (node.kind === SyntaxKind.NewExpression) {
-                let declaration = signature.declaration;
-
-                if (declaration &&
-                    declaration.kind !== SyntaxKind.Constructor &&
-                    declaration.kind !== SyntaxKind.ConstructSignature &&
-                    declaration.kind !== SyntaxKind.ConstructorType) {
-
+                if (signature.kind === SignatureKind.Call) {
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);

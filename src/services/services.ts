@@ -735,6 +735,7 @@ namespace ts {
         declaration: SignatureDeclaration;
         typeParameters: TypeParameter[];
         parameters: Symbol[];
+        kind: SignatureKind;
         resolvedReturnType: Type;
         minArgumentCount: number;
         hasRestParameter: boolean;
