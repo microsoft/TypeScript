@@ -863,10 +863,6 @@ namespace ts {
                                 let start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
                             }
-                            else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
-                                let start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_can_only_be_in_d_ts_files_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
                             else if (importedFile.referencedFiles.length) {
                                 let firstRef = importedFile.referencedFiles[0];
                                 fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
@@ -1005,7 +1001,7 @@ namespace ts {
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (options.isolatedModules) {
                 if (!options.module && languageVersion < ScriptTarget.ES6) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
                 }
 
                 let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
@@ -1022,7 +1018,7 @@ namespace ts {
 
             // Cannot specify module gen target of es6 when below es6
             if (options.module === ModuleKind.ES6 && languageVersion < ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es6_when_targeting_ES5_or_lower));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es2015_when_targeting_ES5_or_lower));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot

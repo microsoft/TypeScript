@@ -159,6 +159,11 @@ namespace ts {
         let timerHandleForRecompilation: number;                    // Handle for 0.25s wait timer to trigger recompilation
         let timerHandleForDirectoryChanges: number;                 // Handle for 0.25s wait timer to trigger directory change handler
 
+        // This map stores and reuses results of fileExists check that happen inside 'createProgram'
+        // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
+        let cachedExistingFiles: Map<boolean>;
+        let hostFileExists: typeof compilerHost.fileExists;
+
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
@@ -274,7 +279,13 @@ namespace ts {
                 compilerHost = createCompilerHost(compilerOptions);
                 hostGetSourceFile = compilerHost.getSourceFile;
                 compilerHost.getSourceFile = getSourceFile;
+
+                hostFileExists = compilerHost.fileExists;
+                compilerHost.fileExists = cachedFileExists;
             }
+
+            // reset the cache of existing files
+            cachedExistingFiles = {};
 
             let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -284,6 +295,13 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+        }
+
+        function cachedFileExists(fileName: string): boolean {
+            if (hasProperty(cachedExistingFiles, fileName)) {
+                return cachedExistingFiles[fileName];
+            }
+            return cachedExistingFiles[fileName] = hostFileExists(fileName);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -567,7 +585,7 @@ namespace ts {
 
     function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
         let currentDirectory = sys.getCurrentDirectory();
-        let file = combinePaths(currentDirectory, "tsconfig.json");
+        let file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
         }

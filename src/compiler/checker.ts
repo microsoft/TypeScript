@@ -2845,23 +2845,29 @@ namespace ts {
             return type.resolvedBaseConstructorType;
         }
 
+        function hasClassBaseType(type: InterfaceType): boolean {
+            return !!forEach(getBaseTypes(type), t => !!(t.symbol.flags & SymbolFlags.Class));
+        }
+
         function getBaseTypes(type: InterfaceType): ObjectType[] {
+            let isClass = type.symbol.flags & SymbolFlags.Class;
+            let isInterface = type.symbol.flags & SymbolFlags.Interface;
             if (!type.resolvedBaseTypes) {
-                if (type.symbol.flags & SymbolFlags.Class) {
+                if (!isClass && !isInterface) {
+                    Debug.fail("type must be class or interface");
+                }
+                if (isClass) {
                     resolveBaseTypesOfClass(type);
                 }
-                else if (type.symbol.flags & SymbolFlags.Interface) {
+                if (isInterface) {
                     resolveBaseTypesOfInterface(type);
-                }
-                else {
-                    Debug.fail("type must be class or interface");
                 }
             }
             return type.resolvedBaseTypes;
         }
 
         function resolveBaseTypesOfClass(type: InterfaceType): void {
-            type.resolvedBaseTypes = emptyArray;
+            type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             let baseContructorType = getBaseConstructorTypeOfClass(type);
             if (!(baseContructorType.flags & TypeFlags.ObjectType)) {
                 return;
@@ -2897,11 +2903,16 @@ namespace ts {
                     typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
                 return;
             }
-            type.resolvedBaseTypes = [baseType];
+            if (type.resolvedBaseTypes === emptyArray) {
+                type.resolvedBaseTypes = [baseType];
+            }
+            else {
+                type.resolvedBaseTypes.push(baseType);
+            }
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
-            type.resolvedBaseTypes = [];
+            type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             for (let declaration of type.symbol.declarations) {
                 if (declaration.kind === SyntaxKind.InterfaceDeclaration && getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
                     for (let node of getInterfaceBaseTypeNodes(<InterfaceDeclaration>declaration)) {
@@ -2909,7 +2920,12 @@ namespace ts {
                         if (baseType !== unknownType) {
                             if (getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) {
                                 if (type !== baseType && !hasBaseType(<InterfaceType>baseType, type)) {
-                                    type.resolvedBaseTypes.push(baseType);
+                                    if (type.resolvedBaseTypes === emptyArray) {
+                                        type.resolvedBaseTypes = [baseType];
+                                    }
+                                    else {
+                                        type.resolvedBaseTypes.push(baseType);
+                                    }
                                 }
                                 else {
                                     error(declaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type, typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.WriteArrayAsGenericType));
@@ -3252,7 +3268,7 @@ namespace ts {
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
-            if (!getBaseTypes(classType).length) {
+            if (!hasClassBaseType(classType)) {
                 return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
             }
             let baseConstructorType = getBaseConstructorTypeOfClass(classType);
@@ -5621,11 +5637,10 @@ namespace ts {
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
             source = getErasedSignature(source);
             target = getErasedSignature(target);
-            let sourceLen = source.parameters.length;
             let targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
-                let s = source.hasRestParameter && i === sourceLen - 1 ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
-                let t = target.hasRestParameter && i === targetLen - 1 ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
+                let s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
+                let t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
                 let related = compareTypes(s, t);
                 if (!related) {
                     return Ternary.False;
@@ -5636,6 +5651,10 @@ namespace ts {
                 result &= compareTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
             return result;
+        }
+
+        function isRestParameterIndex(signature: Signature, parameterIndex: number) {
+            return signature.hasRestParameter && parameterIndex >= signature.parameters.length - 1;
         }
 
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
@@ -6803,8 +6822,9 @@ namespace ts {
                         }
 
                         // If last parameter is contextually rest parameter get its type
-                        if (indexOfParameter === (func.parameters.length - 1) &&
-                            funcHasRestParameters && contextualSignature.hasRestParameter && func.parameters.length >= contextualSignature.parameters.length) {
+                        if (funcHasRestParameters &&
+                            indexOfParameter === (func.parameters.length - 1) &&
+                            isRestParameterIndex(contextualSignature, func.parameters.length - 1)) {
                             return getTypeOfSymbol(lastOrUndefined(contextualSignature.parameters));
                         }
                     }
@@ -8409,7 +8429,7 @@ namespace ts {
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
             if (spreadArgIndex >= 0) {
-                return signature.hasRestParameter && spreadArgIndex >= signature.parameters.length - 1;
+                return isRestParameterIndex(signature, spreadArgIndex);
             }
 
             // Too many arguments implies incorrect arity.
@@ -9400,7 +9420,7 @@ namespace ts {
                 let contextualParameterType = getTypeAtPosition(context, i);
                 assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
             }
-            if (signature.hasRestParameter && context.hasRestParameter && signature.parameters.length >= context.parameters.length) {
+            if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
                 let parameter = lastOrUndefined(signature.parameters);
                 let contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
                 assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper);
@@ -15990,11 +16010,14 @@ namespace ts {
             //  DeclarationElement:
             //     ExportAssignment
             //     export_opt   InterfaceDeclaration
+            //     export_opt   TypeAliasDeclaration
             //     export_opt   ImportDeclaration
             //     export_opt   ExternalImportDeclaration
             //     export_opt   AmbientDeclaration
             //
+            // TODO: The spec needs to be amended to reflect this grammar.
             if (node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.TypeAliasDeclaration ||
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportEqualsDeclaration ||
                 node.kind === SyntaxKind.ExportDeclaration ||
