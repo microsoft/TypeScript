@@ -628,7 +628,7 @@ function deleteTemporaryProjectOutput() {
 
 var testTimeout = 20000;
 desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
+task("runtests", ["lint", "tests", builtLocalDirectory], function() {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -654,14 +654,7 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
     console.log(cmd);
-    exec(cmd, function() {
-        deleteTemporaryProjectOutput();
-        var lint = jake.Task['lint'];
-        lint.addListener('complete', function () {
-            complete();
-        });
-        lint.invoke();
-    });
+    exec(cmd, deleteTemporaryProjectOutput);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
