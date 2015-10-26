@@ -14,9 +14,8 @@ namespace ts {
     }
 
     interface ContextualError {
-        node?: Node
-        callback?: (node?: Node) => void,
-        count: number
+        callback?: (node: Node) => void;
+        count: number;
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
@@ -533,7 +532,7 @@ namespace ts {
         let parseErrorBeforeNextFinishedNode = false;
 
         // For more detailed errors, a contextual error node & callback may be used 
-        let contextualError: ContextualError = {count: 0};
+        let contextualError: ContextualError = { count: 0 };
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
@@ -557,6 +556,7 @@ namespace ts {
 
             contextFlags = isJavaScript(fileName) ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
+            contextualError = { count: 0 };
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
@@ -878,6 +878,7 @@ namespace ts {
             // descent nature of our parser.  However, we still store this here just so we can
             // assert that that invariant holds.
             let saveContextFlags = contextFlags;
+            let saveContextErrorCount = contextualError.count;
 
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
             // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
@@ -894,6 +895,7 @@ namespace ts {
                 token = saveToken;
                 parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
+                contextualError.count = saveContextErrorCount;
             }
 
             return result;
@@ -936,12 +938,19 @@ namespace ts {
         }
 
         module errors {
-            export function invalidTypeReferenceOrTypePredicate(typeName: Identifier | QualifiedName): void {
+            export function invalidTypeReferenceOrTypePredicate(node: TypeReferenceNode | TypePredicateNode): void {
+                if (node.kind === SyntaxKind.TypePredicate) {
+                    if ((<TypePredicateNode>node).type.parserContextFlags & ParserContextFlags.ThisNodeHasError) {
+                        parseErrorAtPosition((<TypePredicateNode>node).type.pos, 0, Diagnostics.Type_expected);
+                    }
+                    return;
+                }
+                let typeName = (<TypeReferenceNode>node).typeName;
                 if (typeName.flags & NodeFlags.Missing) {
                     onInvalidTypeReference(typeName);
                 }
                 if ((<QualifiedName>typeName).right && ((<QualifiedName>typeName).right.flags & NodeFlags.Missing)) {
-                    onInvalidTypeQualifiedName()
+                    onInvalidTypeQualifiedName();
                 }
             }
 
@@ -1073,16 +1082,15 @@ namespace ts {
             return node;
         }
 
-        function finishNodeContextualError<T extends Node>(node: T, end ?: number): T {
+        function finishNodeContextualError<T extends Node>(node: T, end?: number): T {
             finishNode(node, end);
 
-            // If contextual error count, try to use callback for more detailed errors
-            if (contextualError.count) {
-                if (contextualError.callback) {
-                    let errorCallback = contextualError.callback;
-                    contextualError.callback = undefined;
-                    errorCallback(contextualError.node);
-                }
+            let errorCallback = contextualError.count ? contextualError.callback : undefined;
+            contextualError.callback = undefined;
+
+            // If contextual error, use callback for more detailed error(s)
+            if (errorCallback) {
+                errorCallback(node);
                 contextualError.count = 0;
             }
             return node;
@@ -1993,17 +2001,15 @@ namespace ts {
         // TYPES
 
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
-            contextualError.callback = errors.invalidTypeReferenceOrTypePredicate
+            contextualError.callback = errors.invalidTypeReferenceOrTypePredicate;
 
             let typeName = parseEntityName(/*allowReservedWords*/ false);
-            contextualError.node = typeName;
-
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
                 nextToken();
                 let predicateNode = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
                 predicateNode.parameterName = <Identifier>typeName;
                 predicateNode.type = parseType();
-                return finishNode(predicateNode);
+                return finishNodeContextualError(predicateNode);
             }
 
             let node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
