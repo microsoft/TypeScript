@@ -1,5 +1,5 @@
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,28): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
@@ -29,9 +29,11 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(75,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(78,12): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (31 errors) ====
+==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (33 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -43,9 +45,9 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     strOrBoolean = unionOfDifferentReturnType("hello"); // error 
                                               ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-    unionOfDifferentReturnType1(true); // error in type of parameter
-                                ~~~~
-!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
+    unionOfDifferentReturnType(true); // error in type of parameter
+                               ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
     
     var unionOfDifferentReturnType1: { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; };
     numOrDate = unionOfDifferentReturnType1(10);
@@ -168,4 +170,16 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     strOrNum = unionWithRestParameter4("hello", "world");
+    strOrNum = unionWithRestParameter4("goodbye", "cruel", "world"); // error supplied parameters do not match any call signature
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    
+    var unionWithRestParameter5: { (b?: string, ...a: string[]): string; } | { (a?: string, b?: string): number; };
+    strOrNum = unionWithRestParameter5("goodbye", "cruel", "world"); // error supplied parameters do not match any call signature
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    strOrNum = unionWithRestParameter5();
+    strOrNum = unionWithRestParameter5("hello");
+    strOrNum = unionWithRestParameter5("hello", "world");
+    
     

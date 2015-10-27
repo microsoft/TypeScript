@@ -7,7 +7,7 @@ var strOrNum: string | number;
 var unionOfDifferentReturnType: { (a: number): number; } | { (a: number): Date; };
 numOrDate = unionOfDifferentReturnType(10);
 strOrBoolean = unionOfDifferentReturnType("hello"); // error 
-unionOfDifferentReturnType1(true); // error in type of parameter
+unionOfDifferentReturnType(true); // error in type of parameter
 
 var unionOfDifferentReturnType1: { (a: number): number; (a: string): string; } | { (a: number): Date; (a: string): boolean; };
 numOrDate = unionOfDifferentReturnType1(10);
@@ -72,3 +72,11 @@ strOrNum = unionWithRestParameter3(); // error no call signature
 var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
 strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
 strOrNum = unionWithRestParameter4("hello", "world");
+strOrNum = unionWithRestParameter4("goodbye", "cruel", "world"); // error supplied parameters do not match any call signature
+
+var unionWithRestParameter5: { (b?: string, ...a: string[]): string; } | { (a?: string, b?: string): number; };
+strOrNum = unionWithRestParameter5("goodbye", "cruel", "world"); // error supplied parameters do not match any call signature
+strOrNum = unionWithRestParameter5();
+strOrNum = unionWithRestParameter5("hello");
+strOrNum = unionWithRestParameter5("hello", "world");
+
