@@ -3532,7 +3532,7 @@ namespace ts {
             return result;
         }
 
-        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement|JsxSelfClosingElement {
+        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement {
             let fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
