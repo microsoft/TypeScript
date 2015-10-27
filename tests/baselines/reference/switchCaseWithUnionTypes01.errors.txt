@@ -1,0 +1,40 @@
+tests/cases/conformance/types/typeRelationships/matchable/switchCaseWithUnionTypes01.ts(19,10): error TS2322: Type 'number | boolean' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+    Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/matchable/switchCaseWithUnionTypes01.ts(23,10): error TS2322: Type 'boolean' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/types/typeRelationships/matchable/switchCaseWithUnionTypes01.ts (2 errors) ====
+    
+    var strOrNum: string | number;
+    var numOrBool: number | boolean;
+    var str: string;
+    var num: number;
+    var bool: boolean;
+    
+    switch (strOrNum) {
+        // Identical
+        case strOrNum:
+            break;
+    
+        // Constituents
+        case str:
+        case num:
+            break;
+    
+        // Overlap in constituents
+        case numOrBool:
+             ~~~~~~~~~
+!!! error TS2322: Type 'number | boolean' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+            break;
+    
+        // No relation
+        case bool:
+             ~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+            break;
+    }
