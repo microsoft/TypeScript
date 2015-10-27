@@ -943,6 +943,10 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
+            if (options.deconstConstEnums && !options.preserveConstEnums) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "deconstConstEnums", "preserveConstEnums"));
+            }
+
             if (options.isolatedModules) {
                 if (options.declaration) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules"));

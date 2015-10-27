@@ -1,0 +1,24 @@
+=== tests/cases/compiler/deconstConstEnums1.ts ===
+
+const enum Foo {
+>Foo : Symbol(Foo, Decl(deconstConstEnums1.ts, 0, 0))
+
+	Item1,
+>Item1 : Symbol(Foo.Item1, Decl(deconstConstEnums1.ts, 1, 16))
+
+	Item2
+>Item2 : Symbol(Foo.Item2, Decl(deconstConstEnums1.ts, 2, 7))
+}
+
+let a = Foo.Item1;
+>a : Symbol(a, Decl(deconstConstEnums1.ts, 6, 3))
+>Foo.Item1 : Symbol(Foo.Item1, Decl(deconstConstEnums1.ts, 1, 16))
+>Foo : Symbol(Foo, Decl(deconstConstEnums1.ts, 0, 0))
+>Item1 : Symbol(Foo.Item1, Decl(deconstConstEnums1.ts, 1, 16))
+
+let b = Foo.Item2;
+>b : Symbol(b, Decl(deconstConstEnums1.ts, 7, 3))
+>Foo.Item2 : Symbol(Foo.Item2, Decl(deconstConstEnums1.ts, 2, 7))
+>Foo : Symbol(Foo, Decl(deconstConstEnums1.ts, 0, 0))
+>Item2 : Symbol(Foo.Item2, Decl(deconstConstEnums1.ts, 2, 7))
+

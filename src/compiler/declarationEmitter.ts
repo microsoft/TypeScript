@@ -791,7 +791,7 @@ namespace ts {
         function writeEnumDeclaration(node: EnumDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            if (isConst(node)) {
+            if (!compilerOptions.deconstConstEnums && isConst(node)) {
                 write("const ");
             }
             write("enum ");

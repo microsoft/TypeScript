@@ -1336,6 +1336,7 @@ declare namespace ts {
         outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
+        deconstConstEnums?: boolean;
         project?: string;
         removeComments?: boolean;
         rootDir?: string;
