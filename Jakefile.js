@@ -350,11 +350,10 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     ex.run();
 }, {async: true});
 
-file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
-    if (fs.existsSync(builtLocalDirectory)) {
-        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
-    }
-}, {async: true});
+file(builtGeneratedDiagnosticMessagesJSON, [generatedDiagnosticMessagesJSON], function() {
+    jake.mkdirP(builtLocalDirectory);
+    jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON):
+});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
