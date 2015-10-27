@@ -21,7 +21,7 @@ class A {
 function decorator(target: Object, propertyKey: string) {
 >decorator : Symbol(decorator, Decl(decoratorMetadataWithConstructorType.ts, 7, 1))
 >target : Symbol(target, Decl(decoratorMetadataWithConstructorType.ts, 9, 19))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >propertyKey : Symbol(propertyKey, Decl(decoratorMetadataWithConstructorType.ts, 9, 34))
 }
 

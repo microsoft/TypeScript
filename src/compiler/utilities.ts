@@ -65,7 +65,8 @@ namespace ts {
                 increaseIndent: () => { },
                 decreaseIndent: () => { },
                 clear: () => str = "",
-                trackSymbol: () => { }
+                trackSymbol: () => { },
+                reportInaccessibleThisError: () => { }
             };
         }
 
@@ -81,25 +82,25 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
-        if (!arr1 || !arr2) {
-            return arr1 === arr2;
+    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
+        if (!array1 || !array2) {
+            return array1 === array2;
         }
 
-        if (arr1.length !== arr2.length) {
+        if (array1.length !== array2.length) {
             return false;
         }
 
-        for (let i = 0; i < arr1.length; ++i) {
-            let equals = comparer ? comparer(arr1[i], arr2[i]) : arr1[i] === arr2[i];
+        for (let i = 0; i < array1.length; ++i) {
+            let equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
             if (!equals) {
                 return false;
             }
         }
 
         return true;
-    }    
-   
+    }
+
     export function hasResolvedModule(sourceFile: SourceFile, moduleNameText: string): boolean {
         return sourceFile.resolvedModules && hasProperty(sourceFile.resolvedModules, moduleNameText);
     }
@@ -468,13 +469,12 @@ namespace ts {
                 else if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node) {
                     node = node.parent;
                 }
-            // fall through
-            case SyntaxKind.QualifiedName:
-            case SyntaxKind.PropertyAccessExpression:
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isTypeNode'.");
-
+            case SyntaxKind.QualifiedName:
+            case SyntaxKind.PropertyAccessExpression:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 if (parent.kind === SyntaxKind.TypeQuery) {
                     return false;
@@ -657,6 +657,22 @@ namespace ts {
         return false;
     }
 
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return true;
+            case SyntaxKind.LabeledStatement:
+                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+        }
+
+        return false;
+    }
+
+
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
@@ -733,6 +749,9 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.IndexSignature:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.SourceFile:
                     return node;
@@ -893,9 +912,16 @@ namespace ts {
         return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
+    export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
+        return node.kind === SyntaxKind.PropertyAccessExpression;
+    }
+
+    export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
+        return node.kind === SyntaxKind.ElementAccessExpression;
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
@@ -928,6 +954,7 @@ namespace ts {
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.YieldExpression:
+            case SyntaxKind.AwaitExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -941,6 +968,7 @@ namespace ts {
             // fall through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
+            case SyntaxKind.ThisKeyword:
                 let parent = node.parent;
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
@@ -981,6 +1009,7 @@ namespace ts {
                         return node === (<ComputedPropertyName>parent).expression;
                     case SyntaxKind.Decorator:
                     case SyntaxKind.JsxExpression:
+                    case SyntaxKind.JsxSpreadAttribute:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
@@ -991,6 +1020,12 @@ namespace ts {
                 }
         }
         return false;
+    }
+
+    export function isExternalModuleNameRelative(moduleName: string): boolean {
+        // TypeScript 1.0 spec (April 2014): 11.2.1
+        // An external module name is "relative" if the first term is "." or "..".
+        return moduleName.substr(0, 2) === "./" || moduleName.substr(0, 3) === "../" || moduleName.substr(0, 2) === ".\\" || moduleName.substr(0, 3) === "..\\";
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
@@ -1403,7 +1438,7 @@ namespace ts {
      * where Symbol is literally the word "Symbol", and name is any identifierName
      */
     export function isWellKnownSymbolSyntactically(node: Expression): boolean {
-        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+        return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
     export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
@@ -1486,7 +1521,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind);
+        let node = <SynthesizedNode>createNode(kind, /* pos */ -1, /* end */ -1);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
@@ -1516,12 +1551,12 @@ namespace ts {
         function getModificationCount() {
             return modificationCount;
         }
-        
+
         function reattachFileDiagnostics(newFile: SourceFile): void {
             if (!hasProperty(fileDiagnostics, newFile.fileName)) {
                 return;
             }
-            
+
             for (let diagnostic of fileDiagnostics[newFile.fileName]) {
                 diagnostic.file = newFile;
             }
@@ -2036,8 +2071,8 @@ namespace ts {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
-        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
+        else if (isPropertyAccessExpression(node)) {
+            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
         }
         else {
             return false;

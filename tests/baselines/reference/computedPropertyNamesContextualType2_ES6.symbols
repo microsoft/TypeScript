@@ -17,13 +17,13 @@ var o: I = {
 
     [+"foo"](y) { return y.length; },
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 13))
->y.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>y.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 6, 13))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
     [+"bar"]: y => y.length
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 7, 13))
->y.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>y.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >y : Symbol(y, Decl(computedPropertyNamesContextualType2_ES6.ts, 7, 13))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 }

@@ -2,15 +2,15 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
-    let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
+    let nodeConstructors = new Array<new (pos: number, end: number) => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
-    export function getNodeConstructor(kind: SyntaxKind): new () => Node {
+    export function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
 
-    export function createNode(kind: SyntaxKind): Node {
-        return new (getNodeConstructor(kind))();
+    export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
+        return new (getNodeConstructor(kind))(pos, end);
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
@@ -57,11 +57,17 @@ namespace ts {
                 return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
                     visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
+            case SyntaxKind.ShorthandPropertyAssignment:
+                return visitNodes(cbNodes, node.decorators) ||
+                    visitNodes(cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).name) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
+                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
-            case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.BindingElement:
                 return visitNodes(cbNodes, node.decorators) ||
@@ -425,7 +431,7 @@ namespace ts {
     // Implement the parser as a singleton module.  We do this for perf reasons because creating
     // parser instances can actually be expensive enough to impact us on projects with many source
     // files.
-    module Parser {
+    namespace Parser {
         // Share a single scanner across all calls to parse a source file.  This helps speed things
         // up by avoiding the cost of creating/compiling scanners over and over again.
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -518,7 +524,7 @@ namespace ts {
         //
         // Note: any errors at the end of the file that do not precede a regular node, should get
         // attached to the EOF token.
-        let parseErrorBeforeNextFinishedNode: boolean = false;
+        let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
             initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
@@ -856,7 +862,7 @@ namespace ts {
             let saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
-            // because the saving/restorating of these flags happens naturally through the recursive
+            // because the saving/restoring of these flags happens naturally through the recursive
             // descent nature of our parser.  However, we still store this here just so we can
             // assert that that invariant holds.
             let saveContextFlags = contextFlags;
@@ -987,14 +993,10 @@ namespace ts {
 
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
-            let node = new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))();
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
-
-            node.pos = pos;
-            node.end = pos;
-            return node;
+            return new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
@@ -1124,7 +1126,15 @@ namespace ts {
             if (token === SyntaxKind.DefaultKeyword) {
                 return nextTokenIsClassOrFunction();
             }
+            if (token === SyntaxKind.StaticKeyword) {
+                nextToken();
+                return canFollowModifier();
+            }
+
             nextToken();
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
+            }
             return canFollowModifier();
         }
 
@@ -2360,6 +2370,7 @@ namespace ts {
                     let node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
@@ -2382,6 +2393,7 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
+                case SyntaxKind.ThisKeyword:
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.OpenBraceToken:
                 case SyntaxKind.OpenBracketToken:
@@ -3015,7 +3027,31 @@ namespace ts {
                 let newPrecedence = getBinaryOperatorPrecedence();
 
                 // Check the precedence to see if we should "take" this operator
-                if (newPrecedence <= precedence) {
+                // - For left associative operator (all operator but **), consume the operator,
+                //   recursively call the function below, and parse binaryExpression as a rightOperand
+                //   of the caller if the new precendence of the operator is greater then or equal to the current precendence.
+                //   For example:
+                //      a - b - c;
+                //            ^token; leftOperand = b. Return b to the caller as a rightOperand
+                //      a * b - c
+                //            ^token; leftOperand = b. Return b to the caller as a rightOperand
+                //      a - b * c;
+                //            ^token; leftOperand = b. Return b * c to the caller as a rightOperand
+                // - For right associative operator (**), consume the operator, recursively call the function
+                //   and parse binaryExpression as a rightOperand of the caller if the new precendence of
+                //   the operator is strictly grater than the current precendence
+                //   For example:
+                //      a ** b ** c;
+                //             ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
+                //      a - b ** c;
+                //            ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
+                //      a ** b - c
+                //             ^token; leftOperand = b. Return b to the caller as a rightOperand
+                const consumeCurrentOperator = token === SyntaxKind.AsteriskAsteriskToken ?
+                    newPrecedence >= precedence :
+                    newPrecedence > precedence;
+
+                if (!consumeCurrentOperator) {
                     break;
                 }
 
@@ -3089,6 +3125,8 @@ namespace ts {
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.PercentToken:
                     return 10;
+                case SyntaxKind.AsteriskAsteriskToken:
+                    return 11;
             }
 
             // -1 is lower than all other precedences.  Returning it will cause binary expression
@@ -3115,28 +3153,29 @@ namespace ts {
             let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
             node.operator = token;
             nextToken();
-            node.operand = parseUnaryExpressionOrHigher();
+            node.operand = parseSimpleUnaryExpression();
+
             return finishNode(node);
         }
 
         function parseDeleteExpression() {
             let node = <DeleteExpression>createNode(SyntaxKind.DeleteExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
         function parseTypeOfExpression() {
             let node = <TypeOfExpression>createNode(SyntaxKind.TypeOfExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
         function parseVoidExpression() {
             let node = <VoidExpression>createNode(SyntaxKind.VoidExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
@@ -3156,22 +3195,63 @@ namespace ts {
         function parseAwaitExpression() {
             const node = <AwaitExpression>createNode(SyntaxKind.AwaitExpression);
             nextToken();
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
-        function parseUnaryExpressionOrHigher(): UnaryExpression {
+        /**
+         * Parse ES7 unary expression and await expression
+         * 
+         * ES7 UnaryExpression:
+         *      1) SimpleUnaryExpression[?yield]
+         *      2) IncrementExpression[?yield] ** UnaryExpression[?yield]
+         */
+        function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
             if (isAwaitExpression()) {
                 return parseAwaitExpression();
             }
 
+            if (isIncrementExpression()) {
+                let incrementExpression = parseIncrementExpression();
+                return token === SyntaxKind.AsteriskAsteriskToken ?
+                    <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), incrementExpression) :
+                    incrementExpression;
+            }
+
+            let unaryOperator = token;
+            let simpleUnaryExpression = parseSimpleUnaryExpression();
+            if (token === SyntaxKind.AsteriskAsteriskToken) {
+                let diagnostic: Diagnostic;
+                let start = skipTrivia(sourceText, simpleUnaryExpression.pos);
+                if (simpleUnaryExpression.kind === SyntaxKind.TypeAssertionExpression) {
+                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses);
+                }
+                else {
+                    parseErrorAtPosition(start, simpleUnaryExpression.end - start, Diagnostics.An_unary_expression_with_the_0_operator_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Consider_enclosing_the_expression_in_parentheses, tokenToString(unaryOperator));
+                }
+            }
+            return simpleUnaryExpression;
+        }
+
+        /**
+         * Parse ES7 simple-unary expression or higher:
+         *
+         * ES7 SimpleUnaryExpression:
+         *      1) IncrementExpression[?yield]
+         *      2) delete UnaryExpression[?yield]
+         *      3) void UnaryExpression[?yield]
+         *      4) typeof UnaryExpression[?yield]
+         *      5) + UnaryExpression[?yield]
+         *      6) - UnaryExpression[?yield]
+         *      7) ~ UnaryExpression[?yield]
+         *      8) ! UnaryExpression[?yield]
+         */
+        function parseSimpleUnaryExpression(): UnaryExpression {
             switch (token) {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
                 case SyntaxKind.ExclamationToken:
-                case SyntaxKind.PlusPlusToken:
-                case SyntaxKind.MinusMinusToken:
                     return parsePrefixUnaryExpression();
                 case SyntaxKind.DeleteKeyword:
                     return parseDeleteExpression();
@@ -3180,19 +3260,73 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return parseVoidExpression();
                 case SyntaxKind.LessThanToken:
-                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
-                        return parseTypeAssertion();
-                    }
-                    if (lookAhead(nextTokenIsIdentifierOrKeyword)) {
-                        return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
-                    }
-                    // Fall through
+                    // This is modified UnaryExpression grammar in TypeScript
+                    //  UnaryExpression (modified):
+                    //      < type > UnaryExpression
+                    return parseTypeAssertion();
                 default:
-                    return parsePostfixExpressionOrHigher();
+                    return parseIncrementExpression();
             }
         }
 
-        function parsePostfixExpressionOrHigher(): PostfixExpression {
+        /**
+         * Check if the current token can possibly be an ES7 increment expression.
+         *
+         * ES7 IncrementExpression:
+         *      LeftHandSideExpression[?Yield]
+         *      LeftHandSideExpression[?Yield][no LineTerminator here]++
+         *      LeftHandSideExpression[?Yield][no LineTerminator here]--
+         *      ++LeftHandSideExpression[?Yield]
+         *      --LeftHandSideExpression[?Yield]
+         */
+        function isIncrementExpression(): boolean {
+            // This function is called inside parseUnaryExpression to decide
+            // whether to call parseSimpleUnaryExpression or call parseIncrmentExpression directly
+            switch (token) {
+                case SyntaxKind.PlusToken:
+                case SyntaxKind.MinusToken:
+                case SyntaxKind.TildeToken:
+                case SyntaxKind.ExclamationToken:
+                case SyntaxKind.DeleteKeyword:
+                case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.VoidKeyword:
+                    return false;
+                case SyntaxKind.LessThanToken:
+                    // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
+                    if (sourceFile.languageVariant !== LanguageVariant.JSX) {
+                        return false;
+                    }
+                    // We are in JSX context and the token is part of JSXElement.
+                    // Fall through
+                default:
+                    return true;
+            }
+        }
+
+        /**
+         * Parse ES7 IncrementExpression. IncrementExpression is used instead of ES6's PostFixExpression.
+         *
+         * ES7 IncrementExpression[yield]:
+         *      1) LeftHandSideExpression[?yield]
+         *      2) LeftHandSideExpression[?yield] [[no LineTerminator here]]++
+         *      3) LeftHandSideExpression[?yield] [[no LineTerminator here]]--
+         *      4) ++LeftHandSideExpression[?yield]
+         *      5) --LeftHandSideExpression[?yield]
+         * In TypeScript (2), (3) are parsed as PostfixUnaryExpression. (4), (5) are parsed as PrefixUnaryExpression
+         */
+        function parseIncrementExpression(): IncrementExpression {
+            if (token === SyntaxKind.PlusPlusToken || token === SyntaxKind.MinusMinusToken) {
+                let node = <PrefixUnaryExpression>createNode(SyntaxKind.PrefixUnaryExpression);
+                node.operator = token;
+                nextToken();
+                node.operand = parseLeftHandSideExpressionOrHigher();
+                return finishNode(node);
+            }
+            else if (sourceFile.languageVariant === LanguageVariant.JSX && token === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeyword)) {
+                // JSXElement is part of primaryExpression
+                return parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true);
+            }
+
             let expression = parseLeftHandSideExpressionOrHigher();
 
             Debug.assert(isLeftHandSideExpression(expression));
@@ -3316,19 +3450,43 @@ namespace ts {
 
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             let opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
+            let result: JsxElement | JsxSelfClosingElement;
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
                 let node = <JsxElement>createNode(SyntaxKind.JsxElement, opening.pos);
                 node.openingElement = opening;
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
-                return finishNode(node);
+                result = finishNode(node);
             }
             else {
                 Debug.assert(opening.kind === SyntaxKind.JsxSelfClosingElement);
                 // Nothing else to do for self-closing elements
-                return <JsxSelfClosingElement>opening;
+                result = <JsxSelfClosingElement>opening;
             }
+
+            // If the user writes the invalid code '<div></div><div></div>' in an expression context (i.e. not wrapped in
+            // an enclosing tag), we'll naively try to parse   ^ this as a 'less than' operator and the remainder of the tag
+            // as garbage, which will cause the formatter to badly mangle the JSX. Perform a speculative parse of a JSX
+            // element if we see a < token so that we can wrap it in a synthetic binary expression so the formatter
+            // does less damage and we can report a better error.
+            // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
+            // of one sort or another.
+            if (inExpressionContext && token === SyntaxKind.LessThanToken) {
+                let invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/true));
+                if (invalidElement) {
+                    parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
+                    let badNode = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, result.pos);
+                    badNode.end = invalidElement.end;
+                    badNode.left = result;
+                    badNode.right = invalidElement;
+                    badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false, /*diagnosticMessage*/ undefined);
+                    badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
+                    return <JsxElement><Node>badNode;
+                }
+            }
+
+            return result;
         }
 
         function parseJsxText(): JsxText {
@@ -3374,7 +3532,7 @@ namespace ts {
             return result;
         }
 
-        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement|JsxSelfClosingElement {
+        function parseJsxOpeningOrSelfClosingElement(inExpressionContext: boolean): JsxOpeningElement | JsxSelfClosingElement {
             let fullStart = scanner.getStartPos();
 
             parseExpected(SyntaxKind.LessThanToken);
@@ -3489,7 +3647,7 @@ namespace ts {
             parseExpected(SyntaxKind.LessThanToken);
             node.type = parseType();
             parseExpected(SyntaxKind.GreaterThanToken);
-            node.expression = parseUnaryExpressionOrHigher();
+            node.expression = parseSimpleUnaryExpression();
             return finishNode(node);
         }
 
@@ -3748,11 +3906,23 @@ namespace ts {
                 return parseMethodDeclaration(fullStart, decorators, modifiers, asteriskToken, propertyName, questionToken);
             }
 
-            // Parse to check if it is short-hand property assignment or normal property assignment
-            if ((token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken) && tokenIsIdentifier) {
+            // check if it is short-hand property assignment or normal property assignment
+            // NOTE: if token is EqualsToken it is interpreted as CoverInitializedName production
+            // CoverInitializedName[Yield] :
+            //     IdentifierReference[?Yield] Initializer[In, ?Yield]
+            // this is necessary because ObjectLiteral productions are also used to cover grammar for ObjectAssignmentPattern
+            const isShorthandPropertyAssignment =
+                tokenIsIdentifier && (token === SyntaxKind.CommaToken || token === SyntaxKind.CloseBraceToken || token === SyntaxKind.EqualsToken);
+
+            if (isShorthandPropertyAssignment) {
                 let shorthandDeclaration = <ShorthandPropertyAssignment>createNode(SyntaxKind.ShorthandPropertyAssignment, fullStart);
                 shorthandDeclaration.name = <Identifier>propertyName;
                 shorthandDeclaration.questionToken = questionToken;
+                const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
+                if (equalsToken) {
+                    shorthandDeclaration.equalsToken = equalsToken;
+                    shorthandDeclaration.objectAssignmentInitializer = allowInAnd(parseAssignmentExpressionOrHigher);
+                }
                 return finishNode(shorthandDeclaration);
             }
             else {
@@ -3938,7 +4108,8 @@ namespace ts {
                 forOfStatement.expression = allowInAnd(parseAssignmentExpressionOrHigher);
                 parseExpected(SyntaxKind.CloseParenToken);
                 forOrForInOrForOfStatement = forOfStatement;
-            } else {
+            }
+            else {
                 let forStatement = <ForStatement>createNode(SyntaxKind.ForStatement, pos);
                 forStatement.initializer = initializer;
                 parseExpected(SyntaxKind.SemicolonToken);
@@ -4154,8 +4325,12 @@ namespace ts {
                     case SyntaxKind.ModuleKeyword:
                     case SyntaxKind.NamespaceKeyword:
                         return nextTokenIsIdentifierOrStringLiteralOnSameLine();
+                    case SyntaxKind.AbstractKeyword:
                     case SyntaxKind.AsyncKeyword:
                     case SyntaxKind.DeclareKeyword:
+                    case SyntaxKind.PrivateKeyword:
+                    case SyntaxKind.ProtectedKeyword:
+                    case SyntaxKind.PublicKeyword:
                         nextToken();
                         // ASI takes effect for this modifier.
                         if (scanner.hasPrecedingLineBreak()) {
@@ -4175,11 +4350,7 @@ namespace ts {
                         }
                         continue;
 
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                    case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.StaticKeyword:
-                    case SyntaxKind.AbstractKeyword:
                         nextToken();
                         continue;
                     default:
@@ -4825,7 +4996,7 @@ namespace ts {
 
             return finishNode(node);
         }
-        
+
         function parseNameOfClassDeclarationOrExpression(): Identifier {
             // implements is a future reserved word so
             // 'class implements' might mean either
@@ -4836,11 +5007,11 @@ namespace ts {
                 ? parseIdentifier()
                 : undefined;
         }
-        
+
         function isImplementsClause() {
-            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword)
+            return token === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword);
         }
-        
+
         function parseHeritageClauses(isClassHeritageClause: boolean): NodeArray<HeritageClause> {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
@@ -5315,7 +5486,7 @@ namespace ts {
             Unknown
         }
 
-        export module JSDocParser {
+        export namespace JSDocParser {
             export function isJSDocType() {
                 switch (token) {
                     case SyntaxKind.AsteriskToken:
@@ -5960,7 +6131,7 @@ namespace ts {
         }
     }
 
-    module IncrementalParser {
+    namespace IncrementalParser {
         export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks: boolean): SourceFile {
             aggressiveChecks = aggressiveChecks || Debug.shouldAssert(AssertionLevel.Aggressive);
 

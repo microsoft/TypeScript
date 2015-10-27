@@ -21,6 +21,21 @@ module ts.server {
         return spaceCache[n];
     }
 
+    export function generateIndentString(n: number, editorOptions: EditorOptions): string {
+        if (editorOptions.ConvertTabsToSpaces) {
+            return generateSpaces(n);
+        } else {
+            var result = "";
+            for (var i = 0; i < Math.floor(n / editorOptions.TabSize); i++) {
+                result += "\t";
+            }
+            for (var i = 0; i < n % editorOptions.TabSize; i++) {
+                result += " ";
+            }
+            return result;
+        }
+    }
+    
     interface FileStart {
         file: string;
         start: ILineInfo;
@@ -848,31 +863,30 @@ module ts.server {
                                 TabSize: formatOptions.TabSize,
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
+                                IndentStyle: ts.IndentStyle.Smart,
                                 SendMetrics: formatOptions.SendMetrics,
                                 TelemetryUserID: formatOptions.TelemetryUserID,
                                 CheckForDtsUpdates: formatOptions.CheckForDtsUpdates
                             };
-                            var indentPosition =
-                                compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                            var preferredIndent = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
+                            var hasIndent = 0;
                             for (var i = 0, len = lineText.length; i < len; i++) {
                                 if (lineText.charAt(i) == " ") {
-                                    indentPosition--;
+                                    hasIndent++;
                                 }
                                 else if (lineText.charAt(i) == "\t") {
-                                    indentPosition -= editorOptions.IndentSize;
+                                    hasIndent += editorOptions.TabSize;
                                 }
                                 else {
                                     break;
                                 }
                             }
-                            if (indentPosition > 0) {
-                                var spaces = generateSpaces(indentPosition);
-                                edits.push({ span: ts.createTextSpanFromBounds(position, position), newText: spaces });
-                            }
-                            else if (indentPosition < 0) {
+                            // i points to the first non whitespace character
+                            if (preferredIndent !== hasIndent) {
+                                var firstNoWhiteSpacePosition = lineInfo.offset + i;
                                 edits.push({
-                                    span: ts.createTextSpanFromBounds(position, position - indentPosition),
-                                    newText: ""
+                                    span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
+                                    newText: generateIndentString(preferredIndent, editorOptions)
                                 });
                             }
                         }
@@ -1024,6 +1038,7 @@ module ts.server {
         }
 
         private closeClientFile(fileName: string) {
+            if (!fileName) { return; }
             var file = ts.normalizePath(fileName);
             this.projectService.closeClientFile(file);
         }

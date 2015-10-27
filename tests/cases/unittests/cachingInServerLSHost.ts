@@ -48,6 +48,11 @@ module ts {
                 return {
                     close: () => { }
                 }
+            },
+            watchDirectory: (path, callback, recursive?) => {
+                return {
+                    close: () => { }
+                }
             }
         };
     }

@@ -77,10 +77,11 @@ namespace ts {
                 "system": ModuleKind.System,
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES6,
+                "es2015": ModuleKind.ES2015,
             },
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es6,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
             paramType: Diagnostics.KIND,
-            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es6
+            error: Diagnostics.Argument_for_module_option_must_be_commonjs_amd_system_umd_or_es2015
         },
         {
             name: "newLine",
@@ -205,10 +206,15 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: { "es3": ScriptTarget.ES3, "es5": ScriptTarget.ES5, "es6": ScriptTarget.ES6 },
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES6_experimental,
+            type: {
+                "es3": ScriptTarget.ES3,
+                "es5": ScriptTarget.ES5,
+                "es6": ScriptTarget.ES6,
+                "es2015": ScriptTarget.ES2015,
+            },
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_or_ES2015_experimental,
             paramType: Diagnostics.VERSION,
-            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES6
+            error: Diagnostics.Argument_for_target_option_must_be_ES3_ES5_or_ES2015
         },
         {
             name: "version",
@@ -221,11 +227,6 @@ namespace ts {
             shortName: "w",
             type: "boolean",
             description: Diagnostics.Watch_input_files,
-        },
-        {
-            name: "experimentalAsyncFunctions",
-            type: "boolean",
-            description: Diagnostics.Enables_experimental_support_for_ES7_async_functions
         },
         {
             name: "experimentalDecorators",
@@ -389,7 +390,7 @@ namespace ts {
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
-        return parseConfigFileText(fileName, text);
+        return parseConfigFileTextToJson(fileName, text);
     }
 
     /**
@@ -397,7 +398,7 @@ namespace ts {
       * @param fileName The path to the config file
       * @param jsonText The text of the config file
       */
-    export function parseConfigFileText(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
             return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
         }
@@ -409,59 +410,18 @@ namespace ts {
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
+      * @param host Instance of ParseConfigHost used to enumerate files in folder.
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
-        let errors: Diagnostic[] = [];
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+        let { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
 
         return {
-            options: getCompilerOptions(),
+            options,
             fileNames: getFileNames(),
             errors
         };
-
-        function getCompilerOptions(): CompilerOptions {
-            let options: CompilerOptions = {};
-            let optionNameMap: Map<CommandLineOption> = {};
-            forEach(optionDeclarations, option => {
-                optionNameMap[option.name] = option;
-            });
-            let jsonOptions = json["compilerOptions"];
-            if (jsonOptions) {
-                for (let id in jsonOptions) {
-                    if (hasProperty(optionNameMap, id)) {
-                        let opt = optionNameMap[id];
-                        let optType = opt.type;
-                        let value = jsonOptions[id];
-                        let expectedType = typeof optType === "string" ? optType : "string";
-                        if (typeof value === expectedType) {
-                            if (typeof optType !== "string") {
-                                let key = value.toLowerCase();
-                                if (hasProperty(optType, key)) {
-                                    value = optType[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                    value = 0;
-                                }
-                            }
-                            if (opt.isFilePath) {
-                                value = normalizePath(combinePaths(basePath, value));
-                            }
-                            options[opt.name] = value;
-                        }
-                        else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
-                        }
-                    }
-                    else {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
-                    }
-                }
-            }
-            return options;
-        }
 
         function getFileNames(): string[] {
             let fileNames: string[] = [];
@@ -470,7 +430,7 @@ namespace ts {
                     fileNames = map(<string[]>json["files"], s => combinePaths(basePath, s));
                 }
                 else {
-                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));                    
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array"));
                 }
             }
             else {
@@ -496,5 +456,52 @@ namespace ts {
             }
             return fileNames;
         }
+    }
+
+    export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
+        let options: CompilerOptions = {};
+        let errors: Diagnostic[] = [];
+
+        if (!jsonOptions) {
+            return { options, errors };
+        }
+
+        let optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+
+        for (let id in jsonOptions) {
+            if (hasProperty(optionNameMap, id)) {
+                let opt = optionNameMap[id];
+                let optType = opt.type;
+                let value = jsonOptions[id];
+                let expectedType = typeof optType === "string" ? optType : "string";
+                if (typeof value === expectedType) {
+                    if (typeof optType !== "string") {
+                        let key = value.toLowerCase();
+                        if (hasProperty(optType, key)) {
+                            value = optType[key];
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                            value = 0;
+                        }
+                    }
+                    if (opt.isFilePath) {
+                        value = normalizePath(combinePaths(basePath, value));
+                        if (value === "") {
+                            value = ".";
+                        }
+                    }
+                    options[opt.name] = value;
+                }
+                else {
+                    errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, id, expectedType));
+                }
+            }
+            else {
+                errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+            }
+        }
+
+        return { options, errors };
     }
 }

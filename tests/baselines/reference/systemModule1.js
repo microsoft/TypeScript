@@ -8,7 +8,7 @@ System.register([], function(exports_1) {
     return {
         setters:[],
         execute: function() {
-            x = 1;
+            exports_1("x", x = 1);
         }
     }
 });
