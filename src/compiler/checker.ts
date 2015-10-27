@@ -9054,6 +9054,8 @@ namespace ts {
                         }
                         else {
                             if (originalCandidate.unionSignatures.some(sig => !hasCorrectArity(node, args, sig))) {
+                                // if at least one of the signatures fails to match arity, then give a generic
+                                // "no call signature" error instead of "string is not assignable to number"
                                 candidateForArgumentError = undefined;
                                 candidateForTypeArgumentError = undefined;
                             }
