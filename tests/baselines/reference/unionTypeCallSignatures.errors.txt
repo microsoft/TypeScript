@@ -28,9 +28,10 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(67,12): error TS2
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(68,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(69,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (30 errors) ====
+==== tests/cases/conformance/types/union/unionTypeCallSignatures.ts (31 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -162,4 +163,9 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(70,12): error TS2
                ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
     
+    var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
+    strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    strOrNum = unionWithRestParameter4("hello", "world");
     

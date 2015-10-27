@@ -11,7 +11,7 @@ namespace ts.server {
         input: process.stdin,
         output: process.stdout,
         terminal: false,
-    });  
+    });
 
     class Logger implements ts.server.Logger {
         fd = -1;
@@ -58,7 +58,7 @@ namespace ts.server {
         isVerbose() {
             return this.loggingEnabled() && (this.level == "verbose");
         }
-        
+
 
         msg(s: string, type = "Err") {
             if (this.fd < 0) {
@@ -89,18 +89,18 @@ namespace ts.server {
         }
 
         exit() {
-            this.projectService.log("Exiting...","Info");
+            this.projectService.log("Exiting...", "Info");
             this.projectService.closeLog();
             process.exit(0);
         }
 
         listen() {
-            rl.on('line',(input: string) => {
+            rl.on('line', (input: string) => {
                 var message = input.trim();
                 this.onMessage(message);
             });
 
-            rl.on('close',() => {
+            rl.on('close', () => {
                 this.exit();
             });
         }
@@ -154,6 +154,28 @@ namespace ts.server {
     // TODO: check that this location is writable
 
     var logger = createLoggerFromEnv();
+
+    let pending: string[] = [];
+    let canWrite = true;
+    function writeMessage(s: string) {
+        if (!canWrite) {
+            pending.push(s);
+        }
+        else {
+            canWrite = false;
+            process.stdout.write(new Buffer(s, "utf8"), setCanWriteFlagAndWriteMessageIfNecessary);
+        }
+    }
+
+    function setCanWriteFlagAndWriteMessageIfNecessary() {
+        canWrite = true;
+        if (pending.length) {
+            writeMessage(pending.shift());
+        }
+    }
+
+    // Override sys.write because fs.writeSync is not reliable on Node 4
+    ts.sys.write = (s: string) => writeMessage(s);
 
     var ioSession = new IOSession(ts.sys, logger);
     process.on('uncaughtException', function(err: Error) {

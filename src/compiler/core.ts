@@ -365,10 +365,10 @@ namespace ts {
 
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
-    export function getLocaleSpecificMessage(message: string) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
-            ? localizedDiagnosticMessages[message]
-            : message;
+    export function getLocaleSpecificMessage(message: DiagnosticMessage) {
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
+            ? localizedDiagnosticMessages[message.key]
+            : message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -383,7 +383,7 @@ namespace ts {
             Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
         }
 
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
@@ -402,7 +402,7 @@ namespace ts {
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 1) {
             text = formatStringFromArgs(text, arguments, 1);
@@ -421,7 +421,7 @@ namespace ts {
 
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
@@ -775,7 +775,7 @@ namespace ts {
     };
 
     export interface ObjectAllocator {
-        getNodeConstructor(kind: SyntaxKind): new () => Node;
+        getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
@@ -796,15 +796,13 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: kind => {
-            function Node() {
+            function Node(pos: number, end: number) {
+                this.pos = pos;
+                this.end = end;
+                this.flags = NodeFlags.None;
+                this.parent = undefined;
             }
-            Node.prototype = {
-                kind: kind,
-                pos: -1,
-                end: -1,
-                flags: 0,
-                parent: undefined,
-            };
+            Node.prototype = { kind };
             return <any>Node;
         },
         getSymbolConstructor: () => <any>Symbol,
@@ -844,9 +842,9 @@ namespace ts {
 
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         let copiedList: T[] = [];
-        for (var i = 0, len = list.length; i < len; i++) {
-            if (list[i] !== item) {
-                copiedList.push(list[i]);
+        for (let e of list) {
+            if (e !== item) {
+                copiedList.push(e);
             }
         }
         return copiedList;
