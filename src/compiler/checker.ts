@@ -6581,26 +6581,34 @@ namespace ts {
 
         function checkBlockScopedBindingCapturedInLoop(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES6 ||
-                (symbol.flags & SymbolFlags.BlockScopedVariable) === 0 ||
+                (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
                 symbol.valueDeclaration.parent.kind === SyntaxKind.CatchClause) {
                 return;
             }
 
-            // - check if binding is used in some function
-            // (stop the walk when reaching container of binding declaration)
-            // - if first check succeeded - check if variable is declared inside the loop
+            // 1. walk from the use site up to the declaration and check 
+            // if there is anything function like between declaration and use-site (is binding/class is captured in function).
+            // 2. walk from the declaration up to the boundary of lexical environment and check 
+            // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
-            // nesting structure:
-            // (variable declaration or binding element) -> variable declaration list -> container
-            let container: Node = symbol.valueDeclaration;
-            while (container.kind !== SyntaxKind.VariableDeclarationList) {
-                container = container.parent;
+            let container: Node;
+            if (symbol.flags & SymbolFlags.Class) {
+                // get parent of class declaration
+                container = getClassLikeDeclarationOfSymbol(symbol).parent;
             }
-            // get the parent of variable declaration list
-            container = container.parent;
-            if (container.kind === SyntaxKind.VariableStatement) {
-                // if parent is variable statement - get its parent
+            else {
+                // nesting structure:
+                // (variable declaration or binding element) -> variable declaration list -> container
+                container = symbol.valueDeclaration;
+                while (container.kind !== SyntaxKind.VariableDeclarationList) {
+                    container = container.parent;
+                }
+                // get the parent of variable declaration list
                 container = container.parent;
+                if (container.kind === SyntaxKind.VariableStatement) {
+                    // if parent is variable statement - get its parent
+                    container = container.parent;
+                }
             }
 
             let inFunction = isInsideFunction(node.parent, container);
