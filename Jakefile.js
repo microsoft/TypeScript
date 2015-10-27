@@ -320,6 +320,8 @@ var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnostic
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
+var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
+var builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "diagnosticMessages.generated.json");
 
 file(processDiagnosticMessagesTs);
 
@@ -346,6 +348,12 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
         complete();
     });
     ex.run();
+}, {async: true});
+
+file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
+    if (fs.existsSync(builtLocalDirectory)) {
+        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
+    }
 }, {async: true});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -476,7 +484,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
