@@ -345,10 +345,15 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
         process.stderr.write(error);
     });
     ex.addListener("cmdEnd", function() {
-        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON)
         complete();
     });
     ex.run();
+}, {async: true});
+
+file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
+    if (fs.existsSync(builtLocalDirectory)) {
+        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
+    }
 }, {async: true});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -479,7 +484,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
