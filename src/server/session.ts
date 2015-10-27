@@ -109,10 +109,7 @@ module ts.server {
         var properties: Map<string> = {};
         let dtsCount = 0;
 
-        // TODO: set this back to 5 minutes
-        //const sendInterval = 1000 * 5; // 5 seconds
-        var sendInterval = 1000 * 60; // 1 minute
-        //var sendInterval = 1000 * 60 * 5; // 5 minutes
+        const sendInterval = 1000 * 60 * 5; // 5 minutes
         let nextSendTimeMs = Date.now() + sendInterval;
 
         const settingNames = [
@@ -379,14 +376,16 @@ module ts.server {
             var filenameOnly = file.substr(lastSlash + 1);
             for (var i = 0; i < index.length; i++) {
                 if (index[i].n === filenameOnly) {
-                    // Filename match; calculate its hash and see if it's from a non-current version
-                    var crc = dtsHash(host.readFile(file, 'utf-8'));
+                    // Just check for a filename match, ignore commit history
+                    return { fileName: filenameOnly, path: index[i].p, commitsBehind: -1 };
+                    
+                    // Alternatively, we could check against the .d.ts history and report how many commits behind it is
+                    /*var crc = dtsHash(host.readFile(file, 'utf-8'));
                     for (var j = 0; j < index[i].h.length; j++) {
                         if (crc === index[i].h[j]) {
                             return { fileName: filenameOnly, path: index[i].p, commitsBehind: j };
                         }
-                    }
-                    break;
+                    }*/
                 }
             }
             return undefined;
@@ -402,7 +401,8 @@ module ts.server {
                     if (info) {
                         Metrics.countDts(info.fileName);
                         
-                        if(info.commitsBehind > 0) {
+                        // We could consider reporting errors here if the DTS is out of date
+                        /*if(info.commitsBehind > 0) {
                             // Not up to date
                             this.event({
                                 file: file, diagnostics: [{
@@ -410,9 +410,8 @@ module ts.server {
                                     end: { line: 2, offset: 0 },
                                     text: 'File ' + file + ' is ' + info.commitsBehind + ' commits out-of-date'
                                 }]
-                            // TODO: where is infoDiag reported? semanticDiag and you'll see squiggles
                             }, 'semanticDiag');
-                        }
+                        }*/
                     }
                 } catch (err) {    
                     this.logError(err, "up-to-date check");
