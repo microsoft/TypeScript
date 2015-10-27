@@ -320,6 +320,8 @@ var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnostic
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
+var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
+var builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "diagnosticMessages.generated.json");
 
 file(processDiagnosticMessagesTs);
 
@@ -343,6 +345,7 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
         process.stderr.write(error);
     });
     ex.addListener("cmdEnd", function() {
+        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON)
         complete();
     });
     ex.run();
