@@ -9046,8 +9046,20 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
             }
 
-            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>) {
+            function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>): Signature {
                 for (let originalCandidate of candidates) {
+                    if (originalCandidate.unionSignatures) {
+                        if (originalCandidate.unionSignatures.every(sig => !!chooseOverload([sig], relation))) {
+                            return originalCandidate;
+                        }
+                        else {
+                            if (originalCandidate.unionSignatures.some(sig => !hasCorrectArity(node, args, sig))) {
+                                candidateForArgumentError = undefined;
+                                candidateForTypeArgumentError = undefined;
+                            }
+                            continue;
+                        }
+                    }
                     if (!hasCorrectArity(node, args, originalCandidate)) {
                         continue;
                     }
