@@ -254,6 +254,14 @@ export = C;
             };
             test(files, "/parent/app",["myapp.ts"], 2, []);
         });
+
+        it("should find file referenced via absolute and relative names", () => {
+            const files: Map<string> = {
+                "/a/b/c.ts": `/// <reference path="b.ts"/>`,
+                "/a/b/b.ts": "var x"
+            };
+            test(files, "/a/b", ["c.ts", "/a/b/b.ts"], 2, []);
+        });
     });
     
     describe("Files with different casing", () => {
@@ -320,6 +328,14 @@ export = C;
             test(files, { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },  "/a/b", /* useCaseSensitiveFileNames */ false, ["c.ts", "d.ts"], [1149]);
         });
 
+        it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
+            const files: Map<string> = {
+                "moduleA.ts": `import {x} from "./ModuleB"`,
+                "moduleB.ts": "export var x"
+            };
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /* useCaseSensitiveFileNames */ false, ["moduleA.ts", "moduleB.ts"], [1149]);
+        });
+
         it("should fail when two files exist on disk that differs only in casing", () => {
             const files: Map<string> = {
                 "/a/b/c.ts": `import {x} from "D"`,
@@ -328,5 +344,14 @@ export = C;
             };
             test(files, { module: ts.ModuleKind.AMD },  "/a/b", /* useCaseSensitiveFileNames */ true, ["c.ts", "d.ts"], [1149]);
         });
+
+        it("should fail when module name in 'require' calls has inconsistent casing", () => {
+            const files: Map<string> = {
+                "moduleA.ts": `import a = require("./ModuleC")`,
+                "moduleB.ts": `import a = require("./moduleC")`,
+                "moduleC.ts": "export var x"
+            };
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /* useCaseSensitiveFileNames */ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+        })
     });
 }

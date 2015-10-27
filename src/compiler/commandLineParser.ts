@@ -251,7 +251,7 @@ namespace ts {
         {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
-            description: Diagnostics.Raise_error_if_two_file_names_in_program_differ_only_in_case
+            description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
     ];
 
