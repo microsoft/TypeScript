@@ -444,6 +444,8 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Stanalone/web definition file using global 'ts' namespace
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
+                definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+                fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
                 // Official node package definition file, pointed to by 'typings' in package.json
                 // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
