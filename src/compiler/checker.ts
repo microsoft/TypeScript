@@ -50,6 +50,7 @@ namespace ts {
         let emitResolver = createResolver();
 
         let undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        undefinedSymbol.declarations = [];
         let argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
         let checker: TypeChecker = {
@@ -225,6 +226,10 @@ namespace ts {
             ResolvedReturnType
         }
 
+        const builtinGlobals: SymbolTable = {
+            [undefinedSymbol.name]: undefinedSymbol
+        };
+
         initializeTypeChecker();
 
         return checker;
@@ -336,6 +341,13 @@ namespace ts {
                         target[id] = source[id];
                     }
                     else {
+                        if (target === globals && source !== builtinGlobals) {
+                            if (hasProperty(builtinGlobals, id) && source[id].declarations && source[id].declarations.length) {
+                                // Error on builtin redeclarations
+                                forEach(source[id].declarations, addDeclarationDiagnostic.bind(undefined, id));
+                                continue;
+                            }
+                        }
                         let symbol = target[id];
                         if (!(symbol.flags & SymbolFlags.Merged)) {
                             target[id] = symbol = cloneSymbol(symbol);
@@ -343,6 +355,10 @@ namespace ts {
                         mergeSymbol(symbol, source[id]);
                     }
                 }
+            }
+
+            function addDeclarationDiagnostic(id: string, declaration: Declaration) {
+                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_duplicates_builtin_global_identifier_0, id));
             }
         }
 
@@ -14909,6 +14925,9 @@ namespace ts {
                 bindSourceFile(file);
             });
 
+            // Setup global builtins
+            mergeSymbolTable(globals, builtinGlobals);
+
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalModule(file)) {
@@ -14920,7 +14939,6 @@ namespace ts {
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
-            globals[undefinedSymbol.name] = undefinedSymbol;
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
