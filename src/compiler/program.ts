@@ -65,7 +65,7 @@ namespace ts {
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            return loadModuleFromNodeModules(moduleName, containingDirectory, host);
+            return loadModuleFromNodeModules(moduleName, sys.resolvePath(containingDirectory), host);
         }
     }
 
