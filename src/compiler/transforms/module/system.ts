@@ -9,7 +9,6 @@ namespace ts {
         }
 
         let {
-            makeUniqueName,
             createUniqueIdentifier,
             getGeneratedNameForNode,
             hoistVariableDeclaration,
@@ -961,10 +960,16 @@ namespace ts {
         }
 
         function createModuleDefinitionObject(setters: Expression[], statements: Statement[]) {
-            return createObjectLiteralExpression2({
-                "setters": createArrayLiteralExpression(setters),
-                "execute": createFunctionExpression3([], createBlock(statements))
-            });
+            let properties: ObjectLiteralElement[] = [];
+            let settersProp = createPropertyAssignment2("setters", createArrayLiteralExpression(setters));
+            startOnNewLine(settersProp);
+            properties.push(settersProp);
+
+            let executeProp = createPropertyAssignment2("execute", createFunctionExpression3([], createBlock(statements)));
+            startOnNewLine(executeProp);
+            properties.push(executeProp);
+
+            return createObjectLiteralExpression(properties);
         }
 
         function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {

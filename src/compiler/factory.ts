@@ -152,7 +152,39 @@ namespace ts {
     }
 
     export function makeSynthesized<TNode extends Node>(node: TNode): TNode {
-        return nodeIsSynthesized(node) ? node : cloneNode(node);
+        return nodeIsSynthesized(node) ? node : cloneNode(node, /*location*/ undefined, node.flags);
+    }
+
+    const cloneExcludedProperties: Map<boolean> = {
+        "pos": true,
+        "end": true,
+        "flags": true,
+        "original": true,
+        "transformFlags": true,
+        "excludeTransformFlags": true,
+        "createParentNavigator": true
+    };
+
+    export function cloneNode<T extends Node>(node: T, location?: TextRange, flags?: NodeFlags): T {
+        let clone = createNode<T>(node.kind);
+        for (let id in node) {
+            if (hasProperty(cloneExcludedProperties, id)) {
+                continue;
+            }
+
+            (<any>clone)[id] = (<any>node)[id];
+        }
+
+        if (location !== undefined) {
+            clone.pos = location.pos;
+            clone.end = location.end;
+        }
+
+        if (flags !== undefined) {
+            clone.flags = flags;
+        }
+
+        return clone;
     }
 
     const enum BinaryOperandSide {
@@ -436,6 +468,10 @@ namespace ts {
         return createCallExpression2(createPropertyAccessExpression3(target, "apply"), [thisArg, _arguments], location, flags);
     }
 
+    export function createMathPowCall(left: Expression, right: Expression, location?: TextRange) {
+        return createCallExpression2(createPropertyAccessExpression3(createIdentifier("Math"), "pow"), [left, right], location);
+    }
+
     export function createExtendsHelperCall(name: Identifier) {
         return createCallExpression2(createIdentifier("__extends"), [name, createIdentifier("_super")]);
     }
@@ -573,15 +609,6 @@ namespace ts {
 
     export function createReactSpreadCall(segments: Expression[]): LeftHandSideExpression {
         return createCallExpression2(createPropertyAccessExpression3(createIdentifier("React"), "__spread"), segments);
-    }
-
-    export function createDefaultValueCheck(value: Expression, defaultValue: Expression, ensureIdentifier: (value: Expression, reuseIdentifierExpressions: boolean) => Expression, location?: TextRange, flags?: NodeFlags): Expression {
-        // The value expression will be evaluated twice, so for anything but a simple identifier
-        // we need to generate a temporary variable
-        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
-
-        // <value> === void 0 ? <defaultValue> : <value>
-        return createConditionalExpression2(createStrictEqualityExpression(value, createVoidZeroExpression()), defaultValue, value, location, flags);
     }
 
     export function createMemberAccessForPropertyName(target: Expression, memberName: PropertyName, location?: TextRange, flags?: NodeFlags): MemberExpression {

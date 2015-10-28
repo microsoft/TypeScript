@@ -390,16 +390,6 @@ namespace ts {
         return result;
     }
 
-    export function assign<T>(target: Map<T>, source: Map<T>): Map<T> {
-        if (!target) {
-            target = {};
-        }
-        for (let id in source) {
-            target[id] = source[id];
-        }
-        return target;
-    }
-
     export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
         let result: U;
         for (let id in map) {
@@ -925,18 +915,18 @@ namespace ts {
       */
     export function createParentNavigator(currentNode: Node): ParentNavigator {
         /** Gets the grandparent of the current node, without moving the navigator. */
-        function getGrandparent() {
-            let parent = getParent();
+        function getGrandparentNode() {
+            let parent = getParentNode();
             return parent ? parent.parent : undefined;
         }
 
         /** Gets the parent of the current node, without moving the navigator. */
-        function getParent() {
+        function getParentNode() {
             return currentNode ? currentNode.parent : undefined;
         }
 
         /** Gets the current node. */
-        function getNode() {
+        function getCurrentNode() {
             return currentNode;
         }
 
@@ -947,7 +937,7 @@ namespace ts {
 
         /** Navigates to the parent of the current node if it has one. */
         function moveToParent(): boolean {
-            let parent = getParent();
+            let parent = getParentNode();
             if (parent) {
                 currentNode = parent;
                 return true;
@@ -962,9 +952,9 @@ namespace ts {
         }
 
         return {
-            getGrandparent,
-            getParent,
-            getNode,
+            getGrandparentNode,
+            getParentNode,
+            getCurrentNode,
             getKind,
             moveToParent,
             createParentNavigator,
@@ -981,18 +971,22 @@ namespace ts {
         let parentNode: Node;
         let currentNode: Node;
 
+        function getStackSize(): number {
+            return stackSize;
+        }
+
         /** Gets the node two steps back from the top of the stack. */
-        function getGrandparent() {
+        function getGrandparentNode() {
             return peekNode(2);
         }
 
         /** Gets the node one step back from the top of the stack. */
-        function getParent() {
+        function getParentNode() {
             return parentNode;
         }
 
         /** Gets the node at the top of the stack. */
-        function getNode() {
+        function getCurrentNode() {
             return currentNode;
         }
 
@@ -1073,29 +1067,29 @@ namespace ts {
         /** Creates a parent navigator a specified number of steps back from the top of the stack. */
         function createParentNavigatorFromStackOffset(stackOffset: number): ParentNavigator {
             /** Gets the node two steps back from the current stack offset. */
-            function getGrandparent() {
+            function getGrandparentNode() {
                 return peekNode(stackOffset + 2);
             }
 
             /** Gets the node one step back from the current stack offset. */
-            function getParent() {
+            function getParentNode() {
                 return peekNode(stackOffset + 1);
             }
 
             /** Gets the node at the current stack offset. */
-            function getNode() {
+            function getCurrentNode() {
                 return peekNode(stackOffset);
             }
 
             /** Gets the SyntaxKind of the node at the current stack offset. */
             function getKind() {
-                let node = getNode();
+                let node = getCurrentNode();
                 return node ? node.kind : undefined;
             }
 
             /** Navigates to the node one step back from the current stack offset. */
             function moveToParent() {
-                if (getParent()) {
+                if (getParentNode()) {
                     stackOffset++;
                     return true;
                 }
@@ -1119,9 +1113,9 @@ namespace ts {
             }
 
             return {
-                getGrandparent,
-                getParent,
-                getNode,
+                getGrandparentNode,
+                getParentNode,
+                getCurrentNode,
                 getKind,
                 moveToParent,
                 createParentNavigator,
@@ -1129,9 +1123,10 @@ namespace ts {
         }
 
         return {
-            getGrandparent,
-            getParent,
-            getNode,
+            getStackSize,
+            getGrandparentNode,
+            getParentNode,
+            getCurrentNode,
             getKind,
             pushNode,
             tryPushNode,

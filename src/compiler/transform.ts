@@ -63,78 +63,82 @@ namespace ts {
         return chainTransformationPhases(phases);
     }
 
-    export function transformFilesIfNeeded(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): TransformationResult {
-        let compilerOptions = host.getCompilerOptions();
-        if (compilerOptions.experimentalTransforms) {
-            return transformFiles(resolver, host, sourceFiles, transformationChain);
-        }
-
-        return { sourceFiles };
+    interface LexicalEnvironment {
+        tempFlags: TempFlags;
+        hoistedVariableDeclarations: VariableDeclaration[];
+        hoistedFunctionDeclarations: FunctionDeclaration[];
     }
 
-    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): TransformationResult {
-        interface LexicalEnvironment {
-            tempFlags: TempFlags;
-            hoistedVariableDeclarations: VariableDeclaration[];
-            hoistedFunctionDeclarations: FunctionDeclaration[];
-        }
+    const enum VisitFlags {
+        StatementBranch = 1 << 1,
+        ConciseBody = 1 << 2,
+        LexicalEnvironment = 1 << 3,
+        LexicalEnvironmentStarted = 1 << 4,
+        LexicalEnvironmentEnded = 1 << 5,
+    }
 
-        const enum VisitFlags {
-            StatementBranch = 1 << 1,
-            ConciseBody = 1 << 2,
-            LexicalEnvironment = 1 << 3,
-            LexicalEnvironmentStarted = 1 << 4,
-            LexicalEnvironmentEnded = 1 << 5,
-        }
-
-        let compilerOptions = host.getCompilerOptions();
-        let languageVersion = compilerOptions.target || ScriptTarget.ES3;
+    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformationChain: TransformationChain): SourceFile[] {
+        // This is used to aggregate transform flags across the children of a node,
+        // as there is no `reduce`-like function similar to forEachChild.
         let transformFlags: TransformFlags;
-        let generatedNameSet: Map<string>;
-        let tempVariableNameSet: Map<string>;
+
+        // These variables keep track of generated identifiers.
+        let generatedNameSet: Map<string> = {};
+        let tempVariableNameSet: Map<string> = {};
         let nodeToGeneratedName: string[] = [];
         let nodeToGeneratedIdentifier: Identifier[] = [];
-        let lexicalEnvironmentStackSize: number;
+
+        // The lexical environment stack is used to track the allocation of temporary variables
+        // and the hoisting of variable and function declarations within a scope.
+        let lexicalEnvironmentStackSize: number = 0;
         let lexicalEnvironmentStack: LexicalEnvironment[] = [];
         let tempFlags: TempFlags;
         let hoistedVariableDeclarations: VariableDeclaration[];
         let hoistedFunctionDeclarations: FunctionDeclaration[];
-        let currentSourceFile: SourceFile;
-        let nodeStack: NodeStack;
+
+        // Visit flags are used to request and keep track of information related to
+        // the current visit operation.
         let currentVisitFlags: VisitFlags;
         let requestedVisitFlags: VisitFlags;
+
+        // This is used during a call to visitNode/visitNodes to ensure any
+        // node written out during the transformation is valid.
         let nodeTest: (node: Node) => boolean;
+
+        // These variables are used by visitNode/visitNodes to keep track of
+        // differences between the source and output trees without introducing
+        // new function closures on each call.
         let writeOffset: number;
         let originalNodes: Node[];
         let updatedNode: Node;
         let updatedNodes: Node[];
-        let helpersEmitted: NodeCheckFlags;
+
+        // Substitutions are used by Transformation Phases to perform additional
+        // transformations during final emit without further descent into the tree.
+        let bindingIdentifierSubstitution: (node: Identifier) => Identifier;
         let expressionSubstitution: (node: Expression) => Expression;
+
+        // These are flags used during various transformation phases to inform
+        // later transformation phases about additional information from a transformation.
         let generatedNodeFlags: GeneratedNodeFlags[] = [];
+
+        let nodeStack: NodeStack = createNodeStack();
+        let currentSourceFile: SourceFile;
         let transformer: Transformer = {
             getEmitResolver: () => resolver,
-            getCompilerOptions: () => compilerOptions,
-            createParentNavigator: () => nodeStack.createParentNavigator(),
-            getRootNode: () => currentSourceFile,
-            getParentNode: () => nodeStack.getParent(),
-            getCurrentNode: () => nodeStack.getNode(),
-            tryPushNode: node => nodeStack.tryPushNode(node),
-            pushNode: node => nodeStack.pushNode(node),
-            popNode: () => nodeStack.popNode(),
-            setNode: node => nodeStack.setNode(node),
-            findAncestorNode: (match: (node: Node) => boolean) => nodeStack.findAncestorNode(match),
-            getDeclarationName,
-            getClassMemberPrefix,
-            makeUniqueName,
+            getCompilerOptions: () => host.getCompilerOptions(),
+            getSourceFile: () => currentSourceFile,
+            isUniqueName,
             getGeneratedNameForNode,
             nodeHasGeneratedName,
             createUniqueIdentifier,
             createTempVariable,
-            declareLocal,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
             getGeneratedNodeFlags,
             setGeneratedNodeFlags,
+            getBindingIdentifierSubstitution,
+            setBindingIdentifierSubstitution,
             getExpressionSubstitution,
             setExpressionSubstitution,
             startLexicalEnvironment,
@@ -152,26 +156,51 @@ namespace ts {
             visitModuleBody,
             visitFunctionBody,
             visitConciseBody,
-            accept(node: Node, visitor: (node: Node, write: (node: Node) => void) => void) {
-                let wasPushed = node && nodeStack.tryPushNode(node);
-                node = acceptTransformer(transformer, node, visitor);
-                if (wasPushed) {
-                    nodeStack.popNode();
-                }
-                return node;
-            }
+            accept,
+
+            // from NodeStack
+            createParentNavigator: () => nodeStack.createParentNavigator(),
+            getParentNode: () => nodeStack.getParentNode(),
+            getCurrentNode: () => nodeStack.getCurrentNode(),
+            tryPushNode: node => nodeStack.tryPushNode(node),
+            pushNode: node => nodeStack.pushNode(node),
+            popNode: () => nodeStack.popNode(),
+            setNode: node => nodeStack.setNode(node),
+            findAncestorNode: (match: (node: Node) => boolean) => nodeStack.findAncestorNode(match),
         };
 
+        // Build the transformation pipeline using the supplied transformer.
         let transformation = transformationChain(transformer);
 
-        return {
-            sourceFiles: map(sourceFiles, transformSourceFile),
-            substitutions: {
-                getGeneratedNodeFlags,
-                expressionSubstitution,
-            }
-        };
+        // Transform each source file.
+        return map(sourceFiles, transformSourceFile);
 
+        /**
+         * Transforms a source file.
+         * @param sourceFile The source file to transform.
+         */
+        function transformSourceFile(sourceFile: SourceFile) {
+            if (isDeclarationFile(sourceFile)) {
+                return sourceFile;
+            }
+
+            currentSourceFile = sourceFile;
+
+            let visited = transformation(sourceFile);
+            if (visited !== sourceFile) {
+                updateFrom(sourceFile, visited);
+            }
+
+            Debug.assert(nodeStack.getStackSize() === 0, "Incorrect node stack size after transformation.");
+            Debug.assert(lexicalEnvironmentStackSize === 0, "Incorrect lexical environment stack size after transformation.");
+
+            currentSourceFile = undefined;
+            return visited;
+        }
+
+        /**
+         * Gets additional context about a generated node.
+         */
         function getGeneratedNodeFlags(node: Node) {
             let lastNode: Node;
             while (node) {
@@ -187,49 +216,46 @@ namespace ts {
             return undefined;
         }
 
+        /**
+         * Sets additional contxt about a generated node.
+         */
         function setGeneratedNodeFlags(node: Node, flags: GeneratedNodeFlags) {
             generatedNodeFlags[getNodeId(node)] = flags;
         }
 
-        function transformSourceFile(sourceFile: SourceFile) {
-            if (isDeclarationFile(sourceFile)) {
-                return sourceFile;
-            }
-
-            currentSourceFile = sourceFile;
-            generatedNameSet = {};
-            tempVariableNameSet = {};
-            lexicalEnvironmentStackSize = 0;
-            nodeStack = createNodeStack();
-            helpersEmitted = undefined;
-
-            let visited = transformation(sourceFile);
-            if (visited !== sourceFile) {
-                visited.identifiers = assign(assign(clone(sourceFile.identifiers), generatedNameSet), tempVariableNameSet);
-                updateFrom(sourceFile, visited);
-            }
-
-            currentSourceFile = undefined;
-            generatedNameSet = undefined;
-            tempVariableNameSet = undefined;
-            lexicalEnvironmentStackSize = undefined;
-            nodeStack = undefined;
-            helpersEmitted = undefined;
-
-            return visited;
+        /**
+         * Gets the current substitution for binding identifiers.
+         */
+        function getBindingIdentifierSubstitution(): (node: Identifier) => Identifier {
+            return bindingIdentifierSubstitution;
         }
 
+        /**
+         * Sets the current substitution for binding identifiers.
+         */
+        function setBindingIdentifierSubstitution(substitution: (node: Identifier) => Identifier): void {
+            bindingIdentifierSubstitution = substitution;
+        }
+
+        /**
+         * Gets the current substitution for expressions.
+         */
         function getExpressionSubstitution(): (node: Expression) => Expression {
             return expressionSubstitution;
         }
 
-        function setExpressionSubstitution(substitution: (node: Expression) => Expression) {
+        /**
+         * Sets the current substitution for expressions.
+         */
+        function setExpressionSubstitution(substitution: (node: Expression) => Expression): void {
             expressionSubstitution = substitution;
         }
 
-        // Return the next available name in the pattern _a ... _z, _0, _1, ...
-        // TempFlags._i or TempFlags._n may be used to express a preference for that dedicated name.
-        // Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
+        /**
+         * Return the next available name in the pattern _a ... _z, _0, _1, ...
+         * TempFlags._i or TempFlags._n may be used to express a preference for that dedicated name.
+         * Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
+         */
         function makeTempVariableName(flags: TempFlags): string {
             if (flags && !(tempFlags & flags)) {
                 let name = flags === TempFlags._i ? "_i" : "_n";
@@ -253,10 +279,12 @@ namespace ts {
             }
         }
 
-        // Generate a name that is unique within the current file and doesn't conflict with any names
-        // in global scope. The name is formed by adding an '_n' suffix to the specified base name,
-        // where n is a positive integer. Note that names generated by makeTempVariableName and
-        // makeUniqueName are guaranteed to never conflict.
+        /**
+         * Generate a name that is unique within the current file and doesn't conflict with any names
+         * in global scope. The name is formed by adding an '_n' suffix to the specified base name,
+         * where n is a positive integer. Note that names generated by makeTempVariableName and
+         * makeUniqueName are guaranteed to never conflict.
+         */
         function makeUniqueName(baseName: string): string {
             // Find the first unique 'name_n', where n is a positive number
             if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
@@ -272,22 +300,34 @@ namespace ts {
             }
         }
 
+        /**
+         * Gets the generated name for a node.
+         */
         function getGeneratedNameForNode(node: Node) {
             let id = getNodeId(node);
-            return nodeToGeneratedIdentifier[id] || (nodeToGeneratedIdentifier[id] = createIdentifier(getGeneratedNameTextForNode(node, id)));
+            return nodeToGeneratedIdentifier[id] || (nodeToGeneratedIdentifier[id] = generateNameForNode(node));
         }
 
+        /**
+         * Gets a value indicating whether a node has a generated name.
+         */
         function nodeHasGeneratedName(node: Node) {
             let id = getNodeId(node);
             return nodeToGeneratedName[id] !== undefined;
         }
 
+        /**
+         * Tests whether the provided name is unique.
+         */
         function isUniqueName(name: string): boolean {
             return !resolver.hasGlobalName(name)
                 && !hasProperty(currentSourceFile.identifiers, name)
                 && !hasProperty(generatedNameSet, name);
         }
 
+        /**
+         * Tests whether the provided name is unique within a container.
+         */
         function isUniqueLocalName(name: string, container: Node): boolean {
             container = getOriginalNode(container);
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
@@ -301,14 +341,13 @@ namespace ts {
             return true;
         }
 
-        function getGeneratedNameTextForNode(node: Node, id: number) {
-            return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateNameForNode(node)));
-        }
-
-        function generateNameForNode(node: Node) {
+        /**
+         * Generates a name for a node.
+         */
+        function generateNameForNode(node: Node): Identifier {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return makeUniqueName((<Identifier>node).text);
+                    return createUniqueIdentifier((<Identifier>node).text);
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
                     return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
@@ -324,76 +363,29 @@ namespace ts {
                 case SyntaxKind.ComputedPropertyName:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.TaggedTemplateExpression:
-                    return makeTempVariableName(TempFlags.Auto);
+                    return createTempVariable(TempFlags.Auto);
             }
         }
 
         function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
-            let name = node.name.text;
+            let name = node.name;
             // Use module/enum name itself if it is unique, otherwise make a unique variation
-            return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
+            return isUniqueLocalName(name.text, node) ? name : createUniqueIdentifier(name.text);
         }
 
         function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
             let expr = getExternalModuleName(node);
             let baseName = expr.kind === SyntaxKind.StringLiteral ?
                 escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
-            return makeUniqueName(baseName);
+            return createUniqueIdentifier(baseName);
         }
 
         function generateNameForExportDefault() {
-            return makeUniqueName("default");
+            return createUniqueIdentifier("default");
         }
 
         function generateNameForClassExpression() {
-            return makeUniqueName("class");
-        }
-
-        function createParentNavigator(): ParentNavigator {
-            return nodeStack.createParentNavigator();
-        }
-
-        function getRootNode(): SourceFile {
-            return currentSourceFile;
-        }
-
-        function getCurrentNode(): Node {
-            return nodeStack.getNode();
-        }
-
-        function getParentNode(): Node {
-            return nodeStack.getParent();
-        }
-
-        function findAncestorNode<T extends Node>(match: (node: Node) => node is T): T;
-        function findAncestorNode(match: (node: Node) => boolean): Node;
-        function findAncestorNode(match: (node: Node) => boolean) {
-            return nodeStack.findAncestorNode(match);
-        }
-
-        function getDeclarationName(node: DeclarationStatement): Identifier;
-        function getDeclarationName(node: ClassLikeDeclaration): Identifier;
-        function getDeclarationName(node: Declaration): DeclarationName;
-        function getDeclarationName<T extends DeclarationName>(node: Declaration): T | Identifier {
-            let name = node.name;
-            if (name) {
-                return nodeIsSynthesized(name) ? <T>name : cloneNode(<T>name);
-            }
-            else {
-                return getGeneratedNameForNode(node);
-            }
-        }
-
-        function getClassMemberPrefix(node: ClassLikeDeclaration, member: ClassElement) {
-            let expression: LeftHandSideExpression = getDeclarationName(node);
-            if (!(member.flags & NodeFlags.Static)) {
-                expression = createPropertyAccessExpression2(
-                    expression,
-                    createIdentifier("prototype")
-                );
-            }
-
-            return expression;
+            return createUniqueIdentifier("class");
         }
 
         function createUniqueIdentifier(baseName: string): Identifier {
@@ -402,18 +394,17 @@ namespace ts {
         }
 
         function createTempVariable(flags?: TempFlags): Identifier {
-            let name = makeTempVariableName(flags);
-            return createIdentifier(name);
+            let name = createIdentifier();
+            name.tempFlags = flags;
+            getNodeId(name);
+            return name;
+            // let name = makeTempVariableName(flags);
+            // return createIdentifier(name);
         }
 
-        function declareLocal(baseName?: string): Identifier {
-            let local = baseName
-                ? createUniqueIdentifier(baseName)
-                : createTempVariable(TempFlags.Auto);
-            hoistVariableDeclaration(local);
-            return local;
-        }
-
+        /**
+         * Records a hoisted variable declaration within a lexical environment.
+         */
         function hoistVariableDeclaration(name: Identifier): void {
             if (!hoistedVariableDeclarations) {
                 hoistedVariableDeclarations = [];
@@ -422,6 +413,9 @@ namespace ts {
             hoistedVariableDeclarations.push(createVariableDeclaration2(name));
         }
 
+        /**
+         * Records a hoisted function declaration within a lexical environment.
+         */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
             if (!hoistedFunctionDeclarations) {
                 hoistedFunctionDeclarations = [];
@@ -468,65 +462,25 @@ namespace ts {
             transformFlags |= aggregateTransformFlagsForThisNodeAndSubtree(child);
         }
 
-        function nextNodeIsLexicalEnvironment() {
-            requestedVisitFlags |= VisitFlags.LexicalEnvironment;
-        }
-
-        function nextNodeIsStatementBranch() {
-            requestedVisitFlags |= VisitFlags.StatementBranch;
-        }
-
-        function nextNodeIsConciseBody() {
-            requestedVisitFlags |= VisitFlags.ConciseBody;
-        }
-
-        function markLexicalEnvironmentStart() {
-            currentVisitFlags |= VisitFlags.LexicalEnvironmentStarted;
-        }
-
-        function resetLexicalEnvironmentStart() {
-            currentVisitFlags &= ~VisitFlags.LexicalEnvironmentStarted;
-        }
-
-        function markLexicalEnvironmentEnd() {
-            currentVisitFlags |= VisitFlags.LexicalEnvironmentEnded;
-        }
-
-        function resetLexicalEnvironmentEnd() {
-            currentVisitFlags &= ~VisitFlags.LexicalEnvironmentEnded;
-        }
-
-        function thisNodeIsLexicalEnvironment() {
-            return !!(currentVisitFlags & VisitFlags.LexicalEnvironment);
-        }
-
-        function lexicalEnvironmentStartWasMarked() {
-            return !!(currentVisitFlags & VisitFlags.LexicalEnvironmentStarted);
-        }
-
-        function lexicalEnvironmentEndWasMarked() {
-            return !!(currentVisitFlags & VisitFlags.LexicalEnvironmentEnded);
-        }
-
-        function thisNodeIsStatementBranch() {
-            return !!(currentVisitFlags & VisitFlags.StatementBranch);
-        }
-
-        function thisNodeIsConciseBody() {
-            return !!(currentVisitFlags & VisitFlags.ConciseBody);
-        }
-
+        /**
+         * Callback used to write a one or more nodes to a single output node.
+         * If more than one node is written and the output points to a Statement property of a
+         * parent node, the result is lifted to a Block containing multiple statements.
+         * If more than one node is written and the output points to the body of an Arrow Function,
+         * the result is lifted to a Block consisting of a return statement.
+         * Otherwise, If more than one node is written it is an error.
+         */
         function writeNode(node: Node) {
             if (!node) {
                 return;
             }
 
-            Debug.assert(!nodeTest || nodeTest(node), "Wrong node type after visit.");
+            Debug.assert(!nodeTest || nodeTest(node), `Wrong node type after visit: ${formatSyntaxKind(node.kind)}`);
             aggregateTransformFlags(node);
             if (!updatedNode) {
                 updatedNode = node;
             }
-            else if (thisNodeIsStatementBranch()) {
+            else if (currentVisitFlags & VisitFlags.StatementBranch) {
                 if (!updatedNodes) {
                     updatedNodes = [];
                     writeStatementNode(updatedNode);
@@ -534,25 +488,31 @@ namespace ts {
                 }
                 writeStatementNode(node);
             }
-            else if (thisNodeIsConciseBody()) {
+            else if (currentVisitFlags & VisitFlags.ConciseBody) {
                 if (!updatedNodes) {
                     updatedNodes = [];
-                    writeFunctionBodyNode(updatedNode);
+                    writeConciseBodyNode(updatedNode);
                     updatedNode = createBlock(<Statement[]>updatedNodes);
                 }
-                writeFunctionBodyNode(node);
+                writeConciseBodyNode(node);
             }
             else {
                 Debug.fail("Too many nodes written to output.");
             }
         }
 
+        /**
+         * Writes a node to a Statement property of a parent node.
+         */
         function writeStatementNode(node: Node) {
             Debug.assert(isStatementNode(updatedNode), "Statement expected.");
             updatedNodes.push(node);
         }
 
-        function writeFunctionBodyNode(node: Node) {
+        /**
+         * Writes a node to a ConciseBody property of a parent ArrowFunction node.
+         */
+        function writeConciseBodyNode(node: Node) {
             if (isExpressionNode(node)) {
                 updatedNodes.push(createReturnStatement(node));
             }
@@ -562,6 +522,9 @@ namespace ts {
             }
         }
 
+        /**
+         * Writes one or more nodes to a NodeArray.
+         */
         function writeNodeToNodeArray(node: Node) {
             if (!node) {
                 return;
@@ -581,10 +544,16 @@ namespace ts {
             }
         }
 
+        /**
+         * Reads a single Node.
+         */
         function readNode(): Node {
             return updatedNode;
         }
 
+        /**
+         * Reads one or more Nodes as a NodeArray.
+         */
         function readNodeArray(): NodeArray<Node> {
             if (updatedNodes) {
                 return createNodeArray(updatedNodes, /*location*/ <NodeArray<Node>>originalNodes);
@@ -597,6 +566,11 @@ namespace ts {
             }
         }
 
+        /**
+         * Executes a callback function to emit new nodes to an output array or write callback.
+         * @param callback The callback to execute.
+         * @param out Either an array to which to write the results, or a callback used to write the results.
+         */
         function createNodes<TOut extends Node>(callback: (write: (node: TOut) => void) => void, out?: ((node: TOut) => void) | TOut[]): NodeArray<TOut> {
             let write: (node: Node) => void;
             let readNodes: () => NodeArray<Node>;
@@ -644,8 +618,34 @@ namespace ts {
             return resultNodes as NodeArray<TOut>;
         }
 
-        function visitNodeOrNodes(node: Node, nodes: Node[], start: number, count: number, visitor: (node: Node, write: (node: Node) => void) => void,
-            write: (node: Node) => void, readNode?: () => Node, readNodes?: () => NodeArray<Node>, out?: Node[], test?: (node: Node) => boolean): Node | NodeArray<Node> {
+        /**
+         * Visits either a single node or an array of nodes using a general-purpose visitor callback.
+         *
+         * When visiting an array of nodes, it is acceptable to write more or less nodes to the output.
+         *
+         * If the same values are written in the same order as the original node array, the original
+         * node array is returned. If more or fewer values are written, or if any value differs from the source in order or reference
+         * equality, a new node array will be returned. This is to provide reference equality for the various update functions
+         * used by the accept function below.
+         *
+         * This function also ensures that each node is pushed onto the node stack before calling the
+         * visitor, and popped off of the node stack once the visitor has returned.
+         *
+         * The cardinality of this function is expected to be *:* (many-to-many).
+         *
+         * The node test is used to enforce that each output node matches the expected kind of the
+         * result.
+         *
+         * @param nodes The array of Nodes to visit.
+         * @param visitor A callback executed to write the results of visiting each node or its children.
+         * @param test A node test used to validate the result of visiting each node.
+         * @param start An offset into nodes at which to start visiting.
+         * @param count A the number of nodes to visit.
+         */
+        function visitNodeOrNodes(node: Node, nodes: Node[], start: number, count: number,
+            visitor: (node: Node, write: (node: Node) => void) => void, write: (node: Node) => void,
+            readNode?: () => Node, readNodes?: () => NodeArray<Node>, out?: Node[],
+            test?: (node: Node) => boolean): Node | NodeArray<Node> {
             let resultNode: Node;
             let resultNodes: NodeArray<Node>;
             let savedOriginalNodes: typeof originalNodes;
@@ -654,6 +654,8 @@ namespace ts {
             let savedUpdatedNodes: typeof updatedNodes;
             let savedNodeTest: typeof nodeTest;
             let savedCurrentVisitFlags: typeof currentVisitFlags;
+
+            Debug.assert(!(node && nodes), "`node` and `nodes` may not both be specified.");
 
             // If we have no work to do, clear the requested visit flags and exit
             if (!node && !nodes) {
@@ -690,7 +692,7 @@ namespace ts {
                 requestedVisitFlags = undefined;
 
                 // These flags indicate a new lexical environment should be introduced when/if we visit the children of this node.
-                if (thisNodeIsLexicalEnvironment()) {
+                if (currentVisitFlags & VisitFlags.LexicalEnvironment) {
                     pushLexicalEnvironment();
                 }
             }
@@ -710,7 +712,7 @@ namespace ts {
                 // Fix start and count
                 let len = nodes.length;
                 start = start < 0 ? 0 : start || 0;
-                count = count > len - start ? len - start : count || len - start;
+                count = count > len - start ? len - start : count === undefined ? len - start : count;
 
                 // Visit each input node
                 for (let i = 0; i < count; ++i) {
@@ -737,7 +739,7 @@ namespace ts {
                 }
 
                 // If a new lexical environment had been requested, we need to include it here
-                if (thisNodeIsLexicalEnvironment()) {
+                if (currentVisitFlags & VisitFlags.LexicalEnvironment) {
                     if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
                         let statements: Statement[];
                         if (isSourceFile(resultNode) || isModuleBody(resultNode) || isFunctionBody(resultNode)) {
@@ -828,6 +830,13 @@ namespace ts {
             tempFlags = savedLexicalEnvironment.tempFlags;
             hoistedVariableDeclarations = savedLexicalEnvironment.hoistedVariableDeclarations;
             hoistedFunctionDeclarations = savedLexicalEnvironment.hoistedFunctionDeclarations;
+
+            // Whenenver we empty the lexical environment stack, we need to save all temporary
+            // variable names generated in the source file to prevent reuse in other steps or phases.
+            if (lexicalEnvironmentStackSize === 0 && !isEmpty(tempVariableNameSet)) {
+                generatedNameSet = extend(generatedNameSet, tempVariableNameSet);
+                tempVariableNameSet = { };
+            }
         }
 
         function writeLexicalEnvironment(write: (node: Statement) => void): void {
@@ -916,6 +925,20 @@ namespace ts {
             requestedVisitFlags |= VisitFlags.StatementBranch;
             return visitNode(node, visitor, isStatementNode);
         }
+
+        function accept(node: Node, visitor: (node: Node, write: (node: Node) => void) => void) {
+            if (!node) {
+                return undefined;
+            }
+
+            let wasPushed = nodeStack.tryPushNode(node);
+            node = acceptTransformer(transformer, node, visitor);
+            if (wasPushed) {
+                nodeStack.popNode();
+            }
+
+            return node;
+        }
     }
 
     export function chainTransformationPhases(phases: TransformationPhase[]): TransformationChain {
@@ -987,5 +1010,30 @@ namespace ts {
 
     function buildNaryTransformation(steps: Transformation[]): Transformation {
         return node => steps.reduce(runStep, node);
+    }
+
+    function formatSyntaxKind(kind: SyntaxKind) {
+        let text = String(kind);
+        if ((<any>ts).SyntaxKind) {
+            text += " (" + (<any>ts).SyntaxKind[kind] + ")";
+        }
+
+        return text;
+    }
+
+    /**
+     * Emits file prologue directives prior to a module body.
+     */
+    export function writePrologueDirectives(statements: NodeArray<Statement>, write: (node: Statement) => void): number {
+        for (let i = 0; i < statements.length; ++i) {
+            if (isPrologueDirective(statements[i])) {
+                write(statements[i]);
+            }
+            else {
+                return i;
+            }
+        }
+
+        return statements.length;
     }
 }

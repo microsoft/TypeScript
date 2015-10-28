@@ -9,7 +9,7 @@ namespace ts {
      * @param visitor An optional visitor used to visit the initializers of a binding pattern.
      */
     export function flattenVariableDestructuring(transformer: Transformer, node: VariableDeclaration, write: (node: VariableDeclaration) => void, visitor?: (node: Node, write: (node: Node) => void) => void): void {
-        transformDestructuring(transformer, node, /*writeExpression*/ undefined, write, visitor, node.initializer);
+        transformDestructuring(transformer, node, /*writeExpression*/ undefined, write, visitor);
     }
 
     /**
@@ -126,7 +126,7 @@ namespace ts {
                 }
             }
             else {
-                emitAssignment(name, value, /*isTempVariable*/ false, write);
+                emitAssignment(name, value, /*isTempVariable*/ false, /*originalNode*/ target, write);
             }
         }
 
@@ -156,7 +156,7 @@ namespace ts {
                 emitArrayLiteralAssignment(target, value, write);
             }
             else if (isIdentifier(target)) {
-                emitAssignment(target, value, /*isTempVariable*/ false, write);
+                emitAssignment(target, value, /*isTempVariable*/ false, /*originalNode*/ undefined, write);
             }
             else {
                 Debug.fail();
@@ -201,13 +201,20 @@ namespace ts {
             }
         }
 
-        function emitAssignment(left: Identifier, right: Expression, isTempVariable: boolean, write: (node: Expression | VariableDeclaration) => void): void {
+        function emitAssignment(left: Identifier, right: Expression, isTempVariable: boolean, originalNode: Node, write: (node: Expression | VariableDeclaration) => void): void {
+            let node: VariableDeclaration | Expression;
             if (isVariableDeclarationList) {
-                write(createVariableDeclaration2(left, right));
+                node = createVariableDeclaration2(left, right);
             }
             else {
-                write(createAssignmentExpression(left, right));
+                node = createAssignmentExpression(left, right);
             }
+
+            if (originalNode) {
+                node.original = originalNode;
+            }
+            
+            write(node);
         }
 
         function ensureIdentifier(value: Expression, reuseIdentifierExpressions: boolean, write: (node: Expression | VariableDeclaration) => void) {
@@ -220,7 +227,7 @@ namespace ts {
                     hoistVariableDeclaration(temp);
                 }
 
-                emitAssignment(temp, value, /*isTempVariable*/ true, write);
+                emitAssignment(temp, value, /*isTempVariable*/ true, /*originalNode*/ undefined, write);
                 return temp;
             }
         }

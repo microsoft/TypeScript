@@ -74,13 +74,6 @@ namespace ts {
         if (expression) node.expression = expression;
         return node;
     }
-    export function createTypeParameter(name?: Identifier, constraint?: TypeNode, expression?: Expression, location?: TextRange, flags?: NodeFlags): TypeParameterDeclaration {
-        let node = createNode<TypeParameterDeclaration>(SyntaxKind.TypeParameter, location, flags); 
-        if (name) node.name = name;
-        if (constraint) node.constraint = constraint;
-        if (expression) node.expression = expression;
-        return node;
-    }
     export function createParameter(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, dotDotDotToken?: Node, name?: BindingPattern | Identifier, questionToken?: Node, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): ParameterDeclaration {
         let node = createNode<ParameterDeclaration>(SyntaxKind.Parameter, location, flags); 
         if (decorators) node.decorators = createNodeArray(decorators);
@@ -97,15 +90,6 @@ namespace ts {
         if (expression) node.expression = expression;
         return node;
     }
-    export function createPropertySignature(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, name?: PropertyName, questionToken?: Node, type?: TypeNode, location?: TextRange, flags?: NodeFlags): PropertySignature {
-        let node = createNode<PropertySignature>(SyntaxKind.PropertySignature, location, flags); 
-        if (decorators) node.decorators = createNodeArray(decorators);
-        if (modifiers) setModifiers(node, modifiers);
-        if (name) node.name = name;
-        if (questionToken) node.questionToken = questionToken;
-        if (type) node.type = type;
-        return node;
-    }
     export function createPropertyDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, name?: PropertyName, type?: TypeNode, initializer?: Expression, location?: TextRange, flags?: NodeFlags): PropertyDeclaration {
         let node = createNode<PropertyDeclaration>(SyntaxKind.PropertyDeclaration, location, flags); 
         if (decorators) node.decorators = createNodeArray(decorators);
@@ -113,17 +97,6 @@ namespace ts {
         if (name) node.name = name;
         if (type) node.type = type;
         if (initializer) node.initializer = initializer;
-        return node;
-    }
-    export function createMethodSignature(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, name?: PropertyName, questionToken?: Node, typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, location?: TextRange, flags?: NodeFlags): MethodSignature {
-        let node = createNode<MethodSignature>(SyntaxKind.MethodSignature, location, flags); 
-        if (decorators) node.decorators = createNodeArray(decorators);
-        if (modifiers) setModifiers(node, modifiers);
-        if (name) node.name = name;
-        if (questionToken) node.questionToken = questionToken;
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
         return node;
     }
     export function createMethodDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, asteriskToken?: Node, name?: PropertyName, typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, body?: FunctionBody, location?: TextRange, flags?: NodeFlags): MethodDeclaration {
@@ -165,92 +138,6 @@ namespace ts {
         if (parameters) node.parameters = createNodeArray(parameters);
         if (type) node.type = type;
         if (body) node.body = body;
-        return node;
-    }
-    export function createCallSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): CallSignatureDeclaration {
-        let node = createNode<CallSignatureDeclaration>(SyntaxKind.CallSignature, location, flags); 
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
-        if (questionToken) node.questionToken = questionToken;
-        return node;
-    }
-    export function createConstructSignature(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): ConstructSignatureDeclaration {
-        let node = createNode<ConstructSignatureDeclaration>(SyntaxKind.ConstructSignature, location, flags); 
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
-        if (questionToken) node.questionToken = questionToken;
-        return node;
-    }
-    export function createIndexSignature(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, questionToken?: Node, location?: TextRange, flags?: NodeFlags): IndexSignatureDeclaration {
-        let node = createNode<IndexSignatureDeclaration>(SyntaxKind.IndexSignature, location, flags); 
-        if (decorators) node.decorators = createNodeArray(decorators);
-        if (modifiers) setModifiers(node, modifiers);
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
-        if (questionToken) node.questionToken = questionToken;
-        return node;
-    }
-    export function createTypePredicate(parameterName?: Identifier, type?: TypeNode, location?: TextRange, flags?: NodeFlags): TypePredicateNode {
-        let node = createNode<TypePredicateNode>(SyntaxKind.TypePredicate, location, flags); 
-        if (parameterName) node.parameterName = parameterName;
-        if (type) node.type = type;
-        return node;
-    }
-    export function createTypeReference(typeName?: EntityName, typeArguments?: Array<TypeNode>, location?: TextRange, flags?: NodeFlags): TypeReferenceNode {
-        let node = createNode<TypeReferenceNode>(SyntaxKind.TypeReference, location, flags); 
-        if (typeName) node.typeName = typeName;
-        if (typeArguments) node.typeArguments = createNodeArray(typeArguments);
-        return node;
-    }
-    export function createFunctionType(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, location?: TextRange, flags?: NodeFlags): FunctionTypeNode {
-        let node = createNode<FunctionTypeNode>(SyntaxKind.FunctionType, location, flags); 
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
-        return node;
-    }
-    export function createConstructorType(typeParameters?: Array<TypeParameterDeclaration>, parameters?: Array<ParameterDeclaration>, type?: TypeNode, location?: TextRange, flags?: NodeFlags): ConstructorTypeNode {
-        let node = createNode<ConstructorTypeNode>(SyntaxKind.ConstructorType, location, flags); 
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
-        return node;
-    }
-    export function createTypeQuery(exprName?: EntityName, location?: TextRange, flags?: NodeFlags): TypeQueryNode {
-        let node = createNode<TypeQueryNode>(SyntaxKind.TypeQuery, location, flags); 
-        if (exprName) node.exprName = exprName;
-        return node;
-    }
-    export function createTypeLiteral(members?: Array<TypeElement>, location?: TextRange, flags?: NodeFlags): TypeLiteralNode {
-        let node = createNode<TypeLiteralNode>(SyntaxKind.TypeLiteral, location, flags); 
-        if (members) node.members = createNodeArray(members);
-        return node;
-    }
-    export function createArrayType(elementType?: TypeNode, location?: TextRange, flags?: NodeFlags): ArrayTypeNode {
-        let node = createNode<ArrayTypeNode>(SyntaxKind.ArrayType, location, flags); 
-        if (elementType) node.elementType = elementType;
-        return node;
-    }
-    export function createTupleType(elementTypes?: Array<TypeNode>, location?: TextRange, flags?: NodeFlags): TupleTypeNode {
-        let node = createNode<TupleTypeNode>(SyntaxKind.TupleType, location, flags); 
-        if (elementTypes) node.elementTypes = createNodeArray(elementTypes);
-        return node;
-    }
-    export function createUnionType(types?: Array<TypeNode>, location?: TextRange, flags?: NodeFlags): UnionTypeNode {
-        let node = createNode<UnionTypeNode>(SyntaxKind.UnionType, location, flags); 
-        if (types) node.types = createNodeArray(types);
-        return node;
-    }
-    export function createIntersectionType(types?: Array<TypeNode>, location?: TextRange, flags?: NodeFlags): IntersectionTypeNode {
-        let node = createNode<IntersectionTypeNode>(SyntaxKind.IntersectionType, location, flags); 
-        if (types) node.types = createNodeArray(types);
-        return node;
-    }
-    export function createParenthesizedType(type?: TypeNode, location?: TextRange, flags?: NodeFlags): ParenthesizedTypeNode {
-        let node = createNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType, location, flags); 
-        if (type) node.type = type;
         return node;
     }
     export function createObjectBindingPattern(elements?: Array<BindingElement>, location?: TextRange, flags?: NodeFlags): ObjectBindingPattern {
@@ -594,25 +481,6 @@ namespace ts {
         if (members) node.members = createNodeArray(members);
         return node;
     }
-    export function createInterfaceDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, name?: Identifier, typeParameters?: Array<TypeParameterDeclaration>, heritageClauses?: Array<HeritageClause>, members?: Array<TypeElement>, location?: TextRange, flags?: NodeFlags): InterfaceDeclaration {
-        let node = createNode<InterfaceDeclaration>(SyntaxKind.InterfaceDeclaration, location, flags); 
-        if (decorators) node.decorators = createNodeArray(decorators);
-        if (modifiers) setModifiers(node, modifiers);
-        if (name) node.name = name;
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (heritageClauses) node.heritageClauses = createNodeArray(heritageClauses);
-        if (members) node.members = createNodeArray(members);
-        return node;
-    }
-    export function createTypeAliasDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, name?: Identifier, typeParameters?: Array<TypeParameterDeclaration>, type?: TypeNode, location?: TextRange, flags?: NodeFlags): TypeAliasDeclaration {
-        let node = createNode<TypeAliasDeclaration>(SyntaxKind.TypeAliasDeclaration, location, flags); 
-        if (decorators) node.decorators = createNodeArray(decorators);
-        if (modifiers) setModifiers(node, modifiers);
-        if (name) node.name = name;
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (type) node.type = type;
-        return node;
-    }
     export function createEnumDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, name?: Identifier, members?: Array<EnumMember>, location?: TextRange, flags?: NodeFlags): EnumDeclaration {
         let node = createNode<EnumDeclaration>(SyntaxKind.EnumDeclaration, location, flags); 
         if (decorators) node.decorators = createNodeArray(decorators);
@@ -701,13 +569,6 @@ namespace ts {
         let node = createNode<ExportSpecifier>(SyntaxKind.ExportSpecifier, location, flags); 
         if (propertyName) node.propertyName = propertyName;
         if (name) node.name = name;
-        return node;
-    }
-    export function createMissingDeclaration(decorators?: Array<Decorator>, modifiers?: Array<Modifier>, questionToken?: Node, location?: TextRange, flags?: NodeFlags): MissingDeclaration {
-        let node = createNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, location, flags); 
-        if (decorators) node.decorators = createNodeArray(decorators);
-        if (modifiers) setModifiers(node, modifiers);
-        if (questionToken) node.questionToken = questionToken;
         return node;
     }
     export function createExternalModuleReference(expression?: Expression, location?: TextRange, flags?: NodeFlags): ExternalModuleReference {
@@ -823,138 +684,6 @@ namespace ts {
         if (imports) node.imports = imports;
         return node;
     }
-    export function createJSDocTypeExpression(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocTypeExpression {
-        let node = createNode<JSDocTypeExpression>(SyntaxKind.JSDocTypeExpression, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocAllType(location?: TextRange, flags?: NodeFlags): JSDocAllType {
-        let node = createNode<JSDocAllType>(SyntaxKind.JSDocAllType, location, flags); 
-        return node;
-    }
-    export function createJSDocUnknownType(location?: TextRange, flags?: NodeFlags): JSDocUnknownType {
-        let node = createNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType, location, flags); 
-        return node;
-    }
-    export function createJSDocArrayType(elementType?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocArrayType {
-        let node = createNode<JSDocArrayType>(SyntaxKind.JSDocArrayType, location, flags); 
-        if (elementType) node.elementType = elementType;
-        return node;
-    }
-    export function createJSDocUnionType(types?: Array<JSDocType>, location?: TextRange, flags?: NodeFlags): JSDocUnionType {
-        let node = createNode<JSDocUnionType>(SyntaxKind.JSDocUnionType, location, flags); 
-        if (types) node.types = createNodeArray(types);
-        return node;
-    }
-    export function createJSDocTupleType(types?: Array<JSDocType>, location?: TextRange, flags?: NodeFlags): JSDocTupleType {
-        let node = createNode<JSDocTupleType>(SyntaxKind.JSDocTupleType, location, flags); 
-        if (types) node.types = createNodeArray(types);
-        return node;
-    }
-    export function createJSDocNullableType(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocNullableType {
-        let node = createNode<JSDocNullableType>(SyntaxKind.JSDocNullableType, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocNonNullableType(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocNonNullableType {
-        let node = createNode<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocRecordType(members?: Array<JSDocRecordMember>, location?: TextRange, flags?: NodeFlags): JSDocRecordType {
-        let node = createNode<JSDocRecordType>(SyntaxKind.JSDocRecordType, location, flags); 
-        if (members) node.members = createNodeArray(members);
-        return node;
-    }
-    export function createJSDocRecordMember(name?: Identifier | LiteralExpression, type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocRecordMember {
-        let node = createNode<JSDocRecordMember>(SyntaxKind.JSDocRecordMember, location, flags); 
-        if (name) node.name = name;
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocTypeReference(name?: EntityName, typeArguments?: Array<JSDocType>, location?: TextRange, flags?: NodeFlags): JSDocTypeReference {
-        let node = createNode<JSDocTypeReference>(SyntaxKind.JSDocTypeReference, location, flags); 
-        if (name) node.name = name;
-        if (typeArguments) node.typeArguments = createNodeArray(typeArguments);
-        return node;
-    }
-    export function createJSDocOptionalType(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocOptionalType {
-        let node = createNode<JSDocOptionalType>(SyntaxKind.JSDocOptionalType, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocFunctionType(parameters?: Array<ParameterDeclaration>, type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocFunctionType {
-        let node = createNode<JSDocFunctionType>(SyntaxKind.JSDocFunctionType, location, flags); 
-        if (parameters) node.parameters = createNodeArray(parameters);
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocVariadicType(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocVariadicType {
-        let node = createNode<JSDocVariadicType>(SyntaxKind.JSDocVariadicType, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocConstructorType(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocConstructorType {
-        let node = createNode<JSDocConstructorType>(SyntaxKind.JSDocConstructorType, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocThisType(type?: JSDocType, location?: TextRange, flags?: NodeFlags): JSDocThisType {
-        let node = createNode<JSDocThisType>(SyntaxKind.JSDocThisType, location, flags); 
-        if (type) node.type = type;
-        return node;
-    }
-    export function createJSDocComment(tags?: Array<JSDocTag>, location?: TextRange, flags?: NodeFlags): JSDocComment {
-        let node = createNode<JSDocComment>(SyntaxKind.JSDocComment, location, flags); 
-        if (tags) node.tags = createNodeArray(tags);
-        return node;
-    }
-    export function createJSDocTag(atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocTag {
-        let node = createNode<JSDocTag>(SyntaxKind.JSDocTag, location, flags); 
-        if (atToken) node.atToken = atToken;
-        if (tagName) node.tagName = tagName;
-        return node;
-    }
-    export function createJSDocParameterTag(preParameterName?: Identifier, typeExpression?: JSDocTypeExpression, postParameterName?: Identifier, atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocParameterTag {
-        let node = createNode<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, location, flags); 
-        if (preParameterName) node.preParameterName = preParameterName;
-        if (typeExpression) node.typeExpression = typeExpression;
-        if (postParameterName) node.postParameterName = postParameterName;
-        if (atToken) node.atToken = atToken;
-        if (tagName) node.tagName = tagName;
-        return node;
-    }
-    export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocReturnTag {
-        let node = createNode<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, location, flags); 
-        if (typeExpression) node.typeExpression = typeExpression;
-        if (atToken) node.atToken = atToken;
-        if (tagName) node.tagName = tagName;
-        return node;
-    }
-    export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocTypeTag {
-        let node = createNode<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, location, flags); 
-        if (typeExpression) node.typeExpression = typeExpression;
-        if (atToken) node.atToken = atToken;
-        if (tagName) node.tagName = tagName;
-        return node;
-    }
-    export function createJSDocTemplateTag(typeParameters?: Array<TypeParameterDeclaration>, atToken?: Node, tagName?: Identifier, location?: TextRange, flags?: NodeFlags): JSDocTemplateTag {
-        let node = createNode<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, location, flags); 
-        if (typeParameters) node.typeParameters = createNodeArray(typeParameters);
-        if (atToken) node.atToken = atToken;
-        if (tagName) node.tagName = tagName;
-        return node;
-    }
-    export function createRawExpression(text?: string, location?: TextRange, flags?: NodeFlags): RawExpression {
-        let node = createNode<RawExpression>(SyntaxKind.RawExpression, location, flags); 
-        if (text) node.text = text;
-        return node;
-    }
-    export function createRawStatement(text?: string, location?: TextRange, flags?: NodeFlags): RawStatement {
-        let node = createNode<RawStatement>(SyntaxKind.RawStatement, location, flags); 
-        if (text) node.text = text;
-        return node;
-    }
     export function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName {
         if (left !== node.left || right !== node.right) {
             let newNode = createQualifiedName(left, right);
@@ -965,13 +694,6 @@ namespace ts {
     export function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName {
         if (expression !== node.expression) {
             let newNode = createComputedPropertyName(expression);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTypeParameter(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode, expression: Expression): TypeParameterDeclaration {
-        if (name !== node.name || constraint !== node.constraint || expression !== node.expression) {
-            let newNode = createTypeParameter(name, constraint, expression);
             return updateFrom(node, newNode);
         }
         return node;
@@ -990,23 +712,9 @@ namespace ts {
         }
         return node;
     }
-    export function updatePropertySignature(node: PropertySignature, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: PropertyName, type: TypeNode): PropertySignature {
-        if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type) {
-            let newNode = createPropertySignature(decorators, modifiers, name, node.questionToken, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
     export function updatePropertyDeclaration(node: PropertyDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: PropertyName, type: TypeNode, initializer: Expression): PropertyDeclaration {
         if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || type !== node.type || initializer !== node.initializer) {
             let newNode = createPropertyDeclaration(decorators, modifiers, name, type, initializer);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateMethodSignature(node: MethodSignature, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: PropertyName, typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): MethodSignature {
-        if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-            let newNode = createMethodSignature(decorators, modifiers, name, node.questionToken, typeParameters, parameters, type);
             return updateFrom(node, newNode);
         }
         return node;
@@ -1035,104 +743,6 @@ namespace ts {
     export function updateSetAccessor(node: SetAccessorDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: PropertyName, parameters: Array<ParameterDeclaration>, type: TypeNode, body: FunctionBody): SetAccessorDeclaration {
         if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || parameters !== node.parameters || type !== node.type || body !== node.body) {
             let newNode = createSetAccessor(decorators, modifiers, name, parameters, type, body);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateCallSignature(node: CallSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): CallSignatureDeclaration {
-        if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-            let newNode = createCallSignature(typeParameters, parameters, type, node.questionToken);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructSignatureDeclaration {
-        if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-            let newNode = createConstructSignature(typeParameters, parameters, type, node.questionToken);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateIndexSignature(node: IndexSignatureDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>, parameters: Array<ParameterDeclaration>, type: TypeNode): IndexSignatureDeclaration {
-        if (decorators !== node.decorators || modifiers !== node.modifiers || parameters !== node.parameters || type !== node.type) {
-            let newNode = createIndexSignature(decorators, modifiers, parameters, type, node.questionToken);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTypePredicate(node: TypePredicateNode, parameterName: Identifier, type: TypeNode): TypePredicateNode {
-        if (parameterName !== node.parameterName || type !== node.type) {
-            let newNode = createTypePredicate(parameterName, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTypeReference(node: TypeReferenceNode, typeName: EntityName, typeArguments: Array<TypeNode>): TypeReferenceNode {
-        if (typeName !== node.typeName || typeArguments !== node.typeArguments) {
-            let newNode = createTypeReference(typeName, typeArguments);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateFunctionType(node: FunctionTypeNode, typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): FunctionTypeNode {
-        if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-            let newNode = createFunctionType(typeParameters, parameters, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateConstructorType(node: ConstructorTypeNode, typeParameters: Array<TypeParameterDeclaration>, parameters: Array<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode {
-        if (typeParameters !== node.typeParameters || parameters !== node.parameters || type !== node.type) {
-            let newNode = createConstructorType(typeParameters, parameters, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTypeQuery(node: TypeQueryNode, exprName: EntityName): TypeQueryNode {
-        if (exprName !== node.exprName) {
-            let newNode = createTypeQuery(exprName);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTypeLiteral(node: TypeLiteralNode, members: Array<TypeElement>): TypeLiteralNode {
-        if (members !== node.members) {
-            let newNode = createTypeLiteral(members);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateArrayType(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
-        if (elementType !== node.elementType) {
-            let newNode = createArrayType(elementType);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTupleType(node: TupleTypeNode, elementTypes: Array<TypeNode>): TupleTypeNode {
-        if (elementTypes !== node.elementTypes) {
-            let newNode = createTupleType(elementTypes);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateUnionType(node: UnionTypeNode, types: Array<TypeNode>): UnionTypeNode {
-        if (types !== node.types) {
-            let newNode = createUnionType(types);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateIntersectionType(node: IntersectionTypeNode, types: Array<TypeNode>): IntersectionTypeNode {
-        if (types !== node.types) {
-            let newNode = createIntersectionType(types);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode {
-        if (type !== node.type) {
-            let newNode = createParenthesizedType(type);
             return updateFrom(node, newNode);
         }
         return node;
@@ -1487,20 +1097,6 @@ namespace ts {
         }
         return node;
     }
-    export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: Identifier, typeParameters: Array<TypeParameterDeclaration>, heritageClauses: Array<HeritageClause>, members: Array<TypeElement>): InterfaceDeclaration {
-        if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || heritageClauses !== node.heritageClauses || members !== node.members) {
-            let newNode = createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: Identifier, typeParameters: Array<TypeParameterDeclaration>, type: TypeNode): TypeAliasDeclaration {
-        if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || typeParameters !== node.typeParameters || type !== node.type) {
-            let newNode = createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
     export function updateEnumDeclaration(node: EnumDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>, name: Identifier, members: Array<EnumMember>): EnumDeclaration {
         if (decorators !== node.decorators || modifiers !== node.modifiers || name !== node.name || members !== node.members) {
             let newNode = createEnumDeclaration(decorators, modifiers, name, members);
@@ -1595,13 +1191,6 @@ namespace ts {
     export function updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier, name: Identifier): ExportSpecifier {
         if (propertyName !== node.propertyName || name !== node.name) {
             let newNode = createExportSpecifier(propertyName, name);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateMissingDeclaration(node: MissingDeclaration, decorators: Array<Decorator>, modifiers: Array<Modifier>): MissingDeclaration {
-        if (decorators !== node.decorators || modifiers !== node.modifiers) {
-            let newNode = createMissingDeclaration(decorators, modifiers, node.questionToken);
             return updateFrom(node, newNode);
         }
         return node;
@@ -1718,184 +1307,23 @@ namespace ts {
         }
         return node;
     }
-    export function updateJSDocTypeExpression(node: JSDocTypeExpression, type: JSDocType): JSDocTypeExpression {
-        if (type !== node.type) {
-            let newNode = createJSDocTypeExpression(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocArrayType(node: JSDocArrayType, elementType: JSDocType): JSDocArrayType {
-        if (elementType !== node.elementType) {
-            let newNode = createJSDocArrayType(elementType);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocUnionType(node: JSDocUnionType, types: Array<JSDocType>): JSDocUnionType {
-        if (types !== node.types) {
-            let newNode = createJSDocUnionType(types);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocTupleType(node: JSDocTupleType, types: Array<JSDocType>): JSDocTupleType {
-        if (types !== node.types) {
-            let newNode = createJSDocTupleType(types);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocNullableType(node: JSDocNullableType, type: JSDocType): JSDocNullableType {
-        if (type !== node.type) {
-            let newNode = createJSDocNullableType(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocNonNullableType(node: JSDocNonNullableType, type: JSDocType): JSDocNonNullableType {
-        if (type !== node.type) {
-            let newNode = createJSDocNonNullableType(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocRecordType(node: JSDocRecordType, members: Array<JSDocRecordMember>): JSDocRecordType {
-        if (members !== node.members) {
-            let newNode = createJSDocRecordType(members);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocRecordMember(node: JSDocRecordMember, name: Identifier | LiteralExpression, type: JSDocType): JSDocRecordMember {
-        if (name !== node.name || type !== node.type) {
-            let newNode = createJSDocRecordMember(name, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocTypeReference(node: JSDocTypeReference, name: EntityName, typeArguments: Array<JSDocType>): JSDocTypeReference {
-        if (name !== node.name || typeArguments !== node.typeArguments) {
-            let newNode = createJSDocTypeReference(name, typeArguments);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocOptionalType(node: JSDocOptionalType, type: JSDocType): JSDocOptionalType {
-        if (type !== node.type) {
-            let newNode = createJSDocOptionalType(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocFunctionType(node: JSDocFunctionType, parameters: Array<ParameterDeclaration>, type: JSDocType): JSDocFunctionType {
-        if (parameters !== node.parameters || type !== node.type) {
-            let newNode = createJSDocFunctionType(parameters, type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocVariadicType(node: JSDocVariadicType, type: JSDocType): JSDocVariadicType {
-        if (type !== node.type) {
-            let newNode = createJSDocVariadicType(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocConstructorType(node: JSDocConstructorType, type: JSDocType): JSDocConstructorType {
-        if (type !== node.type) {
-            let newNode = createJSDocConstructorType(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocThisType(node: JSDocThisType, type: JSDocType): JSDocThisType {
-        if (type !== node.type) {
-            let newNode = createJSDocThisType(type);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocComment(node: JSDocComment, tags: Array<JSDocTag>): JSDocComment {
-        if (tags !== node.tags) {
-            let newNode = createJSDocComment(tags);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocTag(node: JSDocTag, tagName: Identifier): JSDocTag {
-        if (tagName !== node.tagName) {
-            let newNode = createJSDocTag(node.atToken, tagName);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocParameterTag(node: JSDocParameterTag, preParameterName: Identifier, typeExpression: JSDocTypeExpression, postParameterName: Identifier, tagName: Identifier): JSDocParameterTag {
-        if (preParameterName !== node.preParameterName || typeExpression !== node.typeExpression || postParameterName !== node.postParameterName || tagName !== node.tagName) {
-            let newNode = createJSDocParameterTag(preParameterName, typeExpression, postParameterName, node.atToken, tagName);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocReturnTag(node: JSDocReturnTag, typeExpression: JSDocTypeExpression, tagName: Identifier): JSDocReturnTag {
-        if (typeExpression !== node.typeExpression || tagName !== node.tagName) {
-            let newNode = createJSDocReturnTag(typeExpression, node.atToken, tagName);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocTypeTag(node: JSDocTypeTag, typeExpression: JSDocTypeExpression, tagName: Identifier): JSDocTypeTag {
-        if (typeExpression !== node.typeExpression || tagName !== node.tagName) {
-            let newNode = createJSDocTypeTag(typeExpression, node.atToken, tagName);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
-    export function updateJSDocTemplateTag(node: JSDocTemplateTag, typeParameters: Array<TypeParameterDeclaration>, tagName: Identifier): JSDocTemplateTag {
-        if (typeParameters !== node.typeParameters || tagName !== node.tagName) {
-            let newNode = createJSDocTemplateTag(typeParameters, node.atToken, tagName);
-            return updateFrom(node, newNode);
-        }
-        return node;
-    }
     export function isNumericLiteral(node: Node): node is LiteralExpression {
         return node && node.kind === SyntaxKind.NumericLiteral;
     }
     export function isStringLiteral(node: Node): node is StringLiteral {
         return node && node.kind === SyntaxKind.StringLiteral;
     }
-    export function isRegularExpressionLiteral(node: Node): node is LiteralExpression {
-        return node && node.kind === SyntaxKind.RegularExpressionLiteral;
-    }
     export function isNoSubstitutionTemplateLiteral(node: Node): node is LiteralExpression {
         return node && node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
-    export function isTemplateHead(node: Node): node is LiteralExpression {
-        return node && node.kind === SyntaxKind.TemplateHead;
-    }
-    export function isTemplateMiddle(node: Node): node is LiteralExpression {
-        return node && node.kind === SyntaxKind.TemplateMiddle;
-    }
-    export function isTemplateTail(node: Node): node is LiteralExpression {
-        return node && node.kind === SyntaxKind.TemplateTail;
-    }
     export function isIdentifier(node: Node): node is Identifier {
         return node && node.kind === SyntaxKind.Identifier;
-    }
-    export function isFalseKeyword(node: Node): node is PrimaryExpression {
-        return node && node.kind === SyntaxKind.FalseKeyword;
-    }
-    export function isNullKeyword(node: Node): node is PrimaryExpression {
-        return node && node.kind === SyntaxKind.NullKeyword;
     }
     export function isSuperKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.SuperKeyword;
     }
     export function isThisKeyword(node: Node): node is PrimaryExpression {
         return node && node.kind === SyntaxKind.ThisKeyword;
-    }
-    export function isTrueKeyword(node: Node): node is PrimaryExpression {
-        return node && node.kind === SyntaxKind.TrueKeyword;
     }
     export function isQualifiedName(node: Node): node is QualifiedName {
         return node && node.kind === SyntaxKind.QualifiedName;
@@ -1912,14 +1340,8 @@ namespace ts {
     export function isDecorator(node: Node): node is Decorator {
         return node && node.kind === SyntaxKind.Decorator;
     }
-    export function isPropertySignature(node: Node): node is PropertySignature {
-        return node && node.kind === SyntaxKind.PropertySignature;
-    }
     export function isPropertyDeclaration(node: Node): node is PropertyDeclaration {
         return node && node.kind === SyntaxKind.PropertyDeclaration;
-    }
-    export function isMethodSignature(node: Node): node is MethodSignature {
-        return node && node.kind === SyntaxKind.MethodSignature;
     }
     export function isMethodDeclaration(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration;
@@ -1933,47 +1355,11 @@ namespace ts {
     export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
         return node && node.kind === SyntaxKind.SetAccessor;
     }
-    export function isCallSignature(node: Node): node is CallSignatureDeclaration {
-        return node && node.kind === SyntaxKind.CallSignature;
-    }
-    export function isConstructSignature(node: Node): node is ConstructSignatureDeclaration {
-        return node && node.kind === SyntaxKind.ConstructSignature;
-    }
-    export function isIndexSignature(node: Node): node is IndexSignatureDeclaration {
-        return node && node.kind === SyntaxKind.IndexSignature;
-    }
-    export function isTypePredicate(node: Node): node is TypePredicateNode {
-        return node && node.kind === SyntaxKind.TypePredicate;
-    }
     export function isTypeReference(node: Node): node is TypeReferenceNode {
         return node && node.kind === SyntaxKind.TypeReference;
     }
-    export function isFunctionType(node: Node): node is FunctionTypeNode {
-        return node && node.kind === SyntaxKind.FunctionType;
-    }
-    export function isConstructorType(node: Node): node is ConstructorTypeNode {
-        return node && node.kind === SyntaxKind.ConstructorType;
-    }
-    export function isTypeQuery(node: Node): node is TypeQueryNode {
-        return node && node.kind === SyntaxKind.TypeQuery;
-    }
-    export function isTypeLiteral(node: Node): node is TypeLiteralNode {
-        return node && node.kind === SyntaxKind.TypeLiteral;
-    }
     export function isArrayType(node: Node): node is ArrayTypeNode {
         return node && node.kind === SyntaxKind.ArrayType;
-    }
-    export function isTupleType(node: Node): node is TupleTypeNode {
-        return node && node.kind === SyntaxKind.TupleType;
-    }
-    export function isUnionType(node: Node): node is UnionTypeNode {
-        return node && node.kind === SyntaxKind.UnionType;
-    }
-    export function isIntersectionType(node: Node): node is IntersectionTypeNode {
-        return node && node.kind === SyntaxKind.IntersectionType;
-    }
-    export function isParenthesizedType(node: Node): node is ParenthesizedTypeNode {
-        return node && node.kind === SyntaxKind.ParenthesizedType;
     }
     export function isObjectBindingPattern(node: Node): node is ObjectBindingPattern {
         return node && node.kind === SyntaxKind.ObjectBindingPattern;
@@ -2017,18 +1403,6 @@ namespace ts {
     export function isArrowFunction(node: Node): node is ArrowFunction {
         return node && node.kind === SyntaxKind.ArrowFunction;
     }
-    export function isDeleteExpression(node: Node): node is DeleteExpression {
-        return node && node.kind === SyntaxKind.DeleteExpression;
-    }
-    export function isTypeOfExpression(node: Node): node is TypeOfExpression {
-        return node && node.kind === SyntaxKind.TypeOfExpression;
-    }
-    export function isVoidExpression(node: Node): node is VoidExpression {
-        return node && node.kind === SyntaxKind.VoidExpression;
-    }
-    export function isAwaitExpression(node: Node): node is AwaitExpression {
-        return node && node.kind === SyntaxKind.AwaitExpression;
-    }
     export function isPrefixUnaryExpression(node: Node): node is PrefixUnaryExpression {
         return node && node.kind === SyntaxKind.PrefixUnaryExpression;
     }
@@ -2043,9 +1417,6 @@ namespace ts {
     }
     export function isTemplateExpression(node: Node): node is TemplateExpression {
         return node && node.kind === SyntaxKind.TemplateExpression;
-    }
-    export function isYieldExpression(node: Node): node is YieldExpression {
-        return node && node.kind === SyntaxKind.YieldExpression;
     }
     export function isSpreadElementExpression(node: Node): node is SpreadElementExpression {
         return node && node.kind === SyntaxKind.SpreadElementExpression;
@@ -2071,12 +1442,6 @@ namespace ts {
     export function isBlock(node: Node): node is Block {
         return node && node.kind === SyntaxKind.Block;
     }
-    export function isVariableStatement(node: Node): node is VariableStatement {
-        return node && node.kind === SyntaxKind.VariableStatement;
-    }
-    export function isEmptyStatement(node: Node): node is EmptyStatement {
-        return node && node.kind === SyntaxKind.EmptyStatement;
-    }
     export function isExpressionStatement(node: Node): node is ExpressionStatement {
         return node && node.kind === SyntaxKind.ExpressionStatement;
     }
@@ -2098,32 +1463,8 @@ namespace ts {
     export function isForOfStatement(node: Node): node is ForOfStatement {
         return node && node.kind === SyntaxKind.ForOfStatement;
     }
-    export function isContinueStatement(node: Node): node is ContinueStatement {
-        return node && node.kind === SyntaxKind.ContinueStatement;
-    }
-    export function isBreakStatement(node: Node): node is BreakStatement {
-        return node && node.kind === SyntaxKind.BreakStatement;
-    }
     export function isReturnStatement(node: Node): node is ReturnStatement {
         return node && node.kind === SyntaxKind.ReturnStatement;
-    }
-    export function isWithStatement(node: Node): node is WithStatement {
-        return node && node.kind === SyntaxKind.WithStatement;
-    }
-    export function isSwitchStatement(node: Node): node is SwitchStatement {
-        return node && node.kind === SyntaxKind.SwitchStatement;
-    }
-    export function isLabeledStatement(node: Node): node is LabeledStatement {
-        return node && node.kind === SyntaxKind.LabeledStatement;
-    }
-    export function isThrowStatement(node: Node): node is ThrowStatement {
-        return node && node.kind === SyntaxKind.ThrowStatement;
-    }
-    export function isTryStatement(node: Node): node is TryStatement {
-        return node && node.kind === SyntaxKind.TryStatement;
-    }
-    export function isDebuggerStatement(node: Node): node is DebuggerStatement {
-        return node && node.kind === SyntaxKind.DebuggerStatement;
     }
     export function isVariableDeclaration(node: Node): node is VariableDeclaration {
         return node && node.kind === SyntaxKind.VariableDeclaration;
@@ -2136,15 +1477,6 @@ namespace ts {
     }
     export function isClassDeclaration(node: Node): node is ClassDeclaration {
         return node && node.kind === SyntaxKind.ClassDeclaration;
-    }
-    export function isInterfaceDeclaration(node: Node): node is InterfaceDeclaration {
-        return node && node.kind === SyntaxKind.InterfaceDeclaration;
-    }
-    export function isTypeAliasDeclaration(node: Node): node is TypeAliasDeclaration {
-        return node && node.kind === SyntaxKind.TypeAliasDeclaration;
-    }
-    export function isEnumDeclaration(node: Node): node is EnumDeclaration {
-        return node && node.kind === SyntaxKind.EnumDeclaration;
     }
     export function isModuleDeclaration(node: Node): node is ModuleDeclaration {
         return node && node.kind === SyntaxKind.ModuleDeclaration;
@@ -2185,12 +1517,6 @@ namespace ts {
     export function isExportSpecifier(node: Node): node is ExportSpecifier {
         return node && node.kind === SyntaxKind.ExportSpecifier;
     }
-    export function isMissingDeclaration(node: Node): node is MissingDeclaration {
-        return node && node.kind === SyntaxKind.MissingDeclaration;
-    }
-    export function isExternalModuleReference(node: Node): node is ExternalModuleReference {
-        return node && node.kind === SyntaxKind.ExternalModuleReference;
-    }
     export function isJsxElement(node: Node): node is JsxElement {
         return node && node.kind === SyntaxKind.JsxElement;
     }
@@ -2206,20 +1532,11 @@ namespace ts {
     export function isJsxClosingElement(node: Node): node is JsxClosingElement {
         return node && node.kind === SyntaxKind.JsxClosingElement;
     }
-    export function isJsxAttribute(node: Node): node is JsxAttribute {
-        return node && node.kind === SyntaxKind.JsxAttribute;
-    }
     export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
         return node && node.kind === SyntaxKind.JsxSpreadAttribute;
     }
     export function isJsxExpression(node: Node): node is JsxExpression {
         return node && node.kind === SyntaxKind.JsxExpression;
-    }
-    export function isCaseClause(node: Node): node is CaseClause {
-        return node && node.kind === SyntaxKind.CaseClause;
-    }
-    export function isDefaultClause(node: Node): node is DefaultClause {
-        return node && node.kind === SyntaxKind.DefaultClause;
     }
     export function isHeritageClause(node: Node): node is HeritageClause {
         return node && node.kind === SyntaxKind.HeritageClause;
@@ -2238,78 +1555,6 @@ namespace ts {
     }
     export function isSourceFile(node: Node): node is SourceFile {
         return node && node.kind === SyntaxKind.SourceFile;
-    }
-    export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {
-        return node && node.kind === SyntaxKind.JSDocTypeExpression;
-    }
-    export function isJSDocAllType(node: Node): node is JSDocAllType {
-        return node && node.kind === SyntaxKind.JSDocAllType;
-    }
-    export function isJSDocUnknownType(node: Node): node is JSDocUnknownType {
-        return node && node.kind === SyntaxKind.JSDocUnknownType;
-    }
-    export function isJSDocArrayType(node: Node): node is JSDocArrayType {
-        return node && node.kind === SyntaxKind.JSDocArrayType;
-    }
-    export function isJSDocUnionType(node: Node): node is JSDocUnionType {
-        return node && node.kind === SyntaxKind.JSDocUnionType;
-    }
-    export function isJSDocTupleType(node: Node): node is JSDocTupleType {
-        return node && node.kind === SyntaxKind.JSDocTupleType;
-    }
-    export function isJSDocNullableType(node: Node): node is JSDocNullableType {
-        return node && node.kind === SyntaxKind.JSDocNullableType;
-    }
-    export function isJSDocNonNullableType(node: Node): node is JSDocNonNullableType {
-        return node && node.kind === SyntaxKind.JSDocNonNullableType;
-    }
-    export function isJSDocRecordType(node: Node): node is JSDocRecordType {
-        return node && node.kind === SyntaxKind.JSDocRecordType;
-    }
-    export function isJSDocRecordMember(node: Node): node is JSDocRecordMember {
-        return node && node.kind === SyntaxKind.JSDocRecordMember;
-    }
-    export function isJSDocTypeReference(node: Node): node is JSDocTypeReference {
-        return node && node.kind === SyntaxKind.JSDocTypeReference;
-    }
-    export function isJSDocOptionalType(node: Node): node is JSDocOptionalType {
-        return node && node.kind === SyntaxKind.JSDocOptionalType;
-    }
-    export function isJSDocFunctionType(node: Node): node is JSDocFunctionType {
-        return node && node.kind === SyntaxKind.JSDocFunctionType;
-    }
-    export function isJSDocVariadicType(node: Node): node is JSDocVariadicType {
-        return node && node.kind === SyntaxKind.JSDocVariadicType;
-    }
-    export function isJSDocConstructorType(node: Node): node is JSDocConstructorType {
-        return node && node.kind === SyntaxKind.JSDocConstructorType;
-    }
-    export function isJSDocThisType(node: Node): node is JSDocThisType {
-        return node && node.kind === SyntaxKind.JSDocThisType;
-    }
-    export function isJSDocComment(node: Node): node is JSDocComment {
-        return node && node.kind === SyntaxKind.JSDocComment;
-    }
-    export function isJSDocTag(node: Node): node is JSDocTag {
-        return node && node.kind === SyntaxKind.JSDocTag;
-    }
-    export function isJSDocParameterTag(node: Node): node is JSDocParameterTag {
-        return node && node.kind === SyntaxKind.JSDocParameterTag;
-    }
-    export function isJSDocReturnTag(node: Node): node is JSDocReturnTag {
-        return node && node.kind === SyntaxKind.JSDocReturnTag;
-    }
-    export function isJSDocTypeTag(node: Node): node is JSDocTypeTag {
-        return node && node.kind === SyntaxKind.JSDocTypeTag;
-    }
-    export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag {
-        return node && node.kind === SyntaxKind.JSDocTemplateTag;
-    }
-    export function isRawExpression(node: Node): node is RawExpression {
-        return node && node.kind === SyntaxKind.RawExpression;
-    }
-    export function isRawStatement(node: Node): node is RawStatement {
-        return node && node.kind === SyntaxKind.RawStatement;
     }
     export function isFunctionBody(node: Node): node is FunctionBody {
         if (node) {
@@ -2354,7 +1599,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.FunctionExpression:
@@ -2413,7 +1657,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                     return true;
             }
         }
@@ -2431,7 +1674,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                     return true;
             }
         }
@@ -2451,7 +1693,6 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.Block:
-                case SyntaxKind.RawStatement:
                 case SyntaxKind.EmptyStatement:
                 case SyntaxKind.DebuggerStatement:
                 case SyntaxKind.ModuleBlock:
@@ -2480,6 +1721,12 @@ namespace ts {
     export function isTypeNodeNode(node: Node): node is TypeNode {
         if (node) {
             switch (node.kind) {
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.VoidKeyword:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeReference:
@@ -2584,7 +1831,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.FunctionExpression:
@@ -2620,7 +1866,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                     return true;
             }
         }
@@ -2642,7 +1887,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.FunctionExpression:
@@ -2688,7 +1932,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                 case SyntaxKind.TemplateExpression:
                     return true;
             }
@@ -2733,7 +1976,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.FunctionExpression:
@@ -2800,7 +2042,6 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                 case SyntaxKind.StringLiteral:
-                case SyntaxKind.RawExpression:
                     return true;
             }
         }
@@ -2827,494 +2068,6 @@ namespace ts {
         }
         return false;
     }
-    export function isJSDocType(node: Node): node is JSDocType {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.JSDocAllType:
-                case SyntaxKind.JSDocUnknownType:
-                case SyntaxKind.JSDocArrayType:
-                case SyntaxKind.JSDocUnionType:
-                case SyntaxKind.JSDocTupleType:
-                case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocNullableType:
-                case SyntaxKind.JSDocRecordType:
-                case SyntaxKind.JSDocTypeReference:
-                case SyntaxKind.JSDocOptionalType:
-                case SyntaxKind.JSDocFunctionType:
-                case SyntaxKind.JSDocVariadicType:
-                case SyntaxKind.JSDocConstructorType:
-                case SyntaxKind.JSDocThisType:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function cloneNode<TNode extends Node>(node: TNode, location?: TextRange, flags?: NodeFlags): TNode;
-    export function cloneNode(node: Node, location?: TextRange, flags: NodeFlags = node.flags): Node {
-        if (node) {
-            let clone: Node;
-            switch (node.kind) {
-                case SyntaxKind.NumericLiteral:
-                    clone = createNumericLiteral((<LiteralExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.StringLiteral:
-                    clone = createStringLiteral((<StringLiteral>node).text, location, flags);
-                    break;
-                case SyntaxKind.RegularExpressionLiteral:
-                    clone = createRegularExpressionLiteral((<LiteralExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    clone = createNoSubstitutionTemplateLiteral((<LiteralExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.TemplateHead:
-                    clone = createTemplateHead((<LiteralExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.TemplateMiddle:
-                    clone = createTemplateMiddle((<LiteralExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.TemplateTail:
-                    clone = createTemplateTail((<LiteralExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.Identifier:
-                    clone = createIdentifier((<Identifier>node).text, (<Identifier>node).originalKeywordKind, location, flags);
-                    break;
-                case SyntaxKind.FalseKeyword:
-                    clone = createFalseKeyword(location, flags);
-                    break;
-                case SyntaxKind.NullKeyword:
-                    clone = createNullKeyword(location, flags);
-                    break;
-                case SyntaxKind.SuperKeyword:
-                    clone = createSuperKeyword(location, flags);
-                    break;
-                case SyntaxKind.ThisKeyword:
-                    clone = createThisKeyword(location, flags);
-                    break;
-                case SyntaxKind.TrueKeyword:
-                    clone = createTrueKeyword(location, flags);
-                    break;
-                case SyntaxKind.QualifiedName:
-                    clone = createQualifiedName((<QualifiedName>node).left, (<QualifiedName>node).right, location, flags);
-                    break;
-                case SyntaxKind.ComputedPropertyName:
-                    clone = createComputedPropertyName((<ComputedPropertyName>node).expression, location, flags);
-                    break;
-                case SyntaxKind.TypeParameter:
-                    clone = createTypeParameter((<TypeParameterDeclaration>node).name, (<TypeParameterDeclaration>node).constraint, (<TypeParameterDeclaration>node).expression, location, flags);
-                    break;
-                case SyntaxKind.Parameter:
-                    clone = createParameter((<ParameterDeclaration>node).decorators, (<ParameterDeclaration>node).modifiers, (<ParameterDeclaration>node).dotDotDotToken, (<ParameterDeclaration>node).name, (<ParameterDeclaration>node).questionToken, (<ParameterDeclaration>node).type, (<ParameterDeclaration>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.Decorator:
-                    clone = createDecorator((<Decorator>node).expression, location, flags);
-                    break;
-                case SyntaxKind.PropertySignature:
-                    clone = createPropertySignature((<PropertySignature>node).decorators, (<PropertySignature>node).modifiers, (<PropertySignature>node).name, (<PropertySignature>node).questionToken, (<PropertySignature>node).type, location, flags);
-                    break;
-                case SyntaxKind.PropertyDeclaration:
-                    clone = createPropertyDeclaration((<PropertyDeclaration>node).decorators, (<PropertyDeclaration>node).modifiers, (<PropertyDeclaration>node).name, (<PropertyDeclaration>node).type, (<PropertyDeclaration>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.MethodSignature:
-                    clone = createMethodSignature((<MethodSignature>node).decorators, (<MethodSignature>node).modifiers, (<MethodSignature>node).name, (<MethodSignature>node).questionToken, (<MethodSignature>node).typeParameters, (<MethodSignature>node).parameters, (<MethodSignature>node).type, location, flags);
-                    break;
-                case SyntaxKind.MethodDeclaration:
-                    clone = createMethodDeclaration((<MethodDeclaration>node).decorators, (<MethodDeclaration>node).modifiers, (<MethodDeclaration>node).asteriskToken, (<MethodDeclaration>node).name, (<MethodDeclaration>node).typeParameters, (<MethodDeclaration>node).parameters, (<MethodDeclaration>node).type, (<MethodDeclaration>node).body, location, flags);
-                    break;
-                case SyntaxKind.Constructor:
-                    clone = createConstructor((<ConstructorDeclaration>node).decorators, (<ConstructorDeclaration>node).modifiers, (<ConstructorDeclaration>node).parameters, (<ConstructorDeclaration>node).type, (<ConstructorDeclaration>node).body, location, flags);
-                    break;
-                case SyntaxKind.GetAccessor:
-                    clone = createGetAccessor((<GetAccessorDeclaration>node).decorators, (<GetAccessorDeclaration>node).modifiers, (<GetAccessorDeclaration>node).name, (<GetAccessorDeclaration>node).parameters, (<GetAccessorDeclaration>node).type, (<GetAccessorDeclaration>node).body, location, flags);
-                    break;
-                case SyntaxKind.SetAccessor:
-                    clone = createSetAccessor((<SetAccessorDeclaration>node).decorators, (<SetAccessorDeclaration>node).modifiers, (<SetAccessorDeclaration>node).name, (<SetAccessorDeclaration>node).parameters, (<SetAccessorDeclaration>node).type, (<SetAccessorDeclaration>node).body, location, flags);
-                    break;
-                case SyntaxKind.CallSignature:
-                    clone = createCallSignature((<CallSignatureDeclaration>node).typeParameters, (<CallSignatureDeclaration>node).parameters, (<CallSignatureDeclaration>node).type, (<CallSignatureDeclaration>node).questionToken, location, flags);
-                    break;
-                case SyntaxKind.ConstructSignature:
-                    clone = createConstructSignature((<ConstructSignatureDeclaration>node).typeParameters, (<ConstructSignatureDeclaration>node).parameters, (<ConstructSignatureDeclaration>node).type, (<ConstructSignatureDeclaration>node).questionToken, location, flags);
-                    break;
-                case SyntaxKind.IndexSignature:
-                    clone = createIndexSignature((<IndexSignatureDeclaration>node).decorators, (<IndexSignatureDeclaration>node).modifiers, (<IndexSignatureDeclaration>node).parameters, (<IndexSignatureDeclaration>node).type, (<IndexSignatureDeclaration>node).questionToken, location, flags);
-                    break;
-                case SyntaxKind.TypePredicate:
-                    clone = createTypePredicate((<TypePredicateNode>node).parameterName, (<TypePredicateNode>node).type, location, flags);
-                    break;
-                case SyntaxKind.TypeReference:
-                    clone = createTypeReference((<TypeReferenceNode>node).typeName, (<TypeReferenceNode>node).typeArguments, location, flags);
-                    break;
-                case SyntaxKind.FunctionType:
-                    clone = createFunctionType((<FunctionTypeNode>node).typeParameters, (<FunctionTypeNode>node).parameters, (<FunctionTypeNode>node).type, location, flags);
-                    break;
-                case SyntaxKind.ConstructorType:
-                    clone = createConstructorType((<ConstructorTypeNode>node).typeParameters, (<ConstructorTypeNode>node).parameters, (<ConstructorTypeNode>node).type, location, flags);
-                    break;
-                case SyntaxKind.TypeQuery:
-                    clone = createTypeQuery((<TypeQueryNode>node).exprName, location, flags);
-                    break;
-                case SyntaxKind.TypeLiteral:
-                    clone = createTypeLiteral((<TypeLiteralNode>node).members, location, flags);
-                    break;
-                case SyntaxKind.ArrayType:
-                    clone = createArrayType((<ArrayTypeNode>node).elementType, location, flags);
-                    break;
-                case SyntaxKind.TupleType:
-                    clone = createTupleType((<TupleTypeNode>node).elementTypes, location, flags);
-                    break;
-                case SyntaxKind.UnionType:
-                    clone = createUnionType((<UnionTypeNode>node).types, location, flags);
-                    break;
-                case SyntaxKind.IntersectionType:
-                    clone = createIntersectionType((<IntersectionTypeNode>node).types, location, flags);
-                    break;
-                case SyntaxKind.ParenthesizedType:
-                    clone = createParenthesizedType((<ParenthesizedTypeNode>node).type, location, flags);
-                    break;
-                case SyntaxKind.ObjectBindingPattern:
-                    clone = createObjectBindingPattern((<ObjectBindingPattern>node).elements, location, flags);
-                    break;
-                case SyntaxKind.ArrayBindingPattern:
-                    clone = createArrayBindingPattern((<ArrayBindingPattern>node).elements, location, flags);
-                    break;
-                case SyntaxKind.BindingElement:
-                    clone = createBindingElement((<BindingElement>node).propertyName, (<BindingElement>node).dotDotDotToken, (<BindingElement>node).name, (<BindingElement>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.ArrayLiteralExpression:
-                    clone = createArrayLiteralExpression((<ArrayLiteralExpression>node).elements, location, flags);
-                    break;
-                case SyntaxKind.ObjectLiteralExpression:
-                    clone = createObjectLiteralExpression((<ObjectLiteralExpression>node).properties, location, flags);
-                    break;
-                case SyntaxKind.PropertyAccessExpression:
-                    clone = createPropertyAccessExpression((<PropertyAccessExpression>node).expression, (<PropertyAccessExpression>node).dotToken, (<PropertyAccessExpression>node).name, location, flags);
-                    break;
-                case SyntaxKind.ElementAccessExpression:
-                    clone = createElementAccessExpression((<ElementAccessExpression>node).expression, (<ElementAccessExpression>node).argumentExpression, location, flags);
-                    break;
-                case SyntaxKind.CallExpression:
-                    clone = createCallExpression((<CallExpression>node).expression, (<CallExpression>node).typeArguments, (<CallExpression>node).arguments, location, flags);
-                    break;
-                case SyntaxKind.NewExpression:
-                    clone = createNewExpression((<NewExpression>node).expression, (<NewExpression>node).typeArguments, (<NewExpression>node).arguments, location, flags);
-                    break;
-                case SyntaxKind.TaggedTemplateExpression:
-                    clone = createTaggedTemplateExpression((<TaggedTemplateExpression>node).tag, (<TaggedTemplateExpression>node).template, location, flags);
-                    break;
-                case SyntaxKind.TypeAssertionExpression:
-                    clone = createTypeAssertionExpression((<TypeAssertion>node).type, (<TypeAssertion>node).expression, location, flags);
-                    break;
-                case SyntaxKind.ParenthesizedExpression:
-                    clone = createParenthesizedExpression((<ParenthesizedExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.FunctionExpression:
-                    clone = createFunctionExpression((<FunctionExpression>node).decorators, (<FunctionExpression>node).modifiers, (<FunctionExpression>node).asteriskToken, (<FunctionExpression>node).name, (<FunctionExpression>node).typeParameters, (<FunctionExpression>node).parameters, (<FunctionExpression>node).type, (<FunctionExpression>node).body, location, flags);
-                    break;
-                case SyntaxKind.ArrowFunction:
-                    clone = createArrowFunction((<ArrowFunction>node).decorators, (<ArrowFunction>node).modifiers, (<ArrowFunction>node).typeParameters, (<ArrowFunction>node).parameters, (<ArrowFunction>node).type, (<ArrowFunction>node).equalsGreaterThanToken, (<ArrowFunction>node).body, location, flags);
-                    break;
-                case SyntaxKind.DeleteExpression:
-                    clone = createDeleteExpression((<DeleteExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.TypeOfExpression:
-                    clone = createTypeOfExpression((<TypeOfExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.VoidExpression:
-                    clone = createVoidExpression((<VoidExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.AwaitExpression:
-                    clone = createAwaitExpression((<AwaitExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.PrefixUnaryExpression:
-                    clone = createPrefixUnaryExpression((<PrefixUnaryExpression>node).operator, (<PrefixUnaryExpression>node).operand, location, flags);
-                    break;
-                case SyntaxKind.PostfixUnaryExpression:
-                    clone = createPostfixUnaryExpression((<PostfixUnaryExpression>node).operand, (<PostfixUnaryExpression>node).operator, location, flags);
-                    break;
-                case SyntaxKind.BinaryExpression:
-                    clone = createBinaryExpression((<BinaryExpression>node).left, (<BinaryExpression>node).operatorToken, (<BinaryExpression>node).right, location, flags);
-                    break;
-                case SyntaxKind.ConditionalExpression:
-                    clone = createConditionalExpression((<ConditionalExpression>node).condition, (<ConditionalExpression>node).questionToken, (<ConditionalExpression>node).whenTrue, (<ConditionalExpression>node).colonToken, (<ConditionalExpression>node).whenFalse, location, flags);
-                    break;
-                case SyntaxKind.TemplateExpression:
-                    clone = createTemplateExpression((<TemplateExpression>node).head, (<TemplateExpression>node).templateSpans, location, flags);
-                    break;
-                case SyntaxKind.YieldExpression:
-                    clone = createYieldExpression((<YieldExpression>node).asteriskToken, (<YieldExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.SpreadElementExpression:
-                    clone = createSpreadElementExpression((<SpreadElementExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.ClassExpression:
-                    clone = createClassExpression((<ClassExpression>node).decorators, (<ClassExpression>node).modifiers, (<ClassExpression>node).name, (<ClassExpression>node).typeParameters, (<ClassExpression>node).heritageClauses, (<ClassExpression>node).members, location, flags);
-                    break;
-                case SyntaxKind.OmittedExpression:
-                    clone = createOmittedExpression(location, flags);
-                    break;
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    clone = createExpressionWithTypeArguments((<ExpressionWithTypeArguments>node).expression, (<ExpressionWithTypeArguments>node).typeArguments, location, flags);
-                    break;
-                case SyntaxKind.AsExpression:
-                    clone = createAsExpression((<AsExpression>node).expression, (<AsExpression>node).type, location, flags);
-                    break;
-                case SyntaxKind.TemplateSpan:
-                    clone = createTemplateSpan((<TemplateSpan>node).expression, (<TemplateSpan>node).literal, location, flags);
-                    break;
-                case SyntaxKind.SemicolonClassElement:
-                    clone = createSemicolonClassElement(location, flags);
-                    break;
-                case SyntaxKind.Block:
-                    clone = createBlock((<Block>node).statements, location, flags);
-                    break;
-                case SyntaxKind.VariableStatement:
-                    clone = createVariableStatement((<VariableStatement>node).decorators, (<VariableStatement>node).modifiers, (<VariableStatement>node).declarationList, location, flags);
-                    break;
-                case SyntaxKind.EmptyStatement:
-                    clone = createEmptyStatement(location, flags);
-                    break;
-                case SyntaxKind.ExpressionStatement:
-                    clone = createExpressionStatement((<ExpressionStatement>node).expression, location, flags);
-                    break;
-                case SyntaxKind.IfStatement:
-                    clone = createIfStatement((<IfStatement>node).expression, (<IfStatement>node).thenStatement, (<IfStatement>node).elseStatement, location, flags);
-                    break;
-                case SyntaxKind.DoStatement:
-                    clone = createDoStatement((<DoStatement>node).statement, (<DoStatement>node).expression, location, flags);
-                    break;
-                case SyntaxKind.WhileStatement:
-                    clone = createWhileStatement((<WhileStatement>node).expression, (<WhileStatement>node).statement, location, flags);
-                    break;
-                case SyntaxKind.ForStatement:
-                    clone = createForStatement((<ForStatement>node).initializer, (<ForStatement>node).condition, (<ForStatement>node).incrementor, (<ForStatement>node).statement, location, flags);
-                    break;
-                case SyntaxKind.ForInStatement:
-                    clone = createForInStatement((<ForInStatement>node).initializer, (<ForInStatement>node).expression, (<ForInStatement>node).statement, location, flags);
-                    break;
-                case SyntaxKind.ForOfStatement:
-                    clone = createForOfStatement((<ForOfStatement>node).initializer, (<ForOfStatement>node).expression, (<ForOfStatement>node).statement, location, flags);
-                    break;
-                case SyntaxKind.ContinueStatement:
-                    clone = createContinueStatement((<ContinueStatement>node).label, location, flags);
-                    break;
-                case SyntaxKind.BreakStatement:
-                    clone = createBreakStatement((<BreakStatement>node).label, location, flags);
-                    break;
-                case SyntaxKind.ReturnStatement:
-                    clone = createReturnStatement((<ReturnStatement>node).expression, location, flags);
-                    break;
-                case SyntaxKind.WithStatement:
-                    clone = createWithStatement((<WithStatement>node).expression, (<WithStatement>node).statement, location, flags);
-                    break;
-                case SyntaxKind.SwitchStatement:
-                    clone = createSwitchStatement((<SwitchStatement>node).expression, (<SwitchStatement>node).caseBlock, location, flags);
-                    break;
-                case SyntaxKind.LabeledStatement:
-                    clone = createLabeledStatement((<LabeledStatement>node).label, (<LabeledStatement>node).statement, location, flags);
-                    break;
-                case SyntaxKind.ThrowStatement:
-                    clone = createThrowStatement((<ThrowStatement>node).expression, location, flags);
-                    break;
-                case SyntaxKind.TryStatement:
-                    clone = createTryStatement((<TryStatement>node).tryBlock, (<TryStatement>node).catchClause, (<TryStatement>node).finallyBlock, location, flags);
-                    break;
-                case SyntaxKind.DebuggerStatement:
-                    clone = createDebuggerStatement(location, flags);
-                    break;
-                case SyntaxKind.VariableDeclaration:
-                    clone = createVariableDeclaration((<VariableDeclaration>node).name, (<VariableDeclaration>node).type, (<VariableDeclaration>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.VariableDeclarationList:
-                    clone = createVariableDeclarationList((<VariableDeclarationList>node).declarations, location, flags);
-                    break;
-                case SyntaxKind.FunctionDeclaration:
-                    clone = createFunctionDeclaration((<FunctionDeclaration>node).decorators, (<FunctionDeclaration>node).modifiers, (<FunctionDeclaration>node).asteriskToken, (<FunctionDeclaration>node).name, (<FunctionDeclaration>node).typeParameters, (<FunctionDeclaration>node).parameters, (<FunctionDeclaration>node).type, (<FunctionDeclaration>node).body, location, flags);
-                    break;
-                case SyntaxKind.ClassDeclaration:
-                    clone = createClassDeclaration((<ClassDeclaration>node).decorators, (<ClassDeclaration>node).modifiers, (<ClassDeclaration>node).name, (<ClassDeclaration>node).typeParameters, (<ClassDeclaration>node).heritageClauses, (<ClassDeclaration>node).members, location, flags);
-                    break;
-                case SyntaxKind.InterfaceDeclaration:
-                    clone = createInterfaceDeclaration((<InterfaceDeclaration>node).decorators, (<InterfaceDeclaration>node).modifiers, (<InterfaceDeclaration>node).name, (<InterfaceDeclaration>node).typeParameters, (<InterfaceDeclaration>node).heritageClauses, (<InterfaceDeclaration>node).members, location, flags);
-                    break;
-                case SyntaxKind.TypeAliasDeclaration:
-                    clone = createTypeAliasDeclaration((<TypeAliasDeclaration>node).decorators, (<TypeAliasDeclaration>node).modifiers, (<TypeAliasDeclaration>node).name, (<TypeAliasDeclaration>node).typeParameters, (<TypeAliasDeclaration>node).type, location, flags);
-                    break;
-                case SyntaxKind.EnumDeclaration:
-                    clone = createEnumDeclaration((<EnumDeclaration>node).decorators, (<EnumDeclaration>node).modifiers, (<EnumDeclaration>node).name, (<EnumDeclaration>node).members, location, flags);
-                    break;
-                case SyntaxKind.ModuleDeclaration:
-                    clone = createModuleDeclaration((<ModuleDeclaration>node).decorators, (<ModuleDeclaration>node).modifiers, (<ModuleDeclaration>node).name, (<ModuleDeclaration>node).body, location, flags);
-                    break;
-                case SyntaxKind.ModuleBlock:
-                    clone = createModuleBlock((<ModuleBlock>node).statements, location, flags);
-                    break;
-                case SyntaxKind.CaseBlock:
-                    clone = createCaseBlock((<CaseBlock>node).clauses, location, flags);
-                    break;
-                case SyntaxKind.ImportEqualsDeclaration:
-                    clone = createImportEqualsDeclaration((<ImportEqualsDeclaration>node).decorators, (<ImportEqualsDeclaration>node).modifiers, (<ImportEqualsDeclaration>node).name, (<ImportEqualsDeclaration>node).moduleReference, location, flags);
-                    break;
-                case SyntaxKind.ImportDeclaration:
-                    clone = createImportDeclaration((<ImportDeclaration>node).decorators, (<ImportDeclaration>node).modifiers, (<ImportDeclaration>node).importClause, (<ImportDeclaration>node).moduleSpecifier, location, flags);
-                    break;
-                case SyntaxKind.ImportClause:
-                    clone = createImportClause((<ImportClause>node).name, (<ImportClause>node).namedBindings, location, flags);
-                    break;
-                case SyntaxKind.NamespaceImport:
-                    clone = createNamespaceImport((<NamespaceImport>node).name, location, flags);
-                    break;
-                case SyntaxKind.NamedImports:
-                    clone = createNamedImports((<NamedImports>node).elements, location, flags);
-                    break;
-                case SyntaxKind.ImportSpecifier:
-                    clone = createImportSpecifier((<ImportSpecifier>node).propertyName, (<ImportSpecifier>node).name, location, flags);
-                    break;
-                case SyntaxKind.ExportAssignment:
-                    clone = createExportAssignment((<ExportAssignment>node).decorators, (<ExportAssignment>node).modifiers, (<ExportAssignment>node).expression, location, flags);
-                    break;
-                case SyntaxKind.ExportDeclaration:
-                    clone = createExportDeclaration((<ExportDeclaration>node).decorators, (<ExportDeclaration>node).modifiers, (<ExportDeclaration>node).exportClause, (<ExportDeclaration>node).moduleSpecifier, location, flags);
-                    break;
-                case SyntaxKind.NamedExports:
-                    clone = createNamedExports((<NamedExports>node).elements, location, flags);
-                    break;
-                case SyntaxKind.ExportSpecifier:
-                    clone = createExportSpecifier((<ExportSpecifier>node).propertyName, (<ExportSpecifier>node).name, location, flags);
-                    break;
-                case SyntaxKind.MissingDeclaration:
-                    clone = createMissingDeclaration((<MissingDeclaration>node).decorators, (<MissingDeclaration>node).modifiers, (<MissingDeclaration>node).questionToken, location, flags);
-                    break;
-                case SyntaxKind.ExternalModuleReference:
-                    clone = createExternalModuleReference((<ExternalModuleReference>node).expression, location, flags);
-                    break;
-                case SyntaxKind.JsxElement:
-                    clone = createJsxElement((<JsxElement>node).openingElement, (<JsxElement>node).children, (<JsxElement>node).closingElement, location, flags);
-                    break;
-                case SyntaxKind.JsxSelfClosingElement:
-                    clone = createJsxSelfClosingElement((<JsxSelfClosingElement>node).tagName, (<JsxSelfClosingElement>node).attributes, location, flags);
-                    break;
-                case SyntaxKind.JsxOpeningElement:
-                    clone = createJsxOpeningElement((<JsxOpeningElement>node).tagName, (<JsxOpeningElement>node).attributes, location, flags);
-                    break;
-                case SyntaxKind.JsxText:
-                    clone = createJsxText(location, flags);
-                    break;
-                case SyntaxKind.JsxClosingElement:
-                    clone = createJsxClosingElement((<JsxClosingElement>node).tagName, location, flags);
-                    break;
-                case SyntaxKind.JsxAttribute:
-                    clone = createJsxAttribute((<JsxAttribute>node).name, (<JsxAttribute>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.JsxSpreadAttribute:
-                    clone = createJsxSpreadAttribute((<JsxSpreadAttribute>node).expression, location, flags);
-                    break;
-                case SyntaxKind.JsxExpression:
-                    clone = createJsxExpression((<JsxExpression>node).expression, location, flags);
-                    break;
-                case SyntaxKind.CaseClause:
-                    clone = createCaseClause((<CaseClause>node).expression, (<CaseClause>node).statements, location, flags);
-                    break;
-                case SyntaxKind.DefaultClause:
-                    clone = createDefaultClause((<DefaultClause>node).statements, location, flags);
-                    break;
-                case SyntaxKind.HeritageClause:
-                    clone = createHeritageClause((<HeritageClause>node).token, (<HeritageClause>node).types, location, flags);
-                    break;
-                case SyntaxKind.CatchClause:
-                    clone = createCatchClause((<CatchClause>node).variableDeclaration, (<CatchClause>node).block, location, flags);
-                    break;
-                case SyntaxKind.PropertyAssignment:
-                    clone = createPropertyAssignment((<PropertyAssignment>node).name, (<PropertyAssignment>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.ShorthandPropertyAssignment:
-                    clone = createShorthandPropertyAssignment((<ShorthandPropertyAssignment>node).name, location, flags);
-                    break;
-                case SyntaxKind.EnumMember:
-                    clone = createEnumMember((<EnumMember>node).name, (<EnumMember>node).initializer, location, flags);
-                    break;
-                case SyntaxKind.SourceFile:
-                    clone = createSourceFileNode((<SourceFile>node).statements, (<SourceFile>node).endOfFileToken, (<SourceFile>node).fileName, (<SourceFile>node).text, (<SourceFile>node).amdDependencies, (<SourceFile>node).moduleName, (<SourceFile>node).referencedFiles, (<SourceFile>node).languageVariant, (<SourceFile>node).renamedDependencies, (<SourceFile>node).hasNoDefaultLib, (<SourceFile>node).languageVersion, (<SourceFile>node).externalModuleIndicator, (<SourceFile>node).isDefaultLib, (<SourceFile>node).identifiers, (<SourceFile>node).parseDiagnostics, (<SourceFile>node).bindDiagnostics, (<SourceFile>node).lineMap, (<SourceFile>node).classifiableNames, (<SourceFile>node).resolvedModules, (<SourceFile>node).imports, location, flags);
-                    break;
-                case SyntaxKind.JSDocTypeExpression:
-                    clone = createJSDocTypeExpression((<JSDocTypeExpression>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocAllType:
-                    clone = createJSDocAllType(location, flags);
-                    break;
-                case SyntaxKind.JSDocUnknownType:
-                    clone = createJSDocUnknownType(location, flags);
-                    break;
-                case SyntaxKind.JSDocArrayType:
-                    clone = createJSDocArrayType((<JSDocArrayType>node).elementType, location, flags);
-                    break;
-                case SyntaxKind.JSDocUnionType:
-                    clone = createJSDocUnionType((<JSDocUnionType>node).types, location, flags);
-                    break;
-                case SyntaxKind.JSDocTupleType:
-                    clone = createJSDocTupleType((<JSDocTupleType>node).types, location, flags);
-                    break;
-                case SyntaxKind.JSDocNullableType:
-                    clone = createJSDocNullableType((<JSDocNullableType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocNonNullableType:
-                    clone = createJSDocNonNullableType((<JSDocNonNullableType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocRecordType:
-                    clone = createJSDocRecordType((<JSDocRecordType>node).members, location, flags);
-                    break;
-                case SyntaxKind.JSDocRecordMember:
-                    clone = createJSDocRecordMember((<JSDocRecordMember>node).name, (<JSDocRecordMember>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocTypeReference:
-                    clone = createJSDocTypeReference((<JSDocTypeReference>node).name, (<JSDocTypeReference>node).typeArguments, location, flags);
-                    break;
-                case SyntaxKind.JSDocOptionalType:
-                    clone = createJSDocOptionalType((<JSDocOptionalType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocFunctionType:
-                    clone = createJSDocFunctionType((<JSDocFunctionType>node).parameters, (<JSDocFunctionType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocVariadicType:
-                    clone = createJSDocVariadicType((<JSDocVariadicType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocConstructorType:
-                    clone = createJSDocConstructorType((<JSDocConstructorType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocThisType:
-                    clone = createJSDocThisType((<JSDocThisType>node).type, location, flags);
-                    break;
-                case SyntaxKind.JSDocComment:
-                    clone = createJSDocComment((<JSDocComment>node).tags, location, flags);
-                    break;
-                case SyntaxKind.JSDocTag:
-                    clone = createJSDocTag((<JSDocTag>node).atToken, (<JSDocTag>node).tagName, location, flags);
-                    break;
-                case SyntaxKind.JSDocParameterTag:
-                    clone = createJSDocParameterTag((<JSDocParameterTag>node).preParameterName, (<JSDocParameterTag>node).typeExpression, (<JSDocParameterTag>node).postParameterName, (<JSDocParameterTag>node).atToken, (<JSDocParameterTag>node).tagName, location, flags);
-                    break;
-                case SyntaxKind.JSDocReturnTag:
-                    clone = createJSDocReturnTag((<JSDocReturnTag>node).typeExpression, (<JSDocReturnTag>node).atToken, (<JSDocReturnTag>node).tagName, location, flags);
-                    break;
-                case SyntaxKind.JSDocTypeTag:
-                    clone = createJSDocTypeTag((<JSDocTypeTag>node).typeExpression, (<JSDocTypeTag>node).atToken, (<JSDocTypeTag>node).tagName, location, flags);
-                    break;
-                case SyntaxKind.JSDocTemplateTag:
-                    clone = createJSDocTemplateTag((<JSDocTemplateTag>node).typeParameters, (<JSDocTemplateTag>node).atToken, (<JSDocTemplateTag>node).tagName, location, flags);
-                    break;
-                case SyntaxKind.RawExpression:
-                    clone = createRawExpression((<RawExpression>node).text, location, flags);
-                    break;
-                case SyntaxKind.RawStatement:
-                    clone = createRawStatement((<RawStatement>node).text, location, flags);
-                    break;
-            }
-            if (clone) {
-                clone.original = node;
-                return clone;
-            }
-        }
-        return node;
-    }
     export function acceptTransformer(transformer: Transformer, node: Node, visitor: (node: Node, write: (node: Node) => void) => void): Node {
         if (node) {
             switch (node.kind) {
@@ -3322,18 +2075,12 @@ namespace ts {
                     return updateQualifiedName(<QualifiedName>node, transformer.visitNode((<QualifiedName>node).left, visitor, isEntityName), transformer.visitNode((<QualifiedName>node).right, visitor, isIdentifier));
                 case SyntaxKind.ComputedPropertyName:
                     return updateComputedPropertyName(<ComputedPropertyName>node, transformer.visitNode((<ComputedPropertyName>node).expression, visitor, isExpressionNode));
-                case SyntaxKind.TypeParameter:
-                    return updateTypeParameter(<TypeParameterDeclaration>node, transformer.visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier), transformer.visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNodeNode), transformer.visitNode((<TypeParameterDeclaration>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.Parameter:
                     return updateParameter(<ParameterDeclaration>node, transformer.visitNodes((<ParameterDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ParameterDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ParameterDeclaration>node).name, visitor, isBindingPatternOrIdentifier), (<ParameterDeclaration>node).questionToken, transformer.visitNode((<ParameterDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitNode((<ParameterDeclaration>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.Decorator:
                     return updateDecorator(<Decorator>node, transformer.visitNode((<Decorator>node).expression, visitor, isLeftHandSideExpression));
-                case SyntaxKind.PropertySignature:
-                    return updatePropertySignature(<PropertySignature>node, transformer.visitNodes((<PropertySignature>node).decorators, visitor, isDecorator), transformer.visitNodes((<PropertySignature>node).modifiers, visitor, isModifier), transformer.visitNode((<PropertySignature>node).name, visitor, isPropertyName), transformer.visitNode((<PropertySignature>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.PropertyDeclaration:
                     return updatePropertyDeclaration(<PropertyDeclaration>node, transformer.visitNodes((<PropertyDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<PropertyDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName), transformer.visitNode((<PropertyDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitNode((<PropertyDeclaration>node).initializer, visitor, isExpressionNode));
-                case SyntaxKind.MethodSignature:
-                    return updateMethodSignature(<MethodSignature>node, transformer.visitNodes((<MethodSignature>node).decorators, visitor, isDecorator), transformer.visitNodes((<MethodSignature>node).modifiers, visitor, isModifier), transformer.visitNode((<MethodSignature>node).name, visitor, isPropertyName), transformer.visitNodes((<MethodSignature>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<MethodSignature>node).parameters, visitor, isParameter), transformer.visitNode((<MethodSignature>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.MethodDeclaration:
                     return updateMethodDeclaration(<MethodDeclaration>node, transformer.visitNodes((<MethodDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<MethodDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<MethodDeclaration>node).name, visitor, isPropertyName), transformer.visitNodes((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<MethodDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<MethodDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<MethodDeclaration>node).body, visitor));
                 case SyntaxKind.Constructor:
@@ -3342,34 +2089,6 @@ namespace ts {
                     return updateGetAccessor(<GetAccessorDeclaration>node, transformer.visitNodes((<GetAccessorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<GetAccessorDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<GetAccessorDeclaration>node).name, visitor, isPropertyName), transformer.visitNodes((<GetAccessorDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<GetAccessorDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<GetAccessorDeclaration>node).body, visitor));
                 case SyntaxKind.SetAccessor:
                     return updateSetAccessor(<SetAccessorDeclaration>node, transformer.visitNodes((<SetAccessorDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<SetAccessorDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<SetAccessorDeclaration>node).name, visitor, isPropertyName), transformer.visitNodes((<SetAccessorDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<SetAccessorDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<SetAccessorDeclaration>node).body, visitor));
-                case SyntaxKind.CallSignature:
-                    return updateCallSignature(<CallSignatureDeclaration>node, transformer.visitNodes((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<CallSignatureDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<CallSignatureDeclaration>node).type, visitor, isTypeNodeNode));
-                case SyntaxKind.ConstructSignature:
-                    return updateConstructSignature(<ConstructSignatureDeclaration>node, transformer.visitNodes((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ConstructSignatureDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNodeNode));
-                case SyntaxKind.IndexSignature:
-                    return updateIndexSignature(<IndexSignatureDeclaration>node, transformer.visitNodes((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier), transformer.visitNodes((<IndexSignatureDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNodeNode));
-                case SyntaxKind.TypePredicate:
-                    return updateTypePredicate(<TypePredicateNode>node, transformer.visitNode((<TypePredicateNode>node).parameterName, visitor, isIdentifier), transformer.visitNode((<TypePredicateNode>node).type, visitor, isTypeNodeNode));
-                case SyntaxKind.TypeReference:
-                    return updateTypeReference(<TypeReferenceNode>node, transformer.visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName), transformer.visitNodes((<TypeReferenceNode>node).typeArguments, visitor, isTypeNodeNode));
-                case SyntaxKind.FunctionType:
-                    return updateFunctionType(<FunctionTypeNode>node, transformer.visitNodes((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionTypeNode>node).parameters, visitor, isParameter), transformer.visitNode((<FunctionTypeNode>node).type, visitor, isTypeNodeNode));
-                case SyntaxKind.ConstructorType:
-                    return updateConstructorType(<ConstructorTypeNode>node, transformer.visitNodes((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ConstructorTypeNode>node).parameters, visitor, isParameter), transformer.visitNode((<ConstructorTypeNode>node).type, visitor, isTypeNodeNode));
-                case SyntaxKind.TypeQuery:
-                    return updateTypeQuery(<TypeQueryNode>node, transformer.visitNode((<TypeQueryNode>node).exprName, visitor, isEntityName));
-                case SyntaxKind.TypeLiteral:
-                    return updateTypeLiteral(<TypeLiteralNode>node, transformer.visitNodes((<TypeLiteralNode>node).members, visitor, isTypeElement));
-                case SyntaxKind.ArrayType:
-                    return updateArrayType(<ArrayTypeNode>node, transformer.visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNodeNode));
-                case SyntaxKind.TupleType:
-                    return updateTupleType(<TupleTypeNode>node, transformer.visitNodes((<TupleTypeNode>node).elementTypes, visitor, isTypeNodeNode));
-                case SyntaxKind.UnionType:
-                    return updateUnionType(<UnionTypeNode>node, transformer.visitNodes((<UnionTypeNode>node).types, visitor, isTypeNodeNode));
-                case SyntaxKind.IntersectionType:
-                    return updateIntersectionType(<IntersectionTypeNode>node, transformer.visitNodes((<IntersectionTypeNode>node).types, visitor, isTypeNodeNode));
-                case SyntaxKind.ParenthesizedType:
-                    return updateParenthesizedType(<ParenthesizedTypeNode>node, transformer.visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.ObjectBindingPattern:
                     return updateObjectBindingPattern(<ObjectBindingPattern>node, transformer.visitNodes((<ObjectBindingPattern>node).elements, visitor, isBindingElement));
                 case SyntaxKind.ArrayBindingPattern:
@@ -3470,10 +2189,6 @@ namespace ts {
                     return updateFunctionDeclaration(<FunctionDeclaration>node, transformer.visitNodes((<FunctionDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<FunctionDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<FunctionDeclaration>node).parameters, visitor, isParameter), transformer.visitNode((<FunctionDeclaration>node).type, visitor, isTypeNodeNode), transformer.visitFunctionBody((<FunctionDeclaration>node).body, visitor));
                 case SyntaxKind.ClassDeclaration:
                     return updateClassDeclaration(<ClassDeclaration>node, transformer.visitNodes((<ClassDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<ClassDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<ClassDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<ClassDeclaration>node).members, visitor, isClassElement));
-                case SyntaxKind.InterfaceDeclaration:
-                    return updateInterfaceDeclaration(<InterfaceDeclaration>node, transformer.visitNodes((<InterfaceDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<InterfaceDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<InterfaceDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<InterfaceDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNodes((<InterfaceDeclaration>node).heritageClauses, visitor, isHeritageClause), transformer.visitNodes((<InterfaceDeclaration>node).members, visitor, isTypeElement));
-                case SyntaxKind.TypeAliasDeclaration:
-                    return updateTypeAliasDeclaration(<TypeAliasDeclaration>node, transformer.visitNodes((<TypeAliasDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<TypeAliasDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<TypeAliasDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameter), transformer.visitNode((<TypeAliasDeclaration>node).type, visitor, isTypeNodeNode));
                 case SyntaxKind.EnumDeclaration:
                     return updateEnumDeclaration(<EnumDeclaration>node, transformer.visitNodes((<EnumDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<EnumDeclaration>node).modifiers, visitor, isModifier), transformer.visitNode((<EnumDeclaration>node).name, visitor, isIdentifier), transformer.visitNodes((<EnumDeclaration>node).members, visitor, isEnumMember));
                 case SyntaxKind.ModuleDeclaration:
@@ -3502,8 +2217,6 @@ namespace ts {
                     return updateNamedExports(<NamedExports>node, transformer.visitNodes((<NamedExports>node).elements, visitor, isExportSpecifier));
                 case SyntaxKind.ExportSpecifier:
                     return updateExportSpecifier(<ExportSpecifier>node, transformer.visitNode((<ExportSpecifier>node).propertyName, visitor, isIdentifier), transformer.visitNode((<ExportSpecifier>node).name, visitor, isIdentifier));
-                case SyntaxKind.MissingDeclaration:
-                    return updateMissingDeclaration(<MissingDeclaration>node, transformer.visitNodes((<MissingDeclaration>node).decorators, visitor, isDecorator), transformer.visitNodes((<MissingDeclaration>node).modifiers, visitor, isModifier));
                 case SyntaxKind.ExternalModuleReference:
                     return updateExternalModuleReference(<ExternalModuleReference>node, transformer.visitNode((<ExternalModuleReference>node).expression, visitor, isExpressionNode));
                 case SyntaxKind.JsxElement:
@@ -3536,46 +2249,6 @@ namespace ts {
                     return updateEnumMember(<EnumMember>node, transformer.visitNode((<EnumMember>node).name, visitor, isDeclarationNameNode), transformer.visitNode((<EnumMember>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.SourceFile:
                     return updateSourceFileNode(<SourceFile>node, transformer.visitNodes((<SourceFile>node).statements, visitor, isStatementNode), (<SourceFile>node).endOfFileToken);
-                case SyntaxKind.JSDocTypeExpression:
-                    return updateJSDocTypeExpression(<JSDocTypeExpression>node, transformer.visitNode((<JSDocTypeExpression>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocArrayType:
-                    return updateJSDocArrayType(<JSDocArrayType>node, transformer.visitNode((<JSDocArrayType>node).elementType, visitor, isJSDocType));
-                case SyntaxKind.JSDocUnionType:
-                    return updateJSDocUnionType(<JSDocUnionType>node, transformer.visitNodes((<JSDocUnionType>node).types, visitor, isJSDocType));
-                case SyntaxKind.JSDocTupleType:
-                    return updateJSDocTupleType(<JSDocTupleType>node, transformer.visitNodes((<JSDocTupleType>node).types, visitor, isJSDocType));
-                case SyntaxKind.JSDocNullableType:
-                    return updateJSDocNullableType(<JSDocNullableType>node, transformer.visitNode((<JSDocNullableType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocNonNullableType:
-                    return updateJSDocNonNullableType(<JSDocNonNullableType>node, transformer.visitNode((<JSDocNonNullableType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocRecordType:
-                    return updateJSDocRecordType(<JSDocRecordType>node, transformer.visitNodes((<JSDocRecordType>node).members, visitor, isJSDocRecordMember));
-                case SyntaxKind.JSDocRecordMember:
-                    return updateJSDocRecordMember(<JSDocRecordMember>node, transformer.visitNode((<JSDocRecordMember>node).name, visitor, isIdentifierOrLiteralExpression), transformer.visitNode((<JSDocRecordMember>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocTypeReference:
-                    return updateJSDocTypeReference(<JSDocTypeReference>node, transformer.visitNode((<JSDocTypeReference>node).name, visitor, isEntityName), transformer.visitNodes((<JSDocTypeReference>node).typeArguments, visitor, isJSDocType));
-                case SyntaxKind.JSDocOptionalType:
-                    return updateJSDocOptionalType(<JSDocOptionalType>node, transformer.visitNode((<JSDocOptionalType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocFunctionType:
-                    return updateJSDocFunctionType(<JSDocFunctionType>node, transformer.visitNodes((<JSDocFunctionType>node).parameters, visitor, isParameter), transformer.visitNode((<JSDocFunctionType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocVariadicType:
-                    return updateJSDocVariadicType(<JSDocVariadicType>node, transformer.visitNode((<JSDocVariadicType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocConstructorType:
-                    return updateJSDocConstructorType(<JSDocConstructorType>node, transformer.visitNode((<JSDocConstructorType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocThisType:
-                    return updateJSDocThisType(<JSDocThisType>node, transformer.visitNode((<JSDocThisType>node).type, visitor, isJSDocType));
-                case SyntaxKind.JSDocComment:
-                    return updateJSDocComment(<JSDocComment>node, transformer.visitNodes((<JSDocComment>node).tags, visitor, isJSDocTag));
-                case SyntaxKind.JSDocTag:
-                    return updateJSDocTag(<JSDocTag>node, transformer.visitNode((<JSDocTag>node).tagName, visitor, isIdentifier));
-                case SyntaxKind.JSDocParameterTag:
-                    return updateJSDocParameterTag(<JSDocParameterTag>node, transformer.visitNode((<JSDocParameterTag>node).preParameterName, visitor, isIdentifier), transformer.visitNode((<JSDocParameterTag>node).typeExpression, visitor, isJSDocTypeExpression), transformer.visitNode((<JSDocParameterTag>node).postParameterName, visitor, isIdentifier), transformer.visitNode((<JSDocParameterTag>node).tagName, visitor, isIdentifier));
-                case SyntaxKind.JSDocReturnTag:
-                    return updateJSDocReturnTag(<JSDocReturnTag>node, transformer.visitNode((<JSDocReturnTag>node).typeExpression, visitor, isJSDocTypeExpression), transformer.visitNode((<JSDocReturnTag>node).tagName, visitor, isIdentifier));
-                case SyntaxKind.JSDocTypeTag:
-                    return updateJSDocTypeTag(<JSDocTypeTag>node, transformer.visitNode((<JSDocTypeTag>node).typeExpression, visitor, isJSDocTypeExpression), transformer.visitNode((<JSDocTypeTag>node).tagName, visitor, isIdentifier));
-                case SyntaxKind.JSDocTemplateTag:
-                    return updateJSDocTemplateTag(<JSDocTemplateTag>node, transformer.visitNodes((<JSDocTemplateTag>node).typeParameters, visitor, isTypeParameter), transformer.visitNode((<JSDocTemplateTag>node).tagName, visitor, isIdentifier));
             }
         }
         return node;

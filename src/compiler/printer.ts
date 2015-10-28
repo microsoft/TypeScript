@@ -4,7 +4,6 @@
 
 /* @internal */
 namespace ts {
-    const brackets = createBracketsMap();
     const delimiters = createDelimiterMap();
 
     export function printFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformations?: TransformationChain) {
@@ -103,17 +102,20 @@ function __export(m) {
             } = transformer;
 
             let expressionSubstitution = transformer.getExpressionSubstitution();
+            let bindingIdentifierSubstution = transformer.getBindingIdentifierSubstitution();
             let compilerOptions = host.getCompilerOptions();
             let languageVersion = getLanguageVersion(compilerOptions);
             let moduleKind = getModuleKind(compilerOptions);
             let diagnostics: Diagnostic[] = [];
             let currentSourceFile: SourceFile;
             let helpersEmitted: NodeCheckFlags;
+            let tempFlags: TempFlags;
+            let temporaryVariables: string[] = [];
 
             /** Emit a node */
             let emit = emitNode;
 
-            let emitDetachedComments = function (node: Node) { };
+            let emitDetachedComments = function (node: TextRange) { };
             let emitLeadingComments = function (node: Node) { };
             let emitTrailingComments = function (node: Node) { };
             let emitTrailingCommentsOfPosition = function (pos: number) { };
@@ -176,10 +178,12 @@ function __export(m) {
                     case SyntaxKind.FalseKeyword:
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.SuperKeyword:
-                    case SyntaxKind.ThisKeyword:
                     case SyntaxKind.TrueKeyword:
                     case SyntaxKind.VoidKeyword:
                         return writeTokenNode(node);
+
+                    case SyntaxKind.ThisKeyword:
+                        return emitThisKeyword(<PrimaryExpression>node);
 
                     // Contextual keywords
                     case SyntaxKind.AnyKeyword:
@@ -449,10 +453,6 @@ function __export(m) {
                         return emitSourceFile(<SourceFile>node);
 
                     // JSDoc nodes (ignored)
-                    // Raw nodes (deprecated)
-                    case SyntaxKind.RawStatement:
-                    case SyntaxKind.RawExpression:
-                        return emitRaw(<RawStatement | RawExpression>node);
                 }
             }
 
@@ -483,11 +483,17 @@ function __export(m) {
             //
 
             function emitIdentifier(node: Identifier) {
+                if (node.text === undefined) {
+                    node.text
+                }
                 if (isExpressionIdentifier(node)) {
                     emitExpressionIdentifier(node);
                 }
+                else if (tryEmitSubstitute(node, bindingIdentifierSubstution)) {
+                    return;
+                }
                 else if (nodeIsSynthesized(node)) {
-                    write(node.text);
+                    writeSynthesizedIdentifier(node);
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node);
@@ -565,11 +571,29 @@ function __export(m) {
                         writeLines(umdHelper);
                     }
                     else {
-                        write(node.text);
+                        writeSynthesizedIdentifier(node);
                     }
                 }
                 else {
                     writeTextOfNode(currentSourceFile, node);
+                }
+            }
+
+            function writeSynthesizedIdentifier(node: Identifier) {
+                let text = node.text || temporaryVariables[getOriginalNodeId(node)];
+                if (text === undefined) {
+                    text = temporaryVariables[getOriginalNodeId(node)] = makeTempVariableName(node.tempFlags);
+                }
+
+                write(text);
+            }
+
+            function emitThisKeyword(node: PrimaryExpression) {
+                if (tryEmitSubstitute(node, expressionSubstitution)) {
+                    return;
+                }
+                else {
+                    writeTokenNode(node);
                 }
             }
 
@@ -602,7 +626,7 @@ function __export(m) {
 
             function emitParameter(node: ParameterDeclaration) {
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 writeIfPresent(node.dotDotDotToken, "...");
                 emit(node.name);
@@ -628,7 +652,7 @@ function __export(m) {
             function emitPropertySignature(node: PropertySignature) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 emit(node.name);
                 writeIfPresent(node.questionToken, "?");
@@ -641,7 +665,7 @@ function __export(m) {
             function emitPropertyDeclaration(node: PropertyDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 emit(node.name);
                 emitWithPrefix(": ", node.type);
@@ -654,12 +678,12 @@ function __export(m) {
             function emitMethodSignature(node: MethodSignature) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 emit(node.name);
                 writeIfPresent(node.questionToken, "?");
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.Parameters);
+                emitTypeParameters(node, node.typeParameters);
+                emitParameters(node, node.parameters);
                 emitWithPrefix(": ", node.type);
                 write(";");
                 emitEnd(node);
@@ -669,15 +693,11 @@ function __export(m) {
             function emitMethodDeclaration(node: MethodDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 writeIfPresent(node.asteriskToken, "*");
                 emit(node.name);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.Parameters);
-                emitWithPrefix(": ", node.type);
-                emit(node.body);
-                writeIfMissing(node.body, ";");
+                emitSignatureAndBody(node);
                 emitEnd(node);
                 emitTrailingComments(node);
             }
@@ -687,9 +707,8 @@ function __export(m) {
                 emitStart(node);
                 emitModifiers(node);
                 write("constructor");
-                emitList(node, node.parameters, ListFormat.Parameters);
-                emit(node.body);
-                writeIfMissing(node.body, ";");
+                emitParameters(node, node.parameters);
+                emitFunctionBody(node, node.body);
                 emitEnd(node);
                 emitTrailingComments(node);
             }
@@ -697,14 +716,11 @@ function __export(m) {
             function emitAccessorDeclaration(node: AccessorDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
                 emit(node.name);
-                emitList(node, node.parameters, ListFormat.Parameters);
-                emitWithPrefix(": ", node.type);
-                emit(node.body);
-                writeIfMissing(node.body, ";");
+                emitSignatureAndBody(node);
                 emitEnd(node);
                 emitTrailingComments(node);
             }
@@ -712,10 +728,10 @@ function __export(m) {
             function emitCallSignature(node: CallSignatureDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.Parameters);
+                emitTypeParameters(node, node.typeParameters);
+                emitParameters(node, node.parameters);
                 emitWithPrefix(": ", node.type);
                 write(";");
                 emitEnd(node);
@@ -725,11 +741,11 @@ function __export(m) {
             function emitConstructSignature(node: ConstructSignatureDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 write("new ");
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.Parameters);
+                emitTypeParameters(node, node.typeParameters);
+                emitParameters(node, node.parameters);
                 emitWithPrefix(": ", node.type);
                 write(";");
                 emitEnd(node);
@@ -739,9 +755,9 @@ function __export(m) {
             function emitIndexSignature(node: IndexSignatureDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
-                emitList(node, node.parameters, ListFormat.IndexSignatureParameters);
+                emitParametersForIndexSignature(node, node.parameters);
                 emitWithPrefix(": ", node.type);
                 write(";");
                 emitEnd(node);
@@ -763,14 +779,14 @@ function __export(m) {
             function emitTypeReference(node: TypeReferenceNode) {
                 emitStart(node);
                 emit(node.typeName);
-                emitList(node, node.typeArguments, ListFormat.TypeArguments);
+                emitTypeArguments(node, node.typeArguments);
                 emitEnd(node);
             }
 
             function emitFunctionType(node: FunctionTypeNode) {
                 emitStart(node);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.ArrowParameters);
+                emitTypeParameters(node, node.typeParameters);
+                emitParametersForArrow(node, node.parameters);
                 write(" => ");
                 emit(node.type);
                 emitEnd(node);
@@ -779,8 +795,8 @@ function __export(m) {
             function emitConstructorType(node: ConstructorTypeNode) {
                 emitStart(node);
                 write("new ");
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.ArrowParameters);
+                emitTypeParameters(node, node.typeParameters);
+                emitParametersForArrow(node, node.parameters);
                 write(" => ");
                 emit(node.type);
                 emitEnd(node);
@@ -795,7 +811,9 @@ function __export(m) {
 
             function emitTypeLiteral(node: TypeLiteralNode) {
                 emitStart(node);
-                emitList(node, node.members, ListFormat.TypeElements);
+                write("{");
+                emitList(node, node.members, ListFormat.MultiLine | ListFormat.Indented);
+                write("}");
                 emitEnd(node);
             }
 
@@ -808,19 +826,21 @@ function __export(m) {
 
             function emitTupleType(node: TupleTypeNode) {
                 emitStart(node);
-                emitList(node, node.elementTypes, ListFormat.TupleTypeElementTypes);
+                write("[");
+                emitList(node, node.elementTypes, ListFormat.CommaDelimited | ListFormat.SingleLine | ListFormat.Indented);
+                write("]");
                 emitEnd(node);
             }
 
             function emitUnionType(node: UnionTypeNode) {
                 emitStart(node);
-                emitList(node, node.types, ListFormat.UnionTypeConstituents)
+                emitList(node, node.types, ListFormat.BarDelimited | ListFormat.SingleLine)
                 emitEnd(node);
             }
 
             function emitIntersectionType(node: IntersectionTypeNode) {
                 emitStart(node);
-                emitList(node, node.types, ListFormat.IntersectionTypeConstituents);
+                emitList(node, node.types, ListFormat.AmpersandDelimited | ListFormat.SingleLine);
                 emitEnd(node);
             }
 
@@ -835,11 +855,27 @@ function __export(m) {
             //
 
             function emitObjectBindingPattern(node: ObjectBindingPattern) {
-                emitList(node, node.elements, ListFormat.ObjectBindingPatternElements);
+                let elements = node.elements;
+                if (elements.length === 0) {
+                    write("{}");
+                }
+                else {
+                    write("{");
+                    emitList(node, elements, ListFormat.SingleLine | ListFormat.AllowTrailingComma | ListFormat.SpaceBetweenBraces);
+                    write("}");
+                }
             }
 
             function emitArrayBindingPattern(node: ArrayBindingPattern) {
-                emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
+                let elements = node.elements;
+                if (elements.length === 0) {
+                    write("[]");
+                }
+                else {
+                    write("[");
+                    emitList(node, node.elements, ListFormat.SingleLine | ListFormat.AllowTrailingComma);
+                    write("]");
+                }
             }
 
             function emitBindingElement(node: BindingElement) {
@@ -854,13 +890,30 @@ function __export(m) {
             //
 
             function emitArrayLiteralExpression(node: ArrayLiteralExpression) {
-                emitList(node, node.elements, ListFormat.ArrayLiteralExpressionElements);
+                let elements = node.elements;
+                if (elements.length === 0) {
+                    write("[]");
+                }
+                else {
+                    const preferNewLine = node.flags & NodeFlags.MultiLine ? ListFormat.PreferNewLine : ListFormat.None;
+                    write("[");
+                    emitList(node, elements, ListFormat.PreserveLines | ListFormat.CommaDelimited | ListFormat.AllowTrailingComma | ListFormat.Indented | preferNewLine);
+                    write("]");
+                }
             }
 
             function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
-                emitList(node, node.properties, languageVersion < ScriptTarget.ES5
-                    ? ListFormat.ObjectLiteralExpressionProperties
-                    : ListFormat.ObjectLiteralExpressionPropertiesForES5AndLater);
+                let properties = node.properties;
+                if (properties.length === 0) {
+                    write("{}");
+                }
+                else {
+                    const preferNewLine = node.flags & NodeFlags.MultiLine ? ListFormat.PreferNewLine : ListFormat.None;
+                    const allowTrailingComma = languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
+                    write("{");
+                    emitList(node, properties, ListFormat.PreserveLines | ListFormat.CommaDelimited | ListFormat.SpaceBetweenBraces | ListFormat.Indented | allowTrailingComma | preferNewLine);
+                    write("}");
+                }
             }
 
             function emitPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -910,13 +963,19 @@ function __export(m) {
 
             function emitCallExpression(node: CallExpression) {
                 emit(node.expression);
-                emitList(node, node.arguments, ListFormat.CallExpressionArguments);
+                write("(");
+                emitList(node, node.arguments, ListFormat.CommaDelimited | ListFormat.SingleLine);
+                write(")");
             }
 
             function emitNewExpression(node: NewExpression) {
                 write("new ");
                 emit(node.expression);
-                emitList(node, node.arguments, ListFormat.NewExpressionArguments);
+                if (node.arguments) {
+                    write("(");
+                    emitList(node, node.arguments, ListFormat.CommaDelimited | ListFormat.SingleLine);
+                    write(")");
+                }
             }
 
             function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
@@ -925,9 +984,12 @@ function __export(m) {
             }
 
             function emitTypeAssertionExpression(node: TypeAssertion) {
-                write("<");
-                emit(node.type);
-                write(">");
+                if (node.type) {
+                    write("<");
+                    emit(node.type);
+                    write(">");
+                }
+
                 emit(node.expression);
             }
 
@@ -942,14 +1004,32 @@ function __export(m) {
             }
 
             function emitArrowFunction(node: ArrowFunction) {
+                let savedTempFlags = tempFlags;
+                tempFlags = 0;
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.ArrowParameters);
+                emitTypeParameters(node, node.typeParameters);
+                emitParametersForArrow(node, node.parameters);
                 emitWithPrefix(": ", node.type);
-                emit(node.body);
+                write(" =>");
+                emitConciseBody(node, node.body);
                 emitEnd(node);
+                tempFlags = savedTempFlags;
+            }
+
+            function emitConciseBody(parentNode: Node, body: ConciseBody) {
+                if (isBlock(body)) {
+                    let wasPushed = tryPushNode(body);
+                    emitBlockFunctionBody(parentNode, body);
+                    if (wasPushed) {
+                        popNode();
+                    }
+                }
+                else {
+                    write(" ");
+                    emit(body);
+                }
             }
 
             function emitDeleteExpression(node: DeleteExpression) {
@@ -1040,14 +1120,14 @@ function __export(m) {
 
                 increaseIndentIf(indentBeforeColon, " ");
                 write(":");
-                increaseIndentIf(indentAfterColon);
+                increaseIndentIf(indentAfterColon, " ");
                 emit(node.whenFalse);
                 decreaseIndentIf(indentBeforeColon, indentAfterColon);
             }
 
             function emitTemplateExpression(node: TemplateExpression) {
                 emit(node.head);
-                emitList(node, node.templateSpans, ListFormat.TemplateExpressionTemplateSpans);
+                emitList(node, node.templateSpans, ListFormat.SingleLine);
             }
 
             function emitYieldExpression(node: YieldExpression) {
@@ -1067,14 +1147,16 @@ function __export(m) {
             function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
                 emitStart(node);
                 emit(node.expression);
-                emitList(node, node.typeArguments, ListFormat.TypeArguments);
+                emitTypeArguments(node, node.typeArguments);
                 emitEnd(node);
             }
 
             function emitAsExpression(node: AsExpression) {
                 emit(node.expression);
-                write(" as ");
-                emit(node.type);
+                if (node.type) {
+                    write(" as ");
+                    emit(node.type);
+                }
             }
 
             //
@@ -1090,12 +1172,25 @@ function __export(m) {
             // Statements
             //
 
-            function emitBlock(node: Block, isFunctionBody?: boolean) {
-                emitLeadingComments(node);
-                emitStart(node);
-                emitList(node, node.statements, addHelpers(node, isFunctionBody ? ListFormat.FunctionBodyStatements : ListFormat.BlockStatements));
-                emitEnd(node);
-                emitTrailingComments(node);
+            function emitBlock(node: Block, format?: ListFormat) {
+                if (isSingleLineEmptyBlock(node)) {
+                    write("{ }");
+                }
+                else {
+                    emitStart(node);
+                    write("{");
+                    scopeEmitStart(getParentNode());
+                    if (node.flags & NodeFlags.SingleLine) {
+                        emitList(node, node.statements, addHelpers(node, ListFormat.SpaceBetweenBraces | ListFormat.SingleLine | format));
+                    }
+                    else {
+                        emitList(node, node.statements, addHelpers(node, ListFormat.Indented | ListFormat.MultiLine | format));
+                    }
+
+                    scopeEmitEnd();
+                    write("}");
+                    emitEnd(node);
+                }
             }
 
             function emitVariableStatement(node: VariableStatement) {
@@ -1121,7 +1216,13 @@ function __export(m) {
                 if (node.elseStatement) {
                     writeLine();
                     write("else");
-                    emitEmbeddedStatement(node.elseStatement);
+                    if (isIfStatement(node.elseStatement)) {
+                        write(" ");
+                        emit(node.elseStatement);
+                    }
+                    else {
+                        emitEmbeddedStatement(node.elseStatement);
+                    }
                 }
             }
 
@@ -1210,8 +1311,8 @@ function __export(m) {
 
             function emitLabeledStatement(node: LabeledStatement) {
                 emit(node.label);
-                write(":");
-                emitEmbeddedStatement(node.statement);
+                write(": ");
+                emit(node.statement);
             }
 
             function emitThrowStatement(node: ThrowStatement) {
@@ -1246,7 +1347,7 @@ function __export(m) {
 
             function emitVariableDeclarationList(node: VariableDeclarationList) {
                 write(isLet(node) ? "let " : isConst(node) ? "const " : "var ");
-                emitList(node, node.declarations, ListFormat.VariableDeclarations);
+                emitList(node, node.declarations, ListFormat.CommaDelimited | ListFormat.SingleLine);
             }
 
             function emitFunctionDeclaration(node: FunctionDeclaration) {
@@ -1256,23 +1357,31 @@ function __export(m) {
             function emitFunctionDeclarationOrExpression(node: FunctionDeclaration | FunctionExpression) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 write(node.asteriskToken ? "function* " : "function ");
                 emit(node.name);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.parameters, ListFormat.Parameters);
-                emitWithPrefix(": ", node.type);
-                emitFunctionBody(node.body);
+                emitSignatureAndBody(node);
                 emitEnd(node);
                 emitTrailingComments(node);
             }
 
-            function emitFunctionBody(node: Block) {
-                if (node) {
-                    write(" ");
-                    let wasPushed = tryPushNode(node);
-                    emitBlock(node, /*isFunctionBody*/ true);
+            function emitSignatureAndBody(node: FunctionDeclaration | FunctionExpression | MethodDeclaration | AccessorDeclaration) {
+                let savedTempFlags = tempFlags;
+                tempFlags = 0;
+
+                emitTypeParameters(node, node.typeParameters);
+                emitParameters(node, node.parameters);
+                emitWithPrefix(": ", node.type);
+                emitFunctionBody(node, node.body);
+
+                tempFlags = savedTempFlags;
+            }
+
+            function emitFunctionBody(parentNode: Node, body: FunctionBody) {
+                if (body) {
+                    let wasPushed = tryPushNode(body);
+                    emitBlockFunctionBody(parentNode, body);
                     if (wasPushed) {
                         popNode();
                     }
@@ -1282,6 +1391,46 @@ function __export(m) {
                 }
             }
 
+            function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+                let originalNode = getOriginalNode(parentNode);
+                if (isFunctionLike(originalNode) && !nodeIsSynthesized(originalNode) && rangeEndIsOnSameLineAsRangeStart(originalNode.body, originalNode.body)) {
+                    for (let statement of body.statements) {
+                        if (synthesizedNodeStartsOnNewLine(statement)) {
+                            return false;
+                        }
+                    }
+
+                    if (isArrowFunction(originalNode) && !rangeEndIsOnSameLineAsRangeStart(originalNode.equalsGreaterThanToken, originalNode.body)) {
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            function emitBlockFunctionBody(parentNode: Node, body: Block) {
+                let statements = body.statements;
+                write(" {");
+                scopeEmitStart(parentNode);
+
+                // Emit all the prologue directives (like "use strict").
+                increaseIndent();
+                let statementOffset = emitPrologueDirectives(statements, /*startWithNewLine*/ true);
+                decreaseIndent();
+
+                if (statementOffset === 0 && shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)) {
+                    emitList(body, statements, addHelpers(body, ListFormat.SingleLine | ListFormat.SpaceBetweenBraces | ListFormat.LexicalEnvironment));
+                }
+                else {
+                    emitList(body, statements, addHelpers(body, ListFormat.MultiLine | ListFormat.Indented | ListFormat.LexicalEnvironment), statementOffset);
+                }
+
+                scopeEmitEnd();
+                write("}");
+            }
+
             function emitClassDeclaration(node: ClassDeclaration) {
                 emitClassDeclarationOrExpression(node);
             }
@@ -1289,14 +1438,24 @@ function __export(m) {
             function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 write("class");
                 emitWithPrefix(" ", node.name);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
-                write(" ");
-                emitList(node, node.members, ListFormat.ClassMembers);
+                emitTypeParameters(node, node.typeParameters);
+                emitList(node, node.heritageClauses, ListFormat.SingleLine);
+
+                let savedTempFlags = tempFlags;
+                tempFlags = 0;
+
+                write(" {");
+                scopeEmitStart(node);
+                emitList(node, node.members, ListFormat.Indented | ListFormat.MultiLine);
+                scopeEmitEnd();
+                write("}");
+
+                tempFlags = savedTempFlags;
+
                 emitEnd(node);
                 emitTrailingComments(node);
             }
@@ -1304,14 +1463,15 @@ function __export(m) {
             function emitInterfaceDeclaration(node: InterfaceDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 write("interface ");
                 emit(node.name);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
-                emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
-                write(" ");
-                emitList(node, node.members, ListFormat.TypeElements);
+                emitTypeParameters(node, node.typeParameters);
+                emitList(node, node.heritageClauses, ListFormat.SingleLine);
+                write(" {");
+                emitList(node, node.members, ListFormat.Indented | ListFormat.MultiLine);
+                write("}");
                 emitEnd(node);
                 emitTrailingComments(node);
             }
@@ -1319,11 +1479,11 @@ function __export(m) {
             function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
                 emitLeadingComments(node);
                 emitStart(node);
-                emitList(node, node.decorators, ListFormat.Decorators);
+                emitDecorators(node, node.decorators);
                 emitModifiers(node);
                 write("type ");
                 emit(node.name);
-                emitList(node, node.typeParameters, ListFormat.TypeParameters);
+                emitTypeParameters(node, node.typeParameters);
                 write(" = ");
                 emit(node.type);
                 write(";");
@@ -1337,8 +1497,16 @@ function __export(m) {
                 emitModifiers(node);
                 write("enum ");
                 emit(node.name);
-                write(" ");
-                emitList(node, node.members, ListFormat.EnumMembers);
+
+                let savedTempFlags = tempFlags;
+                tempFlags = 0;
+
+                write(" {");
+                emitList(node, node.members, ListFormat.CommaDelimited | ListFormat.Indented | ListFormat.MultiLine);
+                write("}");
+
+                tempFlags = savedTempFlags;
+
                 emitEnd(node);
                 emitTrailingComments(node);
             }
@@ -1364,11 +1532,18 @@ function __export(m) {
             }
 
             function emitModuleBlock(node: ModuleBlock) {
-                emitList(node, node.statements, ListFormat.ModuleBlockStatements);
+                let savedTempFlags = tempFlags;
+                tempFlags = 0;
+
+                emitBlock(node, ListFormat.LexicalEnvironment);
+
+                tempFlags = savedTempFlags;
             }
 
             function emitCaseBlock(node: CaseBlock) {
-                emitList(node, node.clauses, ListFormat.CaseBlockClauses);
+                write("{");
+                emitList(node, node.clauses, ListFormat.Indented | ListFormat.MultiLine);
+                write("}");
             }
 
             function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -1459,7 +1634,9 @@ function __export(m) {
 
             function emitNamedImportsOrExports(node: NamedImportsOrExports) {
                 emitStart(node);
-                emitList(node, node.elements, ListFormat.ImportOrExportSpecifiers);
+                write("{ ");
+                emitList(node, node.elements, ListFormat.CommaDelimited | ListFormat.AllowTrailingComma | ListFormat.SingleLine);
+                write(" }");
                 emitEnd(node);
             }
 
@@ -1492,7 +1669,7 @@ function __export(m) {
 
             function emitJsxElement(node: JsxElement) {
                 emit(node.openingElement);
-                emitList(node, node.children, ListFormat.JsxElementChildren);
+                emitList(node, node.children, ListFormat.SingleLine);
                 emit(node.closingElement);
             }
 
@@ -1500,7 +1677,7 @@ function __export(m) {
                 write("<");
                 emit(node.tagName);
                 write(" ");
-                emitList(node, node.attributes, ListFormat.JsxAttributes);
+                emitList(node, node.attributes, ListFormat.SingleLine);
                 write("/>");
             }
 
@@ -1508,7 +1685,7 @@ function __export(m) {
                 write("<");
                 emit(node.tagName);
                 writeIfAny(node.attributes, " ");
-                emitList(node, node.attributes, ListFormat.JsxAttributes);
+                emitList(node, node.attributes, ListFormat.SingleLine);
                 write(">");
             }
 
@@ -1547,19 +1724,29 @@ function __export(m) {
                 write("case ");
                 emit(node.expression);
                 write(":");
-                emitList(node, node.statements, ListFormat.CaseOrDefaultClauseStatements);
+                emitCaseOrDefaultClauseStatements(node, node.statements);
             }
 
             function emitDefaultClause(node: DefaultClause) {
                 write("default:");
-                emitList(node, node.statements, ListFormat.CaseOrDefaultClauseStatements);
+                emitCaseOrDefaultClauseStatements(node, node.statements);
+            }
+
+            function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
+                if (statements.length === 1 && rangeStartPositionsAreOnSameLine(parentNode, statements[0])) {
+                    write(" ");
+                    emit(statements[0]);
+                }
+                else {
+                    emitList(parentNode, statements, ListFormat.Indented | ListFormat.MultiLine);
+                }
             }
 
             function emitHeritageClause(node: HeritageClause) {
                 emitStart(node);
                 writeToken(node.token);
                 write(" ");
-                emitList(node, node.types, ListFormat.HeritageClauseTypes);
+                emitList(node, node.types, ListFormat.CommaDelimited | ListFormat.SingleLine);
                 emitEnd(node);
             }
 
@@ -1611,49 +1798,59 @@ function __export(m) {
             //
 
             function emitSourceFile(node: SourceFile) {
+                let savedTempFlags = tempFlags;
+                tempFlags = 0;
                 currentSourceFile = node;
+
                 writeLine();
                 emitShebang();
                 emitDetachedComments(node);
-                emitList(node, node.statements, addHelpers(node, ListFormat.SourceFileStatements));
+
+                let statements = node.statements;
+                let statementOffset = emitPrologueDirectives(statements);
+                emitList(node, statements, addHelpers(node, ListFormat.MultiLine), statementOffset);
+
                 currentSourceFile = undefined;
+                tempFlags = savedTempFlags;
             }
 
-            function emitLexicalEnvironment(node: Statement) {
-                writeLine();
+            function emitLexicalEnvironmentOnNewLine(node: Statement) {
+                emitLexicalEnvironment(node, /*newLine*/ true);
+            }
+
+            function emitLexicalEnvironment(node: Statement, newLine?: boolean) {
+                if (newLine) {
+                    writeLine();
+                }
+                else {
+                    write(" ");
+                }
+
                 emit(node);
             }
 
-            function emitPrologueDirectives(statements: Node[], start?: number, count?: number) {
-                if (start === undefined) {
-                    start = 0;
-                }
-
-                if (count === undefined) {
-                    count = statements.length - start;
-                }
-
-                for (let i = 0; i < count; i++) {
-                    let offset = start + i;
-                    if (isPrologueDirective(statements[offset])) {
-                        if (i > 0) {
+            function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean) {
+                for (let i = 0; i < statements.length; i++) {
+                    if (isPrologueDirective(statements[i])) {
+                        if (startWithNewLine || i > 0) {
                             writeLine();
                         }
-
-                        emit(statements[offset]);
+                        emit(statements[i]);
                     }
                     else {
+                        // return index of the first non prologue directive
                         return i;
                     }
                 }
 
-                return count;
+                return statements.length;
             }
 
             function emitEmitHelpers(node: SourceFile) {
                 let flags = resolver.getNodeCheckFlags(node);
 
                 // Only emit helpers if the user did not say otherwise.
+                let previousHelpersEmitted = helpersEmitted;
                 if (!compilerOptions.noEmitHelpers) {
                     if (shouldEmitHelper(NodeCheckFlags.EmitExtends, flags) && languageVersion < ScriptTarget.ES6) {
                         writeLines(extendsHelper);
@@ -1678,6 +1875,10 @@ function __export(m) {
                         writeLines(awaiterHelper);
                         helpersEmitted |= NodeCheckFlags.EmitAwaiter;
                     }
+
+                    if (helpersEmitted !== previousHelpersEmitted) {
+                        writeLine();
+                    }
                 }
             }
 
@@ -1688,10 +1889,6 @@ function __export(m) {
             function shouldEmitHelper(helper: NodeCheckFlags, requestedHelpers: NodeCheckFlags) {
                 return (requestedHelpers & helper) !== 0
                     && !(helpersEmitted && helper);
-            }
-
-            function emitRaw(node: RawStatement | RawExpression) {
-                writeLines(node.text);
             }
 
             function writeLines(text: string): void {
@@ -1807,85 +2004,90 @@ function __export(m) {
                 }
             }
 
-            function emitList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
-                if (!children && format & ListFormat.Optional) {
-                    return;
+            function emitDecorators(parentNode: Node, decorators: NodeArray<Decorator>) {
+                if (decorators && decorators.length) {
+                    emitList(parentNode, decorators, ListFormat.MultiLine);
                 }
+            }
 
-                let containingRange: TextRange = format & ListFormat.Fragment ? children : parentNode;
+            function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode>) {
+                if (typeArguments && typeArguments.length > 0) {
+                    write("<");
+                    emitList(parentNode, typeArguments, ListFormat.CommaDelimited | ListFormat.SingleLine | ListFormat.Indented)
+                    write(">");
+                }
+            }
 
-                // Shortcut for an empty list.
+            function emitTypeParameters(parentNode: Node, typeParameters: NodeArray<TypeParameterDeclaration>) {
+                if (typeParameters && typeParameters.length > 0) {
+                    write("<");
+                    emitList(parentNode, typeParameters, ListFormat.CommaDelimited | ListFormat.SingleLine | ListFormat.Indented)
+                    write(">");
+                }
+            }
+
+            function emitParameters(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
+                write("(");
+                emitList(parentNode, parameters, ListFormat.CommaDelimited | ListFormat.SingleLine | ListFormat.Indented);
+                write(")");
+            }
+
+            function emitParametersForArrow(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
+                if (parameters &&
+                    parameters.length === 1 &&
+                    parameters[0].type === undefined &&
+                    parameters[0].pos === parentNode.pos) {
+                    emit(parameters[0]);
+                }
+                else {
+                    emitParameters(parentNode, parameters);
+                }
+            }
+
+            function emitParametersForIndexSignature(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
+                write("[");
+                emitList(parentNode, parameters, ListFormat.CommaDelimited | ListFormat.SingleLine | ListFormat.Indented);
+                write("]");
+            }
+
+            function emitTypeElements(parentNode: Node, elements: NodeArray<TypeElement>) {
+                emitList(parentNode, elements, ListFormat.MultiLine | ListFormat.Indented);
+            }
+
+            function emitList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start: number = 0, count: number = children ? children.length - start : 0) {
                 if (!children || children.length === 0 || start >= children.length || count === 0) {
-                    // If the list is bracketed, emit the brackets and any interceeding whitespace.
-                    if (format & ListFormat.BracketsMask) {
-                        write(getBracket(format, ListFormat.LeadingBracketOffset));
-                        if (containingRange && !positionsAreOnSameLine(containingRange.pos, containingRange.end)) {
-                            writeLine();
-                        }
-                        else if (format & ListFormat.Whitespace) {
-                            write(" ");
-                        }
-                        write(getBracket(format, ListFormat.TrailingBracketOffset));
+                    // Write a line terminator if the parent node was multi-line
+                    if (format & ListFormat.MultiLine) {
+                        writeLine();
                     }
+                    else if (format & ListFormat.SpaceBetweenBraces) {
+                        write(" ");
+                    }
+
                     return;
-                }
-
-                if (start === undefined) {
-                    start = 0;
-                }
-
-                if (count === undefined) {
-                    count = children.length - start;
                 }
 
                 let previousSibling: Node;
-                let firstChild = start < children.length ? children[start] : undefined;
-                let lastChild = start + count <= children.length ? children[start + count - 1] : undefined;
-
-                // Shortcut for a simple arrow function.
-                if (format & ListFormat.Arrow &&
-                    children.length === 1 &&
-                    isParameter(firstChild) &&
-                    firstChild.type === undefined &&
-                    firstChild.pos === parentNode.pos) {
-                    emit(firstChild);
-                    return;
-                }
-
-                // Write the leading bracket.
-                write(getBracket(format, ListFormat.LeadingBracketOffset));
-
-                // Start the new scope, if requested.
-                if (format & ListFormat.Scoped) {
-                    scopeEmitStart(parentNode);
-                }
 
                 // Write the opening line terminator or leading whitespace.
-                if (shouldWriteLeadingLineTerminator(containingRange, firstChild, format)) {
+                if (shouldWriteLeadingLineTerminator(parentNode, children, format)) {
                     writeLine();
                 }
-                else if (format & ListFormat.LeadingWhitespace) {
+                else if (format & ListFormat.SpaceBetweenBraces) {
                     write(" ");
                 }
 
                 // Increase the indent, if requested.
-                let indented = format & ListFormat.Indented;
-                if (indented) {
+                if (format & ListFormat.Indented) {
                     increaseIndent();
                 }
 
+                // Start the lexical environment, if requested.
                 if (format & ListFormat.LexicalEnvironment) {
                     startLexicalEnvironment();
                 }
 
-                // Print prologue directives, if needed
-                if (format & ListFormat.MustEmitPrologueDirectivesFirst) {
-                    let directivesWritten = emitPrologueDirectives(children, start, count);
-                    start += directivesWritten;
-                    count -= directivesWritten;
-                }
-
-                // Print the emit helpers, if requested.
+                // Print emit helpers, if requested.
                 if (format & ListFormat.PrintEmitHelpers) {
                     emitEmitHelpers(currentSourceFile);
                 }
@@ -1896,7 +2098,6 @@ function __export(m) {
                 }
 
                 // Emit each child.
-                let canBeDedented = indented && canHaveDedentedChildren(parentNode);
                 let delimiter = getDelimiter(format);
                 for (let i = 0; i < count; i++) {
                     let child = children[start + i];
@@ -1914,18 +2115,8 @@ function __export(m) {
                         }
                     }
 
-                    // For cleaner emit, decrease the indent level for function expressions in an argument list
-                    let dedented = canBeDedented && shouldDedentChild(child);
-                    if (dedented) {
-                        decreaseIndent();
-                    }
-
                     // Emit this child.
                     emit(child);
-
-                    if (dedented) {
-                        increaseIndent();
-                    }
 
                     previousSibling = child;
                 }
@@ -1937,38 +2128,22 @@ function __export(m) {
                 }
 
                 if (format & ListFormat.LexicalEnvironment) {
-                    endLexicalEnvironment(emitLexicalEnvironment);
+                    let isSingleLine = (format & (ListFormat.MultiLine | ListFormat.PreserveLines)) === 0;
+                    endLexicalEnvironment(isSingleLine ? emitLexicalEnvironment : emitLexicalEnvironmentOnNewLine);
                 }
 
                 // Decrease the indent, if requested.
-                if (indented) {
+                if (format & ListFormat.Indented) {
                     decreaseIndent();
                 }
 
                 // Write the closing line terminator or closing whitespace.
-                if (shouldWriteClosingLineTerminator(containingRange, lastChild, format)) {
+                if (shouldWriteClosingLineTerminator(parentNode, children, format)) {
                     writeLine();
                 }
-                else if (format & ListFormat.TrailingWhitespace && (previousSibling || hasTrailingComma)) {
+                else if (format & ListFormat.SpaceBetweenBraces) {
                     write(" ");
                 }
-
-                // End the scope, if requested.
-                if (format & ListFormat.Scoped) {
-                    scopeEmitEnd();
-                }
-
-                // Write the trailing bracket.
-                write(getBracket(format, ListFormat.TrailingBracketOffset));
-            }
-
-            function canHaveDedentedChildren(node: Node) {
-                return isCallExpression(node) || isNewExpression(node) || isVariableDeclarationList(node);
-            }
-
-            function shouldDedentChild(node: Node): boolean {
-                return isFunctionExpression(node) || isArrowFunction(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node) ||
-                    (isVariableDeclaration(node) && shouldDedentChild(node.initializer));
             }
 
             function writeIfAny(nodes: NodeArray<Node>, text: string) {
@@ -2022,42 +2197,73 @@ function __export(m) {
                 }
             }
 
-            function shouldWriteLeadingLineTerminator(containingRange: TextRange, firstChild: Node, format?: ListFormat) {
-                if (containingRange === undefined) {
-                    return false;
+            function shouldWriteLeadingLineTerminator(parentNode: Node, children: NodeArray<Node>, format: ListFormat) {
+                if (format & ListFormat.MultiLine) {
+                    return true;
                 }
-                else if (firstChild === undefined) {
-                    return !positionsAreOnSameLine(getStartPos(containingRange), getEndPos(containingRange));
-                }
-                else if (positionIsSynthesized(containingRange.pos) || nodeIsSynthesized(firstChild)) {
-                    return synthesizedNodeStartsOnNewLine(firstChild, format);
+                else if (format & ListFormat.PreserveLines) {
+                    if (parentNode.flags & NodeFlags.MultiLine) {
+                        return true;
+                    }
+
+                    let firstChild = firstOrUndefined(children);
+                    if (firstChild === undefined) {
+                        return !positionsAreOnSameLine(getStartPos(parentNode), parentNode.end);
+                    }
+                    else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
+                        return synthesizedNodeStartsOnNewLine(firstChild, format);
+                    }
+                    else {
+                        return !rangeStartPositionsAreOnSameLine(parentNode, firstChild);
+                    }
                 }
                 else {
-                    return !rangeStartPositionsAreOnSameLine(containingRange, firstChild);
+                    return false;
                 }
             }
 
-            function shouldWriteSeparatingLineTerminator(previousNode: Node, nextNode: Node, format?: ListFormat) {
-                if (previousNode === undefined || nextNode === undefined) {
-                    return false;
+            function shouldWriteSeparatingLineTerminator(previousNode: Node, nextNode: Node, format: ListFormat) {
+                if (format & ListFormat.MultiLine) {
+                    return true;
                 }
-                else if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
-                    return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
+                else if (format & ListFormat.PreserveLines) {
+                    if (previousNode === undefined || nextNode === undefined) {
+                        return false;
+                    }
+                    else if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
+                        return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
+                    }
+                    else {
+                        return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode);
+                    }
                 }
                 else {
-                    return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode);
+                    return false;
                 }
             }
 
-            function shouldWriteClosingLineTerminator(containingRange: TextRange, lastChild: Node, format?: ListFormat) {
-                if (lastChild === undefined) {
-                    return false;
+            function shouldWriteClosingLineTerminator(parentNode: Node, children: NodeArray<Node>, format: ListFormat) {
+                if (format & ListFormat.MultiLine) {
+                    return true;
                 }
-                else if (positionIsSynthesized(containingRange.pos) || nodeIsSynthesized(lastChild)) {
-                    return synthesizedNodeStartsOnNewLine(lastChild, format);
+                else if (format & ListFormat.PreserveLines) {
+                    if (parentNode.flags & NodeFlags.MultiLine) {
+                        return true;
+                    }
+
+                    let lastChild = lastOrUndefined(children);
+                    if (lastChild === undefined) {
+                        return !positionsAreOnSameLine(getStartPos(parentNode), parentNode.end);
+                    }
+                    else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
+                        return synthesizedNodeStartsOnNewLine(lastChild, format);
+                    }
+                    else {
+                        return !rangeEndPositionsAreOnSameLine(parentNode, lastChild);
+                    }
                 }
                 else {
-                    return !rangeEndPositionsAreOnSameLine(containingRange, lastChild);
+                    return false;
                 }
             }
 
@@ -2078,11 +2284,11 @@ function __export(m) {
             }
 
             function rangeEndPositionsAreOnSameLine(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(getEndPos(range1), getEndPos(range2));
+                return positionsAreOnSameLine(range1.end, range2.end);
             }
 
             function rangeEndIsOnSameLineAsRangeStart(range1: TextRange, range2: TextRange) {
-                return positionsAreOnSameLine(getEndPos(range1), getStartPos(range2));
+                return positionsAreOnSameLine(range1.end, getStartPos(range2));
             }
 
             function positionsAreOnSameLine(pos1: number, pos2: number) {
@@ -2091,11 +2297,7 @@ function __export(m) {
             }
 
             function getStartPos(range: TextRange) {
-                return skipTrivia(currentSourceFile.text, range.pos);
-            }
-
-            function getEndPos(range: TextRange) {
-                return range.end;
+                return range.pos === -1 ? -1 : skipTrivia(currentSourceFile.text, range.pos);
             }
 
             function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {
@@ -2141,6 +2343,40 @@ function __export(m) {
                 }
                 return format;
             }
+
+            function isSingleLineEmptyBlock(block: Block) {
+                return (block.flags & NodeFlags.MultiLine) === 0 &&
+                    block.statements.length === 0 &&
+                    rangeEndIsOnSameLineAsRangeStart(block, block);
+            }
+
+            /**
+            * Return the next available name in the pattern _a ... _z, _0, _1, ...
+            * TempFlags._i or TempFlags._n may be used to express a preference for that dedicated name.
+            * Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
+            */
+            function makeTempVariableName(flags: TempFlags): string {
+                if (flags && !(tempFlags & flags)) {
+                    let name = flags === TempFlags._i ? "_i" : "_n";
+                    if (transformer.isUniqueName(name)) {
+                        tempFlags |= flags;
+                        return name;
+                    }
+                }
+                while (true) {
+                    let count = tempFlags & TempFlags.CountMask;
+                    tempFlags++;
+                    // Skip over 'i' and 'n'
+                    if (count !== 8 && count !== 13) {
+                        let name = count < 26
+                            ? "_" + String.fromCharCode(CharacterCodes.a + count)
+                            : "_" + (count - 26);
+                        if (transformer.isUniqueName(name)) {
+                            return name;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -2157,95 +2393,30 @@ function __export(m) {
         return delimiters[format & ListFormat.DelimitersMask];
     }
 
-    function createBracketsMap() {
-        let brackets: string[] = [];
-        brackets[ListFormat.None] = "";
-        brackets[ListFormat.Parentheses << ListFormat.LeadingBracketOffset] = "(";
-        brackets[ListFormat.Parentheses << ListFormat.TrailingBracketOffset] = ")";
-        brackets[ListFormat.SquareBrackets << ListFormat.LeadingBracketOffset] = "[";
-        brackets[ListFormat.SquareBrackets << ListFormat.TrailingBracketOffset] = "]";
-        brackets[ListFormat.CurlyBrackets << ListFormat.LeadingBracketOffset] = "{";
-        brackets[ListFormat.CurlyBrackets << ListFormat.TrailingBracketOffset] = "}";
-        brackets[ListFormat.AngleBrackets << ListFormat.LeadingBracketOffset] = "<";
-        brackets[ListFormat.AngleBrackets << ListFormat.TrailingBracketOffset] = ">";
-        return brackets;
-    }
-
-    function getBracket(format: ListFormat, offset: number) {
-        return brackets[(format & ListFormat.BracketsMask) << offset];
-    }
-
     const enum ListFormat {
         None = 0,
 
-        // Brackets
-        Parentheses = 1 << 0,           // The list is surrounded with parentheses ("(", ")").
-        SquareBrackets = 1 << 1,        // The list is surrounded with brackets ("[", "]").
-        CurlyBrackets = 1 << 2,         // The list is surrounded with braces ("{", "}").
-        AngleBrackets = 1 << 3,         // The list is surrounded with angle-brackets ("<", ">").
-
-        LeadingBracketOffset = 0,       // Left-shift offset for a leading bracket.
-        TrailingBracketOffset = 4,      // Left-shift offset for a trailing bracket.
-        BracketsMask = Parentheses | SquareBrackets | CurlyBrackets | AngleBrackets,
+        // Line separators
+        SingleLine = 1 << 0,            // Prints the list on a single line (default).
+        MultiLine = 1 << 1,             // Prints the list on multiple lines.
+        PreserveLines = 1 << 2,         // Prints the list using line preservation if possible.
 
         // Delimiters
-        BarDelimited = 1 << 4,          // Each list item is space-and-bar (" |") delimited.
-        AmpersandDelimited = 1 << 5,    // Each list item is space-and-ampersand (" &") delimited.
-        CommaDelimited = 1 << 6,        // Each list item is comma (",") delimited.
-        AllowTrailingComma = 1 << 7,    // Write a trailing comma (",") if present.
+        NotDelimited = 0,               // There is no delimiter between list items (default).
+        BarDelimited = 1 << 3,          // Each list item is space-and-bar (" |") delimited.
+        AmpersandDelimited = 1 << 4,    // Each list item is space-and-ampersand (" &") delimited.
+        CommaDelimited = 1 << 5,        // Each list item is comma (",") delimited.
+        AllowTrailingComma = 1 << 6,    // Write a trailing comma (",") if present.
         DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited,
 
         // Whitespace
-        Indented = 1 << 8,              // The list should be indented.
-        LeadingWhitespace = 1 << 9,     // Write a leading space (" ") before the first element if not indented.
-        TrailingWhitespace = 1 << 10,   // Write a trailing space (" ") after the last element if not indented.
-        Whitespace = LeadingWhitespace | TrailingWhitespace,
+        Indented = 1 << 7,              // The list should be indented.
+        SpaceBetweenBraces = 1 << 8,    // Inserts a space after the opening brace and before the closing brace.
 
         // Other
-        Optional = 1 << 11,             // Skip writing brackets (if any) for an empty or missing list.
-        Scoped = 1 << 12,               // The list starts a new scope (for Source Maps).
-        Arrow = 1 << 13,                // The list is a parameter list for an arrow function.
-        Fragment = 1 << 14,             // The list is a fragment of the node. Line terminators should be based on the node array positions.
-        PreferNewLine = 1 << 15,        // Prefer adding LineTerminators between synthesized nodes.
-        PrintEmitHelpers = 1 << 16,     // Emit any emit helpers along with the list
-        PrintExportStar = 1 << 17,      // Emit the __export helper for "export *"
-        LexicalEnvironment = 1 << 18,   // Marks a lexical environment
-
-        // List formats
-        Decorators = Indented | TrailingWhitespace | Fragment,
-        TypeParameters = AngleBrackets | CommaDelimited | Indented | Optional | Fragment,
-        Parameters = Parentheses | CommaDelimited | Indented | Fragment,
-        ArrowParameters = Parameters | Arrow,
-        IndexSignatureParameters = SquareBrackets | CommaDelimited | Indented | Fragment,
-        TypeArguments = AngleBrackets | CommaDelimited | Indented | Optional | Fragment,
-        TypeElements = CurlyBrackets | Indented | Whitespace | PreferNewLine,
-        TupleTypeElementTypes = SquareBrackets | CommaDelimited | Indented,
-        UnionTypeConstituents = BarDelimited | Indented,
-        IntersectionTypeConstituents = AmpersandDelimited | Indented,
-        ObjectBindingPatternElements = CurlyBrackets | CommaDelimited | AllowTrailingComma | Indented | LeadingWhitespace | TrailingWhitespace | PreferNewLine,
-        ArrayBindingPatternElements = SquareBrackets | CommaDelimited | AllowTrailingComma | Indented,
-        ArrayLiteralExpressionElements = SquareBrackets | CommaDelimited | AllowTrailingComma | Indented,
-        ObjectLiteralExpressionProperties = CurlyBrackets | CommaDelimited | Indented | LeadingWhitespace | TrailingWhitespace | PreferNewLine,
-        ObjectLiteralExpressionPropertiesForES5AndLater = ObjectLiteralExpressionProperties | AllowTrailingComma,
-        CallExpressionArguments = Parentheses | CommaDelimited | Indented | Fragment,
-        NewExpressionArguments = Parentheses | CommaDelimited | Indented | Optional | Fragment,
-        TemplateExpressionTemplateSpans = Fragment,
-        BlockStatements = CurlyBrackets | Indented | Whitespace | Scoped | PreferNewLine,
-        VariableDeclarations = CommaDelimited | Indented,
-        HeritageClauses = Indented | LeadingWhitespace | Fragment,
-        ClassMembers = CurlyBrackets | Indented | Whitespace | Scoped | PreferNewLine,
-        EnumMembers = CurlyBrackets | CommaDelimited | AllowTrailingComma | Indented | Scoped | Whitespace | PreferNewLine,
-        ModuleBlockStatements = CurlyBrackets | Indented | Whitespace | Scoped | PreferNewLine | LexicalEnvironment,
-        CaseBlockClauses = CurlyBrackets | Indented | Whitespace | Scoped | PreferNewLine,
-        ImportOrExportSpecifiers = CurlyBrackets | CommaDelimited | AllowTrailingComma | Indented | Whitespace,
-        CaseOrDefaultClauseStatements = Indented | Whitespace | PreferNewLine,
-        JsxElementChildren = PreferNewLine,
-        JsxAttributes = Fragment,
-        HeritageClauseTypes = CommaDelimited | Indented,
-
-        FunctionBodyStatements = BlockStatements | LexicalEnvironment,
-        SourceFileStatements = PreferNewLine | LexicalEnvironment,
-
-        MustEmitPrologueDirectivesFirst = PrintEmitHelpers | PrintExportStar
+        PreferNewLine = 1 << 9,         // Prefer adding a LineTerminator between synthesized nodes.
+        PrintEmitHelpers = 1 << 10,     // Emit any emit helpers along with the list.
+        PrintExportStar = 1 << 11,      // Emit the __export helper for "export *".
+        LexicalEnvironment = 1 << 12,   // Marks a lexical environment.
     }
 }

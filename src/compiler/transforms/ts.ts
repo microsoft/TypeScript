@@ -11,11 +11,9 @@ namespace ts {
             pushNode,
             popNode,
             findAncestorNode,
-            declareLocal,
             getGeneratedNameForNode,
+            createTempVariable,
             hoistVariableDeclaration,
-            getDeclarationName,
-            getClassMemberPrefix,
             pipeNode,
             pipeNodes,
             mapNode,
@@ -248,14 +246,20 @@ namespace ts {
                     visitParameter(<ParameterDeclaration>node, write);
                     break;
 
+                case SyntaxKind.ParenthesizedExpression:
+                    // ParenthesizedExpressions are TypeScript if their expression is a
+                    // TypeAssertion or AsExpression
+                    visitParenthesizedExpression(<ParenthesizedExpression>node, write);
+                    break;
+
                 case SyntaxKind.TypeAssertionExpression:
                     // TypeScript type assertions are removed, but their subtrees are preserved.
-                    write((<TypeAssertion>node).expression);
+                    write(visitNode((<TypeAssertion>node).expression, visitor, isExpressionNode));
                     break;
 
                 case SyntaxKind.AsExpression:
                     // TypeScript `as` expressions are removed, but their subtrees are preserved.
-                    write((<AsExpression>node).expression);
+                    write(visitNode((<AsExpression>node).expression, visitor, isExpressionNode));
                     break;
 
                 case SyntaxKind.EnumDeclaration:
@@ -283,6 +287,11 @@ namespace ts {
                     visitImportEqualsDeclaration(<ImportEqualsDeclaration>node, write);
                     break;
 
+                case SyntaxKind.BinaryExpression:
+                    // Exponentiation operator
+                    visitBinaryExpression(<BinaryExpression>node, write);
+                    break;
+
                 default:
                     Debug.fail("Encountered unhandled node kind when transforming TypeScript syntax.");
                     write(accept(node, visitor));
@@ -303,7 +312,7 @@ namespace ts {
          */
         function visitClassDeclaration(node: ClassDeclaration, write: (node: Statement) => void): void {
             // Get the name of the class
-            let name = getDeclarationName(node);
+            let name = node.name || getGeneratedNameForNode(node);
 
             // Visit the base type node for the class.
             let baseTypeNode = mapNode(getClassExtendsHeritageClauseElement(node), visitExpressionWithTypeArguments);
@@ -311,7 +320,7 @@ namespace ts {
             // Create a synthetic constructor for the class (if necessary), and visit the members of the class.
             let classMembers: ClassElement[] = [];
             pipeNode(node, (node, write) => emitConstructor(node, write, baseTypeNode), classMembers);
-            pipeNodes(node.members, visitor, classMembers);
+            pipeNodes(node.members, visitClassElement, classMembers);
 
             // Create the declaration for the class. Classes with decorators are transformed into a class
             // expression inside of a let declaration.
@@ -372,7 +381,7 @@ namespace ts {
          */
         function visitClassExpression(node: ClassExpression, write: (node: LeftHandSideExpression) => void): void {
             // Get the name of the class
-            let name = getDeclarationName(node);
+            let name = node.name || getGeneratedNameForNode(node);
 
             // Visit the base type node for the class.
             let baseTypeNode = mapNode(getClassExtendsHeritageClauseElement(node), visitExpressionWithTypeArguments);
@@ -399,7 +408,8 @@ namespace ts {
             let staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             if (staticProperties) {
                 let expressions: Expression[] = [];
-                let temporaryStorage = declareLocal();
+                let temporaryStorage = createTempVariable();
+                hoistVariableDeclaration(temporaryStorage);
                 expressions.push(createAssignmentExpression(temporaryStorage, classExpression));
                 pipeNodes(staticProperties, (member, write) => emitPropertyDeclarationExpression(member, write, node, temporaryStorage), expressions);
                 expressions.push(temporaryStorage);
@@ -407,6 +417,12 @@ namespace ts {
             }
 
             write(classExpression);
+        }
+
+        function visitClassElement(node: ClassElement, write: (node: ClassElement) => void): void {
+            if (!isConstructor(node)) {
+                visitor(node, write);
+            }
         }
 
         /**
@@ -445,17 +461,17 @@ namespace ts {
          * @param baseTypeNode The node for the class extends clause, if present.
          * @remarks This function is intended to support `transformClassLikeDeclaration` and should not be called otherwise.
          */
-        function emitConstructor(node: ClassLikeDeclaration, write: (node: ClassElement) => void, baseTypeNode: ExpressionWithTypeArguments): void {
+        function emitConstructor(node: ClassExpression | ClassDeclaration, write: (node: ClassElement) => void, baseTypeNode: ExpressionWithTypeArguments): void {
             // Check if we have property assignment inside class declaration.
             // If there is a property assignment, we need to emit constructor whether users define it or not
             // If there is no property assignment, we can omit constructor if users do not define it
             let hasInstancePropertyWithInitializer = forEach(node.members, isInstancePropertyWithInitializer);
-
+            let hasParameterPropertyAssignments = node.transformFlags & TransformFlags.ContainsParameterPropertyAssignment;
             let constructor = getFirstConstructorWithBody(node);
 
             // If the class does not contain nodes that require a synthesized constructor,
             // accept the current constructor if it exists.
-            if (!hasInstancePropertyWithInitializer) {
+            if (!hasInstancePropertyWithInitializer && !hasParameterPropertyAssignments) {
                 if (constructor) {
                     write(accept(constructor, visitor));
                 }
@@ -470,6 +486,9 @@ namespace ts {
             }
             else if (baseTypeNode) {
                 parameters = [createRestParameter(createIdentifier("args"), /*location*/ undefined, NodeFlags.Generated)];
+            }
+            else {
+                parameters = [];
             }
 
             // transform the body of the constructor
@@ -488,7 +507,7 @@ namespace ts {
          * @param baseTypeNode The node for the class extends clause, if present.
          * @remarks This function is intended to be called from `emitConstructor` and should not be called otherwise.
          */
-        function emitConstructorBody(node: ClassLikeDeclaration, write: (node: Statement) => void, constructor: ConstructorDeclaration, baseTypeNode: ExpressionWithTypeArguments) {
+        function emitConstructorBody(node: ClassExpression | ClassDeclaration, write: (node: Statement) => void, constructor: ConstructorDeclaration, baseTypeNode: ExpressionWithTypeArguments) {
             startLexicalEnvironment();
 
             // Emit the super call if it exists
@@ -538,7 +557,7 @@ namespace ts {
          * @param write The callback to execute to write the result.
          * @param node The containing class for the property.
          */
-        function emitPropertyDeclarationStatement(property: PropertyDeclaration, write: (node: Statement) => void, node: ClassLikeDeclaration): void {
+        function emitPropertyDeclarationStatement(property: PropertyDeclaration, write: (node: Statement) => void, node: ClassExpression | ClassDeclaration): void {
             emitPropertyDeclarationWorker(node, property, /*receiver*/ undefined, /*isExpression*/ false, write);
         }
 
@@ -548,7 +567,7 @@ namespace ts {
          * @param write The callback to execute to write the result.
          * @param node The containing class for the property.
          */
-        function emitPropertyDeclarationExpression(property: PropertyDeclaration, write: (node: Expression) => void, node: ClassLikeDeclaration, receiver: Identifier): void {
+        function emitPropertyDeclarationExpression(property: PropertyDeclaration, write: (node: Expression) => void, node: ClassExpression | ClassDeclaration, receiver: Identifier): void {
             emitPropertyDeclarationWorker(node, property, receiver, /*isExpression*/ true, write);
         }
 
@@ -559,7 +578,7 @@ namespace ts {
          * @param writeExpression The callback to execute to write the result as an expression.
          * @param writeStatement The callback to execute to write the result as a statement.
          */
-        function emitPropertyDeclarationWorker(node: ClassLikeDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression, isExpression: boolean, write: (node: Expression | Statement) => void): void {
+        function emitPropertyDeclarationWorker(node: ClassExpression | ClassDeclaration, property: PropertyDeclaration, receiver: LeftHandSideExpression, isExpression: boolean, write: (node: Expression | Statement) => void): void {
             let initializer = visitNode(property.initializer, visitor, isExpressionNode);
 
             if (!receiver) {
@@ -581,7 +600,7 @@ namespace ts {
             }
         }
 
-        function getDecoratedClassElements(node: ClassLikeDeclaration, isStatic: boolean): ClassElement[] {
+        function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ClassElement[] {
             let members: ClassElement[];
             for (let member of node.members) {
                 if (nodeCanBeDecorated(member) && nodeOrChildIsDecorated(member) && isStatic === ((member.flags & NodeFlags.Static) !== 0)) {
@@ -601,7 +620,7 @@ namespace ts {
             return isPropertyDeclaration(member) && !(member.flags & NodeFlags.Static) && !!member.initializer;
         }
 
-        function getInitializedProperties(node: ClassLikeDeclaration, isStatic: boolean): PropertyDeclaration[] {
+        function getInitializedProperties(node: ClassExpression | ClassDeclaration, isStatic: boolean): PropertyDeclaration[] {
             let properties: PropertyDeclaration[];
             for (let member of node.members) {
                 if (isPropertyDeclaration(member) && isStatic === ((member.flags & NodeFlags.Static) !== 0) && member.initializer) {
@@ -720,7 +739,7 @@ namespace ts {
             write(createFunctionDeclaration3(node.asteriskToken, node.name, parameters, body, /*location*/ node, flags));
 
             if (thisNodeIsNamespaceExport) {
-                let name = getDeclarationName(node);
+                let name = makeSynthesized(node.name);
                 emitNamespaceExport(name, name, write);
             }
         }
@@ -1061,7 +1080,7 @@ namespace ts {
                 return;
             }
 
-            let name = getDeclarationName(node);
+            let name = node.name;
             let moduleReference = convertEntityNameToExpression(visitNode(<EntityName>node.moduleReference, visitor, isEntityName));
             if (isNamespaceLevelExport(node)) {
                 emitNamespaceExport(node.name, moduleReference, write);
@@ -1069,6 +1088,7 @@ namespace ts {
             else {
                 let exportFlags = isTopLevelExport(node) ? NodeFlags.Export : undefined;
                 write(createVariableStatement3(name, moduleReference));
+                Debug.fail("not implemented");
             }
         }
 
@@ -1078,6 +1098,53 @@ namespace ts {
             // - import declaration is top level and target is value imported by entity name
             return resolver.isReferencedAliasDeclaration(node)
                 || (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node));
+        }
+
+        function visitBinaryExpression(node: BinaryExpression, write: (node: Expression) => void): void {
+            let left = visitNode(node.left, visitor, isExpressionNode);
+            let right = visitNode(node.right, visitor, isExpressionNode);
+            if (node.operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                //  a **= b
+                // becomes:
+                //  a = Math.pow(a, b)
+
+                let target: Expression = left;
+                let value: Expression = left;
+                if (isElementAccessExpression(left)) {
+                    //  z["a"] **= b
+                    // becomes:
+                    //  (_a = z)[_b = "a"] = Math.pow(_a[_b], b);
+                    let expressionCache = createTempVariable();
+                    let expressionCacheAssignment = createAssignmentExpression(expressionCache, left.expression, left.expression);
+                    hoistVariableDeclaration(expressionCache);
+
+                    let argumentCache = createTempVariable();
+                    let argumentCacheAssignment = createAssignmentExpression(argumentCache, left.argumentExpression, left.argumentExpression);
+                    hoistVariableDeclaration(argumentCache);
+
+                    target = createElementAccessExpression2(expressionCacheAssignment, argumentCacheAssignment);
+                    value = createElementAccessExpression2(expressionCache, argumentCache);
+                }
+                else if (isPropertyAccessExpression(left)) {
+                    //  z.a **= b
+                    // becomes:
+                    //  (_a = z).a = Math.pow(_a.a, b)
+                    let expressionCache = createTempVariable();
+                    let expressionCacheAssignment = createAssignmentExpression(expressionCache, left.expression, left.expression);
+                    hoistVariableDeclaration(expressionCache);
+
+                    target = createPropertyAccessExpression2(expressionCacheAssignment, left.name, left);
+                    value = createPropertyAccessExpression2(expressionCache, makeSynthesized(left.name));
+                }
+
+                write(createAssignmentExpression(target, createMathPowCall(value, right)));
+            }
+            else {
+                //  a ** b
+                // becomes:
+                //  Math.pow(a, b)
+                write(createMathPowCall(left, right));
+            }
         }
 
         function getExpressionForPropertyName(container: Declaration): Expression {
@@ -1191,6 +1258,37 @@ namespace ts {
             }
         }
 
+        function visitParenthesizedExpression(node: ParenthesizedExpression, write: (node: Expression) => void) {
+            // Make sure we consider all nested cast expressions, e.g.:
+            // (<any><number><any>-A).x;
+            let expression = visitNode(node.expression, visitor, isExpressionNode);
+            let parentNode = getParentNode();
+            if (!isArrowFunction(parentNode)) {
+                // We have an expression of the form: (<Type>SubExpr)
+                // Emitting this as (SubExpr) is really not desirable. We would like to emit the subexpr as is.
+                // Omitting the parentheses, however, could cause change in the semantics of the generated
+                // code if the casted expression has a lower precedence than the rest of the expression, e.g.:
+                //      (<any>new A).foo should be emitted as (new A).foo and not new A.foo
+                //      (<any>typeof A).toString() should be emitted as (typeof A).toString() and not typeof A.toString()
+                //      new (<any>A()) should be emitted as new (A()) and not new A()
+                //      (<any>function foo() { })() should be emitted as an IIF (function foo(){})() and not declaration function foo(){} ()
+                if (expression.kind !== SyntaxKind.PrefixUnaryExpression &&
+                    expression.kind !== SyntaxKind.VoidExpression &&
+                    expression.kind !== SyntaxKind.TypeOfExpression &&
+                    expression.kind !== SyntaxKind.DeleteExpression &&
+                    expression.kind !== SyntaxKind.PostfixUnaryExpression &&
+                    expression.kind !== SyntaxKind.NewExpression &&
+                    !(expression.kind === SyntaxKind.CallExpression && parentNode.kind === SyntaxKind.NewExpression) &&
+                    !(expression.kind === SyntaxKind.FunctionExpression && parentNode.kind === SyntaxKind.CallExpression) &&
+                    !(expression.kind === SyntaxKind.NumericLiteral && parentNode.kind === SyntaxKind.PropertyAccessExpression)) {
+                    write(expression);
+                    return;
+                }
+            }
+
+            return updateParenthesizedExpression(node, expression);
+        }
+
         function needsParenthesisForAwaitExpressionAsYield(node: AwaitExpression) {
             let parentNode = getParentNode();
             if (isBinaryExpression(parentNode) && !isAssignmentOperator(parentNode.operatorToken.kind)) {
@@ -1213,7 +1311,7 @@ namespace ts {
             write(exportDefault);
         }
 
-        function emitDecoratorsOfConstructor(node: ClassLikeDeclaration, write: (node: Statement) => void) {
+        function emitDecoratorsOfConstructor(node: ClassExpression | ClassDeclaration, write: (node: Statement) => void) {
             let decorators = node.decorators;
             let constructor = getFirstConstructorWithBody(node);
             let hasDecoratedParameters = constructor && forEach(constructor.parameters, nodeIsDecorated);
@@ -1245,7 +1343,7 @@ namespace ts {
         }
 
         function emitDecoratorsOfMember(member: ClassElement, write: (node: Statement) => void) {
-            let container = <ClassLikeDeclaration>getParentNode();
+            let container = <ClassExpression | ClassDeclaration>getParentNode();
             let decorators: Decorator[];
             let method: FunctionLikeDeclaration;
 
@@ -1525,7 +1623,8 @@ namespace ts {
             let result = resolver.getTypeReferenceSerializationKind(typeName);
             switch (result) {
                 case TypeReferenceSerializationKind.Unknown:
-                    let tempVar = declareLocal();
+                    let tempVar = createTempVariable();
+                    hoistVariableDeclaration(tempVar);
                     let globalObjectName = createIdentifier("Object");
                     let typeExpr = serializeEntityNameAsExpression(typeName, /*useFallback*/ true);
                     let cacheExpr = createAssignmentExpression(tempVar, typeExpr);
@@ -1595,7 +1694,8 @@ namespace ts {
                 left = serializeEntityNameAsExpression(node.left, useFallback);
             }
             else if (useFallback) {
-                let tempVar = declareLocal();
+                let tempVar = createTempVariable();
+                hoistVariableDeclaration(tempVar);
                 let pathExpr = serializeEntityNameAsExpression(node.left, /*useFallback*/ true);
                 let cacheExpr = createAssignmentExpression(tempVar, pathExpr);
                 left = createLogicalAndExpression(cacheExpr, tempVar);
@@ -1662,6 +1762,15 @@ namespace ts {
         function createSynthesizedSuperCall() {
             let callExpr = createCallExpression2(createSuperKeyword(), [createSpreadElementExpression(createIdentifier("args"))]);
             return startOnNewLine(createExpressionStatement(callExpr, /*location*/ undefined, NodeFlags.Generated));
+        }
+
+        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
+            return node.name ? makeSynthesized(node.name) : getGeneratedNameForNode(node);
+        }
+
+        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
+            let expression = getDeclarationName(node);
+            return member.flags & NodeFlags.Static ? expression : createPropertyAccessExpression3(expression, "prototype");
         }
     }
 }

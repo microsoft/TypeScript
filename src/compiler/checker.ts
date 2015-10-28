@@ -14649,7 +14649,9 @@ namespace ts {
         // Return true if the given node is a declaration of a nested block scoped entity with a name that hides an
         // existing name.
         function isNestedRedeclaration(node: Declaration): boolean {
-            return isNestedRedeclarationSymbol(getSymbolOfNode(getOriginalNode(node)));
+            let original = getOriginalNode(node);
+            let symbol = !nodeIsSynthesized(original) && getSymbolOfNode(original);
+            return symbol && isNestedRedeclarationSymbol(getSymbolOfNode(original));
         }
 
         function isValueAliasDeclaration(node: Node): boolean {

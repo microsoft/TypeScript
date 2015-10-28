@@ -10,7 +10,6 @@ namespace ts {
         };
 
         let {
-            makeUniqueName,
             getGeneratedNameForNode,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,

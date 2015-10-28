@@ -255,7 +255,7 @@ namespace ts {
     export function getEnclosingBlockScopeContainer(navigable: ParentNavigable): Node {
         let nav = navigable.createParentNavigator();
         while (nav.moveToParent()) {
-            let current = nav.getNode();
+            let current = nav.getCurrentNode();
             if (isFunctionLike(current)) {
                 return current;
             }
@@ -271,7 +271,7 @@ namespace ts {
                 case SyntaxKind.Block:
                     // function block is not considered block-scope container
                     // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                    if (!isFunctionLike(nav.getParent())) {
+                    if (!isFunctionLike(nav.getParentNode())) {
                         return current;
                     }
             }
@@ -376,19 +376,19 @@ namespace ts {
     /** Returns the node flags for this node and all relevant parent nodes. */
     export function getCombinedNodeFlags(navigable: ParentNavigable): NodeFlags {
         let nav = navigable.createParentNavigator();
-        let node = nav.getNode();
+        let node = nav.getCurrentNode();
         while (node && (node.kind === SyntaxKind.BindingElement || isBindingPattern(node))) {
-            node = nav.moveToParent() ? nav.getNode() : undefined;
+            node = nav.moveToParent() ? nav.getCurrentNode() : undefined;
         }
 
         let flags = node.flags;
         if (node.kind === SyntaxKind.VariableDeclaration) {
-            node = nav.moveToParent() ? nav.getNode() : undefined;
+            node = nav.moveToParent() ? nav.getCurrentNode() : undefined;
         }
 
         if (node && node.kind === SyntaxKind.VariableDeclarationList) {
             flags |= node.flags;
-            node = nav.moveToParent() ? nav.getNode() : undefined;
+            node = nav.moveToParent() ? nav.getCurrentNode() : undefined;
         }
 
         if (node && node.kind === SyntaxKind.VariableStatement) {
@@ -685,7 +685,7 @@ namespace ts {
     export function getContainingFunction(navigable: ParentNavigable): FunctionLikeDeclaration {
         let nav = navigable.createParentNavigator();
         while (nav.moveToParent()) {
-            let node = nav.getNode();
+            let node = nav.getCurrentNode();
             if (isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
             }
@@ -697,7 +697,7 @@ namespace ts {
     export function getContainingClass(navigable: ParentNavigable): ClassLikeDeclaration {
         let nav = navigable.createParentNavigator();
         while (nav.moveToParent()) {
-            let node = nav.getNode();
+            let node = nav.getCurrentNode();
             if (isClassLike(node)) {
                 return <ClassLikeDeclaration>node;
             }
@@ -709,14 +709,14 @@ namespace ts {
     export function getThisContainer(navigable: ParentNavigable, includeArrowFunctions: boolean): Node {
         let nav = navigable.createParentNavigator();
         while (nav.moveToParent()) {
-            let node = nav.getNode();
+            let node = nav.getCurrentNode();
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
                     // If the grandparent node is an object literal (as opposed to a class),
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (isClassLike(nav.getGrandparent())) {
+                    if (isClassLike(nav.getGrandparentNode())) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -728,13 +728,13 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (isParameter(nav.getParent()) && isClassElement(nav.getGrandparent())) {
+                    if (isParameter(nav.getParentNode()) && isClassElement(nav.getGrandparentNode())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
                         nav.moveToParent();
                         nav.moveToParent();
                     }
-                    else if (isClassElement(nav.getParent())) {
+                    else if (isClassElement(nav.getParentNode())) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
                         nav.moveToParent();
@@ -768,14 +768,14 @@ namespace ts {
     export function getSuperContainer(navigable: ParentNavigable, includeFunctions: boolean): Node {
         let nav = navigable.createParentNavigator();
         while (nav.moveToParent()) {
-            let node = nav.getNode();
+            let node = nav.getCurrentNode();
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
                     // If the grandparent node is an object literal (as opposed to a class),
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (isClassLike(nav.getGrandparent())) {
+                    if (isClassLike(nav.getGrandparentNode())) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -787,14 +787,14 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (isParameter(nav.getParent())
-                        && isClassElement(nav.getGrandparent())) {
+                    if (isParameter(nav.getParentNode())
+                        && isClassElement(nav.getGrandparentNode())) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
                         nav.moveToParent();
                         nav.moveToParent();
                     }
-                    else if (isClassElement(nav.getParent())) {
+                    else if (isClassElement(nav.getParentNode())) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
                         nav.moveToParent();
@@ -854,7 +854,7 @@ namespace ts {
 
     export function nodeCanBeDecorated(navigable: ParentNavigable): boolean {
         let nav = navigable.createParentNavigator();
-        let node = nav.getNode();
+        let node = nav.getCurrentNode();
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
                 // classes are valid targets
@@ -862,17 +862,17 @@ namespace ts {
 
             case SyntaxKind.PropertyDeclaration:
                 // property declarations are valid if their parent is a class declaration.
-                return nav.getParent().kind === SyntaxKind.ClassDeclaration;
+                return nav.getParentNode().kind === SyntaxKind.ClassDeclaration;
 
             case SyntaxKind.Parameter:
                 // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
-                return (<FunctionLikeDeclaration>nav.getParent()).body && nav.getGrandparent().kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>nav.getParentNode()).body && nav.getGrandparentNode().kind === SyntaxKind.ClassDeclaration;
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 // if this method has a body and its parent is a class declaration, this is a valid target.
-                return (<FunctionLikeDeclaration>node).body && nav.getParent().kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>node).body && nav.getParentNode().kind === SyntaxKind.ClassDeclaration;
         }
 
         return false;
@@ -935,7 +935,7 @@ namespace ts {
     export function isExpression(navigable: ParentNavigable): boolean {
         let nav = navigable.createParentNavigator();
         while (true) {
-            let node = nav.getNode();
+            let node = nav.getCurrentNode();
             switch (node.kind) {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.NullKeyword:
@@ -981,7 +981,7 @@ namespace ts {
                     return nav.getKind() === SyntaxKind.TypeQuery;
 
                 case SyntaxKind.Identifier:
-                    if (nav.getParent().kind === SyntaxKind.TypeQuery) {
+                    if (nav.getParentNode().kind === SyntaxKind.TypeQuery) {
                         return true;
                     }
 
@@ -990,7 +990,7 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.ThisKeyword:
                     nav.moveToParent();
-                    let parent = nav.getNode();
+                    let parent = nav.getCurrentNode();
                     switch (parent.kind) {
                         case SyntaxKind.VariableDeclaration:
                         case SyntaxKind.Parameter:
@@ -2381,8 +2381,8 @@ namespace ts {
     export function isExpressionWithTypeArgumentsInClassExtendsClause(navigable: ParentNavigable): boolean {
         let nav = navigable.createParentNavigator();
         if (nav.getKind() === SyntaxKind.ExpressionWithTypeArguments) {
-            if ((<HeritageClause>nav.getParent()).token === SyntaxKind.ExtendsKeyword) {
-                return isClassLike(nav.getGrandparent());
+            if ((<HeritageClause>nav.getParentNode()).token === SyntaxKind.ExtendsKeyword) {
+                return isClassLike(nav.getGrandparentNode());
             }
         }
         return false;

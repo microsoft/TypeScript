@@ -9,12 +9,9 @@ namespace ts {
             endLexicalEnvironment,
             getParentNode,
             findAncestorNode,
-            declareLocal,
             getGeneratedNameForNode,
             createTempVariable,
             hoistVariableDeclaration,
-            getDeclarationName,
-            getClassMemberPrefix,
             pushNode,
             popNode,
             pipeNode,
@@ -36,6 +33,11 @@ namespace ts {
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let resolver = transformer.getEmitResolver();
         let currentSourceFile: SourceFile;
+        let noSubstitution: boolean[] = [];
+        let savedBindingIdentifierSubstitution = transformer.getBindingIdentifierSubstitution();
+        transformer.setBindingIdentifierSubstitution(substituteBindingIdentifierWithFallback);
+        let savedExpressionSubstitution = transformer.getExpressionSubstitution();
+        transformer.setExpressionSubstitution(substituteExpressionWithFallback);
 
         return transformES6;
 
@@ -76,7 +78,7 @@ namespace ts {
                 return;
             }
 
-            if (node.transformFlags & TransformFlags.ThisNodeIsES6) {
+            if (node.transformFlags & TransformFlags.ES6) {
                 visitorWorker(node, write);
             }
             else if (node.transformFlags & TransformFlags.ContainsES6) {
@@ -117,6 +119,10 @@ namespace ts {
 
                 case SyntaxKind.VariableStatement:
                     visitVariableStatement(<VariableStatement>node, write);
+                    break;
+
+                case SyntaxKind.VariableDeclaration:
+                    visitVariableDeclaration(<VariableDeclaration>node, write);
                     break;
 
                 case SyntaxKind.VariableDeclarationList:
@@ -174,15 +180,34 @@ namespace ts {
                     visitSuperKeyword(<PrimaryExpression>node, write);
                     break;
 
-                case SyntaxKind.ThisKeyword:
-                    visitThisKeyword(<PrimaryExpression>node, write);
+                case SyntaxKind.MethodDeclaration:
+                    visitMethodDeclaration(<MethodDeclaration>node, write);
+                    break;
+
+                case SyntaxKind.SourceFile:
+                    visitSourceFileNode(<SourceFile>node, write);
                     break;
 
                 default:
-                    Debug.fail("Encountered unhandled node kind when transforming ES6 syntax.");
+                    let original = getOriginalNode(node);
+                    let location = "";
+                    if (!nodeIsSynthesized(original)) {
+                        let lineCol = getLineAndCharacterOfPosition(currentSourceFile, node.pos);
+                        location = currentSourceFile.fileName + "(" + (lineCol.line + 1) + "," + lineCol.character + "): ";
+                    }
+                    Debug.fail(`${location}Encountered unhandled node kind ${formatSyntaxKind(node.kind)} when transforming ES6 syntax.`);
                     write(accept(node, visitor));
                     break;
             }
+        }
+
+        function formatSyntaxKind(kind: SyntaxKind) {
+            let text = String(kind);
+            if ((<any>ts).SyntaxKind) {
+                text += " (" + (<any>ts).SyntaxKind[kind] + ")";
+            }
+
+            return text;
         }
 
         function visitClassDeclaration(node: ClassDeclaration, write: (node: Statement) => void): void {
@@ -193,7 +218,7 @@ namespace ts {
             visitClassLikeDeclaration(node, write);
         }
 
-        function visitClassLikeDeclaration(node: ClassLikeDeclaration, write: (node: Expression | Statement) => void): void {
+        function visitClassLikeDeclaration(node: ClassExpression | ClassDeclaration, write: (node: Expression | Statement) => void): void {
             let name = getDeclarationName(node);
             let statements = flattenNode(node, emitClassBody);
             let baseTypeNode = getClassExtendsHeritageClauseElement(node);
@@ -217,16 +242,16 @@ namespace ts {
             }
         }
 
-        function emitClassBody(node: ClassLikeDeclaration, write: (node: Statement) => void): void {
+        function emitClassBody(node: ClassExpression | ClassDeclaration, write: (node: Statement) => void): void {
             startLexicalEnvironment();
             emitExtendsHelperIfNeeded(node, write);
             emitConstructor(node, write);
             emitMemberFunctions(node, write);
-            write(createReturnStatement(getDeclarationName(node)));
+            write(createReturnStatement(node.name ? makeSynthesized(node.name) : getGeneratedNameForNode(node)));
             endLexicalEnvironment(write);
         }
 
-        function emitExtendsHelperIfNeeded(node: ClassLikeDeclaration, write: (node: Statement) => void): void {
+        function emitExtendsHelperIfNeeded(node: ClassExpression | ClassDeclaration, write: (node: Statement) => void): void {
             if (getClassExtendsHeritageClauseElement(node)) {
                 let extendsExpr = createExtendsHelperCall(getDeclarationName(node));
                 let extendsStmt = createExpressionStatement(extendsExpr);
@@ -235,7 +260,7 @@ namespace ts {
             }
         }
 
-        function emitConstructor(node: ClassLikeDeclaration, write: (node: Statement) => void): void {
+        function emitConstructor(node: ClassExpression | ClassDeclaration, write: (node: Statement) => void): void {
             let ctor = getFirstConstructorWithBody(node);
             let parameters: ParameterDeclaration[];
             let statements: Statement[];
@@ -252,7 +277,7 @@ namespace ts {
             }
 
             let name = getDeclarationName(node);
-            let constructorFunction = createFunctionDeclaration2(name, parameters, createBlock(statements));
+            let constructorFunction = createFunctionDeclaration2(name, parameters, createBlock(statements, /*location*/ undefined, NodeFlags.MultiLine));
             startOnNewLine(constructorFunction);
             write(constructorFunction);
         }
@@ -339,24 +364,27 @@ namespace ts {
             let initExpr = visitNode(initializer, visitor, isExpressionNode);
             let assignExpr = createAssignmentExpression(name, initExpr);
             let assignStmt = createExpressionStatement(assignExpr);
-            let trueStmt = createBlock([assignStmt]);
+            let trueStmt = createBlock([assignStmt], /*location*/ undefined, NodeFlags.SingleLine);
             let ifStmt = createIfStatement(equalityExpr, trueStmt);
             startOnNewLine(ifStmt);
             write(ifStmt);
         }
 
         function shouldEmitRestParameter(node: ParameterDeclaration) {
-            return node.dotDotDotToken && !(node.flags & NodeFlags.Generated);
+            return node && node.dotDotDotToken && !(node.flags & NodeFlags.Generated);
         }
 
         function emitRestParameter(node: FunctionLikeDeclaration, write: (node: Statement) => void): void {
             let lastParam = lastOrUndefined(node.parameters);
             if (!shouldEmitRestParameter(lastParam)) {
+                if (node && node.name && (<any>node.name).text === "append") {
+                    console.log("no rest in append");
+                }
                 return;
             }
 
             // var param = [];
-            let name = <Identifier>getDeclarationName(lastParam);
+            let name = makeSynthesized(<Identifier>lastParam.name);
             let restIndex = node.parameters.length - 1;
             let paramVarStmt = createVariableStatement3(name, createArrayLiteralExpression([]));
             startOnNewLine(paramVarStmt);
@@ -392,13 +420,13 @@ namespace ts {
             }
         }
 
-        function emitMemberFunctions(node: ClassLikeDeclaration, write: (node: Statement) => void): void {
+        function emitMemberFunctions(node: ClassExpression | ClassDeclaration, write: (node: Statement) => void): void {
             for (let member of node.members) {
                 if (isSemicolonClassElement(member)) {
                     visitSemicolonClassElement(member, write);
                 }
                 else if (isMethodDeclaration(member)) {
-                    visitMethodDeclaration(node, member, write);
+                    visitClassMethodDeclaration(node, member, write);
                 }
                 else if (isGetAccessor(member) || isSetAccessor(member)) {
                     let accessors = getAllAccessorDeclarations(node.members, member);
@@ -416,7 +444,7 @@ namespace ts {
             write(stmt);
         }
 
-        function visitMethodDeclaration(node: ClassLikeDeclaration, member: MethodDeclaration, write: (node: Statement) => void): void {
+        function visitClassMethodDeclaration(node: ClassExpression | ClassDeclaration, member: MethodDeclaration, write: (node: Statement) => void): void {
             let prefix = getClassMemberPrefix(node, member);
             let propExpr = createMemberAccessForPropertyName(prefix, visitNode(member.name, visitor, isPropertyName));
             let funcExpr = transformFunctionLikeToExpression(member);
@@ -450,13 +478,17 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location?: TextRange, name?: Identifier): FunctionExpression {
             let parameters = visitNodes(node.parameters, visitor, isParameter);
             let statements = flattenNode(node, emitFunctionBody);
-            return createFunctionExpression2(name, parameters, createBlock(statements), location);
+            let expression = createFunctionExpression2(name, parameters, createBlock(statements), location);
+            expression.original = node;
+            return expression;
         }
 
         function visitFunctionDeclaration(node: FunctionDeclaration, write: (node: Statement) => void): void {
             let parameters = visitNodes(node.parameters, visitor, isParameter);
             let statements = flattenNode(node, emitFunctionBody);
-            write(createFunctionDeclaration2(node.name, parameters, createBlock(statements), /*location*/ node));
+            let declaration = createFunctionDeclaration2(node.name, parameters, createBlock(statements), /*location*/ node);
+            declaration.original = node;
+            write(declaration);
         }
 
         function emitFunctionBody(node: FunctionLikeDeclaration, write: (node: Statement) => void): void {
@@ -472,12 +504,7 @@ namespace ts {
             else {
                 let expr = visitNode(body, visitor, isExpressionNode);
                 if (expr) {
-                    let returnStmt = createReturnStatement(expr);
-                    if (!childNodeStartPositionIsOnSameLine(currentSourceFile, node, body)) {
-                        startOnNewLine(returnStmt);
-                    }
-
-                    write(returnStmt);
+                    write(createReturnStatement(expr));
                 }
             }
             endLexicalEnvironment(write);
@@ -496,17 +523,53 @@ namespace ts {
         function visitVariableDeclarationList(node: VariableDeclarationList, write: (node: VariableDeclarationList) => void): void {
             // TODO(rbuckton): let/const
             let declarations = visitNodes(node.declarations, visitVariableDeclaration, isVariableDeclaration);
-            write(updateVariableDeclarationList(node, declarations));
+            write(createVariableDeclarationList(declarations, node));
         }
 
         function visitVariableDeclaration(node: VariableDeclaration, write: (node: VariableDeclaration) => void): void {
-            if (isBindingPattern(node.name)) {
+            let name = node.name;
+            if (isBindingPattern(name)) {
                 flattenVariableDestructuring(transformer, node, write, visitor);
             }
             else {
-                // TODO(rbuckton): Is there any reason we should hit this branch?
-                write(accept(node, visitor));
+                let initializer = node.initializer;
+                if (!initializer) {
+                    // downlevel emit for non-initialized let bindings defined in loops
+                    // for (...) {  let x; }
+                    // should be
+                    // for (...) { var <some-uniqie-name> = void 0; }
+                    // this is necessary to preserve ES6 semantic in scenarios like
+                    // for (...) { let x; console.log(x); x = 1 } // assignment on one iteration should not affect other iterations
+                    let isUninitializedLet =
+                        (resolver.getNodeCheckFlags(node) & NodeCheckFlags.BlockScopedBindingInLoop) &&
+                        (getCombinedNodeFlags(transformer) & NodeFlags.Let);
+
+                    // NOTE: default initialization should not be added to let bindings in for-in\for-of statements
+                    if (isUninitializedLet &&
+                        !isForBinding(findAncestorNode(isIterationStatement), node)) {
+                        initializer = createVoidZeroExpression();
+                    }
+                }
+                else {
+                    initializer = visitNode(initializer, visitor, isExpressionNode);
+                }
+
+                write(updateVariableDeclaration(node, name, /*type*/ undefined, initializer));
             }
+        }
+
+        function isForBinding(container: IterationStatement, node: VariableDeclaration) {
+            if (isForInStatement(container) || isForOfStatement(container)) {
+                let initializer = container.initializer;
+                if (isVariableDeclarationList(initializer)) {
+                    return node === initializer.declarations[0];
+                }
+            }
+            return false;
+        }
+
+        function isIterationStatement(node: Node): node is IterationStatement {
+            return isForInStatement(node) || isForOfStatement(node) || isForStatement(node) || isDoStatement(node) || isWhileStatement(node);
         }
 
         function visitForOfStatement(node: ForOfStatement, write: (node: Statement) => void): void {
@@ -578,7 +641,7 @@ namespace ts {
                     else {
                         // The following call does not include the initializer, so we have
                         // to emit it separately.
-                        declarations.push(createVariableDeclaration2(declaration.name, rhsIterationValue));
+                        declarations.push(updateVariableDeclaration(declaration, declaration.name, /*type*/ undefined, rhsIterationValue));
                     }
                 }
                 else {
@@ -632,7 +695,8 @@ namespace ts {
 
             // For computed properties, we need to create a unique handle to the object
             // literal so we can modify it without risking internal assignments tainting the object.
-            let temp = declareLocal();
+            let temp = createTempVariable();
+            hoistVariableDeclaration(temp);
 
             // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
             let initialProperties = visitNodes(properties, visitor, isObjectLiteralElement, 0, numInitialNonComputedProperties);
@@ -640,9 +704,25 @@ namespace ts {
             let expressions: Expression[] = [];
             expressions.push(createAssignmentExpression(temp, createObjectLiteralExpression(initialProperties)))
             pipeNodes(properties, (property, write) => emitObjectLiteralElementAsExpression(property, write, node, temp), expressions, numInitialNonComputedProperties);
-            expressions.push(temp);
+
+            // We need to clone the temporary identifier so that we can write it on a
+            // new line
+            let clone = cloneNode(temp);
+            if (node.flags & NodeFlags.MultiLine) {
+                startOnNewLine(clone);
+            }
+
+            expressions.push(clone);
 
             write(createParenthesizedExpression(inlineExpressions(expressions)));
+        }
+
+        function visitMethodDeclaration(node: MethodDeclaration, write: (node: ObjectLiteralElement) => void): void {
+            let name = node.name;
+            if (isIdentifier(name)) {
+                let funcExpr = transformFunctionLikeToExpression(node, node);
+                write(createPropertyAssignment(node.name, funcExpr, node));
+            }
         }
 
         function emitObjectLiteralElementAsExpression(property: ObjectLiteralElement, write: (node: Expression) => void, node: ObjectLiteralExpression, receiver: Identifier): void {
@@ -672,7 +752,11 @@ namespace ts {
                     Debug.fail("ObjectLiteralElement type not accounted for: " + property.kind);
                 }
 
-                write(createAssignmentExpression(qualifiedName, initializer));
+                let assignment = createAssignmentExpression(qualifiedName, initializer);
+                if (node.flags & NodeFlags.MultiLine) {
+                    startOnNewLine(assignment);
+                }
+                write(assignment);
             }
         }
 
@@ -696,12 +780,18 @@ namespace ts {
         function visitCallExpression(node: CallExpression, write: (node: LeftHandSideExpression) => void): void {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
-            if (forEach(node.arguments, isSpreadElementExpression)) {
+            if (node.transformFlags & TransformFlags.ContainsSpreadElementExpression) {
                 emitCallWithSpread(node, write);
             }
             else {
+                Debug.assert(
+                    node.expression.kind === SyntaxKind.SuperKeyword ||
+                    node.expression.kind === SyntaxKind.PropertyAccessExpression &&
+                    (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword);
+
                 let expression = visitNode(node.expression, visitor, isExpressionNode);
-                let thisArg = mapNode(createThisKeyword(), visitThisKeyword);
+                let container = getThisContainer(transformer, /*includeArrowFunctions*/ true);
+                let thisArg = isArrowFunction(container) ? createIdentifier("_this") : createThisKeyword();
                 let args = visitNodes(node.arguments, visitor, isExpressionNode);
                 let callCall = createCallCall(expression, thisArg, args, /*location*/ node);
                 write(callCall);
@@ -714,16 +804,16 @@ namespace ts {
             let target: Expression;
             if (isPropertyAccessExpression(callee)) {
                 // Target will be emitted as "this" argument.
-                ({ target, expression } = getCallTarget(visitNode(callee.expression, visitor, isLeftHandSideExpression)));
+                ({ target, expression } = visitCallTarget(callee.expression));
                 expression = createPropertyAccessExpression2(expression, callee.name);
             }
             else if (isElementAccessExpression(callee)) {
                 // target will be emitted as "this" argument.
-                ({ target, expression } = getCallTarget(visitNode(callee.expression, visitor, isLeftHandSideExpression)));
+                ({ target, expression } = visitCallTarget(callee.expression));
                 expression = createElementAccessExpression2(expression, visitNode(callee.argumentExpression, visitor, isExpressionNode));
             }
             else if (isSuperKeyword(callee)) {
-                target = mapNode(createThisKeyword(/*location*/ callee), visitThisKeyword);
+                target = createThisKeyword(/*location*/ callee);
                 expression = createIdentifier("_super");
             }
             else {
@@ -740,7 +830,7 @@ namespace ts {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
             if (forEach(node.arguments, isSpreadElementExpression)) {
-                let { target, expression } = getCallTarget(visitNode(node.expression, visitor, isExpressionNode));
+                let { target, expression } = visitCallTarget(node.expression);
                 let argumentsArray = spreadElements(node.arguments, /*needsUniqueCopy*/ false, createVoidZeroExpression());
                 let bindApply = createApplyCall(createPropertyAccessExpression3(expression, "bind"), target, argumentsArray);
                 write(createNewExpression(createParenthesizedExpression(bindApply), /*typeArguments*/ undefined, []));
@@ -759,17 +849,24 @@ namespace ts {
             return node;
         }
 
-        function getCallTarget(expression: Expression) {
+        function visitCallTarget(node: LeftHandSideExpression) {
+            let expression = visitNode(node, visitor, isLeftHandSideExpression);
             let target: PrimaryExpression;
-            if (isIdentifier(expression) || isThisKeyword(expression) || isSuperKeyword(expression)) {
-                target = cloneNode(<PrimaryExpression>expression);
+            if (isIdentifier(expression)) {
+                target = makeSynthesized(<PrimaryExpression>expression);
+            }
+            else if (isThisKeyword(node) || isSuperKeyword(node)) {
+                target = createThisKeyword();
+                target.original = node;
             }
             else {
-                target = declareLocal();
+                let temp = createTempVariable();
+                hoistVariableDeclaration(temp);
+                target = temp;
                 expression = createParenthesizedExpression(createAssignmentExpression(target, expression));
             }
 
-            return { target, expression };
+            return { expression, target };
         }
 
         function spreadElements(elements: Expression[], needsUniqueCopy: boolean, leadingExpression?: Expression) {
@@ -787,7 +884,8 @@ namespace ts {
                         segments.push(createArrayLiteralExpression(visitNodes(elements.slice(start, i), visitor, isExpressionNode)));
                     }
 
-                    segments.push(needsUniqueCopy ? createSliceCall(element.expression) : element.expression);
+                    let expression = visitNode(element.expression, visitor, isExpressionNode);
+                    segments.push(expression);
                     start = i + 1;
                 }
             }
@@ -797,6 +895,10 @@ namespace ts {
             }
 
             if (segments.length === 1) {
+                if (!leadingExpression && needsUniqueCopy && isSpreadElementExpression(elements[0])) {
+                    return createSliceCall(segments[0]);
+                }
+
                 return parenthesizeForAccess(segments[0]);
             }
 
@@ -813,7 +915,9 @@ namespace ts {
             let tag = visitNode(node.tag, visitor, isExpressionNode);
 
             // Allocate storage for the template site object
-            let templateObj = declareLocal();
+            let templateObj = createTempVariable();
+            hoistVariableDeclaration(templateObj);
+
             let rawObj = createPropertyAccessExpression3(templateObj, "raw");
 
             // Build up the template arguments and the raw and cooked strings for the template.
@@ -969,17 +1073,6 @@ namespace ts {
             write(_super);
         }
 
-        function visitThisKeyword(node: PrimaryExpression, write: (node: LeftHandSideExpression) => void): void {
-            let container = getThisContainer(transformer, /*includeArrowFunctions*/ true);
-            if (isArrowFunction(container)) {
-                let thisName = createIdentifier("_this");
-                write(thisName);
-            }
-            else {
-                write(node);
-            }
-        }
-
         function visitExpressionStatement(node: ExpressionStatement, write: (node: Statement) => void): void {
             if (node.flags & NodeFlags.Generated) {
                 write(createDefaultSuperCall());
@@ -990,6 +1083,80 @@ namespace ts {
             }
         }
 
+        function visitSourceFileNode(node: SourceFile, write: (node: SourceFile) => void): void {
+            let statements = flattenNode(node, emitSourceFileBody);
+            write(updateSourceFileNode(node, statements, node.endOfFileToken));
+        }
+
+        function emitSourceFileBody(node: SourceFile, write: (node: Statement) => void): void {
+            let statementOffset = writePrologueDirectives(node.statements, write);
+            emitCaptureThisForNodeIfNeeded(node, write);
+            pipeNodes(node.statements, visitSourceElement, write, statementOffset);
+        }
+
+        function visitSourceElement(node: Statement, write: (node: Statement) => void): void {
+            write(visitNode(node, visitor, isStatementNode));
+        }
+
+        function substituteBindingIdentifierWithFallback(node: Identifier): Identifier {
+            let substitute = noSubstitution[getNodeId(node)] ? node : substituteBindingIdentifier(node);
+            return savedBindingIdentifierSubstitution ? savedBindingIdentifierSubstitution(substitute) : substitute;
+        }
+
+        function substituteBindingIdentifier(node: Identifier): Identifier {
+            if (isNameOfNestedRedeclaration(node)) {
+                let name = getGeneratedNameForNode(node);
+                noSubstitution[getNodeId(name)] = true;
+                return name;
+            }
+            return node;
+        }
+
+        function substituteExpressionWithFallback(node: Expression): Expression {
+            let substitute = noSubstitution[getNodeId(node)] ? node : substituteExpression(node);
+            return savedExpressionSubstitution ? savedExpressionSubstitution(substitute) : substitute;
+        }
+
+        function substituteExpression(node: Expression): Expression {
+            if (isIdentifier(node)) {
+                return substituteExpressionIdentifier(node);
+            }
+            else if (isThisKeyword(node)) {
+                return substituteThisKeyword(node);
+            }
+            return node;
+        }
+
+        function substituteExpressionIdentifier(node: Identifier): Identifier {
+            let declaration = resolver.getReferencedNestedRedeclaration(node);
+            if (declaration) {
+                return getGeneratedNameForNode(declaration.name);
+            }
+            return node;
+        }
+
+        function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
+            let originalNode = getOriginalNode(node);
+            let container = getThisContainer(originalNode, /*includeArrowFunctions*/ true);
+            if (isArrowFunction(container)) {
+                return createIdentifier("_this");
+            }
+            return node;
+        }
+
+        function isNameOfNestedRedeclaration(node: Identifier) {
+            let parent = transformer.getParentNode();
+            switch (parent.kind) {
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.VariableDeclaration:
+                    return (<Declaration>parent).name === node
+                        && resolver.isNestedRedeclaration(<Declaration>parent);
+            }
+            return false;
+        }
+
         function createDefaultSuperCall() {
             let superName = createIdentifier("_super");
             let thisExpr = createThisKeyword();
@@ -998,6 +1165,15 @@ namespace ts {
             let statement = createExpressionStatement(applyExpr);
             startOnNewLine(statement);
             return statement;
+        }
+
+        function getDeclarationName(node: ClassExpression | ClassDeclaration | FunctionDeclaration) {
+            return node.name ? makeSynthesized(node.name) : getGeneratedNameForNode(node);
+        }
+
+        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
+            let expression = getDeclarationName(node);
+            return member.flags & NodeFlags.Static ? expression : createPropertyAccessExpression3(expression, "prototype");
         }
     }
 }

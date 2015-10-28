@@ -70,24 +70,6 @@ namespace ts {${each(discovery.createableNodes, syntaxNode => `
         }
         return false;
     }`)}
-    export function cloneNode<TNode extends Node>(node: TNode, location?: TextRange, flags?: NodeFlags): TNode;
-    export function cloneNode(node: Node, location?: TextRange, flags: NodeFlags = node.flags): Node {
-        if (node) {
-            let clone: Node;
-            switch (node.kind) {${each(discovery.createableNodes, syntaxNode => `
-                case SyntaxKind.${syntaxNode.kindName}:
-                    clone = ${syntaxNode.createFunctionName}(${each(syntaxNode.createParameters, member =>
-                        `(<${syntaxNode.typeName}>node).${member.propertyName}, `
-                    )}location, flags);
-                    break;`)}
-            }
-            if (clone) {
-                clone.original = node;
-                return clone;
-            }
-        }
-        return node;
-    }
     export function acceptTransformer(transformer: Transformer, node: Node, visitor: (node: Node, write: (node: Node) => void) => void): Node {
         if (node) {
             switch (node.kind) {${each(discovery.updateableNodes, syntaxNode => `

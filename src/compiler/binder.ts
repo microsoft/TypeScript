@@ -1130,6 +1130,10 @@ namespace ts {
     export function computeTransformFlagsForNode(node: Node, subtreeFlags: TransformFlags) {
         Debug.assert((subtreeFlags & TransformFlags.NodeExcludes) == 0, "Subtree includes a `ThisNode...` flag.");
 
+        if (node.flags & NodeFlags.Ambient) {
+            return node.transformFlags = TransformFlags.ThisNodeIsTypeScript;
+        }
+
         // Mark transformations needed for each node
         let transformFlags: TransformFlags;
         let excludeFlags: TransformFlags;
@@ -1145,8 +1149,10 @@ namespace ts {
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
                 // These nodes are TypeScript syntax.
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                transformFlags |= TransformFlags.TypeScript;
                 break;
 
             case SyntaxKind.JsxElement:
@@ -1169,34 +1175,63 @@ namespace ts {
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ForOfStatement:
-            case SyntaxKind.ComputedPropertyName:
             case SyntaxKind.YieldExpression:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.ThisNodeIsES6;
+                break;
+
+
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.VoidKeyword:
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.TypePredicate:
+            case SyntaxKind.TypeReference:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.ArrayType:
+            case SyntaxKind.TupleType:
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.ParenthesizedType:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                // Types and signatures are TypeScript syntax, and exclude all other facts.
+                excludeFlags = TransformFlags.TypeExcludes;
+                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 break;
 
             case SyntaxKind.ComputedPropertyName:
                 // Even though computed property names are ES6, we don't treat them as such.
                 // This is so that they can flow through PropertyName transforms unaffected.
                 // Instead, we mark the container as ES6, so that it can properly handle the transform.
-                transformFlags |= TransformFlags.ContainerIsES6;
+                transformFlags |= TransformFlags.ContainsComputedPropertyName;
                 break;
 
             case SyntaxKind.SpreadElementExpression:
+                // This node is ES6 syntax, but is handled by a containing node.
+                transformFlags |= TransformFlags.ContainsSpreadElementExpression;
+                break;
+
             case SyntaxKind.SuperKeyword:
-                // These nodes are ES6 syntax, and mark their immediate containers as ES6.
-                transformFlags |= TransformFlags.ThisNodeIsES6 | TransformFlags.ContainerIsES6;
+                // This node is ES6 syntax.
+                transformFlags |= TransformFlags.ThisNodeIsES6;
                 break;
 
             case SyntaxKind.ThisKeyword:
                 // Mark this node and its ancestors as containing a lexical `this` keyword.
                 transformFlags |= TransformFlags.ContainsLexicalThis;
                 break;
-
-            // case SyntaxKind.BreakStatement:
-            // case SyntaxKind.ContinueStatement:
-            // case SyntaxKind.ReturnStatement:
-            //     return node.transformFlags = subtreeFlags | TransformFlags.ThisNodeIsCompletionStatement;
 
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
@@ -1205,29 +1240,39 @@ namespace ts {
                 break;
 
             case SyntaxKind.ObjectLiteralExpression:
-            case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.CallExpression:
-            case SyntaxKind.NewExpression:
-                // If the subtree has marked the container as ES6, then these nodes are ES6.
-                if (subtreeFlags & TransformFlags.ContainerIsES6) {
-                    excludeFlags = TransformFlags.ContainerIsES6;
-                    transformFlags |= TransformFlags.ES6;
+                excludeFlags = TransformFlags.ObjectLiteralExpressionExcludes;
+                if (subtreeFlags & TransformFlags.ContainsComputedPropertyName) {
+                    // If an ObjectLiteralExpression contains a ComputedPropertyName, then it
+                    // is an ES6 node.
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
-
                 break;
 
-            case SyntaxKind.PropertyAssignment:
-                // If the name of the assignment is a ComputedPropertyName, we need to mark the container
-                // as ES6 so that it is picked up by the transformer.
-                if (isComputedPropertyName((<PropertyAssignment>node).name)) {
-                    transformFlags |= TransformFlags.ContainerIsES6;
+            case SyntaxKind.CallExpression:
+                excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExpressionExcludes;
+                if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression ||
+                    (<CallExpression>node).expression.kind === SyntaxKind.SuperKeyword ||
+                    (<CallExpression>node).expression.kind === SyntaxKind.PropertyAccessExpression &&
+                    (<PropertyAccessExpression>(<CallExpression>node).expression).expression.kind === SyntaxKind.SuperKeyword) {
+                    // If the this node contains a SpreadElementExpression, or is a super call, then it is an ES6
+                    // node.
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
+                }
+                break;
+
+            case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.NewExpression:
+                excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExpressionExcludes;
+                if (subtreeFlags & TransformFlags.ContainsSpreadElementExpression) {
+                    // If the this node contains a SpreadElementExpression, then it is an ES6
+                    // node.
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
                 break;
 
             case SyntaxKind.Decorator:
                 // This node is TypeScript syntax, and marks its container as also being TypeScript syntax.
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                transformFlags |= TransformFlags.ContainerIsTypeScript;
+                transformFlags |= TransformFlags.ThisNodeIsTypeScript | TransformFlags.ContainsDecorator;
                 break;
 
             case SyntaxKind.ModuleDeclaration:
@@ -1236,10 +1281,14 @@ namespace ts {
                 transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 break;
 
-            // case SyntaxKind.ArrayLiteralExpression:
-            // case SyntaxKind.CallExpression:
-            //     return (node.transformFlags = subtreeFlags)
-            //         & ~(node.excludeTransformFlags = TransformFlags.CallOrArrayLiteralExcludes);
+            case SyntaxKind.ParenthesizedExpression:
+                // If the node is synthesized, it means the emitter put the parentheses there,
+                // not the user. If we didn't want them, the emitter would not have put them
+                // there.
+                if (!nodeIsSynthesized(node) && (isTypeAssertionExpression((<ParenthesizedExpression>node).expression) || isAsExpression((<ParenthesizedExpression>node).expression))) {
+                    transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                }
+                break;
 
             case SyntaxKind.ExpressionStatement:
                 if (node.flags & NodeFlags.Generated) {
@@ -1252,37 +1301,14 @@ namespace ts {
                 break;
 
             case SyntaxKind.BinaryExpression:
-                // Destructuring assignments are ES6 syntax.
                 if (isDestructuringAssignment(node)) {
+                    // Destructuring assignments are ES6 syntax.
                     transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
-
-                break;
-
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.TypeParameter:
-            case SyntaxKind.TypeReference:
-            case SyntaxKind.CallSignature:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.IndexSignature:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.PropertySignature:
-                // Types and signatures are TypeScript syntax, and exclude all other facts.
-                excludeFlags = TransformFlags.TypeExcludes;
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                break;
-
-            case SyntaxKind.PropertyDeclaration:
-                // Property declarations are TypeScript syntax.
-                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-
-                // If the declration has an initializer, we must mark the container as being TypeScript syntax.
-                if ((<PropertyDeclaration>node).initializer) {
-                    transformFlags |= TransformFlags.ContainerIsTypeScript;
+                else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AsteriskAsteriskToken ||
+                    (<BinaryExpression>node).operatorToken.kind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                    // Exponentiation is ES7 syntax.
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
                 break;
@@ -1295,17 +1321,14 @@ namespace ts {
 
                 // If a parameter has an accessibility modifier, then it is TypeScript syntax.
                 if ((<ParameterDeclaration>node).flags & NodeFlags.AccessibilityModifier) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript | TransformFlags.ContainerIsTypeScript;
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript | TransformFlags.ContainsParameterPropertyAssignment;
                 }
 
-                // If a parameter has a dotDotDot token, then it is ES6 syntax.
-                if ((<ParameterDeclaration>node).dotDotDotToken) {
-                    transformFlags |= TransformFlags.ThisNodeIsES6;
-                }
-
-                // If a parameter has an initializer or a binding pattern, then it is ES6 syntax and its container
-                // must emit default value assignments or parameter destructuring downlevel.
-                if ((<ParameterDeclaration>node).initializer || isBindingPattern((<ParameterDeclaration>node).name)) {
+                // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
+                // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
+                if ((<ParameterDeclaration>node).initializer ||
+                    isBindingPattern((<ParameterDeclaration>node).name) ||
+                    (<ParameterDeclaration>node).dotDotDotToken) {
                     transformFlags |= TransformFlags.ThisNodeIsES6 | TransformFlags.ContainsDefaultValueAssignments;
                 }
 
@@ -1321,9 +1344,8 @@ namespace ts {
                     transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
                 }
 
-                // If an ArrowFunction is marked async, or its subtree has marked the container as being
-                // TypeScript syntax, then the node is TypeScript Syntax.
-                if (node.flags & NodeFlags.Async || subtreeFlags & TransformFlags.ContainerIsTypeScript) {
+                // An async arrow function is TypeScript syntax.
+                if (node.flags & NodeFlags.Async) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
@@ -1335,13 +1357,12 @@ namespace ts {
 
                 // If a FunctionExpression contains an asterisk token, or its subtree has marked the container
                 // as needing to capture the lexical this, then this node is ES6 syntax.
-                if ((<FunctionLikeDeclaration>node).asteriskToken || transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
+                if ((<FunctionLikeDeclaration>node).asteriskToken || transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsDefaultValueAssignments)) {
                     transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
 
-                // If a FunctionExpression is async, or its subtree has marked the container
-                // as TypeScript, then this node is TypeScript syntax.
-                if (node.flags & NodeFlags.Async || subtreeFlags & TransformFlags.ContainerIsTypeScript) {
+                // An async function expression is TypeScript syntax.
+                if (node.flags & NodeFlags.Async) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
@@ -1357,29 +1378,32 @@ namespace ts {
                     break;
                 }
 
-                // transformFlags = TransformFlags.ThisNodeIsHoistedDeclaration;
-
                 // If a FunctionDeclaration has an asterisk token, is exported, or its
                 // subtree has marked the container as needing to capture the lexical `this`,
                 // then this node is ES6 syntax.
                 if ((<FunctionLikeDeclaration>node).asteriskToken
                     || node.flags & NodeFlags.Export
-                    || subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
+                    || subtreeFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsDefaultValueAssignments)) {
                     transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
 
-                // If a FunctionDeclaration is async, or its subtree has marked the container
-                // as TypeScript, then this node is TypeScript syntax.
-                if (node.flags & NodeFlags.Async || subtreeFlags & TransformFlags.ContainerIsTypeScript) {
+                // An async function declaration is TypeScript syntax.
+                if (node.flags & NodeFlags.Async) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                break;
+
+            case SyntaxKind.VariableDeclaration:
+                // A VariableDeclaration with a binding pattern is ES6 syntax.
+                if (isBindingPattern((<VariableDeclaration>node).name)) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
 
                 break;
 
             case SyntaxKind.VariableDeclarationList:
                 // If a VariableDeclarationList is `let` or `const`, then it is ES6 syntax.
-
-                // transformFlags = TransformFlags.ThisNodeIsHoistedDeclaration;
                 if (node.flags & (NodeFlags.Let | NodeFlags.Const)) {
                     transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
@@ -1396,31 +1420,40 @@ namespace ts {
 
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                // Class declarations and expressions are ES6 syntax, and exclude markers that should
-                // not escape the scope of a class.
+                // A ClassDeclarations or ClassExpression is ES6 syntax.
                 excludeFlags = TransformFlags.ClassDeclarationOrExpressionExcludes;
                 transformFlags = TransformFlags.ThisNodeIsES6;
 
-                // If the subtree has marked that the container is TypeScript, then this
-                // node is TypeScript syntax.
-                if (subtreeFlags & TransformFlags.ContainerIsTypeScript) {
+                // A class with a parameter property assignment, property initializer, or decorator is
+                // TypeScript syntax.
+                if (subtreeFlags & TransformFlags.TypeScriptClassSyntaxExtensionsMask) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
                 break;
 
             case SyntaxKind.HeritageClause:
-                transformFlags |= TransformFlags.ThisNodeIsES6;
+                // An `extends` HertiageClause is ES6 syntax.
+                if ((<HeritageClause>node).token === SyntaxKind.ExtendsKeyword) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
+                }
 
-                if ((<HeritageClause>node).token !== SyntaxKind.ExtendsKeyword || (<HeritageClause>node).types.length > 1) {
+                // An `implements` HeritageClause, or an `extends` HeritageClause with more than
+                // one type must be TypeScript syntax.
+                if ((<HeritageClause>node).token !== SyntaxKind.ExtendsKeyword ||
+                    (<HeritageClause>node).types.length > 1) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
                 break;
 
             case SyntaxKind.ExpressionWithTypeArguments:
+                // An ExpressionWithTypeArguments is ES6 syntax, as it is used in the
+                // extends clause of a class.
                 transformFlags |= TransformFlags.ThisNodeIsES6;
 
+                // If an ExpressionWithTypeArguments contains type arguments, then it
+                // is TypeScript syntax.
                 if ((<ExpressionWithTypeArguments>node).typeArguments) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
@@ -1428,24 +1461,41 @@ namespace ts {
                 break;
 
             case SyntaxKind.Constructor:
+                // A Constructor is ES6 syntax.
                 excludeFlags = TransformFlags.ConstructorExcludes;
                 transformFlags |= TransformFlags.ThisNodeIsES6;
 
+                // An overload constructor is TypeScript syntax.
                 if (!(<ConstructorDeclaration>node).body) {
-                    transformFlags = TransformFlags.ThisNodeIsTypeScript;
+                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+                }
+
+                break;
+
+            case SyntaxKind.PropertyDeclaration:
+                // A PropertyDeclaration is TypeScript syntax.
+                transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+
+                // If the PropertyDeclaration has an initializer, we need to inform its ancestor
+                // so that it handle the transformation.
+                if ((<PropertyDeclaration>node).initializer) {
+                    transformFlags |= TransformFlags.ContainsPropertyInitializer;
                 }
 
                 break;
 
             case SyntaxKind.MethodDeclaration:
+                // A MethodDeclaration is ES6 syntax.
                 excludeFlags = TransformFlags.MethodDeclarationExcludes;
                 transformFlags |= TransformFlags.ThisNodeIsES6;
 
-                if (!(<MethodDeclaration>node).body) {
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-                }
-
-                if (node.flags & (NodeFlags.Async | NodeFlags.Abstract) || subtreeFlags & TransformFlags.ContainerIsTypeScript) {
+                // A MethodDeclaration is TypeScript syntax if it is either async, abstract, overloaded,
+                // generic, or has both a computed property name and a decorator.
+                if ((<MethodDeclaration>node).body === undefined ||
+                    (<MethodDeclaration>node).typeParameters !== undefined ||
+                    node.flags & (NodeFlags.Async | NodeFlags.Abstract) ||
+                    subtreeFlags & TransformFlags.ContainsDecorator &&
+                    subtreeFlags & TransformFlags.ContainsComputedPropertyName) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
@@ -1453,41 +1503,39 @@ namespace ts {
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+                // A GetAccessor or SetAccessor is ES5 syntax.
                 excludeFlags = TransformFlags.GetOrSetAccessorExcludes;
-                if (subtreeFlags & TransformFlags.ContainerIsTypeScript) {
+
+                // A GetAccessor or SetAccessor is TypeScript syntax if it is either abstract,
+                // or has both a computed property name and a decorator.
+                if (node.flags & NodeFlags.Abstract ||
+                    subtreeFlags & TransformFlags.ContainsDecorator &&
+                    subtreeFlags & TransformFlags.ContainsComputedPropertyName) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
                 break;
 
-            // case SyntaxKind.ImportDeclaration:
-            // case SyntaxKind.ExportDeclaration:
-            //     // Even though these are ES Syntax, we treat them as TypeScript Syntax to support
-            //     // AMD/SystemJS/etc.
-            //     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
-            //     break;
-
             case SyntaxKind.ImportEqualsDeclaration:
-                // An ImportEqualsDeclaration is TypeScriptwith a namespace reference is TypeScript.
+                // An ImportEqualsDeclaration with a namespace reference is TypeScript.
                 if (!isExternalModuleImportEqualsDeclaration(node)) {
                     transformFlags |= TransformFlags.ThisNodeIsTypeScript;
                 }
 
                 break;
 
-            // case SyntaxKind.ExportAssignment:
-            //     // An ExportAssignment that is an `export =` will be
-            //     // handled by the emitter and not the transformer.
-            //     if (!(<ExportAssignment>node).isExportEquals) {
-            //         transformFlags |= TransformFlags.ThisNodeIsES6;
-            //     }
+            case SyntaxKind.PropertyAccessExpression:
+                // If a PropertyAccessExpression starts with a super keyword, then it is
+                // ES6 syntax, and requires a lexical `this` binding.
+                if ((<PropertyAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                    transformFlags |= TransformFlags.ContainsLexicalThis;
+                }
 
-            //     break;
+                break;
 
-            default:
-                if (SyntaxKind.FirstTypeNode <= kind && kind <= SyntaxKind.LastTypeNode) {
-                    excludeFlags = TransformFlags.TypeExcludes;
-                    transformFlags |= TransformFlags.ThisNodeIsTypeScript;
+            case SyntaxKind.SourceFile:
+                if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
+                    transformFlags |= TransformFlags.ThisNodeIsES6;
                 }
 
                 break;
