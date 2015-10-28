@@ -1063,7 +1063,7 @@ namespace ts {
             // Get 'y', the property name, and add it to the type of the class
             let propertyName = (<PropertyAccessExpression>node.left).name;
             let prototypeSymbol = declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.HasMembers, SymbolFlags.None);
-            declareSymbol(prototypeSymbol.members, prototypeSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Method | SymbolFlags.Property, SymbolFlags.None);
+            declareSymbol(prototypeSymbol.members, prototypeSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.None);
         }
 
         function bindCallExpression(node: CallExpression) {

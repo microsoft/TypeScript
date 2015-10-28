@@ -3843,6 +3843,11 @@ namespace ts {
                             }
                         }
                         result.push(getSignatureFromDeclaration(<SignatureDeclaration>node));
+                        break;
+
+                    case SyntaxKind.PropertyAccessExpression:
+                        // Class inference from ClassName.prototype.methodName = expr
+                        return getSignaturesOfType(checkExpressionCached((<BinaryExpression>node.parent).right), SignatureKind.Call);
                 }
             }
             return result;
