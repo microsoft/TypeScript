@@ -1280,6 +1280,7 @@ declare namespace ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        message: string;
     }
     /**
      * A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -1351,6 +1352,7 @@ declare namespace ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
+        forceConsistentCasingInFileNames?: boolean;
         [option: string]: string | number | boolean;
     }
     const enum ModuleKind {
