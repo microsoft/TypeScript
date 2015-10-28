@@ -5479,7 +5479,7 @@ namespace ts {
                 let targetType = getIndexTypeOfType(target, IndexKind.String);
                 if (targetType) {
                     if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
-                        // non-primitive assignment to any is always allowed, eg 
+                        // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: string]: any } = { property: 12 };`
                         return Ternary.True;
                     }
@@ -5509,7 +5509,7 @@ namespace ts {
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
                 if (targetType) {
                     if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
-                        // non-primitive assignment to any is always allowed, eg 
+                        // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: number]: any } = { property: 12 };`
                         return Ternary.True;
                     }
@@ -6586,9 +6586,9 @@ namespace ts {
                 return;
             }
 
-            // 1. walk from the use site up to the declaration and check 
+            // 1. walk from the use site up to the declaration and check
             // if there is anything function like between declaration and use-site (is binding/class is captured in function).
-            // 2. walk from the declaration up to the boundary of lexical environment and check 
+            // 2. walk from the declaration up to the boundary of lexical environment and check
             // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
             let container: Node;
@@ -11631,14 +11631,14 @@ namespace ts {
             //
             // When we get the type of the `Promise` symbol here, we get the type of the static
             // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
-            
+
             let promiseType = getTypeFromTypeNode(node.type);
             if (promiseType === unknownType && compilerOptions.isolatedModules) {
                 // If we are compiling with isolatedModules, we may not be able to resolve the
                 // type as a value. As such, we will just return unknownType;
                 return unknownType;
             }
-            
+
             let promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
                 let typeName = promiseConstructor
