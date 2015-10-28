@@ -55,30 +55,4 @@ sourceFile:a.ts
 3 >Emitted(5, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(5, 6) Source(3, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOlsiYyIsImMuY29uc3RydWN0b3IiXSwibWFwcGluZ3MiOiJBQUNBO0lBQUFBO0lBQ0FDLENBQUNBO0lBQURELFFBQUNBO0FBQURBLENBQUNBLEFBREQsSUFDQyJ9===================================================================
-JsFile: b.js.js
-mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIuanMubWFwIl0sIm5hbWVzIjpbImZvbyJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQUEsQ0FBQ0EifQ==
-sourceRoot: 
-sources: b.js.map
-===================================================================
--------------------------------------------------------------------
-emittedFile:tests/cases/compiler/b.js.js
-sourceFile:b.js.map
--------------------------------------------------------------------
->>>function foo() {
-1 >
-2 >^^->
-1 >
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
----
->>>}
-1->
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->function foo() {
-  >
-2 >}
-1->Emitted(2, 1) Source(2, 1) + SourceIndex(0) name (foo)
-2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0) name (foo)
----
->>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIuanMubWFwIl0sIm5hbWVzIjpbImZvbyJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQUEsQ0FBQ0EifQ==
+>>>//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOlsiYyIsImMuY29uc3RydWN0b3IiXSwibWFwcGluZ3MiOiJBQUNBO0lBQUFBO0lBQ0FDLENBQUNBO0lBQURELFFBQUNBO0FBQURBLENBQUNBLEFBREQsSUFDQyJ9

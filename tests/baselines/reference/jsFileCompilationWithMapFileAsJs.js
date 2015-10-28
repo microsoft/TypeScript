@@ -19,7 +19,4 @@ var c = (function () {
     }
     return c;
 })();
-//# sourceMappingURL=a.js.map//// [b.js.js]
-function foo() {
-}
-//# sourceMappingURL=b.js.js.map
+//# sourceMappingURL=a.js.map

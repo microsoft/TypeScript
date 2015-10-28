@@ -55,30 +55,4 @@ sourceFile:a.ts
 3 >Emitted(5, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(5, 6) Source(3, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=a.js.map===================================================================
-JsFile: b.js.js
-mapUrl: b.js.js.map
-sourceRoot: 
-sources: b.js.map
-===================================================================
--------------------------------------------------------------------
-emittedFile:tests/cases/compiler/b.js.js
-sourceFile:b.js.map
--------------------------------------------------------------------
->>>function foo() {
-1 >
-2 >^^->
-1 >
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
----
->>>}
-1->
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->function foo() {
-  >
-2 >}
-1->Emitted(2, 1) Source(2, 1) + SourceIndex(0) name (foo)
-2 >Emitted(2, 2) Source(2, 2) + SourceIndex(0) name (foo)
----
->>>//# sourceMappingURL=b.js.js.map
+>>>//# sourceMappingURL=a.js.map
