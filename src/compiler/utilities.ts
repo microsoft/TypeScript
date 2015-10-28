@@ -1759,19 +1759,14 @@ namespace ts {
         };
     }
 
-    export function getExtensionsToRemoveForEmitPath(compilerOptons: CompilerOptions) {
-        return getSupportedExtensions(compilerOptons).concat("jsx", "js");
-    }
-
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
         let compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
-            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir),
-                getExtensionsToRemoveForEmitPath(compilerOptions));
+            emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
         }
         else {
-            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName, getExtensionsToRemoveForEmitPath(compilerOptions));
+            emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
         }
 
         return emitOutputFilePathWithoutExtension + extension;
@@ -1816,7 +1811,7 @@ namespace ts {
     }
 
     function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.declaration ? removeFileExtension(jsFilePath, getExtensionsToRemoveForEmitPath(options)) + ".d.ts" : undefined;
+        return options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
     }
 
     export function hasFile(sourceFiles: SourceFile[], fileName: string) {
@@ -2144,7 +2139,7 @@ namespace ts {
 
     export function isJavaScript(fileName: string) {
         // Treat file as typescript if the extension is not supportedTypeScript
-        return hasExtension(fileName) && !forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
+        return hasExtension(fileName) && forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     export function isTsx(fileName: string) {

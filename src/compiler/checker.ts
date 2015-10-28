@@ -14871,7 +14871,7 @@ namespace ts {
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file, compilerOptions);
+                bindSourceFile(file);
             });
 
             // Initialize global symbol table

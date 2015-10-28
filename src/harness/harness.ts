@@ -1193,7 +1193,7 @@ namespace Harness {
                             sourceFileName = outFile;
                         }
 
-                        let dTsFileName = ts.removeFileExtension(sourceFileName, ts.getExtensionsToRemoveForEmitPath(options)) + ".d.ts";
+                        let dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
 
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }

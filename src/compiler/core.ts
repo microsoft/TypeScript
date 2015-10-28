@@ -747,10 +747,8 @@ namespace ts {
         return false;
     }
 
-    export function removeFileExtension(path: string, supportedExtensions: string[]): string {
-        // Sort the extensions in descending order of their length
-        let extensionsToRemove = supportedExtensions.slice(0, supportedExtensions.length) // Get duplicate array
-            .sort((ext1, ext2) => compareValues(ext2.length, ext1.length)); // Sort in descending order of extension length
+    export const extensionsToRemove = ["d.ts", "ts", "js", "tsx", "jsx"]; 
+    export function removeFileExtension(path: string): string {
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length - 1);

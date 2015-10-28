@@ -442,7 +442,7 @@ namespace ts.NavigationBar {
 
                 hasGlobalNode = true;
                 let rootName = isExternalModule(node)
-                    ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName), getSupportedExtensions(compilerOptions)))) + "\""
+                    ? "\"" + escapeString(getBaseFileName(removeFileExtension(normalizePath(node.fileName)))) + "\""
                     : "<global>"
 
                 return getNavigationBarItem(rootName,
