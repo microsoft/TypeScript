@@ -63,7 +63,7 @@ else {
     var r2: string | C = strOrC; // string | C
 >r2 : string | C
 >C : C
->strOrC : string | C
+>strOrC : string
 }
 if (typeof numOrC === "Object") {
 >typeof numOrC === "Object" : boolean
@@ -80,7 +80,7 @@ else {
     var r3: number | C = numOrC; // number | C
 >r3 : number | C
 >C : C
->numOrC : number | C
+>numOrC : number
 }
 if (typeof boolOrC === "Object") {
 >typeof boolOrC === "Object" : boolean
@@ -97,7 +97,7 @@ else {
     var r4: boolean | C = boolOrC; // boolean | C
 >r4 : boolean | C
 >C : C
->boolOrC : boolean | C
+>boolOrC : boolean
 }
 
 // Narrowing occurs only if target type is a subtype of variable type
@@ -129,7 +129,7 @@ if (typeof strOrC !== "Object") {
     var r2: string | C = strOrC; // string | C
 >r2 : string | C
 >C : C
->strOrC : string | C
+>strOrC : string
 }
 else {
     c = strOrC; // C
@@ -146,7 +146,7 @@ if (typeof numOrC !== "Object") {
     var r3: number | C = numOrC; // number | C
 >r3 : number | C
 >C : C
->numOrC : number | C
+>numOrC : number
 }
 else {
     c = numOrC; // C
@@ -163,7 +163,7 @@ if (typeof boolOrC !== "Object") {
     var r4: boolean | C = boolOrC; // boolean | C
 >r4 : boolean | C
 >C : C
->boolOrC : boolean | C
+>boolOrC : boolean
 }
 else {
     c = boolOrC; // C

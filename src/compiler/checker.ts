@@ -6338,6 +6338,10 @@ namespace ts {
                                 // Stop at the first containing function or module declaration
                                 break loop;
                         }
+                        // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
+                        if (narrowedType === getUnionType(emptyArray)) {
+                            narrowedType = type;
+                        }
                         // Use narrowed type if construct contains no assignments to variable
                         if (narrowedType !== type) {
                             if (isVariableAssignedWithin(symbol, node)) {
@@ -6352,6 +6356,9 @@ namespace ts {
             return type;
 
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                if (!(type.flags & TypeFlags.Union)) {
+                    return type;
+                }
                 // Check that we have 'typeof <symbol>' on the left and string literal on the right
                 if (expr.left.kind !== SyntaxKind.TypeOfExpression || expr.right.kind !== SyntaxKind.StringLiteral) {
                     return type;
@@ -6361,31 +6368,17 @@ namespace ts {
                 if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
-                let typeInfo = primitiveTypeInfo[right.text];
                 if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
+                let typeInfo = primitiveTypeInfo[right.text];
+                let flags = typeInfo ? typeInfo.flags : (assumeTrue = !assumeTrue, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol | TypeFlags.Boolean);
+                let union = type as UnionType;
                 if (assumeTrue) {
-                    // Assumed result is true. If check was not for a primitive type, remove all primitive types
-                    if (!typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol,
-                            /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ true);
-                    }
-                    // Check was for a primitive type, return that primitive type if it is a subtype
-                    if (isTypeSubtypeOf(typeInfo.type, type)) {
-                        return typeInfo.type;
-                    }
-                    // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
-                    // union of enum types and other types.
-                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false, /*allowEmptyUnionResult*/ true);
+                    return getUnionType(filter(union.types, t => !!(t.flags & flags)));
                 }
                 else {
-                    // Assumed result is false. If check was for a primitive type, remove that primitive type
-                    if (typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ true);
-                    }
-                    // Otherwise we don't have enough information to do anything.
-                    return type;
+                    return getUnionType(filter(union.types, t => !(t.flags & flags)));
                 }
             }
 
@@ -6399,7 +6392,7 @@ namespace ts {
                     // and the second operand was false. We narrow with those assumptions and union the two resulting types.
                     return getUnionType([
                         narrowType(type, expr.left, /*assumeTrue*/ false),
-                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ false)
+                        narrowType(type, expr.right, /*assumeTrue*/ false)
                     ]);
                 }
             }
@@ -6410,7 +6403,7 @@ namespace ts {
                     // and the second operand was true. We narrow with those assumptions and union the two resulting types.
                     return getUnionType([
                         narrowType(type, expr.left, /*assumeTrue*/ true),
-                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ true)
+                        narrowType(type, expr.right, /*assumeTrue*/ true)
                     ]);
                 }
                 else {

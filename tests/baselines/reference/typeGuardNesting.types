@@ -1,0 +1,30 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNesting.ts ===
+let strOrBool: string|boolean;
+>strOrBool : string | boolean
+
+if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string') {
+>(typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string' : boolean
+>(typeof strOrBool === 'boolean' && !strOrBool) : boolean
+>typeof strOrBool === 'boolean' && !strOrBool : boolean
+>typeof strOrBool === 'boolean' : boolean
+>typeof strOrBool : string
+>strOrBool : string | boolean
+>'boolean' : string
+>!strOrBool : boolean
+>strOrBool : boolean
+>typeof strOrBool === 'string' : boolean
+>typeof strOrBool : string
+>strOrBool : string | boolean
+>'string' : string
+
+	var label: string = (typeof strOrBool === 'string') ? strOrBool : "other string";
+>label : string
+>(typeof strOrBool === 'string') ? strOrBool : "other string" : string
+>(typeof strOrBool === 'string') : boolean
+>typeof strOrBool === 'string' : boolean
+>typeof strOrBool : string
+>strOrBool : boolean | string
+>'string' : string
+>strOrBool : string
+>"other string" : string
+}
