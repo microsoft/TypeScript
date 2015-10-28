@@ -249,11 +249,9 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
-            name: "jsExtensions",
-            type: "string[]",
-            description: Diagnostics.Specifies_extensions_to_treat_as_javascript_file_To_specify_multiple_extensions_either_use_this_option_multiple_times_or_provide_comma_separated_list,
-            paramType: Diagnostics.EXTENSION_S,
-            error: Diagnostics.Argument_for_jsExtensions_option_must_be_either_extension_or_comma_separated_list_of_extensions,
+            name: "allowJs",
+            type: "boolean",
+            description: Diagnostics.Allow_javascript_files_to_be_compiled,
         }
     ];
 

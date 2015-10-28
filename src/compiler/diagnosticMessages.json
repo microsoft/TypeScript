@@ -2181,10 +2181,6 @@
         "category": "Message",
         "code": 6038
     },
-    "EXTENSION[S]": {
-        "category": "Message",
-        "code": 6039
-    },
     "Compilation complete. Watching for file changes.": {
         "category": "Message",
         "code": 6042
@@ -2269,10 +2265,6 @@
         "category": "Error",
         "code": 6063
     },
-    "Argument for '--jsExtensions' option must be either extension or comma separated list of extensions.": {
-        "category": "Error",
-        "code": 6064
-    },
 
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
@@ -2310,7 +2302,7 @@
         "category": "Message",
         "code": 6072
     },
-    "Specifies extensions to treat as javascript file. To specify multiple extensions, either use this option multiple times or provide comma separated list.": {
+    "Allow javascript files to be compiled.": {
         "category": "Message",
         "code": 6073
     },
