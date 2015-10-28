@@ -6356,9 +6356,6 @@ namespace ts {
             return type;
 
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
-                if (!(type.flags & TypeFlags.Union)) {
-                    return type;
-                }
                 // Check that we have 'typeof <symbol>' on the left and string literal on the right
                 if (expr.left.kind !== SyntaxKind.TypeOfExpression || expr.right.kind !== SyntaxKind.StringLiteral) {
                     return type;
@@ -6372,6 +6369,14 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 let typeInfo = primitiveTypeInfo[right.text];
+                // If the type to be narrowed is any and we're affirmatively checking against a primitive, return the primitive
+                if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
+                    return typeInfo.type;
+                }
+                // At this point we can bail if it's not a union
+                if (!(type.flags & TypeFlags.Union)) {
+                    return type;
+                }
                 let flags = typeInfo ? typeInfo.flags : (assumeTrue = !assumeTrue, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol | TypeFlags.Boolean);
                 let union = type as UnionType;
                 if (assumeTrue) {
