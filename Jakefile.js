@@ -352,7 +352,7 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
 
 file(builtGeneratedDiagnosticMessagesJSON, [generatedDiagnosticMessagesJSON], function() {
     jake.mkdirP(builtLocalDirectory);
-    jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON):
+    jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
 });
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
