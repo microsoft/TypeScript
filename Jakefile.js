@@ -96,7 +96,7 @@ var servicesSources = [
     return path.join(servicesDirectory, f);
 }));
 
-var serverOnlySources = [
+var serverCoreSources = [
     "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
@@ -106,7 +106,7 @@ var serverOnlySources = [
     return path.join(serverDirectory, f);
 });
 
-var serverSources = serverOnlySources.concat(servicesSources);
+var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
     "editorServices.ts",
@@ -902,7 +902,7 @@ function lintFileAsync(options, path, cb) {
 
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
-    .concat(serverOnlySources.filter(function(p) { return path.basename(p) !== "node.d.ts"; }));
+    .concat(serverCoreSources);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
