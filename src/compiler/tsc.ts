@@ -224,7 +224,7 @@ namespace ts {
             if (sys.watchDirectory && configFileName) {
                 let directory = ts.getDirectoryPath(configFileName);
                 directoryWatcher = sys.watchDirectory(
-                    // When the configFileName is just "tsconfig.json", the watched directory should be 
+                    // When the configFileName is just "tsconfig.json", the watched directory should be
                     // the current direcotry; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
                     directory == "" ? "." : directory,
@@ -630,13 +630,13 @@ namespace ts {
         }
     }
 
-    // declare var global: any, require: any;
-    // if (typeof global !== "undefined" && Object.prototype.toString.call(global.process) === '[object process]') {
-    //     try {
-    //         require("source-map-support").install();
-    //     }
-    //     catch (e) { }
-    // }
+    declare var global: any, require: any;
+    if (typeof global !== "undefined" && Object.prototype.toString.call(global.process) === '[object process]') {
+        try {
+            require("source-map-support").install();
+        }
+        catch (e) { }
+    }
 }
 
 ts.executeCommandLine(ts.sys.args);
