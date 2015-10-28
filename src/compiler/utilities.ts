@@ -2142,10 +2142,6 @@ namespace ts {
         return hasExtension(fileName) && forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
-    }
-
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
      * representing the UTF-8 encoding of the character, and return the expanded char code list.

@@ -4,13 +4,13 @@
 // @Filename: a.js
 //// var v = <string>undefined;
 
-verify.getSyntacticDiagnostics(`[
+verify.getSyntacticDiagnostics(`[]`);
+verify.getSemanticDiagnostics(`[
   {
-    "message": "Expected corresponding JSX closing tag for 'string'.",
-    "start": 26,
-    "length": 0,
+    "message": "'type assertion expressions' can only be used in a .ts file.",
+    "start": 9,
+    "length": 6,
     "category": "error",
-    "code": 17002
+    "code": 8016
   }
 ]`);
-verify.getSemanticDiagnostics(`[]`);

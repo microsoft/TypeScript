@@ -537,7 +537,8 @@ namespace ts {
         }
 
         function getLanguageVariant(fileName: string) {
-            return isTsx(fileName) || isJavaScript(fileName) ?  LanguageVariant.JSX  : LanguageVariant.Standard;
+            // .tsx and .jsx files are treated as jsx language variant.
+            return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx") ?  LanguageVariant.JSX  : LanguageVariant.Standard;
         }
 
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor) {
