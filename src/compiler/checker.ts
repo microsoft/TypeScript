@@ -4889,12 +4889,7 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
-                    if (relation === matchableRelation) {
-                        result = typeRelatedToSomeType(source, target as IntersectionType, reportErrors);
-                    }
-                    else {
-                        result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors);
-                    }
+                    result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors);
 
                     if (result) {
                         return result;
