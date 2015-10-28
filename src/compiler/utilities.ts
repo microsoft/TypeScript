@@ -2143,7 +2143,7 @@ namespace ts {
     }
 
     export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, "tsx");
+        return fileExtensionIs(fileName, ".tsx");
     }
 
     /**

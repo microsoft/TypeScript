@@ -1875,7 +1875,7 @@ namespace ts {
         let compilerHost: CompilerHost = {
             getSourceFile: (fileName, target) => fileName === normalizeSlashes(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
-                if (fileExtensionIs(name, "map")) {
+                if (fileExtensionIs(name, ".map")) {
                     Debug.assert(sourceMapText === undefined, `Unexpected multiple source map outputs for the file '${name}'`);
                     sourceMapText = text;
                 }

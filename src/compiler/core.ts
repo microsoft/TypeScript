@@ -721,15 +721,15 @@ namespace ts {
 
     export function fileExtensionIs(path: string, extension: string): boolean {
         let pathLen = path.length;
-        let extLen = extension.length + 1;
-        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === "." + extension;
+        let extLen = extension.length;
+        return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions = ["ts", "tsx", "d.ts"];
-    export const supportedJavascriptExtensions = ["js", "jsx"];
+    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    export const supportedJavascriptExtensions = [".js", ".jsx"];
     export const supportedExtensionsWhenAllowedJs = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
@@ -747,11 +747,11 @@ namespace ts {
         return false;
     }
 
-    export const extensionsToRemove = ["d.ts", "ts", "js", "tsx", "jsx"]; 
+    export const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (let ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
-                return path.substr(0, path.length - ext.length - 1);
+                return path.substr(0, path.length - ext.length);
             }
         }
         return path;

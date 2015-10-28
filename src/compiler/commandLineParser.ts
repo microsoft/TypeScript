@@ -515,7 +515,7 @@ namespace ts {
                         if (!hasConflictingExtension) {
                             // Add the file only if there is no higher priority extension file already included
                             // eg. when a.d.ts and a.js are present in the folder, include only a.d.ts not a.js
-                            const baseName = fileName.substr(0, fileName.length - currentExtension.length - 1);
+                            const baseName = fileName.substr(0, fileName.length - currentExtension.length);
                             if (!hasProperty(filesSeen, baseName)) {
                                 filesSeen[baseName] = true;
                                 fileNames.push(fileName);

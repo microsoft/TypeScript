@@ -669,7 +669,7 @@ namespace ts {
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
-            sourceFile.flags = fileExtensionIs(sourceFile.fileName, "d.ts") ? NodeFlags.DeclarationFile : 0;
+            sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
             sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
 
             return sourceFile;

@@ -73,7 +73,7 @@ namespace ts {
         return forEach(supportedExtensions, tryLoad);
 
         function tryLoad(ext: string): string {
-            let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + "." + ext;
+            let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
             if (host.fileExists(fileName)) {
                 return fileName;
             }
@@ -165,13 +165,13 @@ namespace ts {
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
             referencedSourceFile = forEach(getSupportedExtensions(compilerOptions), extension => {
-                if (extension === "tsx" && !compilerOptions.jsx) {
+                if (extension === ".tsx" && !compilerOptions.jsx) {
                     // resolve .tsx files only if jsx support is enabled 
                     // 'logical not' handles both undefined and None cases
                     return undefined;
                 }
 
-                let candidate = searchName + "." + extension;
+                let candidate = searchName + extension;
                 if (host.fileExists(candidate)) {
                     return candidate;
                 }
@@ -964,7 +964,7 @@ namespace ts {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(getSupportedExtensions(options), extension => findSourceFile(fileName + "." + extension, isDefaultLib, supportedExtensions, refFile, refPos, refEnd))) {
+                    else if (!forEach(getSupportedExtensions(options), extension => findSourceFile(fileName + extension, isDefaultLib, supportedExtensions, refFile, refPos, refEnd))) {
                         // (TODO: shkamat) Should this message be different given we support multiple extensions
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
@@ -1077,7 +1077,7 @@ namespace ts {
                                 let start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
                             }
-                            else if (!fileExtensionIs(importedFile.fileName, "d.ts")) {
+                            else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
                                 let start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_can_only_be_in_d_ts_files_Please_contact_the_package_author_to_update_the_package_definition));
                             }

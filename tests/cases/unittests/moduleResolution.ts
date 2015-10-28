@@ -38,7 +38,7 @@ module ts {
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
             for (let ext of supportedTypeScriptExtensions) {
                 let containingFile = { name: containingFileName }
-                let moduleFile = { name: moduleFileNameNoExt + "." + ext }
+                let moduleFile = { name: moduleFileNameNoExt + ext }
                 let resolution = nodeModuleNameResolver(moduleName, containingFile.name, supportedTypeScriptExtensions, createModuleResolutionHost(containingFile, moduleFile));                
                 assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
                 assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
@@ -50,7 +50,7 @@ module ts {
                         break;
                     }
                     else {
-                        failedLookupLocations.push(normalizePath(getRootLength(moduleName) === 0 ? combinePaths(dir, moduleName) : moduleName) + "." + e);
+                        failedLookupLocations.push(normalizePath(getRootLength(moduleName) === 0 ? combinePaths(dir, moduleName) : moduleName) + e);
                     }
                 }
                 
