@@ -211,7 +211,7 @@ namespace ts {
 
         let subtypeRelation: Map<RelationComparisonResult> = {};
         let assignableRelation: Map<RelationComparisonResult> = {};
-        let comparableRelation: Map<RelationComparisonResult> = {};
+        let matchableRelation: Map<RelationComparisonResult> = {};
         let identityRelation: Map<RelationComparisonResult> = {};
 
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
@@ -4743,8 +4743,8 @@ namespace ts {
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
          */
-        function isTypeComparableTo(source: Type, target: Type): boolean {
-            return checkTypeComparableTo(source, target, /*errorNode*/ undefined);
+        function isTypeMatchableBy(source: Type, target: Type): boolean {
+            return checkTypeMatchableBy(source, target, /*errorNode*/ undefined);
         }
 
         function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
@@ -4757,10 +4757,10 @@ namespace ts {
 
         /**
          * This is *not* a bi-directional relationship.
-         * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
+         * If one needs to check both directions for comparability, use a second call to this function or 'isTypeMatchableBy'.
          */
-        function checkTypeComparableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
-            return checkTypeRelatedTo(source, target, comparableRelation, errorNode, headMessage, containingMessageChain);
+        function checkTypeMatchableBy(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
+            return checkTypeRelatedTo(source, target, matchableRelation, errorNode, headMessage, containingMessageChain);
         }
 
         function isSignatureAssignableTo(source: Signature, target: Signature): boolean {
@@ -4773,7 +4773,7 @@ namespace ts {
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
          * @param target The right-hand-side of the relation.
-         * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', 'subTypeRelation', or 'comparableRelation'.
+         * @param relation The relation considered. One of 'identityRelation', 'assignableRelation', 'subTypeRelation', or 'matchableRelation'.
          * Used as both to determine which checks are performed and as a cache of previously computed results.
          * @param errorNode The suggested node upon which all errors will be reported, if defined. This may or may not be the actual node used.
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
@@ -4798,7 +4798,7 @@ namespace ts {
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-            const isAssignableOrComparableRelation = relation === assignableRelation || relation === comparableRelation;
+            const isAssignableOrComparableRelation = relation === assignableRelation || relation === matchableRelation;
             let result = isRelatedTo(source, target, errorNode !== undefined, headMessage);
             if (overflow) {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
@@ -4877,7 +4877,7 @@ namespace ts {
 
                 // Note that the "each" checks must precede the "some" checks to produce the correct results
                 if (source.flags & TypeFlags.Union) {
-                    if (relation === comparableRelation) {
+                    if (relation === matchableRelation) {
                         result = someTypeRelatedToType(source as UnionType, target, reportErrors);
                     }
                     else {
@@ -4889,7 +4889,7 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
-                    if (relation === comparableRelation) {
+                    if (relation === matchableRelation) {
                         result = typeRelatedToSomeType(source, target as IntersectionType, reportErrors);
                     }
                     else {
@@ -9415,8 +9415,8 @@ namespace ts {
             if (produceDiagnostics && targetType !== unknownType) {
                 let widenedType = getWidenedType(exprType);
 
-                if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                if (!isTypeMatchableBy(targetType, widenedType)) {
+                    checkTypeMatchableBy(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
             return targetType;
@@ -10259,7 +10259,7 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if (!isTypeComparableTo(leftType, rightType) && !isTypeComparableTo(rightType, leftType)) {
+                    if (!isTypeMatchableBy(leftType, rightType) && !isTypeMatchableBy(rightType, leftType)) {
                         reportOperatorError();
                     }
                     return booleanType;
@@ -12727,8 +12727,8 @@ namespace ts {
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     let caseType = checkExpression(caseClause.expression);
 
-                    if (!isTypeComparableTo(expressionType, caseType)) {
-                        checkTypeComparableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
+                    if (!isTypeMatchableBy(expressionType, caseType)) {
+                        checkTypeMatchableBy(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
                 forEach(clause.statements, checkSourceElement);
