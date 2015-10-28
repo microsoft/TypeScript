@@ -12230,6 +12230,11 @@ namespace ts {
 
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
+
+            if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
+                error(node.thenStatement, Diagnostics.The_body_of_an_if_statement_cannot_be_the_empty_statement);
+            }
+
             checkSourceElement(node.elseStatement);
         }
 
