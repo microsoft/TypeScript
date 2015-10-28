@@ -17,3 +17,27 @@ function h(_a) {
 function h1(_a) {
     var a = _a[0], b = _a[1][0], c = _a[2][0][0], _b = _a[3], _c = _b.x, x = _c === void 0 ? 10 : _c, _d = _b.y, y = _d === void 0 ? [1, 2, 3] : _d, _e = _b.z, a1 = _e.a1, b1 = _e.b1;
 }
+
+
+//// [declarationEmitDestructuring2.d.ts]
+declare function f({x, y: [a, b, c, d]}?: {
+    x?: number;
+    y?: [number, number, number, number];
+}): void;
+declare function g([a, b, c, d]?: [number, number, number, number]): void;
+declare function h([a, [b], [[c]], {x, y: [a, b, c], z: {a1, b1}}]: [any, [any], [[any]], {
+    x?: number;
+    y: [any, any, any];
+    z: {
+        a1: any;
+        b1: any;
+    };
+}]): void;
+declare function h1([a, [b], [[c]], {x, y, z: {a1, b1}}]: [any, [any], [[any]], {
+    x?: number;
+    y?: number[];
+    z: {
+        a1: any;
+        b1: any;
+    };
+}]): void;

@@ -20,3 +20,13 @@ const enum D {
 // it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
 // Error : not a constant enum expression
 var CONST = 9000 % 2;
+
+
+//// [constEnum2.d.ts]
+declare const CONST: number;
+declare const enum D {
+    d = 10,
+    e,
+    f,
+    g,
+}

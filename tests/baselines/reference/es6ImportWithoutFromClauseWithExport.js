@@ -15,3 +15,5 @@ require("server");
 
 //// [server.d.ts]
 export declare var a: number;
+//// [client.d.ts]
+export import "server";

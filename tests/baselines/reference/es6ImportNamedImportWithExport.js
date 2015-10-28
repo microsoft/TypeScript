@@ -82,3 +82,16 @@ export declare var x1: number;
 export declare var z1: number;
 export declare var z2: number;
 export declare var aaaa: number;
+//// [client.d.ts]
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var z111: number;
+export declare var z2: number;

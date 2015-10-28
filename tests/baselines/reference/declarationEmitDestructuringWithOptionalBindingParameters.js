@@ -11,3 +11,12 @@ function foo(_a) {
 function foo1(_a) {
     var x = _a.x, y = _a.y, z = _a.z;
 }
+
+
+//// [declarationEmitDestructuringWithOptionalBindingParameters.d.ts]
+declare function foo([x, y, z]?: [string, number, boolean]): void;
+declare function foo1({x, y, z}?: {
+    x: string;
+    y: number;
+    z: boolean;
+}): void;

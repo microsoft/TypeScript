@@ -5,3 +5,7 @@ var x = 0;
 //// [declarationEmit_invalidReference2.js]
 /// <reference path="invalid.ts" />
 var x = 0;
+
+
+//// [declarationEmit_invalidReference2.d.ts]
+declare var x: number;

@@ -4,3 +4,8 @@ interface I {
 }
 
 //// [computedPropertyNamesDeclarationEmit3_ES6.js]
+
+
+//// [computedPropertyNamesDeclarationEmit3_ES6.d.ts]
+interface I {
+}

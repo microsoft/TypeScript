@@ -22,3 +22,9 @@ var B = (function () {
     return B;
 })();
 //# sourceMappingURL=c.js.map
+
+//// [c.d.ts]
+declare class A {
+}
+declare class B {
+}

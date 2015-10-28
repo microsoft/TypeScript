@@ -9,6 +9,7 @@
         "DifferentNamesSpecified/a.ts"
     ],
     "emittedFiles": [
-        "test.js"
+        "test.js",
+        "test.d.ts"
     ]
 }

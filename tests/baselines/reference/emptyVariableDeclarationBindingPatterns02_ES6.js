@@ -19,3 +19,6 @@
     let [];
     const [];
 })();
+
+
+//// [emptyVariableDeclarationBindingPatterns02_ES6.d.ts]

@@ -19,3 +19,6 @@
     var _e = void 0;
     var _f = void 0;
 })();
+
+
+//// [emptyVariableDeclarationBindingPatterns02_ES5.d.ts]

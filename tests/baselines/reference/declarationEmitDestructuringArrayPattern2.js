@@ -17,3 +17,15 @@ var _f = [], a11 = _f[0], b11 = _f[1], c11 = _f[2];
 var _g = [1, ["hello", { x12: 5, y12: true }]], a2 = _g[0], _h = _g[1], _j = _h === void 0 ? ["abc", { x12: 10, y12: false }] : _h, b2 = _j[0], _k = _j[1], x12 = _k.x12, c2 = _k.y12;
 var _l = [1, "hello"], x13 = _l[0], y13 = _l[1];
 var _m = [[x13, y13], { x: x13, y: y13 }], a3 = _m[0], b3 = _m[1];
+
+
+//// [declarationEmitDestructuringArrayPattern2.d.ts]
+declare var x10: number, y10: string, z10: boolean;
+declare var x11: number, y11: string;
+declare var a11: any, b11: any, c11: any;
+declare var a2: number, b2: string, x12: number, c2: boolean;
+declare var x13: number, y13: string;
+declare var a3: (number | string)[], b3: {
+    x: number;
+    y: string;
+};

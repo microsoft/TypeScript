@@ -19,3 +19,8 @@ var x = new M.C(); // Declaration file wont get emitted because there are errors
 //// [out.js]
 ///<reference path="declFile.d.ts"/>
 var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
+
+
+//// [out.d.ts]
+/// <reference path="tests/cases/compiler/declFile.d.ts" />
+declare var x: M.C;

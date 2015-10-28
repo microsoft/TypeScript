@@ -19,3 +19,6 @@ function foo() {
 function foo() {
     return 10;
 }
+
+
+//// [out.d.ts]
