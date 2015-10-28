@@ -1358,7 +1358,6 @@ namespace ts {
         getTypeChecker(): TypeChecker;
 
         /* @internal */ getCommonSourceDirectory(): string;
-        /* @internal */ isDeclarationEmitBlocked(emitFileName: string, sourceFile?: SourceFile, cancellationToken?: CancellationToken): boolean;
 
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).

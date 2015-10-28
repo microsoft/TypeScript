@@ -394,7 +394,6 @@ namespace ts {
             getDiagnosticsProducingTypeChecker,
             getCommonSourceDirectory: () => commonSourceDirectory,
             emit,
-            isDeclarationEmitBlocked,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
@@ -512,7 +511,7 @@ namespace ts {
             return true;
         }
 
-        function getEmitHost(writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitHost {
+        function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
                 getCanonicalFileName: fileName => host.getCanonicalFileName(fileName),
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
@@ -524,7 +523,6 @@ namespace ts {
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError) => host.writeFile(fileName, data, writeByteOrderMark, onError)),
                 isEmitBlocked,
-                isDeclarationEmitBlocked: (emitFileName, sourceFile) => program.isDeclarationEmitBlocked(emitFileName, sourceFile, cancellationToken),
             };
         }
 
@@ -538,38 +536,6 @@ namespace ts {
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
             return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
-        }
-
-        function isDeclarationEmitBlocked(emitFileName: string, sourceFile?: SourceFile, cancellationToken?: CancellationToken): boolean {
-            if (isEmitBlocked(emitFileName)) {
-                return true;
-            }
-
-            // Dont check for emit blocking options diagnostics because that check per emit file is already covered in isEmitBlocked
-            // We dont want to end up blocking declaration emit of one file because other file results in emit blocking error
-            if (getOptionsDiagnostics(cancellationToken, /*includeEmitBlockingDiagnostics*/false).length ||
-                getGlobalDiagnostics().length) {
-                return true;
-            }
-
-            if (sourceFile) {
-                // Do not generate declaration file for this if there are any errors in this file or any of the declaration files
-                return hasSyntaxOrSemanticDiagnostics(sourceFile) ||
-                    forEach(files, sourceFile => isDeclarationFile(sourceFile) && hasSyntaxOrSemanticDiagnostics(sourceFile));
-            }
-
-            // Check if the bundled emit source files have errors
-            return forEach(files, sourceFile => {
-                // Check all the files that will be bundled together as well as all the included declaration files are error free
-                if (!isExternalModule(sourceFile)) {
-                    return hasSyntaxOrSemanticDiagnostics(sourceFile);
-                }
-            });
-
-            function hasSyntaxOrSemanticDiagnostics(file: SourceFile) {
-                return !!getSyntacticDiagnostics(file, cancellationToken).length ||
-                    !!getSemanticDiagnostics(file, cancellationToken).length;
-            }
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
@@ -598,7 +564,7 @@ namespace ts {
 
             let emitResult = emitFiles(
                 emitResolver,
-                getEmitHost(writeFileCallback, cancellationToken),
+                getEmitHost(writeFileCallback),
                 sourceFile);
 
             emitTime += new Date().getTime() - start;
