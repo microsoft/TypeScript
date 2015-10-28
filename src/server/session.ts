@@ -219,7 +219,6 @@ module ts.server {
             }];
             var payload = JSON.stringify(data);
             
-            // TODO: stop logging this locally
             host.httpsPost('https://dc.services.visualstudio.com/v2/track', payload, 'application/json');
             
             eventCounts = {};
