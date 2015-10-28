@@ -11631,17 +11631,20 @@ namespace ts {
             //
             // When we get the type of the `Promise` symbol here, we get the type of the static
             // side of the `Promise` class, which would be `{ new <T>(...): Promise<T> }`.
-
+            
             let promiseType = getTypeFromTypeNode(node.type);
             if (promiseType === unknownType && compilerOptions.isolatedModules) {
                 // If we are compiling with isolatedModules, we may not be able to resolve the
                 // type as a value. As such, we will just return unknownType;
                 return unknownType;
             }
-
-            let promiseConstructor = getMergedSymbol(promiseType.symbol);
+            
+            let promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
-                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
+                let typeName = promiseConstructor
+                    ? symbolToString(promiseConstructor)
+                    : typeToString(promiseType);
+                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
                 return unknownType;
             }
 
