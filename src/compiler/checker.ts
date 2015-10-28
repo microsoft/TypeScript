@@ -4877,18 +4877,26 @@ namespace ts {
 
                 // Note that the "each" checks must precede the "some" checks to produce the correct results
                 if (source.flags & TypeFlags.Union) {
-                    if (relation === comparableRelation && (result = someTypeRelatedToType(source as UnionType, target, reportErrors))) {
-                        return result;
+                    if (relation === comparableRelation) {
+                        result = someTypeRelatedToType(source as UnionType, target, reportErrors);
                     }
-                    if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
+                    else {
+                        result = eachTypeRelatedToType(<UnionType>source, target, reportErrors);
+                    }
+
+                    if (result) {
                         return result;
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
-                    if (relation === comparableRelation && (result = typeRelatedToSomeType(source, target as IntersectionType, reportErrors))) {
-                        return result;
+                    if (relation === comparableRelation) {
+                        result = typeRelatedToSomeType(source, target as IntersectionType, reportErrors);
                     }
-                    if (result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors)) {
+                    else {
+                        result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors);
+                    }
+
+                    if (result) {
                         return result;
                     }
                 }
@@ -4897,7 +4905,8 @@ namespace ts {
                     // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
                     // A & B = (A & B) | (C & D).
                     if (source.flags & TypeFlags.Intersection) {
-                        // If target is a union type the following check will report errors so we suppress them here
+                        // If target is a union type then the check following this one will report errors,
+                        // so we'll suppress any errors we could run into here.
                         if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
                             return result;
                         }
