@@ -1,4 +1,4 @@
-// @jsExtensions: js,map
+// @allowJs: true
 // @sourcemap: true
 
 // @filename: a.ts

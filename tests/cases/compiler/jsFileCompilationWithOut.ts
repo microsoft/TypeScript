@@ -1,4 +1,4 @@
-// @jsExtensions: js
+// @allowJs: true
 // @out: out.js
 // @filename: a.ts
 class c {

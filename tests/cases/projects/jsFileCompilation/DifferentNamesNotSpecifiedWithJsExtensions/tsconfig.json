@@ -1,6 +1,0 @@
-{
-  "compilerOptions": {
-    "out": "test.js",
-    "jsExtensions": [ "js" ]
-  }
-}

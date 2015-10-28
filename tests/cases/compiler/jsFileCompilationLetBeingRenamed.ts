@@ -1,4 +1,4 @@
-// @jsExtensions: js
+// @allowJs: true
 // @out: out.js
 
 // @FileName: a.js

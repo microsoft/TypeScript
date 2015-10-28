@@ -1,4 +1,4 @@
-// @jsExtensions: js
+// @allowJs: true
 // @out: out.js
 // @declaration: true
 // @filename: a.ts

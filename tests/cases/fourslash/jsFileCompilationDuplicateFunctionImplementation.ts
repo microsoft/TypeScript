@@ -2,7 +2,7 @@
 
 // @declaration: true
 // @out: out.js
-// @jsExtensions: js
+// @allowJs: true
 // @Filename: b.js
 // @emitThisFile: true
 ////function foo() { return 10; }/*1*/

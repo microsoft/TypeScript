@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @BaselineFile: compileOnSaveWorksWhenEmitBlockingErrorOnOtherFile.baseline
-// @jsExtensions: js
+// @allowJs: true
 // @Filename: b.js
 // @emitThisFile: true
 ////function foo() { } // This has error because js file cannot be overwritten - emitSkipped should be true
