@@ -4877,11 +4877,17 @@ namespace ts {
 
                 // Note that the "each" checks must precede the "some" checks to produce the correct results
                 if (source.flags & TypeFlags.Union) {
+                    if (relation === comparableRelation && (result = someTypeRelatedToType(source as UnionType, target, reportErrors))) {
+                        return result;
+                    }
                     if (result = eachTypeRelatedToType(<UnionType>source, target, reportErrors)) {
                         return result;
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
+                    if (relation === comparableRelation && (result = typeRelatedToSomeType(source, target as IntersectionType, reportErrors))) {
+                        return result;
+                    }
                     if (result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors)) {
                         return result;
                     }
