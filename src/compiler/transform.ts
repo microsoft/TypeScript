@@ -5,7 +5,7 @@
 /// <reference path="transforms/module/es6.ts" />
 /// <reference path="transforms/jsx.ts" />
 /// <reference path="transforms/es6.ts" />
-const FORCE_TRANSFORMS = false;
+const FORCE_TRANSFORMS = true;
 
 /* @internal */
 namespace ts {
