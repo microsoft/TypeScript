@@ -588,8 +588,8 @@ namespace ts {
 
         return;
 
-        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValueType> {
-            let result: Map<CompilerOptionsValueType> = {};
+        function serializeCompilerOptions(options: CompilerOptions): Map<string | number | boolean> {
+            let result: Map<string | number | boolean> = {};
             let optionsNameMap = getOptionNameMap().optionNameMap;
 
             for (let name in options) {
@@ -606,8 +606,8 @@ namespace ts {
                             let optionDefinition = optionsNameMap[name.toLowerCase()];
                             if (optionDefinition) {
                                 if (typeof optionDefinition.type === "string") {
-                                    // string, number, boolean or string[]
-                                    result[name] = <string | number | boolean | string[]>value;
+                                    // string, number or boolean
+                                    result[name] = value;
                                 }
                                 else {
                                     // Enum

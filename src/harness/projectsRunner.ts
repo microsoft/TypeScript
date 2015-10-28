@@ -3,7 +3,7 @@
 /* tslint:disable:no-null */
 
 // Test case is json of below type in tests/cases/project/
-interface ProjectRunnerTestCase extends ts.CompilerOptions {
+interface ProjectRunnerTestCase {
     scenario: string;
     projectRoot: string; // project where it lives - this also is the current directory when compiling
     inputFiles: string[]; // list of input files to be given to program
@@ -51,7 +51,7 @@ class ProjectRunner extends RunnerBase {
     }
 
     private runProjectTestCase(testCaseFileName: string) {
-        let testCase: ProjectRunnerTestCase;
+        let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
 
         let testFileText: string = null;
         try {
@@ -62,7 +62,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         try {
-            testCase = <ProjectRunnerTestCase>JSON.parse(testFileText);
+            testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText);
         }
         catch (e) {
             assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
@@ -183,13 +183,7 @@ class ProjectRunner extends RunnerBase {
 
             let outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
             let inputFiles = testCase.inputFiles;
-            let { errors, compilerOptions } = createCompilerOptions();
-            if (errors.length) {
-                return {
-                    moduleKind,
-                    errors
-                };
-            }
+            let compilerOptions = createCompilerOptions();
 
             let configFileName: string;
             if (compilerOptions.project) {
@@ -240,7 +234,6 @@ class ProjectRunner extends RunnerBase {
                     module: moduleKind,
                     moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
                 };
-                let errors: ts.Diagnostic[] = [];
                 // Set the values specified using json
                 let optionNameMap: ts.Map<ts.CommandLineOption> = {};
                 ts.forEach(ts.optionDeclarations, option => {
@@ -249,14 +242,19 @@ class ProjectRunner extends RunnerBase {
                 for (let name in testCase) {
                     if (name !== "mapRoot" && name !== "sourceRoot" && ts.hasProperty(optionNameMap, name)) {
                         let option = optionNameMap[name];
-                        let { hasValidValue, value } = ts.parseJsonCompilerOption(option, testCase[name], errors);
-                        if (hasValidValue) {
-                            compilerOptions[option.name] = value;
+                        let optType = option.type;
+                        let value = <any>testCase[name];
+                        if (typeof optType !== "string") {
+                            let key = value.toLowerCase();
+                            if (ts.hasProperty(optType, key)) {
+                                value = optType[key];
+                            }
                         }
+                        compilerOptions[option.name] = value;
                     }
                 }
 
-                return { errors, compilerOptions };
+                return compilerOptions;
             }
 
             function getFileNameInTheProjectTest(fileName: string): string {

@@ -2095,10 +2095,8 @@ namespace ts {
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
 
-        [option: string]: CompilerOptionsValueType;
+        [option: string]: string | number | boolean;
     }
-
-    export type CompilerOptionsValueType = string | number | boolean | string[];
 
     export const enum ModuleKind {
         None = 0,
@@ -2166,7 +2164,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<number> | string;     // an object literal mapping named values to actual values | string if it is string[]
+        type: Map<number>;             // an object literal mapping named values to actual values
         error: DiagnosticMessage;      // The error given when the argument does not fit a customized 'type'
     }
 

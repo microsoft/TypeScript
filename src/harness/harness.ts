@@ -1006,17 +1006,23 @@ namespace Harness {
                     }
                     let option = getCommandLineOption(name);
                     if (option) {
-                        if (option.type === "boolean") {
-                            options[option.name] = value.toLowerCase() === "true";
-                        }
-                        else {
-                            let { hasError, value: parsedValue } = ts.parseOption(option, value, options[option.name]);
-                            if (hasError) {
-                                throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
-                            }
-                            else {
-                                options[option.name] = parsedValue;
-                            }
+                        switch (option.type) {
+                            case "boolean":
+                                options[option.name] = value.toLowerCase() === "true";
+                                break;
+                            case "string":
+                                options[option.name] = value;
+                                break;
+                            // If not a primitive, the possible types are specified in what is effectively a map of options.
+                            default:
+                                let map = <ts.Map<number>>option.type;
+                                let key = value.toLowerCase();
+                                if (ts.hasProperty(map, key)) {
+                                    options[option.name] = map[key];
+                                }
+                                else {
+                                    throw new Error(`Unknown value '${value}' for compiler option '${name}'.`);
+                                }
                         }
                     }
                     else {
