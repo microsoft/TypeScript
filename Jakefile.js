@@ -354,7 +354,7 @@ file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], fun
     if (fs.existsSync(builtLocalDirectory)) {
         jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
     }
-}, {async: true});
+});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
