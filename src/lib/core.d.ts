@@ -1032,6 +1032,12 @@ interface Array<T> {
       * Removes the first element from an array and returns it.
       */
     shift(): T;
+    
+    /** 
+      * Returns a shallow copy of an array.
+      */
+    slice(): this;
+
     /** 
       * Returns a section of an array.
       * @param start The beginning of the specified portion of the array.

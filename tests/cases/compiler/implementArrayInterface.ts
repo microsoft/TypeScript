@@ -8,6 +8,7 @@ declare class MyArray<T> implements Array<T> {
     push(...items: T[]): number;
     reverse(): T[];
     shift(): T;
+    slice(): this;
     slice(start?: number, end?: number): T[];
     sort(compareFn?: (a: T, b: T) => number): T[];
     splice(start: number): T[];

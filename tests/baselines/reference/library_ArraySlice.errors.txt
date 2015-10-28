@@ -1,0 +1,22 @@
+tests/cases/compiler/library_ArraySlice.ts(9,5): error TS2322: Type 'number[]' is not assignable to type '[number, number]'.
+  Property '0' is missing in type 'number[]'.
+tests/cases/compiler/library_ArraySlice.ts(10,5): error TS2322: Type 'number[]' is not assignable to type '[number, number]'.
+
+
+==== tests/cases/compiler/library_ArraySlice.ts (2 errors) ====
+    // Array.prototype.slice can have zero, one, or two arguments
+    Array.prototype.slice();
+    Array.prototype.slice(0);
+    Array.prototype.slice(0, 1);
+    
+    // Array.prototype.slice returns this with zero arguments, allowing tuple slicing
+    let t1: [number, number] = [1, 2];
+    let t2: [number, number] = t1.slice();
+    let t3: [number, number] = t1.slice(0);
+        ~~
+!!! error TS2322: Type 'number[]' is not assignable to type '[number, number]'.
+!!! error TS2322:   Property '0' is missing in type 'number[]'.
+    let t4: [number, number] = t1.slice(0,1);
+        ~~
+!!! error TS2322: Type 'number[]' is not assignable to type '[number, number]'.
+    
