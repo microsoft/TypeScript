@@ -20,10 +20,10 @@ namespace ts {
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
         let files: Map<T> = {};
         return {
-            getPath,
-            setPath,
-            containsPath,
-            removePath,
+            get,
+            set,
+            contains,
+            remove,
             forEachValue: forEachValueInMap,
             clear
         };
@@ -35,19 +35,19 @@ namespace ts {
         }
 
         // path should already be well-formed so it does not need to be normalized
-        function getPath(path: Path): T {
+        function get(path: Path): T {
             return files[toKey(path)];
         }
 
-        function setPath(path: Path, value: T) {
+        function set(path: Path, value: T) {
             files[toKey(path)] = value;
         }
 
-        function containsPath(path: Path) {
+        function contains(path: Path) {
             return hasProperty(files, toKey(path));
         }
 
-        function removePath(path: Path) {
+        function remove(path: Path) {
             const key = toKey(path);
             delete files[key];
         }

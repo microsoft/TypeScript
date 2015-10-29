@@ -106,7 +106,7 @@ namespace ts.server {
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
             let path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            let currentResolutionsInFile = this.resolvedModuleNames.getPath(path);
+            let currentResolutionsInFile = this.resolvedModuleNames.get(path);
 
             let newResolutions: Map<TimestampedResolvedModule> = {};
             let resolvedModules: ResolvedModule[] = [];
@@ -135,7 +135,7 @@ namespace ts.server {
             }
 
             // replace old results with a new one
-            this.resolvedModuleNames.setPath(path, newResolutions);
+            this.resolvedModuleNames.set(path, newResolutions);
             return resolvedModules;
 
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
@@ -205,35 +205,35 @@ namespace ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.filenameToScript.removePath(info.path);
-                this.resolvedModuleNames.removePath(info.path);
+                this.filenameToScript.remove(info.path);
+                this.resolvedModuleNames.remove(info.path);
             }
         }
 
         getScriptInfo(filename: string): ScriptInfo {
             let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            let scriptInfo = this.filenameToScript.getPath(path);
+            let scriptInfo = this.filenameToScript.get(path);
             if (!scriptInfo) {
                 scriptInfo = this.project.openReferencedFile(filename);
                 if (scriptInfo) {
-                    this.filenameToScript.setPath(path, scriptInfo);
+                    this.filenameToScript.set(path, scriptInfo);
                 }
             }
             return scriptInfo;
         }
 
         addRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.containsPath(info.path)) {
-                this.filenameToScript.setPath(info.path, info);
+            if (!this.filenameToScript.contains(info.path)) {
+                this.filenameToScript.set(info.path, info);
                 this.roots.push(info);
             }
         }
 
         removeRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.containsPath(info.path)) {
-                this.filenameToScript.removePath(info.path);
+            if (!this.filenameToScript.contains(info.path)) {
+                this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
-                this.resolvedModuleNames.removePath(info.path);
+                this.resolvedModuleNames.remove(info.path);
             }
         }
 
@@ -283,7 +283,7 @@ namespace ts.server {
          */
         lineToTextSpan(filename: string, line: number): ts.TextSpan {
             let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const script: ScriptInfo = this.filenameToScript.getPath(path);
+            const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
 
             const lineInfo = index.lineNumberToInfo(line + 1);
@@ -304,7 +304,7 @@ namespace ts.server {
          */
         lineOffsetToPosition(filename: string, line: number, offset: number): number {
             let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const script: ScriptInfo = this.filenameToScript.getPath(path);
+            const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
 
             const lineInfo = index.lineNumberToInfo(line);
@@ -318,7 +318,7 @@ namespace ts.server {
          */
         positionToLineOffset(filename: string, position: number): ILineInfo {
             let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            const script: ScriptInfo = this.filenameToScript.getPath(path);
+            const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
             const lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };

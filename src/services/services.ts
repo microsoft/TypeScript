@@ -1728,16 +1728,16 @@ namespace ts {
                 };
             }
 
-            this.fileNameToEntry.setPath(path, entry);
+            this.fileNameToEntry.set(path, entry);
             return entry;
         }
 
         private getEntry(path: Path): HostFileInformation {
-            return this.fileNameToEntry.getPath(path);
+            return this.fileNameToEntry.get(path);
         }
 
         private contains(path: Path): boolean {
-            return this.fileNameToEntry.containsPath(path);
+            return this.fileNameToEntry.contains(path);
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
@@ -2053,7 +2053,7 @@ namespace ts {
 
             let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
             let path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            let entry = bucket.getPath(path);
+            let entry = bucket.get(path);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
@@ -2065,7 +2065,7 @@ namespace ts {
                     languageServiceRefCount: 0,
                     owners: []
                 };
-                bucket.setPath(path, entry);
+                bucket.set(path, entry);
             }
             else {
                 // We have an entry for this file.  However, it may be for a different version of
@@ -2095,12 +2095,12 @@ namespace ts {
 
             let path = toPath(fileName, currentDirectory, getCanonicalFileName);
 
-            let entry = bucket.getPath(path);
+            let entry = bucket.get(path);
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.removePath(path);
+                bucket.remove(path);
             }
         }
 

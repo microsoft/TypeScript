@@ -500,7 +500,7 @@ namespace ts {
 
             // update fileName -> file mapping
             for (let i = 0, len = newSourceFiles.length; i < len; ++i) {
-                filesByName.setPath(filePaths[i], newSourceFiles[i]);
+                filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
             files = newSourceFiles;
@@ -570,7 +570,7 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string): SourceFile {
-            return filesByName.getPath(toPath(fileName, currentDirectory, getCanonicalFileName));
+            return filesByName.get(toPath(fileName, currentDirectory, getCanonicalFileName));
         }
 
         function getDiagnosticsHelper(
@@ -787,8 +787,8 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, normalizedAbsolutePath: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
-            if (filesByName.containsPath(normalizedAbsolutePath)) {
-                const file = filesByName.getPath(normalizedAbsolutePath);
+            if (filesByName.contains(normalizedAbsolutePath)) {
+                const file = filesByName.get(normalizedAbsolutePath);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== normalizedAbsolutePath) {
@@ -809,18 +809,18 @@ namespace ts {
                 }
             });
 
-            filesByName.setPath(normalizedAbsolutePath, file);
+            filesByName.set(normalizedAbsolutePath, file);
             if (file) {
                 file.path = normalizedAbsolutePath;
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
-                    const existingFile = filesByNameIgnoreCase.getPath(normalizedAbsolutePath);
+                    const existingFile = filesByNameIgnoreCase.get(normalizedAbsolutePath);
                     if (existingFile) {
                         reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
                     }
                     else {
-                        filesByNameIgnoreCase.setPath(normalizedAbsolutePath, file);
+                        filesByNameIgnoreCase.set(normalizedAbsolutePath, file);
                     }
                 }
 

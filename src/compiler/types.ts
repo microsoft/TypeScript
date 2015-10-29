@@ -8,10 +8,10 @@ namespace ts {
     export type Path = string & { __pathBrand: any };
 
     export interface FileMap<T> {
-        getPath(fileName: Path): T;
-        setPath(fileName: Path, value: T): void;
-        containsPath(fileName: Path): boolean;
-        removePath(fileName: Path): void;
+        get(fileName: Path): T;
+        set(fileName: Path, value: T): void;
+        contains(fileName: Path): boolean;
+        remove(fileName: Path): void;
 
         forEachValue(f: (key: Path, v: T) => void): void;
         clear(): void;
