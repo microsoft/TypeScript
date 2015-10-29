@@ -1357,7 +1357,6 @@ namespace ts {
     export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
             let referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
-            referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
     }

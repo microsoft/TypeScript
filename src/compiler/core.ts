@@ -17,45 +17,55 @@ namespace ts {
         True = -1
     }
 
-    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string, currentDirectory: string): FileMap<T> {
+    export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
         let files: Map<T> = {};
         return {
-            get,
-            set,
-            contains,
-            remove,
-            clear,
-            forEachValue: forEachValueInMap
+            getPath,
+            setPath,
+            containsPath,
+            removePath,
+            forEachValue: forEachValueInMap,
+            clear
         };
 
-        function set(fileName: string, value: T) {
-            files[normalizeKey(fileName)] = value;
+        function forEachValueInMap(f: (key: Path, value: T) => void) {
+            for (let key in files) {
+                f(<Path>key, files[key]);
+            }
         }
 
-        function get(fileName: string) {
-            return files[normalizeKey(fileName)];
+        // path should already be well-formed so it does not need to be normalized
+        function getPath(path: Path): T {
+            return files[toKey(path)];
         }
 
-        function contains(fileName: string) {
-            return hasProperty(files, normalizeKey(fileName));
+        function setPath(path: Path, value: T) {
+            files[toKey(path)] = value;
         }
 
-        function remove (fileName: string) {
-            let key = normalizeKey(fileName);
+        function containsPath(path: Path) {
+            return hasProperty(files, toKey(path));
+        }
+
+        function removePath(path: Path) {
+            const key = toKey(path);
             delete files[key];
-        }
-
-        function forEachValueInMap(f: (value: T) => void) {
-            forEachValue(files, f);
-        }
-
-        function normalizeKey(key: string) {
-            return getCanonicalFileName(getNormalizedAbsolutePath(key, currentDirectory));
         }
 
         function clear() {
             files = {};
         }
+
+        function toKey(path: Path): string {
+            return keyMapper ? keyMapper(path) : path;
+        }
+    }
+
+    export function toPath(fileName: string, basePath: string, getCanonicalFileName: (path: string) => string): Path {
+        const nonCanonicalizedPath = isRootedDiskPath(fileName)
+            ? normalizePath(fileName)
+            : getNormalizedAbsolutePath(fileName, basePath);
+        return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
     export const enum Comparison {
