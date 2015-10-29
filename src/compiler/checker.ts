@@ -6395,22 +6395,22 @@ namespace ts {
                     return narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ true);
                 }
                 else {
-                    // The assumed result is false. This means either the first operand was false, or the first operand was true
-                    // and the second operand was false. We narrow with those assumptions and union the two resulting types.
+                    // The assumed result is false. This means either the first operand was false, or 
+                    // the second operand was false. We narrow with those assumptions and union the two resulting types.
                     return getUnionType([
                         narrowType(type, expr.left, /*assumeTrue*/ false),
-                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ false)
+                        narrowType(type, expr.right, /*assumeTrue*/ false)
                     ]);
                 }
             }
 
             function narrowTypeByOr(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 if (assumeTrue) {
-                    // The assumed result is true. This means either the first operand was true, or the first operand was false
-                    // and the second operand was true. We narrow with those assumptions and union the two resulting types.
+                    // The assumed result is true. This means either the first operand was true, or
+                    // the second operand was true. We narrow with those assumptions and union the two resulting types.
                     return getUnionType([
                         narrowType(type, expr.left, /*assumeTrue*/ true),
-                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ true)
+                        narrowType(type, expr.right, /*assumeTrue*/ true)
                     ]);
                 }
                 else {
