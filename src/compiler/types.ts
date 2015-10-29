@@ -2099,6 +2099,7 @@ namespace ts {
         allowUnreachableCode?: boolean;
         noImplicitReturns?: boolean;
         noFallthroughCasesInSwitch?: boolean;
+        forceConsistentCasingInFileNames?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

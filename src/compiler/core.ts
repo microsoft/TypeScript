@@ -830,7 +830,7 @@ namespace ts {
                 if (verboseDebugInfo) {
                     verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }
-
+                debugger;
                 throw new Error("Debug Failure. False expression: " + (message || "") + verboseDebugString);
             }
         }

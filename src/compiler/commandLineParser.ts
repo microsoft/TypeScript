@@ -267,6 +267,11 @@ namespace ts {
             name: "allowUnreachableCode",
             type: "boolean",
             description: Diagnostics.Do_not_report_errors_on_unreachable_code
+        },
+        {
+            name: "forceConsistentCasingInFileNames",
+            type: "boolean",
+            description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         }
     ];
 

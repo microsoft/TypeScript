@@ -799,7 +799,11 @@
     "'=' can only be used in an object literal property inside a destructuring assignment.": {
         "category": "Error",
         "code": 1312
-    },    
+    },
+    "The body of an 'if' statement cannot be the empty statement.": {
+        "category": "Error",
+        "code": 1313
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2290,21 +2294,25 @@
         "category": "Message",
         "code": 6072
     },
-    "Do not report errors on unused labels.": {
+    "Disallow inconsistently-cased references to the same file.": {
         "category": "Message",
         "code": 6073
     },
-    "Report error when not all code paths in function return a value.": {
+    "Do not report errors on unused labels.": {
         "category": "Message",
         "code": 6074
     },
-    "Report errors for fallthrough cases in switch statement.": {
+    "Report error when not all code paths in function return a value.": {
         "category": "Message",
         "code": 6075
     },
-    "Do not report errors on unreachable code.": {
+    "Report errors for fallthrough cases in switch statement.": {
         "category": "Message",
         "code": 6076
+    },
+    "Do not report errors on unreachable code.": {
+        "category": "Message",
+        "code": 6077
     },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
