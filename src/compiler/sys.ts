@@ -336,7 +336,17 @@ namespace ts {
                     data = "\uFEFF" + data;
                 }
 
-                _fs.writeFileSync(fileName, data, "utf8");
+                let fd: number;
+
+                try {
+                    fd = _fs.openSync(fileName, "w");
+                    _fs.writeSync(fd, data, undefined, "utf8");
+                }
+                finally {
+                    if (fd !== undefined) {
+                        _fs.closeSync(fd);
+                    }
+                }
             }
 
             function getCanonicalPath(path: string): string {
