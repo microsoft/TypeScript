@@ -405,11 +405,103 @@ namespace ts {
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
-            return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+            let jsonTextWithoutComments = removeComments(jsonText);
+            return { config: /\S/.test(jsonTextWithoutComments) ? JSON.parse(jsonTextWithoutComments) : {} };
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
         }
+    }
+
+
+    /**
+     * Remove the comments from a json like text.
+     * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
+     *
+     * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
+     */
+    function removeComments(jsonText: string): string {
+        let result = "";
+        let processingString = false;
+        let processingSingleLineComment = false;
+        let processingMultiLineComment = false;
+        for (let i = 0; i < jsonText.length; i++) {
+            let currentChar = jsonText.charAt(i);
+            let nextChar = (i + 1 < jsonText.length) ? jsonText.charAt(i + 1) : undefined;
+            if (processingString) {
+                if (currentChar === "\\"
+                    && nextChar === "\"") {
+                    // Escaped quote consume the 2 characters
+                    result += currentChar;
+                    result += nextChar;
+                    i += 1;
+                }
+                else if (currentChar === "\"") {
+                    // End of string
+                    result += currentChar;
+                    processingString = false;
+                }
+                else {
+                   // String content
+                   result += currentChar;
+                }
+            }
+            else if (processingSingleLineComment) {
+                if (currentChar === "\n") {
+                    // End of single line comment
+                    processingSingleLineComment = false;
+                    // Keep the line breaks to keep line numbers aligned
+                    result += currentChar;
+                }
+                else {
+                   // replace comment content by whitespaces
+                   result += " ";
+                }
+            }
+            else if (processingMultiLineComment) {
+                if (currentChar === "*" && nextChar === "/") {
+                    // End of comment
+                    result += "  ";
+                    i += 1;
+                    processingMultiLineComment = false;
+                }
+                else if (currentChar === "\n") {
+                    // Keep the line breaks to Keep line aligned
+                    result += currentChar;
+                }
+                else {
+                   // replace comment content by whitespaces
+                   result += " ";
+                }
+            }
+            else if (currentChar === "\"") {
+                // String start
+                result += currentChar;
+                processingString = true;
+            }
+            else if (currentChar === "#") {
+                // Start of # comment
+                result += " ";
+                processingSingleLineComment = true;
+            }
+            else if (currentChar === "/" && nextChar === "/") {
+                // Start of // comment
+                result += "  ";
+                i += 1;
+                processingSingleLineComment = true;
+            }
+            else if (currentChar === "/" && nextChar === "*") {
+                // Start of /**/ comment
+                result += "  ";
+                i += 1;
+                processingMultiLineComment = true;
+            }
+            else {
+                // Keep other characters
+                result += currentChar;
+            }
+        }
+        return result;
     }
 
     /**
