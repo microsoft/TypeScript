@@ -430,8 +430,9 @@ namespace ts {
             let nextChar = (i + 1 < jsonText.length) ? jsonText.charAt(i + 1) : undefined;
             if (processingString) {
                 if (currentChar === "\\"
-                    && nextChar === "\"") {
-                    // Escaped quote consume the 2 characters
+                    && nextChar !== undefined) {
+                    // Found an escaped character 
+                    // consume the \ and the escaped char
                     result += currentChar;
                     result += nextChar;
                     i += 1;

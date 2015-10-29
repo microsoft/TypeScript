@@ -77,6 +77,22 @@ module ts {
       	}`, { config: { exclude: ["xx/*file.d.ts*/"] } });
     });
     
+    it("handles escaped characters in strings correctly", () => {
+      assertParseResult(
+        `{
+      		"exclude": [
+  					"xx\\"//files"
+  				]
+      	}`, { config: { exclude: ["xx\"//files"] } });
+        
+      assertParseResult(
+        `{
+      		"exclude": [
+  					"xx\\\\" // end of line comment
+  				]
+      	}`, { config: { exclude: ["xx\\"] } });
+     });
+    
     it("returns object with error when json is invalid", () => {
        assertParseError("invalid");      
     });
