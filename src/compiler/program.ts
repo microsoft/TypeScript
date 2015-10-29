@@ -869,10 +869,7 @@ namespace ts {
                             ? resolution.resolvedFileName
                             : getNormalizedAbsolutePath(resolution.resolvedFileName, currentDirectory);
 
-                        // convert an absolute import path to path that is relative to current directory
-                        // this was host still can locate it but files names in user output will be shorter (and thus look nicer).
-                        const relativePath = getRelativePathToDirectoryOrUrl(currentDirectory, absoluteImportPath, currentDirectory, getCanonicalFileName, false);
-                        const importedFile = findSourceFile(relativePath, absoluteImportPath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, absoluteImportPath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {

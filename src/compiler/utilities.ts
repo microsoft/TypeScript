@@ -2183,6 +2183,12 @@ namespace ts {
         return result;
     }
 
+    export function toRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+        return !isRootedDiskPath(absoluteOrRelativePath)
+            ? absoluteOrRelativePath
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
+    }
+
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions): string {
