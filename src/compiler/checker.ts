@@ -5603,18 +5603,29 @@ namespace ts {
             return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
 
+        // A source signature matches a target signature if the two signatures have the same number of required,
+        // optional, and rest parameters.
+        function isMatchingSignature(source: Signature, target: Signature) {
+            return source.parameters.length === target.parameters.length &&
+                source.minArgumentCount === target.minArgumentCount &&
+                source.hasRestParameter === target.hasRestParameter;
+        }
+
+        // A source signature partially matches a target signature if the target signature has no fewer required
+        // parameters and no more overall parameters than the source signature (where a signature with a rest
+        // parameter is always considered to have more overall parameters than one without).
+        function isPartiallyMatchingSignature(source: Signature, target: Signature) {
+            return source.minArgumentCount <= target.minArgumentCount && (
+                source.hasRestParameter && !target.hasRestParameter ||
+                source.hasRestParameter === target.hasRestParameter && source.parameters.length >= target.parameters.length);
+        }
+
         function compareSignatures(source: Signature, target: Signature, partialMatch: boolean, ignoreReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             if (source === target) {
                 return Ternary.True;
             }
-            if (source.parameters.length !== target.parameters.length ||
-                source.minArgumentCount !== target.minArgumentCount ||
-                source.hasRestParameter !== target.hasRestParameter) {
-                if (!partialMatch ||
-                    source.parameters.length < target.parameters.length && !source.hasRestParameter ||
-                    source.minArgumentCount > target.minArgumentCount) {
-                    return Ternary.False;
-                }
+            if (!(isMatchingSignature(source, target) || partialMatch && isPartiallyMatchingSignature(source, target))) {
+                return Ternary.False;
             }
             let result = Ternary.True;
             if (source.typeParameters && target.typeParameters) {
