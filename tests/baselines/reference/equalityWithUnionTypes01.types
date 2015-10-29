@@ -1,4 +1,4 @@
-=== tests/cases/conformance/types/typeRelationships/matchable/equalityWithUnionTypes01.ts ===
+=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithUnionTypes01.ts ===
 interface I1 {
 >I1 : I1
 

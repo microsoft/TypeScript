@@ -1,11 +1,11 @@
-tests/cases/conformance/types/typeRelationships/matchable/switchCaseWithIntersectionTypes01.ts(19,10): error TS2322: Type 'number & boolean' is not assignable to type 'string & number'.
+tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts(19,10): error TS2322: Type 'number & boolean' is not assignable to type 'string & number'.
   Type 'number & boolean' is not assignable to type 'string'.
     Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/matchable/switchCaseWithIntersectionTypes01.ts(23,10): error TS2322: Type 'boolean' is not assignable to type 'string & number'.
+tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts(23,10): error TS2322: Type 'boolean' is not assignable to type 'string & number'.
   Type 'boolean' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/matchable/switchCaseWithIntersectionTypes01.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts (2 errors) ====
     
     var strAndNum: string & number;
     var numAndBool: number & boolean;

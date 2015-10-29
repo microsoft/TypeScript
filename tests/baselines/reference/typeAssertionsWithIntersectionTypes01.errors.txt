@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeRelationships/matchable/typeAssertionsWithIntersectionTypes01.ts(17,9): error TS2352: Neither type 'I2' nor type 'I1 & I3' is assignable to the other.
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(17,9): error TS2352: Neither type 'I2' nor type 'I1 & I3' is assignable to the other.
   Type 'I2' is not assignable to type 'I3'.
     Property 'p3' is missing in type 'I2'.
-tests/cases/conformance/types/typeRelationships/matchable/typeAssertionsWithIntersectionTypes01.ts(18,9): error TS2352: Neither type 'I2' nor type 'I3' is assignable to the other.
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(18,9): error TS2352: Neither type 'I2' nor type 'I3' is assignable to the other.
 
 
-==== tests/cases/conformance/types/typeRelationships/matchable/typeAssertionsWithIntersectionTypes01.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts (2 errors) ====
     interface I1 {
         p1: number
     }

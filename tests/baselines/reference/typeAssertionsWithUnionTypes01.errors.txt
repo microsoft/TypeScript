@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/matchable/typeAssertionsWithUnionTypes01.ts(14,9): error TS2352: Neither type 'I1' nor type 'number' is assignable to the other.
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts(14,9): error TS2352: Neither type 'I1' nor type 'number' is assignable to the other.
 
 
-==== tests/cases/conformance/types/typeRelationships/matchable/typeAssertionsWithUnionTypes01.ts (1 errors) ====
+==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts (1 errors) ====
     interface I1 {
         p1: number
     }
