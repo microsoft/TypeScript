@@ -15535,46 +15535,47 @@ namespace ts {
             }
         }
 
-        function writeStructProperty(node: ClassElement, writer: EmitTextWriter): boolean {
+        function writeStructProperty(node: ClassElement): string {
             let symbol = getSymbolOfNode(node);
             let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
                 ? getTypeOfSymbol(symbol)
                 : unknownType;
 
+            let ret = "";
             if (type.flags & TypeFlags.I32) {
-                writer.write("TypedObject.int32");
+                ret = "TypedObject.int32";
             }
             else if (type.flags & TypeFlags.U32) {
-                writer.write("TypedObject.uint32");
+                ret = "TypedObject.uint32";
             }
             else if (type.flags & TypeFlags.U16) {
-                writer.write("TypedObject.uint16");
+                ret = "TypedObject.uint16";
             }
             else if (type.flags & TypeFlags.I16) {
-                writer.write("TypedObject.int16");
+                ret = "TypedObject.int16";
             }
             else if (type.flags & TypeFlags.U8) {
-                writer.write("TypedObject.uint8");
+                ret = "TypedObject.uint8";
             }
             else if (type.flags & TypeFlags.I8) {
-                writer.write("TypedObject.int8");
+                ret = "TypedObject.int8";
             }
             else if (type.flags & TypeFlags.Float) {
-                writer.write("TypedObject.float32");
+                ret = "TypedObject.float32";
             }
             else if (type.flags & TypeFlags.Number) {
-                writer.write("TypedObject.float64");
+                ret = "TypedObject.float64";
             }
             else if (type.flags & TypeFlags.String) {
-                writer.write("TypedObject.string");
+                ret = "TypedObject.string";
             }
             else if (type.flags & TypeFlags.Any) {
-                writer.write("TypedObject.Any");
+                ret = "TypedObject.Any";
             }
             else {
-                writer.write("TypedObject.Object");
+                ret = "TypedObject.Object";
             }
-            return true;
+            return ret;
         }
 
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {

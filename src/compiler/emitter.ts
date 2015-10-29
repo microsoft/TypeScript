@@ -5099,7 +5099,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitDeclarationName(node);
                 write(": ");
 
-                resolver.writeStructProperty(node, writer);
+                write(resolver.writeStructProperty(node));
             }
 
             function emitStructProperties(node: StructLikeDeclaration) {
