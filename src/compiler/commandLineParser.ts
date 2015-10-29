@@ -426,18 +426,19 @@ namespace ts {
         let processingSingleLineComment = false;
         let processingMultiLineComment = false;
         for (let i = 0; i < jsonText.length; i++) {
+            let currentCharCode = jsonText.charCodeAt(i);
             let currentChar = jsonText.charAt(i);
-            let nextChar = (i + 1 < jsonText.length) ? jsonText.charAt(i + 1) : undefined;
+            let nextCharCode = (i + 1 < jsonText.length) ? jsonText.charCodeAt(i + 1) : undefined;
             if (processingString) {
-                if (currentChar === "\\"
-                    && nextChar !== undefined) {
+                if (currentCharCode === CharacterCodes.backslash
+                    && nextCharCode !== undefined) {
                     // Found an escaped character 
                     // consume the \ and the escaped char
                     result += currentChar;
-                    result += nextChar;
+                    result += jsonText.charAt(i + 1);
                     i += 1;
                 }
-                else if (currentChar === "\"") {
+                else if (currentCharCode === CharacterCodes.doubleQuote) {
                     // End of string
                     result += currentChar;
                     processingString = false;
@@ -448,7 +449,7 @@ namespace ts {
                 }
             }
             else if (processingSingleLineComment) {
-                if (currentChar === "\n") {
+                if (isLineBreak(currentCharCode)) {
                     // End of single line comment
                     processingSingleLineComment = false;
                     // Keep the line breaks to keep line numbers aligned
@@ -460,13 +461,13 @@ namespace ts {
                 }
             }
             else if (processingMultiLineComment) {
-                if (currentChar === "*" && nextChar === "/") {
-                    // End of comment
+                if (currentCharCode === CharacterCodes.asterisk && nextCharCode === CharacterCodes.slash) {
+                    // End of comment */
                     result += "  ";
                     i += 1;
                     processingMultiLineComment = false;
                 }
-                else if (currentChar === "\n") {
+                else if (isLineBreak(currentCharCode)) {
                     // Keep the line breaks to Keep line aligned
                     result += currentChar;
                 }
@@ -475,23 +476,23 @@ namespace ts {
                    result += " ";
                 }
             }
-            else if (currentChar === "\"") {
+            else if (currentCharCode === CharacterCodes.doubleQuote) {
                 // String start
                 result += currentChar;
                 processingString = true;
             }
-            else if (currentChar === "#") {
+            else if (currentCharCode === CharacterCodes.hash) {
                 // Start of # comment
                 result += " ";
                 processingSingleLineComment = true;
             }
-            else if (currentChar === "/" && nextChar === "/") {
+            else if (currentCharCode === CharacterCodes.slash && nextCharCode === CharacterCodes.slash) {
                 // Start of // comment
                 result += "  ";
                 i += 1;
                 processingSingleLineComment = true;
             }
-            else if (currentChar === "/" && nextChar === "*") {
+            else if (currentCharCode === CharacterCodes.slash && nextCharCode === CharacterCodes.asterisk) {
                 // Start of /**/ comment
                 result += "  ";
                 i += 1;
