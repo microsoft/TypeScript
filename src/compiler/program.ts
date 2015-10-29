@@ -346,10 +346,10 @@ namespace ts {
             ? ((moduleNames: string[], containingFile: string) => host.resolveModuleNames(moduleNames, containingFile))
             : ((moduleNames: string[], containingFile: string) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedModule));
 
-        let filesByName = createFileMap<SourceFile>(getCanonicalFileName);
+        let filesByName = createFileMap<SourceFile>(getCanonicalFileName, currentDirectory);
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing 
-        let filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
+        let filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase(), currentDirectory) : undefined;
 
         if (oldProgram) {
             // check properties that can affect structure of the program or module resolution strategy

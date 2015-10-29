@@ -93,8 +93,8 @@ namespace ts.server {
 
         constructor(public host: ServerHost, public project: Project) {
             const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>(getCanonicalFileName);
-            this.filenameToScript = createFileMap<ScriptInfo>(getCanonicalFileName);
+            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>(getCanonicalFileName, host.getCurrentDirectory());
+            this.filenameToScript = createFileMap<ScriptInfo>(getCanonicalFileName, host.getCurrentDirectory());
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName)

@@ -17,7 +17,7 @@ namespace ts {
         True = -1
     }
 
-    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string, currentDirectory: string): FileMap<T> {
         let files: Map<T> = {};
         return {
             get,
@@ -50,7 +50,7 @@ namespace ts {
         }
 
         function normalizeKey(key: string) {
-            return getCanonicalFileName(normalizeSlashes(key));
+            return getCanonicalFileName(getNormalizedAbsolutePath(key, currentDirectory));
         }
 
         function clear() {

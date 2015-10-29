@@ -1698,7 +1698,7 @@ namespace ts {
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
-            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName);
+            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName, host.getCurrentDirectory());
 
             // Initialize the list with the root file names
             let rootFileNames = host.getScriptFileNames();
@@ -1993,7 +1993,7 @@ namespace ts {
     }
 
 
-    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean): DocumentRegistry {
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
@@ -2007,7 +2007,7 @@ namespace ts {
             let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName);
+                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName, currentDirectory);
             }
             return bucket;
         }
@@ -2556,7 +2556,9 @@ namespace ts {
         }
     }
 
-    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
+    export function createLanguageService(host: LanguageServiceHost, 
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
