@@ -1,39 +1,39 @@
-tests/cases/compiler/a.ts(1,1): error TS2397: Declaration duplicates builtin global identifier 'undefined'.
-tests/cases/compiler/a.ts(2,5): error TS2397: Declaration duplicates builtin global identifier 'undefined'.
-tests/cases/compiler/a.ts(3,5): error TS2397: Declaration duplicates builtin global identifier 'undefined'.
-tests/cases/compiler/b.ts(1,7): error TS2397: Declaration duplicates builtin global identifier 'undefined'.
-tests/cases/compiler/b.ts(4,11): error TS2397: Declaration duplicates builtin global identifier 'undefined'.
-tests/cases/compiler/b.ts(7,11): error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+tests/cases/compiler/a.ts(1,1): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+tests/cases/compiler/a.ts(2,5): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+tests/cases/compiler/a.ts(3,5): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+tests/cases/compiler/b.ts(1,7): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+tests/cases/compiler/b.ts(4,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
+tests/cases/compiler/b.ts(7,11): error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
 tests/cases/compiler/b.ts(10,8): error TS2304: Cannot find name 'undefined'.
 
 
 ==== tests/cases/compiler/a.ts (3 errors) ====
     type undefined = string;
     ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     var undefined = void 0;
         ~~~~~~~~~
-!!! error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     var undefined = null;
         ~~~~~~~~~
-!!! error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     function p(undefined = 42) {
     	return undefined;
     }
 ==== tests/cases/compiler/b.ts (4 errors) ====
     class undefined {
           ~~~~~~~~~
-!!! error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     	foo: string;
     }
     interface undefined {
               ~~~~~~~~~
-!!! error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     	member: number;
     }
     namespace undefined {
               ~~~~~~~~~
-!!! error TS2397: Declaration duplicates builtin global identifier 'undefined'.
+!!! error TS2397: Declaration name conflicts with built-in global identifier 'undefined'.
     	export var x = 42;
     }
     var x: undefined;

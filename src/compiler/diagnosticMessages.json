@@ -1168,7 +1168,7 @@
         "category": "Error",
         "code": 2396
     },
-    "Declaration duplicates builtin global identifier '{0}'.": {
+    "Declaration name conflicts with built-in global identifier '{0}'.": {
         "category": "Error",
         "code": 2397
     },

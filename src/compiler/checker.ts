@@ -358,7 +358,7 @@ namespace ts {
             }
 
             function addDeclarationDiagnostic(id: string, declaration: Declaration) {
-                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_duplicates_builtin_global_identifier_0, id));
+                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, id));
             }
         }
 
