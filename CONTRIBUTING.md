@@ -32,6 +32,19 @@ Your pull request should:
 * Follow the code conventions descriped in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
+## Contributing `lib.d.ts` fixes
+ 
+The library sources are in: [src\lib\](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
+
+To build the library files, run
+```Shell
+jake lib
+```
+
+`src\lib\dom.generated.d.ts` and `webworker.generated.d.ts`:
+
+These two files represent the DOM typings and are auto-generated. To make any modifications to them, please update the generation script in https://github.com/Microsoft/TSJS-lib-generator
+
 ## Running the Tests
 
 To run all tests, invoke the `runtests` target using jake:
