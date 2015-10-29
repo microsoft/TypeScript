@@ -436,6 +436,22 @@ namespace ts {
         return result;
     }
 
+    export function reduceProperties<T, U>(map: Map<T>, f: (a: U, v: T, k: string) => U, initial: U): U {
+        let result = initial;
+        if (map) {
+            for (let key in map) {
+                if (hasProperty(map, key)) {
+                    result = f(result, map[key], String(key));
+                }
+            }
+        }
+        return result;
+    }
+
+    export function isArray(value: any): value is any[] {
+        return Array.isArray ? Array.isArray(value) : Object.prototype.toString.call(value) === "[object Array]";
+    }
+
     export function memoize<T>(callback: () => T): () => T {
         let value: T;
         return () => {

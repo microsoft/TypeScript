@@ -1556,10 +1556,16 @@ namespace ts {
     export function isSourceFile(node: Node): node is SourceFile {
         return node && node.kind === SyntaxKind.SourceFile;
     }
-    export function isFunctionBody(node: Node): node is FunctionBody {
+    export function isLiteralExpression(node: Node): node is LiteralExpression {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.Block:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.RegularExpressionLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateHead:
+                case SyntaxKind.TemplateMiddle:
+                case SyntaxKind.TemplateTail:
+                case SyntaxKind.StringLiteral:
                     return true;
             }
         }
@@ -1815,6 +1821,15 @@ namespace ts {
         }
         return false;
     }
+    export function isFunctionBody(node: Node): node is FunctionBody {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                    return true;
+            }
+        }
+        return false;
+    }
     export function isUnaryExpression(node: Node): node is UnaryExpression {
         if (node) {
             switch (node.kind) {
@@ -1851,21 +1866,6 @@ namespace ts {
                 case SyntaxKind.VoidExpression:
                 case SyntaxKind.AwaitExpression:
                 case SyntaxKind.TypeAssertionExpression:
-                    return true;
-            }
-        }
-        return false;
-    }
-    export function isLiteralExpression(node: Node): node is LiteralExpression {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.NumericLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
-                case SyntaxKind.StringLiteral:
                     return true;
             }
         }
@@ -2063,6 +2063,37 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.NamespaceImport:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JSDocTypeExpression:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isJSDocRecordMember(node: Node): node is JSDocRecordMember {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JSDocRecordMember:
+                    return true;
+            }
+        }
+        return false;
+    }
+    export function isJSDocTag(node: Node): node is JSDocTag {
+        if (node) {
+            switch (node.kind) {
+                case SyntaxKind.JSDocTag:
+                case SyntaxKind.JSDocTemplateTag:
+                case SyntaxKind.JSDocReturnTag:
+                case SyntaxKind.JSDocTypeTag:
+                case SyntaxKind.JSDocParameterTag:
                     return true;
             }
         }

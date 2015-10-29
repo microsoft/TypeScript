@@ -1,12 +1,13 @@
 /// <reference path="checker.ts"/>
 /// <reference path="transform.ts" />
 /// <reference path="declarationEmitter.ts"/>
+/// <reference path="sourcemap.ts"/>
 
 /* @internal */
 namespace ts {
     const delimiters = createDelimiterMap();
 
-    export function printFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformations?: TransformationChain) {
+    export function printFiles(resolver: EmitResolver, host: EmitHost, writer: EmitTextWriter, sourceFiles: SourceFile[], transformations?: TransformationChain, sourceMap: SourceMapWriter = getNullSourceMapWriter()) {
         // emit output for the __extends helper function
         const extendsHelper = `
 var __extends = (this && this.__extends) || function (d, b) {
@@ -70,7 +71,6 @@ function __export(m) {
     }
 })`;
 
-        let writer = createTextWriter(host.getNewLine());
         let {
             write,
             writeTextOfNode,
@@ -80,6 +80,15 @@ function __export(m) {
             decreaseIndent
         } = writer;
 
+        let {
+            setSourceFile,
+            emitStart,
+            emitEnd,
+            emitPos,
+            pushScope,
+            popScope
+        } = sourceMap;
+
         // Add the pretty printer to the transformation chain.
         transformations = transformations ? chainTransformationPhases([transformations, createPrinter]) : createPrinter;
 
@@ -87,7 +96,11 @@ function __export(m) {
         transformFiles(resolver, host, sourceFiles, transformations);
 
         writeLine();
-        return writer.getText();
+
+        let sourceMappingURL = sourceMap.getSourceMappingURL();
+        if (sourceMappingURL) {
+            write(`//# sourceMappingURL=${sourceMappingURL}`);
+        }
 
         function createPrinter(transformer: Transformer) {
             let {
@@ -119,20 +132,6 @@ function __export(m) {
             let emitLeadingComments = function (node: Node) { };
             let emitTrailingComments = function (node: Node) { };
             let emitTrailingCommentsOfPosition = function (pos: number) { };
-
-            /** Called just before starting emit of a node */
-            let emitStart = function (node: Node) { };
-
-            /** Called once the emit of the node is done */
-            let emitEnd = function (node: Node) { };
-
-            /** Called to before starting the lexical scopes as in function/class in the emitted code because of node
-                * @param scopeDeclaration node that starts the lexical scope
-                * @param scopeName Optional name of this scope instead of deducing one from the declaration node */
-            let scopeEmitStart = function(scopeDeclaration: Node, scopeName?: string) { };
-
-            /** Called after coming out of the scope */
-            let scopeEmitEnd = function() { };
 
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                 // initializeEmitterWithSourceMaps();
@@ -1179,7 +1178,7 @@ function __export(m) {
                 else {
                     emitStart(node);
                     write("{");
-                    scopeEmitStart(getParentNode());
+                    pushScope(getParentNode());
                     if (node.flags & NodeFlags.SingleLine) {
                         emitList(node, node.statements, addHelpers(node, ListFormat.SpaceBetweenBraces | ListFormat.SingleLine | format));
                     }
@@ -1187,7 +1186,7 @@ function __export(m) {
                         emitList(node, node.statements, addHelpers(node, ListFormat.Indented | ListFormat.MultiLine | format));
                     }
 
-                    scopeEmitEnd();
+                    popScope();
                     write("}");
                     emitEnd(node);
                 }
@@ -1413,7 +1412,7 @@ function __export(m) {
             function emitBlockFunctionBody(parentNode: Node, body: Block) {
                 let statements = body.statements;
                 write(" {");
-                scopeEmitStart(parentNode);
+                pushScope(parentNode);
 
                 // Emit all the prologue directives (like "use strict").
                 increaseIndent();
@@ -1427,7 +1426,7 @@ function __export(m) {
                     emitList(body, statements, addHelpers(body, ListFormat.MultiLine | ListFormat.Indented | ListFormat.LexicalEnvironment), statementOffset);
                 }
 
-                scopeEmitEnd();
+                popScope();
                 write("}");
             }
 
@@ -1449,9 +1448,9 @@ function __export(m) {
                 tempFlags = 0;
 
                 write(" {");
-                scopeEmitStart(node);
+                pushScope(node);
                 emitList(node, node.members, ListFormat.Indented | ListFormat.MultiLine);
-                scopeEmitEnd();
+                popScope();
                 write("}");
 
                 tempFlags = savedTempFlags;
@@ -1801,6 +1800,8 @@ function __export(m) {
                 let savedTempFlags = tempFlags;
                 tempFlags = 0;
                 currentSourceFile = node;
+
+                setSourceFile(node);
 
                 writeLine();
                 emitShebang();

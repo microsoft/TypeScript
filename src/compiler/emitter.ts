@@ -7603,9 +7603,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
             if (compilerOptions.experimentalTransforms) {
+                let writer = createTextWriter(host.getNewLine());
                 let nodes = sourceFile ? [sourceFile] : host.getSourceFiles();
-                let text = printFiles(resolver, host, filter(nodes, isNonDeclarationFile), getTransformationChain(compilerOptions));
-                writeFile(host, diagnostics, jsFilePath, text, compilerOptions.emitBOM);
+                let transformationChain = getTransformationChain(compilerOptions);
+                let sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap
+                    ? createSourceMapWriter(host, writer, jsFilePath, sourceFile)
+                    : getNullSourceMapWriter();
+
+                printFiles(resolver, host, writer, filter(nodes, isNonDeclarationFile), transformationChain, sourceMap);
+
+                if (compilerOptions.sourceMap) {
+                    writeFile(host, diagnostics, jsFilePath + ".map", sourceMap.getText(), /*writeByteOrderMark*/ false);
+                }
+
+                writeFile(host, diagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM);
             }
             else {
                 emitJavaScript(jsFilePath, sourceFile);
@@ -7613,6 +7624,78 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             if (compilerOptions.declaration) {
                 writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+            }
+        }
+    }
+
+    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
+    // @internal
+    export function emitFilesUsingTransforms(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile): EmitResult {
+        let compilerOptions = host.getCompilerOptions();
+        let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        let diagnostics: Diagnostic[] = [];
+        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
+        let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
+
+        if (targetSourceFile === undefined) {
+            forEach(host.getSourceFiles(), sourceFile => {
+                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
+                    printFile(jsFilePath, sourceFile);
+                }
+            });
+
+            if (compilerOptions.outFile || compilerOptions.out) {
+                printFile(compilerOptions.outFile || compilerOptions.out);
+            }
+        }
+        else {
+            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
+                let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
+                printFile(jsFilePath, targetSourceFile);
+            }
+            else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
+                printFile(compilerOptions.outFile || compilerOptions.out);
+            }
+        }
+
+        // Sort and make the unique list of diagnostics
+        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
+
+        return {
+            emitSkipped: false,
+            diagnostics,
+            sourceMaps: sourceMapDataList
+        };
+
+        function printFile(jsFilePath: string, sourceFile?: SourceFile) {
+            let writer = createTextWriter(host.getNewLine());
+            let nodes = sourceFile ? [sourceFile] : host.getSourceFiles();
+            let transformationChain = getTransformationChain(compilerOptions);
+            let sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap
+                ? createSourceMapWriter(host, writer, jsFilePath, sourceFile)
+                : getNullSourceMapWriter();
+
+            // Print each file to the writer after executing the transformation chain.
+            printFiles(resolver, host, writer, filter(nodes, isNonDeclarationFile), transformationChain, sourceMap);
+
+            // Write the output file.
+            writeFile(host, diagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM);
+
+            // If source maps were requested, write the source map.
+            if (compilerOptions.sourceMap) {
+                writeFile(host, diagnostics, jsFilePath + ".map", sourceMap.getText(), /*writeByteOrderMark*/ false);
+            }
+
+            // If declarations were requested, write the declaration file.
+            if (compilerOptions.declaration) {
+                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+            }
+
+            // Record source map data for the test harness.
+            if (sourceMapDataList) {
+                sourceMapDataList.push(sourceMap.sourceMapData);
             }
         }
     }
