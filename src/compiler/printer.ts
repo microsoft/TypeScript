@@ -2165,13 +2165,25 @@ function __export(m) {
                 }
             }
 
-            function writeToken(token: SyntaxKind) {
-                write(tokenToString(token));
+            function writeToken(token: SyntaxKind, pos?: number) {
+                let tokenStartPos = skipTrivia(currentSourceFile.text, pos);
+                emitPos(tokenStartPos);
+                let tokenEndPos = writeTokenText(token, pos);
+                emitPos(tokenEndPos);
+                return tokenEndPos;
+            }
+
+            function writeTokenText(token: SyntaxKind, pos?: number) {
+                let tokenString = tokenToString(token);
+                write(tokenString);
+                return positionIsSynthesized(pos) ? -1 : pos + tokenString.length;
             }
 
             function writeTokenNode(node: Node) {
                 if (node) {
-                    writeToken(node.kind);
+                    emitStart(node);
+                    writeTokenText(node.kind);
+                    emitEnd(node);
                 }
             }
 

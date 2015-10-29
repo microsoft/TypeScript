@@ -7,7 +7,7 @@ namespace ts {
     export interface SourceMapWriter {
         sourceMapData?: SourceMapData;
         setSourceFile(sourceFile: SourceFile): void;
-        emitPos(pos: number, skipTrivia?: boolean): void;
+        emitPos(pos: number): void;
         emitStart(range: TextRange): void;
         emitEnd(range: TextRange): void;
         pushScope(scopeDeclaration: Node, scopeName?: string): void;
@@ -167,13 +167,9 @@ namespace ts {
             sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
-        function recordSourceMapSpan(pos: number, skipTrivia?: boolean) {
+        function recordSourceMapSpan(pos: number) {
             if (pos === -1) {
                 return;
-            }
-
-            if (skipTrivia) {
-                pos = ts.skipTrivia(currentSourceFile.text, pos);
             }
 
             let sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
@@ -215,11 +211,11 @@ namespace ts {
         }
 
         function recordEmitNodeStartSpan(range: TextRange) {
-            recordSourceMapSpan(range.pos, /*skipTrivia*/ true);
+            recordSourceMapSpan(range.pos !== -1 ? skipTrivia(currentSourceFile.text, range.pos) : -1);
         }
 
         function recordEmitNodeEndSpan(range: TextRange) {
-            recordSourceMapSpan(range.end, /*skipTrivia*/ false);
+            recordSourceMapSpan(range.end);
         }
 
         function recordNewSourceFileStart(sourceFile: SourceFile) {

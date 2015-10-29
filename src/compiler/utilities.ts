@@ -1827,11 +1827,13 @@ namespace ts {
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
-        return node && node.pos === -1;
+        return node && positionIsSynthesized(node.pos);
     }
 
     export function positionIsSynthesized(pos: number): boolean {
-        return pos === -1;
+        // Using ! with a greater than test is a fast way of testing the following conditions:
+        //  pos === undefined || pos === null || isNaN(pos) || pos <= 0;
+        return !(pos > 0);
     }
 
     export function childNodeStartPositionIsOnSameLine(sourceFile: SourceFile, parent: Node, child: Node) {
