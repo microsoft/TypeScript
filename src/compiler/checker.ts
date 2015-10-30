@@ -11854,12 +11854,10 @@ namespace ts {
                 let symbol = getSymbolOfNode(node);
                 let localSymbol = node.localSymbol || symbol;
 
-                let firstDeclaration = forEach(symbol.declarations, declaration => {
+                let firstDeclaration = forEach(symbol.declarations,
                     // Get first non javascript function declaration
-                    if (declaration.kind === node.kind && !isJavaScript(getSourceFile(declaration).fileName)) {
-                        return declaration;
-                    }
-                });
+                    declaration => declaration.kind === node.kind && !isJavaScript(getSourceFile(declaration).fileName) ?
+                        declaration : undefined);
 
                 // Only type check the symbol once
                 if (node === firstDeclaration) {
