@@ -1267,14 +1267,11 @@ namespace ts {
 
                 // Build map of files seen
                 for (let file of files) {
-                    let { jsFilePath, sourceMapFilePath, declarationFilePath } = getEmitFileNames(file, emitHost);
+                    let { jsFilePath, declarationFilePath } = getEmitFileNames(file, emitHost);
                     if (jsFilePath) {
                         let filesEmittingJsFilePath = lookUp(emitFilesSeen, jsFilePath);
                         if (!filesEmittingJsFilePath) {
                             emitFilesSeen[jsFilePath] = [file];
-                            if (sourceMapFilePath) {
-                                emitFilesSeen[sourceMapFilePath] = [file];
-                            }
                             if (declarationFilePath) {
                                 emitFilesSeen[declarationFilePath] = [file];
                             }
