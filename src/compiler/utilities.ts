@@ -1786,7 +1786,13 @@ namespace ts {
         return emitOutputFilePathWithoutExtension + extension;
     }
 
-    export function getEmitFileNames(sourceFile: SourceFile, host: EmitHost) {
+    export interface EmitFileNames {
+        jsFilePath: string;
+        sourceMapFilePath: string;
+        declarationFilePath: string;
+    }
+
+    export function getEmitFileNames(sourceFile: SourceFile, host: EmitHost): EmitFileNames {
         if (!isDeclarationFile(sourceFile)) {
             let options = host.getCompilerOptions();
             let jsFilePath: string;
@@ -1810,7 +1816,7 @@ namespace ts {
         };
     }
 
-    export function getBundledEmitFileNames(options: CompilerOptions) {
+    function getBundledEmitFileNames(options: CompilerOptions): EmitFileNames {
         let jsFilePath = options.outFile || options.out;
 
         return {
@@ -1820,12 +1826,46 @@ namespace ts {
         };
     }
 
+
+
     function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
         return options.sourceMap ? jsFilePath + ".map" : undefined;
     }
 
     function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
         return options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
+    }
+
+    export function forEachExpectedEmitFile(host: EmitHost,
+        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
+        targetSourceFile?: SourceFile) {
+        let options = host.getCompilerOptions();
+        if (targetSourceFile === undefined) {
+            forEach(host.getSourceFiles(), sourceFile => {
+                if (shouldEmitToOwnFile(sourceFile, options)) {
+                    action(getEmitFileNames(sourceFile, host), [sourceFile], /*isBundledEmit*/false);
+                }
+            });
+
+            if (options.outFile || options.out) {
+                action(getBundledEmitFileNames(options), getBundledEmitSourceFiles(host), /*isBundledEmit*/true);
+            }
+        }
+        else {
+            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
+            if (shouldEmitToOwnFile(targetSourceFile, options)) {
+                action(getEmitFileNames(targetSourceFile, host), [targetSourceFile], /*isBundledEmit*/false);
+            }
+            else if (!isDeclarationFile(targetSourceFile) &&
+                (options.outFile || options.out)) {
+                action(getBundledEmitFileNames(options), getBundledEmitSourceFiles(host), /*isBundledEmit*/true);
+            }
+        }
+
+        function getBundledEmitSourceFiles(host: EmitHost): SourceFile[] {
+            return filter(host.getSourceFiles(),
+                sourceFile => !shouldEmitToOwnFile(sourceFile, host.getCompilerOptions()) && !isDeclarationFile(sourceFile));
+        }
     }
 
     export function hasFile(sourceFiles: SourceFile[], fileName: string) {

@@ -326,27 +326,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let emitSkipped = false;
         let newLine = host.getNewLine();
 
-        if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    emitSkipped = emitFile(getEmitFileNames(sourceFile, host), sourceFile) || emitSkipped;
-                }
-            });
-
-            if (compilerOptions.outFile || compilerOptions.out) {
-                emitSkipped = emitFile(getBundledEmitFileNames(compilerOptions)) || emitSkipped;
-            }
-        }
-        else {
-            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                emitSkipped = emitFile(getEmitFileNames(targetSourceFile, host), targetSourceFile) || emitSkipped;
-            }
-            else if (!isDeclarationFile(targetSourceFile) &&
-                (compilerOptions.outFile || compilerOptions.out)) {
-                emitSkipped = emitFile(getBundledEmitFileNames(compilerOptions)) || emitSkipped;
-            }
-        }
+        forEachExpectedEmitFile(host, emitFile, targetSourceFile);
 
         // Sort and make the unique list of diagnostics
         diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
@@ -476,7 +456,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitJavaScript(jsFilePath: string, sourceMapFilePath: string, root?: SourceFile) {
+        function emitJavaScript(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
             let writer = createTextWriter(newLine);
             let { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
@@ -557,17 +537,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 initializeEmitterWithSourceMaps();
             }
 
-            if (root) {
-                // Do not call emit directly. It does not set the currentSourceFile.
-                emitSourceFile(root);
-            }
-            else {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emitSourceFile(sourceFile);
-                    }
-                });
-            }
+            // Do not call emit directly. It does not set the currentSourceFile.
+            forEach(sourceFiles, emitSourceFile);
 
             writeLine();
             writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
@@ -1009,10 +980,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (compilerOptions.mapRoot) {
                     sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                    if (root) { // emitting single module file
+                    if (!isBundledEmit) { // emitting single module file
+                        Debug.assert(sourceFiles.length === 1);
                         // For modules or multiple emit files the mapRoot will have directory structure like the sources
                         // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, host, sourceMapDir));
+                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFiles[0], host, sourceMapDir));
                     }
 
                     if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -8151,18 +8123,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string }, sourceFile?: SourceFile) {
+        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
+            sourceFiles: SourceFile[], isBundledEmit: boolean) {
             // Make sure not to write js File and source map file if any of them cannot be written
-            let emitSkipped = host.isEmitBlocked(jsFilePath) || (sourceMapFilePath && host.isEmitBlocked(sourceMapFilePath));
-            if (!emitSkipped) {
-                emitJavaScript(jsFilePath, sourceMapFilePath, sourceFile);
+            if (!host.isEmitBlocked(jsFilePath)) {
+                emitJavaScript(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+            }
+            else {
+                emitSkipped = true;
             }
 
             if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics) || emitSkipped;
+                emitSkipped = writeDeclarationFile(declarationFilePath, isBundledEmit ? undefined : sourceFiles[0], host, resolver, diagnostics) || emitSkipped;
             }
-
-            return emitSkipped;
         }
     }
 }
