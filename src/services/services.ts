@@ -174,9 +174,7 @@ namespace ts {
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        let node = <NodeObject> new (getNodeConstructor(kind))();
-        node.pos = pos;
-        node.end = end;
+        let node = <NodeObject> new (getNodeConstructor(kind))(pos, end);
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -7362,7 +7360,7 @@ namespace ts {
                                 let sourceFile = current.getSourceFile();
                                 var canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
-                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
                                 }
                             }
                         }
@@ -7384,7 +7382,7 @@ namespace ts {
                 }
             }
 
-            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element));
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
@@ -7967,14 +7965,14 @@ namespace ts {
     function initializeServices() {
         objectAllocator = {
             getNodeConstructor: kind => {
-                function Node() {
+                function Node(pos: number, end: number) {
+                    this.pos = pos;
+                    this.end = end;
+                    this.flags = NodeFlags.None;
+                    this.parent = undefined;
                 }
                 let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
                 proto.kind = kind;
-                proto.pos = -1;
-                proto.end = -1;
-                proto.flags = 0;
-                proto.parent = undefined;
                 Node.prototype = proto;
                 return <any>Node;
             },

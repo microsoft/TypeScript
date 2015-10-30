@@ -274,7 +274,9 @@ namespace Utils {
 
                     case "flags":
                         // Print out flags with their enum names.
-                        o[propertyName] = getNodeFlagName(n.flags);
+                        if (n.flags) {
+                            o[propertyName] = getNodeFlagName(n.flags);
+                        }
                         break;
 
                     case "parserContextFlags":
@@ -921,7 +923,9 @@ namespace Harness {
             function register(file: { unitName: string; content: string; }) {
                 if (file.content !== undefined) {
                     let fileName = ts.normalizePath(file.unitName);
-                    filemap[getCanonicalFileName(fileName)] = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
+                    const sourceFile = createSourceFileAndAssertInvariants(fileName, file.content, scriptTarget);
+                    filemap[getCanonicalFileName(fileName)] = sourceFile;
+                    filemap[getCanonicalFileName(ts.getNormalizedAbsolutePath(fileName, getCurrentDirectory()))] = sourceFile;
                 }
             };
             inputFiles.forEach(register);
