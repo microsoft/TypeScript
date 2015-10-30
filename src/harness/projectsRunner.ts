@@ -349,7 +349,7 @@ class ProjectRunner extends RunnerBase {
             let inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
                 sourceFile => sourceFile.fileName !== "lib.d.ts"),
                 sourceFile => {
-                    return { unitName: sourceFile.fileName, content: sourceFile.text };
+                    return { unitName: RunnerBase.removeFullPaths(sourceFile.fileName), content: sourceFile.text };
                 });
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
