@@ -15078,7 +15078,7 @@ namespace ts {
                     }
                 },
                 resolveEntityName,
-                getSymbolWalker
+                getSymbolWalker,
                 isArgumentsLocalBinding,
                 getSymbolAtLocation,
             };
