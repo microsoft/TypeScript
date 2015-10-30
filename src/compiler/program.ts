@@ -330,7 +330,6 @@ namespace ts {
         let fileProcessingDiagnostics = createDiagnosticCollection();
         let programDiagnostics = createDiagnosticCollection();
         let emitBlockingDiagnostics = createDiagnosticCollection();
-        let hasEmitBlockingDiagnostics: Map<boolean> = {}; // Map storing if there is emit blocking diagnostics for given input
 
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
@@ -342,6 +341,8 @@ namespace ts {
         let start = new Date().getTime();
 
         host = host || createCompilerHost(options);
+        // Map storing if there is emit blocking diagnostics for given input
+        let hasEmitBlockingDiagnostics = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);
 
         const currentDirectory = host.getCurrentDirectory();
         const resolveModuleNamesWorker = host.resolveModuleNames
@@ -547,7 +548,7 @@ namespace ts {
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
-            return hasProperty(hasEmitBlockingDiagnostics, emitFileName);
+            return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken): EmitResult {
@@ -1256,7 +1257,7 @@ namespace ts {
 
             if (!options.noEmit) {
                 let emitHost = getEmitHost();
-                let emitFilesSeen: Map<boolean> = {};
+                let emitFilesSeen = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);
                 forEachExpectedEmitFile(emitHost, (emitFileNames, sourceFiles, isBundledEmit) => {
                     verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
                     verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
@@ -1264,28 +1265,28 @@ namespace ts {
             }
 
             // Verify that all the emit files are unique and dont overwrite input files
-            function verifyEmitFilePath(emitFilePath: string, emitFilesSeen: Map<boolean>) {
-                if (emitFilePath) {
+            function verifyEmitFilePath(emitFileName: string, emitFilesSeen: FileMap<boolean>) {
+                if (emitFileName) {
+                    let emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
                     // Report error if the output overwrites input file
-                    if (hasFile(files, emitFilePath)) {
-                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
+                    if (forEach(files, file => toPath(file.fileName, currentDirectory, getCanonicalFileName) === emitFilePath)) {
+                        createEmitBlockingDiagnostics(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
                     }
 
                     // Report error if multiple files write into same file
-                    let filesEmittingJsFilePath = lookUp(emitFilesSeen, emitFilePath);
-                    if (filesEmittingJsFilePath) {
+                    if (emitFilesSeen.contains(emitFilePath)) {
                         // Already seen the same emit file - report error
-                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
+                        createEmitBlockingDiagnostics(emitFileName, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
                     }
                     else {
-                        emitFilesSeen[emitFilePath] = true;
+                        emitFilesSeen.set(emitFilePath, true);
                     }
                 }
             }
         }
 
         function createEmitBlockingDiagnostics(emitFileName: string, message: DiagnosticMessage) {
-            hasEmitBlockingDiagnostics[emitFileName] = true;
+            hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
             emitBlockingDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
         }
     }

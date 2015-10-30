@@ -1852,10 +1852,6 @@ namespace ts {
         }
     }
 
-    export function hasFile(sourceFiles: SourceFile[], fileName: string) {
-        return forEach(sourceFiles, file => file.fileName === fileName);
-    }
-
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
