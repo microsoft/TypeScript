@@ -1265,7 +1265,7 @@ namespace FourSlash {
 
         public printCurrentQuickInfo() {
             let quickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-            Harness.IO.log(JSON.stringify(quickInfo));
+            Harness.IO.log("Quick Info: " + quickInfo.displayParts.map(part => part.text).join(""));
         }
 
         public printErrorList() {
@@ -1307,12 +1307,26 @@ namespace FourSlash {
 
         public printMemberListMembers() {
             let members = this.getMemberListAtCaret();
-            Harness.IO.log(JSON.stringify(members));
+            this.printMembersOrCompletions(members);
         }
 
         public printCompletionListMembers() {
             let completions = this.getCompletionListAtCaret();
-            Harness.IO.log(JSON.stringify(completions));
+            this.printMembersOrCompletions(completions);
+        }
+
+        private printMembersOrCompletions(info: ts.CompletionInfo) {
+            function pad(s: string, length: number) {
+                return s + new Array(length - s.length + 1).join(" ");
+            }
+            function max<T>(arr: T[], selector: (x: T) => number): number {
+                return arr.reduce((prev, x) => Math.max(prev, selector(x)), 0);
+            }
+            let longestNameLength = max(info.entries, m => m.name.length);
+            let longestKindLength = max(info.entries, m => m.kind.length);
+            info.entries.sort((m, n) => m.sortText > n.sortText ? 1 : m.sortText < n.sortText ? -1 : m.name > n.name ? 1 : m.name < n.name ? -1 : 0);
+            let membersString = info.entries.map(m => `${pad(m.name, longestNameLength)} ${pad(m.kind, longestKindLength)} ${m.kindModifiers}`).join("\n");
+            Harness.IO.log(membersString);
         }
 
         public printReferences() {
