@@ -6334,7 +6334,7 @@ namespace ts {
                         }
 
                         // Use original type if construct contains assignments to variable
-                        if (!nodeStack.length && isVariableAssignedWithin(symbol, node)) {
+                        if (type != originalType && isVariableAssignedWithin(symbol, node)) {
                             type = originalType;
                         }
                     }
