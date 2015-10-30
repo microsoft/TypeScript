@@ -4427,10 +4427,17 @@ namespace ts {
             error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
             return unknownType;
 
-            function isConstructorParameter(node: TypeNode, container: Node) {
+            function isConstructorParameter(node: Node, container: Node) {
                 if (container.kind === SyntaxKind.Constructor) {
                     let ctor = (<ConstructorDeclaration>container);
-                    return !ctor.body.statements.some(st => st === node.parent);
+                    while (node && node !== ctor) {
+                        if (node === ctor.body) {
+                            return false;
+                        }
+                        node = node.parent;
+                    }
+
+                    return true;
                 }
             }
         }
