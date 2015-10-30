@@ -12806,7 +12806,7 @@ namespace ts {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
                     else if (func.kind === SyntaxKind.Constructor) {
-                        if (!isTypeAssignableTo(exprType, returnType)) {
+                        if (!checkTypeAssignableTo(exprType, returnType, node.expression)) {
                             error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }

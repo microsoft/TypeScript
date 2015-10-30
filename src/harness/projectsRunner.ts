@@ -234,12 +234,15 @@ class ProjectRunner extends RunnerBase {
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+                // convert file name to rooted name
+                // if filename is not rooted - concat it with project root and then expand project root relative to current directory
                 let diskFileName = ts.isRootedDiskPath(fileName)
                     ? fileName
-                    : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
+                    : Harness.IO.resolvePath(ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
 
-                let diskRelativeName = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, diskFileName,
-                    getCurrentDirectory(), Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+                let currentDirectory = getCurrentDirectory();
+                // compute file name relative to current directory (expanded project root)
+                let diskRelativeName = ts.getRelativePathToDirectoryOrUrl(currentDirectory, diskFileName, currentDirectory, Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 if (ts.isRootedDiskPath(diskRelativeName) || diskRelativeName.substr(0, 3) === "../") {
                     // If the generated output file resides in the parent folder or is rooted path,
                     // we need to instead create files that can live in the project reference folder
@@ -376,8 +379,12 @@ class ProjectRunner extends RunnerBase {
                             runTest: testCase.runTest,
                             bug: testCase.bug,
                             rootDir: testCase.rootDir,
-                            resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName),
-                            emittedFiles: ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName)
+                            resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => {
+                                return ts.convertToRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
+                            }),
+                            emittedFiles: ts.map(compilerResult.outputFiles, outputFile => {
+                                return ts.convertToRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
+                            })
                         };
 
                         return resolutionInfo;
