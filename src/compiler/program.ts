@@ -1252,6 +1252,9 @@ namespace ts {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", "declaration"));
                 }
             }
+            else if (options.allowJs && options.declaration) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"));
+            }
 
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
