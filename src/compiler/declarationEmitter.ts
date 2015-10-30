@@ -33,7 +33,9 @@ namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
         let diagnostics: Diagnostic[] = [];
         let { declarationFilePath } = getEmitFileNames(targetSourceFile, host);
-        emitDeclarations(host, resolver, diagnostics, declarationFilePath, targetSourceFile);
+        if (declarationFilePath) {
+            emitDeclarations(host, resolver, diagnostics, declarationFilePath, targetSourceFile);
+        }
         return diagnostics;
     }
 
@@ -105,7 +107,7 @@ namespace ts {
             // Emit references corresponding to this file
             let emittedReferencedFiles: SourceFile[] = [];
             forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                if (!isExternalModuleOrDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {
@@ -1590,9 +1592,17 @@ namespace ts {
         }
 
         function writeReferencePath(referencedFile: SourceFile) {
-            let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
-                ? referencedFile.fileName // Declaration file, use declaration file name
-                :  getEmitFileNames(referencedFile, host).declarationFilePath; // declaration file name
+            let declFileName: string;
+            if (referencedFile.flags & NodeFlags.DeclarationFile) {
+                // Declaration file, use declaration file name
+                declFileName = referencedFile.fileName;
+            }
+            else {
+                // declaration file name
+                let { declarationFilePath, jsFilePath } = getEmitFileNames(referencedFile, host);
+                Debug.assert(!!declarationFilePath || isJavaScript(referencedFile.fileName), "Declaration file is not present only for javascript files");
+                declFileName = declarationFilePath || jsFilePath;
+            }
 
             declFileName = getRelativePathToDirectoryOrUrl(
                 getDirectoryPath(normalizeSlashes(declarationFilePath)),

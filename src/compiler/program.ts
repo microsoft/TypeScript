@@ -1272,7 +1272,7 @@ namespace ts {
                             if (sourceMapFilePath) {
                                 emitFilesSeen[sourceMapFilePath] = [file];
                             }
-                            if (options.declaration) {
+                            if (declarationFilePath) {
                                 emitFilesSeen[declarationFilePath] = [file];
                             }
                         }

@@ -1,5 +1,6 @@
 // @allowJs: true
 // @declaration: true
+// @outDir: outDir
 // @filename: a.ts
 class c {
 }

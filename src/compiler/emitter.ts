@@ -8158,7 +8158,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitJavaScript(jsFilePath, sourceMapFilePath, sourceFile);
             }
 
-            if (compilerOptions.declaration) {
+            if (declarationFilePath) {
                 emitSkipped = writeDeclarationFile(declarationFilePath, sourceFile, host, resolver, diagnostics) || emitSkipped;
             }
 

@@ -1797,7 +1797,7 @@ namespace ts {
                 return {
                     jsFilePath,
                     sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
-                    declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+                    declarationFilePath: !isJavaScript(sourceFile.fileName) ? getDeclarationEmitFilePath(jsFilePath, options) : undefined
                 };
             }
             else if (options.outFile || options.out) {

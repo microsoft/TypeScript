@@ -13,4 +13,3 @@ var x = "hello"; // No error is recorded here and declaration file will show thi
 
 //// [out.d.ts]
 declare var x: number;
-declare var x: number;
