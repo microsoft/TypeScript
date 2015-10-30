@@ -361,6 +361,7 @@ namespace ts {
     }
 
     export const enum NodeFlags {
+        None =              0,
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
         Public =            0x00000010,  // Property/Method
@@ -1305,7 +1306,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost extends ModuleResolutionHost {
+    export interface ParseConfigHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -1611,6 +1612,7 @@ namespace ts {
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        isArgumentsLocalBinding(node: Identifier): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1755,7 +1757,8 @@ namespace ts {
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed          = 0x00002000,
         BlockScopedBindingInLoop    = 0x00004000,
-        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LexicalModuleMergesWithClass = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithBlockScopedBindingCapturedInFunction = 0x00010000, // Loop that contains block scoped variable captured in closure
     }
 
     /* @internal */
@@ -2012,6 +2015,7 @@ namespace ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        message: string;
     }
 
     /**
@@ -2088,6 +2092,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
+        forceConsistentCasingInFileNames?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
 
