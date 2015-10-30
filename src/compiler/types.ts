@@ -2013,6 +2013,19 @@ namespace ts {
         // It is optional because in contextual signature instantiation, nothing fails
     }
 
+    /* @internal */
+    export const enum SpecialPropertyAssignmentKind {
+        None,
+        /// exports.name = expr
+        ExportsProperty,
+        /// module.exports = expr
+        ModuleExports,
+        /// className.prototype.name = expr
+        PrototypeProperty,
+        /// this.name = expr
+        ThisProperty
+    }
+
     export interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;

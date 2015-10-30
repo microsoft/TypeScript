@@ -2576,9 +2576,16 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.BinaryExpression) {
                     return links.type = checkExpression((<BinaryExpression>declaration).right);
                 }
-                // Handle exports.p = expr
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
-                    return checkExpressionCached((<BinaryExpression>declaration.parent).right);
+                    if (declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                        // Handle exports.p = expr or this.p = expr or className.prototype.method = expr
+                        return links.type = checkExpression((<BinaryExpression>declaration.parent).right);
+                    }
+                    else {
+                        // Declaration for className.prototype in inferred JS class
+                        let type = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, undefined, undefined);
+                        return links.type = type;
+                    }
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -3799,8 +3806,15 @@ namespace ts {
                     default:
                         if (declaration.symbol.inferredConstructor) {
                             kind = SignatureKind.Construct;
-                            let proto = declaration.symbol.members["prototype"];
-                            returnType = createAnonymousType(createSymbol(SymbolFlags.None, "__jsClass"), proto.members, emptyArray, emptyArray, undefined, undefined);
+                            let members = createSymbolTable(emptyArray);
+                            // Collect methods declared with className.protoype.methodName = ...
+                            let proto = declaration.symbol.exports["prototype"];
+                            if (proto) {
+                                mergeSymbolTable(members, proto.members);
+                            }
+                            // Collect properties defined in the constructor by this.propName = ...
+                            mergeSymbolTable(members, declaration.symbol.members);
+                            returnType = createAnonymousType(declaration.symbol, members, emptyArray, emptyArray, undefined, undefined);
                         }
                         else {
                             kind = SignatureKind.Call;
@@ -3846,8 +3860,8 @@ namespace ts {
                         break;
 
                     case SyntaxKind.PropertyAccessExpression:
-                        // Class inference from ClassName.prototype.methodName = expr
-                        return getSignaturesOfType(checkExpressionCached((<BinaryExpression>node.parent).right), SignatureKind.Call);
+                        result = getSignaturesOfType(checkExpressionCached((<BinaryExpression>node.parent).right), SignatureKind.Call);
+                        break;
                 }
             }
             return result;
@@ -6957,7 +6971,10 @@ namespace ts {
             let operator = binaryExpression.operatorToken.kind;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
-                if (node === binaryExpression.right) {
+                // In JS files where a special assignment is taking place, don't contextually type the RHS to avoid
+                // incorrectly assuming a circular 'any' (the type of the LHS is determined by the RHS)
+                if (node === binaryExpression.right &&
+                    !(node.parserContextFlags & ParserContextFlags.JavaScriptFile && getSpecialPropertyAssignmentKind(binaryExpression))) {
                     return checkExpression(binaryExpression.left);
                 }
             }
