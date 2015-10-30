@@ -832,13 +832,11 @@ namespace ts {
             });
         }
 
-        function getOptionsDiagnostics(cancellationToken?: CancellationToken, includeEmitBlockingDiagnostics?: boolean): Diagnostic[] {
+        function getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[] {
             let allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
             addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
-            if (!includeEmitBlockingDiagnostics) {
-                addRange(allDiagnostics, emitBlockingDiagnostics.getGlobalDiagnostics());
-            }
+            addRange(allDiagnostics, emitBlockingDiagnostics.getGlobalDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 

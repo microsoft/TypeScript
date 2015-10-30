@@ -740,10 +740,10 @@ namespace ts {
      */
     export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
-    export const supportedExtensionsWhenAllowedJs = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? supportedExtensionsWhenAllowedJs : supportedTypeScriptExtensions;
+        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
