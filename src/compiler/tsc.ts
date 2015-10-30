@@ -87,7 +87,7 @@ namespace ts {
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
             const relativeFileName = host
-                ? toRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
+                ? convertToRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
                 : diagnostic.file.fileName;
 
             output += `${ relativeFileName }(${ loc.line + 1 },${ loc.character + 1 }): `;

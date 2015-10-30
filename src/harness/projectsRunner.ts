@@ -377,10 +377,10 @@ class ProjectRunner extends RunnerBase {
                             bug: testCase.bug,
                             rootDir: testCase.rootDir,
                             resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => {
-                                return ts.toRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
+                                return ts.convertToRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
                             }),
                             emittedFiles: ts.map(compilerResult.outputFiles, outputFile => {
-                                return ts.toRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
+                                return ts.convertToRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
                             })
                         };
 

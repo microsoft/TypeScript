@@ -2182,7 +2182,7 @@ namespace ts {
         return result;
     }
 
-    export function toRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
         return !isRootedDiskPath(absoluteOrRelativePath)
             ? absoluteOrRelativePath
             : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
