@@ -4420,12 +4420,19 @@ namespace ts {
             let container = getThisContainer(node, /*includeArrowFunctions*/ false);
             let parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!(container.flags & NodeFlags.Static)) {
+                if (!(container.flags & NodeFlags.Static) && !isConstructorParameter(node, container)) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
             error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
             return unknownType;
+
+            function isConstructorParameter(node: TypeNode, container: Node) {
+                if (container.kind === SyntaxKind.Constructor) {
+                    let ctor = (<ConstructorDeclaration>container);
+                    return !ctor.body.statements.some(st => st === node.parent);
+                }
+            }
         }
 
         function getTypeFromThisTypeNode(node: TypeNode): Type {
