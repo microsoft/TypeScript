@@ -1792,48 +1792,6 @@ namespace ts {
         declarationFilePath: string;
     }
 
-    export function getEmitFileNames(sourceFile: SourceFile, host: EmitHost): EmitFileNames {
-        if (!isDeclarationFile(sourceFile)) {
-            let options = host.getCompilerOptions();
-            let jsFilePath: string;
-            if (shouldEmitToOwnFile(sourceFile, options)) {
-                let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
-                    sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
-                return {
-                    jsFilePath,
-                    sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
-                    declarationFilePath: !isJavaScript(sourceFile.fileName) ? getDeclarationEmitFilePath(jsFilePath, options) : undefined
-                };
-            }
-            else if (options.outFile || options.out) {
-                return getBundledEmitFileNames(options);
-            }
-        }
-        return {
-            jsFilePath: undefined,
-            sourceMapFilePath: undefined,
-            declarationFilePath: undefined
-        };
-    }
-
-    function getBundledEmitFileNames(options: CompilerOptions): EmitFileNames {
-        let jsFilePath = options.outFile || options.out;
-
-        return {
-            jsFilePath,
-            sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
-            declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
-        };
-    }
-
-    function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.sourceMap ? jsFilePath + ".map" : undefined;
-    }
-
-    function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
-    }
-
     export function forEachExpectedEmitFile(host: EmitHost,
         action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
         targetSourceFile?: SourceFile) {
@@ -1861,15 +1819,36 @@ namespace ts {
         }
 
         function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
-            action(getEmitFileNames(sourceFile, host), [sourceFile], /*isBundledEmit*/false);
+            let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
+                sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+            let emitFileNames: EmitFileNames = {
+                jsFilePath,
+                sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
+                declarationFilePath: !isJavaScript(sourceFile.fileName) ? getDeclarationEmitFilePath(jsFilePath, options) : undefined
+            };
+            action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
         }
 
         function onBundledEmit(host: EmitHost) {
             let bundledSources = filter(host.getSourceFiles(),
                 sourceFile => !shouldEmitToOwnFile(sourceFile, host.getCompilerOptions()) && !isDeclarationFile(sourceFile));
+            let jsFilePath = options.outFile || options.out;
+            let emitFileNames: EmitFileNames = {
+                jsFilePath,
+                sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
+                declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+            };
             if (bundledSources.length) {
-                action(getBundledEmitFileNames(options), bundledSources, /*isBundledEmit*/true);
+                action(emitFileNames, bundledSources, /*isBundledEmit*/true);
             }
+        }
+
+        function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+            return options.sourceMap ? jsFilePath + ".map" : undefined;
+        }
+
+        function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
+            return options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
         }
     }
 

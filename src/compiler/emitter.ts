@@ -8131,7 +8131,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, isBundledEmit ? undefined : sourceFiles[0], host, resolver, emitterDiagnostics) || emitSkipped;
+                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
             }
         }
     }

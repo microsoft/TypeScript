@@ -36,11 +36,12 @@ namespace ts {
         return declarationDiagnostics.getDiagnostics(targetSourceFile.fileName);
 
         function getDeclarationDiagnosticsFromFile({ declarationFilePath }, sources: SourceFile[], isBundledEmit: boolean) {
-            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, !isBundledEmit ? targetSourceFile : undefined);
+            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit);
         }
     }
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string, root?: SourceFile): DeclarationEmit {
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string,
+        sourceFiles: SourceFile[], isBundledEmit: boolean): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
 
@@ -67,67 +68,48 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencePathsOutput = "";
 
-        if (root) {
-            // Emitting just a single file, so emit references in this file only
-            if (!compilerOptions.noResolve) {
-                let addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
-                    let referencedFile = tryResolveScriptReference(host, root, fileReference);
+        // Emit references corresponding to each file
+        let emittedReferencedFiles: SourceFile[] = [];
+        let addedGlobalFileReference = false;
+        forEach(sourceFiles, sourceFile => {
+            if (!isJavaScript(sourceFile.fileName)) {
+                // Check what references need to be added
+                if (!compilerOptions.noResolve) {
+                    forEach(sourceFile.referencedFiles, fileReference => {
+                        let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-                    // All the references that are not going to be part of same file
-                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
-
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
-                            addedGlobalFileReference = true;
-                        }
-                    }
-                });
-            }
-
-            emitSourceFile(root);
-
-            // create asynchronous output for the importDeclarations
-            if (moduleElementDeclarationEmitInfo.length) {
-                let oldWriter = writer;
-                forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                    if (aliasEmitInfo.isVisible) {
-                        Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
-                        createAndSetNewTextWriterWithSymbolWriter();
-                        Debug.assert(aliasEmitInfo.indent === 0);
-                        writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
-                        aliasEmitInfo.asynchronousOutput = writer.getText();
-                    }
-                });
-                setWriter(oldWriter);
-            }
-        }
-        else {
-            // Emit references corresponding to this file
-            let emittedReferencedFiles: SourceFile[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile) && !isJavaScript(sourceFile.fileName)) {
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
+                        // Emit reference in dts, if the file reference was not already emitted
+                        if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
+                            // Add a reference to generated dts file,
+                            // global file reference is added only 
+                            //  - if it is not bundled emit (because otherwise it would be self reference)
+                            //  - and it is not already added
+                            if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
+                                addedGlobalFileReference = true;
                             }
-                        });
-                    }
-
-                    emitSourceFile(sourceFile);
+                            emittedReferencedFiles.push(referencedFile);
+                        }
+                    });
                 }
-            });
-        }
+
+                emitSourceFile(sourceFile);
+
+                // create asynchronous output for the importDeclarations
+                if (moduleElementDeclarationEmitInfo.length) {
+                    let oldWriter = writer;
+                    forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                        if (aliasEmitInfo.isVisible) {
+                            Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
+                            createAndSetNewTextWriterWithSymbolWriter();
+                            Debug.assert(aliasEmitInfo.indent === 0);
+                            writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
+                            aliasEmitInfo.asynchronousOutput = writer.getText();
+                        }
+                    });
+                    setWriter(oldWriter);
+                }
+            }
+        });
 
         return {
             reportedDeclarationError,
@@ -1592,33 +1574,51 @@ namespace ts {
             }
         }
 
-        function writeReferencePath(referencedFile: SourceFile) {
+        /**
+         * Adds the reference to referenced file, returns true if global file reference was emitted
+         * @param referencedFile
+         * @param addBundledFileReference Determines if global file reference corresponding to bundled file should be emitted or not
+         */
+        function writeReferencePath(referencedFile: SourceFile, addBundledFileReference: boolean): boolean {
             let declFileName: string;
-            if (referencedFile.flags & NodeFlags.DeclarationFile) {
+            let addedBundledEmitReference = false;
+            if (isDeclarationFile(referencedFile)) {
                 // Declaration file, use declaration file name
                 declFileName = referencedFile.fileName;
             }
             else {
-                // declaration file name
-                let { declarationFilePath, jsFilePath } = getEmitFileNames(referencedFile, host);
-                Debug.assert(!!declarationFilePath || isJavaScript(referencedFile.fileName), "Declaration file is not present only for javascript files");
-                declFileName = declarationFilePath || jsFilePath;
+                // Get the declaration file path
+                forEachExpectedEmitFile(host, getDeclFileName, referencedFile);
             }
 
-            declFileName = getRelativePathToDirectoryOrUrl(
-                getDirectoryPath(normalizeSlashes(declarationFilePath)),
-                declFileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-            /*isAbsolutePathAnUrl*/ false);
+            if (declFileName) {
+                declFileName = getRelativePathToDirectoryOrUrl(
+                    getDirectoryPath(normalizeSlashes(declarationFilePath)),
+                    declFileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false);
 
-            referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+            }
+            return addedBundledEmitReference;
+
+            function getDeclFileName(emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+                // Dont add reference path to this file if it is a bundled emit and caller asked not emit bundled file path
+                if (isBundledEmit && !addBundledFileReference) {
+                    return;
+                }
+
+                Debug.assert(!!emitFileNames.declarationFilePath || isJavaScript(referencedFile.fileName), "Declaration file is not present only for javascript files");
+                declFileName = emitFileNames.declarationFilePath || emitFileNames.jsFilePath;
+                addedBundledEmitReference = isBundledEmit;
+            }
         }
     }
 
     /* @internal */
-    export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
-        let emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFile);
+    export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
+        let emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit);
         let emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath);
         if (!emitSkipped) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
