@@ -322,10 +322,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
+        let emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
         let diagnostics: Diagnostic[] = [];
         let newLine = host.getNewLine();
-        let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
+        let jsxDesugaring = compilerOptions.jsx !== JsxEmit.Preserve;
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
+
+        // wrap the writeFile function we have on the host,
+        // so we can easily keep track of all the files written
+        if (compilerOptions.listEmittedFiles) {
+            let writeFileCore = host.writeFile;
+            host.writeFile = (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void) => {
+                emittedFilesList.push(fileName);
+                writeFileCore(fileName, data, writeByteOrderMark, onError);
+            };
+        }
 
         if (targetSourceFile === undefined) {
             forEach(host.getSourceFiles(), sourceFile => {
@@ -356,6 +367,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         return {
             emitSkipped: false,
             diagnostics,
+            emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList
         };
 

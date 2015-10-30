@@ -253,6 +253,10 @@ namespace ts {
             type: "boolean",
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
+        {
+            name: "listEmittedFiles",
+            type: "boolean",
+        },
     ];
 
     /* @internal */

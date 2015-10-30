@@ -90,11 +90,11 @@ namespace ts {
                 ? convertToRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
                 : diagnostic.file.fileName;
 
-            output += `${ relativeFileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            output += `${relativeFileName}(${loc.line + 1},${loc.character + 1}): `;
         }
 
         let category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
 
         sys.write(output);
     }
@@ -105,15 +105,33 @@ namespace ts {
         }
     }
 
+    function reportEmittedFiles(fileNames: string[], host: CompilerHost) {
+        for (let i = 0; i < fileNames.length; i++) {
+            reportEmittedFile(fileNames[i], host);
+        }
+    }
+
+    function reportEmittedFile(fileName: string, host: CompilerHost): void {
+
+        let category = DiagnosticCategory[DiagnosticCategory.Message].toLowerCase();
+        const relativeFileName = host
+            ? convertToRelativePath(fileName, host.getCurrentDirectory(), fn => host.getCanonicalFileName(fn))
+            : fileName;
+
+        let output = `${category} TSFILE: ${relativeFileName}${sys.newLine}`;
+
+        sys.write(output);
+    }
+
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
         let output = new Date().toLocaleTimeString() + " - ";
 
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            output += `${diagnostic.file.fileName}(${loc.line + 1},${loc.character + 1}): `;
         }
 
-        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        output += `${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
 
         sys.write(output);
     }
@@ -479,6 +497,11 @@ namespace ts {
             // Otherwise, emit and report any errors we ran into.
             let emitOutput = program.emit();
             reportDiagnostics(emitOutput.diagnostics, compilerHost);
+
+            // and report the list of files we emitted if requested
+            if (emitOutput.emittedFiles) {
+                reportEmittedFiles(emitOutput.emittedFiles, compilerHost);
+            }
 
             // If the emitter didn't emit anything, then pass that value along.
             if (emitOutput.emitSkipped) {
