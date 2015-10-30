@@ -14,8 +14,8 @@ for (let num of array) {
 //// [for-of58.js]
 var array = [1, 2, 3];
 var sum = 0;
-for (var _i = 0; _i < array.length; _i++) {
-    var num = array[_i];
+for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
+    var num = array_1[_i];
     if (sum === 0) {
         array = [4, 5, 6];
     }
