@@ -86,17 +86,19 @@ namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost {
         ls: ts.LanguageService = null;
         compilationSettings: ts.CompilerOptions;
-        filenameToScript: ts.Map<ScriptInfo> = {};
+        filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
 
         constructor(public host: ServerHost, public project: Project) {
-            this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
+            var getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>(getCanonicalFileName);
+            this.filenameToScript = createFileMap<ScriptInfo>(getCanonicalFileName);
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName)
-            }
+            };
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
@@ -199,36 +201,32 @@ namespace ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.filenameToScript[info.fileName] = undefined;
+                this.filenameToScript.remove(info.fileName);
                 this.resolvedModuleNames.remove(info.fileName);
             }
         }
 
         getScriptInfo(filename: string): ScriptInfo {
-            var scriptInfo = ts.lookUp(this.filenameToScript, filename);
+            var scriptInfo = this.filenameToScript.get(filename);
             if (!scriptInfo) {
                 scriptInfo = this.project.openReferencedFile(filename);
                 if (scriptInfo) {
-                    this.filenameToScript[scriptInfo.fileName] = scriptInfo;
+                    this.filenameToScript.set(scriptInfo.fileName, scriptInfo);
                 }
-            }
-            else {
             }
             return scriptInfo;
         }
 
         addRoot(info: ScriptInfo) {
-            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
-            if (!scriptInfo) {
-                this.filenameToScript[info.fileName] = info;
+            if (!this.filenameToScript.contains(info.fileName)) {
+                this.filenameToScript.set(info.fileName, info);
                 this.roots.push(info);
             }
         }
 
         removeRoot(info: ScriptInfo) {
-            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
-            if (scriptInfo) {
-                this.filenameToScript[info.fileName] = undefined;
+            if (!this.filenameToScript.contains(info.fileName)) {
+                this.filenameToScript.remove(info.fileName);
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.fileName);
             }
@@ -279,7 +277,7 @@ namespace ts.server {
          *  @param line 1 based index
          */
         lineToTextSpan(filename: string, line: number): ts.TextSpan {
-            var script: ScriptInfo = this.filenameToScript[filename];
+            var script: ScriptInfo = this.filenameToScript.get(filename);
             var index = script.snap().index;
 
             var lineInfo = index.lineNumberToInfo(line + 1);
@@ -299,7 +297,7 @@ namespace ts.server {
          * @param offset 1 based index
          */
         lineOffsetToPosition(filename: string, line: number, offset: number): number {
-            var script: ScriptInfo = this.filenameToScript[filename];
+            var script: ScriptInfo = this.filenameToScript.get(filename);
             var index = script.snap().index;
 
             var lineInfo = index.lineNumberToInfo(line);
@@ -312,7 +310,7 @@ namespace ts.server {
          * @param offset 1-based index
          */
         positionToLineOffset(filename: string, position: number): ILineInfo {
-            var script: ScriptInfo = this.filenameToScript[filename];
+            var script: ScriptInfo = this.filenameToScript.get(filename);
             var index = script.snap().index;
             var lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };
@@ -386,7 +384,7 @@ namespace ts.server {
         }
 
         getFileNames() {
-            let sourceFiles = this.program.getSourceFiles();
+            var sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
@@ -576,7 +574,8 @@ namespace ts.server {
             let newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             let currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
-            if (!arrayStructurallyIsEqualTo(currentRootFiles, newRootFiles)) {
+            // We check if the project file list has changed. If so, we update the project.
+            if (!arrayIsEqualTo(currentRootFiles && currentRootFiles.sort(), newRootFiles && newRootFiles.sort())) {
                 // For configured projects, the change is made outside the tsconfig file, and
                 // it is not likely to affect the project for other files opened by the client. We can 
                 // just update the current project.
@@ -1267,11 +1266,15 @@ namespace ts.server {
                             if (info.isOpen) {
                                 if (this.openFileRoots.indexOf(info) >= 0) {
                                     this.openFileRoots = copyListRemovingItem(info, this.openFileRoots);
+                                    if (info.defaultProject && !info.defaultProject.isConfiguredProject()) {
+                                        this.removeProject(info.defaultProject);
+                                    }
                                 }
                                 if (this.openFilesReferenced.indexOf(info) >= 0) {
                                     this.openFilesReferenced = copyListRemovingItem(info, this.openFilesReferenced);
                                 }
                                 this.openFileRootsConfigured.push(info);
+                                info.defaultProject = project;
                             }
                         }
                         project.addRoot(info);

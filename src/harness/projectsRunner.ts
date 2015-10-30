@@ -127,7 +127,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: () => string[],
-            getSourceFileText: (fileName: string) => string,
+            getSourceFileTextImpl: (fileName: string) => string,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
             let program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
@@ -170,6 +170,11 @@ class ProjectRunner extends RunnerBase {
                 };
             }
 
+            function getSourceFileText(fileName: string): string {
+                const text = getSourceFileTextImpl(fileName);
+                return text !== undefined ? text : getSourceFileTextImpl(ts.getNormalizedAbsolutePath(fileName, getCurrentDirectory()));
+            }
+
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
@@ -194,7 +199,7 @@ class ProjectRunner extends RunnerBase {
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
-                    fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
+                    fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
                     readFile: fileName => Harness.IO.readFile(fileName)
                 };
             }
@@ -298,7 +303,10 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     let outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
+                    let file = findOutpuDtsFile(outputDtsFileName);
+                    if (file) {
+                        allInputFiles.unshift(file);
+                    }
                 }
                 else {
                     let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
@@ -318,7 +326,16 @@ class ProjectRunner extends RunnerBase {
                 return ts.map(allInputFiles, outputFile => outputFile.emittedFileName);
             }
             function getSourceFileText(fileName: string): string {
-                return ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === fileName ? inputFile.code : undefined);
+                for (const inputFile of allInputFiles) {
+                    const isMatchingFile = ts.isRootedDiskPath(fileName)
+                        ? ts.getNormalizedAbsolutePath(inputFile.emittedFileName, getCurrentDirectory()) === fileName
+                        : inputFile.emittedFileName === fileName;
+
+                    if (isMatchingFile) {
+                        return inputFile.code;
+                    }
+                }
+                return undefined;
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {

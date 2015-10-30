@@ -1,4 +1,2 @@
-//// [a.js.map]
-{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":["A","A.constructor"],"mappings":";IACA;QAAAA;QAAiBC,CAACA;QAADD,QAACA;IAADA,CAACA,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA"}//// [b.js.map]
-{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":["B","B.constructor"],"mappings":";;;;;;IACA;QAAuBA,qBAACA;QAAxBA;YAAuBC,8BAACA;QAAGA,CAACA;QAADD,QAACA;IAADA,CAACA,AAA5B,EAAuB,KAAC,EAAI;IAAf,SAAC,IAAc,CAAA"}//// [all.js.map]
+//// [all.js.map]
 {"version":3,"file":"all.js","sourceRoot":"","sources":["tests/cases/compiler/ref/a.ts","tests/cases/compiler/b.ts"],"names":["A","A.constructor","B","B.constructor"],"mappings":";;;;;;IACA;QAAAA;QAAiBC,CAACA;QAADD,QAACA;IAADA,CAACA,AAAlB,IAAkB;IAAL,SAAC,IAAI,CAAA;;;ICAlB;QAAuBE,qBAACA;QAAxBA;YAAuBC,8BAACA;QAAGA,CAACA;QAADD,QAACA;IAADA,CAACA,AAA5B,EAAuB,KAAC,EAAI;IAAf,SAAC,IAAc,CAAA"}
