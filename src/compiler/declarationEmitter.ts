@@ -31,15 +31,16 @@ namespace ts {
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
-        let diagnostics: Diagnostic[] = [];
-        let { declarationFilePath } = getEmitFileNames(targetSourceFile, host);
-        if (declarationFilePath) {
-            emitDeclarations(host, resolver, diagnostics, declarationFilePath, targetSourceFile);
+        let declarationDiagnostics = createDiagnosticCollection();
+        forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
+        return declarationDiagnostics.getDiagnostics(targetSourceFile.fileName);
+
+        function getDeclarationDiagnosticsFromFile({ declarationFilePath }, sources: SourceFile[], isBundledEmit: boolean) {
+            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, !isBundledEmit ? targetSourceFile : undefined);
         }
-        return diagnostics;
     }
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], declarationFilePath: string, root?: SourceFile): DeclarationEmit {
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string, root?: SourceFile): DeclarationEmit {
         let newLine = host.getNewLine();
         let compilerOptions = host.getCompilerOptions();
 
@@ -243,14 +244,14 @@ namespace ts {
                 let errorInfo = writer.getSymbolAccessibilityDiagnostic(symbolAccesibilityResult);
                 if (errorInfo) {
                     if (errorInfo.typeName) {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
+                        emitterDiagnostics.add(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             getSourceTextOfNodeFromSourceFile(currentSourceFile, errorInfo.typeName),
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
                     }
                     else {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
+                        emitterDiagnostics.add(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
@@ -266,7 +267,7 @@ namespace ts {
         function reportInaccessibleThisError() {
             if (errorNameNode) {
                 reportedDeclarationError = true;
-                diagnostics.push(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode)));
             }
         }
@@ -1616,14 +1617,14 @@ namespace ts {
     }
 
     /* @internal */
-    export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
-        let emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, declarationFilePath, sourceFile);
+    export function writeDeclarationFile(declarationFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
+        let emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFile);
         let emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath);
         if (!emitSkipped) {
             let declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
             let compilerOptions = host.getCompilerOptions();
-            writeFile(host, diagnostics, declarationFilePath, declarationOutput, compilerOptions.emitBOM);
+            writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, compilerOptions.emitBOM);
         }
         return emitSkipped;
 

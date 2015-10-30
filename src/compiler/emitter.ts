@@ -322,18 +322,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
         let sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
-        let diagnostics: Diagnostic[] = [];
+        let emitterDiagnostics = createDiagnosticCollection();
         let emitSkipped = false;
         let newLine = host.getNewLine();
 
         forEachExpectedEmitFile(host, emitFile, targetSourceFile);
 
-        // Sort and make the unique list of diagnostics
-        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
-
         return {
             emitSkipped,
-            diagnostics,
+            diagnostics: emitterDiagnostics.getDiagnostics(),
             sourceMaps: sourceMapDataList
         };
 
@@ -949,7 +946,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         // Write source map file
-                        writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, sourceMapText, /*writeByteOrderMark*/ false);
+                        writeFile(host, emitterDiagnostics, sourceMapData.sourceMapFilePath, sourceMapText, /*writeByteOrderMark*/ false);
                     }
                     sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
 
@@ -1037,7 +1034,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
-                writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(host, emitterDiagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
             // Create a temporary variable with a unique unused name.
@@ -8134,7 +8131,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, isBundledEmit ? undefined : sourceFiles[0], host, resolver, diagnostics) || emitSkipped;
+                emitSkipped = writeDeclarationFile(declarationFilePath, isBundledEmit ? undefined : sourceFiles[0], host, resolver, emitterDiagnostics) || emitSkipped;
             }
         }
     }
