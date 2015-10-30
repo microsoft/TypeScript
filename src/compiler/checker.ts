@@ -6177,27 +6177,6 @@ namespace ts {
             Debug.fail("should not get here");
         }
 
-        // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
-        // or not of the given type kind (when isOfTypeKind is false)
-        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean, allowEmptyUnionResult: boolean): Type {
-            if (type.flags & TypeFlags.Union) {
-                let types = (<UnionType>type).types;
-                if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
-                    // Above we checked if we have anything to remove, now use the opposite test to do the removal
-                    let narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
-                    if (allowEmptyUnionResult || narrowedType !== emptyObjectType) {
-                        return narrowedType;
-                    }
-                }
-            }
-            else if (allowEmptyUnionResult && !!(type.flags & typeKind) === isOfTypeKind) {
-                // Use getUnionType(emptyArray) instead of emptyObjectType in case the way empty union types
-                // are represented ever changes.
-                return getUnionType(emptyArray);
-            }
-            return type;
-        }
-
         function hasInitializer(node: VariableLikeDeclaration): boolean {
             return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableLikeDeclaration>node.parent.parent));
         }
@@ -6296,6 +6275,7 @@ namespace ts {
         // Get the narrowed type of a given symbol at a given location
         function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
             let type = getTypeOfSymbol(symbol);
+            let originalType = type;
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
@@ -6338,10 +6318,6 @@ namespace ts {
                                 // Stop at the first containing function or module declaration
                                 break loop;
                         }
-                        // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-                        if (narrowedType === getUnionType(emptyArray)) {
-                            narrowedType = type;
-                        }
                         // Use narrowed type if construct contains no assignments to variable
                         if (narrowedType !== type) {
                             if (isVariableAssignedWithin(symbol, node)) {
@@ -6349,6 +6325,11 @@ namespace ts {
                             }
                             type = narrowedType;
                         }
+                    }
+
+                    // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
+                    if (type === getUnionType(emptyArray)) {
+                        type = originalType;
                     }
                 }
             }
@@ -6369,22 +6350,24 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 let typeInfo = primitiveTypeInfo[right.text];
-                // If the type to be narrowed is any and we're affirmatively checking against a primitive, return the primitive
+                // If the type to be narrowed is any and we're checking a primitive with assumeTrue=true, return the primitive
                 if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
                     return typeInfo.type;
                 }
-                // At this point we can bail if it's not a union
-                if (!(type.flags & TypeFlags.Union)) {
-                    return type;
-                }
-                let flags = typeInfo ? typeInfo.flags : (assumeTrue = !assumeTrue, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol | TypeFlags.Boolean);
-                let union = type as UnionType;
-                if (assumeTrue) {
-                    return getUnionType(filter(union.types, t => !!(t.flags & flags)));
+                let flags: TypeFlags;
+                if (typeInfo) {
+                    flags =  typeInfo.flags;
                 }
                 else {
-                    return getUnionType(filter(union.types, t => !(t.flags & flags)));
+                    assumeTrue = !assumeTrue;
+                    flags = TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol | TypeFlags.Boolean;
                 }
+                // At this point we can bail if it's not a union
+                if (!(type.flags & TypeFlags.Union)) {
+                    // If the active non-union type would be removed from a union by this type guard, return an empty union
+                    return (assumeTrue === !!(type.flags & flags)) ? type : getUnionType(emptyArray);
+                }
+                return getUnionType(filter((type as UnionType).types, t => assumeTrue === !!(t.flags & flags)), /*noSubtypeReduction*/ true);
             }
 
             function narrowTypeByAnd(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -12554,7 +12537,13 @@ namespace ts {
 
             // After we remove all types that are StringLike, we will know if there was a string constituent
             // based on whether the remaining type is the same as the initial type.
-            let arrayType = removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true, /*allowEmptyUnionResult*/ true);
+            let arrayType = arrayOrStringType;
+            if (arrayOrStringType.flags & TypeFlags.Union) {
+                arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
+            }
+            else if (arrayOrStringType.flags & TypeFlags.StringLike) {
+                arrayType = getUnionType(emptyArray);
+            }
             let hasStringConstituent = arrayOrStringType !== arrayType;
 
             let reportedError = false;
