@@ -611,10 +611,4 @@ sourceFile:outputdir_module_multifolder/test.ts
 6 >Emitted(16, 22) Source(14, 25) + SourceIndex(0)
 7 >Emitted(16, 23) Source(14, 26) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=test.js.map===================================================================
-JsFile: test.js
-mapUrl: test.js.map
-sourceRoot: ../src/
-sources: 
-===================================================================
 >>>//# sourceMappingURL=test.js.map

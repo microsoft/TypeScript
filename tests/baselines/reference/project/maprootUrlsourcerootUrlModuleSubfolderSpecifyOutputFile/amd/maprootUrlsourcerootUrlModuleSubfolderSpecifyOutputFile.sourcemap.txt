@@ -369,10 +369,4 @@ sourceFile:test.ts
 7 >Emitted(14, 27) Source(12, 26) + SourceIndex(0)
 ---
 >>>});
->>>//# sourceMappingURL=http://www.typescriptlang.org/test.js.map===================================================================
-JsFile: test.js
-mapUrl: http://www.typescriptlang.org/test.js.map
-sourceRoot: http://typescript.codeplex.com/
-sources: 
-===================================================================
 >>>//# sourceMappingURL=http://www.typescriptlang.org/test.js.map

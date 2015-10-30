@@ -1258,46 +1258,31 @@ namespace ts {
 
             if (!options.noEmit) {
                 let emitHost = getEmitHost();
-                let emitFilesSeen: Map<SourceFile[]> = {};
+                let emitFilesSeen: Map<boolean> = {};
+                forEachExpectedEmitFile(emitHost, (emitFileNames, sourceFiles, isBundledEmit) => {
+                    verifyEmitFilePath(emitFileNames.jsFilePath, emitFilesSeen);
+                    verifyEmitFilePath(emitFileNames.declarationFilePath, emitFilesSeen);
+                });
+            }
 
-                // Build map of files seen
-                for (let file of files) {
-                    let { jsFilePath, declarationFilePath } = getEmitFileNames(file, emitHost);
-                    if (jsFilePath) {
-                        let filesEmittingJsFilePath = lookUp(emitFilesSeen, jsFilePath);
-                        if (!filesEmittingJsFilePath) {
-                            emitFilesSeen[jsFilePath] = [file];
-                            if (declarationFilePath) {
-                                emitFilesSeen[declarationFilePath] = [file];
-                            }
-                        }
-                        else {
-                            filesEmittingJsFilePath.push(file);
-                        }
-                    }
-                }
-
-                // Verify that all the emit files are unique and dont overwrite input files
-                forEachKey(emitFilesSeen, emitFilePath => {
+            // Verify that all the emit files are unique and dont overwrite input files
+            function verifyEmitFilePath(emitFilePath: string, emitFilesSeen: Map<boolean>) {
+                if (emitFilePath) {
                     // Report error if the output overwrites input file
                     if (hasFile(files, emitFilePath)) {
                         createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
                     }
 
-                    // Report error if multiple files write into same file (except if specified by --out or --outFile)
-                    if (emitFilePath !== (options.outFile || options.out)) {
-                        // Not --out or --outFile emit, There should be single file emitting to this file
-                        if (emitFilesSeen[emitFilePath].length > 1) {
-                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
-                        }
+                    // Report error if multiple files write into same file
+                    let filesEmittingJsFilePath = lookUp(emitFilesSeen, emitFilePath);
+                    if (filesEmittingJsFilePath) {
+                        // Already seen the same emit file - report error
+                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
                     }
                     else {
-                        // --out or --outFile, error if there exist file emitting to single file colliding with --out
-                        if (forEach(emitFilesSeen[emitFilePath], sourceFile => shouldEmitToOwnFile(sourceFile, options))) {
-                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
-                        }
+                        emitFilesSeen[emitFilePath] = true;
                     }
-                });
+                }
             }
         }
 

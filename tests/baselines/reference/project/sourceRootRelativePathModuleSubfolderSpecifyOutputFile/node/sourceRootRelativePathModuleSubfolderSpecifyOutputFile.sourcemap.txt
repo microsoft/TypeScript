@@ -390,10 +390,4 @@ sourceFile:test.ts
 6 >Emitted(14, 22) Source(12, 25) + SourceIndex(0)
 7 >Emitted(14, 23) Source(12, 26) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=test.js.map===================================================================
-JsFile: test.js
-mapUrl: test.js.map
-sourceRoot: ../src/
-sources: 
-===================================================================
 >>>//# sourceMappingURL=test.js.map

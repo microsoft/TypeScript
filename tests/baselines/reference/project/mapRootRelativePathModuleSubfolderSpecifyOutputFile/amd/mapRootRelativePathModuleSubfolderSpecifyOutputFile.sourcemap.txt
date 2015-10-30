@@ -369,10 +369,4 @@ sourceFile:../outputdir_module_subfolder/test.ts
 7 >Emitted(14, 27) Source(12, 26) + SourceIndex(0)
 ---
 >>>});
->>>//# sourceMappingURL=../mapFiles/test.js.map===================================================================
-JsFile: test.js
-mapUrl: ../../mapFiles/test.js.map
-sourceRoot: 
-sources: 
-===================================================================
->>>//# sourceMappingURL=../../mapFiles/test.js.map
+>>>//# sourceMappingURL=../mapFiles/test.js.map
