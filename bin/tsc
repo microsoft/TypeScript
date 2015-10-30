@@ -1,2 +1,13 @@
 #!/usr/bin/env node
-require('../lib/tsc.js')
+var resolve = require('resolve').sync;
+var path = require('path');
+var basedir = process.cwd();
+var libdir = '../lib';
+var tsLocation;
+try {
+  tsLocation = resolve('typescript', {basedir: basedir});
+  libdir = path.dirname(tsLocation);
+} catch(e) {
+  // ignore, use global typescript
+}
+require(path.join(libdir, 'tsc.js'))

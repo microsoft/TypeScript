@@ -35,6 +35,7 @@
         "browserify": "latest",
         "istanbul": "latest",
         "mocha-fivemat-progress-reporter": "latest",
+        "resolve": "^1.1.6",
         "tslint": "latest",
         "tsd": "latest"
     },
