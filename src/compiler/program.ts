@@ -348,7 +348,7 @@ namespace ts {
             ? ((moduleNames: string[], containingFile: string) => host.resolveModuleNames(moduleNames, containingFile))
             : ((moduleNames: string[], containingFile: string) => map(moduleNames, moduleName => resolveModuleName(moduleName, containingFile, options, host).resolvedModule));
 
-        let filesByName = createFileMap<SourceFile>(getCanonicalFileName);
+        let filesByName = createFileMap<SourceFile>();
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing 
         let filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
@@ -384,7 +384,7 @@ namespace ts {
 
         program = {
             getRootFileNames: () => rootNames,
-            getSourceFile: getSourceFile,
+            getSourceFile,
             getSourceFiles: () => files,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -440,7 +440,7 @@ namespace ts {
 
             // check if program source files has changed in the way that can affect structure of the program
             let newSourceFiles: SourceFile[] = [];
-            let normalizedAbsoluteFileNames: string[] = [];
+            let filePaths: Path[] = [];
             let modifiedSourceFiles: SourceFile[] = [];
 
             for (let oldSourceFile of oldProgram.getSourceFiles()) {
@@ -449,8 +449,8 @@ namespace ts {
                     return false;
                 }
 
-                const normalizedAbsolutePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
-                normalizedAbsoluteFileNames.push(normalizedAbsolutePath);
+                newSourceFile.path = oldSourceFile.path;
+                filePaths.push(newSourceFile.path);
 
                 if (oldSourceFile !== newSourceFile) {
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
@@ -474,7 +474,7 @@ namespace ts {
 
                     if (resolveModuleNamesWorker) {
                         let moduleNames = map(newSourceFile.imports, name => name.text);
-                        let resolutions = resolveModuleNamesWorker(moduleNames, normalizedAbsolutePath);
+                        let resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory));
                         // ensure that module resolution results are still correct
                         for (let i = 0; i < moduleNames.length; ++i) {
                             let newResolution = resolutions[i];
@@ -505,7 +505,7 @@ namespace ts {
 
             // update fileName -> file mapping
             for (let i = 0, len = newSourceFiles.length; i < len; ++i) {
-                filesByName.set(normalizedAbsoluteFileNames[i], newSourceFiles[i]);
+                filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
             files = newSourceFiles;
@@ -580,7 +580,7 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string): SourceFile {
-            return filesByName.get(getNormalizedAbsolutePath(fileName, currentDirectory));
+            return filesByName.get(toPath(fileName, currentDirectory, getCanonicalFileName));
         }
 
         function getDiagnosticsHelper(
@@ -920,7 +920,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, getNormalizedAbsolutePath(fileName, currentDirectory), isDefaultLib, supportedExtensions, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, supportedExtensions, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -930,13 +930,13 @@ namespace ts {
                 }
             }
             else {
-                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, getNormalizedAbsolutePath(fileName, currentDirectory), isDefaultLib, supportedExtensions, refFile, refPos, refEnd);
+                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, supportedExtensions, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(getSupportedExtensions(options), extension => findSourceFile(fileName + extension, getNormalizedAbsolutePath(fileName + extension, currentDirectory), isDefaultLib, supportedExtensions, refFile, refPos, refEnd))) {
+                    else if (!forEach(getSupportedExtensions(options), extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, supportedExtensions, refFile, refPos, refEnd))) {
                         // (TODO: shkamat) Should this message be different given we support multiple extensions
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
@@ -966,7 +966,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, normalizedAbsolutePath: string, isDefaultLib: boolean, supportedExtensions: string[], refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, normalizedAbsolutePath: Path, isDefaultLib: boolean, supportedExtensions: string[], refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(normalizedAbsolutePath)) {
                 const file = filesByName.get(normalizedAbsolutePath);
                 // try to check if we've already seen this file but with a different casing in path
@@ -991,6 +991,8 @@ namespace ts {
 
             filesByName.set(normalizedAbsolutePath, file);
             if (file) {
+                file.path = normalizedAbsolutePath;
+
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
                     const existingFile = filesByNameIgnoreCase.get(normalizedAbsolutePath);
@@ -1045,14 +1047,7 @@ namespace ts {
                     let resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        const absoluteImportPath = isRootedDiskPath(resolution.resolvedFileName)
-                            ? resolution.resolvedFileName
-                            : getNormalizedAbsolutePath(resolution.resolvedFileName, currentDirectory);
-
-                        // convert an absolute import path to path that is relative to current directory
-                        // this was host still can locate it but files names in user output will be shorter (and thus look nicer).
-                        const relativePath = getRelativePathToDirectoryOrUrl(currentDirectory, absoluteImportPath, currentDirectory, getCanonicalFileName, false);
-                        const importedFile = findSourceFile(relativePath, absoluteImportPath, /* isDefaultLib */ false, supportedExtensions, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /* isDefaultLib */ false, supportedExtensions, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {

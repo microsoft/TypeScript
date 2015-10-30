@@ -81,12 +81,16 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnostic(diagnostic: Diagnostic) {
+    function reportDiagnostic(diagnostic: Diagnostic, host: CompilerHost) {
         let output = "";
 
         if (diagnostic.file) {
             let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            const relativeFileName = host
+                ? convertToRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
+                : diagnostic.file.fileName;
+
+            output += `${ relativeFileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
         }
 
         let category = DiagnosticCategory[diagnostic.category].toLowerCase();
@@ -95,9 +99,9 @@ namespace ts {
         sys.write(output);
     }
 
-    function reportDiagnostics(diagnostics: Diagnostic[]) {
+    function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost) {
         for (let i = 0; i < diagnostics.length; i++) {
-            reportDiagnostic(diagnostics[i]);
+            reportDiagnostic(diagnostics[i], host);
         }
     }
 
@@ -166,7 +170,7 @@ namespace ts {
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
@@ -175,7 +179,7 @@ namespace ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors);
+            reportDiagnostics(commandLine.errors, compilerHost);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -185,7 +189,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version), /* compilerHost */ undefined);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -197,12 +201,12 @@ namespace ts {
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
@@ -220,7 +224,7 @@ namespace ts {
         // Firefox has Object.prototype.watch
         if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
             if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
@@ -256,7 +260,7 @@ namespace ts {
             let configObject = result.config;
             let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
             if (configParseResult.errors.length > 0) {
-                reportDiagnostics(configParseResult.errors);
+                reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
@@ -463,7 +467,7 @@ namespace ts {
                 }
             }
 
-            reportDiagnostics(diagnostics);
+            reportDiagnostics(diagnostics, compilerHost);
 
             // If the user doesn't want us to emit, then we're done at this point.
             if (compilerOptions.noEmit) {
@@ -474,7 +478,7 @@ namespace ts {
 
             // Otherwise, emit and report any errors we ran into.
             let emitOutput = program.emit();
-            reportDiagnostics(emitOutput.diagnostics);
+            reportDiagnostics(emitOutput.diagnostics, compilerHost);
 
             // If the emitter didn't emit anything, then pass that value along.
             if (emitOutput.emitSkipped) {
@@ -587,7 +591,7 @@ namespace ts {
         let currentDirectory = sys.getCurrentDirectory();
         let file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* compilerHost */ undefined);
         }
         else {
             let compilerOptions = extend(options, defaultInitCompilerOptions);
@@ -602,7 +606,7 @@ namespace ts {
             }
 
             sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* compilerHost */ undefined);
         }
 
         return;

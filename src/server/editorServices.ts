@@ -33,8 +33,10 @@ namespace ts.server {
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
+        path: Path;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
+            this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
         }
 
@@ -90,11 +92,12 @@ namespace ts.server {
         roots: ScriptInfo[] = [];
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
+        private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
-            const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>(getCanonicalFileName);
-            this.filenameToScript = createFileMap<ScriptInfo>(getCanonicalFileName);
+            this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
+            this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName)
@@ -102,7 +105,8 @@ namespace ts.server {
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
+            let path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            let currentResolutionsInFile = this.resolvedModuleNames.get(path);
 
             let newResolutions: Map<TimestampedResolvedModule> = {};
             let resolvedModules: ResolvedModule[] = [];
@@ -131,7 +135,7 @@ namespace ts.server {
             }
 
             // replace old results with a new one
-            this.resolvedModuleNames.set(containingFile, newResolutions);
+            this.resolvedModuleNames.set(path, newResolutions);
             return resolvedModules;
 
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
@@ -201,34 +205,35 @@ namespace ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.filenameToScript.remove(info.fileName);
-                this.resolvedModuleNames.remove(info.fileName);
+                this.filenameToScript.remove(info.path);
+                this.resolvedModuleNames.remove(info.path);
             }
         }
 
         getScriptInfo(filename: string): ScriptInfo {
-            let scriptInfo = this.filenameToScript.get(filename);
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            let scriptInfo = this.filenameToScript.get(path);
             if (!scriptInfo) {
                 scriptInfo = this.project.openReferencedFile(filename);
                 if (scriptInfo) {
-                    this.filenameToScript.set(scriptInfo.fileName, scriptInfo);
+                    this.filenameToScript.set(path, scriptInfo);
                 }
             }
             return scriptInfo;
         }
 
         addRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.fileName)) {
-                this.filenameToScript.set(info.fileName, info);
+            if (!this.filenameToScript.contains(info.path)) {
+                this.filenameToScript.set(info.path, info);
                 this.roots.push(info);
             }
         }
 
         removeRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.fileName)) {
-                this.filenameToScript.remove(info.fileName);
+            if (!this.filenameToScript.contains(info.path)) {
+                this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
-                this.resolvedModuleNames.remove(info.fileName);
+                this.resolvedModuleNames.remove(info.path);
             }
         }
 
@@ -277,7 +282,8 @@ namespace ts.server {
          *  @param line 1 based index
          */
         lineToTextSpan(filename: string, line: number): ts.TextSpan {
-            const script: ScriptInfo = this.filenameToScript.get(filename);
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
 
             const lineInfo = index.lineNumberToInfo(line + 1);
@@ -297,7 +303,8 @@ namespace ts.server {
          * @param offset 1 based index
          */
         lineOffsetToPosition(filename: string, line: number, offset: number): number {
-            const script: ScriptInfo = this.filenameToScript.get(filename);
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
 
             const lineInfo = index.lineNumberToInfo(line);
@@ -310,7 +317,8 @@ namespace ts.server {
          * @param offset 1-based index
          */
         positionToLineOffset(filename: string, position: number): ILineInfo {
-            const script: ScriptInfo = this.filenameToScript.get(filename);
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
             const lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };
