@@ -1,7 +1,7 @@
-error TS5056: Cannot write file 'tests/cases/compiler/a.js' since one or more input files would emit into it.
+error TS5056: Cannot write file 'tests/cases/compiler/a.js' because it would be overwritten by multiple input files.
 
 
-!!! error TS5056: Cannot write file 'tests/cases/compiler/a.js' since one or more input files would emit into it.
+!!! error TS5056: Cannot write file 'tests/cases/compiler/a.js' because it would be overwritten by multiple input files.
 ==== tests/cases/compiler/a.ts (0 errors) ====
     class c {
     }

@@ -1289,20 +1289,20 @@ namespace ts {
                 forEachKey(emitFilesSeen, emitFilePath => {
                     // Report error if the output overwrites input file
                     if (hasFile(files, emitFilePath)) {
-                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_which_is_one_of_the_input_files);
+                        createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file);
                     }
 
                     // Report error if multiple files write into same file (except if specified by --out or --outFile)
                     if (emitFilePath !== (options.outFile || options.out)) {
                         // Not --out or --outFile emit, There should be single file emitting to this file
                         if (emitFilesSeen[emitFilePath].length > 1) {
-                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_since_one_or_more_input_files_would_emit_into_it);
+                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
                         }
                     }
                     else {
                         // --out or --outFile, error if there exist file emitting to single file colliding with --out
                         if (forEach(emitFilesSeen[emitFilePath], sourceFile => shouldEmitToOwnFile(sourceFile, options))) {
-                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_since_one_or_more_input_files_would_emit_into_it);
+                            createEmitBlockingDiagnostics(emitFilePath, Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files);
                         }
                     }
                 });

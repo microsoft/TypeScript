@@ -1,8 +1,8 @@
-error TS5055: Cannot write file 'tests/cases/compiler/b.js' which is one of the input files.
+error TS5055: Cannot write file 'tests/cases/compiler/b.js' because it would overwrite input file.
 error TS6054: File 'tests/cases/compiler/b.js.map' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx'.
 
 
-!!! error TS5055: Cannot write file 'tests/cases/compiler/b.js' which is one of the input files.
+!!! error TS5055: Cannot write file 'tests/cases/compiler/b.js' because it would overwrite input file.
 !!! error TS6054: File 'tests/cases/compiler/b.js.map' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx'.
 ==== tests/cases/compiler/a.ts (0 errors) ====
     
