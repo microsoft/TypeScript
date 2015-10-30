@@ -546,7 +546,7 @@ namespace ts {
                                 isModuleLevelDeclaration(outtermostDeclaration) &&
                                 (!(outtermostDeclaration.id in dependentDeclarations || outtermostDeclaration.id in declarations))) {
                                 dependentDeclarations[outtermostDeclaration.id] = outtermostDeclaration;
-                                walker.visitTypeFromSymbol(outtermostDeclaration.symbol)
+                                walker.visitTypeFromSymbol(outtermostDeclaration.symbol);
                             }
                         });
                     }
