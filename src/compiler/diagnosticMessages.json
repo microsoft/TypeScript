@@ -2476,5 +2476,13 @@
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
       "category": "Error",
       "code": 17007
+    },
+    "Invalid type. To avoid ambiguity, add parentheses: '{0}'": {
+        "category": "Error",
+        "code": 17008
+    },
+    "Identifier expected, reserved word '{0}' not allowed here.": {
+        "category": "Error",
+        "code": 17009
     }
 }
