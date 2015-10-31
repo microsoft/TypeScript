@@ -224,14 +224,22 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         let commandLine = parseCommandLine(args);
-        let configFileName: string;                 // Configuration file name (if any)
-        let configFileWatcher: FileWatcher;         // Configuration file watcher
-        let cachedProgram: Program;                 // Program cached from last compilation
-        let rootFileNames: string[];                // Root fileNames for compilation
-        let compilerOptions: CompilerOptions;       // Compiler options for compilation
-        let compilerHost: CompilerHost;             // Compiler host
-        let hostGetSourceFile: typeof compilerHost.getSourceFile;  // getSourceFile method from default host
-        let timerHandle: number;                    // Handle for 0.25s wait timer
+        let configFileName: string;                                 // Configuration file name (if any)
+        let cachedConfigFileText: string;                           // Cached configuration file text, used for reparsing (if any)
+        let configFileWatcher: FileWatcher;                         // Configuration file watcher
+        let directoryWatcher: FileWatcher;                          // Directory watcher to monitor source file addition/removal
+        let cachedProgram: Program;                                 // Program cached from last compilation
+        let rootFileNames: string[];                                // Root fileNames for compilation
+        let compilerOptions: CompilerOptions;                       // Compiler options for compilation
+        let compilerHost: CompilerHost;                             // Compiler host
+        let hostGetSourceFile: typeof compilerHost.getSourceFile;   // getSourceFile method from default host
+        let timerHandleForRecompilation: number;                    // Handle for 0.25s wait timer to trigger recompilation
+        let timerHandleForDirectoryChanges: number;                 // Handle for 0.25s wait timer to trigger directory change handler
+
+        // This map stores and reuses results of fileExists check that happen inside 'createProgram'
+        // This allows to save time in module resolution heavy scenarios when existence of the same file might be checked multiple times.
+        let cachedExistingFiles: Map<boolean>;
+        let hostFileExists: typeof compilerHost.fileExists;
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
@@ -295,28 +303,49 @@ namespace ts {
             if (configFileName) {
                 configFileWatcher = sys.watchFile(configFileName, configFileChanged);
             }
+            if (sys.watchDirectory && configFileName) {
+                let directory = ts.getDirectoryPath(configFileName);
+                directoryWatcher = sys.watchDirectory(
+                    // When the configFileName is just "tsconfig.json", the watched directory should be 
+                    // the current direcotry; if there is a given "project" parameter, then the configFileName
+                    // is an absolute file name.
+                    directory == "" ? "." : directory,
+                    watchedDirectoryChanged, /*recursive*/ true);
+            }
         }
 
         performCompilation();
+
+        function parseConfigFile(): ParsedCommandLine {
+            if (!cachedConfigFileText) {
+                try {
+                    cachedConfigFileText = sys.readFile(configFileName);
+                }
+                catch (e) {
+                    let error = createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, configFileName, e.message);
+                    reportWatchDiagnostic(error);
+                    sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                    return;
+                }
+            }
+
+            let result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
+            let configObject = result.config;
+            let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
+            if (configParseResult.errors.length > 0) {
+                reportDiagnostics(configParseResult.errors);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
+            return configParseResult;
+        }
 
         // Invoked to perform initial compilation or re-compilation in watch mode
         function performCompilation() {
 
             if (!cachedProgram) {
                 if (configFileName) {
-
-                    let result = readConfigFile(configFileName, sys.readFile);
-                    if (result.error) {
-                        reportWatchDiagnostic(result.error);
-                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    }
-
-                    let configObject = result.config;
-                    let configParseResult = parseConfigFile(configObject, sys, getDirectoryPath(configFileName));
-                    if (configParseResult.errors.length > 0) {
-                        reportDiagnostics(configParseResult.errors);
-                        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                    }
+                    let configParseResult = parseConfigFile();
                     rootFileNames = configParseResult.fileNames;
                     compilerOptions = extend(commandLine.options, configParseResult.options);
                 }
@@ -327,11 +356,17 @@ namespace ts {
                 compilerHost = createCompilerHost(compilerOptions);
                 hostGetSourceFile = compilerHost.getSourceFile;
                 compilerHost.getSourceFile = getSourceFile;
+
+                hostFileExists = compilerHost.fileExists;
+                compilerHost.fileExists = cachedFileExists;
             }
 
             if (compilerOptions.diagnosticStyle === DiagnosticStyle.Pretty) {
                 reportDiagnostic = reportDiagnosticWithColorAndContext;
             }
+
+            // reset the cache of existing files
+            cachedExistingFiles = {};
 
             let compileResult = compile(rootFileNames, compilerOptions, compilerHost);
 
@@ -341,6 +376,13 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+        }
+
+        function cachedFileExists(fileName: string): boolean {
+            if (hasProperty(cachedExistingFiles, fileName)) {
+                return cachedExistingFiles[fileName];
+            }
+            return cachedExistingFiles[fileName] = hostFileExists(fileName);
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void) {
@@ -356,7 +398,7 @@ namespace ts {
             let sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && compilerOptions.watch) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName, removed) => sourceFileChanged(sourceFile, removed));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
             }
             return sourceFile;
         }
@@ -378,7 +420,7 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile, removed: boolean) {
+        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
             if (removed) {
@@ -387,27 +429,55 @@ namespace ts {
                     rootFileNames.splice(index, 1);
                 }
             }
-            startTimer();
+            startTimerForRecompilation();
         }
 
         // If the configuration file changes, forget cached program and start the recompilation timer
         function configFileChanged() {
             setCachedProgram(undefined);
-            startTimer();
+            cachedConfigFileText = undefined;
+            startTimerForRecompilation();
+        }
+
+        function watchedDirectoryChanged(fileName: string) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+                return;
+            }
+
+            startTimerForHandlingDirectoryChanges();
+        }
+
+        function startTimerForHandlingDirectoryChanges() {
+            if (timerHandleForDirectoryChanges) {
+                clearTimeout(timerHandleForDirectoryChanges);
+            }
+            timerHandleForDirectoryChanges = setTimeout(directoryChangeHandler, 250);
+        }
+
+        function directoryChangeHandler() {
+            let parsedCommandLine = parseConfigFile();
+            let newFileNames = ts.map(parsedCommandLine.fileNames, compilerHost.getCanonicalFileName);
+            let canonicalRootFileNames = ts.map(rootFileNames, compilerHost.getCanonicalFileName);
+
+            // We check if the project file list has changed. If so, we just throw away the old program and start fresh.
+            if (!arrayIsEqualTo(newFileNames && newFileNames.sort(), canonicalRootFileNames && canonicalRootFileNames.sort())) {
+                setCachedProgram(undefined);
+                startTimerForRecompilation();
+            }
         }
 
         // Upon detecting a file change, wait for 250ms and then perform a recompilation. This gives batch
         // operations (such as saving all modified files in an editor) a chance to complete before we kick
         // off a new compilation.
-        function startTimer() {
-            if (timerHandle) {
-                clearTimeout(timerHandle);
+        function startTimerForRecompilation() {
+            if (timerHandleForRecompilation) {
+                clearTimeout(timerHandleForRecompilation);
             }
-            timerHandle = setTimeout(recompile, 250);
+            timerHandleForRecompilation = setTimeout(recompile, 250);
         }
 
         function recompile() {
-            timerHandle = undefined;
+            timerHandleForRecompilation = undefined;
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation));
             performCompilation();
         }
@@ -596,7 +666,7 @@ namespace ts {
 
     function writeConfigFile(options: CompilerOptions, fileNames: string[]) {
         let currentDirectory = sys.getCurrentDirectory();
-        let file = combinePaths(currentDirectory, "tsconfig.json");
+        let file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
         }

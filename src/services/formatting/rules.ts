@@ -214,6 +214,7 @@ namespace ts.formatting {
         public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
 
         // Async functions
+        public SpaceBetweenAsyncAndOpenParen: Rule;
         public SpaceBetweenAsyncAndFunctionKeyword: Rule;
 
         // Template strings
@@ -369,6 +370,7 @@ namespace ts.formatting {
             this.SpaceBetweenYieldOrYieldStarAndOperand = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Space));
 
             // Async-await
+            this.SpaceBetweenAsyncAndOpenParen = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsArrowFunctionContext, Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // template string
@@ -402,7 +404,7 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
-                this.SpaceBetweenAsyncAndFunctionKeyword,
+                this.SpaceBetweenAsyncAndOpenParen, this.SpaceBetweenAsyncAndFunctionKeyword,
                 this.SpaceBetweenTagAndTemplateString, this.NoSpaceAfterTemplateHeadAndMiddle, this.NoSpaceBeforeTemplateMiddleAndTail,
 
                 // TypeScript-specific rules
@@ -701,6 +703,10 @@ namespace ts.formatting {
 
         static IsPreviousTokenNotComma(context: FormattingContext): boolean {
             return context.currentTokenSpan.kind !== SyntaxKind.CommaToken;
+        }
+
+        static IsArrowFunctionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.ArrowFunction;
         }
 
         static IsSameLineTokenContext(context: FormattingContext): boolean {

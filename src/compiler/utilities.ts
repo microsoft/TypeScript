@@ -82,17 +82,17 @@ namespace ts {
         return node.end - node.pos;
     }
 
-    export function arrayIsEqualTo<T>(arr1: T[], arr2: T[], comparer?: (a: T, b: T) => boolean): boolean {
-        if (!arr1 || !arr2) {
-            return arr1 === arr2;
+    export function arrayIsEqualTo<T>(array1: T[], array2: T[], equaler?: (a: T, b: T) => boolean): boolean {
+        if (!array1 || !array2) {
+            return array1 === array2;
         }
 
-        if (arr1.length !== arr2.length) {
+        if (array1.length !== array2.length) {
             return false;
         }
 
-        for (let i = 0; i < arr1.length; ++i) {
-            let equals = comparer ? comparer(arr1[i], arr2[i]) : arr1[i] === arr2[i];
+        for (let i = 0; i < array1.length; ++i) {
+            let equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
             if (!equals) {
                 return false;
             }
@@ -896,6 +896,14 @@ namespace ts {
         return nodeIsDecorated(node) || childIsDecorated(node);
     }
 
+    export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
+        return node.kind === SyntaxKind.PropertyAccessExpression;
+    }
+
+    export function isElementAccessExpression(node: Node): node is ElementAccessExpression {
+        return node.kind === SyntaxKind.ElementAccessExpression;
+    }
+
     export function isExpression(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.SuperKeyword:
@@ -1414,7 +1422,7 @@ namespace ts {
      * where Symbol is literally the word "Symbol", and name is any identifierName
      */
     export function isWellKnownSymbolSyntactically(node: Expression): boolean {
-        return node.kind === SyntaxKind.PropertyAccessExpression && isESSymbolIdentifier((<PropertyAccessExpression>node).expression);
+        return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
     export function getPropertyNameForPropertyNameNode(name: DeclarationName): string {
@@ -1497,7 +1505,7 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind);
+        let node = <SynthesizedNode>createNode(kind, /* pos */ -1, /* end */ -1);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
@@ -2047,8 +2055,8 @@ namespace ts {
         if (node.kind === SyntaxKind.Identifier) {
             return true;
         }
-        else if (node.kind === SyntaxKind.PropertyAccessExpression) {
-            return isSupportedExpressionWithTypeArgumentsRest((<PropertyAccessExpression>node).expression);
+        else if (isPropertyAccessExpression(node)) {
+            return isSupportedExpressionWithTypeArgumentsRest(node.expression);
         }
         else {
             return false;

@@ -12,7 +12,7 @@ namespace ts {
 
     let emptyArray: any[] = [];
 
-    export const version = "1.7.0";
+    export const version = "1.8.0";
 
     export function findConfigFile(searchPath: string): string {
         let fileName = "tsconfig.json";
@@ -53,13 +53,13 @@ namespace ts {
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             let failedLookupLocations: string[] = [];
             let candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(candidate, /* loadOnlyDts */ false, failedLookupLocations, host);
+            let resolvedFileName = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            resolvedFileName = loadNodeModuleFromDirectory(candidate, /* loadOnlyDts */ false, failedLookupLocations, host);
+            resolvedFileName = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
             return resolvedFileName
                 ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
                 : { resolvedModule: undefined, failedLookupLocations };
@@ -69,13 +69,8 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromFile(candidate: string, loadOnlyDts: boolean, failedLookupLocation: string[], host: ModuleResolutionHost): string {
-        if (loadOnlyDts) {
-            return tryLoad(".d.ts");
-        }
-        else {
-            return forEach(supportedExtensions, tryLoad);
-        }
+    function loadNodeModuleFromFile(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+        return forEach(moduleFileExtensions, tryLoad);
 
         function tryLoad(ext: string): string {
             let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -89,7 +84,7 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(candidate: string, loadOnlyDts: boolean, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadNodeModuleFromDirectory(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
         let packageJsonPath = combinePaths(candidate, "package.json");
         if (host.fileExists(packageJsonPath)) {
 
@@ -105,7 +100,7 @@ namespace ts {
             }
 
             if (jsonContent.typings) {
-                let result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), loadOnlyDts, failedLookupLocation, host);
+                let result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
                 if (result) {
                     return result;
                 }
@@ -116,7 +111,7 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(combinePaths(candidate, "index"), loadOnlyDts, failedLookupLocation, host);
+        return loadNodeModuleFromFile(combinePaths(candidate, "index"), failedLookupLocation, host);
     }
 
     function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -127,12 +122,12 @@ namespace ts {
             if (baseName !== "node_modules") {
                 let nodeModulesFolder = combinePaths(directory, "node_modules");
                 let candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(candidate, /* loadOnlyDts */ true, failedLookupLocations, host);
+                let result = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(candidate, /* loadOnlyDts */ true, failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -868,10 +863,6 @@ namespace ts {
                                 let start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
                             }
-                            else if (!fileExtensionIs(importedFile.fileName, ".d.ts")) {
-                                let start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_can_only_be_in_d_ts_files_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
                             else if (importedFile.referencedFiles.length) {
                                 let firstRef = importedFile.referencedFiles[0];
                                 fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
@@ -1010,7 +1001,7 @@ namespace ts {
             let firstExternalModuleSourceFile = forEach(files, f => isExternalModule(f) ? f : undefined);
             if (options.isolatedModules) {
                 if (!options.module && languageVersion < ScriptTarget.ES6) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES6_or_higher));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
                 }
 
                 let firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
@@ -1027,7 +1018,7 @@ namespace ts {
 
             // Cannot specify module gen target of es6 when below es6
             if (options.module === ModuleKind.ES6 && languageVersion < ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es6_when_targeting_ES5_or_lower));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es2015_when_targeting_ES5_or_lower));
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot
@@ -1075,11 +1066,6 @@ namespace ts {
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
-            }
-
-            if (options.experimentalAsyncFunctions &&
-                options.target !== ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_experimentalAsyncFunctions_cannot_be_specified_when_targeting_ES5_or_lower));
             }
         }
     }

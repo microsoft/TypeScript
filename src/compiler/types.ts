@@ -64,6 +64,7 @@ namespace ts {
         PlusToken,
         MinusToken,
         AsteriskToken,
+        AsteriskAsteriskToken,
         SlashToken,
         PercentToken,
         PlusPlusToken,
@@ -86,6 +87,7 @@ namespace ts {
         PlusEqualsToken,
         MinusEqualsToken,
         AsteriskEqualsToken,
+        AsteriskAsteriskEqualsToken,
         SlashEqualsToken,
         PercentEqualsToken,
         LessThanLessThanEqualsToken,
@@ -359,6 +361,7 @@ namespace ts {
     }
 
     export const enum NodeFlags {
+        None =              0,
         Export =            0x00000001,  // Declarations
         Ambient =           0x00000002,  // Declarations
         Public =            0x00000010,  // Property/Method
@@ -562,6 +565,10 @@ namespace ts {
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement {
         name: Identifier;
         questionToken?: Node;
+        // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
+        // it is grammar error to appear in actual object initializer
+        equalsToken?: Node;
+        objectAssignmentInitializer?: Expression;
     }
 
     // SyntaxKind.VariableDeclaration
@@ -707,12 +714,16 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
-    export interface PrefixUnaryExpression extends UnaryExpression {
+    export interface IncrementExpression extends UnaryExpression {
+        _incrementExpressionBrand: any;
+    }
+
+    export interface PrefixUnaryExpression extends IncrementExpression {
         operator: SyntaxKind;
         operand: UnaryExpression;
     }
 
-    export interface PostfixUnaryExpression extends PostfixExpression {
+    export interface PostfixUnaryExpression extends IncrementExpression {
         operand: LeftHandSideExpression;
         operator: SyntaxKind;
     }
@@ -721,7 +732,7 @@ namespace ts {
         _postfixExpressionBrand: any;
     }
 
-    export interface LeftHandSideExpression extends PostfixExpression {
+    export interface LeftHandSideExpression extends IncrementExpression {
         _leftHandSideExpressionBrand: any;
     }
 
@@ -1295,7 +1306,7 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost extends ModuleResolutionHost {
+    export interface ParseConfigHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
@@ -1598,7 +1609,6 @@ namespace ts {
         isEntityNameVisible(entityName: EntityName | Expression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
-        getBlockScopedVariableId(node: Identifier): number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
@@ -2078,7 +2088,6 @@ namespace ts {
         watch?: boolean;
         isolatedModules?: boolean;
         experimentalDecorators?: boolean;
-        experimentalAsyncFunctions?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
         /* @internal */ stripInternal?: boolean;
@@ -2096,6 +2105,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES6 = 5,
+        ES2015 = ES6,
     }
 
     export const enum JsxEmit {
@@ -2121,12 +2131,13 @@ namespace ts {
         ES3 = 0,
         ES5 = 1,
         ES6 = 2,
+        ES2015 = ES6,
         Latest = ES6,
     }
 
     export const enum LanguageVariant {
         Standard,
-        JSX
+        JSX,
     }
 
     /* @internal */
