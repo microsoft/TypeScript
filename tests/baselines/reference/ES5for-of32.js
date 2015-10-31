@@ -1,4 +1,4 @@
-//// [for-of58.ts]
+//// [ES5for-of32.ts]
 
 var array = [1,2,3];
 var sum = 0;
@@ -11,7 +11,7 @@ for (let num of array) {
     sum += num;
 }
 
-//// [for-of58.js]
+//// [ES5for-of32.js]
 var array = [1, 2, 3];
 var sum = 0;
 for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {

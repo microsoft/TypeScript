@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of58.ts ===
+=== tests/cases/conformance/statements/for-ofStatements/ES5for-of32.ts ===
 
 var array = [1,2,3];
 >array : number[]
