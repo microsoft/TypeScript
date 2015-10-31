@@ -21,7 +21,6 @@ module ts {
     
     it("returns empty config for file with comments only", () => {
       assertParseResult("// Comment", { config: {} });
-      assertParseResult("# Comment", { config: {} });
       assertParseResult("/* Comment*/", { config: {} });
     });
 
@@ -37,19 +36,12 @@ module ts {
   					"file.d.ts"
   				]
       	}`, { config: { exclude: ["file.d.ts"] } });
-      assertParseResult(
-        `{
-      		# Excluded files
-      		"exclude": [
-  					# Exclude d.ts
-  					"file.d.ts"
-  				]
-      	}`, { config: { exclude: ["file.d.ts"] } });
+    
       assertParseResult(
         `{
       		/* Excluded
-      			 Files
-      		*/
+             Files
+          */
       		"exclude": [  		
   					/* multiline comments can be in the middle of a line */"file.d.ts"
   				]
@@ -60,16 +52,10 @@ module ts {
       assertParseResult(
         `{
       		"exclude": [
-  					"xx//file.d.ts"
+            "xx//file.d.ts"
   				]
       	}`, { config: { exclude: ["xx//file.d.ts"] } });
-      assertParseResult(
-        `{
-      		"exclude": [
-  					"xx#file.d.ts"
-  				]
-      	}`, { config: { exclude: ["xx#file.d.ts"] } });
-      assertParseResult(
+     assertParseResult(
         `{
       		"exclude": [
   					"xx/*file.d.ts*/"

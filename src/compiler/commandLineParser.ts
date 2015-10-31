@@ -421,90 +421,48 @@ namespace ts {
      * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
      */
     function removeComments(jsonText: string): string {
-        let result = "";
-        let processingString = false;
-        let processingSingleLineComment = false;
-        let processingMultiLineComment = false;
-        for (let i = 0; i < jsonText.length; i++) {
-            let currentCharCode = jsonText.charCodeAt(i);
-            let currentChar = jsonText.charAt(i);
-            let nextCharCode = (i + 1 < jsonText.length) ? jsonText.charCodeAt(i + 1) : undefined;
-            if (processingString) {
-                if (currentCharCode === CharacterCodes.backslash
-                    && nextCharCode !== undefined) {
-                    // Found an escaped character 
-                    // consume the \ and the escaped char
-                    result += currentChar;
-                    result += jsonText.charAt(i + 1);
-                    i += 1;
-                }
-                else if (currentCharCode === CharacterCodes.doubleQuote) {
-                    // End of string
-                    result += currentChar;
-                    processingString = false;
-                }
-                else {
-                   // String content
-                   result += currentChar;
-                }
-            }
-            else if (processingSingleLineComment) {
-                if (isLineBreak(currentCharCode)) {
-                    // End of single line comment
-                    processingSingleLineComment = false;
-                    // Keep the line breaks to keep line numbers aligned
-                    result += currentChar;
-                }
-                else {
-                   // replace comment content by whitespaces
-                   result += " ";
-                }
-            }
-            else if (processingMultiLineComment) {
-                if (currentCharCode === CharacterCodes.asterisk && nextCharCode === CharacterCodes.slash) {
-                    // End of comment */
-                    result += "  ";
-                    i += 1;
-                    processingMultiLineComment = false;
-                }
-                else if (isLineBreak(currentCharCode)) {
-                    // Keep the line breaks to Keep line aligned
-                    result += currentChar;
-                }
-                else {
-                   // replace comment content by whitespaces
-                   result += " ";
-                }
-            }
-            else if (currentCharCode === CharacterCodes.doubleQuote) {
-                // String start
-                result += currentChar;
-                processingString = true;
-            }
-            else if (currentCharCode === CharacterCodes.hash) {
-                // Start of # comment
-                result += " ";
-                processingSingleLineComment = true;
-            }
-            else if (currentCharCode === CharacterCodes.slash && nextCharCode === CharacterCodes.slash) {
-                // Start of // comment
-                result += "  ";
-                i += 1;
-                processingSingleLineComment = true;
-            }
-            else if (currentCharCode === CharacterCodes.slash && nextCharCode === CharacterCodes.asterisk) {
-                // Start of /**/ comment
-                result += "  ";
-                i += 1;
-                processingMultiLineComment = true;
-            }
-            else {
-                // Keep other characters
-                result += currentChar;
+        let output = "";
+        let scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
+        let token: SyntaxKind;
+        while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
+            switch (token) {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    // replace comments with whitespaces to preserve original characters position
+                    output += replaceWithWhitespaces(scanner.getTokenText());
+                    break;
+                default:
+                    output += scanner.getTokenText();
+                    break;
             }
         }
-        return result;
+        return output;
+
+        function replaceWithWhitespaces(commentTokenText: string): string {
+            let result = "";
+            let pos = 0;
+            let start = 0;
+            while (pos < commentTokenText.length) {
+                if (isLineBreak(commentTokenText.charCodeAt(pos))) {
+                    let nbCharToReplace = pos - start;
+                    result += nSpaces(nbCharToReplace);
+                    result += commentTokenText.charAt(pos);
+                    pos += 1;
+                    start = pos;
+                }
+                else {
+                    pos += 1;
+                }
+            }
+            result += nSpaces(pos - start);
+            return result;
+
+            function nSpaces(n: number): string {
+                return new Array(n + 1).join(" ");
+            };
+        }
     }
+
 
     /**
       * Parse the contents of a config file (tsconfig.json).
