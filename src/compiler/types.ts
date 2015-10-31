@@ -1427,6 +1427,7 @@ namespace ts {
     export interface EmitResult {
         emitSkipped: boolean;
         diagnostics: Diagnostic[];
+        emittedFiles: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
     }
 
@@ -2099,6 +2100,7 @@ namespace ts {
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
         forceConsistentCasingInFileNames?: boolean;
+        listEmittedFiles?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

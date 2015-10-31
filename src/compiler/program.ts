@@ -545,7 +545,7 @@ namespace ts {
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
             if (options.noEmitOnError && getPreEmitDiagnostics(program, /*sourceFile:*/ undefined, cancellationToken).length > 0) {
-                return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
+                return { diagnostics: [], sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
             }
 
             // Create the emit resolver outside of the "emitTime" tracking code below.  That way
