@@ -3614,10 +3614,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 //     for (let v of arr) { }
                 //
-                // we don't want to emit a temporary variable for the RHS, just use it directly.
-                let rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
+                // we can't reuse 'arr' because it might be modified within the body of the loop.
                 let counter = createTempVariable(TempFlags._i);
-                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(TempFlags.Auto);
+                let rhsReference = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
+                rhsReference.text = node.expression.kind === SyntaxKind.Identifier ?
+                    makeUniqueName((<Identifier>node.expression).text) :
+                    makeTempVariableName(TempFlags.Auto);
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
@@ -3629,15 +3631,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(" = 0");
                 emitEnd(node.expression);
 
-                if (!rhsIsIdentifier) {
-                    // , _a = expr
-                    write(", ");
-                    emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
-                    write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
-                    emitEnd(node.expression);
-                }
+                // , _a = expr
+                write(", ");
+                emitStart(node.expression);
+                emitNodeWithoutSourceMap(rhsReference);
+                write(" = ");
+                emitNodeWithoutSourceMap(node.expression);
+                emitEnd(node.expression);
 
                 write("; ");
 
