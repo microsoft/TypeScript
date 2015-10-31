@@ -1151,6 +1151,14 @@ namespace ts {
         return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
+    export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+        while (node) {
+            if (node === ancestor) return true;
+            node = node.parent;
+        }
+        return false;
+    }
+
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
             if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) {
