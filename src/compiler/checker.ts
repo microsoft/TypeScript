@@ -4420,26 +4420,13 @@ namespace ts {
             let container = getThisContainer(node, /*includeArrowFunctions*/ false);
             let parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!(container.flags & NodeFlags.Static) && !isConstructorParameter(node, container)) {
+                if (!(container.flags & NodeFlags.Static) &&
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendentOf(node, (<ConstructorDeclaration>container).body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
             error(node, Diagnostics.A_this_type_is_available_only_in_a_non_static_member_of_a_class_or_interface);
             return unknownType;
-
-            function isConstructorParameter(node: Node, container: Node) {
-                if (container.kind === SyntaxKind.Constructor) {
-                    let ctor = (<ConstructorDeclaration>container);
-                    while (node && node !== ctor) {
-                        if (node === ctor.body) {
-                            return false;
-                        }
-                        node = node.parent;
-                    }
-
-                    return true;
-                }
-            }
         }
 
         function getTypeFromThisTypeNode(node: TypeNode): Type {
