@@ -1150,7 +1150,7 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): arg is Array<any>;
+    isArray(arg: any): boolean;
     prototype: Array<any>;
 }
 
@@ -1210,7 +1210,7 @@ interface ArrayBuffer {
 interface ArrayBufferConstructor {
     prototype: ArrayBuffer;
     new (byteLength: number): ArrayBuffer;
-    isView(arg: any): arg is ArrayBufferView;
+    isView(arg: any): boolean;
 }
 declare var ArrayBuffer: ArrayBufferConstructor;
 
