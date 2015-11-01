@@ -1456,7 +1456,7 @@
         "category": "Error",
         "code": 2474
     },
-    "'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.": {
+    "A 'const' enum is only allowed in a property access, import declaration, export assignment, or type query.": {
         "category": "Error",
         "code": 2475
     },

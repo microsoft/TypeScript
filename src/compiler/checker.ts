@@ -10463,20 +10463,27 @@ namespace ts {
             }
 
             if (isConstEnumObjectType(type)) {
-                // enum object type for const enums are only permitted in:
-                // - 'left' in property access
-                // - 'object' in indexed access
-                // - target in rhs of import statement
-                let ok =
-                    (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
-                    (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
-                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node));
-
-                if (!ok) {
-                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment);
-                }
+                checkConstEnumPosition(node);
             }
             return type;
+        }
+
+        function checkConstEnumPosition(node: Node) {
+            // const enums are only permitted in:
+            // - 'left' in property access
+            // - 'object' in indexed access
+            // - target in rhs of import statement
+            // - in a type query
+            let parent = node.parent;
+            let ok =
+                (parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>parent).expression === node) ||
+                (parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node) ||
+                ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node)) ||
+                isInTypeQuery(node);
+
+            if (!ok) {
+                error(node, Diagnostics.A_const_enum_is_only_allowed_in_a_property_access_import_declaration_export_assignment_or_type_query);
+            }
         }
 
         function checkNumericLiteral(node: LiteralExpression): Type {
