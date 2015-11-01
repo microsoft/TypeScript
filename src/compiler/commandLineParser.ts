@@ -428,8 +428,8 @@ namespace ts {
             switch (token) {
                 case SyntaxKind.SingleLineCommentTrivia:
                 case SyntaxKind.MultiLineCommentTrivia:
-                    // replace comments with whitespaces to preserve original characters position
-                    output += replaceWithWhitespaces(scanner.getTokenText());
+                    // replace comments with whitespace to preserve original character positions
+                    output += scanner.getTokenText().replace(/\S/g, " ");
                     break;
                 default:
                     output += scanner.getTokenText();
@@ -437,30 +437,6 @@ namespace ts {
             }
         }
         return output;
-
-        function replaceWithWhitespaces(commentTokenText: string): string {
-            let result = "";
-            let pos = 0;
-            let start = 0;
-            while (pos < commentTokenText.length) {
-                if (isLineBreak(commentTokenText.charCodeAt(pos))) {
-                    let nbCharToReplace = pos - start;
-                    result += nSpaces(nbCharToReplace);
-                    result += commentTokenText.charAt(pos);
-                    pos += 1;
-                    start = pos;
-                }
-                else {
-                    pos += 1;
-                }
-            }
-            result += nSpaces(pos - start);
-            return result;
-
-            function nSpaces(n: number): string {
-                return new Array(n + 1).join(" ");
-            };
-        }
     }
 
 
