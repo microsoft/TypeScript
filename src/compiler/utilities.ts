@@ -457,7 +457,7 @@ namespace ts {
                 // Specialized signatures can have string literals as their parameters' type names
                 return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+                return !isExpressionWithTypeArgumentsInClassOrStructExtendsClause(node);
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -490,7 +490,7 @@ namespace ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                        return !isExpressionWithTypeArgumentsInClassOrStructExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
@@ -621,6 +621,10 @@ namespace ts {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
 
+export function isStructLike(node: Node): node is StructLikeDeclaration {
+return node && (node.kind === SyntaxKind.StructDeclaration || node.kind === SyntaxKind.StructExpression);
+}
+
     export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
             switch (node.kind) {
@@ -670,6 +674,15 @@ namespace ts {
             node = node.parent;
             if (!node || isFunctionLike(node)) {
                 return <FunctionLikeDeclaration>node;
+            }
+        }
+    }
+
+    export function getContainingStruct(node: Node): StructLikeDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isStructLike(node)) {
+                return <StructLikeDeclaration>node;
             }
         }
     }
@@ -996,7 +1009,7 @@ namespace ts {
                     case SyntaxKind.JsxSpreadAttribute:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassOrStructExtendsClause(parent);
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1224,6 +1237,18 @@ namespace ts {
         }
     }
 
+export function isStructElement(n: Node): boolean {
+    switch (n.kind) {
+        case SyntaxKind.Constructor:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+            return true;
+        default:
+            return false;
+    }
+}
+
     export function isClassElement(n: Node): boolean {
         switch (n.kind) {
             case SyntaxKind.Constructor:
@@ -1311,17 +1336,12 @@ namespace ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getStructExtendsHeritageClauseElement(node: StructLikeDeclaration) {
-        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
-        return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
-    }
-
     export function getStructImplementsHeritageClauseElements(node: StructLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+    export function getClassOrStructExtendsHeritageClauseElement(node: ClassLikeDeclaration | StructLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -2049,10 +2069,10 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+    export function isExpressionWithTypeArgumentsInClassOrStructExtendsClause(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent);
+            (isClassLike(node.parent.parent) || isStructLike(node.parent.parent));
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
