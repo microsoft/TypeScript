@@ -1,4 +1,5 @@
 //// [functionWithNoBestCommonType1.ts]
+
 function foo() {
     return true;
     return bar();

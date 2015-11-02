@@ -622,25 +622,26 @@ namespace ts {
     }
 
     export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
-        if (node) {
-            switch (node.kind) {
-                case SyntaxKind.Constructor:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.IndexSignature:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.ConstructorType:
-                    return true;
-            }
+        return node && isFunctionLikeKind(node.kind);
+    }
+
+    export function isFunctionLikeKind(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return true;
         }
-        return false;
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -1236,7 +1237,7 @@ namespace ts {
             case SyntaxKind.LabeledStatement:
             case SyntaxKind.ReturnStatement:
             case SyntaxKind.SwitchStatement:
-            case SyntaxKind.ThrowKeyword:
+            case SyntaxKind.ThrowStatement:
             case SyntaxKind.TryStatement:
             case SyntaxKind.VariableStatement:
             case SyntaxKind.WhileStatement:

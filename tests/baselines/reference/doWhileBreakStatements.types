@@ -1,4 +1,5 @@
 === tests/cases/conformance/statements/breakStatements/doWhileBreakStatements.ts ===
+
 do {
     break;
 } while(true)

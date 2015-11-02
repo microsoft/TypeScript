@@ -1,4 +1,5 @@
 === tests/cases/compiler/recursiveMods.ts ===
+
 export module Foo {
 >Foo : typeof Foo
 
