@@ -8,6 +8,7 @@ class Generic<T> {
 class Derived {
     n: number;
     constructor(public host: Generic<this>) {
+        let self: this = this;
         this.n = 12;
     }
 }
@@ -27,6 +28,7 @@ var Generic = (function () {
 var Derived = (function () {
     function Derived(host) {
         this.host = host;
+        var self = this;
         this.n = 12;
     }
     return Derived;
