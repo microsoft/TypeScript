@@ -130,7 +130,7 @@ namespace ts {
                 }
                 else if (isExternalModule(sourceFile)) {
                     noDeclare = true;
-                    write(`declare module "${sourceFile.moduleName}" {`);
+                    write(`declare module "${getModuleName(host, sourceFile)}" {`);
                     writeLine();
                     increaseIndent();
                     emitSourceFile(sourceFile);
