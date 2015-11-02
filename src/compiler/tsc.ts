@@ -119,7 +119,7 @@ namespace ts {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
         [DiagnosticCategory.Error]: redForegroundEscapeSequence,
         [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
-    }
+    };
 
     function formatAndReset(text: string, formatStyle: string) {
         return formatStyle + text + resetEscapeSequence;
