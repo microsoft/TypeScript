@@ -799,7 +799,11 @@
     "'=' can only be used in an object literal property inside a destructuring assignment.": {
         "category": "Error",
         "code": 1312
-    },    
+    },
+    "The body of an 'if' statement cannot be the empty statement.": {
+        "category": "Error",
+        "code": 1313
+    },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2000,10 +2004,6 @@
         "category": "Error",
         "code": 4082
     },
-    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 4091
-    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -2289,6 +2289,10 @@
     "Stylize errors and messages using colors if available. (experimental)": {
         "category": "Message",
         "code": 6073
+    },
+    "Disallow inconsistently-cased references to the same file.": {
+        "category": "Message",
+        "code": 6074
     },
 
     "Specify JSX code generation: 'preserve' or 'react'": {

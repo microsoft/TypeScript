@@ -17,45 +17,55 @@ namespace ts {
         True = -1
     }
 
-    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+    export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
         let files: Map<T> = {};
         return {
             get,
             set,
             contains,
             remove,
-            clear,
-            forEachValue: forEachValueInMap
+            forEachValue: forEachValueInMap,
+            clear
         };
 
-        function set(fileName: string, value: T) {
-            files[normalizeKey(fileName)] = value;
+        function forEachValueInMap(f: (key: Path, value: T) => void) {
+            for (let key in files) {
+                f(<Path>key, files[key]);
+            }
         }
 
-        function get(fileName: string) {
-            return files[normalizeKey(fileName)];
+        // path should already be well-formed so it does not need to be normalized
+        function get(path: Path): T {
+            return files[toKey(path)];
         }
 
-        function contains(fileName: string) {
-            return hasProperty(files, normalizeKey(fileName));
+        function set(path: Path, value: T) {
+            files[toKey(path)] = value;
         }
 
-        function remove (fileName: string) {
-            let key = normalizeKey(fileName);
+        function contains(path: Path) {
+            return hasProperty(files, toKey(path));
+        }
+
+        function remove(path: Path) {
+            const key = toKey(path);
             delete files[key];
-        }
-
-        function forEachValueInMap(f: (value: T) => void) {
-            forEachValue(files, f);
-        }
-
-        function normalizeKey(key: string) {
-            return getCanonicalFileName(normalizeSlashes(key));
         }
 
         function clear() {
             files = {};
         }
+
+        function toKey(path: Path): string {
+            return keyMapper ? keyMapper(path) : path;
+        }
+    }
+
+    export function toPath(fileName: string, basePath: string, getCanonicalFileName: (path: string) => string): Path {
+        const nonCanonicalizedPath = isRootedDiskPath(fileName)
+            ? normalizePath(fileName)
+            : getNormalizedAbsolutePath(fileName, basePath);
+        return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
     export const enum Comparison {
@@ -365,10 +375,10 @@ namespace ts {
 
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
-    export function getLocaleSpecificMessage(message: string) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
-            ? localizedDiagnosticMessages[message]
-            : message;
+    export function getLocaleSpecificMessage(message: DiagnosticMessage) {
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
+            ? localizedDiagnosticMessages[message.key]
+            : message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
@@ -383,7 +393,7 @@ namespace ts {
             Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
         }
 
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
@@ -402,7 +412,7 @@ namespace ts {
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 1) {
             text = formatStringFromArgs(text, arguments, 1);
@@ -421,7 +431,7 @@ namespace ts {
 
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
@@ -830,7 +840,7 @@ namespace ts {
                 if (verboseDebugInfo) {
                     verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }
-
+                debugger;
                 throw new Error("Debug Failure. False expression: " + (message || "") + verboseDebugString);
             }
         }

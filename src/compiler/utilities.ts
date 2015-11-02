@@ -657,6 +657,22 @@ namespace ts {
         return false;
     }
 
+    export function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return true;
+            case SyntaxKind.LabeledStatement:
+                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+        }
+
+        return false;
+    }
+
+
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
@@ -1151,6 +1167,14 @@ namespace ts {
         return !!node && (node.kind === SyntaxKind.ArrayBindingPattern || node.kind === SyntaxKind.ObjectBindingPattern);
     }
 
+    export function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
+        while (node) {
+            if (node === ancestor) return true;
+            node = node.parent;
+        }
+        return false;
+    }
+
     export function isInAmbientContext(node: Node): boolean {
         while (node) {
             if (node.flags & (NodeFlags.Ambient | NodeFlags.DeclarationFile)) {
@@ -1341,7 +1365,6 @@ namespace ts {
     export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
             let referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
-            referenceFileName = getNormalizedAbsolutePath(referenceFileName, host.getCurrentDirectory());
             return host.getSourceFile(referenceFileName);
         }
     }
@@ -1889,6 +1912,74 @@ namespace ts {
         });
     }
 
+    /**
+     * Detached comment is a comment at the top of file or function body that is separated from
+     * the next statement by space.
+     */
+    export function emitDetachedComments(currentSourceFile: SourceFile, writer: EmitTextWriter,
+        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void,
+        node: TextRange, newLine: string, removeComments: boolean) {
+        let leadingComments: CommentRange[];
+        let currentDetachedCommentInfo: {nodePos: number, detachedCommentEndPos: number};
+        if (removeComments) {
+            // removeComments is true, only reserve pinned comment at the top of file
+            // For example:
+            //      /*! Pinned Comment */
+            //
+            //      var x = 10;
+            if (node.pos === 0) {
+                leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComment);
+            }
+        }
+        else {
+            // removeComments is false, just get detached as normal and bypass the process to filter comment
+            leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+        }
+
+        if (leadingComments) {
+            let detachedComments: CommentRange[] = [];
+            let lastComment: CommentRange;
+
+            for (let comment of leadingComments) {
+                if (lastComment) {
+                    let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
+                    let commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
+
+                    if (commentLine >= lastCommentLine + 2) {
+                        // There was a blank line between the last comment and this comment.  This
+                        // comment is not part of the copyright comments.  Return what we have so
+                        // far.
+                        break;
+                    }
+                }
+
+                detachedComments.push(comment);
+                lastComment = comment;
+            }
+
+            if (detachedComments.length) {
+                // All comments look like they could have been part of the copyright header.  Make
+                // sure there is at least one blank line between it and the node.  If not, it's not
+                // a copyright header.
+                let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
+                let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                if (nodeLine >= lastCommentLine + 2) {
+                    // Valid detachedComments
+                    emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                    emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
+                    currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
+                }
+            }
+        }
+
+        return currentDetachedCommentInfo;
+
+        function isPinnedComment(comment: CommentRange) {
+            return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+        }
+    }
+
     export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
             let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
@@ -2165,6 +2256,12 @@ namespace ts {
         }
 
         return result;
+    }
+
+    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+        return !isRootedDiskPath(absoluteOrRelativePath)
+            ? absoluteOrRelativePath
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /* isAbsolutePathAnUrl */ false);
     }
 
     const carriageReturnLineFeed = "\r\n";

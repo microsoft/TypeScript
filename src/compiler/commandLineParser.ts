@@ -254,7 +254,12 @@ namespace ts {
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
-        }
+        },
+        {
+            name: "forceConsistentCasingInFileNames",
+            type: "boolean",
+            description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
+        },
     ];
 
     /* @internal */
@@ -407,12 +412,40 @@ namespace ts {
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
-            return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+            let jsonTextWithoutComments = removeComments(jsonText);
+            return { config: /\S/.test(jsonTextWithoutComments) ? JSON.parse(jsonTextWithoutComments) : {} };
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
         }
     }
+
+
+    /**
+     * Remove the comments from a json like text.
+     * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
+     *
+     * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
+     */
+    function removeComments(jsonText: string): string {
+        let output = "";
+        let scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
+        let token: SyntaxKind;
+        while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
+            switch (token) {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    // replace comments with whitespace to preserve original character positions
+                    output += scanner.getTokenText().replace(/\S/g, " ");
+                    break;
+                default:
+                    output += scanner.getTokenText();
+                    break;
+            }
+        }
+        return output;
+    }
+
 
     /**
       * Parse the contents of a config file (tsconfig.json).

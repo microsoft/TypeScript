@@ -127,7 +127,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function compileProjectFiles(moduleKind: ts.ModuleKind, getInputFiles: () => string[],
-            getSourceFileText: (fileName: string) => string,
+            getSourceFileTextImpl: (fileName: string) => string,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
             let program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
@@ -170,6 +170,11 @@ class ProjectRunner extends RunnerBase {
                 };
             }
 
+            function getSourceFileText(fileName: string): string {
+                const text = getSourceFileTextImpl(fileName);
+                return text !== undefined ? text : getSourceFileTextImpl(ts.getNormalizedAbsolutePath(fileName, getCurrentDirectory()));
+            }
+
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
@@ -194,7 +199,7 @@ class ProjectRunner extends RunnerBase {
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
-                    fileExists: fileName => getSourceFile(fileName, ts.ScriptTarget.ES5) !== undefined,
+                    fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
                     readFile: fileName => Harness.IO.readFile(fileName)
                 };
             }
@@ -229,12 +234,15 @@ class ProjectRunner extends RunnerBase {
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
+                // convert file name to rooted name
+                // if filename is not rooted - concat it with project root and then expand project root relative to current directory
                 let diskFileName = ts.isRootedDiskPath(fileName)
                     ? fileName
-                    : ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName);
+                    : Harness.IO.resolvePath(ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
 
-                let diskRelativeName = ts.getRelativePathToDirectoryOrUrl(testCase.projectRoot, diskFileName,
-                    getCurrentDirectory(), Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+                let currentDirectory = getCurrentDirectory();
+                // compute file name relative to current directory (expanded project root)
+                let diskRelativeName = ts.getRelativePathToDirectoryOrUrl(currentDirectory, diskFileName, currentDirectory, Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 if (ts.isRootedDiskPath(diskRelativeName) || diskRelativeName.substr(0, 3) === "../") {
                     // If the generated output file resides in the parent folder or is rooted path,
                     // we need to instead create files that can live in the project reference folder
@@ -318,7 +326,16 @@ class ProjectRunner extends RunnerBase {
                 return ts.map(allInputFiles, outputFile => outputFile.emittedFileName);
             }
             function getSourceFileText(fileName: string): string {
-                return ts.forEach(allInputFiles, inputFile => inputFile.emittedFileName === fileName ? inputFile.code : undefined);
+                for (const inputFile of allInputFiles) {
+                    const isMatchingFile = ts.isRootedDiskPath(fileName)
+                        ? ts.getNormalizedAbsolutePath(inputFile.emittedFileName, getCurrentDirectory()) === fileName
+                        : inputFile.emittedFileName === fileName;
+
+                    if (isMatchingFile) {
+                        return inputFile.code;
+                    }
+                }
+                return undefined;
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
@@ -359,8 +376,12 @@ class ProjectRunner extends RunnerBase {
                             runTest: testCase.runTest,
                             bug: testCase.bug,
                             rootDir: testCase.rootDir,
-                            resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => inputFile.fileName),
-                            emittedFiles: ts.map(compilerResult.outputFiles, outputFile => outputFile.emittedFileName)
+                            resolvedInputFiles: ts.map(compilerResult.program.getSourceFiles(), inputFile => {
+                                return ts.convertToRelativePath(inputFile.fileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
+                            }),
+                            emittedFiles: ts.map(compilerResult.outputFiles, outputFile => {
+                                return ts.convertToRelativePath(outputFile.emittedFileName, getCurrentDirectory(), path => Harness.Compiler.getCanonicalFileName(path));
+                            })
                         };
 
                         return resolutionInfo;

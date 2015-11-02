@@ -4420,7 +4420,8 @@ namespace ts {
             let container = getThisContainer(node, /*includeArrowFunctions*/ false);
             let parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!(container.flags & NodeFlags.Static)) {
+                if (!(container.flags & NodeFlags.Static) &&
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendentOf(node, (<ConstructorDeclaration>container).body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
@@ -5479,7 +5480,7 @@ namespace ts {
                 let targetType = getIndexTypeOfType(target, IndexKind.String);
                 if (targetType) {
                     if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
-                        // non-primitive assignment to any is always allowed, eg 
+                        // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: string]: any } = { property: 12 };`
                         return Ternary.True;
                     }
@@ -5509,7 +5510,7 @@ namespace ts {
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
                 if (targetType) {
                     if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
-                        // non-primitive assignment to any is always allowed, eg 
+                        // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: number]: any } = { property: 12 };`
                         return Ternary.True;
                     }
@@ -6581,26 +6582,34 @@ namespace ts {
 
         function checkBlockScopedBindingCapturedInLoop(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES6 ||
-                (symbol.flags & SymbolFlags.BlockScopedVariable) === 0 ||
+                (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
                 symbol.valueDeclaration.parent.kind === SyntaxKind.CatchClause) {
                 return;
             }
 
-            // - check if binding is used in some function
-            // (stop the walk when reaching container of binding declaration)
-            // - if first check succeeded - check if variable is declared inside the loop
+            // 1. walk from the use site up to the declaration and check
+            // if there is anything function like between declaration and use-site (is binding/class is captured in function).
+            // 2. walk from the declaration up to the boundary of lexical environment and check
+            // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
-            // nesting structure:
-            // (variable declaration or binding element) -> variable declaration list -> container
-            let container: Node = symbol.valueDeclaration;
-            while (container.kind !== SyntaxKind.VariableDeclarationList) {
-                container = container.parent;
+            let container: Node;
+            if (symbol.flags & SymbolFlags.Class) {
+                // get parent of class declaration
+                container = getClassLikeDeclarationOfSymbol(symbol).parent;
             }
-            // get the parent of variable declaration list
-            container = container.parent;
-            if (container.kind === SyntaxKind.VariableStatement) {
-                // if parent is variable statement - get its parent
+            else {
+                // nesting structure:
+                // (variable declaration or binding element) -> variable declaration list -> container
+                container = symbol.valueDeclaration;
+                while (container.kind !== SyntaxKind.VariableDeclarationList) {
+                    container = container.parent;
+                }
+                // get the parent of variable declaration list
                 container = container.parent;
+                if (container.kind === SyntaxKind.VariableStatement) {
+                    // if parent is variable statement - get its parent
+                    container = container.parent;
+                }
             }
 
             let inFunction = isInsideFunction(node.parent, container);
@@ -6609,7 +6618,7 @@ namespace ts {
             while (current && !nodeStartsNewLexicalEnvironment(current)) {
                 if (isIterationStatement(current, /*lookInLabeledStatements*/ false)) {
                     if (inFunction) {
-                        grammarErrorOnFirstToken(current, Diagnostics.Loop_contains_block_scoped_variable_0_referenced_by_a_function_in_the_loop_This_is_only_supported_in_ECMAScript_6_or_higher, declarationNameToString(node));
+                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithBlockScopedBindingCapturedInFunction;
                     }
                     // mark value declaration so during emit they can have a special handling
                     getNodeLinks(<VariableDeclaration>symbol.valueDeclaration).flags |= NodeCheckFlags.BlockScopedBindingInLoop;
@@ -9414,7 +9423,9 @@ namespace ts {
             if (isBindingPattern(node.name)) {
                 for (let element of (<BindingPattern>node.name).elements) {
                     if (element.kind !== SyntaxKind.OmittedExpression) {
-                        getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        if (element.name.kind === SyntaxKind.Identifier) {
+                            getSymbolLinks(getSymbolOfNode(element)).type = getTypeForBindingElement(element);
+                        }
                         assignBindingElementTypes(element);
                     }
                 }
@@ -11629,9 +11640,12 @@ namespace ts {
                 return unknownType;
             }
 
-            let promiseConstructor = getMergedSymbol(promiseType.symbol);
+            let promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
-                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
+                let typeName = promiseConstructor
+                    ? symbolToString(promiseConstructor)
+                    : typeToString(promiseType);
+                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
                 return unknownType;
             }
 
@@ -12217,6 +12231,11 @@ namespace ts {
 
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
+
+            if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
+                error(node.thenStatement, Diagnostics.The_body_of_an_if_statement_cannot_be_the_empty_statement);
+            }
+
             checkSourceElement(node.elseStatement);
         }
 
@@ -12629,7 +12648,7 @@ namespace ts {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
                     else if (func.kind === SyntaxKind.Constructor) {
-                        if (!isTypeAssignableTo(exprType, returnType)) {
+                        if (!checkTypeAssignableTo(exprType, returnType, node.expression)) {
                             error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }
@@ -14580,6 +14599,10 @@ namespace ts {
 
         // Emitter support
 
+        function isArgumentsLocalBinding(node: Identifier): boolean {
+            return getReferencedValueSymbol(node) === argumentsSymbol;
+        }
+
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
@@ -14884,7 +14907,8 @@ namespace ts {
                 collectLinkedAliases,
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
-                isOptionalParameter
+                isOptionalParameter,
+                isArgumentsLocalBinding
             };
         }
 
@@ -15709,21 +15733,6 @@ namespace ts {
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
                 return checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol);
             }
-        }
-
-        function isIterationStatement(node: Node, lookInLabeledStatements: boolean): boolean {
-            switch (node.kind) {
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                    return true;
-                case SyntaxKind.LabeledStatement:
-                    return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
-            }
-
-            return false;
         }
 
         function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {

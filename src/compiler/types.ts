@@ -3,12 +3,17 @@ namespace ts {
         [index: string]: T;
     }
 
+    // branded string type used to store absolute, normalized and canonicalized paths
+    // arbitrary file name can be converted to Path via toPath function
+    export type Path = string & { __pathBrand: any };
+
     export interface FileMap<T> {
-        get(fileName: string): T;
-        set(fileName: string, value: T): void;
-        contains(fileName: string): boolean;
-        remove(fileName: string): void;
-        forEachValue(f: (v: T) => void): void;
+        get(fileName: Path): T;
+        set(fileName: Path, value: T): void;
+        contains(fileName: Path): boolean;
+        remove(fileName: Path): void;
+
+        forEachValue(f: (key: Path, v: T) => void): void;
         clear(): void;
     }
 
@@ -1250,6 +1255,7 @@ namespace ts {
         endOfFileToken: Node;
 
         fileName: string;
+        /* internal */ path: Path;
         text: string;
 
         amdDependencies: {path: string; name: string}[];
@@ -1612,6 +1618,7 @@ namespace ts {
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        isArgumentsLocalBinding(node: Identifier): boolean;
     }
 
     export const enum SymbolFlags {
@@ -1756,7 +1763,8 @@ namespace ts {
         // Values for enum members have been computed, and any errors have been reported for them.
         EnumValuesComputed          = 0x00002000,
         BlockScopedBindingInLoop    = 0x00004000,
-        LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LexicalModuleMergesWithClass = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithBlockScopedBindingCapturedInFunction = 0x00010000, // Loop that contains block scoped variable captured in closure
     }
 
     /* @internal */
@@ -2013,6 +2021,7 @@ namespace ts {
         key: string;
         category: DiagnosticCategory;
         code: number;
+        message: string;
     }
 
     /**
@@ -2090,6 +2099,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
+        forceConsistentCasingInFileNames?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

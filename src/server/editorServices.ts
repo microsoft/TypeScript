@@ -15,12 +15,12 @@ namespace ts.server {
         msg(s: string, type?: string): void;
     }
 
-    var lineCollectionCapacity = 4;
+    const lineCollectionCapacity = 4;
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
-        var hasOwnProperty = Object.prototype.hasOwnProperty;
+        const hasOwnProperty = Object.prototype.hasOwnProperty;
         Object.keys(formatOptions).forEach((key) => {
-            var codeKey = key.charAt(0).toUpperCase() + key.substring(1);
+            const codeKey = key.charAt(0).toUpperCase() + key.substring(1);
             if (hasOwnProperty.call(formatCodeOptions, codeKey)) {
                 formatCodeOptions[codeKey] = formatOptions[key];
             }
@@ -33,8 +33,10 @@ namespace ts.server {
         defaultProject: Project;      // project to use by default for file
         fileWatcher: FileWatcher;
         formatCodeOptions = ts.clone(CompilerService.defaultFormatCodeOptions);
+        path: Path;
 
         constructor(private host: ServerHost, public fileName: string, public content: string, public isOpen = false) {
+            this.path = toPath(fileName, host.getCurrentDirectory(), createGetCanonicalFileName(host.useCaseSensitiveFileNames));
             this.svc = ScriptVersionCache.fromString(host, content);
         }
 
@@ -57,12 +59,12 @@ namespace ts.server {
         }
 
         getText() {
-            var snap = this.snap();
+            const snap = this.snap();
             return snap.getText(0, snap.getLength());
         }
 
         getLineInfo(line: number) {
-            var snap = this.snap();
+            const snap = this.snap();
             return snap.index.lineNumberToInfo(line);
         }
 
@@ -84,23 +86,27 @@ namespace ts.server {
     }
 
     export class LSHost implements ts.LanguageServiceHost {
-        ls: ts.LanguageService = null;
+        ls: ts.LanguageService;
         compilationSettings: ts.CompilerOptions;
-        filenameToScript: ts.Map<ScriptInfo> = {};
+        filenameToScript: ts.FileMap<ScriptInfo>;
         roots: ScriptInfo[] = [];
         private resolvedModuleNames: ts.FileMap<Map<TimestampedResolvedModule>>;
         private moduleResolutionHost: ts.ModuleResolutionHost;
+        private getCanonicalFileName: (fileName: string) => string;
 
         constructor(public host: ServerHost, public project: Project) {
-            this.resolvedModuleNames = ts.createFileMap<Map<TimestampedResolvedModule>>(ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames))
+            this.getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+            this.resolvedModuleNames = createFileMap<Map<TimestampedResolvedModule>>();
+            this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
                 readFile: fileName => this.host.readFile(fileName)
-            }
+            };
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            let currentResolutionsInFile = this.resolvedModuleNames.get(containingFile);
+            let path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            let currentResolutionsInFile = this.resolvedModuleNames.get(path);
 
             let newResolutions: Map<TimestampedResolvedModule> = {};
             let resolvedModules: ResolvedModule[] = [];
@@ -127,9 +133,9 @@ namespace ts.server {
 
                 resolvedModules.push(resolution.resolvedModule);
             }
-            
+
             // replace old results with a new one
-            this.resolvedModuleNames.set(containingFile, newResolutions);
+            this.resolvedModuleNames.set(path, newResolutions);
             return resolvedModules;
 
             function moduleResolutionIsValid(resolution: TimestampedResolvedModule): boolean {
@@ -142,7 +148,7 @@ namespace ts.server {
                     // TODO: use lastCheckTime to track expiration for module name resolution 
                     return true;
                 }
-                
+
                 // consider situation if we have no candidate locations as valid resolution.
                 // after all there is no point to invalidate it if we have no idea where to look for the module.
                 return resolution.failedLookupLocations.length === 0;
@@ -150,12 +156,12 @@ namespace ts.server {
         }
 
         getDefaultLibFileName() {
-            var nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
+            const nodeModuleBinDir = ts.getDirectoryPath(ts.normalizePath(this.host.getExecutingFilePath()));
             return ts.combinePaths(nodeModuleBinDir, ts.getDefaultLibFileName(this.compilationSettings));
         }
 
         getScriptSnapshot(filename: string): ts.IScriptSnapshot {
-            var scriptInfo = this.getScriptInfo(filename);
+            const scriptInfo = this.getScriptInfo(filename);
             if (scriptInfo) {
                 return scriptInfo.snap();
             }
@@ -168,10 +174,10 @@ namespace ts.server {
         }
 
         lineAffectsRefs(filename: string, line: number) {
-            var info = this.getScriptInfo(filename);
-            var lineInfo = info.getLineInfo(line);
+            const info = this.getScriptInfo(filename);
+            const lineInfo = info.getLineInfo(line);
             if (lineInfo && lineInfo.text) {
-                var regex = /reference|import|\/\*|\*\//;
+                const regex = /reference|import|\/\*|\*\//;
                 return regex.test(lineInfo.text);
             }
         }
@@ -199,58 +205,55 @@ namespace ts.server {
 
         removeReferencedFile(info: ScriptInfo) {
             if (!info.isOpen) {
-                this.filenameToScript[info.fileName] = undefined;
-                this.resolvedModuleNames.remove(info.fileName);
+                this.filenameToScript.remove(info.path);
+                this.resolvedModuleNames.remove(info.path);
             }
         }
 
         getScriptInfo(filename: string): ScriptInfo {
-            var scriptInfo = ts.lookUp(this.filenameToScript, filename);
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            let scriptInfo = this.filenameToScript.get(path);
             if (!scriptInfo) {
                 scriptInfo = this.project.openReferencedFile(filename);
                 if (scriptInfo) {
-                    this.filenameToScript[scriptInfo.fileName] = scriptInfo;
+                    this.filenameToScript.set(path, scriptInfo);
                 }
-            }
-            else {
             }
             return scriptInfo;
         }
 
         addRoot(info: ScriptInfo) {
-            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
-            if (!scriptInfo) {
-                this.filenameToScript[info.fileName] = info;
+            if (!this.filenameToScript.contains(info.path)) {
+                this.filenameToScript.set(info.path, info);
                 this.roots.push(info);
             }
         }
 
         removeRoot(info: ScriptInfo) {
-            var scriptInfo = ts.lookUp(this.filenameToScript, info.fileName);
-            if (scriptInfo) {
-                this.filenameToScript[info.fileName] = undefined;
+            if (!this.filenameToScript.contains(info.path)) {
+                this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
-                this.resolvedModuleNames.remove(info.fileName);
+                this.resolvedModuleNames.remove(info.path);
             }
         }
 
         saveTo(filename: string, tmpfilename: string) {
-            var script = this.getScriptInfo(filename);
+            const script = this.getScriptInfo(filename);
             if (script) {
-                var snap = script.snap();
+                const snap = script.snap();
                 this.host.writeFile(tmpfilename, snap.getText(0, snap.getLength()));
             }
         }
 
         reloadScript(filename: string, tmpfilename: string, cb: () => any) {
-            var script = this.getScriptInfo(filename);
+            const script = this.getScriptInfo(filename);
             if (script) {
                 script.svc.reloadFromFile(tmpfilename, cb);
             }
         }
 
         editScript(filename: string, start: number, end: number, newText: string) {
-            var script = this.getScriptInfo(filename);
+            const script = this.getScriptInfo(filename);
             if (script) {
                 script.editContent(start, end, newText);
                 return;
@@ -260,14 +263,14 @@ namespace ts.server {
         }
 
         resolvePath(path: string): string {
-            var start = new Date().getTime();
-            var result = this.host.resolvePath(path);
+            const start = new Date().getTime();
+            const result = this.host.resolvePath(path);
             return result;
         }
 
         fileExists(path: string): boolean {
-            var start = new Date().getTime();
-            var result = this.host.fileExists(path);
+            const start = new Date().getTime();
+            const result = this.host.fileExists(path);
             return result;
         }
 
@@ -279,16 +282,17 @@ namespace ts.server {
          *  @param line 1 based index
          */
         lineToTextSpan(filename: string, line: number): ts.TextSpan {
-            var script: ScriptInfo = this.filenameToScript[filename];
-            var index = script.snap().index;
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const script: ScriptInfo = this.filenameToScript.get(path);
+            const index = script.snap().index;
 
-            var lineInfo = index.lineNumberToInfo(line + 1);
-            var len: number;
+            const lineInfo = index.lineNumberToInfo(line + 1);
+            let len: number;
             if (lineInfo.leaf) {
                 len = lineInfo.leaf.text.length;
             }
             else {
-                var nextLineInfo = index.lineNumberToInfo(line + 2);
+                const nextLineInfo = index.lineNumberToInfo(line + 2);
                 len = nextLineInfo.offset - lineInfo.offset;
             }
             return ts.createTextSpan(lineInfo.offset, len);
@@ -299,10 +303,11 @@ namespace ts.server {
          * @param offset 1 based index
          */
         lineOffsetToPosition(filename: string, line: number, offset: number): number {
-            var script: ScriptInfo = this.filenameToScript[filename];
-            var index = script.snap().index;
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const script: ScriptInfo = this.filenameToScript.get(path);
+            const index = script.snap().index;
 
-            var lineInfo = index.lineNumberToInfo(line);
+            const lineInfo = index.lineNumberToInfo(line);
             // TODO: assert this offset is actually on the line
             return (lineInfo.offset + offset - 1);
         }
@@ -312,36 +317,37 @@ namespace ts.server {
          * @param offset 1-based index
          */
         positionToLineOffset(filename: string, position: number): ILineInfo {
-            var script: ScriptInfo = this.filenameToScript[filename];
-            var index = script.snap().index;
-            var lineOffset = index.charOffsetToLineNumberAndPos(position);
+            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const script: ScriptInfo = this.filenameToScript.get(path);
+            const index = script.snap().index;
+            const lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };
         }
     }
 
     // assumes normalized paths
     function getAbsolutePath(filename: string, directory: string) {
-        var rootLength = ts.getRootLength(filename);
+        const rootLength = ts.getRootLength(filename);
         if (rootLength > 0) {
             return filename;
         }
         else {
-            var splitFilename = filename.split('/');
-            var splitDir = directory.split('/');
-            var i = 0;
-            var dirTail = 0;
-            var sflen = splitFilename.length;
-            while ((i < sflen) && (splitFilename[i].charAt(0) == '.')) {
-                var dots = splitFilename[i];
-                if (dots == '..') {
+            const splitFilename = filename.split("/");
+            const splitDir = directory.split("/");
+            let i = 0;
+            let dirTail = 0;
+            const sflen = splitFilename.length;
+            while ((i < sflen) && (splitFilename[i].charAt(0) == ".")) {
+                const dots = splitFilename[i];
+                if (dots == "..") {
                     dirTail++;
                 }
-                else if (dots != '.') {
+                else if (dots != ".") {
                     return undefined;
                 }
                 i++;
             }
-            return splitDir.slice(0, splitDir.length - dirTail).concat(splitFilename.slice(i)).join('/');
+            return splitDir.slice(0, splitDir.length - dirTail).concat(splitFilename.slice(i)).join("/");
         }
     }
 
@@ -386,7 +392,7 @@ namespace ts.server {
         }
 
         getFileNames() {
-            let sourceFiles = this.program.getSourceFiles();
+            const sourceFiles = this.program.getSourceFiles();
             return sourceFiles.map(sourceFile => sourceFile.fileName);
         }
 
@@ -395,7 +401,7 @@ namespace ts.server {
         }
 
         getSourceFileFromName(filename: string, requireOpen?: boolean) {
-            var info = this.projectService.getScriptInfo(filename);
+            const info = this.projectService.getScriptInfo(filename);
             if (info) {
                 if ((!requireOpen) || info.isOpen) {
                     return this.getSourceFile(info);
@@ -414,9 +420,9 @@ namespace ts.server {
 
         updateFileMap() {
             this.filenameToSourceFile = {};
-            var sourceFiles = this.program.getSourceFiles();
-            for (var i = 0, len = sourceFiles.length; i < len; i++) {
-                var normFilename = ts.normalizePath(sourceFiles[i].fileName);
+            const sourceFiles = this.program.getSourceFiles();
+            for (let i = 0, len = sourceFiles.length; i < len; i++) {
+                const normFilename = ts.normalizePath(sourceFiles[i].fileName);
                 this.filenameToSourceFile[normFilename] = sourceFiles[i];
             }
         }
@@ -439,14 +445,14 @@ namespace ts.server {
         addRoot(info: ScriptInfo) {
             this.compilerService.host.addRoot(info);
         }
-        
+
         // remove a root file from project
         removeRoot(info: ScriptInfo) {
             this.compilerService.host.removeRoot(info);
         }
 
         filesToString() {
-            var strBuilder = "";
+            let strBuilder = "";
             ts.forEachValue(this.filenameToSourceFile,
                 sourceFile => { strBuilder += sourceFile.fileName + "\n"; });
             return strBuilder;
@@ -467,8 +473,8 @@ namespace ts.server {
     }
 
     function copyListRemovingItem<T>(item: T, list: T[]) {
-        var copiedList: T[] = [];
-        for (var i = 0, len = list.length; i < len; i++) {
+        const copiedList: T[] = [];
+        for (let i = 0, len = list.length; i < len; i++) {
             if (list[i] != item) {
                 copiedList.push(list[i]);
             }
@@ -514,12 +520,12 @@ namespace ts.server {
             this.hostConfiguration = {
                 formatCodeOptions: ts.clone(CompilerService.defaultFormatCodeOptions),
                 hostInfo: "Unknown host"
-            }
+            };
         }
 
         getFormatCodeOptions(file?: string) {
             if (file) {
-                var info = this.filenameToScriptInfo[file];
+                const info = this.filenameToScriptInfo[file];
                 if (info) {
                     return info.formatCodeOptions;
                 }
@@ -528,7 +534,7 @@ namespace ts.server {
         }
 
         watchedFileChanged(fileName: string) {
-            var info = this.filenameToScriptInfo[fileName];
+            const info = this.filenameToScriptInfo[fileName];
             if (!info) {
                 this.psLogger.info("Error: got watch notification for unknown file: " + fileName);
             }
@@ -631,7 +637,7 @@ namespace ts.server {
 
         setHostConfiguration(args: ts.server.protocol.ConfigureRequestArguments) {
             if (args.file) {
-                var info = this.filenameToScriptInfo[args.file];
+                const info = this.filenameToScriptInfo[args.file];
                 if (info) {
                     info.setFormatOptions(args.formatOptions);
                     this.log("Host configuration update for file " + args.file, "Info");
@@ -654,7 +660,7 @@ namespace ts.server {
         }
 
         createInferredProject(root: ScriptInfo) {
-            var project = new Project(this);
+            const project = new Project(this);
             project.addRoot(root);
 
             let currentPath = ts.getDirectoryPath(root.fileName);
@@ -689,21 +695,21 @@ namespace ts.server {
 
             if (!info.isOpen) {
                 this.filenameToScriptInfo[info.fileName] = undefined;
-                var referencingProjects = this.findReferencingProjects(info);
+                const referencingProjects = this.findReferencingProjects(info);
                 if (info.defaultProject) {
                     info.defaultProject.removeRoot(info);
                 }
-                for (var i = 0, len = referencingProjects.length; i < len; i++) {
+                for (let i = 0, len = referencingProjects.length; i < len; i++) {
                     referencingProjects[i].removeReferencedFile(info);
                 }
-                for (var j = 0, flen = this.openFileRoots.length; j < flen; j++) {
-                    var openFile = this.openFileRoots[j];
+                for (let j = 0, flen = this.openFileRoots.length; j < flen; j++) {
+                    const openFile = this.openFileRoots[j];
                     if (this.eventHandler) {
                         this.eventHandler("context", openFile.defaultProject, openFile.fileName);
                     }
                 }
-                for (var j = 0, flen = this.openFilesReferenced.length; j < flen; j++) {
-                    var openFile = this.openFilesReferenced[j];
+                for (let j = 0, flen = this.openFilesReferenced.length; j < flen; j++) {
+                    const openFile = this.openFilesReferenced[j];
                     if (this.eventHandler) {
                         this.eventHandler("context", openFile.defaultProject, openFile.fileName);
                     }
@@ -714,8 +720,8 @@ namespace ts.server {
         }
 
         updateConfiguredProjectList() {
-            var configuredProjects: Project[] = [];
-            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+            const configuredProjects: Project[] = [];
+            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
                 if (this.configuredProjects[i].openRefCount > 0) {
                     configuredProjects.push(this.configuredProjects[i]);
                 }
@@ -752,7 +758,7 @@ namespace ts.server {
         }
 
         setConfiguredProjectRoot(info: ScriptInfo) {
-            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
                 let configuredProject = this.configuredProjects[i];
                 if (configuredProject.isRoot(info)) {
                     info.defaultProject = configuredProject;
@@ -775,10 +781,10 @@ namespace ts.server {
                 else {
                     // create new inferred project p with the newly opened file as root
                     info.defaultProject = this.createInferredProject(info);
-                    var openFileRoots: ScriptInfo[] = [];
+                    const openFileRoots: ScriptInfo[] = [];
                     // for each inferred project root r
-                    for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
-                        var r = this.openFileRoots[i];
+                    for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
+                        const r = this.openFileRoots[i];
                         // if r referenced by the new project
                         if (info.defaultProject.getSourceFile(r)) {
                             // remove project rooted at r
@@ -810,9 +816,9 @@ namespace ts.server {
             // to the disk, and the server's version of the file can be out of sync.
             info.svc.reloadFromFile(info.fileName);
 
-            var openFileRoots: ScriptInfo[] = [];
-            var removedProject: Project;
-            for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+            const openFileRoots: ScriptInfo[] = [];
+            let removedProject: Project;
+            for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
                 // if closed file is root of project
                 if (info === this.openFileRoots[i]) {
                     // remove that project and remember it
@@ -824,9 +830,9 @@ namespace ts.server {
             }
             this.openFileRoots = openFileRoots;
             if (!removedProject) {
-                var openFileRootsConfigured: ScriptInfo[] = [];
+                const openFileRootsConfigured: ScriptInfo[] = [];
 
-                for (var i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
+                for (let i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
                     if (info === this.openFileRootsConfigured[i]) {
                         if (info.defaultProject.deleteOpenRef() === 0) {
                             removedProject = info.defaultProject;
@@ -841,11 +847,11 @@ namespace ts.server {
             }
             if (removedProject) {
                 this.removeProject(removedProject);
-                var openFilesReferenced: ScriptInfo[] = [];
-                var orphanFiles: ScriptInfo[] = [];
+                const openFilesReferenced: ScriptInfo[] = [];
+                const orphanFiles: ScriptInfo[] = [];
                 // for all open, referenced files f
-                for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                    var f = this.openFilesReferenced[i];
+                for (let i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                    const f = this.openFilesReferenced[i];
                     // if f was referenced by the removed project, remember it
                     if (f.defaultProject === removedProject || !f.defaultProject) {
                         f.defaultProject = undefined;
@@ -858,7 +864,7 @@ namespace ts.server {
                 }
                 this.openFilesReferenced = openFilesReferenced;
                 // treat orphaned files as newly opened
-                for (var i = 0, len = orphanFiles.length; i < len; i++) {
+                for (let i = 0, len = orphanFiles.length; i < len; i++) {
                     this.addOpenFile(orphanFiles[i]);
                 }
             }
@@ -869,10 +875,10 @@ namespace ts.server {
         }
 
         findReferencingProjects(info: ScriptInfo, excludedProject?: Project) {
-            var referencingProjects: Project[] = [];
+            const referencingProjects: Project[] = [];
             info.defaultProject = undefined;
-            for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
-                var inferredProject = this.inferredProjects[i];
+            for (let i = 0, len = this.inferredProjects.length; i < len; i++) {
+                const inferredProject = this.inferredProjects[i];
                 inferredProject.updateGraph();
                 if (inferredProject !== excludedProject) {
                     if (inferredProject.getSourceFile(info)) {
@@ -881,8 +887,8 @@ namespace ts.server {
                     }
                 }
             }
-            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
-                var configuredProject = this.configuredProjects[i];
+            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
+                const configuredProject = this.configuredProjects[i];
                 configuredProject.updateGraph();
                 if (configuredProject.getSourceFile(info)) {
                     info.defaultProject = configuredProject;
@@ -930,11 +936,11 @@ namespace ts.server {
             // project roots.  For each referenced file, see if the default project still
             // references that file.  If so, then just keep the file in the referenced list.
             // If not, add the file to an unattached list, to be rechecked later.
-            var openFilesReferenced: ScriptInfo[] = [];
-            for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                var referencedFile = this.openFilesReferenced[i];
+            const openFilesReferenced: ScriptInfo[] = [];
+            for (let i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                const referencedFile = this.openFilesReferenced[i];
                 referencedFile.defaultProject.updateGraph();
-                var sourceFile = referencedFile.defaultProject.getSourceFile(referencedFile);
+                const sourceFile = referencedFile.defaultProject.getSourceFile(referencedFile);
                 if (sourceFile) {
                     openFilesReferenced.push(referencedFile);
                 }
@@ -951,11 +957,11 @@ namespace ts.server {
             // projects newly references the file, remove its project from the
             // inferred projects list (since it is no longer a root) and add
             // the file to the open, referenced file list.
-            var openFileRoots: ScriptInfo[] = [];
-            for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
-                var rootFile = this.openFileRoots[i];
-                var rootedProject = rootFile.defaultProject;
-                var referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
+            const openFileRoots: ScriptInfo[] = [];
+            for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
+                const rootFile = this.openFileRoots[i];
+                const rootedProject = rootFile.defaultProject;
+                const referencingProjects = this.findReferencingProjects(rootFile, rootedProject);
 
                 if (rootFile.defaultProject && rootFile.defaultProject.isConfiguredProject()) {
                     // If the root file has already been added into a configured project,
@@ -982,7 +988,7 @@ namespace ts.server {
             // Finally, if we found any open, referenced files that are no longer
             // referenced by their default project, treat them as newly opened
             // by the editor.
-            for (var i = 0, len = unattachedOpenFiles.length; i < len; i++) {
+            for (let i = 0, len = unattachedOpenFiles.length; i < len; i++) {
                 this.addOpenFile(unattachedOpenFiles[i]);
             }
             this.printProjects();
@@ -998,9 +1004,9 @@ namespace ts.server {
          */
         openFile(fileName: string, openedByClient: boolean) {
             fileName = ts.normalizePath(fileName);
-            var info = ts.lookUp(this.filenameToScriptInfo, fileName);
+            let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
-                var content: string;
+                let content: string;
                 if (this.host.fileExists(fileName)) {
                     content = this.host.readFile(fileName);
                 }
@@ -1010,7 +1016,7 @@ namespace ts.server {
                     }
                 }
                 if (content !== undefined) {
-                    var indentSize: number;
+                    let indentSize: number;
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
@@ -1034,11 +1040,11 @@ namespace ts.server {
         // the newly opened file.
         findConfigFile(searchPath: string): string {
             while (true) {
-                var fileName = ts.combinePaths(searchPath, "tsconfig.json");
+                const fileName = ts.combinePaths(searchPath, "tsconfig.json");
                 if (this.host.fileExists(fileName)) {
                     return fileName;
                 }
-                var parentPath = ts.getDirectoryPath(searchPath);
+                const parentPath = ts.getDirectoryPath(searchPath);
                 if (parentPath === searchPath) {
                     break;
                 }
@@ -1053,7 +1059,7 @@ namespace ts.server {
          */
         openClientFile(fileName: string) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
-            var info = this.openFile(fileName, true);
+            const info = this.openFile(fileName, true);
             this.addOpenFile(info);
             this.printProjects();
             return info;
@@ -1072,7 +1078,7 @@ namespace ts.server {
                 this.log("Config file name: " + configFileName, "Info");
                 let project = this.findConfiguredProjectByConfigFile(configFileName);
                 if (!project) {
-                    var configResult = this.openConfigFile(configFileName, fileName);
+                    const configResult = this.openConfigFile(configFileName, fileName);
                     if (!configResult.success) {
                         this.log("Error opening config file " + configFileName + " " + configResult.errorMsg);
                     }
@@ -1096,7 +1102,7 @@ namespace ts.server {
          */
 
         closeClientFile(filename: string) {
-            var info = ts.lookUp(this.filenameToScriptInfo, filename);
+            const info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
                 this.closeOpenFile(info);
                 info.isOpen = false;
@@ -1105,19 +1111,19 @@ namespace ts.server {
         }
 
         getProjectForFile(filename: string) {
-            var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 return scriptInfo.defaultProject;
             }
         }
 
         printProjectsForFile(filename: string) {
-            var scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
+            const scriptInfo = ts.lookUp(this.filenameToScriptInfo, filename);
             if (scriptInfo) {
                 this.psLogger.startGroup();
-                this.psLogger.info("Projects for " + filename)
-                var projects = this.findReferencingProjects(scriptInfo);
-                for (var i = 0, len = projects.length; i < len; i++) {
+                this.psLogger.info("Projects for " + filename);
+                const projects = this.findReferencingProjects(scriptInfo);
+                for (let i = 0, len = projects.length; i < len; i++) {
                     this.psLogger.info("Project " + i.toString());
                 }
                 this.psLogger.endGroup();
@@ -1132,34 +1138,34 @@ namespace ts.server {
                 return;
             }
             this.psLogger.startGroup();
-            for (var i = 0, len = this.inferredProjects.length; i < len; i++) {
-                var project = this.inferredProjects[i];
+            for (let i = 0, len = this.inferredProjects.length; i < len; i++) {
+                const project = this.inferredProjects[i];
                 project.updateGraph();
                 this.psLogger.info("Project " + i.toString());
                 this.psLogger.info(project.filesToString());
                 this.psLogger.info("-----------------------------------------------");
             }
-            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
-                var project = this.configuredProjects[i];
+            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
+                const project = this.configuredProjects[i];
                 project.updateGraph();
                 this.psLogger.info("Project (configured) " + (i + this.inferredProjects.length).toString());
                 this.psLogger.info(project.filesToString());
                 this.psLogger.info("-----------------------------------------------");
             }
-            this.psLogger.info("Open file roots of inferred projects: ")
-            for (var i = 0, len = this.openFileRoots.length; i < len; i++) {
+            this.psLogger.info("Open file roots of inferred projects: ");
+            for (let i = 0, len = this.openFileRoots.length; i < len; i++) {
                 this.psLogger.info(this.openFileRoots[i].fileName);
             }
-            this.psLogger.info("Open files referenced by inferred or configured projects: ")
-            for (var i = 0, len = this.openFilesReferenced.length; i < len; i++) {
-                var fileInfo = this.openFilesReferenced[i].fileName;
+            this.psLogger.info("Open files referenced by inferred or configured projects: ");
+            for (let i = 0, len = this.openFilesReferenced.length; i < len; i++) {
+                let fileInfo = this.openFilesReferenced[i].fileName;
                 if (this.openFilesReferenced[i].defaultProject.isConfiguredProject()) {
                     fileInfo += " (configured)";
                 }
                 this.psLogger.info(fileInfo);
             }
-            this.psLogger.info("Open file roots of configured projects: ")
-            for (var i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
+            this.psLogger.info("Open file roots of configured projects: ");
+            for (let i = 0, len = this.openFileRootsConfigured.length; i < len; i++) {
                 this.psLogger.info(this.openFileRootsConfigured[i].fileName);
             }
             this.psLogger.endGroup();
@@ -1170,7 +1176,7 @@ namespace ts.server {
         }
 
         findConfiguredProjectByConfigFile(configFileName: string) {
-            for (var i = 0, len = this.configuredProjects.length; i < len; i++) {
+            for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
                 if (this.configuredProjects[i].projectFilename == configFileName) {
                     return this.configuredProjects[i];
                 }
@@ -1181,22 +1187,24 @@ namespace ts.server {
         configFileToProjectOptions(configFilename: string): { succeeded: boolean, projectOptions?: ProjectOptions, error?: ProjectOpenResult } {
             configFilename = ts.normalizePath(configFilename);
             // file references will be relative to dirPath (or absolute)
-            var dirPath = ts.getDirectoryPath(configFilename);
-            var contents = this.host.readFile(configFilename)
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
+            const dirPath = ts.getDirectoryPath(configFilename);
+            const contents = this.host.readFile(configFilename);
+            const rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileTextToJson(configFilename, contents);
             if (rawConfig.error) {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
-                var parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath);
+                const parsedCommandLine = ts.parseJsonConfigFileContent(rawConfig.config, this.host, dirPath);
+                Debug.assert(!!parsedCommandLine.fileNames);
+
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
                 }
-                else if (parsedCommandLine.fileNames == null) {
+                else if (parsedCommandLine.fileNames.length === 0) {
                     return { succeeded: false, error: { errorMsg: "no files found" } };
                 }
                 else {
-                    var projectOptions: ProjectOptions = {
+                    const projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
                         compilerOptions: parsedCommandLine.options
                     };
@@ -1289,7 +1297,7 @@ namespace ts.server {
         }
 
         createProject(projectFilename: string, projectOptions?: ProjectOptions) {
-            var project = new Project(this, projectOptions);
+            const project = new Project(this, projectOptions);
             project.projectFilename = projectFilename;
             return project;
         }
@@ -1321,14 +1329,14 @@ namespace ts.server {
         }
 
         isExternalModule(filename: string): boolean {
-            var sourceFile = this.languageService.getSourceFile(filename);
+            const sourceFile = this.languageService.getSourceFile(filename);
             return ts.isExternalModule(sourceFile);
         }
 
         static defaultFormatCodeOptions: ts.FormatCodeOptions = {
             IndentSize: 4,
             TabSize: 4,
-            NewLineCharacter: ts.sys ? ts.sys.newLine : '\n',
+            NewLineCharacter: ts.sys ? ts.sys.newLine : "\n",
             ConvertTabsToSpaces: true,
             IndentStyle: ts.IndentStyle.Smart,
             InsertSpaceAfterCommaDelimiter: true,
@@ -1340,7 +1348,7 @@ namespace ts.server {
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
-        }
+        };
     }
 
     export interface LineCollection {
@@ -1414,17 +1422,17 @@ namespace ts.server {
             else {
                 insertedText = this.initialText + this.trailingText;
             }
-            var lm = LineIndex.linesFromText(insertedText);
-            var lines = lm.lines;
+            const lm = LineIndex.linesFromText(insertedText);
+            const lines = lm.lines;
             if (lines.length > 1) {
                 if (lines[lines.length - 1] == "") {
                     lines.length--;
                 }
             }
-            var branchParent: LineNode;
-            var lastZeroCount: LineCollection;
+            let branchParent: LineNode;
+            let lastZeroCount: LineCollection;
 
-            for (var k = this.endBranch.length - 1; k >= 0; k--) {
+            for (let k = this.endBranch.length - 1; k >= 0; k--) {
                 (<LineNode>this.endBranch[k]).updateCounts();
                 if (this.endBranch[k].charCount() === 0) {
                     lastZeroCount = this.endBranch[k];
@@ -1441,29 +1449,29 @@ namespace ts.server {
             }
 
             // path at least length two (root and leaf)
-            var insertionNode = <LineNode>this.startPath[this.startPath.length - 2];
-            var leafNode = <LineLeaf>this.startPath[this.startPath.length - 1];
-            var len = lines.length;
+            let insertionNode = <LineNode>this.startPath[this.startPath.length - 2];
+            const leafNode = <LineLeaf>this.startPath[this.startPath.length - 1];
+            const len = lines.length;
 
             if (len > 0) {
                 leafNode.text = lines[0];
 
                 if (len > 1) {
-                    var insertedNodes = <LineCollection[]>new Array(len - 1);
-                    var startNode = <LineCollection>leafNode;
-                    for (var i = 1, len = lines.length; i < len; i++) {
+                    let insertedNodes = <LineCollection[]>new Array(len - 1);
+                    let startNode = <LineCollection>leafNode;
+                    for (let i = 1, len = lines.length; i < len; i++) {
                         insertedNodes[i - 1] = new LineLeaf(lines[i]);
                     }
-                    var pathIndex = this.startPath.length - 2;
+                    let pathIndex = this.startPath.length - 2;
                     while (pathIndex >= 0) {
                         insertionNode = <LineNode>this.startPath[pathIndex];
                         insertedNodes = insertionNode.insertAt(startNode, insertedNodes);
                         pathIndex--;
                         startNode = insertionNode;
                     }
-                    var insertedNodesLen = insertedNodes.length;
+                    let insertedNodesLen = insertedNodes.length;
                     while (insertedNodesLen > 0) {
-                        var newRoot = new LineNode();
+                        const newRoot = new LineNode();
                         newRoot.add(this.lineIndex.root);
                         insertedNodes = newRoot.insertAt(this.lineIndex.root, insertedNodes);
                         insertedNodesLen = insertedNodes.length;
@@ -1472,7 +1480,7 @@ namespace ts.server {
                     this.lineIndex.root.updateCounts();
                 }
                 else {
-                    for (var j = this.startPath.length - 2; j >= 0; j--) {
+                    for (let j = this.startPath.length - 2; j >= 0; j--) {
                         (<LineNode>this.startPath[j]).updateCounts();
                     }
                 }
@@ -1480,7 +1488,7 @@ namespace ts.server {
             else {
                 // no content for leaf node, so delete it
                 insertionNode.remove(leafNode);
-                for (var j = this.startPath.length - 2; j >= 0; j--) {
+                for (let j = this.startPath.length - 2; j >= 0; j--) {
                     (<LineNode>this.startPath[j]).updateCounts();
                 }
             }
@@ -1501,7 +1509,7 @@ namespace ts.server {
 
         pre(relativeStart: number, relativeLength: number, lineCollection: LineCollection, parent: LineCollection, nodeType: CharRangeSection) {
             // currentNode corresponds to parent, but in the new tree
-            var currentNode = this.stack[this.stack.length - 1];
+            const currentNode = this.stack[this.stack.length - 1];
 
             if ((this.state === CharRangeSection.Entire) && (nodeType === CharRangeSection.Start)) {
                 // if range is on single line, we will never make this state transition
@@ -1510,7 +1518,7 @@ namespace ts.server {
                 this.lineCollectionAtBranch = lineCollection;
             }
 
-            var child: LineCollection;
+            let child: LineCollection;
             function fresh(node: LineCollection): LineCollection {
                 if (node.isLeaf()) {
                     return new LineLeaf("");
@@ -1635,7 +1643,7 @@ namespace ts.server {
         }
 
         reloadFromFile(filename: string, cb?: () => any) {
-            var content = this.host.readFile(filename);
+            const content = this.host.readFile(filename);
             this.reload(content);
             if (cb)
                 cb();
@@ -1645,13 +1653,13 @@ namespace ts.server {
         reload(script: string) {
             this.currentVersion++;
             this.changes = []; // history wiped out by reload
-            var snap = new LineIndexSnapshot(this.currentVersion, this);
+            const snap = new LineIndexSnapshot(this.currentVersion, this);
             this.versions[this.currentVersion] = snap;
             snap.index = new LineIndex();
-            var lm = LineIndex.linesFromText(script);
+            const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
             // REVIEW: could use linked list
-            for (var i = this.minVersion; i < this.currentVersion; i++) {
+            for (let i = this.minVersion; i < this.currentVersion; i++) {
                 this.versions[i] = undefined;
             }
             this.minVersion = this.currentVersion;
@@ -1659,11 +1667,11 @@ namespace ts.server {
         }
 
         getSnapshot() {
-            var snap = this.versions[this.currentVersion];
+            let snap = this.versions[this.currentVersion];
             if (this.changes.length > 0) {
-                var snapIndex = this.latest().index;
-                for (var i = 0, len = this.changes.length; i < len; i++) {
-                    var change = this.changes[i];
+                let snapIndex = this.latest().index;
+                for (let i = 0, len = this.changes.length; i < len; i++) {
+                    const change = this.changes[i];
                     snapIndex = snapIndex.edit(change.pos, change.deleteLen, change.insertedText);
                 }
                 snap = new LineIndexSnapshot(this.currentVersion + 1, this);
@@ -1673,9 +1681,9 @@ namespace ts.server {
                 this.versions[snap.version] = snap;
                 this.changes = [];
                 if ((this.currentVersion - this.minVersion) >= ScriptVersionCache.maxVersions) {
-                    var oldMin = this.minVersion;
+                    const oldMin = this.minVersion;
                     this.minVersion = (this.currentVersion - ScriptVersionCache.maxVersions) + 1;
-                    for (var j = oldMin; j < this.minVersion; j++) {
+                    for (let j = oldMin; j < this.minVersion; j++) {
                         this.versions[j] = undefined;
                     }
                 }
@@ -1686,11 +1694,11 @@ namespace ts.server {
         getTextChangesBetweenVersions(oldVersion: number, newVersion: number) {
             if (oldVersion < newVersion) {
                 if (oldVersion >= this.minVersion) {
-                    var textChangeRanges: ts.TextChangeRange[] = [];
-                    for (var i = oldVersion + 1; i <= newVersion; i++) {
-                        var snap = this.versions[i];
-                        for (var j = 0, len = snap.changesSincePreviousVersion.length; j < len; j++) {
-                            var textChange = snap.changesSincePreviousVersion[j];
+                    const textChangeRanges: ts.TextChangeRange[] = [];
+                    for (let i = oldVersion + 1; i <= newVersion; i++) {
+                        const snap = this.versions[i];
+                        for (let j = 0, len = snap.changesSincePreviousVersion.length; j < len; j++) {
+                            const textChange = snap.changesSincePreviousVersion[j];
                             textChangeRanges[textChangeRanges.length] = textChange.getTextChangeRange();
                         }
                     }
@@ -1706,12 +1714,12 @@ namespace ts.server {
         }
 
         static fromString(host: ServerHost, script: string) {
-            var svc = new ScriptVersionCache();
-            var snap = new LineIndexSnapshot(0, svc);
+            const svc = new ScriptVersionCache();
+            const snap = new LineIndexSnapshot(0, svc);
             svc.versions[svc.currentVersion] = snap;
             svc.host = host;
             snap.index = new LineIndex();
-            var lm = LineIndex.linesFromText(script);
+            const lm = LineIndex.linesFromText(script);
             snap.index.load(lm.lines);
             return svc;
         }
@@ -1734,9 +1742,9 @@ namespace ts.server {
 
         // this requires linear space so don't hold on to these
         getLineStartPositions(): number[] {
-            var starts: number[] = [-1];
-            var count = 1;
-            var pos = 0;
+            const starts: number[] = [-1];
+            let count = 1;
+            let pos = 0;
             this.index.every((ll, s, len) => {
                 starts[count++] = pos;
                 pos += ll.text.length;
@@ -1760,7 +1768,7 @@ namespace ts.server {
             }
         }
         getChangeRange(oldSnapshot: ts.IScriptSnapshot): ts.TextChangeRange {
-            var oldSnap = <LineIndexSnapshot>oldSnapshot;
+            const oldSnap = <LineIndexSnapshot>oldSnapshot;
             return this.getTextChangeRangeSinceVersion(oldSnap.version);
         }
     }
@@ -1775,9 +1783,9 @@ namespace ts.server {
         }
 
         lineNumberToInfo(lineNumber: number): ILineInfo {
-            var lineCount = this.root.lineCount();
+            const lineCount = this.root.lineCount();
             if (lineNumber <= lineCount) {
-                var lineInfo = this.root.lineNumberToInfo(lineNumber, 0);
+                const lineInfo = this.root.lineNumberToInfo(lineNumber, 0);
                 lineInfo.line = lineNumber;
                 return lineInfo;
             }
@@ -1785,14 +1793,14 @@ namespace ts.server {
                 return {
                     line: lineNumber,
                     offset: this.root.charCount()
-                }
+                };
             }
         }
 
         load(lines: string[]) {
             if (lines.length > 0) {
-                var leaves: LineLeaf[] = [];
-                for (var i = 0, len = lines.length; i < len; i++) {
+                const leaves: LineLeaf[] = [];
+                for (let i = 0, len = lines.length; i < len; i++) {
                     leaves[i] = new LineLeaf(lines[i]);
                 }
                 this.root = LineIndex.buildTreeFromBottom(leaves);
@@ -1807,7 +1815,7 @@ namespace ts.server {
         }
 
         getText(rangeStart: number, rangeLength: number) {
-            var accum = "";
+            let accum = "";
             if ((rangeLength > 0) && (rangeStart < this.root.charCount())) {
                 this.walk(rangeStart, rangeLength, {
                     goSubtree: true,
@@ -1828,7 +1836,7 @@ namespace ts.server {
             if (!rangeEnd) {
                 rangeEnd = this.root.charCount();
             }
-            var walkFns = {
+            const walkFns = {
                 goSubtree: true,
                 done: false,
                 leaf: function (relativeStart: number, relativeLength: number, ll: LineLeaf) {
@@ -1836,7 +1844,7 @@ namespace ts.server {
                         this.done = true;
                     }
                 }
-            }
+            };
             this.walk(rangeStart, rangeEnd - rangeStart, walkFns);
             return !walkFns.done;
         }
@@ -1853,14 +1861,15 @@ namespace ts.server {
                 }
             }
             else {
+                let checkText: string;
                 if (this.checkEdits) {
-                    var checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
+                    checkText = editFlat(this.getText(0, this.root.charCount()), pos, deleteLength, newText);
                 }
-                var walker = new EditWalker();
+                const walker = new EditWalker();
                 if (pos >= this.root.charCount()) {
                     // insert at end
                     pos = this.root.charCount() - 1;
-                    var endString = this.getText(pos, 1);
+                    const endString = this.getText(pos, 1);
                     if (newText) {
                         newText = endString + newText;
                     }
@@ -1872,8 +1881,8 @@ namespace ts.server {
                 }
                 else if (deleteLength > 0) {
                     // check whether last characters deleted are line break
-                    var e = pos + deleteLength;
-                    var lineInfo = this.charOffsetToLineNumberAndPos(e);
+                    const e = pos + deleteLength;
+                    const lineInfo = this.charOffsetToLineNumberAndPos(e);
                     if ((lineInfo && (lineInfo.offset === 0))) {
                         // move range end just past line that will merge with previous line
                         deleteLength += lineInfo.text.length;
@@ -1891,7 +1900,7 @@ namespace ts.server {
                     walker.insertLines(newText);
                 }
                 if (this.checkEdits) {
-                    var updatedText = this.getText(0, this.root.charCount());
+                    const updatedText = this.getText(0, this.root.charCount());
                     Debug.assert(checkText == updatedText, "buffer edit mismatch");
                 }
                 return walker.lineIndex;
@@ -1899,14 +1908,14 @@ namespace ts.server {
         }
 
         static buildTreeFromBottom(nodes: LineCollection[]): LineNode {
-            var nodeCount = Math.ceil(nodes.length / lineCollectionCapacity);
-            var interiorNodes: LineNode[] = [];
-            var nodeIndex = 0;
-            for (var i = 0; i < nodeCount; i++) {
+            const nodeCount = Math.ceil(nodes.length / lineCollectionCapacity);
+            const interiorNodes: LineNode[] = [];
+            let nodeIndex = 0;
+            for (let i = 0; i < nodeCount; i++) {
                 interiorNodes[i] = new LineNode();
-                var charCount = 0;
-                var lineCount = 0;
-                for (var j = 0; j < lineCollectionCapacity; j++) {
+                let charCount = 0;
+                let lineCount = 0;
+                for (let j = 0; j < lineCollectionCapacity; j++) {
                     if (nodeIndex < nodes.length) {
                         interiorNodes[i].add(nodes[nodeIndex]);
                         charCount += nodes[nodeIndex].charCount();
@@ -1929,18 +1938,18 @@ namespace ts.server {
         }
 
         static linesFromText(text: string) {
-            var lineStarts = ts.computeLineStarts(text);
+            const lineStarts = ts.computeLineStarts(text);
 
             if (lineStarts.length === 0) {
                 return { lines: <string[]>[], lineMap: lineStarts };
             }
-            var lines = <string[]>new Array(lineStarts.length);
-            var lc = lineStarts.length - 1;
-            for (var lmi = 0; lmi < lc; lmi++) {
+            const lines = <string[]>new Array(lineStarts.length);
+            const lc = lineStarts.length - 1;
+            for (let lmi = 0; lmi < lc; lmi++) {
                 lines[lmi] = text.substring(lineStarts[lmi], lineStarts[lmi + 1]);
             }
 
-            var endText = text.substring(lineStarts[lc]);
+            const endText = text.substring(lineStarts[lc]);
             if (endText.length > 0) {
                 lines[lc] = endText;
             }
@@ -1963,8 +1972,8 @@ namespace ts.server {
         updateCounts() {
             this.totalChars = 0;
             this.totalLines = 0;
-            for (var i = 0, len = this.children.length; i < len; i++) {
-                var child = this.children[i];
+            for (let i = 0, len = this.children.length; i < len; i++) {
+                const child = this.children[i];
                 this.totalChars += child.charCount();
                 this.totalLines += child.lineCount();
             }
@@ -1995,11 +2004,11 @@ namespace ts.server {
 
         walk(rangeStart: number, rangeLength: number, walkFns: ILineIndexWalker) {
             // assume (rangeStart < this.totalChars) && (rangeLength <= this.totalChars)
-            var childIndex = 0;
-            var child = this.children[0];
-            var childCharCount = child.charCount();
+            let childIndex = 0;
+            let child = this.children[0];
+            let childCharCount = child.charCount();
             // find sub-tree containing start
-            var adjustedStart = rangeStart;
+            let adjustedStart = rangeStart;
             while (adjustedStart >= childCharCount) {
                 this.skipChild(adjustedStart, rangeLength, childIndex, walkFns, CharRangeSection.PreStart);
                 adjustedStart -= childCharCount;
@@ -2017,7 +2026,7 @@ namespace ts.server {
                 if (this.execWalk(adjustedStart, childCharCount - adjustedStart, walkFns, childIndex, CharRangeSection.Start)) {
                     return;
                 }
-                var adjustedLength = rangeLength - (childCharCount - adjustedStart);
+                let adjustedLength = rangeLength - (childCharCount - adjustedStart);
                 child = this.children[++childIndex];
                 childCharCount = child.charCount();
                 while (adjustedLength > childCharCount) {
@@ -2036,9 +2045,9 @@ namespace ts.server {
             }
             // Process any subtrees after the one containing range end
             if (walkFns.pre) {
-                var clen = this.children.length;
+                const clen = this.children.length;
                 if (childIndex < (clen - 1)) {
-                    for (var ej = childIndex + 1; ej < clen; ej++) {
+                    for (let ej = childIndex + 1; ej < clen; ej++) {
                         this.skipChild(0, 0, ej, walkFns, CharRangeSection.PostEnd);
                     }
                 }
@@ -2046,12 +2055,12 @@ namespace ts.server {
         }
 
         charOffsetToLineNumberAndPos(lineNumber: number, charOffset: number): ILineInfo {
-            var childInfo = this.childFromCharOffset(lineNumber, charOffset);
+            const childInfo = this.childFromCharOffset(lineNumber, charOffset);
             if (!childInfo.child) {
                 return {
                     line: lineNumber,
                     offset: charOffset,
-                }
+                };
             }
             else if (childInfo.childIndex < this.children.length) {
                 if (childInfo.child.isLeaf()) {
@@ -2063,23 +2072,23 @@ namespace ts.server {
                     };
                 }
                 else {
-                    var lineNode = <LineNode>(childInfo.child);
+                    const lineNode = <LineNode>(childInfo.child);
                     return lineNode.charOffsetToLineNumberAndPos(childInfo.lineNumber, childInfo.charOffset);
                 }
             }
             else {
-                var lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
+                const lineInfo = this.lineNumberToInfo(this.lineCount(), 0);
                 return { line: this.lineCount(), offset: lineInfo.leaf.charCount() };
             }
         }
 
         lineNumberToInfo(lineNumber: number, charOffset: number): ILineInfo {
-            var childInfo = this.childFromLineNumber(lineNumber, charOffset);
+            const childInfo = this.childFromLineNumber(lineNumber, charOffset);
             if (!childInfo.child) {
                 return {
                     line: lineNumber,
                     offset: charOffset
-                }
+                };
             }
             else if (childInfo.child.isLeaf()) {
                 return {
@@ -2087,20 +2096,22 @@ namespace ts.server {
                     offset: childInfo.charOffset,
                     text: (<LineLeaf>(childInfo.child)).text,
                     leaf: (<LineLeaf>(childInfo.child))
-                }
+                };
             }
             else {
-                var lineNode = <LineNode>(childInfo.child);
+                const lineNode = <LineNode>(childInfo.child);
                 return lineNode.lineNumberToInfo(childInfo.relativeLineNumber, childInfo.charOffset);
             }
         }
 
         childFromLineNumber(lineNumber: number, charOffset: number) {
-            var child: LineCollection;
-            var relativeLineNumber = lineNumber;
-            for (var i = 0, len = this.children.length; i < len; i++) {
+            let child: LineCollection;
+            let relativeLineNumber = lineNumber;
+            let i: number;
+            let len: number;
+            for (i = 0, len = this.children.length; i < len; i++) {
                 child = this.children[i];
-                var childLineCount = child.lineCount();
+                const childLineCount = child.lineCount();
                 if (childLineCount >= relativeLineNumber) {
                     break;
                 }
@@ -2118,8 +2129,10 @@ namespace ts.server {
         }
 
         childFromCharOffset(lineNumber: number, charOffset: number) {
-            var child: LineCollection;
-            for (var i = 0, len = this.children.length; i < len; i++) {
+            let child: LineCollection;
+            let i: number;
+            let len: number;
+            for (i = 0, len = this.children.length; i < len; i++) {
                 child = this.children[i];
                 if (child.charCount() > charOffset) {
                     break;
@@ -2134,14 +2147,14 @@ namespace ts.server {
                 childIndex: i,
                 charOffset: charOffset,
                 lineNumber: lineNumber
-            }
+            };
         }
 
         splitAfter(childIndex: number) {
-            var splitNode: LineNode;
-            var clen = this.children.length;
+            let splitNode: LineNode;
+            const clen = this.children.length;
             childIndex++;
-            var endLength = childIndex;
+            const endLength = childIndex;
             if (childIndex < clen) {
                 splitNode = new LineNode();
                 while (childIndex < clen) {
@@ -2154,10 +2167,10 @@ namespace ts.server {
         }
 
         remove(child: LineCollection) {
-            var childIndex = this.findChildIndex(child);
-            var clen = this.children.length;
+            const childIndex = this.findChildIndex(child);
+            const clen = this.children.length;
             if (childIndex < (clen - 1)) {
-                for (var i = childIndex; i < (clen - 1); i++) {
+                for (let i = childIndex; i < (clen - 1); i++) {
                     this.children[i] = this.children[i + 1];
                 }
             }
@@ -2165,16 +2178,16 @@ namespace ts.server {
         }
 
         findChildIndex(child: LineCollection) {
-            var childIndex = 0;
-            var clen = this.children.length;
+            let childIndex = 0;
+            const clen = this.children.length;
             while ((this.children[childIndex] !== child) && (childIndex < clen)) childIndex++;
             return childIndex;
         }
 
         insertAt(child: LineCollection, nodes: LineCollection[]) {
-            var childIndex = this.findChildIndex(child);
-            var clen = this.children.length;
-            var nodeCount = nodes.length;
+            let childIndex = this.findChildIndex(child);
+            const clen = this.children.length;
+            const nodeCount = nodes.length;
             // if child is last and there is more room and only one node to place, place it
             if ((clen < lineCollectionCapacity) && (childIndex === (clen - 1)) && (nodeCount === 1)) {
                 this.add(nodes[0]);
@@ -2182,22 +2195,22 @@ namespace ts.server {
                 return [];
             }
             else {
-                var shiftNode = this.splitAfter(childIndex);
-                var nodeIndex = 0;
+                const shiftNode = this.splitAfter(childIndex);
+                let nodeIndex = 0;
                 childIndex++;
                 while ((childIndex < lineCollectionCapacity) && (nodeIndex < nodeCount)) {
                     this.children[childIndex++] = nodes[nodeIndex++];
                 }
-                var splitNodes: LineNode[] = [];
-                var splitNodeCount = 0;
+                let splitNodes: LineNode[] = [];
+                let splitNodeCount = 0;
                 if (nodeIndex < nodeCount) {
                     splitNodeCount = Math.ceil((nodeCount - nodeIndex) / lineCollectionCapacity);
                     splitNodes = <LineNode[]>new Array(splitNodeCount);
-                    var splitNodeIndex = 0;
-                    for (var i = 0; i < splitNodeCount; i++) {
+                    let splitNodeIndex = 0;
+                    for (let i = 0; i < splitNodeCount; i++) {
                         splitNodes[i] = new LineNode();
                     }
-                    var splitNode = <LineNode>splitNodes[0];
+                    let splitNode = <LineNode>splitNodes[0];
                     while (nodeIndex < nodeCount) {
                         splitNode.add(nodes[nodeIndex++]);
                         if (splitNode.children.length === lineCollectionCapacity) {
@@ -2205,7 +2218,7 @@ namespace ts.server {
                             splitNode = <LineNode>splitNodes[splitNodeIndex];
                         }
                     }
-                    for (i = splitNodes.length - 1; i >= 0; i--) {
+                    for (let i = splitNodes.length - 1; i >= 0; i--) {
                         if (splitNodes[i].children.length === 0) {
                             splitNodes.length--;
                         }
@@ -2215,7 +2228,7 @@ namespace ts.server {
                     splitNodes[splitNodes.length] = shiftNode;
                 }
                 this.updateCounts();
-                for (i = 0; i < splitNodeCount; i++) {
+                for (let i = 0; i < splitNodeCount; i++) {
                     (<LineNode>splitNodes[i]).updateCounts();
                 }
                 return splitNodes;
