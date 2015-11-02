@@ -7,6 +7,10 @@ namespace ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
+    export function getModuleName(host: EmitHost, file: SourceFile): string {
+        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
+    }
+
     type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
 
     let entities: Map<number> = {
@@ -578,11 +582,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     forEach(host.getSourceFiles(), emitEmitHelpers);
                 }
                 forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if ((!isExternalModuleOrDeclarationFile(sourceFile)) || (modulekind && isExternalModule(sourceFile))) {
                         emitSourceFile(sourceFile);
-                    }
-                    else if (modulekind && isExternalModule(sourceFile)) {
-                        emitConcatenatedModule(sourceFile);
                     }
                 });
             }
@@ -594,14 +595,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSourceFile(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
                 exportFunctionForFile = undefined;
-                emit(sourceFile);
-            }
-
-            function emitConcatenatedModule(sourceFile: SourceFile): void {
-                currentSourceFile = sourceFile;
-                exportFunctionForFile = undefined;
-                let canonicalName = getExternalModuleNameFromPath(host, sourceFile.fileName);
-                sourceFile.moduleName = sourceFile.moduleName || canonicalName;
                 emit(sourceFile);
             }
 
@@ -7282,6 +7275,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
+            function writeModuleName(node: SourceFile, resolveModuleNames?: boolean): void {
+                let moduleName = node.moduleName;
+                if (moduleName || (resolveModuleNames && (moduleName = getModuleName(host, node)))) {
+                    write(`"${moduleName}", `);
+                }
+            }
+
             function emitSystemModule(node: SourceFile,  resolveModuleNames?: boolean): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
@@ -7297,9 +7297,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportFunctionForFile = makeUniqueName("exports");
                 writeLine();
                 write("System.register(");
-                if (node.moduleName) {
-                    write(`"${node.moduleName}", `);
-                }
+                writeModuleName(node, resolveModuleNames);
                 write("[");
 
                 let groupIndices: Map<number> = {};
@@ -7459,9 +7457,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 writeLine();
                 write("define(");
-                if (node.moduleName) {
-                    write("\"" + node.moduleName + "\", ");
-                }
+                writeModuleName(node, resolveModuleNames);
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, resolveModuleNames);
                 increaseIndent();
                 let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
