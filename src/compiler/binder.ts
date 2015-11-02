@@ -440,11 +440,9 @@ namespace ts {
 
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
-                    return declareClassMember(node, symbolFlags, symbolExcludes);
-
                 case SyntaxKind.StructExpression:
                 case SyntaxKind.StructDeclaration:
-                    return declareStructMember(node, symbolFlags, symbolExcludes);
+                    return declareClassOrStructMember(node, symbolFlags, symbolExcludes);
 
                 case SyntaxKind.EnumDeclaration:
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
@@ -483,13 +481,7 @@ namespace ts {
             }
         }
 
-        function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            return node.flags & NodeFlags.Static
-                ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
-                : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
-        }
-
-        function declareStructMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
+        function declareClassOrStructMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return node.flags & NodeFlags.Static
                 ? declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes)
                 : declareSymbol(container.symbol.members, container.symbol, node, symbolFlags, symbolExcludes);
@@ -679,6 +671,10 @@ namespace ts {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
             }
 
+	        if (getContainingStruct(node)) {
+		        return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Struct_definitions_are_automatically_in_strict_mode;
+	        }
+
             if (file.externalModuleIndicator) {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
             }
@@ -736,6 +732,10 @@ namespace ts {
             if (getContainingClass(node)) {
                 return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
             }
+
+	        if (getContainingStruct(node)) {
+		        return Diagnostics.Invalid_use_of_0_Struct_definitions_are_automatically_in_strict_mode;
+	        }
 
             if (file.externalModuleIndicator) {
                 return Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode;
@@ -834,6 +834,8 @@ namespace ts {
                     return;
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
+	            case SyntaxKind.StructDeclaration:
+	            case SyntaxKind.StructExpression:
                     // All classes are automatically in strict mode in ES6.
                     inStrictMode = true;
                     return;
@@ -1008,7 +1010,7 @@ namespace ts {
             else {
                 let bindingName = node.name ? node.name.text : "__struct";
                 bindAnonymousDeclaration(node, SymbolFlags.Struct, bindingName);
-                // Add name of class expression into the map for semantic classifier
+                // Add name of struct expression into the map for semantic classifier
                 if (node.name) {
                     classifiableNames[node.name.text] = node.name.text;
                 }
@@ -1017,12 +1019,12 @@ namespace ts {
             let symbol = node.symbol;
 
             // TypeScript 1.0 spec (April 2014): 8.4
-            // Every class automatically contains a static property member named 'prototype', the
-            // type of which is an instantiation of the class type with type Any supplied as a type
+            // Every struct automatically contains a static property member named 'prototype', the
+            // type of which is an instantiation of the struct type with type Any supplied as a type
             // argument for each type parameter. It is an error to explicitly declare a static
             // property member with the name 'prototype'.
             //
-            // Note: we check for this here because this class may be merging into a module.  The
+            // Note: we check for this here because this struct may be merging into a module.  The
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
             let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
@@ -1122,12 +1124,15 @@ namespace ts {
 
             // If this is a property-parameter, then also declare the property symbol into the
             // containing class.
-            if (node.flags & NodeFlags.AccessibilityModifier &&
-                node.parent.kind === SyntaxKind.Constructor &&
-                isClassLike(node.parent.parent)) {
-
-                let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
-                declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            if (node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor) {
+                if (isClassLike(node.parent.parent)) {
+                    let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
+                    declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                }
+                else if (isStructLike(node.parent.parent)) {
+                    let structDeclaration = <StructLikeDeclaration>node.parent.parent;
+                    declareSymbol(structDeclaration.symbol.members, structDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                }
             }
         }
 
