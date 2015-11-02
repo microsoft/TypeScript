@@ -40,7 +40,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(133,34
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (32 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (33 errors) ====
     
     class A {
         propA: number;
