@@ -1131,12 +1131,12 @@ namespace ts {
             if (token === SyntaxKind.ExportKeyword) {
                 nextToken();
                 if (token === SyntaxKind.DefaultKeyword) {
-                    return lookAhead(nextTokenIsClassOrFunction);
+                    return lookAhead(nextTokenIsClassOrStructOrFunction);
                 }
                 return token !== SyntaxKind.AsteriskToken && token !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             if (token === SyntaxKind.DefaultKeyword) {
-                return nextTokenIsClassOrFunction();
+                return nextTokenIsClassOrStructOrFunction();
             }
             if (token === SyntaxKind.StaticKeyword) {
                 nextToken();
@@ -1161,7 +1161,7 @@ namespace ts {
                 || isLiteralPropertyName();
         }
 
-        function nextTokenIsClassOrFunction(): boolean {
+        function nextTokenIsClassOrStructOrFunction(): boolean {
             nextToken();
             return token === SyntaxKind.ClassKeyword || token === SyntaxKind.StructKeyword || token === SyntaxKind.FunctionKeyword;
         }
@@ -4897,6 +4897,18 @@ namespace ts {
             return false;
         }
 
+        function isStructMemberModifier(idToken: SyntaxKind) {
+            switch (idToken) {
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                // case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.StaticKeyword:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         function isStructMemberStart(): boolean {
             let idToken: SyntaxKind;
 
@@ -4907,13 +4919,13 @@ namespace ts {
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier.
             while (isModifier(token)) {
                 idToken = token;
-                // If the idToken is a class modifier (protected, private, public, and static), it is
-                // certain that we are starting to parse class member. This allows better error recovery
+                // If the idToken is a struct modifier (private, public, and static), it is
+                // certain that we are starting to parse struct member. This allows better error recovery
                 // Example:
                 //      public foo() ...     // true
                 //      public @dec blah ... // true; we will then report an error later
                 //      export public ...    // true; we will then report an error later
-                if (isClassMemberModifier(idToken)) {
+                if (isStructMemberModifier(idToken)) {
                     return true;
                 }
 
@@ -4925,26 +4937,27 @@ namespace ts {
             }
 
             // Try to get the first property-like token following all modifiers.
-            // This can either be an identifier or the 'get' or 'set' keywords.
+            // This has to be an identifier, and the 'get' or 'set' keywords are not allowed in struct.
             if (isLiteralPropertyName()) {
                 idToken = token;
                 nextToken();
             }
 
-            // Index signatures and computed properties are class members; we can parse.
+            // Index like signatures are actually struct array, they are members of struct; we can parse.
             if (token === SyntaxKind.OpenBracketToken) {
                 return true;
             }
 
             // If we were able to get any potential identifier...
             if (idToken !== undefined) {
-                // If we have a non-keyword identifier, or if we have an accessor, then it's safe to parse.
-                if (!isKeyword(idToken) || idToken === SyntaxKind.SetKeyword || idToken === SyntaxKind.GetKeyword) {
+                // If we have a non-keyword identifier, it's safe to parse.
+                // accessors are not allowed in struct.
+                if (!isKeyword(idToken)) {
                     return true;
                 }
 
                 // If it *is* a keyword, but not an accessor, check a little farther along
-                // to see if it should actually be parsed as a class member.
+                // to see if it should actually be parsed as a struct member.
                 switch (token) {
                     case SyntaxKind.OpenParenToken:     // Method declaration
                     case SyntaxKind.LessThanToken:      // Generic Method declaration
@@ -4955,7 +4968,7 @@ namespace ts {
                     default:
                         // Covers
                         //  - Semicolons     (declaration termination)
-                        //  - Closing braces (end-of-class, must be declaration)
+                        //  - Closing braces (end-of-struct, must be declaration)
                         //  - End-of-files   (not valid, but permitted so that it gets caught later on)
                         //  - Line-breaks    (enabling *automatic semicolon insertion*)
                         return canParseSemicolon();
@@ -5077,6 +5090,45 @@ namespace ts {
             Debug.fail("Should not have attempted to parse class member declaration.");
         }
 
+        function parseStructElement(): StructElement {
+            let fullStart = getNodePos();
+            let decorators = parseDecorators();
+            let modifiers = parseModifiers();
+
+            if (token === SyntaxKind.ConstructorKeyword) {
+                return parseConstructorDeclaration(fullStart, decorators, modifiers);
+            }
+
+            // index signature not allowed in struct
+            if (token === SyntaxKind.OpenBracketToken) {
+
+            }
+
+            if (isIndexSignature()) {
+                return parseIndexSignatureDeclaration(fullStart, decorators, modifiers);
+            }
+
+            // It is very important that we check this *after* checking indexers because
+            // the [ token can start an index signature or a computed property name
+            if (tokenIsIdentifierOrKeyword(token) ||
+                token === SyntaxKind.StringLiteral ||
+                token === SyntaxKind.NumericLiteral ||
+                token === SyntaxKind.AsteriskToken ||
+                token === SyntaxKind.OpenBracketToken) {
+
+                return parsePropertyOrMethodDeclaration(fullStart, decorators, modifiers);
+            }
+
+            if (decorators || modifiers) {
+                // treat this as a property declaration with a missing name.
+                let name = <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+                return parsePropertyDeclaration(fullStart, decorators, modifiers, name, /*questionToken*/ undefined);
+            }
+
+            // 'isStructMemberStart' should have hinted not to attempt parsing.
+            Debug.fail("Should not have attempted to parse struct member declaration.");
+        }
+
         function parseClassExpression(): ClassExpression {
             return <ClassExpression>parseClassDeclarationOrExpression(
                 /*fullStart*/ scanner.getStartPos(),
@@ -5090,7 +5142,7 @@ namespace ts {
                 /*fullStart*/ scanner.getStartPos(),
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                SyntaxKind.ClassExpression);
+                SyntaxKind.StructExpression);
         }
 
         function parseClassDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ClassDeclaration {
@@ -5124,22 +5176,22 @@ namespace ts {
         }
 
         function parseStructDeclarationOrExpression(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray, kind: SyntaxKind): StructLikeDeclaration {
-            let node = <ClassLikeDeclaration>createNode(kind, fullStart);
+            let node = <StructLikeDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             setModifiers(node, modifiers);
             parseExpected(SyntaxKind.StructKeyword);
             node.name = parseNameOfStructDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
-            node.heritageClauses = parseHeritageClauses(/*isClassHeritageClause*/ true);
+            node.heritageClauses = parseHeritageClauses(/*isStructHeritageClause*/ true);
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
-                // ClassTail[Yield,Await] : (Modified) See 14.5
-                //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
-                node.members = parseClassMembers();
+                // StructTail[Yield,Await] : (Modified) See 14.5
+                //      StructHeritage[?Yield,?Await]opt { StructBody[?Yield,?Await]opt }
+                node.members = parseStructMembers();
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                node.members = createMissingList<ClassElement>();
+                node.members = createMissingList<StructElement>();
             }
 
             return finishNode(node);
@@ -5214,6 +5266,10 @@ namespace ts {
 
         function parseClassMembers() {
             return parseList(ParsingContext.ClassMembers, parseClassElement);
+        }
+
+        function parseStructMembers() {
+            return parseList(ParsingContext.StructMembers, parseStructElement);
         }
 
         function parseInterfaceDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): InterfaceDeclaration {
@@ -5631,7 +5687,7 @@ namespace ts {
             TypeParameters,            // Type parameters in type parameter list
             TypeArguments,             // Type arguments in type argument list
             TupleElementTypes,         // Element types in tuple element type list
-            HeritageClauses,           // Heritage clauses for a class or interface declaration.
+            HeritageClauses,           // Heritage clauses for a class, struct or interface declaration.
             ImportOrExportSpecifiers,  // Named import clause's import specifier list
             JSDocFunctionParameters,
             JSDocTypeArguments,
