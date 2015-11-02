@@ -671,9 +671,9 @@ namespace ts {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
             }
 
-	        if (getContainingStruct(node)) {
-		        return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Struct_definitions_are_automatically_in_strict_mode;
-	        }
+if (getContainingStruct(node)) {
+    return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Struct_definitions_are_automatically_in_strict_mode;
+}
 
             if (file.externalModuleIndicator) {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
@@ -733,9 +733,9 @@ namespace ts {
                 return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
             }
 
-	        if (getContainingStruct(node)) {
-		        return Diagnostics.Invalid_use_of_0_Struct_definitions_are_automatically_in_strict_mode;
-	        }
+if (getContainingStruct(node)) {
+    return Diagnostics.Invalid_use_of_0_Struct_definitions_are_automatically_in_strict_mode;
+}
 
             if (file.externalModuleIndicator) {
                 return Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode;
@@ -834,8 +834,8 @@ namespace ts {
                     return;
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-	            case SyntaxKind.StructDeclaration:
-	            case SyntaxKind.StructExpression:
+        case SyntaxKind.StructDeclaration:
+        case SyntaxKind.StructExpression:
                     // All classes are automatically in strict mode in ES6.
                     inStrictMode = true;
                     return;
