@@ -104,11 +104,23 @@ namespace ts {
         sys.write(output);
     }
 
-    const shouldUseColors = sys.writesToTty && sys.writesToTty();
+    const shouldUseColors = !!sys.writesToTty && sys.writesToTty();
     const redForegroundEscapeSequence = shouldUseColors ? "\u001b[91m" : "";
+    const yellowForegroundEscapeSequence = shouldUseColors ? "\u001b[93m" : "";
+    const blueForegroundEscapeSequence = shouldUseColors ? "\u001b[93m" : "";
     const gutterStyleSequence = shouldUseColors ? "\u001b[100;30m" : "";
     const gutterSeparator = shouldUseColors ? " " : " | ";
     const resetEscapeSequence = shouldUseColors ? "\u001b[0m" : "";
+    const elipsis = "...";
+    const categoryFormatMap: Map<string> = {
+        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
+        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
+        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
+    }
+
+    function formatAndReset(text: string, formatStyle: string) {
+        return formatStyle + text + resetEscapeSequence;
+    }
 
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic): void {
         let output = "";
@@ -122,7 +134,7 @@ namespace ts {
             let hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
             let gutterWidth = (lastLine + 1 + "").length;
             if (hasMoreThanFiveLines) {
-                gutterWidth = Math.max("...".length, gutterWidth);
+                gutterWidth = Math.max(elipsis.length, gutterWidth);
             }
 
             output += sys.newLine;
@@ -130,7 +142,7 @@ namespace ts {
                 // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
                 // so we'll skip ahead to the second-to-last line.
                 if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                    output += gutterStyleSequence + padLeft("...", gutterWidth) + resetEscapeSequence + gutterSeparator + sys.newLine;
+                    output += formatAndReset(padLeft(elipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
                     i = lastLine - 1;
                 }
 
@@ -141,16 +153,16 @@ namespace ts {
                 lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
 
                 // Output the gutter and the actual contents of the line.
-                output += gutterStyleSequence + padLeft(i + 1 + "", gutterWidth) + resetEscapeSequence + gutterSeparator;
+                output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
                 output += lineContent + sys.newLine;
 
                 // Output the gutter and the error span for the line using tildes.
-                output += gutterStyleSequence + padLeft("", gutterWidth) + resetEscapeSequence + gutterSeparator;
+                output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
                 output += redForegroundEscapeSequence;
                 if (i === firstLine) {
                     // If we're on the last line, then limit it to the last character of the last line.
                     // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
-                    let lastCharForLine = i === lastLine ? lastLineChar : undefined;
+                    const lastCharForLine = i === lastLine ? lastLineChar : undefined;
 
                     output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
                     output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
@@ -171,8 +183,9 @@ namespace ts {
             output += `${ file.fileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
-        let category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        const categoryColor = categoryFormatMap[diagnostic.category];
+        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
         output += sys.newLine + sys.newLine;
 
         sys.write(output);
