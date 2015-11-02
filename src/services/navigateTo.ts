@@ -6,6 +6,9 @@ namespace ts.NavigateTo {
         let patternMatcher = createPatternMatcher(searchValue);
         let rawItems: RawNavigateToItem[] = [];
 
+        // This means "compare in a case insensitive manner."
+        let baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
+
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[] 
         forEach(program.getSourceFiles(), sourceFile => {
             cancellationToken.throwIfCancellationRequested();
@@ -162,8 +165,6 @@ namespace ts.NavigateTo {
             return bestMatchKind;
         }
 
-        // This means "compare in a case insensitive manner."
-        let baseSensitivity: Intl.CollatorOptions = { sensitivity: "base" };
         function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
             // TODO(cyrusn): get the gamut of comparisons that VS already uses here.
             // Right now we just sort by kind first, and then by name of the item.

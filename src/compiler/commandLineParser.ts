@@ -249,10 +249,30 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
+            name: "allowUnusedLabels",
+            type: "boolean",
+            description: Diagnostics.Do_not_report_errors_on_unused_labels
+        },
+        {
+            name: "noImplicitReturns",
+            type: "boolean",
+            description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value
+        },
+        {
+            name: "noFallthroughCasesInSwitch",
+            type: "boolean",
+            description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
+        },
+        {
+            name: "allowUnreachableCode",
+            type: "boolean",
+            description: Diagnostics.Do_not_report_errors_on_unreachable_code
+        },
+        {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
-        },
+        }
     ];
 
     /* @internal */

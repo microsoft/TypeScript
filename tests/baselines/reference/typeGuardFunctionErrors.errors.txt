@@ -9,6 +9,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(38,51)
   Property 'propA' is missing in type 'B'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(42,56): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(46,56): error TS2322: Type 'T[]' is not assignable to type 'string'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(50,1): error TS7027: Unreachable code detected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(60,7): error TS2339: Property 'propB' does not exist on type 'A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(65,7): error TS2339: Property 'propB' does not exist on type 'A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(70,7): error TS2339: Property 'propB' does not exist on type 'A'.
@@ -111,6 +112,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
     }
     
     let a: A;
+    ~~~
+!!! error TS7027: Unreachable code detected.
     let b: B;
     
     declare function isB(p1): p1 is B;

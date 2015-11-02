@@ -3,6 +3,7 @@ tests/cases/compiler/recursiveLetConst.ts(3,12): error TS2448: Block-scoped vari
 tests/cases/compiler/recursiveLetConst.ts(4,11): error TS2448: Block-scoped variable 'y' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(5,14): error TS2448: Block-scoped variable 'y1' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(6,14): error TS2448: Block-scoped variable 'v' used before its declaration.
+tests/cases/compiler/recursiveLetConst.ts(7,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/recursiveLetConst.ts(7,16): error TS2448: Block-scoped variable 'v' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(8,15): error TS2448: Block-scoped variable 'v' used before its declaration.
 tests/cases/compiler/recursiveLetConst.ts(9,15): error TS2448: Block-scoped variable 'v' used before its declaration.
@@ -10,7 +11,7 @@ tests/cases/compiler/recursiveLetConst.ts(10,17): error TS2448: Block-scoped var
 tests/cases/compiler/recursiveLetConst.ts(11,11): error TS2448: Block-scoped variable 'x2' used before its declaration.
 
 
-==== tests/cases/compiler/recursiveLetConst.ts (10 errors) ====
+==== tests/cases/compiler/recursiveLetConst.ts (11 errors) ====
     'use strict'
     let x = x + 1;
             ~
@@ -28,6 +29,8 @@ tests/cases/compiler/recursiveLetConst.ts(11,11): error TS2448: Block-scoped var
                  ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
     for (let [v] = v; ;) { }
+    ~~~
+!!! error TS7027: Unreachable code detected.
                    ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
     for (let v in v) { }

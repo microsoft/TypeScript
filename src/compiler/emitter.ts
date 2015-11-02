@@ -9,6 +9,12 @@ namespace ts {
 
     type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
 
+    const enum Jump {
+        Break       = 1 << 1,
+        Continue    = 1 << 2,
+        Return      = 1 << 3
+    }
+
     let entities: Map<number> = {
         "quot": 0x0022,
         "amp": 0x0026,
@@ -369,12 +375,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
             return true;
-        }
-
-        const enum Jump {
-            Break       = 1 << 1,
-            Continue    = 1 << 2,
-            Return      = 1 << 3
         }
 
         interface ConvertedLoopState {

@@ -10,6 +10,21 @@ namespace ts {
         ConstEnumOnly   = 2
     }
 
+    const enum Reachability {
+        Unintialized        = 1 << 0,
+        Reachable           = 1 << 1,
+        Unreachable         = 1 << 2,
+        ReportedUnreachable = 1 << 3
+    }
+
+    function or(state1: Reachability, state2: Reachability): Reachability {
+        return (state1 | state2) & Reachability.Reachable
+            ? Reachability.Reachable
+            : (state1 & state2) & Reachability.ReportedUnreachable
+                ? Reachability.ReportedUnreachable
+                : Reachability.Unreachable;
+    }
+
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         // 1. interface declarations, type alias declarations
@@ -77,35 +92,64 @@ namespace ts {
         IsContainerWithLocals = IsContainer | HasLocals
     }
 
-    export function bindSourceFile(file: SourceFile) {
+    const binder = createBinder();
+
+    export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
         let start = new Date().getTime();
-        bindSourceFileWorker(file);
+        binder(file, options);
         bindTime += new Date().getTime() - start;
     }
 
-    function bindSourceFileWorker(file: SourceFile) {
+    function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
+        let file: SourceFile;
+        let options: CompilerOptions;
         let parent: Node;
         let container: Node;
         let blockScopeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
+        // state used by reachability checks
+        let hasExplicitReturn: boolean;
+        let currentReachabilityState: Reachability;
+        let labelStack: Reachability[];
+        let labelIndexMap: Map<number>;
+        let implicitLabels: number[];
+
         // If this file is an external module, then it is automatically in strict-mode according to
         // ES6.  If it is not an external module, then we'll determine if it is in strict mode or
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
-        let inStrictMode = !!file.externalModuleIndicator;
+        let inStrictMode: boolean;
 
         let symbolCount = 0;
-        let Symbol = objectAllocator.getSymbolConstructor();
-        let classifiableNames: Map<string> = {};
+        let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
+        let classifiableNames: Map<string>;
 
-        if (!file.locals) {
-            bind(file);
-            file.symbolCount = symbolCount;
-            file.classifiableNames = classifiableNames;
+        function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
+            file = f;
+            options = opts;
+            inStrictMode = !!file.externalModuleIndicator;
+            classifiableNames = {};
+            Symbol = objectAllocator.getSymbolConstructor();
+
+            if (!file.locals) {
+                bind(file);
+                file.symbolCount = symbolCount;
+                file.classifiableNames = classifiableNames;
+            }
+
+            parent = undefined;
+            container = undefined;
+            blockScopeContainer = undefined;
+            lastContainer = undefined;
+            seenThisKeyword = false;
+            hasExplicitReturn = false;
+            labelStack = undefined;
+            labelIndexMap = undefined;
+            implicitLabels = undefined;
         }
 
-        return;
+        return bindSourceFile;
 
         function createSymbol(flags: SymbolFlags, name: string): Symbol {
             symbolCount++;
@@ -338,18 +382,275 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
 
-            if (node.kind === SyntaxKind.InterfaceDeclaration) {
+            let savedReachabilityState: Reachability;
+            let savedLabelStack: Reachability[];
+            let savedLabels: Map<number>;
+            let savedImplicitLabels: number[];
+            let savedHasExplicitReturn: boolean;
+
+            const kind = node.kind;
+            let flags = node.flags;
+
+            // reset all reachability check related flags on node (for incremental scenarios)
+            flags &= ~NodeFlags.ReachabilityCheckFlags;
+
+            if (kind === SyntaxKind.InterfaceDeclaration) {
                 seenThisKeyword = false;
-                forEachChild(node, bind);
-                node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
             }
-            else {
-                forEachChild(node, bind);
+
+            let saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
+            if (saveState) {
+                savedReachabilityState = currentReachabilityState;
+                savedLabelStack = labelStack;
+                savedLabels = labelIndexMap;
+                savedImplicitLabels = implicitLabels;
+                savedHasExplicitReturn = hasExplicitReturn;
+
+                currentReachabilityState = Reachability.Reachable;
+                hasExplicitReturn = false;
+                labelStack = labelIndexMap = implicitLabels = undefined;
+            }
+
+            bindReachableStatement(node);
+
+            if (currentReachabilityState === Reachability.Reachable && isFunctionLikeKind(kind) && nodeIsPresent((<FunctionLikeDeclaration>node).body)) {
+                flags |= NodeFlags.HasImplicitReturn;
+                if (hasExplicitReturn) {
+                    flags |= NodeFlags.HasExplicitReturn;
+                }
+            }
+
+            if (kind === SyntaxKind.InterfaceDeclaration) {
+                flags = seenThisKeyword ? flags | NodeFlags.ContainsThis : flags & ~NodeFlags.ContainsThis;
+            }
+
+            node.flags = flags;
+
+            if (saveState) {
+                hasExplicitReturn = savedHasExplicitReturn;
+                currentReachabilityState = savedReachabilityState;
+                labelStack = savedLabelStack;
+                labelIndexMap = savedLabels;
+                implicitLabels = savedImplicitLabels;
             }
 
             container = saveContainer;
             parent = saveParent;
             blockScopeContainer = savedBlockScopeContainer;
+        }
+
+        /**
+         * Returns true if node and its subnodes were successfully traversed.
+         * Returning false means that node was not examined and caller needs to dive into the node himself. 
+         */
+        function bindReachableStatement(node: Node): void {
+            if (checkUnreachable(node)) {
+                forEachChild(node, bind);
+                return;
+            }
+
+            switch (node.kind) {
+                case SyntaxKind.WhileStatement:
+                    bindWhileStatement(<WhileStatement>node);
+                    break;
+                case SyntaxKind.DoStatement:
+                    bindDoStatement(<DoStatement>node);
+                    break;
+                case SyntaxKind.ForStatement:
+                    bindForStatement(<ForStatement>node);
+                    break;
+                case SyntaxKind.ForInStatement:
+                case SyntaxKind.ForOfStatement:
+                    bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                    break;
+                case SyntaxKind.IfStatement:
+                    bindIfStatement(<IfStatement>node);
+                    break;
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.ThrowStatement:
+                    bindReturnOrThrow(<ReturnStatement | ThrowStatement>node);
+                    break;
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                    bindBreakOrContinueStatement(<BreakOrContinueStatement>node);
+                    break;
+                case SyntaxKind.TryStatement:
+                    bindTryStatement(<TryStatement>node);
+                    break;
+                case SyntaxKind.SwitchStatement:
+                    bindSwitchStatement(<SwitchStatement>node);
+                    break;
+                case SyntaxKind.CaseBlock:
+                    bindCaseBlock(<CaseBlock>node);
+                    break;
+                case SyntaxKind.LabeledStatement:
+                    bindLabeledStatement(<LabeledStatement>node);
+                    break;
+                default:
+                    forEachChild(node, bind);
+                    break;
+            }
+        }
+
+        function bindWhileStatement(n: WhileStatement): void {
+            const preWhileState =
+                n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
+            const postWhileState =
+                n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : currentReachabilityState;
+
+            // bind expressions (don't affect reachability)
+            bind(n.expression);
+
+            currentReachabilityState = preWhileState;
+            const postWhileLabel = pushImplicitLabel();
+            bind(n.statement);
+            popImplicitLabel(postWhileLabel, postWhileState);
+        }
+
+        function bindDoStatement(n: DoStatement): void {
+            const preDoState = currentReachabilityState;
+
+            const postDoLabel = pushImplicitLabel();
+            bind(n.statement);
+            const postDoState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : preDoState;
+            popImplicitLabel(postDoLabel, postDoState);
+
+            // bind expressions (don't affect reachability)
+            bind(n.expression);
+        }
+
+        function bindForStatement(n: ForStatement): void {
+            const preForState = currentReachabilityState;
+            const postForLabel = pushImplicitLabel();
+
+            // bind expressions (don't affect reachability)
+            bind(n.initializer);
+            bind(n.condition);
+            bind(n.incrementor);
+
+            bind(n.statement);
+
+            // for statement is considered infinite when it condition is either omitted or is true keyword
+            // - for(..;;..)
+            // - for(..;true;..)
+            const isInfiniteLoop = (!n.condition || n.condition.kind === SyntaxKind.TrueKeyword);
+            const postForState = isInfiniteLoop ? Reachability.Unreachable : preForState;
+            popImplicitLabel(postForLabel, postForState);
+        }
+
+        function bindForInOrForOfStatement(n: ForInStatement | ForOfStatement): void {
+            const preStatementState = currentReachabilityState;
+            const postStatementLabel = pushImplicitLabel();
+
+            // bind expressions (don't affect reachability)
+            bind(n.initializer);
+            bind(n.expression);
+
+            bind(n.statement);
+            popImplicitLabel(postStatementLabel, preStatementState);
+        }
+
+        function bindIfStatement(n: IfStatement): void {
+            // denotes reachability state when entering 'thenStatement' part of the if statement: 
+            // i.e. if condition is false then thenStatement is unreachable
+            const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
+            // denotes reachability state when entering 'elseStatement':
+            // i.e. if condition is true then elseStatement is unreachable
+            const ifFalseState = n.expression.kind === SyntaxKind.TrueKeyword ? Reachability.Unreachable : currentReachabilityState;
+
+            currentReachabilityState = ifTrueState;
+
+            // bind expression (don't affect reachability)
+            bind(n.expression);
+
+            bind(n.thenStatement);
+            if (n.elseStatement) {
+                const preElseState = currentReachabilityState;
+                currentReachabilityState = ifFalseState;
+                bind(n.elseStatement);
+                currentReachabilityState = or(currentReachabilityState, preElseState);
+            }
+            else {
+                currentReachabilityState = or(currentReachabilityState, ifFalseState);
+            }
+        }
+
+        function bindReturnOrThrow(n: ReturnStatement | ThrowStatement): void {
+            // bind expression (don't affect reachability)
+            bind(n.expression);
+            if (n.kind === SyntaxKind.ReturnStatement) {
+                hasExplicitReturn = true;
+            }
+            currentReachabilityState = Reachability.Unreachable;
+        }
+
+        function bindBreakOrContinueStatement(n: BreakOrContinueStatement): void {
+            // call bind on label (don't affect reachability)
+            bind(n.label);
+            // for continue case touch label so it will be marked a used
+            const isValidJump = jumpToLabel(n.label, n.kind === SyntaxKind.BreakStatement ? currentReachabilityState : Reachability.Unreachable);
+            if (isValidJump) {
+                currentReachabilityState = Reachability.Unreachable;
+            }
+        }
+
+        function bindTryStatement(n: TryStatement): void {
+            // catch\finally blocks has the same reachability as try block
+            const preTryState = currentReachabilityState;
+            bind(n.tryBlock);
+            const postTryState = currentReachabilityState;
+
+            currentReachabilityState = preTryState;
+            bind(n.catchClause);
+            const postCatchState = currentReachabilityState;
+
+            currentReachabilityState = preTryState;
+            bind(n.finallyBlock);
+
+            // post catch/finally state is reachable if
+            // - post try state is reachable - control flow can fall out of try block
+            // - post catch state is reachable - control flow can fall out of catch block
+            currentReachabilityState = or(postTryState, postCatchState);
+        }
+
+        function bindSwitchStatement(n: SwitchStatement): void {
+            const preSwitchState = currentReachabilityState;
+            const postSwitchLabel = pushImplicitLabel();
+
+            // bind expression (don't affect reachability)
+            bind(n.expression);
+
+            bind(n.caseBlock);
+
+            const hasDefault = forEach(n.caseBlock.clauses, c => c.kind === SyntaxKind.DefaultClause);
+
+            // post switch state is unreachable if switch is exaustive (has a default case ) and does not have fallthrough from the last case
+            const postSwitchState = hasDefault && currentReachabilityState !== Reachability.Reachable ? Reachability.Unreachable : preSwitchState;
+
+            popImplicitLabel(postSwitchLabel, postSwitchState);
+        }
+
+        function bindCaseBlock(n: CaseBlock): void {
+            const startState = currentReachabilityState;
+
+            for (let clause of n.clauses) {
+                currentReachabilityState = startState;
+                bind(clause);
+                if (clause.statements.length && currentReachabilityState === Reachability.Reachable && options.noFallthroughCasesInSwitch) {
+                    errorOnFirstToken(clause, Diagnostics.Fallthrough_case_in_switch);
+                }
+            }
+        }
+
+        function bindLabeledStatement(n: LabeledStatement): void {
+            // call bind on label (don't affect reachability)
+            bind(n.label);
+
+            const ok = pushNamedLabel(n.label);
+            bind(n.statement);
+            if (ok) {
+                popNamedLabel(n.label, currentReachabilityState);
+            }
         }
 
         function getContainerFlags(node: Node): ContainerFlags {
@@ -488,17 +789,6 @@ namespace ts {
                 : declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
         }
 
-        function isAmbientContext(node: Node): boolean {
-            while (node) {
-                if (node.flags & NodeFlags.Ambient) {
-                    return true;
-                }
-
-                node = node.parent;
-            }
-            return false;
-        }
-
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
             let body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
             if (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock) {
@@ -514,7 +804,7 @@ namespace ts {
         function setExportContextFlag(node: ModuleDeclaration | SourceFile) {
             // A declaration source file or ambient module declaration that contains no export declarations (but possibly regular
             // declarations with export modifiers) is an export context in which declarations are implicitly exported.
-            if (isAmbientContext(node) && !hasExportDeclarations(node)) {
+            if (isInAmbientContext(node) && !hasExportDeclarations(node)) {
                 node.flags |= NodeFlags.ExportContext;
             }
             else {
@@ -766,11 +1056,11 @@ namespace ts {
         function checkStrictModeWithStatement(node: WithStatement) {
             // Grammar checking for withStatement
             if (inStrictMode) {
-                grammarErrorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
+                errorOnFirstToken(node, Diagnostics.with_statements_are_not_allowed_in_strict_mode);
             }
         }
 
-        function grammarErrorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
+        function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
             let span = getSpanOfTokenAtPosition(file, node.pos);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
@@ -780,6 +1070,10 @@ namespace ts {
         }
 
         function bind(node: Node) {
+            if (!node) {
+                return;
+            }
+
             node.parent = parent;
 
             let savedInStrictMode = inStrictMode;
@@ -1083,6 +1377,136 @@ namespace ts {
             return hasDynamicName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
+        }
+
+        // reachability checks
+
+        function pushNamedLabel(name: Identifier): boolean {
+            initializeReachabilityStateIfNecessary();
+
+            if (hasProperty(labelIndexMap, name.text)) {
+                return false;
+            }
+            labelIndexMap[name.text] = labelStack.push(Reachability.Unintialized) - 1;
+            return true;
+        }
+
+        function pushImplicitLabel(): number {
+            initializeReachabilityStateIfNecessary();
+
+            let index = labelStack.push(Reachability.Unintialized) - 1;
+            implicitLabels.push(index);
+            return index;
+        }
+
+        function popNamedLabel(label: Identifier, outerState: Reachability): void {
+            let index = labelIndexMap[label.text];
+            Debug.assert(index !== undefined);
+            Debug.assert(labelStack.length == index + 1);
+
+            labelIndexMap[label.text] = undefined;
+
+            setCurrentStateAtLabel(labelStack.pop(), outerState, label);
+        }
+
+        function popImplicitLabel(implicitLabelIndex: number, outerState: Reachability): void {
+            if (labelStack.length !== implicitLabelIndex + 1) {
+                Debug.assert(false, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
+            }
+
+            let i = implicitLabels.pop();
+
+            if (implicitLabelIndex !== i) {
+                Debug.assert(false, `i: ${i}, index: ${implicitLabelIndex}`);
+            }
+
+            setCurrentStateAtLabel(labelStack.pop(), outerState, /*name*/ undefined);
+        }
+
+        function setCurrentStateAtLabel(innerMergedState: Reachability, outerState: Reachability, label: Identifier): void {
+            if (innerMergedState === Reachability.Unintialized) {
+                if (label && !options.allowUnusedLabels) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(label, Diagnostics.Unused_label));
+                }
+                currentReachabilityState = outerState;
+            }
+            else {
+                currentReachabilityState = or(innerMergedState, outerState);
+            }
+        }
+
+        function jumpToLabel(label: Identifier, outerState: Reachability): boolean {
+            initializeReachabilityStateIfNecessary();
+
+            const index = label ? labelIndexMap[label.text] : lastOrUndefined(implicitLabels);
+            if (index === undefined) {
+                // reference to unknown label or
+                // break/continue used outside of loops
+                return false;
+            }
+            const stateAtLabel = labelStack[index];
+            labelStack[index] = stateAtLabel === Reachability.Unintialized ? outerState : or(stateAtLabel, outerState);
+            return true;
+        }
+
+        function checkUnreachable(node: Node): boolean {
+            switch (currentReachabilityState) {
+                case Reachability.Unreachable:
+                    const reportError =
+                        // report error on all statements
+                        isStatement(node) ||
+                        // report error on class declarations
+                        node.kind === SyntaxKind.ClassDeclaration ||
+                        // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
+                        (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
+                        // report error on regular enums and const enums if preserveConstEnums is set
+                        (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
+
+                    if (reportError) {
+                        currentReachabilityState = Reachability.ReportedUnreachable;
+
+                        // unreachable code is reported if
+                        // - user has explicitly asked about it AND
+                        // - statement is in not ambient context (statements in ambient context is already an error 
+                        //   so we should not report extras) AND
+                        //   - node is not variable statement OR
+                        //   - node is block scoped variable statement OR
+                        //   - node is not block scoped variable statement and at least one variable declaration has initializer
+                        //   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
+                        //   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
+                        const reportUnreachableCode =
+                            !options.allowUnreachableCode &&
+                            !isInAmbientContext(node) &&
+                            (
+                                node.kind !== SyntaxKind.VariableStatement ||
+                                getCombinedNodeFlags((<VariableStatement>node).declarationList) & NodeFlags.BlockScoped ||
+                                forEach((<VariableStatement>node).declarationList.declarations, d => d.initializer)
+                            );
+
+                        if (reportUnreachableCode) {
+                            errorOnFirstToken(node, Diagnostics.Unreachable_code_detected);
+                        }
+                    }
+                case Reachability.ReportedUnreachable:
+                    return true;
+                default:
+                    return false;
+            }
+
+            function shouldReportErrorOnModuleDeclaration(node: ModuleDeclaration): boolean {
+                const instanceState = getModuleInstanceState(node);
+                return instanceState === ModuleInstanceState.Instantiated || (instanceState === ModuleInstanceState.ConstEnumOnly && options.preserveConstEnums);
+            }
+        }
+
+        function initializeReachabilityStateIfNecessary(): void {
+            if (labelIndexMap) {
+                return;
+            }
+            currentReachabilityState = Reachability.Reachable;
+            labelIndexMap = {};
+            labelStack = [];
+            implicitLabels = [];
         }
     }
 }
