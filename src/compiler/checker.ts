@@ -112,6 +112,7 @@ namespace ts {
         let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        let emptyUnionType = emptyObjectType;
         let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -4321,7 +4322,7 @@ namespace ts {
         // a named type that circularly references itself.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
-                return emptyObjectType;
+                return emptyUnionType;
             }
             let typeSet: Type[] = [];
             addTypesToSet(typeSet, types, TypeFlags.Union);
@@ -6278,8 +6279,8 @@ namespace ts {
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
-                    let originalType = type;
-                    let nodeStack: {node: Node, child: Node}[] = [];
+                    const originalType = type;
+                    const nodeStack: {node: Node, child: Node}[] = [];
                     loop: while (node.parent) {
                         let child = node;
                         node = node.parent;
@@ -6304,7 +6305,7 @@ namespace ts {
 
                     let nodes: {node: Node, child: Node};
                     while (nodes = nodeStack.pop()) {
-                        let {node, child} = nodes;
+                        const {node, child} = nodes;
                         switch (node.kind) {
                             case SyntaxKind.IfStatement:
                                 // In a branch of an if statement, narrow based on controlling expression
@@ -6334,13 +6335,13 @@ namespace ts {
                         }
 
                         // Use original type if construct contains assignments to variable
-                        if (type != originalType && isVariableAssignedWithin(symbol, node)) {
+                        if (type !== originalType && isVariableAssignedWithin(symbol, node)) {
                             type = originalType;
                         }
                     }
 
                     // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-                    if (type === getUnionType(emptyArray)) {
+                    if (type === emptyUnionType) {
                         type = originalType;
                     }
                 }
@@ -6368,7 +6369,7 @@ namespace ts {
                 }
                 let flags: TypeFlags;
                 if (typeInfo) {
-                    flags =  typeInfo.flags;
+                    flags = typeInfo.flags;
                 }
                 else {
                     assumeTrue = !assumeTrue;
@@ -6377,12 +6378,12 @@ namespace ts {
                 // At this point we can bail if it's not a union
                 if (!(type.flags & TypeFlags.Union)) {
                     // If the active non-union type would be removed from a union by this type guard, return an empty union
-                    return filterUnion(type) ? type : getUnionType(emptyArray);
+                    return filterUnion(type) ? type : emptyUnionType;
                 }
                 return getUnionType(filter((type as UnionType).types, filterUnion), /*noSubtypeReduction*/ true);
 
-                function filterUnion(t: Type) {
-                    return assumeTrue === !!(t.flags & flags);
+                function filterUnion(type: Type) {
+                    return assumeTrue === !!(type.flags & flags);
                 }
             }
 
@@ -12558,7 +12559,7 @@ namespace ts {
                 arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
             }
             else if (arrayOrStringType.flags & TypeFlags.StringLike) {
-                arrayType = getUnionType(emptyArray);
+                arrayType = emptyUnionType;
             }
             let hasStringConstituent = arrayOrStringType !== arrayType;
 
