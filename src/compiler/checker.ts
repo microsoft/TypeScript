@@ -4420,7 +4420,8 @@ namespace ts {
             let container = getThisContainer(node, /*includeArrowFunctions*/ false);
             let parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!(container.flags & NodeFlags.Static)) {
+                if (!(container.flags & NodeFlags.Static) &&
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendentOf(node, (<ConstructorDeclaration>container).body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
