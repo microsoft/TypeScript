@@ -6,7 +6,6 @@ namespace ts {
         newLine: string;
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
-        writesToTty?(): boolean;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
@@ -379,7 +378,6 @@ namespace ts {
                 write(s: string): void {
                     process.stdout.write(s);
                 },
-                writesToTty: () => _tty.isatty(1),
                 readFile,
                 writeFile,
                 watchFile: (fileName, callback) => {

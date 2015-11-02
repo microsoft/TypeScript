@@ -104,13 +104,12 @@ namespace ts {
         sys.write(output);
     }
 
-    const shouldUseColors = !!sys.writesToTty && sys.writesToTty();
-    const redForegroundEscapeSequence = shouldUseColors ? "\u001b[91m" : "";
-    const yellowForegroundEscapeSequence = shouldUseColors ? "\u001b[93m" : "";
-    const blueForegroundEscapeSequence = shouldUseColors ? "\u001b[93m" : "";
-    const gutterStyleSequence = shouldUseColors ? "\u001b[100;30m" : "";
-    const gutterSeparator = shouldUseColors ? " " : " | ";
-    const resetEscapeSequence = shouldUseColors ? "\u001b[0m" : "";
+    const redForegroundEscapeSequence = "\u001b[91m";
+    const yellowForegroundEscapeSequence = "\u001b[93m";
+    const blueForegroundEscapeSequence = "\u001b[93m";
+    const gutterStyleSequence = "\u001b[100;30m";
+    const gutterSeparator = " ";
+    const resetEscapeSequence = "\u001b[0m";
     const elipsis = "...";
     const categoryFormatMap: Map<string> = {
         [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
