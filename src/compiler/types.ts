@@ -2053,7 +2053,6 @@ namespace ts {
         charset?: string;
         declaration?: boolean;
         diagnostics?: boolean;
-        /* @internal */diagnosticStyle?: DiagnosticStyle;
         emitBOM?: boolean;
         help?: boolean;
         init?: boolean;
@@ -2076,6 +2075,7 @@ namespace ts {
         outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
+        /* @internal */ pretty?: DiagnosticStyle;
         project?: string;
         removeComments?: boolean;
         rootDir?: string;

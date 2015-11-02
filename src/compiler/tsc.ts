@@ -374,7 +374,7 @@ namespace ts {
                 compilerHost.fileExists = cachedFileExists;
             }
 
-            if (compilerOptions.diagnosticStyle === DiagnosticStyle.Pretty) {
+            if (compilerOptions.pretty) {
                 reportDiagnostic = reportDiagnosticWithColorAndContext;
             }
 

@@ -22,17 +22,6 @@ namespace ts {
             type: "boolean",
         },
         {
-            name: "diagnosticStyle",
-            paramType: Diagnostics.KIND,
-            description: Diagnostics.Specify_diagnostic_printing_style_Colon_simple_default_or_pretty,
-            type: {
-                "simple": DiagnosticStyle.Simple,
-                "pretty": DiagnosticStyle.Pretty,
-            },
-            error: Diagnostics.Argument_for_diagnosticStyle_must_be_simple_or_pretty,
-            experimental: true,
-        },
-        {
             name: "emitBOM",
             type: "boolean"
         },
@@ -161,6 +150,12 @@ namespace ts {
             name: "preserveConstEnums",
             type: "boolean",
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+        },
+        {
+            name: "pretty",
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Stylize_errors_and_messages_using_colors_if_available_experimental,
+            type: "boolean"
         },
         {
             name: "project",

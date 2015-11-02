@@ -2286,13 +2286,9 @@
         "category": "Message",
         "code": 6072
     },
-    "Specify diagnostic printing style: 'simple' (default) or 'pretty'.": {
+    "Stylize errors and messages using colors if available. (experimental)": {
         "category": "Message",
         "code": 6073
-    },
-    "Argument for '--diagnosticStyle' must be 'simple' or 'pretty'.": {
-        "category": "Error",
-        "code": 6074
     },
 
     "Specify JSX code generation: 'preserve' or 'react'": {
