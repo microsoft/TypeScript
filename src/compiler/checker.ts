@@ -15073,7 +15073,8 @@ namespace ts {
                 resolveEntityName,
                 getSymbolWalker,
                 isArgumentsLocalBinding,
-                getExternalModuleFileFromDeclaration
+                getExternalModuleFileFromDeclaration,
+                getSymbolAtLocation,
             };
         }
 

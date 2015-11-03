@@ -1628,6 +1628,7 @@ namespace ts {
         getDefiningTypeOfSymbol(symbol: Symbol): Type;
         resolveEntityName(entityName: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol;
         getSymbolWalker(accept?: (type: Symbol) => boolean): SymbolWalker;
+        getSymbolAtLocation(node: Node): Symbol;
     }
 
     export interface SymbolWalker {
