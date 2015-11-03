@@ -2286,7 +2286,7 @@
         "category": "Message",
         "code": 6072
     },
-    "Stylize errors and messages using colors if available. (experimental)": {
+    "Stylize errors and messages using color and context. (experimental)": {
         "category": "Message",
         "code": 6073
     },

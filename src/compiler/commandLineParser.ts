@@ -154,7 +154,7 @@ namespace ts {
         {
             name: "pretty",
             paramType: Diagnostics.KIND,
-            description: Diagnostics.Stylize_errors_and_messages_using_colors_if_available_experimental,
+            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental,
             type: "boolean"
         },
         {
