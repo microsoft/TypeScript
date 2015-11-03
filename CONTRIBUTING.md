@@ -34,14 +34,14 @@ Your pull request should:
 
 ## Contributing `lib.d.ts` fixes
  
-The library sources are in: [src\lib\](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
+The library sources are in: [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
 
 To build the library files, run
 ```Shell
 jake lib
 ```
 
-`src\lib\dom.generated.d.ts` and `src\lib\webworker.generated.d.ts`:
+### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
 
 These two files represent the DOM typings and are auto-generated. To make any modifications to them, please submit a PR to  https://github.com/Microsoft/TSJS-lib-generator
 
