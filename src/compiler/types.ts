@@ -1619,7 +1619,7 @@ namespace ts {
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
-        getSymbolAtLocation(node: Node): Symbol;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
     }
 
     export const enum SymbolFlags {

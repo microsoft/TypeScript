@@ -130,7 +130,7 @@ namespace ts {
                 }
                 else if (isExternalModule(sourceFile)) {
                     noDeclare = true;
-                    write(`declare module "${getModuleName(host, sourceFile)}" {`);
+                    write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
                     writeLine();
                     increaseIndent();
                     emitSourceFile(sourceFile);
@@ -738,16 +738,12 @@ namespace ts {
 
         function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
-                let moduleSymbol = resolver.getSymbolAtLocation(moduleSpecifier);
-                if (moduleSymbol) {
-                    let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
-                    if (moduleDeclaration && !isDeclarationFile(moduleDeclaration)) {
-                        let nonRelativeModuleName = getExternalModuleNameFromPath(host, moduleDeclaration.fileName);
-                        write("\"");
-                        write(nonRelativeModuleName);
-                        write("\"");
-                        return;
-                    }
+                let moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+                if (moduleName) {
+                    write("\"");
+                    write(moduleName);
+                    write("\"");
+                    return;
                 }
             }
 

@@ -14908,8 +14908,21 @@ namespace ts {
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
                 isArgumentsLocalBinding,
-                getSymbolAtLocation
+                getExternalModuleFileFromDeclaration
             };
+        }
+
+        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
+                const specifier = getExternalModuleName(declaration);
+                const moduleSymbol = getSymbolAtLocation(specifier);
+                if (!moduleSymbol) {
+                    return undefined;
+                }
+                const moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+                if (!moduleDeclaration) {
+                    return undefined;
+                }
+                return moduleDeclaration;
         }
 
         function initializeTypeChecker() {
