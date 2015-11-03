@@ -147,7 +147,8 @@ var harnessSources = harnessCoreSources.concat([
     "transpile.ts",
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
-    "moduleResolution.ts"
+    "moduleResolution.ts",
+    "tsconfigParsing.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -227,7 +228,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noEmitOnError";
+        var options = "--noImplicitAny --noEmitOnError --pretty";
 
         // Keep comments when specifically requested
         // or when in debug mode.

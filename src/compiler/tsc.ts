@@ -6,6 +6,14 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    let reportDiagnostic = reportDiagnosticSimply;
+
+    function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
+        for (let diagnostic of diagnostics) {
+            reportDiagnostic(diagnostic, host);
+        }
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -81,16 +89,16 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnostic(diagnostic: Diagnostic, host: CompilerHost) {
+    function reportDiagnosticSimply(diagnostic: Diagnostic, host: CompilerHost): void {
         let output = "";
 
         if (diagnostic.file) {
-            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
             const relativeFileName = host
                 ? convertToRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
                 : diagnostic.file.fileName;
 
-            output += `${ relativeFileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            output += `${ diagnostic.file.fileName }(${ line + 1 },${ character + 1 }): `;
         }
 
         let category = DiagnosticCategory[diagnostic.category].toLowerCase();
@@ -99,10 +107,91 @@ namespace ts {
         sys.write(output);
     }
 
-    function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost) {
-        for (let i = 0; i < diagnostics.length; i++) {
-            reportDiagnostic(diagnostics[i], host);
+
+    const redForegroundEscapeSequence = "\u001b[91m";
+    const yellowForegroundEscapeSequence = "\u001b[93m";
+    const blueForegroundEscapeSequence = "\u001b[93m";
+    const gutterStyleSequence = "\u001b[100;30m";
+    const gutterSeparator = " ";
+    const resetEscapeSequence = "\u001b[0m";
+    const elipsis = "...";
+    const categoryFormatMap: Map<string> = {
+        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
+        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
+        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
+    };
+
+    function formatAndReset(text: string, formatStyle: string) {
+        return formatStyle + text + resetEscapeSequence;
+    }
+
+    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: CompilerHost): void {
+        let output = "";
+
+        if (diagnostic.file) {
+            let { start, length, file } = diagnostic;
+            let { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
+            let { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
+            const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
+
+            let hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
+            let gutterWidth = (lastLine + 1 + "").length;
+            if (hasMoreThanFiveLines) {
+                gutterWidth = Math.max(elipsis.length, gutterWidth);
+            }
+
+            output += sys.newLine;
+            for (let i = firstLine; i <= lastLine; i++) {
+                // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
+                // so we'll skip ahead to the second-to-last line.
+                if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
+                    output += formatAndReset(padLeft(elipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                    i = lastLine - 1;
+                }
+
+                let lineStart = getPositionOfLineAndCharacter(file, i, 0);
+                let lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
+                let lineContent = file.text.slice(lineStart, lineEnd);
+                lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+                lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
+
+                // Output the gutter and the actual contents of the line.
+                output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                output += lineContent + sys.newLine;
+
+                // Output the gutter and the error span for the line using tildes.
+                output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                output += redForegroundEscapeSequence;
+                if (i === firstLine) {
+                    // If we're on the last line, then limit it to the last character of the last line.
+                    // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
+                    const lastCharForLine = i === lastLine ? lastLineChar : undefined;
+
+                    output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                    output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+                }
+                else if (i === lastLine) {
+                    output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+                }
+                else {
+                    // Squiggle the entire line.
+                    output += lineContent.replace(/./g, "~");
+                }
+                output += resetEscapeSequence;
+
+                output += sys.newLine;
+            }
+
+            output += sys.newLine;
+            output += `${ file.fileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
+
+        const categoryColor = categoryFormatMap[diagnostic.category];
+        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        output += sys.newLine + sys.newLine;
+
+        sys.write(output);
     }
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
@@ -286,6 +375,10 @@ namespace ts {
 
                 hostFileExists = compilerHost.fileExists;
                 compilerHost.fileExists = cachedFileExists;
+            }
+
+            if (compilerOptions.pretty) {
+                reportDiagnostic = reportDiagnosticWithColorAndContext;
             }
 
             // reset the cache of existing files

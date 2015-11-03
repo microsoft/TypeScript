@@ -21,6 +21,12 @@ namespace ts {
 
     type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
 
+    const enum Jump {
+        Break       = 1 << 1,
+        Continue    = 1 << 2,
+        Return      = 1 << 3
+    }
+
     let entities: Map<number> = {
         "quot": 0x0022,
         "amp": 0x0026,
@@ -373,14 +379,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             sourceMaps: sourceMapDataList
         };
 
-        function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
-            while (node) {
-                if (node === ancestor) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
@@ -391,12 +389,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
             return true;
-        }
-
-        const enum Jump {
-            Break       = 1 << 1,
-            Continue    = 1 << 2,
-            Return      = 1 << 3
         }
 
         interface ConvertedLoopState {
@@ -3639,10 +3631,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 //     for (let v of arr) { }
                 //
-                // we don't want to emit a temporary variable for the RHS, just use it directly.
-                let rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
+                // we can't reuse 'arr' because it might be modified within the body of the loop.
                 let counter = createTempVariable(TempFlags._i);
-                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(TempFlags.Auto);
+                let rhsReference = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
+                rhsReference.text = node.expression.kind === SyntaxKind.Identifier ?
+                    makeUniqueName((<Identifier>node.expression).text) :
+                    makeTempVariableName(TempFlags.Auto);
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
@@ -3654,15 +3648,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(" = 0");
                 emitEnd(node.expression);
 
-                if (!rhsIsIdentifier) {
-                    // , _a = expr
-                    write(", ");
-                    emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
-                    write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
-                    emitEnd(node.expression);
-                }
+                // , _a = expr
+                write(", ");
+                emitStart(node.expression);
+                emitNodeWithoutSourceMap(rhsReference);
+                write(" = ");
+                emitNodeWithoutSourceMap(node.expression);
+                emitEnd(node.expression);
 
                 write("; ");
 
@@ -4932,7 +4924,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 increaseIndent();
                 let outPos = writer.getTextPos();
-                emitDetachedComments(node.body);
+                emitDetachedCommentsAndUpdateCommentsInfo(node.body);
                 emitFunctionBodyPreamble(node);
                 let preambleEmitted = writer.getTextPos() !== outPos;
                 decreaseIndent();
@@ -4977,7 +4969,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let initialTextPos = writer.getTextPos();
 
                 increaseIndent();
-                emitDetachedComments(body.statements);
+                emitDetachedCommentsAndUpdateCommentsInfo(body.statements);
 
                 // Emit all the directive prologues (like "use strict").  These have to come before
                 // any other preamble code we write (like parameter initializers).
@@ -5299,7 +5291,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Emit all the directive prologues (like "use strict").  These have to come before
                     // any other preamble code we write (like parameter initializers).
                     startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);
-                    emitDetachedComments(ctor.body.statements);
+                    emitDetachedCommentsAndUpdateCommentsInfo(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
                 let superCall: ExpressionStatement;
@@ -7693,7 +7685,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Start new file on new line
                 writeLine();
                 emitShebang();
-                emitDetachedComments(node);
+                emitDetachedCommentsAndUpdateCommentsInfo(node);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (root || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
@@ -7994,11 +7986,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            function isPinnedComments(comment: CommentRange) {
-                return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-            }
-
             /**
              * Determine if the given comment is a triple-slash
              *
@@ -8132,62 +8119,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitDetachedComments(node: TextRange) {
-                let leadingComments: CommentRange[];
-                if (compilerOptions.removeComments) {
-                    // removeComments is true, only reserve pinned comment at the top of file
-                    // For example:
-                    //      /*! Pinned Comment */
-                    //
-                    //      var x = 10;
-                    if (node.pos === 0) {
-                        leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments);
+            function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange) {
+                let currentDetachedCommentInfo = emitDetachedComments(currentSourceFile, writer, writeComment, node, newLine, compilerOptions.removeComments);
+
+                if (currentDetachedCommentInfo) {
+                    if (detachedCommentsInfo) {
+                        detachedCommentsInfo.push(currentDetachedCommentInfo);
                     }
-                }
-                else {
-                    // removeComments is false, just get detached as normal and bypass the process to filter comment
-                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
-                }
-
-                if (leadingComments) {
-                    let detachedComments: CommentRange[] = [];
-                    let lastComment: CommentRange;
-
-                    forEach(leadingComments, comment => {
-                        if (lastComment) {
-                            let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
-                            let commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
-
-                            if (commentLine >= lastCommentLine + 2) {
-                                // There was a blank line between the last comment and this comment.  This
-                                // comment is not part of the copyright comments.  Return what we have so
-                                // far.
-                                return detachedComments;
-                            }
-                        }
-
-                        detachedComments.push(comment);
-                        lastComment = comment;
-                    });
-
-                    if (detachedComments.length) {
-                        // All comments look like they could have been part of the copyright header.  Make
-                        // sure there is at least one blank line between it and the node.  If not, it's not
-                        // a copyright header.
-                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
-                        let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        if (nodeLine >= lastCommentLine + 2) {
-                            // Valid detachedComments
-                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
-                            emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
-                            if (detachedCommentsInfo) {
-                                detachedCommentsInfo.push(currentDetachedCommentInfo);
-                            }
-                            else {
-                                detachedCommentsInfo = [currentDetachedCommentInfo];
-                            }
-                        }
+                    else {
+                        detachedCommentsInfo = [currentDetachedCommentInfo];
                     }
                 }
             }
