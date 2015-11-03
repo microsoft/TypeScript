@@ -1012,7 +1012,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.": {
+    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -1096,7 +1096,7 @@
         "category": "Error",
         "code": 2377
     },
-    "A 'get' accessor must return a value or consist of a single 'throw' statement.": {
+    "A 'get' accessor must return a value.": {
         "category": "Error",
         "code": 2378
     },
@@ -2293,9 +2293,29 @@
         "category": "Message",
         "code": 6072
     },
-    "Disallow inconsistently-cased references to the same file.": {
+    "Stylize errors and messages using color and context. (experimental)": {
         "category": "Message",
         "code": 6073
+    },
+    "Do not report errors on unused labels.": {
+        "category": "Message",
+        "code": 6074
+    },
+    "Report error when not all code paths in function return a value.": {
+        "category": "Message",
+        "code": 6075
+    },
+    "Report errors for fallthrough cases in switch statement.": {
+        "category": "Message",
+        "code": 6076
+    },
+    "Do not report errors on unreachable code.": {
+        "category": "Message",
+        "code": 6077
+    },
+    "Disallow inconsistently-cased references to the same file.": {
+        "category": "Message",
+        "code": 6078
     },
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
@@ -2377,8 +2397,22 @@
         "category": "Error",
         "code": 7026
     },
-
-
+    "Unreachable code detected.": {
+        "category": "Error",
+        "code": 7027
+    },
+    "Unused label.": {
+        "category": "Error",
+        "code": 7028
+    },
+    "Fallthrough case in switch.": {
+        "category": "Error",
+        "code": 7029
+    },
+    "Not all code paths return a value.": {
+        "category": "Error",
+        "code": 7030
+    },    
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

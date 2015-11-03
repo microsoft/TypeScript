@@ -1,6 +1,7 @@
 /// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
+/// <reference path="diagnosticInformationMap.generated.ts"/>
 /// <reference path="scanner.ts"/>
 
 namespace ts {
@@ -151,6 +152,12 @@ namespace ts {
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         },
         {
+            name: "pretty",
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental,
+            type: "boolean"
+        },
+        {
             name: "project",
             shortName: "p",
             type: "string",
@@ -256,10 +263,30 @@ namespace ts {
             paramType: Diagnostics.FILE
         },
         {
+            name: "allowUnusedLabels",
+            type: "boolean",
+            description: Diagnostics.Do_not_report_errors_on_unused_labels
+        },
+        {
+            name: "noImplicitReturns",
+            type: "boolean",
+            description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value
+        },
+        {
+            name: "noFallthroughCasesInSwitch",
+            type: "boolean",
+            description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
+        },
+        {
+            name: "allowUnreachableCode",
+            type: "boolean",
+            description: Diagnostics.Do_not_report_errors_on_unreachable_code
+        },
+        {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
-        },
+        }
     ];
 
     /* @internal */
@@ -412,12 +439,40 @@ namespace ts {
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
-            return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+            let jsonTextWithoutComments = removeComments(jsonText);
+            return { config: /\S/.test(jsonTextWithoutComments) ? JSON.parse(jsonTextWithoutComments) : {} };
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
         }
     }
+
+
+    /**
+     * Remove the comments from a json like text.
+     * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
+     *
+     * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
+     */
+    function removeComments(jsonText: string): string {
+        let output = "";
+        let scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
+        let token: SyntaxKind;
+        while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
+            switch (token) {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    // replace comments with whitespace to preserve original character positions
+                    output += scanner.getTokenText().replace(/\S/g, " ");
+                    break;
+                default:
+                    output += scanner.getTokenText();
+                    break;
+            }
+        }
+        return output;
+    }
+
 
     /**
       * Parse the contents of a config file (tsconfig.json).

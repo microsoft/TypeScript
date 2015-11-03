@@ -1,4 +1,5 @@
 //// [duplicateLabel3.ts]
+
 target:
 while (true) {
   function f() {

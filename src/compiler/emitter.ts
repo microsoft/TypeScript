@@ -7,11 +7,25 @@ namespace ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
-    export function getModuleName(host: EmitHost, file: SourceFile): string {
+    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
 
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+        let file = resolver.getExternalModuleFileFromDeclaration(declaration);
+        if (!file || isDeclarationFile(file)) {
+            return undefined;
+        }
+        return getResolvedExternalModuleName(host, file);
+    }
+
     type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
+
+    const enum Jump {
+        Break       = 1 << 1,
+        Continue    = 1 << 2,
+        Return      = 1 << 3
+    }
 
     let entities: Map<number> = {
         "quot": 0x0022,
@@ -365,14 +379,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             sourceMaps: sourceMapDataList
         };
 
-        function isNodeDescendentOf(node: Node, ancestor: Node): boolean {
-            while (node) {
-                if (node === ancestor) return true;
-                node = node.parent;
-            }
-            return false;
-        }
-
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendentOf(node, container); node = node.nextContainer) {
                 if (node.locals && hasProperty(node.locals, name)) {
@@ -383,12 +389,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
             return true;
-        }
-
-        const enum Jump {
-            Break       = 1 << 1,
-            Continue    = 1 << 2,
-            Return      = 1 << 3
         }
 
         interface ConvertedLoopState {
@@ -553,7 +553,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** If removeComments is true, no leading-comments needed to be emitted **/
             let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
 
-            let moduleEmitDelegates: Map<(node: SourceFile, resolveModuleNames?: boolean) => void> = {
+            let moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -561,7 +561,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 [ModuleKind.CommonJS]: emitCommonJSModule,
             };
 
-            let bundleEmitDelegates: Map<(node: SourceFile, resolveModuleNames?: boolean) => void> = {
+            let bundleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]() {},
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -3631,10 +3631,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 //     for (let v of arr) { }
                 //
-                // we don't want to emit a temporary variable for the RHS, just use it directly.
-                let rhsIsIdentifier = node.expression.kind === SyntaxKind.Identifier;
+                // we can't reuse 'arr' because it might be modified within the body of the loop.
                 let counter = createTempVariable(TempFlags._i);
-                let rhsReference = rhsIsIdentifier ? <Identifier>node.expression : createTempVariable(TempFlags.Auto);
+                let rhsReference = createSynthesizedNode(SyntaxKind.Identifier) as Identifier;
+                rhsReference.text = node.expression.kind === SyntaxKind.Identifier ?
+                    makeUniqueName((<Identifier>node.expression).text) :
+                    makeTempVariableName(TempFlags.Auto);
 
                 // This is the let keyword for the counter and rhsReference. The let keyword for
                 // the LHS will be emitted inside the body.
@@ -3646,15 +3648,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(" = 0");
                 emitEnd(node.expression);
 
-                if (!rhsIsIdentifier) {
-                    // , _a = expr
-                    write(", ");
-                    emitStart(node.expression);
-                    emitNodeWithoutSourceMap(rhsReference);
-                    write(" = ");
-                    emitNodeWithoutSourceMap(node.expression);
-                    emitEnd(node.expression);
-                }
+                // , _a = expr
+                write(", ");
+                emitStart(node.expression);
+                emitNodeWithoutSourceMap(rhsReference);
+                write(" = ");
+                emitNodeWithoutSourceMap(node.expression);
+                emitEnd(node.expression);
 
                 write("; ");
 
@@ -4924,7 +4924,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 increaseIndent();
                 let outPos = writer.getTextPos();
-                emitDetachedComments(node.body);
+                emitDetachedCommentsAndUpdateCommentsInfo(node.body);
                 emitFunctionBodyPreamble(node);
                 let preambleEmitted = writer.getTextPos() !== outPos;
                 decreaseIndent();
@@ -4969,7 +4969,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let initialTextPos = writer.getTextPos();
 
                 increaseIndent();
-                emitDetachedComments(body.statements);
+                emitDetachedCommentsAndUpdateCommentsInfo(body.statements);
 
                 // Emit all the directive prologues (like "use strict").  These have to come before
                 // any other preamble code we write (like parameter initializers).
@@ -5291,7 +5291,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Emit all the directive prologues (like "use strict").  These have to come before
                     // any other preamble code we write (like parameter initializers).
                     startIndex = emitDirectivePrologues(ctor.body.statements, /*startWithNewLine*/ true);
-                    emitDetachedComments(ctor.body.statements);
+                    emitDetachedCommentsAndUpdateCommentsInfo(ctor.body.statements);
                 }
                 emitCaptureThisForNodeIfNecessary(node);
                 let superCall: ExpressionStatement;
@@ -7275,14 +7275,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function writeModuleName(node: SourceFile, resolveModuleNames?: boolean): void {
+            function writeModuleName(node: SourceFile, emitRelativePathAsModuleName?: boolean): void {
                 let moduleName = node.moduleName;
-                if (moduleName || (resolveModuleNames && (moduleName = getModuleName(host, node)))) {
+                if (moduleName || (emitRelativePathAsModuleName && (moduleName = getResolvedExternalModuleName(host, node)))) {
                     write(`"${moduleName}", `);
                 }
             }
 
-            function emitSystemModule(node: SourceFile,  resolveModuleNames?: boolean): void {
+            function emitSystemModule(node: SourceFile,  emitRelativePathAsModuleName?: boolean): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -7297,7 +7297,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportFunctionForFile = makeUniqueName("exports");
                 writeLine();
                 write("System.register(");
-                writeModuleName(node, resolveModuleNames);
+                writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
                 let groupIndices: Map<number> = {};
@@ -7320,8 +7320,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
-                    if (resolveModuleNames) {
-                        let name = lookupSpecifierName(externalImports[i]);
+                    if (emitRelativePathAsModuleName) {
+                        let name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
                         if (name) {
                             text = `"${name}"`;
                         }
@@ -7340,32 +7340,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("});");
             }
 
-            function lookupSpecifierName(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
-                let specifier: Node;
-                if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                    specifier = (declaration as ImportEqualsDeclaration).moduleReference;
-                }
-                else {
-                    specifier = (declaration as ImportDeclaration | ExportDeclaration).moduleSpecifier;
-                }
-                let moduleSymbol = resolver.getSymbolAtLocation(specifier);
-                if (!moduleSymbol) {
-                    return undefined;
-                }
-                let moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
-                if (!moduleDeclaration || isDeclarationFile(moduleDeclaration)) {
-                    return undefined;
-                }
-                return getExternalModuleNameFromPath(host, moduleDeclaration.fileName);
-            }
-
             interface AMDDependencyNames {
                 aliasedModuleNames: string[];
                 unaliasedModuleNames: string[];
                 importAliasNames: string[];
             }
 
-            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean, resolveModuleNames?: boolean): AMDDependencyNames {
+            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean, emitRelativePathAsModuleName?: boolean): AMDDependencyNames {
                 // names of modules with corresponding parameter in the factory function
                 let aliasedModuleNames: string[] = [];
                 // names of modules with no corresponding parameters in factory function
@@ -7389,8 +7370,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Find the name of the external module
                     let externalModuleName = getExternalModuleNameText(importNode);
 
-                    if (resolveModuleNames) {
-                        let name = lookupSpecifierName(importNode);
+                    if (emitRelativePathAsModuleName) {
+                        let name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
                         if (name) {
                             externalModuleName = `"${name}"`;
                         }
@@ -7410,7 +7391,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
             }
 
-            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean, resolveModuleNames?: boolean) {
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean, emitRelativePathAsModuleName?: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
                 //
@@ -7423,7 +7404,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
 
-                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies, resolveModuleNames);
+                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies, emitRelativePathAsModuleName);
                 emitAMDDependencyList(dependencyNames);
                 write(", ");
                 emitAMDFactoryHeader(dependencyNames);
@@ -7451,14 +7432,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(") {");
             }
 
-            function emitAMDModule(node: SourceFile, resolveModuleNames?: boolean) {
+            function emitAMDModule(node: SourceFile, emitRelativePathAsModuleName?: boolean) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
                 writeLine();
                 write("define(");
-                writeModuleName(node, resolveModuleNames);
-                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, resolveModuleNames);
+                writeModuleName(node, emitRelativePathAsModuleName);
+                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
                 let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
@@ -7704,7 +7685,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Start new file on new line
                 writeLine();
                 emitShebang();
-                emitDetachedComments(node);
+                emitDetachedCommentsAndUpdateCommentsInfo(node);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
                     if (root || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
@@ -7712,7 +7693,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitModule(node);
                     }
                     else {
-                        bundleEmitDelegates[modulekind](node, /*resolveModuleNames*/true);
+                        bundleEmitDelegates[modulekind](node, /*emitRelativePathAsModuleName*/true);
                     }
                 }
                 else {
@@ -8005,11 +7986,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return leadingComments;
             }
 
-            function isPinnedComments(comment: CommentRange) {
-                return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
-            }
-
             /**
              * Determine if the given comment is a triple-slash
              *
@@ -8143,62 +8119,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
-            function emitDetachedComments(node: TextRange) {
-                let leadingComments: CommentRange[];
-                if (compilerOptions.removeComments) {
-                    // removeComments is true, only reserve pinned comment at the top of file
-                    // For example:
-                    //      /*! Pinned Comment */
-                    //
-                    //      var x = 10;
-                    if (node.pos === 0) {
-                        leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComments);
+            function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange) {
+                let currentDetachedCommentInfo = emitDetachedComments(currentSourceFile, writer, writeComment, node, newLine, compilerOptions.removeComments);
+
+                if (currentDetachedCommentInfo) {
+                    if (detachedCommentsInfo) {
+                        detachedCommentsInfo.push(currentDetachedCommentInfo);
                     }
-                }
-                else {
-                    // removeComments is false, just get detached as normal and bypass the process to filter comment
-                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
-                }
-
-                if (leadingComments) {
-                    let detachedComments: CommentRange[] = [];
-                    let lastComment: CommentRange;
-
-                    forEach(leadingComments, comment => {
-                        if (lastComment) {
-                            let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
-                            let commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
-
-                            if (commentLine >= lastCommentLine + 2) {
-                                // There was a blank line between the last comment and this comment.  This
-                                // comment is not part of the copyright comments.  Return what we have so
-                                // far.
-                                return detachedComments;
-                            }
-                        }
-
-                        detachedComments.push(comment);
-                        lastComment = comment;
-                    });
-
-                    if (detachedComments.length) {
-                        // All comments look like they could have been part of the copyright header.  Make
-                        // sure there is at least one blank line between it and the node.  If not, it's not
-                        // a copyright header.
-                        let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
-                        let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
-                        if (nodeLine >= lastCommentLine + 2) {
-                            // Valid detachedComments
-                            emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
-                            emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
-                            let currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
-                            if (detachedCommentsInfo) {
-                                detachedCommentsInfo.push(currentDetachedCommentInfo);
-                            }
-                            else {
-                                detachedCommentsInfo = [currentDetachedCommentInfo];
-                            }
-                        }
+                    else {
+                        detachedCommentsInfo = [currentDetachedCommentInfo];
                     }
                 }
             }

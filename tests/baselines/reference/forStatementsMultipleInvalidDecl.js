@@ -1,4 +1,5 @@
 //// [forStatementsMultipleInvalidDecl.ts]
+
 interface I {
     id: number;
 }

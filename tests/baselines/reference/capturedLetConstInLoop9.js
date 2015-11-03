@@ -75,9 +75,8 @@ function foo() {
                 break l0;
             }
             
-            return 100;
-            
             () => b
+            return 100;
         }
 
         
@@ -207,8 +206,8 @@ function foo() {
             if (b === 2) {
                 return "break-l0";
             }
-            return { value: 100 };
             (function () { return b; });
+            return { value: 100 };
         };
         for (var _d = 0, _e = []; _d < _e.length; _d++) {
             var b = _e[_d];

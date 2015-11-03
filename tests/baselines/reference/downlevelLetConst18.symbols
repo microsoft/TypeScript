@@ -1,0 +1,59 @@
+=== tests/cases/compiler/downlevelLetConst18.ts ===
+
+'use strict'
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 3, 8))
+
+    function foo() { x };
+>foo : Symbol(foo, Decl(downlevelLetConst18.ts, 3, 16))
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 3, 8))
+}
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 7, 8))
+
+    function foo1() { x };
+>foo1 : Symbol(foo1, Decl(downlevelLetConst18.ts, 7, 16))
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 7, 8))
+}
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 11, 8))
+
+    (() => { x })();
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 11, 8))
+}
+
+for (const x = 1; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 15, 10))
+
+    (() => { x })();
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 15, 10))
+}
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 19, 8))
+
+    ({ foo() { x }})
+>foo : Symbol(foo, Decl(downlevelLetConst18.ts, 20, 6))
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 19, 8))
+}
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 23, 8))
+
+    ({ get foo() { return x } })
+>foo : Symbol(foo, Decl(downlevelLetConst18.ts, 24, 6))
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 23, 8))
+}
+
+for (let x; ;) {
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 27, 8))
+
+    ({ set foo(v) { x } })
+>foo : Symbol(foo, Decl(downlevelLetConst18.ts, 28, 6))
+>v : Symbol(v, Decl(downlevelLetConst18.ts, 28, 15))
+>x : Symbol(x, Decl(downlevelLetConst18.ts, 27, 8))
+}
+
