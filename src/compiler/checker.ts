@@ -33,26 +33,26 @@ namespace ts {
         // they no longer need the information (for example, if the user started editing again).
         let cancellationToken: CancellationToken;
 
-        let Symbol = objectAllocator.getSymbolConstructor();
-        let Type = objectAllocator.getTypeConstructor();
-        let Signature = objectAllocator.getSignatureConstructor();
+        const Symbol = objectAllocator.getSymbolConstructor();
+        const Type = objectAllocator.getTypeConstructor();
+        const Signature = objectAllocator.getSignatureConstructor();
 
         let typeCount = 0;
         let symbolCount = 0;
 
-        let emptyArray: any[] = [];
-        let emptySymbols: SymbolTable = {};
+        const emptyArray: any[] = [];
+        const emptySymbols: SymbolTable = {};
 
-        let compilerOptions = host.getCompilerOptions();
-        let languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
+        const compilerOptions = host.getCompilerOptions();
+        const languageVersion = compilerOptions.target || ScriptTarget.ES3;
+        const modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
 
-        let emitResolver = createResolver();
+        const emitResolver = createResolver();
 
-        let undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
-        let argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
+        const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
-        let checker: TypeChecker = {
+        const checker: TypeChecker = {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
@@ -97,36 +97,35 @@ namespace ts {
             isOptionalParameter
         };
 
-        let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
-        let resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
+        const unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
+        const resolvingSymbol = createSymbol(SymbolFlags.Transient, "__resolving__");
 
-        let anyType = createIntrinsicType(TypeFlags.Any, "any");
-        let stringType = createIntrinsicType(TypeFlags.String, "string");
-        let numberType = createIntrinsicType(TypeFlags.Number, "number");
-        let booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
-        let esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
-        let voidType = createIntrinsicType(TypeFlags.Void, "void");
-        let undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
-        let nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
-        let unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
-        let circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
+        const anyType = createIntrinsicType(TypeFlags.Any, "any");
+        const stringType = createIntrinsicType(TypeFlags.String, "string");
+        const numberType = createIntrinsicType(TypeFlags.Number, "number");
+        const booleanType = createIntrinsicType(TypeFlags.Boolean, "boolean");
+        const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
+        const voidType = createIntrinsicType(TypeFlags.Void, "void");
+        const undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
+        const nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
+        const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
 
-        let emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        let emptyUnionType = emptyObjectType;
-        let emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyUnionType = emptyObjectType;
+        const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
-        let anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const anyFunctionType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         // The anyFunctionType contains the anyFunctionType by definition. The flag is further propagated
         // in getPropagatingFlagsOfTypes, and it is checked in inferFromTypes.
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
-        let noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        let anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
-        let unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
 
-        let globals: SymbolTable = {};
+        const globals: SymbolTable = {};
 
         let globalESSymbolConstructorSymbol: Symbol;
 
@@ -161,29 +160,29 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
-        let tupleTypes: Map<TupleType> = {};
-        let unionTypes: Map<UnionType> = {};
-        let intersectionTypes: Map<IntersectionType> = {};
-        let stringLiteralTypes: Map<StringLiteralType> = {};
+        const tupleTypes: Map<TupleType> = {};
+        const unionTypes: Map<UnionType> = {};
+        const intersectionTypes: Map<IntersectionType> = {};
+        const stringLiteralTypes: Map<StringLiteralType> = {};
         let emitExtends = false;
         let emitDecorate = false;
         let emitParam = false;
         let emitAwaiter = false;
         let emitGenerator = false;
 
-        let resolutionTargets: TypeSystemEntity[] = [];
-        let resolutionResults: boolean[] = [];
-        let resolutionPropertyNames: TypeSystemPropertyName[] = [];
+        const resolutionTargets: TypeSystemEntity[] = [];
+        const resolutionResults: boolean[] = [];
+        const resolutionPropertyNames: TypeSystemPropertyName[] = [];
 
-        let mergedSymbols: Symbol[] = [];
-        let symbolLinks: SymbolLinks[] = [];
-        let nodeLinks: NodeLinks[] = [];
-        let potentialThisCollisions: Node[] = [];
-        let awaitedTypeStack: number[] = [];
+        const mergedSymbols: Symbol[] = [];
+        const symbolLinks: SymbolLinks[] = [];
+        const nodeLinks: NodeLinks[] = [];
+        const potentialThisCollisions: Node[] = [];
+        const awaitedTypeStack: number[] = [];
 
-        let diagnostics = createDiagnosticCollection();
+        const diagnostics = createDiagnosticCollection();
 
-        let primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
+        const primitiveTypeInfo: Map<{ type: Type; flags: TypeFlags }> = {
             "string": {
                 type: stringType,
                 flags: TypeFlags.StringLike
@@ -210,9 +209,9 @@ namespace ts {
             Element: "Element"
         };
 
-        let subtypeRelation: Map<RelationComparisonResult> = {};
-        let assignableRelation: Map<RelationComparisonResult> = {};
-        let identityRelation: Map<RelationComparisonResult> = {};
+        const subtypeRelation: Map<RelationComparisonResult> = {};
+        const assignableRelation: Map<RelationComparisonResult> = {};
+        const identityRelation: Map<RelationComparisonResult> = {};
 
         // This is for caching the result of getSymbolDisplayBuilder. Do not access directly.
         let _displayBuilder: SymbolDisplayBuilder;
