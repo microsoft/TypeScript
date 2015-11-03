@@ -198,6 +198,7 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
+            const _tty = require("tty");
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -335,7 +336,17 @@ namespace ts {
                     data = "\uFEFF" + data;
                 }
 
-                _fs.writeFileSync(fileName, data, "utf8");
+                let fd: number;
+
+                try {
+                    fd = _fs.openSync(fileName, "w");
+                    _fs.writeSync(fd, data, undefined, "utf8");
+                }
+                finally {
+                    if (fd !== undefined) {
+                        _fs.closeSync(fd);
+                    }
+                }
             }
 
             function getCanonicalPath(path: string): string {
@@ -375,15 +386,7 @@ namespace ts {
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {
-                    const buffer = new Buffer(s, "utf8");
-                    let offset = 0;
-                    let toWrite: number = buffer.length;
-                    let written = 0;
-                    // 1 is a standard descriptor for stdout
-                    while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
-                        offset += written;
-                        toWrite -= written;
-                    }
+                    process.stdout.write(s);
                 },
                 readFile,
                 writeFile,

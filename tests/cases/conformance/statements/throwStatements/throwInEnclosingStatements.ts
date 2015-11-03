@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 function fn(x) {
     throw x;
 }

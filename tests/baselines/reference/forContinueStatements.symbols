@@ -1,4 +1,5 @@
 === tests/cases/conformance/statements/continueStatements/forContinueStatements.ts ===
+
 for (; ;) {
     continue;
 }
@@ -33,7 +34,7 @@ for (; ;) for (; ;) for (; ;) continue SEVEN;
 EIGHT:
 for (; ;) {
     var fn = function () { }
->fn : Symbol(fn, Decl(forContinueStatements.ts, 33, 7))
+>fn : Symbol(fn, Decl(forContinueStatements.ts, 34, 7))
 
     continue EIGHT;
 }

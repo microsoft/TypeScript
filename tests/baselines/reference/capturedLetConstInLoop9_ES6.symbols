@@ -142,11 +142,10 @@ function foo() {
 
                 break l0;
             }
-            
-            return 100;
-            
             () => b
 >b : Symbol(b, Decl(capturedLetConstInLoop9_ES6.ts, 67, 16))
+
+            return 100;
         }
 
         
@@ -172,25 +171,25 @@ function foo() {
 }
 
 function foo2() {
->foo2 : Symbol(foo2, Decl(capturedLetConstInLoop9_ES6.ts, 90, 1))
+>foo2 : Symbol(foo2, Decl(capturedLetConstInLoop9_ES6.ts, 88, 1))
 
     for (let x of []) {
->x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 93, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 91, 12))
 
         if (x === 1) {
->x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 93, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 91, 12))
 
             break;
         }
         else if (x === 2) {
->x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 93, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 91, 12))
 
             continue;
         }
         
         while (1 === 1) {
             if (x) {
->x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 93, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 91, 12))
 
                 break;
             }
@@ -200,17 +199,17 @@ function foo2() {
         }
         
         switch(x) {
->x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 93, 12))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 91, 12))
 
             case 1: break;
             case 2: continue;
         }
         
         for (let y of []) {
->y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 115, 16))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 113, 16))
 
             switch(y) {
->y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 115, 16))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 113, 16))
 
                 case 1: break;
                 case 2: continue;
@@ -220,50 +219,50 @@ function foo2() {
 }
 
 class C {
->C : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 122, 1))
+>C : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 120, 1))
 
     constructor(private N: number) { }
->N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
+>N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 123, 16))
 
     foo() {
->foo : Symbol(foo, Decl(capturedLetConstInLoop9_ES6.ts, 125, 38))
+>foo : Symbol(foo, Decl(capturedLetConstInLoop9_ES6.ts, 123, 38))
 
         for (let i = 0; i < 100; i++) {
->i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
->i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
->i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
 
             let f = () => this.N * i;
->f : Symbol(f, Decl(capturedLetConstInLoop9_ES6.ts, 128, 15))
->this.N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
->this : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 122, 1))
->N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
->i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 127, 16))
+>f : Symbol(f, Decl(capturedLetConstInLoop9_ES6.ts, 126, 15))
+>this.N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 123, 16))
+>this : Symbol(C, Decl(capturedLetConstInLoop9_ES6.ts, 120, 1))
+>N : Symbol(N, Decl(capturedLetConstInLoop9_ES6.ts, 123, 16))
+>i : Symbol(i, Decl(capturedLetConstInLoop9_ES6.ts, 125, 16))
         }
     }
 }
 
 function foo3 () {
->foo3 : Symbol(foo3, Decl(capturedLetConstInLoop9_ES6.ts, 131, 1))
+>foo3 : Symbol(foo3, Decl(capturedLetConstInLoop9_ES6.ts, 129, 1))
 
     let x = arguments.length;
->x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 134, 7))
+>x : Symbol(x, Decl(capturedLetConstInLoop9_ES6.ts, 132, 7))
 >arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 >arguments : Symbol(arguments)
 >length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 
     for (let y of []) {
->y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 135, 12))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 133, 12))
 
         let z = arguments.length;
->z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 136, 11))
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 134, 11))
 >arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 >arguments : Symbol(arguments)
 >length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 
         (function() { return y + z + arguments.length; });
->y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 135, 12))
->z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 136, 11))
+>y : Symbol(y, Decl(capturedLetConstInLoop9_ES6.ts, 133, 12))
+>z : Symbol(z, Decl(capturedLetConstInLoop9_ES6.ts, 134, 11))
 >arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 >arguments : Symbol(arguments)
 >length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))

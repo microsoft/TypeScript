@@ -80,22 +80,22 @@
 })();
 (function () {
     var ns = [];
-    for (var _i = 0; _i < ns.length; _i++) {
-        var _a = ns[_i];
+    for (var _i = 0, ns_1 = ns; _i < ns_1.length; _i++) {
+        var _a = ns_1[_i];
     }
-    for (var _b = 0; _b < ns.length; _b++) {
-        var _c = ns[_b];
+    for (var _b = 0, ns_2 = ns; _b < ns_2.length; _b++) {
+        var _c = ns_2[_b];
     }
-    for (var _d = 0; _d < ns.length; _d++) {
-        var _e = ns[_d];
+    for (var _d = 0, ns_3 = ns; _d < ns_3.length; _d++) {
+        var _e = ns_3[_d];
     }
-    for (var _f = 0; _f < ns.length; _f++) {
-        var _g = ns[_f];
+    for (var _f = 0, ns_4 = ns; _f < ns_4.length; _f++) {
+        var _g = ns_4[_f];
     }
-    for (var _h = 0; _h < ns.length; _h++) {
-        var _j = ns[_h];
+    for (var _h = 0, ns_5 = ns; _h < ns_5.length; _h++) {
+        var _j = ns_5[_h];
     }
-    for (var _k = 0; _k < ns.length; _k++) {
-        var _l = ns[_k];
+    for (var _k = 0, ns_6 = ns; _k < ns_6.length; _k++) {
+        var _l = ns_6[_k];
     }
 })();

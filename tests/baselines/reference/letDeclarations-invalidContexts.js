@@ -1,5 +1,6 @@
 //// [letDeclarations-invalidContexts.ts]
 
+
 // Errors, let must be defined inside a block
 if (true) 
     let l1 = 0;

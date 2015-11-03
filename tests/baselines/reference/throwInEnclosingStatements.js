@@ -1,4 +1,5 @@
 //// [throwInEnclosingStatements.ts]
+
 function fn(x) {
     throw x;
 }

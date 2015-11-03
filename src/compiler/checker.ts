@@ -160,6 +160,8 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
+        let jsxElementClassType: Type;
+
         const tupleTypes: Map<TupleType> = {};
         const unionTypes: Map<UnionType> = {};
         const intersectionTypes: Map<IntersectionType> = {};
@@ -4420,7 +4422,8 @@ namespace ts {
             let container = getThisContainer(node, /*includeArrowFunctions*/ false);
             let parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!(container.flags & NodeFlags.Static)) {
+                if (!(container.flags & NodeFlags.Static) &&
+                    (container.kind !== SyntaxKind.Constructor || isNodeDescendentOf(node, (<ConstructorDeclaration>container).body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent)).thisType;
                 }
             }
@@ -5479,7 +5482,7 @@ namespace ts {
                 let targetType = getIndexTypeOfType(target, IndexKind.String);
                 if (targetType) {
                     if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
-                        // non-primitive assignment to any is always allowed, eg 
+                        // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: string]: any } = { property: 12 };`
                         return Ternary.True;
                     }
@@ -5509,7 +5512,7 @@ namespace ts {
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
                 if (targetType) {
                     if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
-                        // non-primitive assignment to any is always allowed, eg 
+                        // non-primitive assignment to any is always allowed, eg
                         //   `var x: { [index: number]: any } = { property: 12 };`
                         return Ternary.True;
                     }
@@ -6583,9 +6586,9 @@ namespace ts {
                 return;
             }
 
-            // 1. walk from the use site up to the declaration and check 
+            // 1. walk from the use site up to the declaration and check
             // if there is anything function like between declaration and use-site (is binding/class is captured in function).
-            // 2. walk from the declaration up to the boundary of lexical environment and check 
+            // 2. walk from the declaration up to the boundary of lexical environment and check
             // if there is an iteration statement in between declaration and boundary (is binding/class declared inside iteration statement)
 
             let container: Node;
@@ -7870,7 +7873,6 @@ namespace ts {
             return prop || unknownSymbol;
         }
 
-        let jsxElementClassType: Type = undefined;
         function getJsxGlobalElementClassType(): Type {
             if (!jsxElementClassType) {
                 jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
@@ -9616,21 +9618,11 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        function bodyContainsAReturnStatement(funcBody: Block) {
-            return forEachReturnStatement(funcBody, returnStatement => {
-                return true;
-            });
-        }
-
-        function bodyContainsSingleThrowStatement(body: Block) {
-            return (body.statements.length === 1) && (body.statements[0].kind === SyntaxKind.ThrowStatement);
-        }
-
         // TypeScript Specification 1.0 (6.3) - July 2014
         // An explicitly typed function whose return type isn't the Void or the Any type
         // must have at least one return statement somewhere in its body.
         // An exception to this rule is if the function implementation consists of a single 'throw' statement.
-        function checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(func: FunctionLikeDeclaration, returnType: Type): void {
+        function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration, returnType: Type): void {
             if (!produceDiagnostics) {
                 return;
             }
@@ -9641,26 +9633,20 @@ namespace ts {
             }
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block) {
+            // also if HasImplicitReturnValue flags is not set this means that all codepaths in function body end with return of throw
+            if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !(func.flags & NodeFlags.HasImplicitReturn)) {
                 return;
             }
 
-            let bodyBlock = <Block>func.body;
-
-            // Ensure the body has at least one return expression.
-            if (bodyContainsAReturnStatement(bodyBlock)) {
-                return;
+            if (func.flags & NodeFlags.HasExplicitReturn) {
+                if (compilerOptions.noImplicitReturns) {
+                    error(func.type, Diagnostics.Not_all_code_paths_return_a_value);
+                }
             }
-
-            // If there are no return expressions, then we need to check if
-            // the function body consists solely of a throw statement;
-            // this is to make an exception for unimplemented functions.
-            if (bodyContainsSingleThrowStatement(bodyBlock)) {
-                return;
+            else {
+                // This function does not conform to the specification.
+                error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
-
-            // This function does not conform to the specification.
-            error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value_or_consist_of_a_single_throw_statement);
         }
 
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, contextualMapper?: TypeMapper): Type {
@@ -9740,7 +9726,7 @@ namespace ts {
             }
 
             if (returnType && !node.asteriskToken) {
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
+                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, isAsync ? promisedType : returnType);
             }
 
             if (node.body) {
@@ -10941,8 +10927,15 @@ namespace ts {
                 checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
                 if (node.kind === SyntaxKind.GetAccessor) {
-                    if (!isInAmbientContext(node) && nodeIsPresent(node.body) && !(bodyContainsAReturnStatement(<Block>node.body) || bodyContainsSingleThrowStatement(<Block>node.body))) {
-                        error(node.name, Diagnostics.A_get_accessor_must_return_a_value_or_consist_of_a_single_throw_statement);
+                    if (!isInAmbientContext(node) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
+                        if (node.flags & NodeFlags.HasExplicitReturn) {
+                            if (compilerOptions.noImplicitReturns) {
+                                error(node.name, Diagnostics.Not_all_code_paths_return_a_value);
+                            }
+                        }
+                        else {
+                            error(node.name, Diagnostics.A_get_accessor_must_return_a_value);
+                        }
                     }
                 }
 
@@ -11636,9 +11629,12 @@ namespace ts {
                 return unknownType;
             }
 
-            let promiseConstructor = getMergedSymbol(promiseType.symbol);
+            let promiseConstructor = getNodeLinks(node.type).resolvedSymbol;
             if (!promiseConstructor || !symbolIsValue(promiseConstructor)) {
-                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeToString(promiseType));
+                let typeName = promiseConstructor
+                    ? symbolToString(promiseConstructor)
+                    : typeToString(promiseType);
+                error(node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type, typeName);
                 return unknownType;
             }
 
@@ -11870,7 +11866,7 @@ namespace ts {
                     promisedType = checkAsyncFunctionReturnType(node);
                 }
 
-                checkIfNonVoidFunctionHasReturnExpressionsOrSingleThrowStatment(node, isAsync ? promisedType : returnType);
+                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, isAsync ? promisedType : returnType);
             }
 
             if (produceDiagnostics && !node.type) {
@@ -12224,6 +12220,11 @@ namespace ts {
 
             checkExpression(node.expression);
             checkSourceElement(node.thenStatement);
+
+            if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
+                error(node.thenStatement, Diagnostics.The_body_of_an_if_statement_cannot_be_the_empty_statement);
+            }
+
             checkSourceElement(node.elseStatement);
         }
 
@@ -12642,7 +12643,7 @@ namespace ts {
                         error(node.expression, Diagnostics.Setters_cannot_return_a_value);
                     }
                     else if (func.kind === SyntaxKind.Constructor) {
-                        if (!isTypeAssignableTo(exprType, returnType)) {
+                        if (!checkTypeAssignableTo(exprType, returnType, node.expression)) {
                             error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }
@@ -14909,7 +14910,7 @@ namespace ts {
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
             forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file);
+                bindSourceFile(file, compilerOptions);
             });
 
             // Initialize global symbol table

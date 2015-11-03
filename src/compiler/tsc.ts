@@ -6,6 +6,14 @@ namespace ts {
         fileWatcher?: FileWatcher;
     }
 
+    let reportDiagnostic = reportDiagnosticSimply;
+
+    function reportDiagnostics(diagnostics: Diagnostic[], host: CompilerHost): void {
+        for (let diagnostic of diagnostics) {
+            reportDiagnostic(diagnostic, host);
+        }
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -81,12 +89,16 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
-    function reportDiagnostic(diagnostic: Diagnostic) {
+    function reportDiagnosticSimply(diagnostic: Diagnostic, host: CompilerHost): void {
         let output = "";
 
         if (diagnostic.file) {
-            let loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
+            const relativeFileName = host
+                ? convertToRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
+                : diagnostic.file.fileName;
+
+            output += `${ diagnostic.file.fileName }(${ line + 1 },${ character + 1 }): `;
         }
 
         let category = DiagnosticCategory[diagnostic.category].toLowerCase();
@@ -95,10 +107,91 @@ namespace ts {
         sys.write(output);
     }
 
-    function reportDiagnostics(diagnostics: Diagnostic[]) {
-        for (let i = 0; i < diagnostics.length; i++) {
-            reportDiagnostic(diagnostics[i]);
+
+    const redForegroundEscapeSequence = "\u001b[91m";
+    const yellowForegroundEscapeSequence = "\u001b[93m";
+    const blueForegroundEscapeSequence = "\u001b[93m";
+    const gutterStyleSequence = "\u001b[100;30m";
+    const gutterSeparator = " ";
+    const resetEscapeSequence = "\u001b[0m";
+    const elipsis = "...";
+    const categoryFormatMap: Map<string> = {
+        [DiagnosticCategory.Warning]: yellowForegroundEscapeSequence,
+        [DiagnosticCategory.Error]: redForegroundEscapeSequence,
+        [DiagnosticCategory.Message]: blueForegroundEscapeSequence,
+    };
+
+    function formatAndReset(text: string, formatStyle: string) {
+        return formatStyle + text + resetEscapeSequence;
+    }
+
+    function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: CompilerHost): void {
+        let output = "";
+
+        if (diagnostic.file) {
+            let { start, length, file } = diagnostic;
+            let { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
+            let { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
+            const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
+
+            let hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
+            let gutterWidth = (lastLine + 1 + "").length;
+            if (hasMoreThanFiveLines) {
+                gutterWidth = Math.max(elipsis.length, gutterWidth);
+            }
+
+            output += sys.newLine;
+            for (let i = firstLine; i <= lastLine; i++) {
+                // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
+                // so we'll skip ahead to the second-to-last line.
+                if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
+                    output += formatAndReset(padLeft(elipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                    i = lastLine - 1;
+                }
+
+                let lineStart = getPositionOfLineAndCharacter(file, i, 0);
+                let lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
+                let lineContent = file.text.slice(lineStart, lineEnd);
+                lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+                lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
+
+                // Output the gutter and the actual contents of the line.
+                output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                output += lineContent + sys.newLine;
+
+                // Output the gutter and the error span for the line using tildes.
+                output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                output += redForegroundEscapeSequence;
+                if (i === firstLine) {
+                    // If we're on the last line, then limit it to the last character of the last line.
+                    // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
+                    const lastCharForLine = i === lastLine ? lastLineChar : undefined;
+
+                    output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                    output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+                }
+                else if (i === lastLine) {
+                    output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+                }
+                else {
+                    // Squiggle the entire line.
+                    output += lineContent.replace(/./g, "~");
+                }
+                output += resetEscapeSequence;
+
+                output += sys.newLine;
+            }
+
+            output += sys.newLine;
+            output += `${ file.fileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
+
+        const categoryColor = categoryFormatMap[diagnostic.category];
+        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        output += sys.newLine + sys.newLine;
+
+        sys.write(output);
     }
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
@@ -166,7 +259,7 @@ namespace ts {
 
         if (commandLine.options.locale) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--locale"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             validateLocaleAndSetLanguage(commandLine.options.locale, commandLine.errors);
@@ -175,7 +268,7 @@ namespace ts {
         // If there are any errors due to command line parsing and/or
         // setting up localization, report them and quit.
         if (commandLine.errors.length > 0) {
-            reportDiagnostics(commandLine.errors);
+            reportDiagnostics(commandLine.errors, compilerHost);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
@@ -185,7 +278,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version), /* compilerHost */ undefined);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -197,12 +290,12 @@ namespace ts {
 
         if (commandLine.options.project) {
             if (!isJSONSupported()) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
@@ -220,7 +313,7 @@ namespace ts {
         // Firefox has Object.prototype.watch
         if (commandLine.options.watch && commandLine.options.hasOwnProperty("watch")) {
             if (!sys.watchFile) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             if (configFileName) {
@@ -256,7 +349,7 @@ namespace ts {
             let configObject = result.config;
             let configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
             if (configParseResult.errors.length > 0) {
-                reportDiagnostics(configParseResult.errors);
+                reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
@@ -282,6 +375,10 @@ namespace ts {
 
                 hostFileExists = compilerHost.fileExists;
                 compilerHost.fileExists = cachedFileExists;
+            }
+
+            if (compilerOptions.pretty) {
+                reportDiagnostic = reportDiagnosticWithColorAndContext;
             }
 
             // reset the cache of existing files
@@ -463,7 +560,7 @@ namespace ts {
                 }
             }
 
-            reportDiagnostics(diagnostics);
+            reportDiagnostics(diagnostics, compilerHost);
 
             // If the user doesn't want us to emit, then we're done at this point.
             if (compilerOptions.noEmit) {
@@ -474,7 +571,7 @@ namespace ts {
 
             // Otherwise, emit and report any errors we ran into.
             let emitOutput = program.emit();
-            reportDiagnostics(emitOutput.diagnostics);
+            reportDiagnostics(emitOutput.diagnostics, compilerHost);
 
             // If the emitter didn't emit anything, then pass that value along.
             if (emitOutput.emitSkipped) {
@@ -587,7 +684,7 @@ namespace ts {
         let currentDirectory = sys.getCurrentDirectory();
         let file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
         if (sys.fileExists(file)) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* compilerHost */ undefined);
         }
         else {
             let compilerOptions = extend(options, defaultInitCompilerOptions);
@@ -602,7 +699,7 @@ namespace ts {
             }
 
             sys.writeFile(file, JSON.stringify(configurations, undefined, 4));
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file));
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* compilerHost */ undefined);
         }
 
         return;

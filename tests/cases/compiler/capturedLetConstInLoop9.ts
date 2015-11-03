@@ -74,9 +74,8 @@ function foo() {
                 break l0;
             }
             
-            return 100;
-            
             () => b
+            return 100;
         }
 
         
