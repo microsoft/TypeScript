@@ -7757,12 +7757,6 @@ namespace ts {
 
             let returnType = getUnionType(signatures.map(getReturnTypeOfSignature));
 
-            // Issue an error if this return type isn't assignable to JSX.ElementClass
-            let elemClassType = getJsxGlobalElementClassType();
-            if (elemClassType) {
-                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
-            }
-
             return returnType;
         }
 
@@ -7813,7 +7807,26 @@ namespace ts {
                 let sym = getJsxElementTagSymbol(node);
 
                 if (links.jsxFlags & JsxFlags.ClassElement) {
+                    // Get the element instance type (the result of newing or invoking this tag)
                     let elemInstanceType = getJsxElementInstanceType(node);
+
+                    // Is this is a stateless function component? See if its single signature is
+                    // assignable to the JSX Element Type with either 0 arguments, or 1 argument
+                    // that is an object type
+                    let callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
+                    let callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                    let paramType = callSignature && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && paramType.flags & TypeFlags.ObjectType) {
+                        // TODO: Things like 'ref' and 'key' are always valid, how to account for that?
+                        return paramType;
+                    }
+
+                    // Issue an error if this return type isn't assignable to JSX.ElementClass
+                    let elemClassType = getJsxGlobalElementClassType();
+                    if (elemClassType) {
+                        checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
+                    }
+
 
                     if (isTypeAny(elemInstanceType)) {
                         return links.resolvedJsxType = elemInstanceType;

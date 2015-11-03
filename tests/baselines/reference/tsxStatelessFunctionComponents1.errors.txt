@@ -1,0 +1,27 @@
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx(17,9): error TS2324: Property 'name' is missing in type '{ name: string; }'.
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx(17,16): error TS2339: Property 'naaame' does not exist on type '{ name: string; }'.
+
+
+==== tests/cases/conformance/jsx/tsxStatelessFunctionComponents1.tsx (2 errors) ====
+    declare module JSX {
+    	interface Element { el: any; }
+    	interface IntrinsicElements { div: any; }
+    }
+    
+    
+    function Greet(x: {name: string}) {
+    	return <div>Hello, {x}</div>;
+    }
+    function Meet({name = 'world'}) {
+    	return <div>Hello, {x}</div>;
+    }
+    
+    // OK
+    let x = <Greet name='world' />;
+    // Error
+    let y = <Greet naaame='world' />;
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2324: Property 'name' is missing in type '{ name: string; }'.
+                   ~~~~~~
+!!! error TS2339: Property 'naaame' does not exist on type '{ name: string; }'.
+    
