@@ -89,16 +89,17 @@ namespace ts {
         return <string>diagnostic.messageText;
     }
 
+    function getRelativeFileName(fileName: string, host: CompilerHost): string {
+        return host ? convertToRelativePath(fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : fileName;
+    }
+
     function reportDiagnosticSimply(diagnostic: Diagnostic, host: CompilerHost): void {
         let output = "";
 
         if (diagnostic.file) {
             const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            const relativeFileName = host
-                ? convertToRelativePath(diagnostic.file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName))
-                : diagnostic.file.fileName;
-
-            output += `${ diagnostic.file.fileName }(${ line + 1 },${ character + 1 }): `;
+            const relativeFileName = getRelativeFileName(diagnostic.file.fileName, host);
+            output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
         }
 
         let category = DiagnosticCategory[diagnostic.category].toLowerCase();
@@ -133,6 +134,7 @@ namespace ts {
             let { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
             let { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
             const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
+            const relativeFileName = getRelativeFileName(file.fileName, host);
 
             let hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
             let gutterWidth = (lastLine + 1 + "").length;
@@ -183,7 +185,7 @@ namespace ts {
             }
 
             output += sys.newLine;
-            output += `${ file.fileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
         }
 
         const categoryColor = categoryFormatMap[diagnostic.category];
