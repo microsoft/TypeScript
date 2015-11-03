@@ -14063,7 +14063,7 @@ namespace ts {
                         return;
                     }
 
-                    // If the user specified '--noLib' and a file has a `/// <reference no-default-lib="true"/>,
+                    // If the user specified '--noLib' and a file has a '/// <reference no-default-lib="true"/>',
                     // then we should treat that file as a default lib.
                     if (compilerOptions.noLib && node.hasNoDefaultLib) {
                         return;
