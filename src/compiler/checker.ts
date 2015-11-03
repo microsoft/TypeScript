@@ -14911,11 +14911,7 @@ namespace ts {
                 if (!moduleSymbol) {
                     return undefined;
                 }
-                const moduleDeclaration = getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
-                if (!moduleDeclaration) {
-                    return undefined;
-                }
-                return moduleDeclaration;
+                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
         function initializeTypeChecker() {
