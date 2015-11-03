@@ -190,35 +190,35 @@ namespace ts {
         }
 
         function emitFlattenedTypeDefinitions(entrypoint: SourceFile): void {
-            let undoActions: (() => void)[] = [];
-            let aliasEmits: (() => void)[] = [];
-            let symbolNameSet: Map<number> = {};
-            let imports: Map<Declaration[]> = {};
-            let importEquals: Map<Declaration[]> = {};
-            let exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
+            const aliasEmits: (() => void)[] = [];
+            const symbolNameSet: Map<number> = {};
+            const imports: Map<Declaration[]> = {};
+            const importEquals: Map<Declaration[]> = {};
+            const exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
 
             // Handle an export=import as soon as possible
-            let maybeRedirectionType = exportedMembers.length && resolver.getDefiningTypeOfSymbol(exportedMembers[0]);
+            const maybeRedirectionType = exportedMembers.length && resolver.getDefiningTypeOfSymbol(exportedMembers[0]);
             if (maybeRedirectionType && maybeRedirectionType.symbol && exportedMembers[0].name === "export=" && maybeRedirectionType.symbol.valueDeclaration && maybeRedirectionType.symbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
                 return emitFlattenedTypeDefinitions(maybeRedirectionType.symbol.valueDeclaration as SourceFile);
             }
 
-            let createSymbolEntry = (name: string, id: number) => {
+            const createSymbolEntry = (name: string, id: number) => {
                 symbolNameSet[name] = 1;
                 symbolGeneratedNameMap[id] = name;
             };
-            let generateName = (symbol: Symbol, name: string = symbol.name): string => {
+            const generateName = (symbol: Symbol, name: string = symbol.name): string => {
+                const id = getSymbolId(symbol);
                 if (name in symbolNameSet) {
                     let generatedName = `${name}_${symbolNameSet[name]}`;
                     while (!!symbolNameSet[generatedName]) {
                         generatedName = `${name}_${++symbolNameSet[name]}`;
                     }
                     symbolNameSet[name]++;
-                    createSymbolEntry(generatedName, symbol.id);
+                    createSymbolEntry(generatedName, id);
                     return generatedName;
                 }
                 else {
-                    createSymbolEntry(name, symbol.id);
+                    createSymbolEntry(name, id);
                     return name;
                 }
             };
@@ -233,11 +233,11 @@ namespace ts {
             let writeExportAssignment = (tempname: string): void => undefined;
 
             let exportEquals: Type;
-            let moduleIdReverseLookup = buildModuleDtsReverseLookupTable(entrypoint);
-            let declarations = collectExportedDeclarations(exportedMembers);
-            let dependentDeclarations = collectDependentDeclarations(exportedMembers);
+            const moduleIdReverseLookup = buildModuleDtsReverseLookupTable(entrypoint);
+            const declarations = collectExportedDeclarations(exportedMembers);
+            const dependentDeclarations = collectDependentDeclarations(exportedMembers);
 
-            let alias = createDefaultExportAlias();
+            const alias = createDefaultExportAlias();
             forEachValue(dependentDeclarations, d => {
                 generateName(d.symbol);
             });
@@ -247,12 +247,12 @@ namespace ts {
                 writeLine();
                 increaseIndent();
                 forEach(imports[fileName], declaration => {
-                    let symbol = declaration.symbol;
+                    const symbol = declaration.symbol;
                     if (!symbol) {
                         return;
                     }
                     // Alias the import if need be
-                    let name = generateName(symbol);
+                    const name = generateName(symbol);
                     write(symbol.name !== name ? `${symbol.name} as ${name},` : `${symbol.name},`);
                     writeLine();
                 });
@@ -262,12 +262,13 @@ namespace ts {
                 writeLine();
             });
             forEachKey(importEquals, fileName => {
-                let declarations = importEquals[fileName];
+                const declarations = importEquals[fileName];
                 let name: string;
                 forEach(declarations, declaration => {
-                    let symbol = declaration.symbol;
+                    const symbol = declaration.symbol;
+                    const id = getSymbolId(symbol);
                     if (name) {
-                        createSymbolEntry(name, symbol.id);
+                        createSymbolEntry(name, id);
                     }
                     else {
                         name = generateName(symbol, makeIdentifierFromModuleName(fileName));
@@ -285,13 +286,13 @@ namespace ts {
                 writeLine();
             });
 
-            let emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
-                let realSourceFile = currentSourceFile;
+            const emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
+                const realSourceFile = currentSourceFile;
                 currentSourceFile = getSourceFileOfNode(d);
                 if (d.kind === SyntaxKind.VariableDeclaration) {
                     d = d.parent.parent as Declaration;
                 }
-                let oldFlags = d.flags;
+                const oldFlags = d.flags;
                 if (shouldExport) {
                     d.flags |= NodeFlags.Export;
                 }
@@ -330,7 +331,6 @@ namespace ts {
                 write("};");
                 writeLine();
             }
-            forEach(undoActions, undo => undo()); // So we don't ruin the tree
 
             return;
 
@@ -342,11 +342,10 @@ namespace ts {
                         return;
                     }
                     // Skip relative paths and rooted paths (look at module identifiers only)
-                    let filename = entrypoint.resolvedModules[name].resolvedFileName;
-                    if (!name.match(/(\.|\/)/)) {
-                        table[filename] = name;
+                    const file = host.getSourceFile(entrypoint.resolvedModules[name].resolvedFileName);
+                    if (!name.match(/^(\.|\/)/m)) {
+                        table[file.fileName] = name;
                     }
-                    let file = host.getSourceFile(filename);
                     if (!visited[file.fileName]) {
                         buildModuleDtsReverseLookupTable(file, table, visited);
                     }
@@ -376,8 +375,9 @@ namespace ts {
                 for (let exported of exportedMembers) {
                     const type = resolver.getDefiningTypeOfSymbol(exported);
                     for (let declaration of exported.declarations) {
+                        const id = getNodeId(declaration);
                         if (isModuleLevelDeclaration(declaration)) { // skips export specifiers
-                            result[declaration.id] = declaration;
+                            result[id] = declaration;
                         }
                         else {
                             // inline the declaration referred to by an export specifier with the specified name
@@ -398,8 +398,9 @@ namespace ts {
                                             const oldSourceFile = currentSourceFile;
                                             currentSourceFile = getSourceFileOfNode(d);
                                             const symbol = resolver.getDefiningTypeOfSymbol(d.symbol).symbol;
-                                            if (symbol && symbol.id in symbolGeneratedNameMap) {
-                                                write(symbolGeneratedNameMap[symbol.id]);
+                                            const symbolid = symbol && getSymbolId(symbol);
+                                            if (symbol && symbolid in symbolGeneratedNameMap) {
+                                                write(symbolGeneratedNameMap[symbolid]);
                                             }
                                             else {
                                                 Debug.fail("Encountered export alias of untraversed type when flattening.");
@@ -449,14 +450,16 @@ namespace ts {
                     else if (exported.name === "default") {
                         // delay making the alias until after all exported names are collected
                         createDefaultExportAlias = ((exported: Symbol, type: Type) => () => {
+                            const exportedId = getSymbolId(exported);
                             let name = "default_1";
                             while (!!symbolNameSet[name]) {
                                 name += "_1";
                             }
-                            createSymbolEntry(name, exported.id);
-                            let symbol = type.symbol;
+                            createSymbolEntry(name, exportedId);
+                            const symbol = type.symbol;
                             if (symbol) {
-                                createSymbolEntry(name, symbol.id);
+                                const symbolId = getSymbolId(symbol);
+                                createSymbolEntry(name, symbolId);
                             }
                             return name;
                         })(exported, type);
@@ -471,10 +474,12 @@ namespace ts {
                     }
 
                     if (type.symbol) {
-                        let symbol = type.symbol;
-                        createSymbolEntry(symbol.name, symbol.id);
+                        const symbol = type.symbol;
+                        const id = getSymbolId(symbol);
+                        createSymbolEntry(symbol.name, id);
                     }
-                    createSymbolEntry(exported.name, exported.id);
+                    const exportedId = getSymbolId(exported);
+                    createSymbolEntry(exported.name, exportedId);
                 }
                 return result;
             }
@@ -493,17 +498,18 @@ namespace ts {
                     else {
                         // Add containing declarations if we've navigated to a nested type.
                         forEach(symbol.declarations, d => {
+                            const id = getNodeId(d);
                             // Collect declarations 
-                            let sourceFile = getSourceFileOfNode(d);
+                            const sourceFile = getSourceFileOfNode(d);
                             // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
-                            let declarationStack = findDeclarationStack(d);
+                            const declarationStack = findDeclarationStack(d);
                             if (isDeclarationFile(sourceFile)) {
                                 // If the declaration is from an external module dts, we need to create an import for it
                                 if (isExternalModule(sourceFile)) {
                                     // First, try to reverse lookup a module identifier
-                                    let fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
+                                    const fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
                                     // Get the topmost declaration from that stack of nodes
-                                    let declaration = declarationStack.pop();
+                                    const declaration = declarationStack.pop();
                                     // Check for an export=
                                     if (sourceFile.symbol.exports["export="]) {
                                         importEquals[fileName] = importEquals[fileName] || [];
@@ -522,11 +528,11 @@ namespace ts {
                                 }
                                 else {
                                     // Check if this type comes from an ambient external module declaration
-                                    let moduleDeclaration = declarationStack.pop();
+                                    const moduleDeclaration = declarationStack.pop();
                                     if (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration) {
                                         // If so, add said ambient external module to the imports list, and the next declaration in the stack to the set of imports
-                                        let declaration = declarationStack.pop();
-                                        let moduleName = (moduleDeclaration as ModuleDeclaration).name.text;
+                                        const declaration = declarationStack.pop();
+                                        const moduleName = (moduleDeclaration as ModuleDeclaration).name.text;
                                         imports[moduleName] = imports[moduleName] || [];
                                         if (!contains(imports[moduleName], declaration)) {
                                             imports[moduleName].push(declaration);
@@ -536,16 +542,17 @@ namespace ts {
                                 // Otherwise we can elide it, as its from the stdlib or a triple-slash reference
                                 return;
                             }
-                            if (!(d.id in dependentDeclarations || d.id in declarations) && isModuleLevelDeclaration(d)) {
+                            if (!(id in dependentDeclarations || id in declarations) && isModuleLevelDeclaration(d)) {
                                 // Don't need to collect declarations which are not module-level
-                                dependentDeclarations[d.id] = d;
+                                dependentDeclarations[id] = d;
                             }
-                            let outtermostDeclaration = declarationStack.pop();
+                            const outtermostDeclaration = declarationStack.pop();
+                            const outterId = outtermostDeclaration && getNodeId(outtermostDeclaration);
                             if (outtermostDeclaration && outtermostDeclaration !== d &&
                                 outtermostDeclaration.kind !== SyntaxKind.ModuleDeclaration &&
                                 isModuleLevelDeclaration(outtermostDeclaration) &&
-                                (!(outtermostDeclaration.id in dependentDeclarations || outtermostDeclaration.id in declarations))) {
-                                dependentDeclarations[outtermostDeclaration.id] = outtermostDeclaration;
+                                (!(outterId in dependentDeclarations || outterId in declarations))) {
+                                dependentDeclarations[outterId] = outtermostDeclaration;
                                 walker.visitTypeFromSymbol(outtermostDeclaration.symbol);
                             }
                         });
@@ -555,7 +562,7 @@ namespace ts {
 
                 function findDeclarationStack(d: Declaration): Declaration[] {
                     let outermostNode: Node = d;
-                    let visited: Node[] = [d];
+                    const visited: Node[] = [d];
                     // Find all the nodes between this declaration and the top of the file
                     // In most cases, this will _never_ even execute a single iteration as the declaration we have is likely already top-level
                     while (outermostNode.parent && outermostNode.parent.kind !== SyntaxKind.SourceFile) {
@@ -768,9 +775,10 @@ namespace ts {
         }
 
         function writeEntityNameIfRenamed(entityName: EntityName | Expression): boolean {
-            let symbol = resolver.resolveEntityName(entityName, SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value);
-            if (symbol && symbol.id in symbolGeneratedNameMap) {
-                write(symbolGeneratedNameMap[symbol.id]);
+            const symbol = resolver.resolveEntityName(entityName, SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value);
+            const id = symbol && getSymbolId(symbol);
+            if (symbol && id in symbolGeneratedNameMap) {
+                write(symbolGeneratedNameMap[id]);
                 return true;
             }
             return false;
@@ -2051,9 +2059,10 @@ namespace ts {
             if (!node) {
                 return;
             }
-            let symbol = resolver.getSymbolAtLocation(node);
-            if (symbol && symbol.id in symbolGeneratedNameMap) {
-                write(symbolGeneratedNameMap[symbol.id]);
+            const symbol = resolver.getSymbolAtLocation(node);
+            const id = symbol && getSymbolId(symbol);
+            if (symbol && id in symbolGeneratedNameMap) {
+                write(symbolGeneratedNameMap[id]);
             }
             else {
                 writeTextOfNode(currentSourceFile, node);
