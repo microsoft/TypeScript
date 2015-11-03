@@ -1,6 +1,7 @@
 /// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
+/// <reference path="diagnosticInformationMap.generated.ts"/>
 /// <reference path="scanner.ts"/>
 
 namespace ts {
@@ -149,6 +150,12 @@ namespace ts {
             name: "preserveConstEnums",
             type: "boolean",
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
+        },
+        {
+            name: "pretty",
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Stylize_errors_and_messages_using_colors_if_available_experimental,
+            type: "boolean"
         },
         {
             name: "project",

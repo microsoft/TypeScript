@@ -2087,6 +2087,7 @@ namespace ts {
         outFile?: string;
         outDir?: string;
         preserveConstEnums?: boolean;
+        /* @internal */ pretty?: DiagnosticStyle;
         project?: string;
         removeComments?: boolean;
         rootDir?: string;
@@ -2154,6 +2155,12 @@ namespace ts {
     export const enum LanguageVariant {
         Standard,
         JSX,
+    }
+
+    /* @internal */
+    export const enum DiagnosticStyle {
+        Simple,
+        Pretty,
     }
 
     export interface ParsedCommandLine {

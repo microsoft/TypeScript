@@ -2258,14 +2258,6 @@
         "code": 6063
     },
 
-    "Specify JSX code generation: 'preserve' or 'react'": {
-        "category": "Message",
-        "code": 6080
-    },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
-    },
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
@@ -2294,7 +2286,7 @@
         "category": "Message",
         "code": 6072
     },
-    "Disallow inconsistently-cased references to the same file.": {
+    "Stylize errors and messages using colors if available. (experimental)": {
         "category": "Message",
         "code": 6073
     },
@@ -2314,6 +2306,20 @@
         "category": "Message",
         "code": 6077
     },
+    "Disallow inconsistently-cased references to the same file.": {
+        "category": "Message",
+        "code": 6078
+    },
+
+    "Specify JSX code generation: 'preserve' or 'react'": {
+        "category": "Message",
+        "code": 6080
+    },
+    "Argument for '--jsx' must be 'preserve' or 'react'.": {
+        "category": "Message",
+        "code": 6081
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
