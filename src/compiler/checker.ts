@@ -4835,7 +4835,7 @@ namespace ts {
 
                 if (!message) {
                     message = relation === comparableRelation ?
-                        Diagnostics.Type_0_is_not_comparable_with_type_1 :
+                        Diagnostics.Type_0_is_not_comparable_to_type_1 :
                         Diagnostics.Type_0_is_not_assignable_to_type_1;
                 }
 

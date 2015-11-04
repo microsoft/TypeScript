@@ -888,7 +888,7 @@
         "category": "Error",
         "code": 2322
     },
-    "Type '{0}' is not comparable with type '{1}'.": {
+    "Type '{0}' is not comparable to type '{1}'.": {
         "category": "Error",
         "code": 2323
     },
