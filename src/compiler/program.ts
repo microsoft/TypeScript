@@ -199,10 +199,8 @@ namespace ts {
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES3,
+        target: ScriptTarget.ES5,
         noImplicitAny: false,
-        outDir: "built",
-        rootDir: ".",
         sourceMap: false,
     };
 
