@@ -11153,7 +11153,7 @@ namespace ts {
             let someHaveQuestionToken = false;
             let allHaveQuestionToken = true;
             let hasOverloads = false;
-            let bodyDeclaration: FunctionLikeDeclaration;
+            let implementationDeclaration: FunctionLikeDeclaration; // should be the first declaration with a body
             let lastSeenNonAmbientDeclaration: FunctionLikeDeclaration;
             let previousDeclaration: FunctionLikeDeclaration;
 
@@ -11235,12 +11235,17 @@ namespace ts {
                     someHaveQuestionToken = someHaveQuestionToken || hasQuestionToken(node);
                     allHaveQuestionToken = allHaveQuestionToken && hasQuestionToken(node);
 
-                    if (nodeIsPresent(node.body) && bodyDeclaration) {
+                    if (nodeIsPresent(node.body) && implementationDeclaration) {
                         if (isConstructor) {
                             multipleConstructorImplementation = true;
                         }
                         else {
                             duplicateFunctionDeclaration = true;
+
+                            // We expect both implementations to agree in defaultness for later on.
+                            if ((node.flags & NodeFlags.Default) !== (implementationDeclaration.flags & NodeFlags.Default)) {
+                                Debug.fail("Expected first and current implementations of and current to agree in export default flag.");
+                            }
                         }
                     }
                     else if (!isExportSymbolInsideModule && previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
@@ -11248,8 +11253,8 @@ namespace ts {
                     }
 
                     if (nodeIsPresent(node.body)) {
-                        if (!bodyDeclaration) {
-                            bodyDeclaration = node;
+                        if (!implementationDeclaration) {
+                            implementationDeclaration = node;
                         }
                     }
                     else {
@@ -11265,15 +11270,19 @@ namespace ts {
             }
 
             if (multipleConstructorImplementation) {
-                forEach(declarations, declaration => {
+                for (let declaration of declarations) {
                     error(declaration, Diagnostics.Multiple_constructor_implementations_are_not_allowed);
-                });
+                }
             }
 
             if (duplicateFunctionDeclaration) {
-                forEach(declarations, declaration => {
-                    error(declaration.name, Diagnostics.Duplicate_function_implementation);
-                });
+                let message = implementationDeclaration.flags & NodeFlags.Default && areAllFunctionDeclarationsWhereSomeNamesDiffer(declarations) ?
+                    Diagnostics.A_module_cannot_have_multiple_default_exports :
+                    Diagnostics.Duplicate_function_implementation;
+
+                for (let declaration of declarations) {
+                    error(declaration.name || declaration, message);
+                }
             }
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
@@ -11283,12 +11292,12 @@ namespace ts {
             }
 
             if (hasOverloads) {
-                checkFlagAgreementBetweenOverloads(declarations, bodyDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
-                checkQuestionTokenAgreementBetweenOverloads(declarations, bodyDeclaration, someHaveQuestionToken, allHaveQuestionToken);
+                checkFlagAgreementBetweenOverloads(declarations, implementationDeclaration, flagsToCheck, someNodeFlags, allNodeFlags);
+                checkQuestionTokenAgreementBetweenOverloads(declarations, implementationDeclaration, someHaveQuestionToken, allHaveQuestionToken);
 
-                if (bodyDeclaration) {
+                if (implementationDeclaration) {
                     let signatures = getSignaturesOfSymbol(symbol);
-                    let bodySignature = getSignatureFromDeclaration(bodyDeclaration);
+                    let bodySignature = getSignatureFromDeclaration(implementationDeclaration);
                     // If the implementation signature has string literals, we will have reported an error in
                     // checkSpecializedSignatureDeclaration
                     if (!bodySignature.hasStringLiterals) {
@@ -11315,6 +11324,56 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        /**
+         * Determines if all declarations in the given list are function declarations, and that
+         * all the declarations have the same name. This is useful for how we report errors.
+         *
+         * For instance, if a user has
+         *
+         *      export default function foo() { }
+         *      export default function bar() { }
+         *
+         * We want to tell the user that there are multiple default exports. However, if a user has
+         *
+         *      export default function foo() { }
+         *      export default function foo() { }
+         *
+         * It is probably more accurate to say that there are duplicate function implementations.
+         * 
+         * @param declarations
+         */
+        function areAllFunctionDeclarationsWhereSomeNamesDiffer(declarations: Declaration[]) {
+            let numDeclarations = declarations.length;
+            Debug.assert(numDeclarations > 0, "Expected at least one declaration.");
+
+            let firstDeclaration = declarations[0];
+            if (firstDeclaration.kind !== SyntaxKind.FunctionDeclaration) {
+                return false;
+            }
+
+            let firstName = (firstDeclaration as FunctionDeclaration).name;
+            for (let i = 1; i < numDeclarations; i++) {
+                let currentDeclaration = declarations[i];
+                if (currentDeclaration.kind !== SyntaxKind.FunctionDeclaration) {
+                    return false;
+                }
+
+                let currentName = (currentDeclaration as FunctionDeclaration).name;
+                if (currentName) {
+                    if (!firstName || currentName.text !== firstName.text) {
+                        // Either 'firstName' must be undefined or the text must differ.
+                        return true;
+                    }
+                }
+                else if (firstName) {
+                    // 'currentName' is not defined but 'firstName' is.
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         function checkExportsOnMergedDeclarations(node: Node): void {
