@@ -7,13 +7,13 @@ interface A {
 declare var A: AConstructor;
 
 var obj1: A | string;
-if (obj1 instanceof A) { // narrowed to A.
+if (obj1 instanceof A) { // narrowed to 'A'.
     obj1.foo;
     obj1.bar;
 }
 
 var obj2: any;
-if (obj2 instanceof A) { // can't narrow type from 'any'
+if (obj2 instanceof A) { // narrowed to 'A'.
     obj2.foo;
     obj2.bar;
 }
@@ -28,14 +28,14 @@ interface B<T> {
 declare var B: BConstructor;
 
 var obj3: B<number> | string;
-if (obj3 instanceof B) { // narrowed to B<number>.
+if (obj3 instanceof B) { // narrowed to 'B<number>'.
     obj3.foo = 1;
     obj3.foo = "str";
     obj3.bar = "str";
 }
 
 var obj4: any;
-if (obj4 instanceof B) { // can't narrow type from 'any'
+if (obj4 instanceof B) { // narrowed to 'B<any>'
     obj4.foo = "str";
     obj4.foo = 1;
     obj4.bar = "str";
@@ -59,7 +59,7 @@ interface C2 {
 declare var C: CConstructor;
 
 var obj5: C1 | A;
-if (obj5 instanceof C) { // narrowed to C1|C2.
+if (obj5 instanceof C) { // narrowed to 'C1'.
     obj5.foo;
     obj5.c;
     obj5.bar1;
@@ -67,8 +67,9 @@ if (obj5 instanceof C) { // narrowed to C1|C2.
 }
 
 var obj6: any;
-if (obj6 instanceof C) { // can't narrow type from 'any'
+if (obj6 instanceof C) { // narrowed to 'C1 | C2'.
     obj6.foo;
+    obj6.c;
     obj6.bar1;
     obj6.bar2;
 }
@@ -80,13 +81,13 @@ interface D {
 declare var D: { new (): D; };
 
 var obj7: D | string;
-if (obj7 instanceof D) { // narrowed to D.
+if (obj7 instanceof D) { // narrowed to 'D'.
     obj7.foo;
     obj7.bar;
 }
 
 var obj8: any;
-if (obj8 instanceof D) { // can't narrow type from 'any'
+if (obj8 instanceof D) { // narrowed to 'D'.
     obj8.foo;
     obj8.bar;
 }
@@ -106,20 +107,20 @@ interface E2 {
 declare var E: EConstructor;
 
 var obj9: E1 | A;
-if (obj9 instanceof E) { // narrowed to E1 | E2
+if (obj9 instanceof E) { // narrowed to 'E1'
     obj9.foo;
     obj9.bar1;
     obj9.bar2;
 }
 
 var obj10: any;
-if (obj10 instanceof E) { // can't narrow type from 'any'
+if (obj10 instanceof E) { // narrowed to 'E1 | E2'
     obj10.foo;
     obj10.bar1;
     obj10.bar2;
 }
 
-// a construct signature that returns any
+// a construct signature that returns 'any'
 interface FConstructor {
     new (): any;
 }
@@ -130,21 +131,24 @@ interface F {
 declare var F: FConstructor;
 
 var obj11: F | string;
-if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
+if (obj11 instanceof F) { // can't narrow type, construct signature returns 'any', type remains 'F | string'
     obj11.foo;
     obj11.bar;
 }
 
 var obj12: any;
-if (obj12 instanceof F) { // can't narrow type from 'any'
+if (obj12 instanceof F) { // type is not narrowed, stays 'any'.
     obj12.foo;
     obj12.bar;
 }
 
-// a type with a prototype, it overrides the construct signature
+// A constructor type with a prototype.
+// The type of the prototype is taken over
+// the type returned by the construct signature,
+// so long as the prototype's type is not 'any'.
 interface GConstructor {
-    prototype: G1; // high priority
-    new (): G2;    // low priority
+    prototype: G1;
+    new (): G2;
 }
 interface G1 {
     foo1: number;
@@ -155,21 +159,23 @@ interface G2 {
 declare var G: GConstructor;
 
 var obj13: G1 | G2;
-if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
+if (obj13 instanceof G) { // narrowed to 'G1', (the type of the 'prototype' property).
     obj13.foo1;
     obj13.foo2;
 }
 
 var obj14: any;
-if (obj14 instanceof G) { // can't narrow type from 'any'
+if (obj14 instanceof G) { // narrowed to 'G1', (the type of the 'prototype' property).
     obj14.foo1;
     obj14.foo2;
 }
 
-// a type with a prototype that has any type
+// A type with a prototype that has the 'any' type.
+// Since 'prototype' is typed as 'any', we defer to
+// the type returned by the construct signature.
 interface HConstructor {
-    prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
-    new (): H;      // low priority
+    prototype: any;
+    new (): H;
 }
 interface H {
     foo: number;
@@ -177,13 +183,13 @@ interface H {
 declare var H: HConstructor;
 
 var obj15: H | string;
-if (obj15 instanceof H) { // narrowed to H.
+if (obj15 instanceof H) { // narrowed to 'H'.
     obj15.foo;
     obj15.bar;
 }
 
 var obj16: any;
-if (obj16 instanceof H) { // can't narrow type from 'any'
-    obj16.foo1;
-    obj16.foo2;
+if (obj16 instanceof H) { // narrowed to 'H'.
+    obj16.foo;
+    obj16.bar;
 }
