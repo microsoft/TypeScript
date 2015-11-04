@@ -157,7 +157,7 @@ namespace ts.server {
 
     const logger = createLoggerFromEnv();
 
-    let pending: string[] = [];
+    const pending: string[] = [];
     let canWrite = true;
     function writeMessage(s: string) {
         if (!canWrite) {

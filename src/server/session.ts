@@ -338,25 +338,25 @@ namespace ts.server {
 
         private getOccurrences(line: number, offset: number, fileName: string): protocol.OccurrencesResponseItem[] {
             fileName = ts.normalizePath(fileName);
-            let project = this.projectService.getProjectForFile(fileName);
+            const project = this.projectService.getProjectForFile(fileName);
 
             if (!project) {
                 throw Errors.NoProject;
             }
 
-            let { compilerService } = project;
-            let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
+            const { compilerService } = project;
+            const position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
 
-            let occurrences = compilerService.languageService.getOccurrencesAtPosition(fileName, position);
+            const occurrences = compilerService.languageService.getOccurrencesAtPosition(fileName, position);
 
             if (!occurrences) {
                 return undefined;
             }
 
             return occurrences.map(occurrence => {
-                let { fileName, isWriteAccess, textSpan } = occurrence;
-                let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
-                let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                const { fileName, isWriteAccess, textSpan } = occurrence;
+                const start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                const end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
                 return {
                     start,
                     end,
@@ -368,16 +368,16 @@ namespace ts.server {
 
         private getDocumentHighlights(line: number, offset: number, fileName: string, filesToSearch: string[]): protocol.DocumentHighlightsItem[] {
             fileName = ts.normalizePath(fileName);
-            let project = this.projectService.getProjectForFile(fileName);
+            const project = this.projectService.getProjectForFile(fileName);
 
             if (!project) {
                 throw Errors.NoProject;
             }
 
-            let { compilerService } = project;
-            let position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
+            const { compilerService } = project;
+            const position = compilerService.host.lineOffsetToPosition(fileName, line, offset);
 
-            let documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
+            const documentHighlights = compilerService.languageService.getDocumentHighlights(fileName, position, filesToSearch);
 
             if (!documentHighlights) {
                 return undefined;
@@ -386,7 +386,7 @@ namespace ts.server {
             return documentHighlights.map(convertToDocumentHighlightsItem);
 
             function convertToDocumentHighlightsItem(documentHighlights: ts.DocumentHighlights): ts.server.protocol.DocumentHighlightsItem {
-                let { fileName, highlightSpans } = documentHighlights;
+                const { fileName, highlightSpans } = documentHighlights;
 
                 return {
                     file: fileName,
@@ -394,9 +394,9 @@ namespace ts.server {
                 };
 
                 function convertHighlightSpan(highlightSpan: ts.HighlightSpan): ts.server.protocol.HighlightSpan {
-                    let { textSpan, kind } = highlightSpan;
-                    let start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
-                    let end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
+                    const { textSpan, kind } = highlightSpan;
+                    const start = compilerService.host.positionToLineOffset(fileName, textSpan.start);
+                    const end = compilerService.host.positionToLineOffset(fileName, ts.textSpanEnd(textSpan));
                     return { start, end, kind };
                 }
             }
@@ -404,9 +404,9 @@ namespace ts.server {
 
         private getProjectInfo(fileName: string, needFileNameList: boolean): protocol.ProjectInfo {
             fileName = ts.normalizePath(fileName);
-            let project = this.projectService.getProjectForFile(fileName);
+            const project = this.projectService.getProjectForFile(fileName);
 
-            let projectInfo: protocol.ProjectInfo = {
+            const projectInfo: protocol.ProjectInfo = {
                 configFileName: project.projectFilename
             };
 
@@ -640,7 +640,7 @@ namespace ts.server {
                             }
                             // i points to the first non whitespace character
                             if (preferredIndent !== hasIndent) {
-                                let firstNoWhiteSpacePosition = lineInfo.offset + i;
+                                const firstNoWhiteSpacePosition = lineInfo.offset + i;
                                 edits.push({
                                     span: ts.createTextSpanFromBounds(lineInfo.offset, firstNoWhiteSpacePosition),
                                     newText: generateIndentString(preferredIndent, editorOptions)
@@ -897,22 +897,22 @@ namespace ts.server {
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
-            let { configFileName, fileNames: fileNamesInProject } = this.getProjectInfo(fileName, true);
+            const { configFileName, fileNames } = this.getProjectInfo(fileName, true);
             // No need to analyze lib.d.ts
-            fileNamesInProject = fileNamesInProject.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
+            let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
 
             // Sort the file name list to make the recently touched files come first
-            let highPriorityFiles: string[] = [];
-            let mediumPriorityFiles: string[] = [];
-            let lowPriorityFiles: string[] = [];
-            let veryLowPriorityFiles: string[] = [];
-            let normalizedFileName = ts.normalizePath(fileName);
-            let project = this.projectService.getProjectForFile(normalizedFileName);
-            for (let fileNameInProject of fileNamesInProject) {
+            const highPriorityFiles: string[] = [];
+            const mediumPriorityFiles: string[] = [];
+            const lowPriorityFiles: string[] = [];
+            const veryLowPriorityFiles: string[] = [];
+            const normalizedFileName = ts.normalizePath(fileName);
+            const project = this.projectService.getProjectForFile(normalizedFileName);
+            for (const fileNameInProject of fileNamesInProject) {
                 if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
                     highPriorityFiles.push(fileNameInProject);
                 else {
-                    let info = this.projectService.getScriptInfo(fileNameInProject);
+                    const info = this.projectService.getScriptInfo(fileNameInProject);
                     if (!info.isOpen) {
                         if (fileNameInProject.indexOf(".d.ts") > 0)
                             veryLowPriorityFiles.push(fileNameInProject);
@@ -927,8 +927,8 @@ namespace ts.server {
             fileNamesInProject = highPriorityFiles.concat(mediumPriorityFiles).concat(lowPriorityFiles).concat(veryLowPriorityFiles);
 
             if (fileNamesInProject.length > 0) {
-                let checkList = fileNamesInProject.map<PendingErrorCheck>((fileName: string) => {
-                    let normalizedFileName = ts.normalizePath(fileName);
+                const checkList = fileNamesInProject.map<PendingErrorCheck>((fileName: string) => {
+                    const normalizedFileName = ts.normalizePath(fileName);
                     return { fileName: normalizedFileName, project };
                 });
                 // Project level error analysis runs on background files too, therefore
@@ -938,7 +938,7 @@ namespace ts.server {
         }
 
         getCanonicalFileName(fileName: string) {
-            let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return ts.normalizePath(name);
         }
 
@@ -1001,7 +1001,7 @@ namespace ts.server {
                 return {response: this.getDiagnostics(geterrArgs.delay, geterrArgs.files), responseRequired: false};
             },
             [CommandNames.GeterrForProject]: (request: protocol.Request) => {
-                let { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
+                const { file, delay } = <protocol.GeterrForProjectRequestArgs>request.arguments;
                 return {response: this.getDiagnosticsForProject(delay, file), responseRequired: false};
             },
             [CommandNames.Change]: (request: protocol.Request) => {
