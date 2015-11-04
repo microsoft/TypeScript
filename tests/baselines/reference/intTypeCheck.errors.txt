@@ -61,7 +61,7 @@ tests/cases/compiler/intTypeCheck.ts(176,22): error TS2304: Cannot find name 'i6
 tests/cases/compiler/intTypeCheck.ts(177,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
-tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Neither type 'Base' nor type 'i7' is assignable to the other.
+tests/cases/compiler/intTypeCheck.ts(185,17): error TS2323: Type 'Base' is not comparable with type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
@@ -377,7 +377,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj69: i7 = new obj66;
     var obj70: i7 = <i7>new Base;
                     ~~~~~~~~~~~~
-!!! error TS2352: Neither type 'Base' nor type 'i7' is assignable to the other.
+!!! error TS2323: Type 'Base' is not comparable with type 'i7'.
     var obj71: i7 = null;
     var obj72: i7 = function () { };
         ~~~~~
