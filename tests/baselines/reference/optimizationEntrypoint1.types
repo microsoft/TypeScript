@@ -1,0 +1,110 @@
+=== tests/cases/compiler/index.ts ===
+
+export * from "./a";
+export {Detail, Detail as DetailMock, Detail as DetailReal} from "./b";
+>Detail : any
+>Detail : any
+>DetailMock : any
+>Detail : any
+>DetailReal : any
+
+export interface Inner {
+>Inner : Inner
+
+	item4: number;
+>item4 : number
+}
+
+export interface default_1 { // make sure generated names don't clash
+>default_1 : default_1
+
+	number: number;
+>number : number
+}
+
+export {default as BBaseMain, Inner as Middle} from "./b";
+>default : typeof Main
+>BBaseMain : typeof Main
+>Inner : any
+>Middle : any
+
+export {default as CBaseMain, Inner as Innermost} from "./c";
+>default : typeof Main
+>CBaseMain : typeof Main
+>Inner : any
+>Innermost : any
+
+export {default} from "./a";
+>default : typeof Main
+
+=== tests/cases/compiler/a.ts ===
+import {default as BaseMain, Inner as Middle} from "./b";
+>default : typeof BaseMain
+>BaseMain : typeof BaseMain
+>Inner : any
+>Middle : any
+
+export default class Main extends BaseMain {
+>Main : Main
+>BaseMain : BaseMain
+
+	memberc: Middle;
+>memberc : Middle
+>Middle : Middle
+}
+
+export interface Inner {
+>Inner : Inner
+
+	item3: number;
+>item3 : number
+}
+
+=== tests/cases/compiler/b.ts ===
+import {default as BaseMain, Inner as Innermost} from "./c";
+>default : typeof BaseMain
+>BaseMain : typeof BaseMain
+>Inner : any
+>Innermost : any
+
+export default class Main extends BaseMain {
+>Main : Main
+>BaseMain : BaseMain
+
+	member2: Innermost;
+>member2 : Innermost
+>Innermost : Innermost
+
+	details: Detail;
+>details : Detail
+>Detail : Detail
+}
+
+export interface Inner {
+>Inner : Inner
+
+	item2: number;
+>item2 : number
+}
+
+export interface Detail {
+>Detail : Detail
+
+	id: string;
+>id : string
+}
+
+=== tests/cases/compiler/c.ts ===
+export default class Main {
+>Main : Main
+
+	member1: string;
+>member1 : string
+}
+
+export interface Inner {
+>Inner : Inner
+
+	item: number;
+>item : number
+}

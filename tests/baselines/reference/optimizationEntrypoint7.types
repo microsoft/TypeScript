@@ -1,0 +1,34 @@
+=== tests/cases/compiler/node_modules/foo/index.d.ts ===
+
+export class Dependency {}
+>Dependency : Dependency
+
+=== tests/cases/compiler/node_modules/bar/index.d.ts ===
+export class Dependency {}
+>Dependency : Dependency
+
+=== tests/cases/compiler/main.ts ===
+export * from "./interop";
+export class Baz {}
+>Baz : Baz
+
+=== tests/cases/compiler/interop/index.ts ===
+export * from "./foodep";
+No type information for this code.export * from "./bardep";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/interop/foodep.ts ===
+import {Dependency} from "foo";
+>Dependency : typeof Dependency
+
+export class FooDependency extends Dependency {}
+>FooDependency : FooDependency
+>Dependency : Dependency
+
+=== tests/cases/compiler/interop/bardep.ts ===
+import {Dependency} from "bar";
+>Dependency : typeof Dependency
+
+export class BarDependency extends Dependency {}
+>BarDependency : BarDependency
+>Dependency : Dependency
+

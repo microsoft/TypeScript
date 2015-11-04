@@ -7,6 +7,18 @@ namespace ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
+    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string {
+        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
+    }
+
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+        let file = resolver.getExternalModuleFileFromDeclaration(declaration);
+        if (!file || isDeclarationFile(file)) {
+            return undefined;
+        }
+        return getResolvedExternalModuleName(host, file);
+    }
+
     type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
 
     const enum Jump {
@@ -332,17 +344,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         let newLine = host.getNewLine();
         let jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
         let shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
+        let outFile = compilerOptions.outFile || compilerOptions.out;
 
         if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
-                }
-            });
-
-            if (compilerOptions.outFile || compilerOptions.out) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+            if (outFile) {
+                emitFile(outFile);
+            }
+            else {
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                        let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
+                        emitFile(jsFilePath, sourceFile);
+                    }
+                });
             }
         }
         else {
@@ -351,8 +365,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
-            else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+            else if (!isDeclarationFile(targetSourceFile) && outFile) {
+                emitFile(outFile);
             }
         }
 
@@ -539,12 +553,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** If removeComments is true, no leading-comments needed to be emitted **/
             let emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
 
-            let moduleEmitDelegates: Map<(node: SourceFile) => void> = {
+            let moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
                 [ModuleKind.UMD]: emitUMDModule,
                 [ModuleKind.CommonJS]: emitCommonJSModule,
+            };
+
+            let bundleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+                [ModuleKind.ES6]() {},
+                [ModuleKind.AMD]: emitAMDModule,
+                [ModuleKind.System]: emitSystemModule,
+                [ModuleKind.UMD]() {},
+                [ModuleKind.CommonJS]() {},
             };
 
             if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
@@ -556,8 +578,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitSourceFile(root);
             }
             else {
+                if (modulekind) {
+                    forEach(host.getSourceFiles(), emitEmitHelpers);
+                }
                 forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    if ((!isExternalModuleOrDeclarationFile(sourceFile)) || (modulekind && isExternalModule(sourceFile))) {
                         emitSourceFile(sourceFile);
                     }
                 });
@@ -7250,7 +7275,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function emitSystemModule(node: SourceFile): void {
+            function writeModuleName(node: SourceFile, emitRelativePathAsModuleName?: boolean): void {
+                let moduleName = node.moduleName;
+                if (moduleName || (emitRelativePathAsModuleName && (moduleName = getResolvedExternalModuleName(host, node)))) {
+                    write(`"${moduleName}", `);
+                }
+            }
+
+            function emitSystemModule(node: SourceFile,  emitRelativePathAsModuleName?: boolean): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -7265,9 +7297,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportFunctionForFile = makeUniqueName("exports");
                 writeLine();
                 write("System.register(");
-                if (node.moduleName) {
-                    write(`"${node.moduleName}", `);
-                }
+                writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
                 let groupIndices: Map<number> = {};
@@ -7290,6 +7320,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
+                    if (emitRelativePathAsModuleName) {
+                        let name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
+                        if (name) {
+                            text = `"${name}"`;
+                        }
+                    }
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
@@ -7310,7 +7346,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 importAliasNames: string[];
             }
 
-            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean): AMDDependencyNames {
+            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean, emitRelativePathAsModuleName?: boolean): AMDDependencyNames {
                 // names of modules with corresponding parameter in the factory function
                 let aliasedModuleNames: string[] = [];
                 // names of modules with no corresponding parameters in factory function
@@ -7334,6 +7370,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Find the name of the external module
                     let externalModuleName = getExternalModuleNameText(importNode);
 
+                    if (emitRelativePathAsModuleName) {
+                        let name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
+                        if (name) {
+                            externalModuleName = `"${name}"`;
+                        }
+                    }
+
                     // Find the name of the module alias, if there is one
                     let importAliasName = getLocalNameForExternalImport(importNode);
                     if (includeNonAmdDependencies && importAliasName) {
@@ -7348,7 +7391,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
             }
 
-            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean, emitRelativePathAsModuleName?: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
                 //
@@ -7361,7 +7404,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
 
-                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies);
+                let dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies, emitRelativePathAsModuleName);
                 emitAMDDependencyList(dependencyNames);
                 write(", ");
                 emitAMDFactoryHeader(dependencyNames);
@@ -7389,16 +7432,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(") {");
             }
 
-            function emitAMDModule(node: SourceFile) {
+            function emitAMDModule(node: SourceFile, emitRelativePathAsModuleName?: boolean) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
                 writeLine();
                 write("define(");
-                if (node.moduleName) {
-                    write("\"" + node.moduleName + "\", ");
-                }
-                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
+                writeModuleName(node, emitRelativePathAsModuleName);
+                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
                 let startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
@@ -7647,8 +7688,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitDetachedCommentsAndUpdateCommentsInfo(node);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
-                    emitModule(node);
+                    if (root || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
+                        let emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
+                        emitModule(node);
+                    }
+                    else {
+                        bundleEmitDelegates[modulekind](node, /*emitRelativePathAsModuleName*/true);
+                    }
                 }
                 else {
                     // emit prologue directives prior to __extends

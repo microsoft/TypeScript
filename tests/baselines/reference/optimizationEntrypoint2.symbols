@@ -1,0 +1,35 @@
+=== tests/cases/compiler/index.ts ===
+
+import * as t from "./foo";
+>t : Symbol(t, Decl(index.ts, 1, 6))
+
+export = t;
+>t : Symbol(t, Decl(index.ts, 1, 6))
+
+=== tests/cases/compiler/foo.ts ===
+export * from "./bar";
+
+export class Foo<T> extends Array<T> {
+>Foo : Symbol(Foo, Decl(foo.ts, 0, 22))
+>T : Symbol(T, Decl(foo.ts, 2, 17))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>T : Symbol(T, Decl(foo.ts, 2, 17))
+
+	self: this;
+>self : Symbol(self, Decl(foo.ts, 2, 38))
+}
+
+=== tests/cases/compiler/bar.ts ===
+
+import {Foo} from "./foo";
+>Foo : Symbol(Foo, Decl(bar.ts, 1, 8))
+
+export class Bar extends Foo<Foo<number>> {
+>Bar : Symbol(Bar, Decl(bar.ts, 1, 26))
+>Foo : Symbol(Foo, Decl(bar.ts, 1, 8))
+>Foo : Symbol(Foo, Decl(bar.ts, 1, 8))
+
+	primary: Foo<number>;
+>primary : Symbol(primary, Decl(bar.ts, 3, 43))
+>Foo : Symbol(Foo, Decl(bar.ts, 1, 8))
+}

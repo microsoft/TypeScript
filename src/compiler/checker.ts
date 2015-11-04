@@ -94,7 +94,8 @@ namespace ts {
 
             getJsxElementAttributesType,
             getJsxIntrinsicTagNames,
-            isOptionalParameter
+            isOptionalParameter,
+            getSymbolWalker
         };
 
         let unknownSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "unknown");
@@ -2050,6 +2051,164 @@ namespace ts {
                 buildSignatureDisplay,
                 buildReturnTypeDisplay
             });
+        }
+
+        function getSymbolWalker(accept: (symbol: Symbol) => boolean = () => true): SymbolWalker {
+            let visited: Type[] = [];
+            let visitedSymbols: Symbol[] = [];
+
+            return {
+                visitType,
+                visitTypeFromSymbol,
+                reset: (newCallback: (symbol: Symbol) => boolean = () => true) => {
+                    accept = newCallback;
+                    visited = [];
+                    visitedSymbols = [];
+                }
+            };
+
+            function visitType(type: Type): void {
+                if (!type) {
+                    return;
+                }
+                if (contains(visited, type)) {
+                    return;
+                }
+                visited.push(type);
+                if (type.symbol) {
+                    if (!accept(type.symbol)) {
+                        return;
+                    }
+                }
+
+                // Visit the type's related types, if any
+                if (type.flags & TypeFlags.Reference) {
+                    visitTypeReference(type as TypeReference);
+                }
+                if (type.flags & TypeFlags.TypeParameter) {
+                    visitTypeParameter(type as TypeParameter);
+                }
+                if (type.flags & TypeFlags.Tuple) {
+                    visitTupleType(type as TupleType);
+                }
+                if (type.flags & TypeFlags.UnionOrIntersection) {
+                    visitUnionOrIntersectionType(type as UnionOrIntersectionType);
+                }
+                if (type.flags & (TypeFlags.Class | TypeFlags.Interface)) {
+                    visitInterfaceType(type as InterfaceType);
+                }
+                if (type.flags & TypeFlags.Anonymous) {
+                    visitObjectType(type as ObjectType);
+                }
+            }
+
+            function visitTypeList(types: Type[]): void {
+                if (!types) {
+                    return;
+                }
+                for (let i = 0; i < types.length; i++) {
+                    visitType(types[i]);
+                }
+            }
+
+            function visitTypeReference(type: TypeReference): void {
+                visitType(type.target);
+                let typeArguments: Type[] = type.typeArguments || emptyArray;
+                if (type.target === globalArrayType) { // Shortcut
+                    visitType(typeArguments[0]);
+                }
+                else {
+                    visitTypeList(typeArguments);
+                }
+            }
+
+            function visitTypeParameter(type: TypeParameter): void {
+                visitType(type.constraint);
+            }
+
+            function visitTupleType(type: TupleType): void {
+                visitTypeList(type.elementTypes);
+            }
+
+            function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
+                visitTypeList(type.types);
+            }
+
+            function visitSignature(signature: Signature): void {
+                if (signature.typePredicate) {
+                    visitType(signature.typePredicate.type);
+                }
+                visitTypeList(signature.typeParameters);
+
+                for (let parameter of signature.parameters){
+                    visitTypeFromSymbol(parameter);
+                }
+                visitType(getRestTypeOfSignature(signature));
+                visitType(getReturnTypeOfSignature(signature));
+            }
+
+            function visitInterfaceType(interfaceT: InterfaceType): void {
+                visitObjectType(interfaceT);
+                if (interfaceT.typeParameters) {
+                    visitTypeList(interfaceT.typeParameters);
+                }
+                visitTypeList(getBaseTypes(interfaceT));
+                visitType(interfaceT.thisType);
+            }
+
+            function visitObjectType(type: ObjectType): void {
+                let resolved = resolveStructuredTypeMembers(type);
+
+                if (resolved.stringIndexType) {
+                    visitType(resolved.stringIndexType);
+                }
+                if (resolved.numberIndexType) {
+                    visitType(resolved.numberIndexType);
+                }
+                for (let signature of resolved.callSignatures) {
+                    visitSignature(signature);
+                }
+                for (let signature of resolved.constructSignatures) {
+                    visitSignature(signature);
+                }
+                for (let p of resolved.properties) {
+                    visitTypeFromSymbol(p);
+                }
+            }
+
+            function visitTypeFromSymbol(symbol: Symbol): void {
+                if (contains(visitedSymbols, symbol)) {
+                    return;
+                }
+                visitedSymbols.push(symbol);
+                if (!accept(symbol)) {
+                    return;
+                }
+                let t = getTypeOfSymbol(symbol);
+                visitType(t); // Should handle members on classes and such
+                if (symbol.flags & SymbolFlags.HasExports) {
+                    forEachValue(symbol.exports, visitTypeFromSymbol);
+                }
+                forEach(symbol.declarations, d => {
+                    // Type queries are too far resolved when we just visit the symbol's type
+                    // So to get the intervening symbols, we need to check if there's a type
+                    // query node on any of the symbol's declarations and get symbols there
+                    if ((d as any).type && (d as any).type.kind === SyntaxKind.TypeQuery) {
+                        let query = (d as any).type as TypeQueryNode;
+                        let entity = leftmostSymbol(query.exprName);
+                        visitTypeFromSymbol(entity);
+                    }
+                });
+
+                function leftmostSymbol(expr: QualifiedName | Identifier): Symbol {
+                    if (expr.kind === SyntaxKind.Identifier) {
+                        return getResolvedSymbol(expr as Identifier);
+                    }
+                    else {
+                        return leftmostSymbol((expr as QualifiedName).left);
+                    }
+                }
+            }
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
@@ -14900,8 +15059,32 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
-                isArgumentsLocalBinding
+                getExportsOfModule: getExportsOfModuleAsArray,
+                getDefiningTypeOfSymbol: (symbol: Symbol) => {
+                    let declaredType = getDeclaredTypeOfSymbol(symbol);
+                    if (declaredType !== unknownType) {
+                        return declaredType;
+                    }
+                    let valueType = getTypeOfSymbol(symbol);
+                    if (valueType !== unknownType) {
+                        return valueType;
+                    }
+                },
+                resolveEntityName,
+                getSymbolWalker,
+                isArgumentsLocalBinding,
+                getExternalModuleFileFromDeclaration,
+                getSymbolAtLocation,
             };
+        }
+
+        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
+                const specifier = getExternalModuleName(declaration);
+                const moduleSymbol = getSymbolAtLocation(specifier);
+                if (!moduleSymbol) {
+                    return undefined;
+                }
+                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
         function initializeTypeChecker() {

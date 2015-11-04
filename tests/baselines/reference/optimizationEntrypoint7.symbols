@@ -1,0 +1,34 @@
+=== tests/cases/compiler/node_modules/foo/index.d.ts ===
+
+export class Dependency {}
+>Dependency : Symbol(Dependency, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/node_modules/bar/index.d.ts ===
+export class Dependency {}
+>Dependency : Symbol(Dependency, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/main.ts ===
+export * from "./interop";
+export class Baz {}
+>Baz : Symbol(Baz, Decl(main.ts, 0, 26))
+
+=== tests/cases/compiler/interop/index.ts ===
+export * from "./foodep";
+No type information for this code.export * from "./bardep";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/interop/foodep.ts ===
+import {Dependency} from "foo";
+>Dependency : Symbol(Dependency, Decl(foodep.ts, 0, 8))
+
+export class FooDependency extends Dependency {}
+>FooDependency : Symbol(FooDependency, Decl(foodep.ts, 0, 31))
+>Dependency : Symbol(Dependency, Decl(foodep.ts, 0, 8))
+
+=== tests/cases/compiler/interop/bardep.ts ===
+import {Dependency} from "bar";
+>Dependency : Symbol(Dependency, Decl(bardep.ts, 0, 8))
+
+export class BarDependency extends Dependency {}
+>BarDependency : Symbol(BarDependency, Decl(bardep.ts, 0, 31))
+>Dependency : Symbol(Dependency, Decl(bardep.ts, 0, 8))
+

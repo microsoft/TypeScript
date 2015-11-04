@@ -1,0 +1,41 @@
+=== tests/cases/compiler/typings/foo/index.d.ts ===
+
+declare module "foo" {
+	export class Dependency {}
+>Dependency : Symbol(Dependency, Decl(index.d.ts, 1, 22))
+}
+
+=== tests/cases/compiler/typings/bar/index.d.ts ===
+declare module "bar" {
+	export class Dependency {}
+>Dependency : Symbol(Dependency, Decl(index.d.ts, 0, 22))
+}
+
+=== tests/cases/compiler/main.ts ===
+///<reference path="./typings/foo/index.d.ts" />
+///<reference path="./typings/bar/index.d.ts" />
+export * from "./interop/index";
+export default 2+2;
+export class Baz {}
+>Baz : Symbol(Baz, Decl(main.ts, 3, 19))
+
+=== tests/cases/compiler/interop/index.ts ===
+export * from "./foodep";
+No type information for this code.export * from "./bardep";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/interop/foodep.ts ===
+import {Dependency} from "foo";
+>Dependency : Symbol(Dependency, Decl(foodep.ts, 0, 8))
+
+export class FooDependency extends Dependency {}
+>FooDependency : Symbol(FooDependency, Decl(foodep.ts, 0, 31))
+>Dependency : Symbol(Dependency, Decl(foodep.ts, 0, 8))
+
+=== tests/cases/compiler/interop/bardep.ts ===
+import {Dependency} from "bar";
+>Dependency : Symbol(Dependency, Decl(bardep.ts, 0, 8))
+
+export class BarDependency extends Dependency {}
+>BarDependency : Symbol(BarDependency, Decl(bardep.ts, 0, 31))
+>Dependency : Symbol(Dependency, Decl(bardep.ts, 0, 8))
+

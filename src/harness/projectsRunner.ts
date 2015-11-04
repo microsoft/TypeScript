@@ -306,7 +306,10 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     let outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
+                    let file = findOutpuDtsFile(outputDtsFileName);
+                    if (file) {
+                        allInputFiles.unshift(file);
+                    }
                 }
                 else {
                     let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
@@ -346,7 +349,7 @@ class ProjectRunner extends RunnerBase {
             let inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
                 sourceFile => sourceFile.fileName !== "lib.d.ts"),
                 sourceFile => {
-                    return { unitName: sourceFile.fileName, content: sourceFile.text };
+                    return { unitName: RunnerBase.removeFullPaths(sourceFile.fileName), content: sourceFile.text };
                 });
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
@@ -387,7 +390,7 @@ class ProjectRunner extends RunnerBase {
                         return resolutionInfo;
                     }
 
-                    it(name + ": " + moduleNameToString(moduleKind) , () => {
+                    it(name + ": " + moduleNameToString(moduleKind), () => {
                         // Compile using node
                         compilerResult = batchCompilerProjectTestCase(moduleKind);
                     });

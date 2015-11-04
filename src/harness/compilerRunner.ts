@@ -183,8 +183,9 @@ class CompilerBaselineRunner extends RunnerBase {
                                 jsCode += result.declFilesCode[i].code;
                             }
                         }
-
+                        options.optimizationEntrypoint = undefined;
                         let declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
+                            delete tcSettings["optimizationEntrypoint"];
                             harnessCompiler.setCompilerSettings(tcSettings);
                         }, options);
 

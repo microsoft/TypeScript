@@ -1,0 +1,35 @@
+=== tests/cases/compiler/index.ts ===
+
+import * as t from "./foo";
+>t : typeof t
+
+export = t;
+>t : typeof t
+
+=== tests/cases/compiler/foo.ts ===
+export * from "./bar";
+
+export class Foo<T> extends Array<T> {
+>Foo : Foo<T>
+>T : T
+>Array : T[]
+>T : T
+
+	self: this;
+>self : this
+}
+
+=== tests/cases/compiler/bar.ts ===
+
+import {Foo} from "./foo";
+>Foo : typeof Foo
+
+export class Bar extends Foo<Foo<number>> {
+>Bar : Bar
+>Foo : Foo<Foo<number>>
+>Foo : Foo<T>
+
+	primary: Foo<number>;
+>primary : Foo<number>
+>Foo : Foo<T>
+}

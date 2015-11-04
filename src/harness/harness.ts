@@ -1157,6 +1157,16 @@ namespace Harness {
                 if (options.declaration && result.errors.length === 0 && result.declFilesCode.length > 0) {
                     ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                     ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
+                    let outFile = options.outFile || options.out;
+                    if (outFile) {
+                        let dTsFileName = ts.removeFileExtension(outFile) + ".d.ts";
+                        if (!findUnit(dTsFileName, declInputFiles) && !findUnit(dTsFileName, declOtherFiles)) {
+                            let out = ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
+                            if (out) {
+                                declInputFiles.push({unitName: out.fileName, content: out.code});
+                            }
+                        }
+                    }
                     this.compileFiles(declInputFiles, declOtherFiles, function (compileResult) { declResult = compileResult; },
                         settingsCallback, options, currentDirectory);
 
@@ -1169,7 +1179,7 @@ namespace Harness {
                     }
                     else if (isTS(file.unitName)) {
                         let declFile = findResultCodeFile(file.unitName);
-                        if (!findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
+                        if (declFile && !findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
                             dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
                         }
                     }
@@ -1191,7 +1201,6 @@ namespace Harness {
                             }
                         }
                         else {
-                            // Goes to single --out file
                             sourceFileName = outFile;
                         }
 
@@ -1199,10 +1208,10 @@ namespace Harness {
 
                         return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
                     }
+                }
 
-                    function findUnit(fileName: string, units: { unitName: string; content: string; }[]) {
-                        return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
-                    }
+                function findUnit(fileName: string, units: { unitName: string; content: string; }[]) {
+                    return ts.forEach(units, unit => unit.unitName === fileName ? unit : undefined);
                 }
             }
         }

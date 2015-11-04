@@ -925,6 +925,10 @@ namespace ts {
                 }
             });
 
+            if (!commonPathComponents) { // Can happen when all input files are .d.ts files
+                return currentDirectory;
+            }
+
             return getNormalizedPathFromPathComponents(commonPathComponents);
         }
 
@@ -1026,12 +1030,16 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es2015_when_targeting_ES5_or_lower));
             }
 
+            // Cannot specify module gen that isn't amd or system with --out
+            if (outFile && options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+            }
+
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
-                (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
-                    (!outFile || firstExternalModuleSourceFile !== undefined))) {
+                options.mapRoot) { // there is --mapRoot specified
 
                 if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
@@ -1071,6 +1079,21 @@ namespace ts {
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
+            }
+
+            let entrypointPath = options.optimizationEntrypoint;
+            if (entrypointPath) {
+                if (entrypointPath && !(outFile && options.module)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_with_both_options_1_and_2, "optimizationEntrypoint", "module", "outFile"));
+                }
+
+                let entrypoint = getSourceFile(entrypointPath);
+                if (!entrypoint) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_not_found, entrypointPath));
+                }
+                if (!isExternalModule(entrypoint)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_a_module, entrypointPath));
+                }
             }
         }
     }

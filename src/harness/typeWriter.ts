@@ -37,9 +37,17 @@ class TypeWriterWalker {
     }
 
     private logTypeAndSymbol(node: ts.Node): void {
-        let actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
-        let lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
-        let sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        let sourceText: string;
+        let resultLine = 0;
+        if (node.flags & ts.NodeFlags.Synthetic) {
+            sourceText = (node as any).text;
+        }
+        else {
+            let actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
+            let lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
+            resultLine = lineAndCharacter.line;
+            sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        }
 
         // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
         // let type = this.checker.getTypeAtLocation(node);
@@ -66,7 +74,7 @@ class TypeWriterWalker {
         }
 
         this.results.push({
-            line: lineAndCharacter.line,
+            line: resultLine,
             syntaxKind: node.kind,
             sourceText: sourceText,
             type: typeString,

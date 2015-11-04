@@ -1,0 +1,110 @@
+=== tests/cases/compiler/index.ts ===
+
+export * from "./a";
+export {Detail, Detail as DetailMock, Detail as DetailReal} from "./b";
+>Detail : Symbol(Detail, Decl(index.ts, 2, 8))
+>Detail : Symbol(DetailMock, Decl(index.ts, 2, 15))
+>DetailMock : Symbol(DetailMock, Decl(index.ts, 2, 15))
+>Detail : Symbol(DetailReal, Decl(index.ts, 2, 37))
+>DetailReal : Symbol(DetailReal, Decl(index.ts, 2, 37))
+
+export interface Inner {
+>Inner : Symbol(Inner, Decl(index.ts, 2, 71))
+
+	item4: number;
+>item4 : Symbol(item4, Decl(index.ts, 4, 24))
+}
+
+export interface default_1 { // make sure generated names don't clash
+>default_1 : Symbol(default_1, Decl(index.ts, 6, 1))
+
+	number: number;
+>number : Symbol(number, Decl(index.ts, 8, 28))
+}
+
+export {default as BBaseMain, Inner as Middle} from "./b";
+>default : Symbol(BBaseMain, Decl(index.ts, 12, 8))
+>BBaseMain : Symbol(BBaseMain, Decl(index.ts, 12, 8))
+>Inner : Symbol(Middle, Decl(index.ts, 12, 29))
+>Middle : Symbol(Middle, Decl(index.ts, 12, 29))
+
+export {default as CBaseMain, Inner as Innermost} from "./c";
+>default : Symbol(CBaseMain, Decl(index.ts, 13, 8))
+>CBaseMain : Symbol(CBaseMain, Decl(index.ts, 13, 8))
+>Inner : Symbol(Innermost, Decl(index.ts, 13, 29))
+>Innermost : Symbol(Innermost, Decl(index.ts, 13, 29))
+
+export {default} from "./a";
+>default : Symbol(default, Decl(index.ts, 14, 8))
+
+=== tests/cases/compiler/a.ts ===
+import {default as BaseMain, Inner as Middle} from "./b";
+>default : Symbol(BaseMain, Decl(a.ts, 0, 8))
+>BaseMain : Symbol(BaseMain, Decl(a.ts, 0, 8))
+>Inner : Symbol(Middle, Decl(a.ts, 0, 28))
+>Middle : Symbol(Middle, Decl(a.ts, 0, 28))
+
+export default class Main extends BaseMain {
+>Main : Symbol(Main, Decl(a.ts, 0, 57))
+>BaseMain : Symbol(BaseMain, Decl(a.ts, 0, 8))
+
+	memberc: Middle;
+>memberc : Symbol(memberc, Decl(a.ts, 2, 44))
+>Middle : Symbol(Middle, Decl(a.ts, 0, 28))
+}
+
+export interface Inner {
+>Inner : Symbol(Inner, Decl(a.ts, 4, 1))
+
+	item3: number;
+>item3 : Symbol(item3, Decl(a.ts, 6, 24))
+}
+
+=== tests/cases/compiler/b.ts ===
+import {default as BaseMain, Inner as Innermost} from "./c";
+>default : Symbol(BaseMain, Decl(b.ts, 0, 8))
+>BaseMain : Symbol(BaseMain, Decl(b.ts, 0, 8))
+>Inner : Symbol(Innermost, Decl(b.ts, 0, 28))
+>Innermost : Symbol(Innermost, Decl(b.ts, 0, 28))
+
+export default class Main extends BaseMain {
+>Main : Symbol(Main, Decl(b.ts, 0, 60))
+>BaseMain : Symbol(BaseMain, Decl(b.ts, 0, 8))
+
+	member2: Innermost;
+>member2 : Symbol(member2, Decl(b.ts, 2, 44))
+>Innermost : Symbol(Innermost, Decl(b.ts, 0, 28))
+
+	details: Detail;
+>details : Symbol(details, Decl(b.ts, 3, 20))
+>Detail : Symbol(Detail, Decl(b.ts, 9, 1))
+}
+
+export interface Inner {
+>Inner : Symbol(Inner, Decl(b.ts, 5, 1))
+
+	item2: number;
+>item2 : Symbol(item2, Decl(b.ts, 7, 24))
+}
+
+export interface Detail {
+>Detail : Symbol(Detail, Decl(b.ts, 9, 1))
+
+	id: string;
+>id : Symbol(id, Decl(b.ts, 11, 25))
+}
+
+=== tests/cases/compiler/c.ts ===
+export default class Main {
+>Main : Symbol(Main, Decl(c.ts, 0, 0))
+
+	member1: string;
+>member1 : Symbol(member1, Decl(c.ts, 0, 27))
+}
+
+export interface Inner {
+>Inner : Symbol(Inner, Decl(c.ts, 2, 1))
+
+	item: number;
+>item : Symbol(item, Decl(c.ts, 4, 24))
+}

@@ -256,6 +256,13 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
+            name: "optimizationEntrypoint",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Specifies_the_script_file_used_as_the_entrypoint_for_optimizations,
+            paramType: Diagnostics.FILE
+        },
+        {
             name: "allowUnusedLabels",
             type: "boolean",
             description: Diagnostics.Do_not_report_errors_on_unused_labels

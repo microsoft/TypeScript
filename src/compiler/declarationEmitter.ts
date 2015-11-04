@@ -55,6 +55,8 @@ namespace ts {
         let errorNameNode: DeclarationName;
         let emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         let emit = compilerOptions.stripInternal ? stripInternal : emitNode;
+        let noDeclare = false;
+        let symbolGeneratedNameMap: Map<string> = {};
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -102,28 +104,65 @@ namespace ts {
             }
         }
         else {
-            // Emit references corresponding to this file
-            let emittedReferencedFiles: SourceFile[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-
-                    emitSourceFile(sourceFile);
+            if (compilerOptions.optimizationEntrypoint) {
+                let path = compilerOptions.optimizationEntrypoint;
+                let entrypoint = host.getSourceFile(path);
+                if (!entrypoint) {
+                    return {reportedDeclarationError: true, synchronousDeclarationOutput: "", referencePathsOutput: "", moduleElementDeclarationEmitInfo: []};
                 }
-            });
+                noDeclare = false;
+                let emittedReferencedFiles: SourceFile[] = [];
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isDeclarationFile(sourceFile)) {
+                        emitReferences(sourceFile, emittedReferencedFiles);
+                    }
+                });
+                emitFlattenedTypeDefinitions(entrypoint);
+            }
+            else {
+                // Emit references corresponding to this file
+                let emittedReferencedFiles: SourceFile[] = [];
+                let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (!isDeclarationFile(sourceFile)) {
+                        emitReferences(sourceFile, emittedReferencedFiles);
+                    }
+                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                        noDeclare = false;
+                        emitSourceFile(sourceFile);
+                    }
+                    else if (isExternalModule(sourceFile)) {
+                        noDeclare = true;
+                        write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
+                        writeLine();
+                        increaseIndent();
+                        emitSourceFile(sourceFile);
+                        decreaseIndent();
+                        write("}");
+                        writeLine();
+
+                        // create asynchronous output for the importDeclarations
+                        if (moduleElementDeclarationEmitInfo.length) {
+                            let oldWriter = writer;
+                            forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                                if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
+                                    Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
+                                    createAndSetNewTextWriterWithSymbolWriter();
+                                    Debug.assert(aliasEmitInfo.indent === 1);
+                                    increaseIndent();
+                                    writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
+                                    aliasEmitInfo.asynchronousOutput = writer.getText();
+                                    decreaseIndent();
+                                }
+                            });
+                            setWriter(oldWriter);
+                        }
+                        prevModuleElementDeclarationEmitInfo = prevModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                        moduleElementDeclarationEmitInfo = [];
+                    }
+                });
+                moduleElementDeclarationEmitInfo = moduleElementDeclarationEmitInfo.concat(prevModuleElementDeclarationEmitInfo);
+            }
         }
 
         return {
@@ -132,6 +171,408 @@ namespace ts {
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
         };
+
+        function emitReferences(sourceFile: SourceFile, emittedReferencedFiles: FileReference[]) {
+            // Check what references need to be added
+            if (!compilerOptions.noResolve) {
+                forEach(sourceFile.referencedFiles, fileReference => {
+                    let referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+
+                    // If the reference file is a declaration file or an external module, emit that reference
+                    if (referencedFile && (isDeclarationFile(referencedFile) &&
+                        !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
+
+                        writeReferencePath(referencedFile);
+                        emittedReferencedFiles.push(referencedFile);
+                    }
+                });
+            }
+        }
+
+        function emitFlattenedTypeDefinitions(entrypoint: SourceFile): void {
+            const aliasEmits: (() => void)[] = [];
+            const symbolNameSet: Map<number> = {};
+            const imports: Map<Declaration[]> = {};
+            const importEquals: Map<Declaration[]> = {};
+            const exportedMembers = resolver.getExportsOfModule(entrypoint.symbol);
+
+            // Handle an export=import as soon as possible
+            const maybeRedirectionType = exportedMembers.length && resolver.getDefiningTypeOfSymbol(exportedMembers[0]);
+            if (maybeRedirectionType && maybeRedirectionType.symbol && exportedMembers[0].name === "export=" && maybeRedirectionType.symbol.valueDeclaration && maybeRedirectionType.symbol.valueDeclaration.kind === SyntaxKind.SourceFile) {
+                return emitFlattenedTypeDefinitions(maybeRedirectionType.symbol.valueDeclaration as SourceFile);
+            }
+
+            const createSymbolEntry = (name: string, id: number) => {
+                symbolNameSet[name] = 1;
+                symbolGeneratedNameMap[id] = name;
+            };
+            const generateName = (symbol: Symbol, name: string = symbol.name): string => {
+                const id = getSymbolId(symbol);
+                if (name in symbolNameSet) {
+                    let generatedName = `${name}_${symbolNameSet[name]}`;
+                    while (!!symbolNameSet[generatedName]) {
+                        generatedName = `${name}_${++symbolNameSet[name]}`;
+                    }
+                    symbolNameSet[name]++;
+                    createSymbolEntry(generatedName, id);
+                    return generatedName;
+                }
+                else {
+                    createSymbolEntry(name, id);
+                    return name;
+                }
+            };
+            let createDefaultExportAlias = (): string => {
+                let name = "default_1";
+                while (!!symbolNameSet[name]) {
+                    name += "_1";
+                }
+                symbolNameSet[name] = 1;
+                return name;
+            };
+            let writeExportAssignment = (tempname: string): void => undefined;
+
+            let exportEquals: Type;
+            const moduleIdReverseLookup = buildModuleDtsReverseLookupTable(entrypoint);
+            const declarations = collectExportedDeclarations(exportedMembers);
+            const dependentDeclarations = collectDependentDeclarations(exportedMembers);
+
+            const alias = createDefaultExportAlias();
+            forEachValue(dependentDeclarations, d => {
+                generateName(d.symbol);
+            });
+
+            forEachKey(imports, fileName => {
+                write("import {");
+                writeLine();
+                increaseIndent();
+                forEach(imports[fileName], declaration => {
+                    const symbol = declaration.symbol;
+                    if (!symbol) {
+                        return;
+                    }
+                    // Alias the import if need be
+                    const name = generateName(symbol);
+                    write(symbol.name !== name ? `${symbol.name} as ${name},` : `${symbol.name},`);
+                    writeLine();
+                });
+                decreaseIndent();
+                // Handle module identifiers
+                write(fileName.match(/^('|")/) ? `} from ${fileName}` : `} from "${fileName}";`);
+                writeLine();
+            });
+            forEachKey(importEquals, fileName => {
+                const declarations = importEquals[fileName];
+                let name: string;
+                forEach(declarations, declaration => {
+                    const symbol = declaration.symbol;
+                    const id = getSymbolId(symbol);
+                    if (name) {
+                        createSymbolEntry(name, id);
+                    }
+                    else {
+                        name = generateName(symbol, makeIdentifierFromModuleName(fileName));
+                    }
+                });
+                if (!name) {
+                    Debug.fail("Found dependency on an export= when flattening, but no symbols from it were used");
+                }
+                if (fileName.match(/^('|")/)) {
+                    write(`import * as ${name} from ${fileName};`);
+                }
+                else {
+                    write(`import * as ${name} from "${fileName}";`);
+                }
+                writeLine();
+            });
+
+            const emitModuleLevelDeclaration = (d: Declaration, shouldExport: boolean) => {
+                const realSourceFile = currentSourceFile;
+                currentSourceFile = getSourceFileOfNode(d);
+                if (d.kind === SyntaxKind.VariableDeclaration) {
+                    d = d.parent.parent as Declaration;
+                }
+                const oldFlags = d.flags;
+                if (shouldExport) {
+                    d.flags |= NodeFlags.Export;
+                }
+                else {
+                    if (oldFlags & NodeFlags.Export) {
+                        d.flags -= NodeFlags.Export;
+                    }
+                }
+                if (oldFlags & NodeFlags.Default) {
+                    d.flags -= NodeFlags.Default;
+                }
+                writeModuleElement(d);
+                d.flags = oldFlags;
+                currentSourceFile = realSourceFile;
+            };
+            let privateDeclarations = 0;
+            forEachValue(dependentDeclarations, d => {
+                privateDeclarations++;
+                emitModuleLevelDeclaration(d, /*shouldExport*/false);
+            });
+            if (!exportEquals) {
+                forEachValue(declarations, d => emitModuleLevelDeclaration(d, /*shouldExport*/true));
+            }
+            writeExportAssignment(alias);
+            if ((privateDeclarations && !exportEquals) || aliasEmits.length) {
+                writeLine();
+                write("export {");
+                writeLine();
+                increaseIndent();
+                forEach(aliasEmits, alias => {
+                    alias();
+                    write(",");
+                    writeLine();
+                });
+                decreaseIndent();
+                write("};");
+                writeLine();
+            }
+
+            return;
+
+            function buildModuleDtsReverseLookupTable(entrypoint: SourceFile, table: Map<string> = {}, visited: Map<SourceFile> = {}) {
+                visited[entrypoint.fileName] = entrypoint;
+                forEachKey(entrypoint.resolvedModules, name => {
+                    // Skip unresolved modules
+                    if (!entrypoint.resolvedModules[name]) {
+                        return;
+                    }
+                    // Skip relative paths and rooted paths (look at module identifiers only)
+                    const file = host.getSourceFile(entrypoint.resolvedModules[name].resolvedFileName);
+                    if (!name.match(/^(\.|\/)/m)) {
+                        table[file.fileName] = name;
+                    }
+                    if (!visited[file.fileName]) {
+                        buildModuleDtsReverseLookupTable(file, table, visited);
+                    }
+                });
+                return table;
+            }
+
+            function isModuleLevelDeclaration(node: Node) {
+                switch (node.kind) {
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.VariableStatement:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            function collectExportedDeclarations(exportedMembers: Symbol[]): Map<Declaration> {
+                const result: Map<Declaration> = {};
+                const originalExportAssignment = writeExportAssignment;
+                for (let exported of exportedMembers) {
+                    const type = resolver.getDefiningTypeOfSymbol(exported);
+                    for (let declaration of exported.declarations) {
+                        const id = getNodeId(declaration);
+                        if (isModuleLevelDeclaration(declaration)) { // skips export specifiers
+                            result[id] = declaration;
+                        }
+                        else {
+                            // inline the declaration referred to by an export specifier with the specified name
+                            if (declaration.kind === SyntaxKind.ExportSpecifier) {
+                                const d = declaration as ExportSpecifier;
+                                const symbol = d.symbol;
+                                // If we already export the symbol being aliased, add a block to add the alias at the end, or inline 
+                                if (contains(exportedMembers, symbol)) {
+                                    if (!d.propertyName) {
+                                        // Inline the declaration referenced, rather than emitting an alias
+                                        const innertype = resolver.getDefiningTypeOfSymbol(symbol);
+                                        if (innertype && innertype.symbol) {
+                                            exportedMembers.push(innertype.symbol);
+                                        }
+                                    }
+                                    else {
+                                        aliasEmits.push(((d: ExportSpecifier) => () => {
+                                            const oldSourceFile = currentSourceFile;
+                                            currentSourceFile = getSourceFileOfNode(d);
+                                            const symbol = resolver.getDefiningTypeOfSymbol(d.symbol).symbol;
+                                            const symbolid = symbol && getSymbolId(symbol);
+                                            if (symbol && symbolid in symbolGeneratedNameMap) {
+                                                write(symbolGeneratedNameMap[symbolid]);
+                                            }
+                                            else {
+                                                Debug.fail("Encountered export alias of untraversed type when flattening.");
+                                            }
+                                            write(" as ");
+                                            emitIdentifier(d.name);
+                                            currentSourceFile = oldSourceFile;
+                                        })(d));
+                                    }
+                                }
+                            }
+                            // Handle export assignments
+                            else if (declaration.kind === SyntaxKind.ExportAssignment) {
+                                const assignment = declaration as ExportAssignment;
+                                if (assignment.expression.kind === SyntaxKind.Identifier) {
+                                    writeExportAssignment = ((assignment: ExportAssignment) => (alias: string) => {
+                                        write(assignment.isExportEquals ? "export = " : "export default ");
+                                        write(alias);
+                                        write(";");
+                                        writeLine();
+                                    })(assignment);
+                                }
+                                else {
+                                    writeExportAssignment = ((assignment: ExportAssignment) => (alias: string) => {
+                                        write("declare var ");
+                                        write(alias);
+                                        write(": ");
+                                        resolver.writeTypeOfExpression(assignment.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction, writer);
+                                        write(";");
+                                        writeLine();
+                                        write(assignment.isExportEquals ? "export = " : "export default ");
+                                        write(alias);
+                                        write(";");
+                                        writeLine();
+                                    })(assignment);
+                                }
+                            }
+                        }
+                    }
+
+                    // Special case all the things
+                    if (exported.name === "export=") {
+                        exportEquals = type;
+                        createDefaultExportAlias = ((value: string) => () => value)(type.symbol.name);
+                        continue;
+                    }
+                    else if (exported.name === "default") {
+                        // delay making the alias until after all exported names are collected
+                        createDefaultExportAlias = ((exported: Symbol, type: Type) => () => {
+                            const exportedId = getSymbolId(exported);
+                            let name = "default_1";
+                            while (!!symbolNameSet[name]) {
+                                name += "_1";
+                            }
+                            createSymbolEntry(name, exportedId);
+                            const symbol = type.symbol;
+                            if (symbol) {
+                                const symbolId = getSymbolId(symbol);
+                                createSymbolEntry(name, symbolId);
+                            }
+                            return name;
+                        })(exported, type);
+                        if (originalExportAssignment === writeExportAssignment) {
+                            // We're adding an export assignment despite never seeing one in the original file
+                            writeExportAssignment = (alias: string) => {
+                                write(`export default ${alias};`);
+                                writeLine();
+                            };
+                        }
+                        continue;
+                    }
+
+                    if (type.symbol) {
+                        const symbol = type.symbol;
+                        const id = getSymbolId(symbol);
+                        createSymbolEntry(symbol.name, id);
+                    }
+                    const exportedId = getSymbolId(exported);
+                    createSymbolEntry(exported.name, exportedId);
+                }
+                return result;
+            }
+
+            function collectDependentDeclarations(exportedMembers: Symbol[]): Map<Declaration> {
+                const dependentDeclarations: Map<Declaration> = {};
+                const walker = resolver.getSymbolWalker(inspectSymbol);
+                forEach(exportedMembers, symbol => walker.visitTypeFromSymbol(symbol));
+
+                return dependentDeclarations;
+
+                function inspectSymbol(symbol: Symbol): boolean {
+                    if (symbol.valueDeclaration && symbol.valueDeclaration.flags && symbol.valueDeclaration.flags & NodeFlags.Private) {
+                        return false;
+                    }
+                    else {
+                        // Add containing declarations if we've navigated to a nested type.
+                        forEach(symbol.declarations, d => {
+                            const id = getNodeId(d);
+                            // Collect declarations 
+                            const sourceFile = getSourceFileOfNode(d);
+                            // Look for the outtermost declaration (ie, the outtermost namespace this declaration is nested within)
+                            const declarationStack = findDeclarationStack(d);
+                            if (isDeclarationFile(sourceFile)) {
+                                // If the declaration is from an external module dts, we need to create an import for it
+                                if (isExternalModule(sourceFile)) {
+                                    // First, try to reverse lookup a module identifier
+                                    const fileName = moduleIdReverseLookup[sourceFile.fileName] || sourceFile.fileName;
+                                    // Get the topmost declaration from that stack of nodes
+                                    const declaration = declarationStack.pop();
+                                    // Check for an export=
+                                    if (sourceFile.symbol.exports["export="]) {
+                                        importEquals[fileName] = importEquals[fileName] || [];
+                                        // Add the declaration to the list of those refed by this file
+                                        if (!contains(importEquals[fileName], declaration)) {
+                                            importEquals[fileName].push(declaration);
+                                        }
+                                    }
+                                    else {
+                                        imports[fileName] = imports[fileName] || [];
+                                        // Add that outer declaration to the list of things which need to be imported from an external source
+                                        if (!contains(imports[fileName], declaration)) {
+                                            imports[fileName].push(declaration);
+                                        }
+                                    }
+                                }
+                                else {
+                                    // Check if this type comes from an ambient external module declaration
+                                    const moduleDeclaration = declarationStack.pop();
+                                    if (moduleDeclaration.kind === SyntaxKind.ModuleDeclaration) {
+                                        // If so, add said ambient external module to the imports list, and the next declaration in the stack to the set of imports
+                                        const declaration = declarationStack.pop();
+                                        const moduleName = (moduleDeclaration as ModuleDeclaration).name.text;
+                                        imports[moduleName] = imports[moduleName] || [];
+                                        if (!contains(imports[moduleName], declaration)) {
+                                            imports[moduleName].push(declaration);
+                                        }
+                                    }
+                                }
+                                // Otherwise we can elide it, as its from the stdlib or a triple-slash reference
+                                return;
+                            }
+                            if (!(id in dependentDeclarations || id in declarations) && isModuleLevelDeclaration(d)) {
+                                // Don't need to collect declarations which are not module-level
+                                dependentDeclarations[id] = d;
+                            }
+                            const outtermostDeclaration = declarationStack.pop();
+                            const outterId = outtermostDeclaration && getNodeId(outtermostDeclaration);
+                            if (outtermostDeclaration && outtermostDeclaration !== d &&
+                                outtermostDeclaration.kind !== SyntaxKind.ModuleDeclaration &&
+                                isModuleLevelDeclaration(outtermostDeclaration) &&
+                                (!(outterId in dependentDeclarations || outterId in declarations))) {
+                                dependentDeclarations[outterId] = outtermostDeclaration;
+                                walker.visitTypeFromSymbol(outtermostDeclaration.symbol);
+                            }
+                        });
+                    }
+                    return true;
+                }
+
+                function findDeclarationStack(d: Declaration): Declaration[] {
+                    let outermostNode: Node = d;
+                    const visited: Node[] = [d];
+                    // Find all the nodes between this declaration and the top of the file
+                    // In most cases, this will _never_ even execute a single iteration as the declaration we have is likely already top-level
+                    while (outermostNode.parent && outermostNode.parent.kind !== SyntaxKind.SourceFile) {
+                        outermostNode = outermostNode.parent;
+                        visited.push(outermostNode);
+                    }
+                    return filter(visited, node => isDeclaration(node)) as Declaration[];
+                }
+            }
+        }
 
         function hasInternalAnnotation(range: CommentRange) {
             let text = currentSourceFile.text;
@@ -333,6 +774,16 @@ namespace ts {
             emitType(type);
         }
 
+        function writeEntityNameIfRenamed(entityName: EntityName | Expression): boolean {
+            const symbol = resolver.resolveEntityName(entityName, SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value);
+            const id = symbol && getSymbolId(symbol);
+            if (symbol && id in symbolGeneratedNameMap) {
+                write(symbolGeneratedNameMap[id]);
+                return true;
+            }
+            return false;
+        }
+
         function emitType(type: TypeNode | Identifier | QualifiedName) {
             switch (type.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -374,15 +825,20 @@ namespace ts {
             }
 
             function writeEntityName(entityName: EntityName | Expression) {
+                // Lookup for renames
+                let written = writeEntityNameIfRenamed(entityName);
+                if (written) {
+                    return;
+                }
                 if (entityName.kind === SyntaxKind.Identifier) {
-                    writeTextOfNode(currentSourceFile, entityName);
+                    emitIdentifier(entityName as Identifier);
                 }
                 else {
                     let left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
                     let right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
                     writeEntityName(left);
                     write(".");
-                    writeTextOfNode(currentSourceFile, right);
+                    emitIdentifier(right);
                 }
             }
 
@@ -417,7 +873,7 @@ namespace ts {
             }
 
             function emitTypePredicate(type: TypePredicateNode) {
-                writeTextOfNode(currentSourceFile, type.parameterName);
+                emitIdentifier(type.parameterName);
                 write(" is ");
                 emitType(type.type);
             }
@@ -493,7 +949,7 @@ namespace ts {
         function emitExportAssignment(node: ExportAssignment) {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
-                writeTextOfNode(currentSourceFile, node.expression);
+                emitIdentifier(node.expression as Identifier);
             }
             else {
                 // Expression
@@ -602,7 +1058,7 @@ namespace ts {
                 if (node.flags & NodeFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
                     write("declare ");
                 }
             }
@@ -632,7 +1088,7 @@ namespace ts {
                 write("export ");
             }
             write("import ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             write(" = ");
             if (isInternalModuleImportEqualsDeclaration(node)) {
                 emitTypeWithNewGetSymbolAccessibilityDiagnostic(<EntityName>node.moduleReference, getImportEntityNameVisibilityError);
@@ -678,7 +1134,7 @@ namespace ts {
             if (node.importClause) {
                 let currentWriterPos = writer.getTextPos();
                 if (node.importClause.name && resolver.isDeclarationVisible(node.importClause)) {
-                    writeTextOfNode(currentSourceFile, node.importClause.name);
+                    emitIdentifier(node.importClause.name);
                 }
                 if (node.importClause.namedBindings && isVisibleNamedBinding(node.importClause.namedBindings)) {
                     if (currentWriterPos !== writer.getTextPos()) {
@@ -687,7 +1143,7 @@ namespace ts {
                     }
                     if (node.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                         write("* as ");
-                        writeTextOfNode(currentSourceFile, (<NamespaceImport>node.importClause.namedBindings).name);
+                        emitIdentifier((node.importClause.namedBindings as NamespaceImport).name);
                     }
                     else {
                         write("{ ");
@@ -697,17 +1153,36 @@ namespace ts {
                 }
                 write(" from ");
             }
-            writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+            emitExternalModuleSpecifier(node.moduleSpecifier);
             write(";");
             writer.writeLine();
         }
 
+        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
+            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
+                let moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+                if (moduleName) {
+                    write("\"");
+                    write(moduleName);
+                    write("\"");
+                    return;
+                }
+            }
+
+            if (moduleSpecifier.kind === SyntaxKind.Identifier) {
+                emitIdentifier(moduleSpecifier as Identifier);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, moduleSpecifier);
+            }
+        }
+
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
             if (node.propertyName) {
-                writeTextOfNode(currentSourceFile, node.propertyName);
+                emitIdentifier(node.propertyName);
                 write(" as ");
             }
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
         }
 
         function emitExportSpecifier(node: ExportSpecifier) {
@@ -733,7 +1208,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(currentSourceFile, node.moduleSpecifier);
+                emitExternalModuleSpecifier(node.moduleSpecifier);
             }
             write(";");
             writer.writeLine();
@@ -748,11 +1223,21 @@ namespace ts {
             else {
                 write("module ");
             }
-            writeTextOfNode(currentSourceFile, node.name);
+            if (node.name && node.name.kind === SyntaxKind.Identifier) {
+                emitIdentifier(node.name);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node.name);
+            }
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");
-                writeTextOfNode(currentSourceFile, node.name);
+                if (node.name && node.name.kind === SyntaxKind.Identifier) {
+                    emitIdentifier(node.name);
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.name);
+                }
             }
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
@@ -772,7 +1257,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("type ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             emitTypeParameters(node.typeParameters);
             write(" = ");
             emitTypeWithNewGetSymbolAccessibilityDiagnostic(node.type, getTypeAliasDeclarationVisibilityError);
@@ -796,7 +1281,7 @@ namespace ts {
                 write("const ");
             }
             write("enum ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             write(" {");
             writeLine();
             increaseIndent();
@@ -808,7 +1293,12 @@ namespace ts {
 
         function emitEnumMemberDeclaration(node: EnumMember) {
             emitJsDocComments(node);
-            writeTextOfNode(currentSourceFile, node.name);
+            if (node.name && node.name.kind === SyntaxKind.Identifier) {
+                emitIdentifier(node.name as Identifier);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node.name);
+            }
             let enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
@@ -827,7 +1317,7 @@ namespace ts {
                 increaseIndent();
                 emitJsDocComments(node);
                 decreaseIndent();
-                writeTextOfNode(currentSourceFile, node.name);
+                emitIdentifier(node.name);
                 // If there is constraint present and this is not a type parameter of the private method emit the constraint
                 if (node.constraint && !isPrivateMethodTypeParameter(node)) {
                     write(" extends ");
@@ -958,7 +1448,7 @@ namespace ts {
             }
 
             write("class ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
@@ -982,7 +1472,7 @@ namespace ts {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             write("interface ");
-            writeTextOfNode(currentSourceFile, node.name);
+            emitIdentifier(node.name);
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
@@ -1020,7 +1510,8 @@ namespace ts {
                     // If this node is a computed name, it can only be a symbol, because we've already skipped
                     // it if it's not a well known symbol. In that case, the text of the name will be exactly
                     // what we want, namely the name expression enclosed in brackets.
-                    writeTextOfNode(currentSourceFile, node.name);
+                    emitIdentifier(node.name as Identifier);
+
                     // If optional property emit ?
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) && hasQuestionToken(node)) {
                         write("?");
@@ -1107,7 +1598,7 @@ namespace ts {
                         emitBindingPattern(<BindingPattern>bindingElement.name);
                     }
                     else {
-                        writeTextOfNode(currentSourceFile, bindingElement.name);
+                        emitIdentifier(bindingElement.name as Identifier);
                         writeTypeOfDeclaration(bindingElement, /*type*/ undefined, getBindingElementTypeVisibilityError);
                     }
                 }
@@ -1157,7 +1648,12 @@ namespace ts {
                 emitJsDocComments(accessors.getAccessor);
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(node);
-                writeTextOfNode(currentSourceFile, node.name);
+                if (node.name && node.name.kind === SyntaxKind.Identifier) {
+                    emitIdentifier(node.name as Identifier);
+                }
+                else {
+                    writeTextOfNode(currentSourceFile, node.name);
+                }
                 if (!(node.flags & NodeFlags.Private)) {
                     accessorWithTypeAnnotation = node;
                     let type = getTypeAnnotationFromAccessor(node);
@@ -1247,13 +1743,23 @@ namespace ts {
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     write("function ");
-                    writeTextOfNode(currentSourceFile, node.name);
+                    if (node.name && node.name.kind === SyntaxKind.Identifier) {
+                        emitIdentifier(node.name as Identifier);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node.name);
+                    }
                 }
                 else if (node.kind === SyntaxKind.Constructor) {
                     write("constructor");
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node.name);
+                    if (node.name && node.name.kind === SyntaxKind.Identifier) {
+                        emitIdentifier(node.name as Identifier);
+                    }
+                    else {
+                        writeTextOfNode(currentSourceFile, node.name);
+                    }
                     if (hasQuestionToken(node)) {
                         write("?");
                     }
@@ -1393,7 +1899,7 @@ namespace ts {
                 emitBindingPattern(<BindingPattern>node.name);
             }
             else {
-                writeTextOfNode(currentSourceFile, node.name);
+                emitIdentifier(node.name as Identifier);
             }
             if (resolver.isOptionalParameter(node)) {
                 write("?");
@@ -1519,7 +2025,7 @@ namespace ts {
                         // Example:
                         //      original: function foo({y: [a,b,c]}) {}
                         //      emit    : declare function foo({y: [a, b, c]}: { y: [any, any, any] }) void;
-                        writeTextOfNode(currentSourceFile, bindingElement.propertyName);
+                        emitIdentifier(bindingElement.propertyName);
                         write(": ");
                     }
                     if (bindingElement.name) {
@@ -1542,10 +2048,24 @@ namespace ts {
                             if (bindingElement.dotDotDotToken) {
                                 write("...");
                             }
-                            writeTextOfNode(currentSourceFile, bindingElement.name);
+                            emitIdentifier(bindingElement.name as Identifier);
                         }
                     }
                 }
+            }
+        }
+
+        function emitIdentifier(node: Identifier) {
+            if (!node) {
+                return;
+            }
+            const symbol = resolver.getSymbolAtLocation(node);
+            const id = symbol && getSymbolId(symbol);
+            if (symbol && id in symbolGeneratedNameMap) {
+                write(symbolGeneratedNameMap[id]);
+            }
+            else {
+                writeTextOfNode(currentSourceFile, node);
             }
         }
 

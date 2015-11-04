@@ -1450,6 +1450,7 @@ namespace ts {
         getIndexTypeOfType(type: Type, kind: IndexKind): Type;
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
+        getSymbolWalker(accept?: (type: Symbol) => boolean): SymbolWalker;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
@@ -1622,6 +1623,18 @@ namespace ts {
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
+        getExportsOfModule(symbol: Symbol): Symbol[];
+        getDefiningTypeOfSymbol(symbol: Symbol): Type;
+        resolveEntityName(entityName: EntityName | Expression, meaning: SymbolFlags, ignoreErrors?: boolean): Symbol;
+        getSymbolWalker(accept?: (type: Symbol) => boolean): SymbolWalker;
+        getSymbolAtLocation(node: Node): Symbol;
+    }
+
+    export interface SymbolWalker {
+        visitType(type: Type): void;
+        visitTypeFromSymbol(symbol: Symbol): void;
+        reset(accept?: (type: Symbol) => boolean): void;
     }
 
     export const enum SymbolFlags {
@@ -2102,6 +2115,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         emitDecoratorMetadata?: boolean;
         moduleResolution?: ModuleResolutionKind;
+        optimizationEntrypoint?: string;
         allowUnusedLabels?: boolean;
         allowUnreachableCode?: boolean;
         noImplicitReturns?: boolean;
