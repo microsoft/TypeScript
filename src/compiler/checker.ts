@@ -4882,13 +4882,13 @@ namespace ts {
 
                 let saveErrorInfo = errorInfo;
 
-                // Note that the "each" checks must precede the "some" checks to produce the correct results
+                // Note that these checks are specifically ordered to produce correct results.
                 if (source.flags & TypeFlags.Union) {
                     if (relation === comparableRelation) {
                         result = someTypeRelatedToType(source as UnionType, target, reportErrors);
                     }
                     else {
-                        result = eachTypeRelatedToType(<UnionType>source, target, reportErrors);
+                        result = eachTypeRelatedToType(source as UnionType, target, reportErrors);
                     }
 
                     if (result) {
@@ -4896,25 +4896,25 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Intersection) {
-                    result = typeRelatedToEachType(source, <IntersectionType>target, reportErrors);
+                    result = typeRelatedToEachType(source, target as IntersectionType, reportErrors);
 
                     if (result) {
                         return result;
                     }
                 }
                 else {
-                    // It is necessary to try "some" checks on both sides because there may be nested "each" checks
+                    // It is necessary to try these "some" checks on both sides because there may be nested "each" checks
                     // on either side that need to be prioritized. For example, A | B = (A | B) & (C | D) or
                     // A & B = (A & B) | (C & D).
                     if (source.flags & TypeFlags.Intersection) {
                         // If target is a union type then the check following this one will report errors,
                         // so we'll suppress any errors we could run into here.
-                        if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
+                        if (result = someTypeRelatedToType(source as IntersectionType, target, reportErrors && !(target.flags & TypeFlags.Union))) {
                             return result;
                         }
                     }
                     if (target.flags & TypeFlags.Union) {
-                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors)) {
+                        if (result = typeRelatedToSomeType(source, target as UnionType, reportErrors)) {
                             return result;
                         }
                     }
@@ -12727,6 +12727,7 @@ namespace ts {
                     let caseClause = <CaseClause>clause;
                     // TypeScript 1.0 spec (April 2014): 5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
+                    // TODO (drosen): this needs to be amended to reflect the "comparable" relationship.
                     let caseType = checkExpression(caseClause.expression);
 
                     if (!isTypeComparableTo(expressionType, caseType)) {
