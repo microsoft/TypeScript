@@ -2337,6 +2337,26 @@ namespace ts {
             return symbol && getSymbolLinks(symbol).type || getTypeForVariableLikeDeclaration(node);
         }
 
+        function getTextOfPropertyName(name: PropertyName): string {
+            switch (name.kind) {
+                case SyntaxKind.Identifier:
+                    return (<Identifier>name).text;
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                    return (<LiteralExpression>name).text;
+                case SyntaxKind.ComputedPropertyName:
+                    if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind)) {
+                        return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+                    }
+            }
+
+            return undefined;
+        }
+
+        function isComputedNonLiteralName(name: PropertyName): boolean {
+            return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind);
+        }
+
         // Return the inferred type for a binding element
         function getTypeForBindingElement(declaration: BindingElement): Type {
             let pattern = <BindingPattern>declaration.parent;
@@ -2359,10 +2379,17 @@ namespace ts {
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                 let name = declaration.propertyName || <Identifier>declaration.name;
+                if (isComputedNonLiteralName(name)) {
+                    // computed properties with non-literal names are treated as 'any'
+                    return anyType;
+                }
+
                 // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
                 // or otherwise the type of the string index signature.
-                type = getTypeOfPropertyOfType(parentType, name.text) ||
-                    isNumericLiteralName(name.text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
+                let text = getTextOfPropertyName(name);
+
+                type = getTypeOfPropertyOfType(parentType, text) ||
+                    isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
                     getIndexTypeOfType(parentType, IndexKind.String);
                 if (!type) {
                     error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
@@ -2474,9 +2501,16 @@ namespace ts {
         function getTypeFromObjectBindingPattern(pattern: BindingPattern, includePatternInType: boolean): Type {
             let members: SymbolTable = {};
             forEach(pattern.elements, e => {
-                let flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
                 let name = e.propertyName || <Identifier>e.name;
-                let symbol = <TransientSymbol>createSymbol(flags, name.text);
+                if (isComputedNonLiteralName(name)) {
+                    // do not include computed properties in the implied type
+                    return;
+                }
+
+                let text = getTextOfPropertyName(name);
+                let flags = SymbolFlags.Property | SymbolFlags.Transient | (e.initializer ? SymbolFlags.Optional : 0);
+
+                let symbol = <TransientSymbol>createSymbol(flags, text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType);
                 symbol.bindingElement = e;
                 members[symbol.name] = symbol;
@@ -9999,19 +10033,27 @@ namespace ts {
             let properties = node.properties;
             for (let p of properties) {
                 if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                    // TODO(andersh): Computed property support
-                    let name = <Identifier>(<PropertyAssignment>p).name;
+                    let name = <PropertyName>(<PropertyAssignment>p).name;
+                    if (name.kind === SyntaxKind.ComputedPropertyName) {
+                        checkComputedPropertyName(<ComputedPropertyName>name);
+                    }
+                    if (isComputedNonLiteralName(name)) {
+                        continue;
+                    }
+
+                    let text = getTextOfPropertyName(name);
                     let type = isTypeAny(sourceType)
                         ? sourceType
-                        : getTypeOfPropertyOfType(sourceType, name.text) ||
-                        isNumericLiteralName(name.text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
+                        : getTypeOfPropertyOfType(sourceType, text) ||
+                        isNumericLiteralName(text) && getIndexTypeOfType(sourceType, IndexKind.Number) ||
                         getIndexTypeOfType(sourceType, IndexKind.String);
                     if (type) {
                         if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             checkDestructuringAssignment(<ShorthandPropertyAssignment>p, type);
                         }
                         else {
-                            checkDestructuringAssignment((<PropertyAssignment>p).initializer || name, type);
+                            // non-shorthand property assignments should always have initializers 
+                            checkDestructuringAssignment((<PropertyAssignment>p).initializer, type);
                         }
                     }
                     else {
@@ -12130,6 +12172,14 @@ namespace ts {
                     checkExpressionCached(node.initializer);
                 }
             }
+
+            if (node.kind === SyntaxKind.BindingElement) {
+                // check computed properties inside property names of binding elements
+                if (node.propertyName && node.propertyName.kind === SyntaxKind.ComputedPropertyName) {
+                    checkComputedPropertyName(<ComputedPropertyName>node.propertyName);
+                }
+            }
+
             // For a binding pattern, check contained binding elements
             if (isBindingPattern(node.name)) {
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
@@ -12147,6 +12197,7 @@ namespace ts {
                 }
                 return;
             }
+
             let symbol = getSymbolOfNode(node);
             let type = getTypeOfVariableOrParameterOrProperty(symbol);
             if (node === symbol.valueDeclaration) {
@@ -13234,11 +13285,14 @@ namespace ts {
                 let enumIsConst = isConst(node);
 
                 for (const member of node.members) {
-                    if (member.name.kind === SyntaxKind.ComputedPropertyName) {
+                    if (isComputedNonLiteralName(<PropertyName>member.name)) {
                         error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
                     }
-                    else if (isNumericLiteralName((<Identifier>member.name).text)) {
-                        error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
+                    else {
+                        let text = getTextOfPropertyName(<PropertyName>member.name);
+                        if (isNumericLiteralName(text)) {
+                            error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
+                        }
                     }
 
                     const previousEnumMemberIsNonConstant = autoValue === undefined;
@@ -15682,7 +15736,7 @@ namespace ts {
         }
 
         function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
-            if (node.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically((<ComputedPropertyName>node).expression)) {
+            if (isDynamicName(node)) {
                 return grammarErrorOnNode(node, message);
             }
         }

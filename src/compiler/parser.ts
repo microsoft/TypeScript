@@ -1069,7 +1069,7 @@ namespace ts {
                 token === SyntaxKind.NumericLiteral;
         }
 
-        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): DeclarationName {
+        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
                 return parseLiteralNode(/*internName*/ true);
             }
@@ -1079,7 +1079,7 @@ namespace ts {
             return parseIdentifierName();
         }
 
-        function parsePropertyName(): DeclarationName {
+        function parsePropertyName(): PropertyName {
             return parsePropertyNameWorker(/*allowComputedPropertyNames:*/ true);
         }
 
@@ -1189,7 +1189,7 @@ namespace ts {
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
-                    return isLiteralPropertyName();
+                    return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:
                     // If we see { } then only consume it as an expression if it is followed by , or {
                     // That way we won't consume the body of a class in its heritage clause.
@@ -4569,7 +4569,6 @@ namespace ts {
 
         function parseObjectBindingElement(): BindingElement {
             let node = <BindingElement>createNode(SyntaxKind.BindingElement);
-            // TODO(andersh): Handle computed properties
             let tokenIsIdentifier = isIdentifier();
             let propertyName = parsePropertyName();
             if (tokenIsIdentifier && token !== SyntaxKind.ColonToken) {
@@ -4577,7 +4576,7 @@ namespace ts {
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
-                node.propertyName = <Identifier>propertyName;
+                node.propertyName = propertyName;
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseBindingElementInitializer(/*inParameter*/ false);

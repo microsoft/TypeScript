@@ -3814,7 +3814,10 @@ namespace ts {
                     let existingName: string;
 
                     if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
-                        existingName = (<BindingElement>m).propertyName.text;
+                        // include only identifiers in completion list
+                        if ((<BindingElement>m).propertyName.kind === SyntaxKind.Identifier) {
+                            existingName = (<Identifier>(<BindingElement>m).propertyName).text
+                        }
                     }
                     else {
                         // TODO(jfreeman): Account for computed property name
