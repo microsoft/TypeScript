@@ -4832,7 +4832,14 @@ namespace ts {
                     sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                     targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 }
-                reportError(message || Diagnostics.Type_0_is_not_assignable_to_type_1, sourceType, targetType);
+                
+                if (!message) {
+                    message = relation === comparableRelation ?
+                        Diagnostics.Type_0_is_not_comparable_with_type_1 :
+                        Diagnostics.Type_0_is_not_assignable_to_type_1
+                }
+                
+                reportError(message, sourceType, targetType);
             }
 
             // Compare two types and return
@@ -9411,7 +9418,7 @@ namespace ts {
                 let widenedType = getWidenedType(exprType);
 
                 if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    checkTypeComparableTo(exprType, targetType, node);
                 }
             }
             return targetType;

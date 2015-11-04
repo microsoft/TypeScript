@@ -888,6 +888,10 @@
         "category": "Error",
         "code": 2322
     },
+    "Type '{0}' is not comparable with type '{1}'.": {
+        "category": "Error",
+        "code": 2323
+    },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2324
@@ -995,10 +999,6 @@
     "Cannot use 'new' with an expression whose type lacks a call or construct signature.": {
         "category": "Error",
         "code": 2351
-    },
-    "Neither type '{0}' nor type '{1}' is assignable to the other.": {
-        "category": "Error",
-        "code": 2352
     },
     "Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.": {
         "category": "Error",
