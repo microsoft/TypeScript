@@ -68,8 +68,8 @@ class PreferConstWalker extends Lint.RuleWalker {
     private errors: Lint.RuleFailure[] = [];
     private markAssignment(identifier: ts.Identifier) {
         const name = identifier.text;
-        for (var i = this.inScopeLetDeclarations.length - 1; i >= 0; i--) {
-            var declarations = this.inScopeLetDeclarations[i];
+        for (let i = this.inScopeLetDeclarations.length - 1; i >= 0; i--) {
+            const declarations = this.inScopeLetDeclarations[i];
             if (declarations[name]) {
                 declarations[name].usages++;
                 break;
@@ -173,7 +173,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     }
 
     private visitAnyForStatement(node: ts.ForOfStatement | ts.ForInStatement) {
-        let names: ts.Map<DeclarationUsages> = {};
+        const names: ts.Map<DeclarationUsages> = {};
         if (isLet(node.initializer)) {
             if (node.initializer.kind === ts.SyntaxKind.VariableDeclarationList) {
                 this.collectLetIdentifiers(node.initializer as ts.VariableDeclarationList, names);
@@ -195,7 +195,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     }
 
     visitBlock(node: ts.Block) {
-        let names: ts.Map<DeclarationUsages> = {};
+        const names: ts.Map<DeclarationUsages> = {};
         for (let i = 0; i < node.statements.length; i++) {
             const statement = node.statements[i];
             if (statement.kind === ts.SyntaxKind.VariableStatement) {
