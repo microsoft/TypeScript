@@ -1,5 +1,5 @@
-tests/cases/compiler/arrayCast.ts(3,23): error TS2323: Type '{ foo: string; }[]' is not comparable with type '{ id: number; }[]'.
-  Type '{ foo: string; }' is not comparable with type '{ id: number; }'.
+tests/cases/compiler/arrayCast.ts(3,23): error TS2323: Type '{ foo: string; }[]' is not comparable to type '{ id: number; }[]'.
+  Type '{ foo: string; }' is not comparable to type '{ id: number; }'.
     Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
 
 
@@ -8,8 +8,8 @@ tests/cases/compiler/arrayCast.ts(3,23): error TS2323: Type '{ foo: string; }[]'
     // has type { foo: string }[], which is not assignable to { id: number }[].
     <{ id: number; }[]>[{ foo: "s" }];
                           ~~~~~~~~
-!!! error TS2323: Type '{ foo: string; }[]' is not comparable with type '{ id: number; }[]'.
-!!! error TS2323:   Type '{ foo: string; }' is not comparable with type '{ id: number; }'.
+!!! error TS2323: Type '{ foo: string; }[]' is not comparable to type '{ id: number; }[]'.
+!!! error TS2323:   Type '{ foo: string; }' is not comparable to type '{ id: number; }'.
 !!! error TS2323:     Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
     
     // Should succeed, as the {} element causes the type of the array to be {}[]

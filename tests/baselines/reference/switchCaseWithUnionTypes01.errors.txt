@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts(23,10): error TS2323: Type 'boolean' is not comparable with type 'string | number'.
-  Type 'boolean' is not comparable with type 'number'.
+tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts(23,10): error TS2323: Type 'boolean' is not comparable to type 'string | number'.
+  Type 'boolean' is not comparable to type 'number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts (1 errors) ====
@@ -27,7 +27,7 @@ tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTy
         // No relation
         case bool:
              ~~~~
-!!! error TS2323: Type 'boolean' is not comparable with type 'string | number'.
-!!! error TS2323:   Type 'boolean' is not comparable with type 'number'.
+!!! error TS2323: Type 'boolean' is not comparable to type 'string | number'.
+!!! error TS2323:   Type 'boolean' is not comparable to type 'number'.
             break;
     }

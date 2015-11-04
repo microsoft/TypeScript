@@ -4,7 +4,7 @@ tests/cases/compiler/fuzzy.ts(21,20): error TS2322: Type '{ anything: number; on
   Types of property 'oneI' are incompatible.
     Type 'this' is not assignable to type 'I'.
       Type 'C' is not assignable to type 'I'.
-tests/cases/compiler/fuzzy.ts(25,20): error TS2323: Type '{ oneI: this; }' is not comparable with type 'R'.
+tests/cases/compiler/fuzzy.ts(25,20): error TS2323: Type '{ oneI: this; }' is not comparable to type 'R'.
   Property 'anything' is missing in type '{ oneI: this; }'.
 
 
@@ -43,7 +43,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2323: Type '{ oneI: this; }' is no
             worksToo():R {
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2323: Type '{ oneI: this; }' is not comparable with type 'R'.
+!!! error TS2323: Type '{ oneI: this; }' is not comparable to type 'R'.
 !!! error TS2323:   Property 'anything' is missing in type '{ oneI: this; }'.
             }
         }

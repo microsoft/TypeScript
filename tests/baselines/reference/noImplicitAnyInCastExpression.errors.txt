@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2323: Type '{ c: null; }' is not comparable with type 'IFoo'.
+tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2323: Type '{ c: null; }' is not comparable to type 'IFoo'.
   Property 'a' is missing in type '{ c: null; }'.
 
 
@@ -20,5 +20,5 @@ tests/cases/compiler/noImplicitAnyInCastExpression.ts(16,2): error TS2323: Type 
     // Neither types is assignable to each other
     (<IFoo>{ c: null });
      ~~~~~~~~~~~~~~~~~
-!!! error TS2323: Type '{ c: null; }' is not comparable with type 'IFoo'.
+!!! error TS2323: Type '{ c: null; }' is not comparable to type 'IFoo'.
 !!! error TS2323:   Property 'a' is missing in type '{ c: null; }'.

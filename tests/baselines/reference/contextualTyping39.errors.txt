@@ -1,9 +1,9 @@
-tests/cases/compiler/contextualTyping39.ts(1,11): error TS2323: Type '() => string' is not comparable with type '() => number'.
-  Type 'string' is not comparable with type 'number'.
+tests/cases/compiler/contextualTyping39.ts(1,11): error TS2323: Type '() => string' is not comparable to type '() => number'.
+  Type 'string' is not comparable to type 'number'.
 
 
 ==== tests/cases/compiler/contextualTyping39.ts (1 errors) ====
     var foo = <{ (): number; }> function() { return "err"; };
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2323: Type '() => string' is not comparable with type '() => number'.
-!!! error TS2323:   Type 'string' is not comparable with type 'number'.
+!!! error TS2323: Type '() => string' is not comparable to type '() => number'.
+!!! error TS2323:   Type 'string' is not comparable to type 'number'.
