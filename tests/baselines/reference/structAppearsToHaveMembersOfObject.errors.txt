@@ -1,0 +1,17 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structAppearsToHaveMembersOfObject.ts(6,5): error TS2322: Type 'C' is not assignable to type 'Object'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structAppearsToHaveMembersOfObject.ts(7,5): error TS2322: Type 'C' is not assignable to type '{}'.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structAppearsToHaveMembersOfObject.ts (2 errors) ====
+    struct C { foo: string; }
+    
+    var c: C;
+    var r = c.toString(); // call members of JS Object
+    var r2 = c.hasOwnProperty('');
+    var o: Object = c; // error, not assignable
+        ~
+!!! error TS2322: Type 'C' is not assignable to type 'Object'.
+    var o2: {} = c; // error, not assignable
+        ~~
+!!! error TS2322: Type 'C' is not assignable to type '{}'.
+    
