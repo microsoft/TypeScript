@@ -1,0 +1,27 @@
+tests/cases/conformance/structs/structDeclarations/structAndInterfaceWithSameName.ts(1,12): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/structs/structDeclarations/structAndInterfaceWithSameName.ts(2,15): error TS2300: Duplicate identifier 'foo'.
+tests/cases/conformance/structs/structDeclarations/structAndInterfaceWithSameName.ts(6,9): error TS2300: Duplicate identifier 'bar'.
+tests/cases/conformance/structs/structDeclarations/structAndInterfaceWithSameName.ts(10,9): error TS2300: Duplicate identifier 'bar'.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structAndInterfaceWithSameName.ts (4 errors) ====
+    struct C { foo: string; }
+               ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    interface C { foo: string; } // error
+                  ~~~
+!!! error TS2300: Duplicate identifier 'foo'.
+    
+    module M {
+        struct D {
+            bar: string;
+            ~~~
+!!! error TS2300: Duplicate identifier 'bar'.
+        }
+    
+        interface D { // error
+            bar: string;
+            ~~~
+!!! error TS2300: Duplicate identifier 'bar'.
+        }
+    }
