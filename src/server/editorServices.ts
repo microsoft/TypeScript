@@ -680,6 +680,12 @@ namespace ts.server {
                     this.openFileRoots.push(info);
                 }
             }
+
+            // Acquire typings for JS files
+            if (fileExtensionIs(info.fileName, ".js")) {
+                this.acquireTypingForJs(ts.getDirectoryPath(info.fileName), info.defaultProject);
+            }
+
             this.updateConfiguredProjectList();
         }
 
@@ -913,6 +919,83 @@ namespace ts.server {
                 searchPath = parentPath;
             }
             return undefined;
+        }
+
+        acquireTypingForJs(path: string, project: Project) {
+            let { cachedTypings, newTypings } = this.resolveTypingsForJs(path);
+            this.downloadTypingFilesForJs(cachedTypings, newTypings, project);
+        }
+
+        resolveTypingsForJs(path: string): { cachedTypings: string[], newTypings: string[] } {
+            // Todo: change the mock behavior
+            return { cachedTypings: ["angular"], newTypings:  ["backbone"] };
+        }
+
+        downloadTypingFilesForJs(cachedTypingPaths: string[], typings: string[], project: Project) {
+            let tsd = require("tsd");
+            let tsdJsonPath = 'C:\\Users\\lizhe\\.typingCache\\tsd.json';
+            let typingPath = 'C:\\Users\\lizhe\\.typingCache\\typings';
+            let api = tsd.getAPI(tsdJsonPath);
+            let cachedInstalledPaths: Map<string>;
+
+            let options = new tsd.Options();
+            options.resolveDependencies = true;
+            options.overwriteFiles = true;
+            options.saveToConfig = true;
+            options.saveBundle = true;
+
+            api.readConfig().then(updateTypings);
+
+            cachedTypingPaths.forEach(p => addTypingToProject(p, project));
+
+            function getInstalledPaths(): Map<string> {
+                if (!cachedInstalledPaths) {
+                    cachedInstalledPaths = {};
+                    api.context.config.getInstalled().forEach(
+                        (installed: { path: string, commitSha: string }) => { cachedInstalledPaths[installed.path] = installed.commitSha; }
+                    );
+                }
+                return cachedInstalledPaths;
+            }
+
+            function updateTypings() {
+                for (let typing of typings) {
+                    let query = new tsd.Query(typing);
+                    query.loadHistory = true;
+                    api.select(query, options).then(function (selection: any) {
+                        // Compare the stored commit hash with the latest commit hash,
+                        // and update the cache if different
+                        let firstResult = selection.definitions[0];
+                        if (!firstResult) {
+                            return;
+                        }
+
+                        if (firstResult.history[0]) {
+                            let recentCommitHash = firstResult.history[0].def.head.commit.commitSha;
+                            let path = firstResult.path;
+                            let storedCommitHash = getInstalledPaths()[path];
+                            if (recentCommitHash === storedCommitHash) {
+                                // Open file and add to project directly
+                                addTypingToProject(path, project);
+                                return;
+                            }
+                        }
+                        api.install(selection, options);
+                    })..then(function (installRes: any) {
+                        //let keys = Object.keys(installRes.written.dict);
+                        //keys.forEach(key => addTypingToProject(key, project));
+                        addTypingToProject(firstResult.path, project);
+                    });;
+                }
+            }
+
+            function addTypingToProject(path: string, project: Project) {
+                let fileName = ts.normalizePath(ts.combinePaths(typingPath, path));
+                let script = project.projectService.openFile(fileName, false);
+                project.addRoot(script);
+                project.projectService.openFileRootsConfigured.push(script);
+                project.projectService.updateProjectStructure();
+            }
         }
 
         /**
