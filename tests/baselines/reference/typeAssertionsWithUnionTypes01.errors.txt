@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts(14,9): error TS2323: Type 'I1' is not comparable to type 'number'.
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts(14,9): error TS2352: Type 'I1' cannot be converted to type 'number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts (1 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUni
     var a = <number | I2>z;
     var b = <number>z;
             ~~~~~~~~~
-!!! error TS2323: Type 'I1' is not comparable to type 'number'.
+!!! error TS2352: Type 'I1' cannot be converted to type 'number'.
     var c = <I2>z;
     var d = <I1>y;
     
