@@ -26,9 +26,9 @@ namespace Harness.LanguageService {
 
         public editContent(start: number, end: number, newText: string): void {
             // Apply edits
-            let prefix = this.content.substring(0, start);
-            let middle = newText;
-            let suffix = this.content.substring(end);
+            const prefix = this.content.substring(0, start);
+            const middle = newText;
+            const suffix = this.content.substring(end);
             this.setContent(prefix + middle + suffix);
 
             // Store edit range + new length of script
@@ -48,10 +48,10 @@ namespace Harness.LanguageService {
                 return ts.unchangedTextChangeRange;
             }
 
-            let initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
-            let lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
+            const initialEditRangeIndex = this.editRanges.length - (this.version - startVersion);
+            const lastEditRangeIndex = this.editRanges.length - (this.version - endVersion);
 
-            let entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
+            const entries = this.editRanges.slice(initialEditRangeIndex, lastEditRangeIndex);
             return ts.collapseTextChangeRangesAcrossMultipleVersions(entries.map(e => e.textChangeRange));
         }
     }
@@ -74,7 +74,7 @@ namespace Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.IScriptSnapshot): ts.TextChangeRange {
-            let oldShim = <ScriptSnapshot>oldScript;
+            const oldShim = <ScriptSnapshot>oldScript;
             return this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
         }
     }
@@ -92,9 +92,9 @@ namespace Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.ScriptSnapshotShim): string {
-            let oldShim = <ScriptSnapshotProxy>oldScript;
+            const oldShim = <ScriptSnapshotProxy>oldScript;
 
-            let range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
+            const range = this.scriptSnapshot.getChangeRange(oldShim.scriptSnapshot);
             if (range === undefined) {
                 return undefined;
             }
@@ -130,7 +130,7 @@ namespace Harness.LanguageService {
         }
 
         public getFilenames(): string[] {
-            let fileNames: string[] = [];
+            const fileNames: string[] = [];
             ts.forEachKey(this.fileNameToScript, (fileName) => { fileNames.push(fileName); });
             return fileNames;
         }
@@ -144,7 +144,7 @@ namespace Harness.LanguageService {
         }
 
         public editScript(fileName: string, start: number, end: number, newText: string) {
-            let script = this.getScriptInfo(fileName);
+            const script = this.getScriptInfo(fileName);
             if (script !== undefined) {
                 script.editContent(start, end, newText);
                 return;
@@ -161,7 +161,7 @@ namespace Harness.LanguageService {
           * @param col 0 based index
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
-            let script: ScriptInfo = this.fileNameToScript[fileName];
+            const script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
             return ts.computeLineAndCharacterOfPosition(script.lineMap, position);
@@ -176,11 +176,11 @@ namespace Harness.LanguageService {
         getDefaultLibFileName(): string { return ""; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
-            let script = this.getScriptInfo(fileName);
+            const script = this.getScriptInfo(fileName);
             return script ? new ScriptSnapshot(script) : undefined;
         }
         getScriptVersion(fileName: string): string {
-            let script = this.getScriptInfo(fileName);
+            const script = this.getScriptInfo(fileName);
             return script ? script.version.toString() : undefined;
         }
 
@@ -211,20 +211,20 @@ namespace Harness.LanguageService {
             this.nativeHost = new NativeLanguageServiceHost(cancellationToken, options);
 
             if (preprocessToResolve) {
-                let compilerOptions = this.nativeHost.getCompilationSettings();
-                let moduleResolutionHost: ts.ModuleResolutionHost = {
+                const compilerOptions = this.nativeHost.getCompilationSettings();
+                const moduleResolutionHost: ts.ModuleResolutionHost = {
                     fileExists: fileName => this.getScriptInfo(fileName) !== undefined,
                     readFile: fileName => {
-                        let scriptInfo = this.getScriptInfo(fileName);
+                        const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
                     }
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
-                    let scriptInfo = this.getScriptInfo(fileName);
-                    let preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
-                    let imports: ts.Map<string> = {};
-                    for (let module of preprocessInfo.importedFiles) {
-                        let resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost);
+                    const scriptInfo = this.getScriptInfo(fileName);
+                    const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ true);
+                    const imports: ts.Map<string> = {};
+                    for (const module of preprocessInfo.importedFiles) {
+                        const resolutionInfo = ts.resolveModuleName(module.fileName, fileName, compilerOptions, moduleResolutionHost);
                         if (resolutionInfo.resolvedModule) {
                             imports[module.fileName] = resolutionInfo.resolvedModule.resolvedFileName;
                         }
@@ -246,7 +246,7 @@ namespace Harness.LanguageService {
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
-            let nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
+            const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);
             return nativeScriptSnapshot && new ScriptSnapshotProxy(nativeScriptSnapshot);
         }
         getScriptVersion(fileName: string): string { return this.nativeHost.getScriptVersion(fileName); }
@@ -257,7 +257,7 @@ namespace Harness.LanguageService {
         }
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
-            let snapshot = this.nativeHost.getScriptSnapshot(fileName);
+            const snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
         log(s: string): void { this.nativeHost.log(s); }
@@ -272,13 +272,13 @@ namespace Harness.LanguageService {
             throw new Error("NYI");
         }
         getClassificationsForLine(text: string, lexState: ts.EndOfLineState, classifyKeywordsInGenerics?: boolean): ts.ClassificationResult {
-            let result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split("\n");
-            let entries: ts.ClassificationInfo[] = [];
+            const result = this.shim.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics).split("\n");
+            const entries: ts.ClassificationInfo[] = [];
             let i = 0;
             let position = 0;
 
             for (; i < result.length - 1; i += 2) {
-                let t = entries[i / 2] = {
+                const t = entries[i / 2] = {
                     length: parseInt(result[i]),
                     classification: parseInt(result[i + 1])
                 };
@@ -286,7 +286,7 @@ namespace Harness.LanguageService {
                 assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
                 position += t.length;
             }
-            let finalLexState = parseInt(result[result.length - 1]);
+            const finalLexState = parseInt(result[result.length - 1]);
 
             assert.equal(position, text.length, "Expected cumulative length of all entries to match the length of the source. expected: " + text.length + ", but got: " + position);
 
@@ -298,7 +298,7 @@ namespace Harness.LanguageService {
     }
 
     function unwrapJSONCallResult(result: string): any {
-        let parsedResult = JSON.parse(result);
+        const parsedResult = JSON.parse(result);
         if (parsedResult.error) {
             throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
         }
@@ -312,7 +312,7 @@ namespace Harness.LanguageService {
         constructor(private shim: ts.LanguageServiceShim) {
         }
         private unwrappJSONCallResult(result: string): any {
-            let parsedResult = JSON.parse(result);
+            const parsedResult = JSON.parse(result);
             if (parsedResult.error) {
                 throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
             }
@@ -443,10 +443,10 @@ namespace Harness.LanguageService {
                 isLibFile: boolean;
             };
 
-            let coreServicesShim = this.factory.createCoreServicesShim(this.host);
+            const coreServicesShim = this.factory.createCoreServicesShim(this.host);
             shimResult = unwrapJSONCallResult(coreServicesShim.getPreProcessedFileInfo(fileName, ts.ScriptSnapshot.fromString(fileContents)));
 
-            let convertResult: ts.PreProcessedFileInfo = {
+            const convertResult: ts.PreProcessedFileInfo = {
                 referencedFiles: [],
                 importedFiles: [],
                 ambientExternalModules: [],
@@ -530,7 +530,7 @@ namespace Harness.LanguageService {
                 fileName = Harness.Compiler.defaultLibFileName;
             }
 
-            let snapshot = this.host.getScriptSnapshot(fileName);
+            const snapshot = this.host.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());
         }
 
@@ -612,13 +612,13 @@ namespace Harness.LanguageService {
         private client: ts.server.SessionClient;
         constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             // This is the main host that tests use to direct tests
-            let clientHost = new SessionClientHost(cancellationToken, options);
-            let client = new ts.server.SessionClient(clientHost);
+            const clientHost = new SessionClientHost(cancellationToken, options);
+            const client = new ts.server.SessionClient(clientHost);
 
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
-            let serverHost = new SessionServerHost(clientHost);
-            let server = new ts.server.Session(serverHost,
+            const serverHost = new SessionServerHost(clientHost);
+            const server = new ts.server.Session(serverHost,
                 Buffer ? Buffer.byteLength : (string: string, encoding?: string) => string.length,
                 process.hrtime, serverHost);
 

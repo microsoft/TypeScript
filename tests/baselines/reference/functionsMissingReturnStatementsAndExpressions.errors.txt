@@ -1,15 +1,14 @@
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(2,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(64,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(94,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(112,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
-tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): error TS1003: Identifier expected.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(3,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(95,16): error TS2378: A 'get' accessor must return a value.
+tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(118,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (5 errors) ====
+==== tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts (3 errors) ====
+    
     
     function f1(): string {
                    ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
         // errors because there are no return statements
     }
     
@@ -72,8 +71,6 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): e
     }
     
     function f14(): number {
-                    ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         // Not fine, since we can *only* consist of a single throw statement
         // if no return statements are present but we are annotated.
         throw undefined;
@@ -105,7 +102,7 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): e
     class C {
         public get m1() {
                    ~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value.
             // Errors; get accessors must return a value.
         }
     
@@ -124,8 +121,6 @@ tests/cases/compiler/functionsMissingReturnStatementsAndExpressions.ts(117,5): e
         }
     
         public get m5() {
-                   ~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
             // Not fine, since we can *only* consist of a single throw statement
             // if no return statements are present but we are a get accessor.
             throw null;
