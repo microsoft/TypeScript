@@ -16,9 +16,9 @@ namespace ts {
     }
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
-        let declarations = symbol.declarations;
+        const declarations = symbol.declarations;
         if (declarations) {
-            for (let declaration of declarations) {
+            for (const declaration of declarations) {
                 if (declaration.kind === kind) {
                     return declaration;
                 }
@@ -43,12 +43,12 @@ namespace ts {
     }
 
     // Pool writers to avoid needing to allocate them for every symbol we write.
-    let stringWriters: StringSymbolWriter[] = [];
+    const stringWriters: StringSymbolWriter[] = [];
     export function getSingleLineStringWriter(): StringSymbolWriter {
         if (stringWriters.length === 0) {
             let str = "";
 
-            let writeText: (text: string) => void = text => str += text;
+            const writeText: (text: string) => void = text => str += text;
             return {
                 string: () => str,
                 writeKeyword: writeText,
@@ -92,7 +92,7 @@ namespace ts {
         }
 
         for (let i = 0; i < array1.length; ++i) {
-            let equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
+            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
             if (!equals) {
                 return false;
             }
@@ -128,7 +128,7 @@ namespace ts {
             // A node is considered to contain a parse error if:
             //  a) the parser explicitly marked that it had an error
             //  b) any of it's children reported that it had an error.
-            let thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
+            const thisNodeOrAnySubNodesHasError = ((node.parserContextFlags & ParserContextFlags.ThisNodeHasError) !== 0) ||
                 forEachChild(node, containsParseError);
 
             // If so, mark ourselves accordingly.
@@ -157,8 +157,8 @@ namespace ts {
 
     // This is a useful function for debugging purposes.
     export function nodePosToString(node: Node): string {
-        let file = getSourceFileOfNode(node);
-        let loc = getLineAndCharacterOfPosition(file, node.pos);
+        const file = getSourceFileOfNode(node);
+        const loc = getLineAndCharacterOfPosition(file, node.pos);
         return `${ file.fileName }(${ loc.line + 1 },${ loc.character + 1 })`;
     }
 
@@ -213,7 +213,7 @@ namespace ts {
             return "";
         }
 
-        let text = sourceFile.text;
+        const text = sourceFile.text;
         return text.substring(includeTrivia ? node.pos : skipTrivia(text, node.pos), node.end);
     }
 
@@ -294,14 +294,14 @@ namespace ts {
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): Diagnostic {
-        let sourceFile = getSourceFileOfNode(node);
-        let span = getErrorSpanForNode(sourceFile, node);
+        const sourceFile = getSourceFileOfNode(node);
+        const span = getErrorSpanForNode(sourceFile, node);
         return createFileDiagnostic(sourceFile, span.start, span.length, message, arg0, arg1, arg2);
     }
 
     export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain): Diagnostic {
-        let sourceFile = getSourceFileOfNode(node);
-        let span = getErrorSpanForNode(sourceFile, node);
+        const sourceFile = getSourceFileOfNode(node);
+        const span = getErrorSpanForNode(sourceFile, node);
         return {
             file: sourceFile,
             start: span.start,
@@ -313,9 +313,9 @@ namespace ts {
     }
 
     export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
-        let scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+        const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
         scanner.scan();
-        let start = scanner.getTokenPos();
+        const start = scanner.getTokenPos();
         return createTextSpanFromBounds(start, scanner.getTextPos());
     }
 
@@ -351,7 +351,7 @@ namespace ts {
             return getSpanOfTokenAtPosition(sourceFile, node.pos);
         }
 
-        let pos = nodeIsMissing(errorNode)
+        const pos = nodeIsMissing(errorNode)
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
 
@@ -422,7 +422,7 @@ namespace ts {
     }
 
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
-        let commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
+        const commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
             concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
                 getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :
             getLeadingCommentRangesOfNode(node, sourceFileOfNode);
@@ -579,7 +579,7 @@ namespace ts {
                     return;
                 default:
                     if (isFunctionLike(node)) {
-                        let name = (<FunctionLikeDeclaration>node).name;
+                        const name = (<FunctionLikeDeclaration>node).name;
                         if (name && name.kind === SyntaxKind.ComputedPropertyName) {
                             // Note that we will not include methods/accessors of a class because they would require
                             // first descending into the class. This is by design.
@@ -1030,7 +1030,7 @@ namespace ts {
     }
 
     export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
-        let moduleState = getModuleInstanceState(node);
+        const moduleState = getModuleInstanceState(node);
         return moduleState === ModuleInstanceState.Instantiated ||
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
@@ -1053,7 +1053,7 @@ namespace ts {
             return (<ImportDeclaration>node).moduleSpecifier;
         }
         if (node.kind === SyntaxKind.ImportEqualsDeclaration) {
-            let reference = (<ImportEqualsDeclaration>node).moduleReference;
+            const reference = (<ImportEqualsDeclaration>node).moduleReference;
             if (reference.kind === SyntaxKind.ExternalModuleReference) {
                 return (<ExternalModuleReference>reference).expression;
             }
@@ -1088,7 +1088,7 @@ namespace ts {
 
     function getJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
         if (node && node.jsDocComment) {
-            for (let tag of node.jsDocComment.tags) {
+            for (const tag of node.jsDocComment.tags) {
                 if (tag.kind === kind) {
                     return tag;
                 }
@@ -1112,14 +1112,14 @@ namespace ts {
         if (parameter.name && parameter.name.kind === SyntaxKind.Identifier) {
             // If it's a parameter, see if the parent has a jsdoc comment with an @param
             // annotation.
-            let parameterName = (<Identifier>parameter.name).text;
+            const parameterName = (<Identifier>parameter.name).text;
 
-            let docComment = parameter.parent.jsDocComment;
+            const docComment = parameter.parent.jsDocComment;
             if (docComment) {
                 return <JSDocParameterTag>forEach(docComment.tags, t => {
                     if (t.kind === SyntaxKind.JSDocParameterTag) {
-                        let parameterTag = <JSDocParameterTag>t;
-                        let name = parameterTag.preParameterName || parameterTag.postParameterName;
+                        const parameterTag = <JSDocParameterTag>t;
+                        const name = parameterTag.preParameterName || parameterTag.postParameterName;
                         if (name.text === parameterName) {
                             return t;
                         }
@@ -1140,7 +1140,7 @@ namespace ts {
                     return true;
                 }
 
-                let paramTag = getCorrespondingJSDocParameterTag(node);
+                const paramTag = getCorrespondingJSDocParameterTag(node);
                 if (paramTag && paramTag.typeExpression) {
                     return paramTag.typeExpression.type.kind === SyntaxKind.JSDocVariadicType;
                 }
@@ -1270,7 +1270,7 @@ namespace ts {
             return false;
         }
 
-        let parent = name.parent;
+        const parent = name.parent;
         if (parent.kind === SyntaxKind.ImportSpecifier || parent.kind === SyntaxKind.ExportSpecifier) {
             if ((<ImportOrExportSpecifier>parent).propertyName) {
                 return true;
@@ -1337,23 +1337,23 @@ namespace ts {
     }
 
     export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
-        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
 
     export function getClassImplementsHeritageClauseElements(node: ClassLikeDeclaration) {
-        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
+        const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
-        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
+        const heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
 
     export function getHeritageClause(clauses: NodeArray<HeritageClause>, kind: SyntaxKind) {
         if (clauses) {
-            for (let clause of clauses) {
+            for (const clause of clauses) {
                 if (clause.token === kind) {
                     return clause;
                 }
@@ -1365,7 +1365,7 @@ namespace ts {
 
     export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
-            let referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
+            const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
             return host.getSourceFile(referenceFileName);
         }
     }
@@ -1381,8 +1381,8 @@ namespace ts {
     }
 
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
-        let simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
-        let isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
+        const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
+        const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
         if (simpleReferenceRegEx.exec(comment)) {
             if (isNoDefaultLibRegEx.exec(comment)) {
                 return {
@@ -1390,10 +1390,10 @@ namespace ts {
                 };
             }
             else {
-                let matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
+                const matchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 if (matchResult) {
-                    let start = commentRange.pos;
-                    let end = commentRange.end;
+                    const start = commentRange.pos;
+                    const end = commentRange.end;
                     return {
                         fileReference: {
                             pos: start,
@@ -1462,9 +1462,9 @@ namespace ts {
             return (<Identifier | LiteralExpression>name).text;
         }
         if (name.kind === SyntaxKind.ComputedPropertyName) {
-            let nameExpression = (<ComputedPropertyName>name).expression;
+            const nameExpression = (<ComputedPropertyName>name).expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
-                let rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
+                const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
             }
         }
@@ -1501,7 +1501,7 @@ namespace ts {
     }
 
     export function isParameterDeclaration(node: VariableLikeDeclaration) {
-        let root = getRootDeclaration(node);
+        const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }
 
@@ -1518,12 +1518,12 @@ namespace ts {
 
     export function cloneEntityName(node: EntityName): EntityName {
         if (node.kind === SyntaxKind.Identifier) {
-            let clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
+            const clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
             clone.text = (<Identifier>node).text;
             return clone;
         }
         else {
-            let clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
+            const clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
             clone.left = cloneEntityName((<QualifiedName>node).left);
             clone.left.parent = clone;
             clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
@@ -1537,13 +1537,13 @@ namespace ts {
     }
 
     export function createSynthesizedNode(kind: SyntaxKind, startsOnNewLine?: boolean): Node {
-        let node = <SynthesizedNode>createNode(kind, /* pos */ -1, /* end */ -1);
+        const node = <SynthesizedNode>createNode(kind, /* pos */ -1, /* end */ -1);
         node.startsOnNewLine = startsOnNewLine;
         return node;
     }
 
     export function createSynthesizedNodeArray(): NodeArray<any> {
-        let array = <NodeArray<any>>[];
+        const array = <NodeArray<any>>[];
         array.pos = -1;
         array.end = -1;
         return array;
@@ -1551,7 +1551,7 @@ namespace ts {
 
     export function createDiagnosticCollection(): DiagnosticCollection {
         let nonFileDiagnostics: Diagnostic[] = [];
-        let fileDiagnostics: Map<Diagnostic[]> = {};
+        const fileDiagnostics: Map<Diagnostic[]> = {};
 
         let diagnosticsModified = false;
         let modificationCount = 0;
@@ -1573,7 +1573,7 @@ namespace ts {
                 return;
             }
 
-            for (let diagnostic of fileDiagnostics[newFile.fileName]) {
+            for (const diagnostic of fileDiagnostics[newFile.fileName]) {
                 diagnostic.file = newFile;
             }
         }
@@ -1607,14 +1607,14 @@ namespace ts {
                 return fileDiagnostics[fileName] || [];
             }
 
-            let allDiagnostics: Diagnostic[] = [];
+            const allDiagnostics: Diagnostic[] = [];
             function pushDiagnostic(d: Diagnostic) {
                 allDiagnostics.push(d);
             }
 
             forEach(nonFileDiagnostics, pushDiagnostic);
 
-            for (let key in fileDiagnostics) {
+            for (const key in fileDiagnostics) {
                 if (hasProperty(fileDiagnostics, key)) {
                     forEach(fileDiagnostics[key], pushDiagnostic);
                 }
@@ -1631,7 +1631,7 @@ namespace ts {
             diagnosticsModified = false;
             nonFileDiagnostics = sortAndDeduplicateDiagnostics(nonFileDiagnostics);
 
-            for (let key in fileDiagnostics) {
+            for (const key in fileDiagnostics) {
                 if (hasProperty(fileDiagnostics, key)) {
                     fileDiagnostics[key] = sortAndDeduplicateDiagnostics(fileDiagnostics[key]);
                 }
@@ -1644,8 +1644,8 @@ namespace ts {
     // the language service. These characters should be escaped when printing, and if any characters are added,
     // the map below must be updated. Note that this regexp *does not* include the 'delete' character.
     // There is no reason for this other than that JSON.stringify does not handle it either.
-    let escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    let escapedCharsMap: Map<string> = {
+    const escapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -1676,17 +1676,17 @@ namespace ts {
     }
 
     export function isIntrinsicJsxName(name: string) {
-        let ch = name.substr(0, 1);
+        const ch = name.substr(0, 1);
         return ch.toLowerCase() === ch;
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {
-        let hexCharCode = charCode.toString(16).toUpperCase();
-        let paddedHexCode = ("0000" + hexCharCode).slice(-4);
+        const hexCharCode = charCode.toString(16).toUpperCase();
+        const paddedHexCode = ("0000" + hexCharCode).slice(-4);
         return "\\u" + paddedHexCode;
     }
 
-    let nonAsciiCharacters = /[^\u0000-\u007F]/g;
+    const nonAsciiCharacters = /[^\u0000-\u007F]/g;
     export function escapeNonAsciiCharacters(s: string): string {
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.
@@ -1710,7 +1710,7 @@ namespace ts {
         getIndent(): number;
     }
 
-    let indentStrings: string[] = ["", "    "];
+    const indentStrings: string[] = ["", "    "];
     export function getIndentString(level: number) {
         if (indentStrings[level] === undefined) {
             indentStrings[level] = getIndentString(level - 1) + indentStrings[1];
@@ -1751,7 +1751,7 @@ namespace ts {
         function writeLiteral(s: string) {
             if (s && s.length) {
                 write(s);
-                let lineStartsOfS = computeLineStarts(s);
+                const lineStartsOfS = computeLineStarts(s);
                 if (lineStartsOfS.length > 1) {
                     lineCount = lineCount + lineStartsOfS.length - 1;
                     linePos = output.length - s.length + lastOrUndefined(lineStartsOfS);
@@ -1789,7 +1789,7 @@ namespace ts {
     }
 
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
-        let compilerOptions = host.getCompilerOptions();
+        const compilerOptions = host.getCompilerOptions();
         let emitOutputFilePathWithoutExtension: string;
         if (compilerOptions.outDir) {
             emitOutputFilePathWithoutExtension = removeFileExtension(getSourceFilePathInNewDir(sourceFile, host, compilerOptions.outDir));
@@ -1862,8 +1862,8 @@ namespace ts {
             forEach(declarations, (member: Declaration) => {
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
                     && (member.flags & NodeFlags.Static) === (accessor.flags & NodeFlags.Static)) {
-                    let memberName = getPropertyNameForPropertyNameNode(member.name);
-                    let accessorName = getPropertyNameForPropertyNameNode(accessor.name);
+                    const memberName = getPropertyNameForPropertyNameNode(member.name);
+                    const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
                         if (!firstAccessor) {
                             firstAccessor = <AccessorDeclaration>member;
@@ -1946,13 +1946,13 @@ namespace ts {
         }
 
         if (leadingComments) {
-            let detachedComments: CommentRange[] = [];
+            const detachedComments: CommentRange[] = [];
             let lastComment: CommentRange;
 
-            for (let comment of leadingComments) {
+            for (const comment of leadingComments) {
                 if (lastComment) {
-                    let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
-                    let commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
+                    const lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
+                    const commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
 
                     if (commentLine >= lastCommentLine + 2) {
                         // There was a blank line between the last comment and this comment.  This
@@ -1970,8 +1970,8 @@ namespace ts {
                 // All comments look like they could have been part of the copyright header.  Make
                 // sure there is at least one blank line between it and the node.  If not, it's not
                 // a copyright header.
-                let lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
-                let nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                const lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
+                const nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
                 if (nodeLine >= lastCommentLine + 2) {
                     // Valid detachedComments
                     emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
@@ -1991,11 +1991,11 @@ namespace ts {
 
     export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
         if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-            let firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
-            let lineCount = getLineStarts(currentSourceFile).length;
+            const firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
+            const lineCount = getLineStarts(currentSourceFile).length;
             let firstCommentLineIndent: number;
             for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
-                let nextLineStart = (currentLine + 1) === lineCount
+                const nextLineStart = (currentLine + 1) === lineCount
                     ? currentSourceFile.text.length + 1
                     : getStartPositionOfLine(currentLine + 1, currentSourceFile);
 
@@ -2006,7 +2006,7 @@ namespace ts {
                     }
 
                     // These are number of spaces writer is going to write at current indent
-                    let currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
+                    const currentWriterIndentSpacing = writer.getIndent() * getIndentSize();
 
                     // Number of spaces we want to be writing
                     // eg: Assume writer indent
@@ -2022,10 +2022,10 @@ namespace ts {
                     //            More right indented comment */                  --4 = 8 - 4 + 11
                     //     class c { }
                     // }
-                    let spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
+                    const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
                     if (spacesToEmit > 0) {
                         let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
-                        let indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
+                        const indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
 
                         // Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
                         writer.rawWrite(indentSizeSpaceString);
@@ -2054,8 +2054,8 @@ namespace ts {
         }
 
         function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-            let end = Math.min(comment.end, nextLineStart - 1);
-            let currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, "");
+            const end = Math.min(comment.end, nextLineStart - 1);
+            const currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, "");
             if (currentLineText) {
                 // trimmed forward and ending spaces text
                 writer.write(currentLineText);
@@ -2169,7 +2169,7 @@ namespace ts {
     }
 
     export function isEmptyObjectLiteralOrArrayLiteral(expression: Node): boolean {
-        let kind = expression.kind;
+        const kind = expression.kind;
         if (kind === SyntaxKind.ObjectLiteralExpression) {
             return (<ObjectLiteralExpression>expression).properties.length === 0;
         }
@@ -2196,11 +2196,11 @@ namespace ts {
      * representing the UTF-8 encoding of the character, and return the expanded char code list.
      */
     function getExpandedCharCodes(input: string): number[] {
-        let output: number[] = [];
-        let length = input.length;
+        const output: number[] = [];
+        const length = input.length;
 
         for (let i = 0; i < length; i++) {
-            let charCode = input.charCodeAt(i);
+            const charCode = input.charCodeAt(i);
 
             // handel utf8
             if (charCode < 0x80) {
@@ -2236,9 +2236,9 @@ namespace ts {
      */
     export function convertToBase64(input: string): string {
         let result = "";
-        let charCodes = getExpandedCharCodes(input);
+        const charCodes = getExpandedCharCodes(input);
         let i = 0;
-        let length = charCodes.length;
+        const length = charCodes.length;
         let byte1: number, byte2: number, byte3: number, byte4: number;
 
         while (i < length) {
@@ -2312,14 +2312,14 @@ namespace ts {
     }
 
     export function textSpanOverlapsWith(span: TextSpan, other: TextSpan) {
-        let overlapStart = Math.max(span.start, other.start);
-        let overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
+        const overlapStart = Math.max(span.start, other.start);
+        const overlapEnd = Math.min(textSpanEnd(span), textSpanEnd(other));
         return overlapStart < overlapEnd;
     }
 
     export function textSpanOverlap(span1: TextSpan, span2: TextSpan) {
-        let overlapStart = Math.max(span1.start, span2.start);
-        let overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        const overlapStart = Math.max(span1.start, span2.start);
+        const overlapEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
         if (overlapStart < overlapEnd) {
             return createTextSpanFromBounds(overlapStart, overlapEnd);
         }
@@ -2331,13 +2331,13 @@ namespace ts {
     }
 
     export function textSpanIntersectsWith(span: TextSpan, start: number, length: number) {
-        let end = start + length;
+        const end = start + length;
         return start <= textSpanEnd(span) && end >= span.start;
     }
 
     export function decodedTextSpanIntersectsWith(start1: number, length1: number, start2: number, length2: number) {
-        let end1 = start1 + length1;
-        let end2 = start2 + length2;
+        const end1 = start1 + length1;
+        const end2 = start2 + length2;
         return start2 <= end1 && end2 >= start1;
     }
 
@@ -2346,8 +2346,8 @@ namespace ts {
     }
 
     export function textSpanIntersection(span1: TextSpan, span2: TextSpan) {
-        let intersectStart = Math.max(span1.start, span2.start);
-        let intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
+        const intersectStart = Math.max(span1.start, span2.start);
+        const intersectEnd = Math.min(textSpanEnd(span1), textSpanEnd(span2));
         if (intersectStart <= intersectEnd) {
             return createTextSpanFromBounds(intersectStart, intersectEnd);
         }
@@ -2406,14 +2406,14 @@ namespace ts {
 
         // We change from talking about { { oldStart, oldLength }, newLength } to { oldStart, oldEnd, newEnd }
         // as it makes things much easier to reason about.
-        let change0 = changes[0];
+        const change0 = changes[0];
 
         let oldStartN = change0.span.start;
         let oldEndN = textSpanEnd(change0.span);
         let newEndN = oldStartN + change0.newLength;
 
         for (let i = 1; i < changes.length; i++) {
-            let nextChange = changes[i];
+            const nextChange = changes[i];
 
             // Consider the following case:
             // i.e. two edits.  The first represents the text change range { { 10, 50 }, 30 }.  i.e. The span starting
@@ -2495,13 +2495,13 @@ namespace ts {
             //      newEnd3  : Max(newEnd2, newEnd2 + (newEnd1 - oldEnd2))
             // }
 
-            let oldStart1 = oldStartN;
-            let oldEnd1 = oldEndN;
-            let newEnd1 = newEndN;
+            const oldStart1 = oldStartN;
+            const oldEnd1 = oldEndN;
+            const newEnd1 = newEndN;
 
-            let oldStart2 = nextChange.span.start;
-            let oldEnd2 = textSpanEnd(nextChange.span);
-            let newEnd2 = oldStart2 + nextChange.newLength;
+            const oldStart2 = nextChange.span.start;
+            const oldEnd2 = textSpanEnd(nextChange.span);
+            const newEnd2 = oldStart2 + nextChange.newLength;
 
             oldStartN = Math.min(oldStart1, oldStart2);
             oldEndN = Math.max(oldEnd1, oldEnd1 + (oldEnd2 - newEnd1));

@@ -295,8 +295,8 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        let optionNameMap: Map<CommandLineOption> = {};
-        let shortOptionNames: Map<string> = {};
+        const optionNameMap: Map<CommandLineOption> = {};
+        const shortOptionNames: Map<string> = {};
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
@@ -309,10 +309,10 @@ namespace ts {
     }
 
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
-        let options: CompilerOptions = {};
-        let fileNames: string[] = [];
-        let errors: Diagnostic[] = [];
-        let { optionNameMap, shortOptionNames } = getOptionNameMap();
+        const options: CompilerOptions = {};
+        const fileNames: string[] = [];
+        const errors: Diagnostic[] = [];
+        const { optionNameMap, shortOptionNames } = getOptionNameMap();
 
         parseStrings(commandLine);
         return {
@@ -337,7 +337,7 @@ namespace ts {
                     }
 
                     if (hasProperty(optionNameMap, s)) {
-                        let opt = optionNameMap[s];
+                        const opt = optionNameMap[s];
 
                         // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
                         if (!args[i] && opt.type !== "boolean") {
@@ -377,19 +377,19 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            let text = readFile ? readFile(fileName) : sys.readFile(fileName);
+            const text = readFile ? readFile(fileName) : sys.readFile(fileName);
 
             if (!text) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
                 return;
             }
 
-            let args: string[] = [];
+            const args: string[] = [];
             let pos = 0;
             while (true) {
                 while (pos < text.length && text.charCodeAt(pos) <= CharacterCodes.space) pos++;
                 if (pos >= text.length) break;
-                let start = pos;
+                const start = pos;
                 if (text.charCodeAt(start) === CharacterCodes.doubleQuote) {
                     pos++;
                     while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.doubleQuote) pos++;
@@ -432,7 +432,7 @@ namespace ts {
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
-            let jsonTextWithoutComments = removeComments(jsonText);
+            const jsonTextWithoutComments = removeComments(jsonText);
             return { config: /\S/.test(jsonTextWithoutComments) ? JSON.parse(jsonTextWithoutComments) : {} };
         }
         catch (e) {
@@ -449,7 +449,7 @@ namespace ts {
      */
     function removeComments(jsonText: string): string {
         let output = "";
-        let scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
+        const scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
         let token: SyntaxKind;
         while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
             switch (token) {
@@ -475,7 +475,7 @@ namespace ts {
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
-        let { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+        const { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
 
         return {
             options,
@@ -494,12 +494,12 @@ namespace ts {
                 }
             }
             else {
-                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                const exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                const sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
                 for (let i = 0; i < sysFiles.length; i++) {
-                    let name = sysFiles[i];
+                    const name = sysFiles[i];
                     if (fileExtensionIs(name, ".d.ts")) {
-                        let baseName = name.substr(0, name.length - ".d.ts".length);
+                        const baseName = name.substr(0, name.length - ".d.ts".length);
                         if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
                             fileNames.push(name);
                         }
@@ -519,24 +519,24 @@ namespace ts {
     }
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
-        let options: CompilerOptions = {};
-        let errors: Diagnostic[] = [];
+        const options: CompilerOptions = {};
+        const errors: Diagnostic[] = [];
 
         if (!jsonOptions) {
             return { options, errors };
         }
 
-        let optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+        const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
-        for (let id in jsonOptions) {
+        for (const id in jsonOptions) {
             if (hasProperty(optionNameMap, id)) {
-                let opt = optionNameMap[id];
-                let optType = opt.type;
+                const opt = optionNameMap[id];
+                const optType = opt.type;
                 let value = jsonOptions[id];
-                let expectedType = typeof optType === "string" ? optType : "string";
+                const expectedType = typeof optType === "string" ? optType : "string";
                 if (typeof value === expectedType) {
                     if (typeof optType !== "string") {
-                        let key = value.toLowerCase();
+                        const key = value.toLowerCase();
                         if (hasProperty(optType, key)) {
                             value = optType[key];
                         }

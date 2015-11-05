@@ -95,7 +95,7 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        let start = new Date().getTime();
+        const start = new Date().getTime();
         binder(file, options);
         bindTime += new Date().getTime() - start;
     }
@@ -187,7 +187,7 @@ namespace ts {
                     return `"${(<LiteralExpression>node.name).text}"`;
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                    let nameExpression = (<ComputedPropertyName>node.name).expression;
+                    const nameExpression = (<ComputedPropertyName>node.name).expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal 
                     if (isStringOrNumericLiteral(nameExpression.kind)) {
                         return (<LiteralExpression>nameExpression).text;
@@ -234,9 +234,9 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            let isDefaultExport = node.flags & NodeFlags.Default;
+            const isDefaultExport = node.flags & NodeFlags.Default;
             // The exported symbol for an export default function/class node is always named "default"
-            let name = isDefaultExport && parent ? "default" : getDeclarationName(node);
+            const name = isDefaultExport && parent ? "default" : getDeclarationName(node);
 
             let symbol: Symbol;
             if (name !== undefined) {
@@ -303,7 +303,7 @@ namespace ts {
         }
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            let hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
+            const hasExportModifier = getCombinedNodeFlags(node) & NodeFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
@@ -325,11 +325,11 @@ namespace ts {
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
                 if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
-                    let exportKind =
+                    const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
                         (symbolFlags & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
-                    let local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
+                    const local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
                     return local;
@@ -347,9 +347,9 @@ namespace ts {
             // Before we recurse into a node's chilren, we first save the existing parent, container
             // and block-container.  Then after we pop out of processing the children, we restore
             // these saved values.
-            let saveParent = parent;
-            let saveContainer = container;
-            let savedBlockScopeContainer = blockScopeContainer;
+            const saveParent = parent;
+            const saveContainer = container;
+            const savedBlockScopeContainer = blockScopeContainer;
 
             // This node will now be set as the parent of all of its children as we recurse into them.
             parent = node;
@@ -371,7 +371,7 @@ namespace ts {
             // reusing a node from a previous compilation, that node may have had 'locals' created
             // for it.  We must clear this so we don't accidently move any stale data forward from
             // a previous compilation.
-            let containerFlags = getContainerFlags(node);
+            const containerFlags = getContainerFlags(node);
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
 
@@ -403,7 +403,7 @@ namespace ts {
                 seenThisKeyword = false;
             }
 
-            let saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
+            const saveState = kind === SyntaxKind.SourceFile || kind === SyntaxKind.ModuleBlock || isFunctionLikeKind(kind);
             if (saveState) {
                 savedReachabilityState = currentReachabilityState;
                 savedLabelStack = labelStack;
@@ -638,7 +638,7 @@ namespace ts {
         function bindCaseBlock(n: CaseBlock): void {
             const startState = currentReachabilityState;
 
-            for (let clause of n.clauses) {
+            for (const clause of n.clauses) {
                 currentReachabilityState = startState;
                 bind(clause);
                 if (clause.statements.length && currentReachabilityState === Reachability.Reachable && options.noFallthroughCasesInSwitch) {
@@ -795,9 +795,9 @@ namespace ts {
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
-            let body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
+            const body = node.kind === SyntaxKind.SourceFile ? node : (<ModuleDeclaration>node).body;
             if (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock) {
-                for (let stat of (<Block>body).statements) {
+                for (const stat of (<Block>body).statements) {
                     if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
                         return true;
                     }
@@ -823,7 +823,7 @@ namespace ts {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
             }
             else {
-                let state = getModuleInstanceState(node);
+                const state = getModuleInstanceState(node);
                 if (state === ModuleInstanceState.NonInstantiated) {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.NamespaceModule, SymbolFlags.NamespaceModuleExcludes);
                 }
@@ -835,7 +835,7 @@ namespace ts {
                         node.symbol.constEnumOnlyModule = false;
                     }
                     else {
-                        let currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
+                        const currentModuleIsConstEnumOnly = state === ModuleInstanceState.ConstEnumOnly;
                         if (node.symbol.constEnumOnlyModule === undefined) {
                             // non-merged case - use the current state
                             node.symbol.constEnumOnlyModule = currentModuleIsConstEnumOnly;
@@ -856,10 +856,10 @@ namespace ts {
             // We do that by making an anonymous type literal symbol, and then setting the function
             // symbol as its sole member. To the rest of the system, this symbol will be  indistinguishable
             // from an actual type literal symbol you would have gotten had you used the long form.
-            let symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
+            const symbol = createSymbol(SymbolFlags.Signature, getDeclarationName(node));
             addDeclarationToSymbol(symbol, node, SymbolFlags.Signature);
 
-            let typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
+            const typeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type");
             addDeclarationToSymbol(typeLiteralSymbol, node, SymbolFlags.TypeLiteral);
             typeLiteralSymbol.members = { [symbol.name]: symbol };
         }
@@ -871,14 +871,14 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                let seen: Map<ElementKind> = {};
+                const seen: Map<ElementKind> = {};
 
-                for (let prop of node.properties) {
+                for (const prop of node.properties) {
                     if (prop.name.kind !== SyntaxKind.Identifier) {
                         continue;
                     }
 
-                    let identifier = <Identifier>prop.name;
+                    const identifier = <Identifier>prop.name;
 
                     // ECMA-262 11.1.5 Object Initialiser
                     // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
@@ -888,18 +888,18 @@ namespace ts {
                     //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
                     //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
                     // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
-                    let currentKind = prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.MethodDeclaration
+                    const currentKind = prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.MethodDeclaration
                         ? ElementKind.Property
                         : ElementKind.Accessor;
 
-                    let existingKind = seen[identifier.text];
+                    const existingKind = seen[identifier.text];
                     if (!existingKind) {
                         seen[identifier.text] = currentKind;
                         continue;
                     }
 
                     if (currentKind === ElementKind.Property && existingKind === ElementKind.Property) {
-                        let span = getErrorSpanForNode(file, identifier);
+                        const span = getErrorSpanForNode(file, identifier);
                         file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
                             Diagnostics.An_object_literal_cannot_have_multiple_properties_with_the_same_name_in_strict_mode));
                     }
@@ -910,7 +910,7 @@ namespace ts {
         }
 
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
-            let symbol = createSymbol(symbolFlags, name);
+            const symbol = createSymbol(symbolFlags, name);
             addDeclarationToSymbol(symbol, node, symbolFlags);
         }
 
@@ -989,7 +989,7 @@ namespace ts {
             if (inStrictMode && node.expression.kind === SyntaxKind.Identifier) {
                 // When a delete operator occurs within strict mode code, a SyntaxError is thrown if its
                 // UnaryExpression is a direct reference to a variable, function argument, or function name
-                let span = getErrorSpanForNode(file, node.expression);
+                const span = getErrorSpanForNode(file, node.expression);
                 file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, Diagnostics.delete_cannot_be_called_on_an_identifier_in_strict_mode));
             }
         }
@@ -1001,11 +1001,11 @@ namespace ts {
 
         function checkStrictModeEvalOrArguments(contextNode: Node, name: Node) {
             if (name && name.kind === SyntaxKind.Identifier) {
-                let identifier = <Identifier>name;
+                const identifier = <Identifier>name;
                 if (isEvalOrArgumentsIdentifier(identifier)) {
                     // We check first if the name is inside class declaration or class expression; if so give explicit message
                     // otherwise report generic error message.
-                    let span = getErrorSpanForNode(file, name);
+                    const span = getErrorSpanForNode(file, name);
                     file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length,
                         getStrictModeEvalOrArgumentsMessage(contextNode), identifier.text));
                 }
@@ -1066,7 +1066,7 @@ namespace ts {
         }
 
         function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
-            let span = getSpanOfTokenAtPosition(file, node.pos);
+            const span = getSpanOfTokenAtPosition(file, node.pos);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
@@ -1081,7 +1081,7 @@ namespace ts {
 
             node.parent = parent;
 
-            let savedInStrictMode = inStrictMode;
+            const savedInStrictMode = inStrictMode;
             if (!savedInStrictMode) {
                 updateStrictMode(node);
             }
@@ -1127,7 +1127,7 @@ namespace ts {
         }
 
         function updateStrictModeStatementList(statements: NodeArray<Statement>) {
-            for (let statement of statements) {
+            for (const statement of statements) {
                 if (!isPrologueDirective(statement)) {
                     return;
                 }
@@ -1141,7 +1141,7 @@ namespace ts {
 
         /// Should be called only on prologue directives (isPrologueDirective(node) should be true)
         function isUseStrictPrologueDirective(node: ExpressionStatement): boolean {
-            let nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
+            const nodeText = getTextOfNodeFromSourceText(file.text, node.expression);
 
             // Note: the node text must be exactly "use strict" or 'use strict'.  It is not ok for the
             // string to contain unicode escapes (as per ES5).
@@ -1216,7 +1216,7 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     checkStrictModeFunctionName(<FunctionExpression>node);
-                    let bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
+                    const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
@@ -1289,7 +1289,7 @@ namespace ts {
                 bindBlockScopedDeclaration(node, SymbolFlags.Class, SymbolFlags.ClassExcludes);
             }
             else {
-                let bindingName = node.name ? node.name.text : "__class";
+                const bindingName = node.name ? node.name.text : "__class";
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
@@ -1297,7 +1297,7 @@ namespace ts {
                 }
             }
 
-            let symbol = node.symbol;
+            const symbol = node.symbol;
 
             // TypeScript 1.0 spec (April 2014): 8.4
             // Every class automatically contains a static property member named 'prototype', the
@@ -1308,7 +1308,7 @@ namespace ts {
             // Note: we check for this here because this class may be merging into a module.  The
             // module might have an exported variable called 'prototype'.  We can't allow that as
             // that would clash with the built-in 'prototype' for the class.
-            let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
+            const prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
             if (hasProperty(symbol.exports, prototypeSymbol.name)) {
                 if (node.name) {
                     node.name.parent = node;
@@ -1373,7 +1373,7 @@ namespace ts {
                 node.parent.kind === SyntaxKind.Constructor &&
                 isClassLike(node.parent.parent)) {
 
-                let classDeclaration = <ClassLikeDeclaration>node.parent.parent;
+                const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
         }
@@ -1399,13 +1399,13 @@ namespace ts {
         function pushImplicitLabel(): number {
             initializeReachabilityStateIfNecessary();
 
-            let index = labelStack.push(Reachability.Unintialized) - 1;
+            const index = labelStack.push(Reachability.Unintialized) - 1;
             implicitLabels.push(index);
             return index;
         }
 
         function popNamedLabel(label: Identifier, outerState: Reachability): void {
-            let index = labelIndexMap[label.text];
+            const index = labelIndexMap[label.text];
             Debug.assert(index !== undefined);
             Debug.assert(labelStack.length == index + 1);
 
@@ -1419,7 +1419,7 @@ namespace ts {
                 Debug.assert(false, `Label stack: ${labelStack.length}, index:${implicitLabelIndex}`);
             }
 
-            let i = implicitLabels.pop();
+            const i = implicitLabels.pop();
 
             if (implicitLabelIndex !== i) {
                 Debug.assert(false, `i: ${i}, index: ${implicitLabelIndex}`);

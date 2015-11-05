@@ -39,6 +39,7 @@
         "no-inferrable-types": true,
         "no-null": true,
         "boolean-trivia": true,
-        "type-operator-spacing": true
+        "type-operator-spacing": true,
+        "prefer-const": true
   }
 }
