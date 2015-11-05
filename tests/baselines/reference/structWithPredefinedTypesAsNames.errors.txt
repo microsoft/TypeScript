@@ -1,0 +1,21 @@
+tests/cases/conformance/structs/structDeclarations/structWithPredefinedTypesAsNames.ts(3,8): error TS20002: Struct name cannot be 'any'
+tests/cases/conformance/structs/structDeclarations/structWithPredefinedTypesAsNames.ts(4,8): error TS20002: Struct name cannot be 'number'
+tests/cases/conformance/structs/structDeclarations/structWithPredefinedTypesAsNames.ts(5,8): error TS20002: Struct name cannot be 'boolean'
+tests/cases/conformance/structs/structDeclarations/structWithPredefinedTypesAsNames.ts(6,8): error TS20002: Struct name cannot be 'string'
+
+
+==== tests/cases/conformance/structs/structDeclarations/structWithPredefinedTypesAsNames.ts (4 errors) ====
+    // structs cannot use predefined types as names
+    
+    struct any { }
+           ~~~
+!!! error TS20002: Struct name cannot be 'any'
+    struct number { }
+           ~~~~~~
+!!! error TS20002: Struct name cannot be 'number'
+    struct boolean { }
+           ~~~~~~~
+!!! error TS20002: Struct name cannot be 'boolean'
+    struct string { }
+           ~~~~~~
+!!! error TS20002: Struct name cannot be 'string'
