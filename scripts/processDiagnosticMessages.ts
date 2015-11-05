@@ -18,6 +18,13 @@ function main(): void {
         return;
     }
 
+    function writeFile(fileName: string, contents: string) {
+        // TODO: Fix path joining
+        var inputDirectory = inputFilePath.substr(0,inputFilePath.lastIndexOf("/"));
+        var fileOutputPath = inputDirectory + "/" + fileName;
+        sys.writeFile(fileOutputPath, contents);
+    }
+
     var inputFilePath = sys.args[0].replace(/\\/g, "/");
     var inputStr = sys.readFile(inputFilePath);
     
@@ -28,11 +35,10 @@ function main(): void {
 
     var infoFileOutput = buildInfoFileOutput(diagnosticMessages, nameMap);
     checkForUniqueCodes(names, diagnosticMessages);
+    writeFile("diagnosticInformationMap.generated.ts", infoFileOutput);
 
-    // TODO: Fix path joining
-    var inputDirectory = inputFilePath.substr(0,inputFilePath.lastIndexOf("/"));
-    var fileOutputPath = inputDirectory + "/diagnosticInformationMap.generated.ts";
-    sys.writeFile(fileOutputPath, infoFileOutput);
+    var messageOutput = buildDiagnosticMessageOutput(diagnosticMessages, nameMap);
+    writeFile("diagnosticMessages.generated.json", messageOutput);
 }
 
 function checkForUniqueCodes(messages: string[], diagnosticTable: InputDiagnosticMessageTable) {
@@ -85,18 +91,44 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, nameMap:
     for (var i = 0; i < names.length; i++) {
         var name = names[i];
         var diagnosticDetails = messageTable[name];
+        var propName = convertPropertyName(nameMap[name]);
 
         result +=
-        '        ' + convertPropertyName(nameMap[name]) +
+        '        ' + propName +
         ': { code: ' + diagnosticDetails.code +
         ', category: DiagnosticCategory.' + diagnosticDetails.category +
-        ', key: "' + name.replace(/[\"]/g, '\\"') + '"' +
+        ', key: "' + createKey(propName, diagnosticDetails.code) + '"' +
+        ', message: "' + name.replace(/[\"]/g, '\\"') + '"' +
         ' },\r\n';
     }
 
     result += '    };\r\n}';
 
     return result;
+}
+
+function buildDiagnosticMessageOutput(messageTable: InputDiagnosticMessageTable, nameMap: ts.Map<string>): string {
+    var result =
+        '{';
+    var names = Utilities.getObjectKeys(messageTable);
+    for (var i = 0; i < names.length; i++) {
+        var name = names[i];
+        var diagnosticDetails = messageTable[name];
+        var propName = convertPropertyName(nameMap[name]);
+
+        result += '\r\n  "' + createKey(propName, diagnosticDetails.code) + '"' + ' : "' + name.replace(/[\"]/g, '\\"') + '"';
+        if (i !== names.length - 1) {
+            result += ',';
+        }
+    }
+
+    result += '\r\n}';
+
+    return result;
+}
+
+function createKey(name: string, code: number) : string {
+    return name.slice(0, 100) + '_' + code;
 }
 
 function convertPropertyName(origName: string): string {

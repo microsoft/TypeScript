@@ -323,7 +323,6 @@ namespace ts {
             // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
-                return null;
             }
             return <CompilerOptions>JSON.parse(settingsJson);
         }
