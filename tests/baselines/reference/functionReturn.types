@@ -1,4 +1,5 @@
 === tests/cases/compiler/functionReturn.ts ===
+
 function f0(): void { }
 >f0 : () => void
 

@@ -1,4 +1,5 @@
 === tests/cases/compiler/sourceMapValidationLabeled.ts ===
+
 x:
 >x : any
 

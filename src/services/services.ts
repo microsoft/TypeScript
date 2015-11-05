@@ -773,6 +773,7 @@ namespace ts {
     class SourceFileObject extends NodeObject implements SourceFile {
         public _declarationBrand: any;
         public fileName: string;
+        public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: number[];
@@ -1695,15 +1696,17 @@ namespace ts {
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
+        private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
-            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName);
+            this.currentDirectory = host.getCurrentDirectory();
+            this.fileNameToEntry = createFileMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             let rootFileNames = host.getScriptFileNames();
             for (let fileName of rootFileNames) {
-                this.createEntry(fileName);
+                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
 
             // store the compilation settings
@@ -1714,7 +1717,7 @@ namespace ts {
             return this._compilationSettings;
         }
 
-        private createEntry(fileName: string) {
+        private createEntry(fileName: string, path: Path) {
             let entry: HostFileInformation;
             let scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
@@ -1725,30 +1728,31 @@ namespace ts {
                 };
             }
 
-            this.fileNameToEntry.set(fileName, entry);
+            this.fileNameToEntry.set(path, entry);
             return entry;
         }
 
-        private getEntry(fileName: string): HostFileInformation {
-            return this.fileNameToEntry.get(fileName);
+        private getEntry(path: Path): HostFileInformation {
+            return this.fileNameToEntry.get(path);
         }
 
-        private contains(fileName: string): boolean {
-            return this.fileNameToEntry.contains(fileName);
+        private contains(path: Path): boolean {
+            return this.fileNameToEntry.contains(path);
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
-            if (this.contains(fileName)) {
-                return this.getEntry(fileName);
+            let path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName)
+            if (this.contains(path)) {
+                return this.getEntry(path);
             }
 
-            return this.createEntry(fileName);
+            return this.createEntry(fileName, path);
         }
 
         public getRootFileNames(): string[] {
             let fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue(value => {
+            this.fileNameToEntry.forEachValue((path, value) => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1757,13 +1761,13 @@ namespace ts {
             return fileNames;
         }
 
-        public getVersion(fileName: string): string {
-            let file = this.getEntry(fileName);
+        public getVersion(path: Path): string {
+            let file = this.getEntry(path);
             return file && file.version;
         }
 
-        public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            let file = this.getEntry(fileName);
+        public getScriptSnapshot(path: Path): IScriptSnapshot {
+            let file = this.getEntry(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1993,7 +1997,7 @@ namespace ts {
     }
 
 
-    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean): DocumentRegistry {
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
@@ -2007,7 +2011,7 @@ namespace ts {
             let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName);
+                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
             }
             return bucket;
         }
@@ -2016,14 +2020,13 @@ namespace ts {
             let bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 let entries = lookUp(buckets, name);
                 let sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
-                for (let i in entries) {
-                    let entry = entries.get(i);
+                entries.forEachValue((key, entry) => {
                     sourceFiles.push({
-                        name: i,
+                        name: key,
                         refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
-                }
+                });
                 sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
                     bucket: name,
@@ -2049,7 +2052,8 @@ namespace ts {
             acquiring: boolean): SourceFile {
 
             let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            let entry = bucket.get(fileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            let entry = bucket.get(path);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
@@ -2061,7 +2065,7 @@ namespace ts {
                     languageServiceRefCount: 0,
                     owners: []
                 };
-                bucket.set(fileName, entry);
+                bucket.set(path, entry);
             }
             else {
                 // We have an entry for this file.  However, it may be for a different version of
@@ -2089,12 +2093,14 @@ namespace ts {
             let bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket !== undefined);
 
-            let entry = bucket.get(fileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
+
+            let entry = bucket.get(path);
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.remove(fileName);
+                bucket.remove(path);
             }
         }
 
@@ -2556,7 +2562,9 @@ namespace ts {
         }
     }
 
-    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
+    export function createLanguageService(host: LanguageServiceHost, 
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
@@ -2565,6 +2573,7 @@ namespace ts {
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
+        let currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
@@ -2579,8 +2588,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
-            fileName = normalizeSlashes(fileName);
-            let sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
+            let sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
@@ -2641,7 +2649,7 @@ namespace ts {
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => { 
                     // stub missing host functionality
                     Debug.assert(!host.resolveModuleNames);
@@ -2665,9 +2673,8 @@ namespace ts {
             if (program) {
                 let oldSourceFiles = program.getSourceFiles();
                 for (let oldSourceFile of oldSourceFiles) {
-                    let fileName = oldSourceFile.fileName;
-                    if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(fileName, oldSettings);
+                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(oldSourceFile.fileName, oldSettings);
                     }
                 }
             }
@@ -2732,7 +2739,8 @@ namespace ts {
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.fileName);
+                let path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
+                return sourceFile && sourceFile.version === hostCache.getVersion(path);
             }
 
             function programUpToDate(): boolean {
@@ -4929,7 +4937,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 /**
@@ -4976,7 +4984,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
@@ -6285,8 +6293,6 @@ namespace ts {
             }
 
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-
-            Debug.fail("Unknown declaration type");
         }
 
         function isTypeReference(node: Node): boolean {
@@ -7360,7 +7366,7 @@ namespace ts {
                                 let sourceFile = current.getSourceFile();
                                 var canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
-                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
                                 }
                             }
                         }
@@ -7382,7 +7388,7 @@ namespace ts {
                 }
             }
 
-            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element));
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {

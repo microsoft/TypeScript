@@ -1,4 +1,5 @@
 === tests/cases/compiler/bestCommonTypeReturnStatement.ts ===
+
 interface IPromise<T> {
 >IPromise : IPromise<T>
 >T : T

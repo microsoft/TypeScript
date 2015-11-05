@@ -192,7 +192,6 @@ function getRequestOperation(req: http.ServerRequest, filename: string) {
         }
         return RequestType.Unknown
     }
-    return RequestType.Unknown
 }
 
 function handleRequestOperation(req: http.ServerRequest, res: http.ServerResponse, operation: RequestType, reqPath: string) {

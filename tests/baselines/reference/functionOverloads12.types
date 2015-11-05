@@ -1,4 +1,5 @@
 === tests/cases/compiler/functionOverloads12.ts ===
+
 function foo():string;
 >foo : { (): string; (): number; }
 

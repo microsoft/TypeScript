@@ -41,13 +41,13 @@ let testConfigFile =
     (Harness.IO.fileExists(testconfig) ? Harness.IO.readFile(testconfig) : "");
 
 if (testConfigFile !== "") {
-    let testConfig = JSON.parse(testConfigFile);
+    const testConfig = JSON.parse(testConfigFile);
     if (testConfig.light) {
         Harness.lightMode = true;
     }
 
     if (testConfig.test && testConfig.test.length > 0) {
-        for (let option of testConfig.test) {
+        for (const option of testConfig.test) {
             if (!option) {
                 continue;
             }

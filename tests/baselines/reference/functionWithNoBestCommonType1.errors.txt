@@ -1,7 +1,8 @@
-tests/cases/compiler/functionWithNoBestCommonType1.ts(1,10): error TS2354: No best common type exists among return expressions.
+tests/cases/compiler/functionWithNoBestCommonType1.ts(2,10): error TS2354: No best common type exists among return expressions.
 
 
 ==== tests/cases/compiler/functionWithNoBestCommonType1.ts (1 errors) ====
+    
     function foo() {
              ~~~
 !!! error TS2354: No best common type exists among return expressions.

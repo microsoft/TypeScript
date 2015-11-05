@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts(2,12): error TS1029: 'public' modifier must precede 'static' modifier.
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts(2,23): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts(2,23): error TS2378: A 'get' accessor must return a value.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration9.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemb
                ~~~~~~
 !!! error TS1029: 'public' modifier must precede 'static' modifier.
                           ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value.
     }
