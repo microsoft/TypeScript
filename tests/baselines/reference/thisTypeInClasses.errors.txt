@@ -1,0 +1,57 @@
+tests/cases/conformance/types/thisType/thisTypeInClasses.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+
+
+==== tests/cases/conformance/types/thisType/thisTypeInClasses.ts (1 errors) ====
+    class C1 {
+        x: this;
+        f(x: this): this { return undefined; }
+        constructor(x: this) { }
+                       ~~~~
+!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+    }
+    
+    class C2 {
+        [x: string]: this;
+    }
+    
+    interface Foo<T> {
+        x: T;
+        y: this;
+    }
+    
+    class C3 {
+        a: this[];
+        b: [this, this];
+        c: this | Date;
+        d: this & Date;
+        e: (((this)));
+        f: (x: this) => this;
+        g: new (x: this) => this;
+        h: Foo<this>;
+        i: Foo<this | (() => this)>;
+        j: (x: any) => x is this;
+    }
+    
+    declare class C4 {
+        x: this;
+        f(x: this): this;
+    }
+    
+    class C5 {
+        foo() {
+            let f1 = (x: this): this => this;
+            let f2 = (x: this) => this;
+            let f3 = (x: this) => (y: this) => this;
+            let f4 = (x: this) => {
+                let g = (y: this) => {
+                    return () => this;
+                }
+                return g(this);
+            }
+        }
+        bar() {
+            let x1 = <this>undefined;
+            let x2 = undefined as this;
+        }
+    }
+    

@@ -62,14 +62,14 @@ declare var SlowBuffer: {
 // Buffer class
 interface Buffer extends NodeBuffer { }
 interface BufferConstructor {
-    new (str: string, encoding ?: string): Buffer;
+    new (str: string, encoding?: string): Buffer;
     new (size: number): Buffer;
     new (size: Uint8Array): Buffer;
     new (array: any[]): Buffer;
     prototype: Buffer;
     isBuffer(obj: any): boolean;
-    byteLength(string: string, encoding ?: string): number;
-    concat(list: Buffer[], totalLength ?: number): Buffer;
+    byteLength(string: string, encoding?: string): number;
+    concat(list: Buffer[], totalLength?: number): Buffer;
 }
 declare var Buffer: BufferConstructor;
 
@@ -78,7 +78,7 @@ declare var Buffer: BufferConstructor;
 *               GLOBAL INTERFACES               *
 *                                               *
 ************************************************/
-declare module NodeJS {
+declare namespace NodeJS {
     export interface ErrnoException extends Error {
         errno?: any;
         code?: string;
@@ -245,7 +245,7 @@ interface NodeBuffer {
     fill(value: any, offset?: number, end?: number): void;
 }
 
-declare module NodeJS {
+declare namespace NodeJS {
     export interface Path {
         normalize(p: string): string;
         join(...paths: any[]): string;
@@ -258,7 +258,7 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
+declare namespace NodeJS {
     export interface ReadLineInstance extends EventEmitter {
         setPrompt(prompt: string, length: number): void;
         prompt(preserveCursor?: boolean): void;
@@ -280,8 +280,8 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
-    module events {
+declare namespace NodeJS {
+    namespace events {
         export class EventEmitter implements NodeJS.EventEmitter {
             static listenerCount(emitter: EventEmitter, event: string): number;
 
@@ -297,8 +297,8 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
-    module stream {
+declare namespace NodeJS {
+    namespace stream {
 
         export interface Stream extends events.EventEmitter {
             pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
@@ -397,8 +397,8 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
-    module fs {
+declare namespace NodeJS {
+    namespace fs {
         interface Stats {
             isFile(): boolean;
             isDirectory(): boolean;
@@ -547,8 +547,8 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
-    module path {
+declare namespace NodeJS {
+    namespace path {
         export function normalize(p: string): string;
         export function join(...paths: any[]): string;
         export function resolve(...pathSegments: any[]): string;
@@ -560,8 +560,8 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
-    module _debugger {
+declare namespace NodeJS {
+    namespace _debugger {
         export interface Packet {
             raw: string;
             headers: string[];

@@ -1,4 +1,5 @@
 //// [null.ts]
+
 var x=null; 
 var y=3+x;  
 var z=3+null; 
