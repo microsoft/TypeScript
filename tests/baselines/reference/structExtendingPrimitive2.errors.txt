@@ -1,0 +1,10 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive2.ts(3,20): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive2.ts (1 errors) ====
+    // structes cannot extend primitives
+    
+    struct C4a extends void {}
+                       ~~~~
+!!! error TS1109: Expression expected.
+    struct C5a extends null { }
