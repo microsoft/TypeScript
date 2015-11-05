@@ -105,8 +105,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     private visitBindingLiteralExpression(node: ts.ArrayLiteralExpression | ts.ObjectLiteralExpression) {
         if (node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
             const pattern = node as ts.ObjectLiteralExpression;
-            for (let i = 0; i < pattern.properties.length; i++) {
-                const element = pattern.properties[i];
+            for (const element of pattern.properties) {
                 if (element.name.kind === ts.SyntaxKind.Identifier) {
                     this.markAssignment(element.name as ts.Identifier)
                 }
@@ -117,16 +116,14 @@ class PreferConstWalker extends Lint.RuleWalker {
         }
         else if (node.kind === ts.SyntaxKind.ArrayLiteralExpression) {
             const pattern = node as ts.ArrayLiteralExpression;
-            for (let i = 0; i < pattern.elements.length; i++) {
-                const element = pattern.elements[i];
+            for (const element of pattern.elements) {
                 this.visitLHSExpressions(element);
             }
         }
     }
 
     private visitBindingPatternIdentifiers(pattern: ts.BindingPattern) {
-        for (let i = 0; i < pattern.elements.length; i++) {
-            const element = pattern.elements[i];
+        for (const element of pattern.elements) {
             if (element.name.kind === ts.SyntaxKind.Identifier) {
                 this.markAssignment(element.name as ts.Identifier);
             }
@@ -196,8 +193,7 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     visitBlock(node: ts.Block) {
         const names: ts.Map<DeclarationUsages> = {};
-        for (let i = 0; i < node.statements.length; i++) {
-            const statement = node.statements[i];
+        for (const statement of node.statements) {
             if (statement.kind === ts.SyntaxKind.VariableStatement) {
                 this.collectLetIdentifiers((statement as ts.VariableStatement).declarationList, names);
             }
@@ -208,9 +204,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     }
 
     private collectLetIdentifiers(list: ts.VariableDeclarationList, ret: ts.Map<DeclarationUsages>) {
-        const children = list.declarations;
-        for (let i = 0; i < children.length; i++) {
-            const node = children[i];
+        for (const node of list.declarations) {
             if (isLet(node) && !isExported(node)) {
                 this.collectNameIdentifiers(node, node.name, ret);
             }
@@ -227,8 +221,7 @@ class PreferConstWalker extends Lint.RuleWalker {
     }
 
     private collectBindingPatternIdentifiers(value: ts.VariableDeclaration, pattern: ts.BindingPattern, table: ts.Map<DeclarationUsages>) {
-        for (let i = 0; i < pattern.elements.length; i++) {
-            const element = pattern.elements[i];
+        for (const element of pattern.elements) {
             this.collectNameIdentifiers(value, element.name, table);
         }
     }
