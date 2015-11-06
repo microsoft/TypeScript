@@ -683,7 +683,7 @@ namespace ts.server {
 
             // Acquire typings for JS files
             if (fileExtensionIs(info.fileName, ".js")) {
-                this.acquireTypingForJs(ts.getDirectoryPath(info.fileName), info.defaultProject);
+                this.acquireTypingForJs(info.fileName, info.defaultProject);
             }
 
             this.updateConfiguredProjectList();
@@ -922,19 +922,19 @@ namespace ts.server {
         }
 
         acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypings, newTypings } = this.resolveTypingsForJs(path);
-            this.downloadTypingFilesForJs(cachedTypings, newTypings, project);
+            let { cachedTypingPaths, newTypings } = this.resolveTypingsForJs(path);
+            this.downloadTypingFilesForJs(cachedTypingPaths, newTypings, project);
         }
 
-        resolveTypingsForJs(path: string): { cachedTypings: string[], newTypings: string[] } {
-            // Todo: change the mock behavior
-            return { cachedTypings: ["angular"], newTypings:  ["backbone"] };
+        resolveTypingsForJs(fileName: string): { cachedTypingPaths: string[], newTypings: string[] } {
+            this.log("Files for JS typing:" + fileName);
+            return ts.JsTyping.discoverTypings(sys, [fileName]);
         }
 
-        downloadTypingFilesForJs(cachedTypingPaths: string[], typings: string[], project: Project) {
+        downloadTypingFilesForJs(cachedTypingPaths: string[], newTypings: string[], project: Project) {
             let tsd = require("tsd");
-            let tsdJsonPath = 'C:\\Users\\lizhe\\.typingCache\\tsd.json';
-            let typingPath = 'C:\\Users\\lizhe\\.typingCache\\typings';
+            let tsdJsonPath = 'C:/Users/lizhe/.typingCache/tsd.json';
+            let typingPath = 'C:/Users/lizhe/.typingCache/typings';
             let api = tsd.getAPI(tsdJsonPath);
             let cachedInstalledPaths: Map<string>;
 
@@ -942,59 +942,32 @@ namespace ts.server {
             options.resolveDependencies = true;
             options.overwriteFiles = true;
             options.saveToConfig = true;
-            options.saveBundle = true;
 
-            api.readConfig().then(updateTypings);
-
+            this.log("Cached typings include: " + cachedTypingPaths);
             cachedTypingPaths.forEach(p => addTypingToProject(p, project));
+            project.projectService.updateProjectStructure();
 
-            function getInstalledPaths(): Map<string> {
-                if (!cachedInstalledPaths) {
-                    cachedInstalledPaths = {};
-                    api.context.config.getInstalled().forEach(
-                        (installed: { path: string, commitSha: string }) => { cachedInstalledPaths[installed.path] = installed.commitSha; }
-                    );
+            this.log("New typings to download: " + newTypings);
+            if (newTypings && newTypings.length > 0) {
+                let query = new tsd.Query();
+                for(let newTyping of newTypings) {
+                    query.addNamePattern(newTyping);
                 }
-                return cachedInstalledPaths;
+
+                api.readConfig()
+                    .then(() => api.select(query, options))
+                    .then((selection: any) => api.install(selection, options))
+                    .then((installResult: any) => {
+                        let keys = Object.keys(installResult.written.dict);
+                        keys.forEach(key => addTypingToProject(ts.combinePaths(typingPath, key), project));
+                        project.projectService.updateProjectStructure();
+                    });
             }
 
-            function updateTypings() {
-                for (let typing of typings) {
-                    let query = new tsd.Query(typing);
-                    query.loadHistory = true;
-                    api.select(query, options).then(function (selection: any) {
-                        // Compare the stored commit hash with the latest commit hash,
-                        // and update the cache if different
-                        let firstResult = selection.definitions[0];
-                        if (!firstResult) {
-                            return;
-                        }
-
-                        if (firstResult.history[0]) {
-                            let recentCommitHash = firstResult.history[0].def.head.commit.commitSha;
-                            let path = firstResult.path;
-                            let storedCommitHash = getInstalledPaths()[path];
-                            if (recentCommitHash === storedCommitHash) {
-                                // Open file and add to project directly
-                                addTypingToProject(path, project);
-                                return;
-                            }
-                        }
-                        api.install(selection, options);
-                    })..then(function (installRes: any) {
-                        //let keys = Object.keys(installRes.written.dict);
-                        //keys.forEach(key => addTypingToProject(key, project));
-                        addTypingToProject(firstResult.path, project);
-                    });;
-                }
-            }
-
-            function addTypingToProject(path: string, project: Project) {
-                let fileName = ts.normalizePath(ts.combinePaths(typingPath, path));
+            function addTypingToProject(fileName: string, project: Project) {
                 let script = project.projectService.openFile(fileName, false);
                 project.addRoot(script);
                 project.projectService.openFileRootsConfigured.push(script);
-                project.projectService.updateProjectStructure();
             }
         }
 

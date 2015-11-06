@@ -270,7 +270,7 @@ namespace ts.server {
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
     function createLoggerFromEnv() {
         var fileName: string = undefined;
-        var detailLevel = "normal";
+        var detailLevel = "verbose";
         var logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
             var logEnv = parseLoggingEnvironmentString(logEnvStr);
