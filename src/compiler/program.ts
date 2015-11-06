@@ -286,7 +286,7 @@ namespace ts {
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
-        let diagnostics = program.getOptionsDiagnostics(cancellationToken).concat(
+        let diagnostics = program.getOptionsDiagnostics().concat(
                           program.getSyntacticDiagnostics(sourceFile, cancellationToken),
                           program.getGlobalDiagnostics(cancellationToken),
                           program.getSemanticDiagnostics(sourceFile, cancellationToken));
@@ -337,6 +337,7 @@ namespace ts {
         let classifiableNames: Map<string>;
 
         let skipDefaultLib = options.noLib;
+        let supportedExtensions = getSupportedExtensions(options);
 
         let start = new Date().getTime();
 
@@ -369,14 +370,13 @@ namespace ts {
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            let supportedExtensions = getSupportedExtensions(options);
-            forEach(rootNames, name => processRootFile(name, false, supportedExtensions));
+            forEach(rootNames, name => processRootFile(name, false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
             if (!skipDefaultLib) {
-                processRootFile(host.getDefaultLibFileName(options), true, supportedExtensions);
+                processRootFile(host.getDefaultLibFileName(options), true);
             }
         }
 
@@ -833,7 +833,7 @@ namespace ts {
             });
         }
 
-        function getOptionsDiagnostics(cancellationToken?: CancellationToken): Diagnostic[] {
+        function getOptionsDiagnostics(): Diagnostic[] {
             let allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
             addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
@@ -851,8 +851,8 @@ namespace ts {
             return getBaseFileName(fileName).indexOf(".") >= 0;
         }
 
-        function processRootFile(fileName: string, isDefaultLib: boolean, supportedExtensions: string[]) {
-            processSourceFile(normalizePath(fileName), isDefaultLib, supportedExtensions);
+        function processRootFile(fileName: string, isDefaultLib: boolean) {
+            processSourceFile(normalizePath(fileName), isDefaultLib);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -911,7 +911,7 @@ namespace ts {
             }
         }
 
-        function processSourceFile(fileName: string, isDefaultLib: boolean, supportedExtensions: string[], refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
@@ -919,7 +919,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, supportedExtensions, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -929,13 +929,13 @@ namespace ts {
                 }
             }
             else {
-                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, supportedExtensions, refFile, refPos, refEnd);
+                let nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(getSupportedExtensions(options), extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, supportedExtensions, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
                         // (TODO: shkamat) Should this message be different given we support multiple extensions
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
@@ -965,7 +965,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, normalizedAbsolutePath: Path, isDefaultLib: boolean, supportedExtensions: string[], refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, normalizedAbsolutePath: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(normalizedAbsolutePath)) {
                 const file = filesByName.get(normalizedAbsolutePath);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1007,11 +1007,11 @@ namespace ts {
 
                 let basePath = getDirectoryPath(fileName);
                 if (!options.noResolve) {
-                    processReferencedFiles(file, basePath, supportedExtensions);
+                    processReferencedFiles(file, basePath);
                 }
 
                 // always process imported modules to record module name resolutions
-                processImportedModules(file, basePath, supportedExtensions);
+                processImportedModules(file, basePath);
 
                 if (isDefaultLib) {
                     file.isDefaultLib = true;
@@ -1025,10 +1025,10 @@ namespace ts {
             return file;
         }
 
-        function processReferencedFiles(file: SourceFile, basePath: string, supportedExtensions: string[]) {
+        function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 let referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, /* isDefaultLib */ false, supportedExtensions, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
 
@@ -1036,7 +1036,7 @@ namespace ts {
             return host.getCanonicalFileName(fileName);
         }
 
-        function processImportedModules(file: SourceFile, basePath: string, supportedExtensions: string[]) {
+        function processImportedModules(file: SourceFile, basePath: string) {
             collectExternalModuleReferences(file);
             if (file.imports.length) {
                 file.resolvedModules = {};
@@ -1046,7 +1046,7 @@ namespace ts {
                     let resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /* isDefaultLib */ false, supportedExtensions, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {
@@ -1255,6 +1255,7 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
+            // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
             if (!options.noEmit) {
                 let emitHost = getEmitHost();
                 let emitFilesSeen = createFileMap<boolean>(!host.useCaseSensitiveFileNames() ? key => key.toLocaleLowerCase() : undefined);

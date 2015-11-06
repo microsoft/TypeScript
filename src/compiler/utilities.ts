@@ -1831,7 +1831,7 @@ namespace ts {
 
         function onBundledEmit(host: EmitHost) {
             let bundledSources = filter(host.getSourceFiles(),
-                sourceFile => !shouldEmitToOwnFile(sourceFile, host.getCompilerOptions()) && !isDeclarationFile(sourceFile));
+                sourceFile => !shouldEmitToOwnFile(sourceFile, options) && !isDeclarationFile(sourceFile));
             let jsFilePath = options.outFile || options.out;
             let emitFileNames: EmitFileNames = {
                 jsFilePath,
