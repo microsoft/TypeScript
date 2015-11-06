@@ -7,12 +7,9 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,11): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(15,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2365: Operator '<' cannot be applied to types '"ABC"' and '"XYZ"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2365: Operator '===' cannot be applied to types '"ABC"' and '"XYZ"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(18,9): error TS2365: Operator '!=' cannot be applied to types '"ABC"' and '"XYZ"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (12 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (9 errors) ====
     
     let abc: "ABC" = "ABC";
     let xyz: "XYZ" = "XYZ";
@@ -47,11 +44,5 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
             ~~~~~~~~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
     let j = abc < xyz;
-            ~~~~~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '"ABC"' and '"XYZ"'.
     let k = abc === xyz;
-            ~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"ABC"' and '"XYZ"'.
     let l = abc != xyz;
-            ~~~~~~~~~~
-!!! error TS2365: Operator '!=' cannot be applied to types '"ABC"' and '"XYZ"'.
