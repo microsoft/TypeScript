@@ -13,6 +13,4 @@ function f(foo: T) {
     else { 
         return foo[0];
     }
-
-    throw new Error("Unreachable code hit.");
 }

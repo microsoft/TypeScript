@@ -12,6 +12,4 @@ function f(foo: T) {
     else { 
         return (foo as S[])[0];
     }
-
-    throw new Error("Unreachable code hit.");
 }
