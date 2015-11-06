@@ -1,0 +1,66 @@
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(5,5): error TS2322: Type 'C' is not assignable to type '{}'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(6,1): error TS2322: Type 'number' is not assignable to type 'C'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(7,1): error TS2322: Type '{ foo: string; }' is not assignable to type 'C'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(8,1): error TS2322: Type '() => void' is not assignable to type 'C'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(13,16): error TS20020: Cannot have return expression in struct constructor.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(18,5): error TS2322: Type 'D' is not assignable to type '{}'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(19,1): error TS2322: Type 'number' is not assignable to type 'D'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(20,1): error TS2322: Type '{ foo: string; }' is not assignable to type 'D'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(21,1): error TS2322: Type '() => void' is not assignable to type 'D'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(22,1): error TS2322: Type 'C' is not assignable to type 'D'.
+tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts(29,1): error TS2322: Type 'number' is not assignable to type 'E'.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structBody/structWithEmptyBody.ts (11 errors) ====
+    struct C {
+    }
+    
+    var c: C;
+    var o: {} = c; // error
+        ~
+!!! error TS2322: Type 'C' is not assignable to type '{}'.
+    c = 1; // error
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'C'.
+    c = { foo: '' }; // error
+    ~
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'C'.
+    c = () => { }; // error
+    ~
+!!! error TS2322: Type '() => void' is not assignable to type 'C'.
+    c = new C(); // ok
+    
+    struct D {
+        constructor() {
+            return 1; // error
+                   ~
+!!! error TS20020: Cannot have return expression in struct constructor.
+        }
+    }
+    
+    var d: D;
+    var o: {} = d; // error
+        ~
+!!! error TS2322: Type 'D' is not assignable to type '{}'.
+    d = 1; // error
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'D'.
+    d = { foo: '' }; // error
+    ~
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'D'.
+    d = () => { }; // error
+    ~
+!!! error TS2322: Type '() => void' is not assignable to type 'D'.
+    d = c; // error, no inheritance
+    ~
+!!! error TS2322: Type 'C' is not assignable to type 'D'.
+    
+    struct E {
+    	foo: number;
+    }
+    
+    var e: E;
+    e = 1; // error, Type 'number' is not assignable to type 'E'
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'E'.
+    
