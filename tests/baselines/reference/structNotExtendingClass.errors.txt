@@ -1,0 +1,16 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structNotExtendingClass.ts(7,18): error TS20023: Base constructor return type 'C' is not a struct type.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structNotExtendingClass.ts (1 errors) ====
+    class C {
+    	foo: string;
+    	thing() { }
+        static other() { }
+    }
+    
+    struct D extends C { // error, struct can only extend struct
+                     ~
+!!! error TS20023: Base constructor return type 'C' is not a struct type.
+    	bar: string;
+    }
+    
