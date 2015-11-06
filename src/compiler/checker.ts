@@ -2990,7 +2990,7 @@ namespace ts {
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
                     type.thisType.symbol = symbol;
-                    type.thisType.constraint = getTypeWithThisArgument(type);
+                    type.thisType.constraint = type;
                 }
             }
             return <InterfaceType>links.declaredType;
@@ -3534,18 +3534,28 @@ namespace ts {
         }
 
         /**
+         * The apparent type of a type parameter is the base constraint instantiated with the type parameter
+         * as the type argument for the 'this' type.
+         */
+        function getApparentTypeOfTypeParameter(type: TypeParameter) {
+            if (!type.resolvedApparentType) {
+                let constraintType = getConstraintOfTypeParameter(type);
+                while (constraintType && constraintType.flags & TypeFlags.TypeParameter) {
+                    constraintType = getConstraintOfTypeParameter(<TypeParameter>constraintType);
+                }
+                type.resolvedApparentType = getTypeWithThisArgument(constraintType || emptyObjectType, type);
+            }
+            return type.resolvedApparentType;
+        }
+
+        /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.TypeParameter) {
-                do {
-                    type = getConstraintOfTypeParameter(<TypeParameter>type);
-                } while (type && type.flags & TypeFlags.TypeParameter);
-                if (!type) {
-                    type = emptyObjectType;
-                }
+                type = getApparentTypeOfTypeParameter(<TypeParameter>type);
             }
             if (type.flags & TypeFlags.StringLike) {
                 type = globalStringType;
