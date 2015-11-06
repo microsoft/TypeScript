@@ -3011,13 +3011,15 @@ namespace ts {
             if (baseType === unknownType) {
                 return;
             }
-            if (!(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface)) || (isInClassDecl && (getTargetType(baseType).flags & TypeFlags.Struct))) {
-                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
-                return;
-            }
-	        else if (!isInClassDecl && !(getTargetType(baseType).flags & TypeFlags.Struct)) {
-	            error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_struct_type, typeToString(baseType));
-	            return;
+            if (!(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Struct | TypeFlags.Interface))) {
+                if (isInClassDecl) {
+	                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
+	                return;
+                }
+                else {
+	                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_struct_type, typeToString(baseType));
+	                return;
+                }
             }
             if (type === baseType || hasBaseType(<InterfaceType>baseType, type)) {
                 error(type.symbol.valueDeclaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
@@ -4909,13 +4911,13 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
         }
 
     function isBothStructType(source: Type, target: Type): boolean {
-        return isTypeStruct(source) && isTypeStruct(target);
+        return isTypeReferenceStruct(source) && isTypeReferenceStruct(target);
     }
 
     function isOneTypeStructType(source: Type, target: Type): boolean {
         // return (isTypeStruct(source) && !isTypeStruct(target)) || (isTypeStruct(target) && !isTypeStruct(source));
-        return (isTypeStruct(source) && !isTypeStruct(target)) ||
-            (isTypeStruct(target) && !isTypeStruct(source));
+        return (isTypeReferenceStruct(source) && !isTypeReferenceStruct(target)) ||
+            (isTypeReferenceStruct(target) && !isTypeReferenceStruct(source));
     }
 
     function write(info: string): void {
@@ -5120,25 +5122,30 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
                     if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                         // Report structural errors only if we haven't reported any errors yet
                         let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                    if (isBothStructType(source, target)) {
-	                    // for struct assignability, check its inheritance chain
-                    let baseTypes = (<InterfaceType>apparentType).resolvedBaseTypes;
-                    while (baseTypes && baseTypes.length > 0) {
-                    if (baseTypes.indexOf(<ObjectType>target) > -1) { // target is on source's inheritance chain
-                    errorInfo = saveErrorInfo;
-                    return Ternary.True;
-                    }
-                    else {
-baseTypes = (<InterfaceType>baseTypes[0]).resolvedBaseTypes; // expand the inheritance chain
-                    }
-                    }
-                }
-                else { // structural comparison
-                    if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
-                    errorInfo = saveErrorInfo;
-                    return result;
-                    }
-                    }
+	                    if (isBothStructType(source, target)) {
+		                    // for struct assignability, check its inheritance chain
+		                    let baseTypes = (<InterfaceType>apparentType).resolvedBaseTypes;
+                            if (baseTypes) {
+	                            while (baseTypes && baseTypes.length > 0) {
+		                            if (baseTypes.indexOf(<ObjectType>target) > -1) { // target is on source's inheritance chain
+			                            errorInfo = saveErrorInfo;
+			                            return Ternary.True;
+		                            }
+		                            else {
+			                            baseTypes = (<InterfaceType>baseTypes[0]).resolvedBaseTypes; // expand the inheritance chain
+		                            }
+	                            }
+                            }
+		                    else {  // struct declaration
+	                            return Ternary.True;
+                            }
+		                }
+		                else { // structural comparison
+		                    if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
+			                    errorInfo = saveErrorInfo;
+			                    return result;
+		                    }
+	                    }
                     }
                 }
 
