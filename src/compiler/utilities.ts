@@ -2142,7 +2142,7 @@ namespace ts {
         return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 
-    export function isTsx(fileName: string) {
+    export function allowsJsxExpressions(fileName: string) {
         return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
     }
 

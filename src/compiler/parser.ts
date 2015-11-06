@@ -554,7 +554,7 @@ namespace ts {
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(isTsx(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
+            scanner.setLanguageVariant(allowsJsxExpressions(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
         }
 
         function clearState() {
@@ -671,7 +671,7 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = isTsx(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
+            sourceFile.languageVariant = allowsJsxExpressions(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
 
             return sourceFile;
         }
