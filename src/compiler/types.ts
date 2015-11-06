@@ -1828,7 +1828,7 @@ namespace ts {
         StringLiteral           = 0x00000100,  // String literal type
         TypeParameter           = 0x00000200,  // Type parameter
         Class                   = 0x00000400,  // Class
-        Struct                  = 0x100000000,  // Struct
+        Struct                  = 0x80000000,  // Struct
         Interface               = 0x00000800,  // Interface
         Reference               = 0x00001000,  // Generic type reference
         Tuple                   = 0x00002000,  // Tuple
@@ -1856,7 +1856,7 @@ namespace ts {
         U16                     = 0x10000000,
         I32                     = 0x20000000,
         U32                     = 0x40000000,
-        Float                   = 0x80000000,
+        Float                   = 0x40000000,
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | I8 | U8 | I16 | U16 | I32 | U32 | Float | ESSymbol | Void | Undefined | Null,
