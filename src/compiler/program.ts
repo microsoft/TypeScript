@@ -70,7 +70,7 @@ namespace ts {
     }
 
     function loadNodeModuleFromFile(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
-        return forEach(supportedJsExtensions, tryLoad);
+        return forEach(supportedExtensions, tryLoad);
 
         function tryLoad(ext: string): string {
             let fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
