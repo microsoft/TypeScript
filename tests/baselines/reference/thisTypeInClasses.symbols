@@ -9,131 +9,128 @@ class C1 {
 >f : Symbol(f, Decl(thisTypeInClasses.ts, 1, 12))
 >x : Symbol(x, Decl(thisTypeInClasses.ts, 2, 6))
 >undefined : Symbol(undefined)
-
-    constructor(x: this) { }
->x : Symbol(x, Decl(thisTypeInClasses.ts, 3, 16))
 }
 
 class C2 {
->C2 : Symbol(C2, Decl(thisTypeInClasses.ts, 4, 1))
+>C2 : Symbol(C2, Decl(thisTypeInClasses.ts, 3, 1))
 
     [x: string]: this;
->x : Symbol(x, Decl(thisTypeInClasses.ts, 7, 5))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 6, 5))
 }
 
 interface Foo<T> {
->Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 8, 1))
->T : Symbol(T, Decl(thisTypeInClasses.ts, 10, 14))
+>Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 7, 1))
+>T : Symbol(T, Decl(thisTypeInClasses.ts, 9, 14))
 
     x: T;
->x : Symbol(x, Decl(thisTypeInClasses.ts, 10, 18))
->T : Symbol(T, Decl(thisTypeInClasses.ts, 10, 14))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 9, 18))
+>T : Symbol(T, Decl(thisTypeInClasses.ts, 9, 14))
 
     y: this;
->y : Symbol(y, Decl(thisTypeInClasses.ts, 11, 9))
+>y : Symbol(y, Decl(thisTypeInClasses.ts, 10, 9))
 }
 
 class C3 {
->C3 : Symbol(C3, Decl(thisTypeInClasses.ts, 13, 1))
+>C3 : Symbol(C3, Decl(thisTypeInClasses.ts, 12, 1))
 
     a: this[];
->a : Symbol(a, Decl(thisTypeInClasses.ts, 15, 10))
+>a : Symbol(a, Decl(thisTypeInClasses.ts, 14, 10))
 
     b: [this, this];
->b : Symbol(b, Decl(thisTypeInClasses.ts, 16, 14))
+>b : Symbol(b, Decl(thisTypeInClasses.ts, 15, 14))
 
     c: this | Date;
->c : Symbol(c, Decl(thisTypeInClasses.ts, 17, 20))
+>c : Symbol(c, Decl(thisTypeInClasses.ts, 16, 20))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     d: this & Date;
->d : Symbol(d, Decl(thisTypeInClasses.ts, 18, 19))
+>d : Symbol(d, Decl(thisTypeInClasses.ts, 17, 19))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     e: (((this)));
->e : Symbol(e, Decl(thisTypeInClasses.ts, 19, 19))
+>e : Symbol(e, Decl(thisTypeInClasses.ts, 18, 19))
 
     f: (x: this) => this;
->f : Symbol(f, Decl(thisTypeInClasses.ts, 20, 18))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 21, 8))
+>f : Symbol(f, Decl(thisTypeInClasses.ts, 19, 18))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 20, 8))
 
     g: new (x: this) => this;
->g : Symbol(g, Decl(thisTypeInClasses.ts, 21, 25))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 22, 12))
+>g : Symbol(g, Decl(thisTypeInClasses.ts, 20, 25))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 21, 12))
 
     h: Foo<this>;
->h : Symbol(h, Decl(thisTypeInClasses.ts, 22, 29))
->Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 8, 1))
+>h : Symbol(h, Decl(thisTypeInClasses.ts, 21, 29))
+>Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 7, 1))
 
     i: Foo<this | (() => this)>;
->i : Symbol(i, Decl(thisTypeInClasses.ts, 23, 17))
->Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 8, 1))
+>i : Symbol(i, Decl(thisTypeInClasses.ts, 22, 17))
+>Foo : Symbol(Foo, Decl(thisTypeInClasses.ts, 7, 1))
 
     j: (x: any) => x is this;
->j : Symbol(j, Decl(thisTypeInClasses.ts, 24, 32))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 25, 8))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 25, 8))
+>j : Symbol(j, Decl(thisTypeInClasses.ts, 23, 32))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 24, 8))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 24, 8))
 }
 
 declare class C4 {
->C4 : Symbol(C4, Decl(thisTypeInClasses.ts, 26, 1))
+>C4 : Symbol(C4, Decl(thisTypeInClasses.ts, 25, 1))
 
     x: this;
->x : Symbol(x, Decl(thisTypeInClasses.ts, 28, 18))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 27, 18))
 
     f(x: this): this;
->f : Symbol(f, Decl(thisTypeInClasses.ts, 29, 12))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 30, 6))
+>f : Symbol(f, Decl(thisTypeInClasses.ts, 28, 12))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 29, 6))
 }
 
 class C5 {
->C5 : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
+>C5 : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
 
     foo() {
->foo : Symbol(foo, Decl(thisTypeInClasses.ts, 33, 10))
+>foo : Symbol(foo, Decl(thisTypeInClasses.ts, 32, 10))
 
         let f1 = (x: this): this => this;
->f1 : Symbol(f1, Decl(thisTypeInClasses.ts, 35, 11))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 35, 18))
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
+>f1 : Symbol(f1, Decl(thisTypeInClasses.ts, 34, 11))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 34, 18))
+>this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
+>this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
 
         let f2 = (x: this) => this;
->f2 : Symbol(f2, Decl(thisTypeInClasses.ts, 36, 11))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 36, 18))
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
+>f2 : Symbol(f2, Decl(thisTypeInClasses.ts, 35, 11))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 35, 18))
+>this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
 
         let f3 = (x: this) => (y: this) => this;
->f3 : Symbol(f3, Decl(thisTypeInClasses.ts, 37, 11))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 37, 18))
->y : Symbol(y, Decl(thisTypeInClasses.ts, 37, 31))
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
+>f3 : Symbol(f3, Decl(thisTypeInClasses.ts, 36, 11))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 36, 18))
+>y : Symbol(y, Decl(thisTypeInClasses.ts, 36, 31))
+>this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
 
         let f4 = (x: this) => {
->f4 : Symbol(f4, Decl(thisTypeInClasses.ts, 38, 11))
->x : Symbol(x, Decl(thisTypeInClasses.ts, 38, 18))
+>f4 : Symbol(f4, Decl(thisTypeInClasses.ts, 37, 11))
+>x : Symbol(x, Decl(thisTypeInClasses.ts, 37, 18))
 
             let g = (y: this) => {
->g : Symbol(g, Decl(thisTypeInClasses.ts, 39, 15))
->y : Symbol(y, Decl(thisTypeInClasses.ts, 39, 21))
+>g : Symbol(g, Decl(thisTypeInClasses.ts, 38, 15))
+>y : Symbol(y, Decl(thisTypeInClasses.ts, 38, 21))
 
                 return () => this;
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
+>this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
             }
             return g(this);
->g : Symbol(g, Decl(thisTypeInClasses.ts, 39, 15))
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 31, 1))
+>g : Symbol(g, Decl(thisTypeInClasses.ts, 38, 15))
+>this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
         }
     }
     bar() {
->bar : Symbol(bar, Decl(thisTypeInClasses.ts, 44, 5))
+>bar : Symbol(bar, Decl(thisTypeInClasses.ts, 43, 5))
 
         let x1 = <this>undefined;
->x1 : Symbol(x1, Decl(thisTypeInClasses.ts, 46, 11))
+>x1 : Symbol(x1, Decl(thisTypeInClasses.ts, 45, 11))
 >undefined : Symbol(undefined)
 
         let x2 = undefined as this;
->x2 : Symbol(x2, Decl(thisTypeInClasses.ts, 47, 11))
+>x2 : Symbol(x2, Decl(thisTypeInClasses.ts, 46, 11))
 >undefined : Symbol(undefined)
     }
 }
