@@ -1,0 +1,14 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/classNotExtendingStruct.ts(5,17): error TS2509: Base constructor return type 'S' is not a class or interface type.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/classNotExtendingStruct.ts (1 errors) ====
+    struct S {
+    	bar: string;
+    }
+    
+    class C extends S { // error, class may only extend class
+                    ~
+!!! error TS2509: Base constructor return type 'S' is not a class or interface type.
+    	foo: string;
+    }
+    
