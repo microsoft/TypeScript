@@ -1,0 +1,67 @@
+=== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingStruct.ts ===
+struct C {
+>C : C
+
+    foo: string;
+>foo : string
+
+    thing() { }
+>thing : () => void
+
+    static other() { }
+>other : () => void
+}
+
+struct D extends C {
+>D : D
+>C : C
+
+    bar: string;
+>bar : string
+}
+
+var d: D;
+>d : D
+>D : D
+
+var r = d.foo;
+>r : string
+>d.foo : string
+>d : D
+>foo : string
+
+var r2 = d.bar;
+>r2 : string
+>d.bar : string
+>d : D
+>bar : string
+
+var r3 = d.thing();
+>r3 : void
+>d.thing() : void
+>d.thing : () => void
+>d : D
+>thing : () => void
+
+var r4 = D.other();
+>r4 : void
+>D.other() : void
+>D.other : () => void
+>D : typeof D
+>other : () => void
+
+/* struct C2<T> {
+    foo: T;
+    thing(x: T) { }
+    static other<T>(x: T) { }
+}
+
+struct D2<T> extends C2<T> {
+    bar: string;
+}
+
+var d2: D2<string>;
+var r5 = d2.foo;
+var r6 = d2.bar;
+var r7 = d2.thing('');
+var r8 = D2.other(1); */
