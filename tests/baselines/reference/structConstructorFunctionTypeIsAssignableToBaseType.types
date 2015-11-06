@@ -1,0 +1,38 @@
+=== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structConstructorFunctionTypeIsAssignableToBaseType.ts ===
+struct Base {
+>Base : Base
+
+    static foo: {
+>foo : { bar: Object; }
+
+        bar: Object;
+>bar : Object
+>Object : Object
+    }
+}
+
+struct Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    // ok
+    static foo: {
+>foo : { bar: number; }
+
+        bar: number;
+>bar : number
+    }
+}
+
+struct Derived2 extends Base {
+>Derived2 : Derived2
+>Base : Base
+
+    // ok
+    static foo: {
+>foo : { bar: any; }
+
+        bar: any;
+>bar : any
+    }
+}
