@@ -1,20 +1,20 @@
-tests/cases/conformance/functions/functionImplementationErrors.ts(2,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(6,19): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(10,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(16,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
-tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
-tests/cases/conformance/functions/functionImplementationErrors.ts(40,28): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
-tests/cases/conformance/functions/functionImplementationErrors.ts(49,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(53,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(57,11): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(61,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(65,11): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(3,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(7,19): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(11,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(17,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(26,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/functions/functionImplementationErrors.ts(31,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(36,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(50,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(54,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(58,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(62,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(66,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(70,11): error TS2354: No best common type exists among return expressions.
 
 
-==== tests/cases/conformance/functions/functionImplementationErrors.ts (14 errors) ====
+==== tests/cases/conformance/functions/functionImplementationErrors.ts (13 errors) ====
+    
     // FunctionExpression with no return type annotation with multiple return statements with unrelated types
     var f1 = function () {
              ~~~~~~~~
@@ -52,7 +52,7 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
     // Function implemetnation with non -void return type annotation with no return
     function f5(): number {
                    ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
+!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
     }
     
     var m;
@@ -72,8 +72,6 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(69,11): error 
     // FunctionExpression with non -void return type annotation with a throw, no return, and other code
     // Should be error but isn't
     undefined === function (): number {
-                               ~~~~~~
-!!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.
         throw undefined;
         var x = 4;
     };

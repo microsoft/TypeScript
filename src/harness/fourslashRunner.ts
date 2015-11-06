@@ -45,10 +45,10 @@ class FourSlashRunner extends RunnerBase {
             this.tests.forEach((fn: string) => {
                  describe(fn, () => {
                        fn = ts.normalizeSlashes(fn);
-                        let justName = fn.replace(/^.*[\\\/]/, "");
+                        const justName = fn.replace(/^.*[\\\/]/, "");
 
                         // Convert to relative path
-                        let testIndex = fn.indexOf("tests/");
+                        const testIndex = fn.indexOf("tests/");
                         if (testIndex >= 0) fn = fn.substr(testIndex);
 
                         if (justName && !justName.match(/fourslash\.ts$/i) && !justName.match(/\.d\.ts$/i)) {
@@ -60,21 +60,21 @@ class FourSlashRunner extends RunnerBase {
             });
 
             describe("Generate Tao XML", () => {
-                let invalidReasons: any = {};
+                const invalidReasons: any = {};
                 FourSlash.xmlData.forEach(xml => {
                     if (xml.invalidReason !== null) {
                         invalidReasons[xml.invalidReason] = (invalidReasons[xml.invalidReason] || 0) + 1;
                     }
                 });
-                let invalidReport: { reason: string; count: number }[] = [];
-                for (let reason in invalidReasons) {
+                const invalidReport: { reason: string; count: number }[] = [];
+                for (const reason in invalidReasons) {
                     if (invalidReasons.hasOwnProperty(reason)) {
                         invalidReport.push({ reason: reason, count: invalidReasons[reason] });
                     }
                 }
                 invalidReport.sort((lhs, rhs) => lhs.count > rhs.count ? -1 : lhs.count === rhs.count ? 0 : 1);
 
-                let lines: string[] = [];
+                const lines: string[] = [];
                 lines.push("<!-- Blocked Test Report");
                 invalidReport.forEach((reasonAndCount) => {
                     lines.push(reasonAndCount.count + " tests blocked by " + reasonAndCount.reason);

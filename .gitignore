@@ -31,6 +31,7 @@ scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 src/harness/*.js
 src/compiler/diagnosticInformationMap.generated.ts
+src/compiler/diagnosticMessages.generated.json
 rwc-report.html
 *.swp
 build.json
