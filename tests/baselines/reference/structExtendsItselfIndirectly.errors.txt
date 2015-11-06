@@ -1,0 +1,26 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly.ts(1,8): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly.ts(3,8): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly.ts(5,8): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly.ts(11,39): error TS1010: '*/' expected.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly.ts (4 errors) ====
+    struct C extends E { foo: string; } // error
+           ~
+!!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+    
+    struct D extends C { bar: string; }
+           ~
+!!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+    
+    struct E extends D { baz: number; }
+           ~
+!!! error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+    
+    /* struct C2<T> extends E2<T> { foo: T; } // error
+    
+    struct D2<T> extends C2<T> { bar: T; }
+    
+    struct E2<T> extends D2<T> { baz: T; }
+                                          
+!!! error TS1010: '*/' expected.

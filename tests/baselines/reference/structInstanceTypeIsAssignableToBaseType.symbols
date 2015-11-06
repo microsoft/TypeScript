@@ -1,0 +1,42 @@
+=== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structInstanceTypeIsAssignableToBaseType.ts ===
+// doc 1.1
+// Because struct uses nominal typing, the instance type of the declared struct doesn’t need to be
+// assignable to the base type reference. However, member variables override is not allowed.
+// ok
+
+struct C {
+>C : Symbol(C, Decl(structInstanceTypeIsAssignableToBaseType.ts, 0, 0))
+
+	foo: string;
+>foo : Symbol(foo, Decl(structInstanceTypeIsAssignableToBaseType.ts, 5, 10))
+
+	thing(): string {
+>thing : Symbol(thing, Decl(structInstanceTypeIsAssignableToBaseType.ts, 6, 13))
+
+		return "1";
+	}
+}
+
+struct D extends C {
+>D : Symbol(D, Decl(structInstanceTypeIsAssignableToBaseType.ts, 10, 1))
+>C : Symbol(C, Decl(structInstanceTypeIsAssignableToBaseType.ts, 0, 0))
+
+	thing(): number {
+>thing : Symbol(thing, Decl(structInstanceTypeIsAssignableToBaseType.ts, 12, 20))
+
+		return 1;  // ok
+	}
+}
+
+var c: C;
+>c : Symbol(c, Decl(structInstanceTypeIsAssignableToBaseType.ts, 18, 3))
+>C : Symbol(C, Decl(structInstanceTypeIsAssignableToBaseType.ts, 0, 0))
+
+var d: D;
+>d : Symbol(d, Decl(structInstanceTypeIsAssignableToBaseType.ts, 19, 3))
+>D : Symbol(D, Decl(structInstanceTypeIsAssignableToBaseType.ts, 10, 1))
+
+c = d;
+>c : Symbol(c, Decl(structInstanceTypeIsAssignableToBaseType.ts, 18, 3))
+>d : Symbol(d, Decl(structInstanceTypeIsAssignableToBaseType.ts, 19, 3))
+

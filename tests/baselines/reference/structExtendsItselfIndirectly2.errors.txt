@@ -1,0 +1,37 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly2.ts(1,8): error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly2.ts(4,19): error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly2.ts(9,19): error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly2.ts(22,2): error TS1010: '*/' expected.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsItselfIndirectly2.ts (4 errors) ====
+    struct C extends N.E { foo: string; } // error
+           ~
+!!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
+    
+    module M {
+        export struct D extends C { bar: string; }
+                      ~
+!!! error TS2506: 'D' is referenced directly or indirectly in its own base expression.
+    
+    }
+    
+    module N {
+        export struct E extends M.D { baz: number; }
+                      ~
+!!! error TS2506: 'E' is referenced directly or indirectly in its own base expression.
+    }
+    
+    /* module O {
+        struct C2<T> extends Q.E2<T> { foo: T; } // error
+    
+        module P {
+            export struct D2<T> extends C2<T> { bar: T; }
+        }
+    
+        module Q {
+            export struct E2<T> extends P.D2<T> { baz: T; }
+        }
+    }
+     
+!!! error TS1010: '*/' expected.
