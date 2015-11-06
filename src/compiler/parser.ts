@@ -5183,6 +5183,13 @@ namespace ts {
             node.name = parseNameOfStructDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isStructHeritageClause*/ true);
+            if (node.heritageClauses) {
+            for (let hc of node.heritageClauses) {
+            if (hc.token === SyntaxKind.ImplementsKeyword) {
+parseErrorAtPosition(hc.pos, hc.end - hc.pos, Diagnostics.A_struct_can_not_implement_a_class_or_interface);
+            }
+            }
+            }
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // StructTail[Yield,Await] : (Modified) See 14.5
