@@ -38,9 +38,4 @@ function f(foo: T) {
 >S : "a" | "b"
 >0 : number
     }
-
-    throw new Error("Unreachable code hit.");
->new Error("Unreachable code hit.") : Error
->Error : ErrorConstructor
->"Unreachable code hit." : string
 }

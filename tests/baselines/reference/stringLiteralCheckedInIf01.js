@@ -13,8 +13,6 @@ function f(foo: T) {
     else { 
         return (foo as S[])[0];
     }
-
-    throw new Error("Unreachable code hit.");
 }
 
 //// [stringLiteralCheckedInIf01.js]
@@ -28,5 +26,4 @@ function f(foo) {
     else {
         return foo[0];
     }
-    throw new Error("Unreachable code hit.");
 }

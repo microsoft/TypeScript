@@ -36,7 +36,4 @@ function f(foo: T) {
         return foo[0];
 >foo : Symbol(foo, Decl(stringLiteralCheckedInIf02.ts, 8, 11))
     }
-
-    throw new Error("Unreachable code hit.");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
