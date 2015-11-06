@@ -1,4 +1,5 @@
 //// [recursiveMods.ts]
+
 export module Foo {
 	export class C {}
 }

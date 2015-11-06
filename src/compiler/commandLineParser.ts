@@ -1,6 +1,7 @@
 /// <reference path="sys.ts"/>
 /// <reference path="types.ts"/>
 /// <reference path="core.ts"/>
+/// <reference path="diagnosticInformationMap.generated.ts"/>
 /// <reference path="scanner.ts"/>
 
 namespace ts {
@@ -151,6 +152,12 @@ namespace ts {
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         },
         {
+            name: "pretty",
+            paramType: Diagnostics.KIND,
+            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental,
+            type: "boolean"
+        },
+        {
             name: "project",
             shortName: "p",
             type: "string",
@@ -249,6 +256,26 @@ namespace ts {
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
         },
         {
+            name: "allowUnusedLabels",
+            type: "boolean",
+            description: Diagnostics.Do_not_report_errors_on_unused_labels
+        },
+        {
+            name: "noImplicitReturns",
+            type: "boolean",
+            description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value
+        },
+        {
+            name: "noFallthroughCasesInSwitch",
+            type: "boolean",
+            description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
+        },
+        {
+            name: "allowUnreachableCode",
+            type: "boolean",
+            description: Diagnostics.Do_not_report_errors_on_unreachable_code
+        },
+        {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
@@ -273,8 +300,8 @@ namespace ts {
             return optionNameMapCache;
         }
 
-        let optionNameMap: Map<CommandLineOption> = {};
-        let shortOptionNames: Map<string> = {};
+        const optionNameMap: Map<CommandLineOption> = {};
+        const shortOptionNames: Map<string> = {};
         forEach(optionDeclarations, option => {
             optionNameMap[option.name.toLowerCase()] = option;
             if (option.shortName) {
@@ -287,10 +314,10 @@ namespace ts {
     }
 
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
-        let options: CompilerOptions = {};
-        let fileNames: string[] = [];
-        let errors: Diagnostic[] = [];
-        let { optionNameMap, shortOptionNames } = getOptionNameMap();
+        const options: CompilerOptions = {};
+        const fileNames: string[] = [];
+        const errors: Diagnostic[] = [];
+        const { optionNameMap, shortOptionNames } = getOptionNameMap();
 
         parseStrings(commandLine);
         return {
@@ -315,7 +342,7 @@ namespace ts {
                     }
 
                     if (hasProperty(optionNameMap, s)) {
-                        let opt = optionNameMap[s];
+                        const opt = optionNameMap[s];
 
                         // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
                         if (!args[i] && opt.type !== "boolean") {
@@ -355,19 +382,19 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            let text = readFile ? readFile(fileName) : sys.readFile(fileName);
+            const text = readFile ? readFile(fileName) : sys.readFile(fileName);
 
             if (!text) {
                 errors.push(createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName));
                 return;
             }
 
-            let args: string[] = [];
+            const args: string[] = [];
             let pos = 0;
             while (true) {
                 while (pos < text.length && text.charCodeAt(pos) <= CharacterCodes.space) pos++;
                 if (pos >= text.length) break;
-                let start = pos;
+                const start = pos;
                 if (text.charCodeAt(start) === CharacterCodes.doubleQuote) {
                     pos++;
                     while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.doubleQuote) pos++;
@@ -410,12 +437,40 @@ namespace ts {
       */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
         try {
-            return { config: /\S/.test(jsonText) ? JSON.parse(jsonText) : {} };
+            const jsonTextWithoutComments = removeComments(jsonText);
+            return { config: /\S/.test(jsonTextWithoutComments) ? JSON.parse(jsonTextWithoutComments) : {} };
         }
         catch (e) {
             return { error: createCompilerDiagnostic(Diagnostics.Failed_to_parse_file_0_Colon_1, fileName, e.message) };
         }
     }
+
+
+    /**
+     * Remove the comments from a json like text.
+     * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
+     *
+     * This method replace comment content by whitespace rather than completely remove them to keep positions in json parsing error reporting accurate.
+     */
+    function removeComments(jsonText: string): string {
+        let output = "";
+        const scanner = createScanner(ScriptTarget.ES5, /* skipTrivia */ false, LanguageVariant.Standard, jsonText);
+        let token: SyntaxKind;
+        while ((token = scanner.scan()) !== SyntaxKind.EndOfFileToken) {
+            switch (token) {
+                case SyntaxKind.SingleLineCommentTrivia:
+                case SyntaxKind.MultiLineCommentTrivia:
+                    // replace comments with whitespace to preserve original character positions
+                    output += scanner.getTokenText().replace(/\S/g, " ");
+                    break;
+                default:
+                    output += scanner.getTokenText();
+                    break;
+            }
+        }
+        return output;
+    }
+
 
     /**
       * Parse the contents of a config file (tsconfig.json).
@@ -425,9 +480,9 @@ namespace ts {
       *    file to. e.g. outDir
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}): ParsedCommandLine {
-        let { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
 
-        options = extend(existingOptions, options);
+        const options = extend(existingOptions, optionsFromJsonConfigFile);
         return {
             options,
             fileNames: getFileNames(),
@@ -445,18 +500,18 @@ namespace ts {
                 }
             }
             else {
-                let filesSeen: Map<boolean> = {};
-                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let extensionsByPriority = getSupportedExtensions(options);
+                const filesSeen: Map<boolean> = {};
+                const exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                const extensionsByPriority = getSupportedExtensions(options);
                 for (let extensionsIndex = 0; extensionsIndex < extensionsByPriority.length; extensionsIndex++) {
-                    let currentExtension = extensionsByPriority[extensionsIndex];
-                    let filesInDirWithExtension = host.readDirectory(basePath, currentExtension, exclude);
+                    const currentExtension = extensionsByPriority[extensionsIndex];
+                    const filesInDirWithExtension = host.readDirectory(basePath, currentExtension, exclude);
                     // Get list of conflicting extensions, conflicting extension is
                     // - extension that is lower priority than current extension and 
                     // - extension also is current extension (ends with "." + currentExtension)
-                    let conflictingExtensions: string[] = [];
+                    const conflictingExtensions: string[] = [];
                     for (let i = extensionsIndex + 1; i < extensionsByPriority.length; i++) {
-                        let extension = extensionsByPriority[i]; // lower priority extension
+                        const extension = extensionsByPriority[i]; // lower priority extension
                         if (fileExtensionIs(extension, currentExtension)) { // also has current extension
                             conflictingExtensions.push(extension);
                         }
@@ -490,24 +545,24 @@ namespace ts {
     }
 
     export function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string): { options: CompilerOptions, errors: Diagnostic[] } {
-        let options: CompilerOptions = {};
-        let errors: Diagnostic[] = [];
+        const options: CompilerOptions = {};
+        const errors: Diagnostic[] = [];
 
         if (!jsonOptions) {
             return { options, errors };
         }
 
-        let optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
+        const optionNameMap = arrayToMap(optionDeclarations, opt => opt.name);
 
-        for (let id in jsonOptions) {
+        for (const id in jsonOptions) {
             if (hasProperty(optionNameMap, id)) {
-                let opt = optionNameMap[id];
-                let optType = opt.type;
+                const opt = optionNameMap[id];
+                const optType = opt.type;
                 let value = jsonOptions[id];
-                let expectedType = typeof optType === "string" ? optType : "string";
+                const expectedType = typeof optType === "string" ? optType : "string";
                 if (typeof value === expectedType) {
                     if (typeof optType !== "string") {
-                        let key = value.toLowerCase();
+                        const key = value.toLowerCase();
                         if (hasProperty(optType, key)) {
                             value = optType[key];
                         }

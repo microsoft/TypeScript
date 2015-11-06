@@ -6,9 +6,9 @@
 
 namespace RWC {
     function runWithIOLog(ioLog: IOLog, fn: (oldIO: Harness.IO) => void) {
-        let oldIO = Harness.IO;
+        const oldIO = Harness.IO;
 
-        let wrappedIO = Playback.wrapIO(oldIO);
+        const wrappedIO = Playback.wrapIO(oldIO);
         wrappedIO.startReplayFromData(ioLog);
         Harness.IO = wrappedIO;
 
@@ -55,10 +55,10 @@ namespace RWC {
             });
 
             it("can compile", () => {
-                let harnessCompiler = Harness.Compiler.getCompiler();
+                const harnessCompiler = Harness.Compiler.getCompiler();
                 let opts: ts.ParsedCommandLine;
 
-                let ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
+                const ioLog: IOLog = JSON.parse(Harness.IO.readFile(jsonPath));
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
@@ -75,26 +75,26 @@ namespace RWC {
 
                     let fileNames = opts.fileNames;
 
-                    let tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
+                    const tsconfigFile = ts.forEach(ioLog.filesRead, f => isTsConfigFile(f) ? f : undefined);
                     if (tsconfigFile) {
-                        let tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
-                        let parsedTsconfigFileContents = ts.parseConfigFileTextToJson(tsconfigFile.path, tsconfigFileContents.content);
-                        let configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
+                        const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
+                        const parsedTsconfigFileContents = ts.parseConfigFileTextToJson(tsconfigFile.path, tsconfigFileContents.content);
+                        const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
                         opts.options = ts.extend(opts.options, configParseResult.options);
                     }
 
                     // Load the files
-                    for (let fileName of fileNames) {
+                    for (const fileName of fileNames) {
                         inputFiles.push(getHarnessCompilerInputUnit(fileName));
                     }
 
                     // Add files to compilation
-                    let isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
-                    for (let fileRead of ioLog.filesRead) {
+                    const isInInputList = (resolvedPath: string) => (inputFile: { unitName: string; content: string; }) => inputFile.unitName === resolvedPath;
+                    for (const fileRead of ioLog.filesRead) {
                         // Check if the file is already added into the set of input files.
                         const resolvedPath = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path));
-                        let inInputList = ts.forEach(inputFiles, isInInputList(resolvedPath));
+                        const inInputList = ts.forEach(inputFiles, isInInputList(resolvedPath));
 
                         if (isTsConfigFile(fileRead)) {
                             continue;
@@ -139,7 +139,7 @@ namespace RWC {
                 });
 
                 function getHarnessCompilerInputUnit(fileName: string) {
-                    let unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
+                    const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName));
                     let content: string = null;
                     try {
                         content = Harness.IO.readFile(unitName);
@@ -201,7 +201,7 @@ namespace RWC {
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
                     Harness.Baseline.runBaseline("has the expected errors in generated declaration files", baseName + ".dts.errors.txt", () => {
-                        let declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult,
+                        const declFileCompilationResult = Harness.Compiler.getCompiler().compileDeclarationFiles(inputFiles, otherFiles, compilerResult,
                             /*settingscallback*/ undefined, compilerOptions, currentDirectory);
                         if (declFileCompilationResult.declResult.errors.length === 0) {
                             return null;
@@ -227,7 +227,7 @@ class RWCRunner extends RunnerBase {
      */
     public initializeTests(): void {
         // Read in and evaluate the test list
-        let testList = Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
+        const testList = Harness.IO.listFiles(RWCRunner.sourcePath, /.+\.json$/);
         for (let i = 0; i < testList.length; i++) {
             this.runTest(testList[i]);
         }

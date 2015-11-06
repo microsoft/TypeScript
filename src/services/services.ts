@@ -4774,7 +4774,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 /**
@@ -4821,7 +4821,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
@@ -6130,8 +6130,6 @@ namespace ts {
             }
 
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-
-            Debug.fail("Unknown declaration type");
         }
 
         function isTypeReference(node: Node): boolean {

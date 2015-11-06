@@ -197,13 +197,12 @@ function foo() {
                 break l0;
 >l0 : any
             }
-            
-            return 100;
->100 : number
-            
             () => b
 >() => b : () => any
 >b : any
+
+            return 100;
+>100 : number
         }
 
         
