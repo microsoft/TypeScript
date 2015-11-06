@@ -1026,7 +1026,7 @@ if (getContainingStruct(node)) {
             //
             // Note: we check for this here because this struct may be merging into a module.  The
             // module might have an exported variable called 'prototype'.  We can't allow that as
-            // that would clash with the built-in 'prototype' for the class.
+            // that would clash with the built-in 'prototype' for the struct.
             let prototypeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Prototype, "prototype");
             if (hasProperty(symbol.exports, prototypeSymbol.name)) {
                 if (node.name) {
