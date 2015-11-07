@@ -785,7 +785,8 @@ namespace ts {
     };
 
     export interface ObjectAllocator {
-        getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node;
+        getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
@@ -804,7 +805,7 @@ namespace ts {
     function Signature(checker: TypeChecker) {
     }
 
-    function Node(pos: number, end: number, kind: SyntaxKind) {
+    function Node(kind: SyntaxKind, pos: number, end: number) {
         this.kind = kind;
         this.pos = pos;
         this.end = end;
@@ -813,7 +814,8 @@ namespace ts {
     }
 
     export let objectAllocator: ObjectAllocator = {
-        getNodeConstructor: _ => <any>Node,
+        getNodeConstructor: () => <any>Node,
+        getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature
