@@ -1,0 +1,17 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateStaticNotAccessibleInModule.ts(10,20): error TS20018: Property 'bar' is private and only accessible within struct 'C'.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateStaticNotAccessibleInModule.ts (1 errors) ====
+    // doc 2.2
+    // private property members can be accessed only within the struct body that contains their declaration
+    
+    struct C {
+        private foo: string;
+        private static bar: string;
+    }
+    
+    module C {
+        export var y = C.bar; // error
+                       ~~~~~
+!!! error TS20018: Property 'bar' is private and only accessible within struct 'C'.
+    }
