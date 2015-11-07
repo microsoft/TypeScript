@@ -2,15 +2,15 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
-    const nodeConstructors = new Array<new (pos: number, end: number) => Node>(SyntaxKind.Count);
+    const nodeConstructors = new Array<new (pos: number, end: number, kind: number) => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
-    export function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node {
+    export function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number, kind?: SyntaxKind) => Node {
         return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
     }
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
-        return new (getNodeConstructor(kind))(pos, end);
+        return new (getNodeConstructor(kind))(pos, end, kind);
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
@@ -671,7 +671,7 @@ namespace ts {
             return sourceFile;
         }
 
-        function setContextFlag(val: Boolean, flag: ParserContextFlags) {
+        function setContextFlag(val: boolean, flag: ParserContextFlags) {
             if (val) {
                 contextFlags |= flag;
             }
@@ -996,7 +996,7 @@ namespace ts {
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
-            return new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(pos, pos);
+            return new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(pos, pos, kind);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {

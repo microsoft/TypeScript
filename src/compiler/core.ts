@@ -804,17 +804,16 @@ namespace ts {
     function Signature(checker: TypeChecker) {
     }
 
+    function Node(pos: number, end: number, kind: SyntaxKind) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+    }
+
     export let objectAllocator: ObjectAllocator = {
-        getNodeConstructor: kind => {
-            function Node(pos: number, end: number) {
-                this.pos = pos;
-                this.end = end;
-                this.flags = NodeFlags.None;
-                this.parent = undefined;
-            }
-            Node.prototype = { kind };
-            return <any>Node;
-        },
+        getNodeConstructor: _ => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature
