@@ -1956,6 +1956,8 @@ namespace ts {
         target?: TypeParameter;  // Instantiation target
         /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
+        /* @internal */
+        resolvedApparentType: Type;
     }
 
     export const enum SignatureKind {
