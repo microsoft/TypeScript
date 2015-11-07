@@ -1,0 +1,13 @@
+tests/cases/conformance/structs/members/instanceAndStaticMembers/structTypeOfThisInStaticMembers2.ts(2,18): error TS2334: 'this' cannot be referenced in a static property initializer.
+
+
+==== tests/cases/conformance/structs/members/instanceAndStaticMembers/structTypeOfThisInStaticMembers2.ts (1 errors) ====
+    struct C {
+        static foo = this; // error, 'this' cannot be referenced in a static property initializer.
+                     ~~~~
+!!! error TS2334: 'this' cannot be referenced in a static property initializer.
+    }
+    
+    /* struct C2<T> {
+        static foo = this; // error
+    } */

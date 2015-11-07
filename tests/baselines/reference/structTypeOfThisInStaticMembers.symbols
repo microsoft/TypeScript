@@ -1,0 +1,67 @@
+=== tests/cases/conformance/structs/members/instanceAndStaticMembers/structTypeOfThisInStaticMembers.ts ===
+// Within static member functions and static member accessors, the type of this is
+// the constructor function type.
+
+struct C {
+>C : Symbol(C, Decl(structTypeOfThisInStaticMembers.ts, 0, 0))
+
+    constructor(x: number) { }
+>x : Symbol(x, Decl(structTypeOfThisInStaticMembers.ts, 4, 16))
+
+    static foo: number;
+>foo : Symbol(C.foo, Decl(structTypeOfThisInStaticMembers.ts, 4, 30))
+
+    static bar() {
+>bar : Symbol(C.bar, Decl(structTypeOfThisInStaticMembers.ts, 5, 23))
+
+        // type of this is the constructor function type
+        var t = this;
+>t : Symbol(t, Decl(structTypeOfThisInStaticMembers.ts, 8, 11))
+>this : Symbol(C, Decl(structTypeOfThisInStaticMembers.ts, 0, 0))
+
+        return this;
+>this : Symbol(C, Decl(structTypeOfThisInStaticMembers.ts, 0, 0))
+    }
+}
+
+var t = C.bar();
+>t : Symbol(t, Decl(structTypeOfThisInStaticMembers.ts, 13, 3))
+>C.bar : Symbol(C.bar, Decl(structTypeOfThisInStaticMembers.ts, 5, 23))
+>C : Symbol(C, Decl(structTypeOfThisInStaticMembers.ts, 0, 0))
+>bar : Symbol(C.bar, Decl(structTypeOfThisInStaticMembers.ts, 5, 23))
+
+// all ok
+var r2 = t.foo + 1;
+>r2 : Symbol(r2, Decl(structTypeOfThisInStaticMembers.ts, 15, 3))
+>t.foo : Symbol(C.foo, Decl(structTypeOfThisInStaticMembers.ts, 4, 30))
+>t : Symbol(t, Decl(structTypeOfThisInStaticMembers.ts, 13, 3))
+>foo : Symbol(C.foo, Decl(structTypeOfThisInStaticMembers.ts, 4, 30))
+
+var r3 = t.bar();
+>r3 : Symbol(r3, Decl(structTypeOfThisInStaticMembers.ts, 16, 3))
+>t.bar : Symbol(C.bar, Decl(structTypeOfThisInStaticMembers.ts, 5, 23))
+>t : Symbol(t, Decl(structTypeOfThisInStaticMembers.ts, 13, 3))
+>bar : Symbol(C.bar, Decl(structTypeOfThisInStaticMembers.ts, 5, 23))
+
+var r4 = new t(1);
+>r4 : Symbol(r4, Decl(structTypeOfThisInStaticMembers.ts, 17, 3))
+>t : Symbol(t, Decl(structTypeOfThisInStaticMembers.ts, 13, 3))
+
+/* struct C2<T> {
+    static test: number;
+    constructor(x: string) { }
+    static foo: string;
+    static bar() {
+        // type of this is the constructor function type
+        var t = this;
+        return this;
+    }
+}
+
+var t2 = C2.bar();
+// all ok
+var r5 = t2.foo + 1;
+var r6 = t2.bar();
+var r7 = new t2(''); */
+
+
