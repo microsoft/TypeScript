@@ -16050,6 +16050,9 @@ getGlobalClassDecoratorType = memoize(() => getGlobalType("StructDecorator"));
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
+                        else if (!isProtectedAllowedInStruct && (node.parent.kind === SyntaxKind.StructExpression || node.parent.kind === SyntaxKind.StructDeclaration)) {
+	                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_struct_element, text);
+                        }
                         else if (flags & NodeFlags.Abstract) {
                             if (modifier.kind === SyntaxKind.PrivateKeyword) {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract");

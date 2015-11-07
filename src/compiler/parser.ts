@@ -2,6 +2,9 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
+	// use for protected modifier in struct
+	export let isProtectedAllowedInStruct = false;
+
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
@@ -4898,10 +4901,12 @@ namespace ts {
         }
 
         function isStructMemberModifier(idToken: SyntaxKind) {
+	        if ((idToken === SyntaxKind.ProtectedKeyword) && isProtectedAllowedInStruct) {
+				return true;
+	        }
             switch (idToken) {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
-                // case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.StaticKeyword:
                     return true;
                 default:
@@ -5184,11 +5189,11 @@ namespace ts {
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isStructHeritageClause*/ true);
             if (node.heritageClauses) {
-            for (let hc of node.heritageClauses) {
-            if (hc.token === SyntaxKind.ImplementsKeyword) {
-parseErrorAtPosition(hc.pos, hc.end - hc.pos, Diagnostics.A_struct_can_not_implement_a_class_or_interface);
-            }
-            }
+	            for (let hc of node.heritageClauses) {
+		            if (hc.token === SyntaxKind.ImplementsKeyword) {
+						parseErrorAtPosition(hc.pos, hc.end - hc.pos, Diagnostics.A_struct_can_not_implement_a_class_or_interface);
+		            }
+	            }
             }
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
