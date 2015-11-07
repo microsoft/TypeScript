@@ -770,7 +770,7 @@ namespace ts {
     };
 
     export interface ObjectAllocator {
-        getNodeConstructor(kind: SyntaxKind): new () => Node;
+        getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
@@ -791,15 +791,13 @@ namespace ts {
 
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: kind => {
-            function Node() {
+            function Node(pos: number, end: number) {
+                this.pos = pos;
+                this.end = end;
+                this.flags = NodeFlags.None;
+                this.parent = undefined;
             }
-            Node.prototype = {
-                kind: kind,
-                pos: -1,
-                end: -1,
-                flags: 0,
-                parent: undefined,
-            };
+            Node.prototype = { kind };
             return <any>Node;
         },
         getSymbolConstructor: () => <any>Symbol,
@@ -839,9 +837,9 @@ namespace ts {
 
     export function copyListRemovingItem<T>(item: T, list: T[]) {
         let copiedList: T[] = [];
-        for (var i = 0, len = list.length; i < len; i++) {
-            if (list[i] !== item) {
-                copiedList.push(list[i]);
+        for (let e of list) {
+            if (e !== item) {
+                copiedList.push(e);
             }
         }
         return copiedList;

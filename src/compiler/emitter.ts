@@ -1769,34 +1769,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(".");
                     }
                 }
-                else if (modulekind !== ModuleKind.ES6) {
-                    let declaration = resolver.getReferencedImportDeclaration(node);
-                    if (declaration) {
-                        if (declaration.kind === SyntaxKind.ImportClause) {
-                            // Identifier references default import
-                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
-                            write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
-                            return;
-                        }
-                        else if (declaration.kind === SyntaxKind.ImportSpecifier) {
-                            // Identifier references named import
-                            write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
-                            let name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
-                            let identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
-                            if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
-                                write(`["default"]`);
+                else {
+                    if (modulekind !== ModuleKind.ES6) {
+                        let declaration = resolver.getReferencedImportDeclaration(node);
+                        if (declaration) {
+                            if (declaration.kind === SyntaxKind.ImportClause) {
+                                // Identifier references default import
+                                write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent));
+                                write(languageVersion === ScriptTarget.ES3 ? "[\"default\"]" : ".default");
+                                return;
                             }
-                            else {
-                                write(".");
-                                write(identifier);
+                            else if (declaration.kind === SyntaxKind.ImportSpecifier) {
+                                // Identifier references named import
+                                write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
+                                let name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
+                                let identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
+                                if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
+                                    write(`["default"]`);
+                                }
+                                else {
+                                    write(".");
+                                    write(identifier);
+                                }
+                                return;
                             }
-                            return;
                         }
                     }
-                    declaration = resolver.getReferencedNestedRedeclaration(node);
-                    if (declaration) {
-                        write(getGeneratedNameForNode(declaration.name));
-                        return;
+
+                    if (languageVersion !== ScriptTarget.ES6) {
+                        let declaration = resolver.getReferencedNestedRedeclaration(node);
+                        if (declaration) {
+                            write(getGeneratedNameForNode(declaration.name));
+                            return;
+                        }
                     }
                 }
 
@@ -2785,7 +2790,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /**
              * Emit ES7 exponentiation operator downlevel using Math.pow
-             * @param node a binary expression node containing exponentiationOperator (**, **=) 
+             * @param node a binary expression node containing exponentiationOperator (**, **=)
              */
             function emitExponentiationOperator(node: BinaryExpression) {
                 let leftHandSideExpression = node.left;

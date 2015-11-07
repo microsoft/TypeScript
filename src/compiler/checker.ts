@@ -4922,7 +4922,7 @@ namespace ts {
                     if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                         // Report structural errors only if we haven't reported any errors yet
                         let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-                        if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
+                        if (result = objectTypeRelatedTo(apparentType, source, target, reportStructuralErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
@@ -4944,7 +4944,7 @@ namespace ts {
                             return result;
                         }
                     }
-                    return objectTypeRelatedTo(<ObjectType>source, <ObjectType>target, /*reportErrors*/ false);
+                    return objectTypeRelatedTo(source, source, target, /*reportErrors*/ false);
                 }
                 if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
                     return typeParameterIdenticalTo(<TypeParameter>source, <TypeParameter>target);
@@ -4971,34 +4971,34 @@ namespace ts {
                         resolved.stringIndexType || resolved.numberIndexType || getPropertyOfType(type, name)) {
                         return true;
                     }
-                    return false;
                 }
-                if (type.flags & TypeFlags.UnionOrIntersection) {
+                else if (type.flags & TypeFlags.UnionOrIntersection) {
                     for (let t of (<UnionOrIntersectionType>type).types) {
                         if (isKnownProperty(t, name)) {
                             return true;
                         }
                     }
-                    return false;
                 }
-                return true;
+                return false;
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                for (let prop of getPropertiesOfObjectType(source)) {
-                    if (!isKnownProperty(target, prop.name)) {
-                        if (reportErrors) {
-                            // We know *exactly* where things went wrong when comparing the types.
-                            // Use this property as the error node as this will be more helpful in
-                            // reasoning about what went wrong.
-                            errorNode = prop.valueDeclaration;
-                            reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                        symbolToString(prop),
-                                        typeToString(target));
+                if (someConstituentTypeHasKind(target, TypeFlags.ObjectType)) {
+                    for (let prop of getPropertiesOfObjectType(source)) {
+                        if (!isKnownProperty(target, prop.name)) {
+                            if (reportErrors) {
+                                // We know *exactly* where things went wrong when comparing the types.
+                                // Use this property as the error node as this will be more helpful in
+                                // reasoning about what went wrong.
+                                errorNode = prop.valueDeclaration;
+                                reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                    symbolToString(prop), typeToString(target));
+                            }
+                            return true;
                         }
-                        return true;
                     }
                 }
+                return false;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
@@ -5098,11 +5098,11 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(apparentSource: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
-                let id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
+                let id = relation !== identityRelation || apparentSource.id < target.id ? apparentSource.id + "," + target.id : target.id + "," + apparentSource.id;
                 let related = relation[id];
                 if (related !== undefined) {
                     // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
@@ -5129,28 +5129,28 @@ namespace ts {
                     maybeStack = [];
                     expandingFlags = 0;
                 }
-                sourceStack[depth] = source;
+                sourceStack[depth] = apparentSource;
                 targetStack[depth] = target;
                 maybeStack[depth] = {};
                 maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 let saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
+                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(apparentSource, sourceStack, depth)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
                 let result: Ternary;
                 if (expandingFlags === 3) {
                     result = Ternary.Maybe;
                 }
                 else {
-                    result = propertiesRelatedTo(source, target, reportErrors);
+                    result = propertiesRelatedTo(apparentSource, target, reportErrors);
                     if (result) {
-                        result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
+                        result &= signaturesRelatedTo(apparentSource, target, SignatureKind.Call, reportErrors);
                         if (result) {
-                            result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
+                            result &= signaturesRelatedTo(apparentSource, target, SignatureKind.Construct, reportErrors);
                             if (result) {
-                                result &= stringIndexTypesRelatedTo(source, target, reportErrors);
+                                result &= stringIndexTypesRelatedTo(apparentSource, originalSource, target, reportErrors);
                                 if (result) {
-                                    result &= numberIndexTypesRelatedTo(source, target, reportErrors);
+                                    result &= numberIndexTypesRelatedTo(apparentSource, originalSource, target, reportErrors);
                                 }
                             }
                         }
@@ -5481,12 +5481,17 @@ namespace ts {
                 return result;
             }
 
-            function stringIndexTypesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function stringIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.String);
-                if (targetType && !(targetType.flags & TypeFlags.Any)) {
+                if (targetType) {
+                    if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
+                        // non-primitive assignment to any is always allowed, eg 
+                        //   `var x: { [index: string]: any } = { property: 12 };`
+                        return Ternary.True;
+                    }
                     let sourceType = getIndexTypeOfType(source, IndexKind.String);
                     if (!sourceType) {
                         if (reportErrors) {
@@ -5506,12 +5511,17 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function numberIndexTypesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function numberIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
                 let targetType = getIndexTypeOfType(target, IndexKind.Number);
-                if (targetType && !(targetType.flags & TypeFlags.Any)) {
+                if (targetType) {
+                    if ((targetType.flags & TypeFlags.Any) && !(originalSource.flags & TypeFlags.Primitive)) {
+                        // non-primitive assignment to any is always allowed, eg 
+                        //   `var x: { [index: number]: any } = { property: 12 };`
+                        return Ternary.True;
+                    }
                     let sourceStringType = getIndexTypeOfType(source, IndexKind.String);
                     let sourceNumberType = getIndexTypeOfType(source, IndexKind.Number);
                     if (!(sourceStringType || sourceNumberType)) {
@@ -7537,9 +7547,6 @@ namespace ts {
                     case SyntaxKind.JsxSelfClosingElement:
                         checkJsxSelfClosingElement(<JsxSelfClosingElement>child);
                         break;
-                    default:
-                        // No checks for JSX Text
-                        Debug.assert(child.kind === SyntaxKind.JsxText);
                 }
             }
 
