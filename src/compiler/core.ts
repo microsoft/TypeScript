@@ -17,45 +17,55 @@ namespace ts {
         True = -1
     }
 
-    export function createFileMap<T>(getCanonicalFileName: (fileName: string) => string): FileMap<T> {
+    export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
         let files: Map<T> = {};
         return {
             get,
             set,
             contains,
             remove,
-            clear,
-            forEachValue: forEachValueInMap
+            forEachValue: forEachValueInMap,
+            clear
         };
 
-        function set(fileName: string, value: T) {
-            files[normalizeKey(fileName)] = value;
+        function forEachValueInMap(f: (key: Path, value: T) => void) {
+            for (const key in files) {
+                f(<Path>key, files[key]);
+            }
         }
 
-        function get(fileName: string) {
-            return files[normalizeKey(fileName)];
+        // path should already be well-formed so it does not need to be normalized
+        function get(path: Path): T {
+            return files[toKey(path)];
         }
 
-        function contains(fileName: string) {
-            return hasProperty(files, normalizeKey(fileName));
+        function set(path: Path, value: T) {
+            files[toKey(path)] = value;
         }
 
-        function remove (fileName: string) {
-            let key = normalizeKey(fileName);
+        function contains(path: Path) {
+            return hasProperty(files, toKey(path));
+        }
+
+        function remove(path: Path) {
+            const key = toKey(path);
             delete files[key];
-        }
-
-        function forEachValueInMap(f: (value: T) => void) {
-            forEachValue(files, f);
-        }
-
-        function normalizeKey(key: string) {
-            return getCanonicalFileName(normalizeSlashes(key));
         }
 
         function clear() {
             files = {};
         }
+
+        function toKey(path: Path): string {
+            return keyMapper ? keyMapper(path) : path;
+        }
+    }
+
+    export function toPath(fileName: string, basePath: string, getCanonicalFileName: (path: string) => string): Path {
+        const nonCanonicalizedPath = isRootedDiskPath(fileName)
+            ? normalizePath(fileName)
+            : getNormalizedAbsolutePath(fileName, basePath);
+        return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
     export const enum Comparison {
@@ -74,7 +84,7 @@ namespace ts {
     export function forEach<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0, len = array.length; i < len; i++) {
-                let result = callback(array[i], i);
+                const result = callback(array[i], i);
                 if (result) {
                     return result;
                 }
@@ -85,7 +95,7 @@ namespace ts {
 
     export function contains<T>(array: T[], value: T): boolean {
         if (array) {
-            for (let v of array) {
+            for (const v of array) {
                 if (v === value) {
                     return true;
                 }
@@ -108,7 +118,7 @@ namespace ts {
     export function countWhere<T>(array: T[], predicate: (x: T) => boolean): number {
         let count = 0;
         if (array) {
-            for (let v of array) {
+            for (const v of array) {
                 if (predicate(v)) {
                     count++;
                 }
@@ -121,7 +131,7 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (let item of array) {
+            for (const item of array) {
                 if (f(item)) {
                     result.push(item);
                 }
@@ -134,7 +144,7 @@ namespace ts {
         let result: U[];
         if (array) {
             result = [];
-            for (let v of array) {
+            for (const v of array) {
                 result.push(f(v));
             }
         }
@@ -152,7 +162,7 @@ namespace ts {
         let result: T[];
         if (array) {
             result = [];
-            for (let item of array) {
+            for (const item of array) {
                 if (!contains(result, item)) {
                     result.push(item);
                 }
@@ -163,7 +173,7 @@ namespace ts {
 
     export function sum(array: any[], prop: string): number {
         let result = 0;
-        for (let v of array) {
+        for (const v of array) {
             result += v[prop];
         }
         return result;
@@ -171,7 +181,7 @@ namespace ts {
 
     export function addRange<T>(to: T[], from: T[]): void {
         if (to && from) {
-            for (let v of from) {
+            for (const v of from) {
                 to.push(v);
             }
         }
@@ -210,8 +220,8 @@ namespace ts {
         let high = array.length - 1;
 
         while (low <= high) {
-            let middle = low + ((high - low) >> 1);
-            let midValue = array[middle];
+            const middle = low + ((high - low) >> 1);
+            const midValue = array[middle];
 
             if (midValue === value) {
                 return middle;
@@ -260,7 +270,7 @@ namespace ts {
         return initial;
     }
 
-    let hasOwnProperty = Object.prototype.hasOwnProperty;
+    const hasOwnProperty = Object.prototype.hasOwnProperty;
 
     export function hasProperty<T>(map: Map<T>, key: string): boolean {
         return hasOwnProperty.call(map, key);
@@ -271,7 +281,7 @@ namespace ts {
     }
 
     export function isEmpty<T>(map: Map<T>) {
-        for (let id in map) {
+        for (const id in map) {
             if (hasProperty(map, id)) {
                 return false;
             }
@@ -280,19 +290,19 @@ namespace ts {
     }
 
     export function clone<T>(object: T): T {
-        let result: any = {};
-        for (let id in object) {
+        const result: any = {};
+        for (const id in object) {
             result[id] = (<any>object)[id];
         }
         return <T>result;
     }
 
     export function extend<T1, T2>(first: Map<T1>, second: Map<T2>): Map<T1 & T2> {
-        let result: Map<T1 & T2> = {};
-        for (let id in first) {
+        const result: Map<T1 & T2> = {};
+        for (const id in first) {
             (result as any)[id] = first[id];
         }
-        for (let id in second) {
+        for (const id in second) {
             if (!hasProperty(result, id)) {
                 (result as any)[id] = second[id];
             }
@@ -302,7 +312,7 @@ namespace ts {
 
     export function forEachValue<T, U>(map: Map<T>, callback: (value: T) => U): U {
         let result: U;
-        for (let id in map) {
+        for (const id in map) {
             if (result = callback(map[id])) break;
         }
         return result;
@@ -310,7 +320,7 @@ namespace ts {
 
     export function forEachKey<T, U>(map: Map<T>, callback: (key: string) => U): U {
         let result: U;
-        for (let id in map) {
+        for (const id in map) {
             if (result = callback(id)) break;
         }
         return result;
@@ -321,7 +331,7 @@ namespace ts {
     }
 
     export function copyMap<T>(source: Map<T>, target: Map<T>): void {
-        for (let p in source) {
+        for (const p in source) {
             target[p] = source[p];
         }
     }
@@ -337,7 +347,7 @@ namespace ts {
      * index in the array will be the one associated with the produced key.
      */
     export function arrayToMap<T>(array: T[], makeKey: (value: T) => string): Map<T> {
-        let result: Map<T> = {};
+        const result: Map<T> = {};
 
         forEach(array, value => {
             result[makeKey(value)] = value;
@@ -365,15 +375,15 @@ namespace ts {
 
     export let localizedDiagnosticMessages: Map<string> = undefined;
 
-    export function getLocaleSpecificMessage(message: string) {
-        return localizedDiagnosticMessages && localizedDiagnosticMessages[message]
-            ? localizedDiagnosticMessages[message]
-            : message;
+    export function getLocaleSpecificMessage(message: DiagnosticMessage) {
+        return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key]
+            ? localizedDiagnosticMessages[message.key]
+            : message.message;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
-        let end = start + length;
+        const end = start + length;
 
         Debug.assert(start >= 0, "start must be non-negative, is " + start);
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
@@ -383,7 +393,7 @@ namespace ts {
             Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
         }
 
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 4) {
             text = formatStringFromArgs(text, arguments, 4);
@@ -402,7 +412,7 @@ namespace ts {
 
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 1) {
             text = formatStringFromArgs(text, arguments, 1);
@@ -421,7 +431,7 @@ namespace ts {
 
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage, ...args: any[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain, message: DiagnosticMessage): DiagnosticMessageChain {
-        let text = getLocaleSpecificMessage(message.key);
+        let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
             text = formatStringFromArgs(text, arguments, 2);
@@ -469,10 +479,10 @@ namespace ts {
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
         while (text1 && text2) {
             // We still have both chains.
-            let string1 = typeof text1 === "string" ? text1 : text1.messageText;
-            let string2 = typeof text2 === "string" ? text2 : text2.messageText;
+            const string1 = typeof text1 === "string" ? text1 : text1.messageText;
+            const string2 = typeof text2 === "string" ? text2 : text2.messageText;
 
-            let res = compareValues(string1, string2);
+            const res = compareValues(string1, string2);
             if (res) {
                 return res;
             }
@@ -499,11 +509,11 @@ namespace ts {
             return diagnostics;
         }
 
-        let newDiagnostics = [diagnostics[0]];
+        const newDiagnostics = [diagnostics[0]];
         let previousDiagnostic = diagnostics[0];
         for (let i = 1; i < diagnostics.length; i++) {
-            let currentDiagnostic = diagnostics[i];
-            let isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
+            const currentDiagnostic = diagnostics[i];
+            const isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
             if (!isDupe) {
                 newDiagnostics.push(currentDiagnostic);
                 previousDiagnostic = currentDiagnostic;
@@ -521,9 +531,9 @@ namespace ts {
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
-            let p1 = path.indexOf("/", 2);
+            const p1 = path.indexOf("/", 2);
             if (p1 < 0) return 2;
-            let p2 = path.indexOf("/", p1 + 1);
+            const p2 = path.indexOf("/", p1 + 1);
             if (p2 < 0) return p1 + 1;
             return p2 + 1;
         }
@@ -539,7 +549,7 @@ namespace ts {
         if (path.lastIndexOf("file:///", 0) === 0) {
             return "file:///".length;
         }
-        let idx = path.indexOf("://");
+        const idx = path.indexOf("://");
         if (idx !== -1) {
             return idx + "://".length;
         }
@@ -548,9 +558,9 @@ namespace ts {
 
     export let directorySeparator = "/";
     function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
-        let parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
-        let normalized: string[] = [];
-        for (let part of parts) {
+        const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
+        const normalized: string[] = [];
+        for (const part of parts) {
             if (part !== ".") {
                 if (part === ".." && normalized.length > 0 && lastOrUndefined(normalized) !== "..") {
                     normalized.pop();
@@ -570,8 +580,8 @@ namespace ts {
 
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
-        let rootLength = getRootLength(path);
-        let normalized = getNormalizedParts(path, rootLength);
+        const rootLength = getRootLength(path);
+        const normalized = getNormalizedParts(path, rootLength);
         return path.substr(0, rootLength) + normalized.join(directorySeparator);
     }
 
@@ -588,7 +598,7 @@ namespace ts {
     }
 
     function normalizedPathComponents(path: string, rootLength: number) {
-        let normalizedParts = getNormalizedParts(path, rootLength);
+        const normalizedParts = getNormalizedParts(path, rootLength);
         return [path.substr(0, rootLength)].concat(normalizedParts);
     }
 
@@ -619,7 +629,7 @@ namespace ts {
         // In this example the root is:  http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
-        let urlLength = url.length;
+        const urlLength = url.length;
         // Initial root length is http:// part
         let rootLength = url.indexOf("://") + "://".length;
         while (rootLength < urlLength) {
@@ -640,7 +650,7 @@ namespace ts {
         }
 
         // Find the index of "/" after website.com so the root can be http://www.website.com/ (from existing http://)
-        let indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
+        const indexOfNextSlash = url.indexOf(directorySeparator, rootLength);
         if (indexOfNextSlash !== -1) {
             // Found the "/" after the website.com so the root is length of http://www.website.com/
             // and get components afetr the root normally like any other folder components
@@ -666,8 +676,8 @@ namespace ts {
     }
 
     export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
-        let pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
-        let directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
+        const pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
+        const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
             // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
@@ -684,7 +694,7 @@ namespace ts {
         // Get the relative path
         if (joinStartIndex) {
             let relativePath = "";
-            let relativePathComponents = pathComponents.slice(joinStartIndex, pathComponents.length);
+            const relativePathComponents = pathComponents.slice(joinStartIndex, pathComponents.length);
             for (; joinStartIndex < directoryComponents.length; joinStartIndex++) {
                 if (directoryComponents[joinStartIndex] !== "") {
                     relativePath = relativePath + ".." + directorySeparator;
@@ -707,7 +717,7 @@ namespace ts {
         if (!path) {
             return undefined;
         }
-        let i = path.lastIndexOf(directorySeparator);
+        const i = path.lastIndexOf(directorySeparator);
         return i < 0 ? path : path.substring(i + 1);
     }
 
@@ -720,8 +730,8 @@ namespace ts {
     }
 
     export function fileExtensionIs(path: string, extension: string): boolean {
-        let pathLen = path.length;
-        let extLen = extension.length;
+        const pathLen = path.length;
+        const extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
     }
 
@@ -734,7 +744,7 @@ namespace ts {
     export function isSupportedSourceFileName(fileName: string) {
         if (!fileName) { return false; }
 
-        for (let extension of supportedExtensions) {
+        for (const extension of supportedExtensions) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -744,7 +754,7 @@ namespace ts {
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
-        for (let ext of extensionsToRemove) {
+        for (const ext of extensionsToRemove) {
             if (fileExtensionIs(path, ext)) {
                 return path.substr(0, path.length - ext.length);
             }
@@ -752,9 +762,9 @@ namespace ts {
         return path;
     }
 
-    let backslashOrDoubleQuote = /[\"\\]/g;
-    let escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    let escapedCharsMap: Map<string> = {
+    const backslashOrDoubleQuote = /[\"\\]/g;
+    const escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
+    const escapedCharsMap: Map<string> = {
         "\0": "\\0",
         "\t": "\\t",
         "\v": "\\v",
@@ -813,7 +823,7 @@ namespace ts {
     }
 
     export namespace Debug {
-        let currentAssertionLevel = AssertionLevel.None;
+        const currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
@@ -825,7 +835,7 @@ namespace ts {
                 if (verboseDebugInfo) {
                     verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }
-
+                debugger;
                 throw new Error("Debug Failure. False expression: " + (message || "") + verboseDebugString);
             }
         }
@@ -836,8 +846,8 @@ namespace ts {
     }
 
     export function copyListRemovingItem<T>(item: T, list: T[]) {
-        let copiedList: T[] = [];
-        for (let e of list) {
+        const copiedList: T[] = [];
+        for (const e of list) {
             if (e !== item) {
                 copiedList.push(e);
             }
