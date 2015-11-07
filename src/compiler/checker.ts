@@ -3011,15 +3011,13 @@ namespace ts {
             if (baseType === unknownType) {
                 return;
             }
-            if (!(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Struct | TypeFlags.Interface))) {
-                if (isInClassDecl) {
-	                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
-	                return;
-                }
-                else {
-	                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_struct_type, typeToString(baseType));
-	                return;
-                }
+            if (isInClassDecl && !(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface))) {
+	            error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
+	            return;
+            }
+            else if (!isInClassDecl && !(getTargetType(baseType).flags & TypeFlags.Struct)) {
+                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_struct_type, typeToString(baseType));
+                return;
             }
             if (type === baseType || hasBaseType(<InterfaceType>baseType, type)) {
                 error(type.symbol.valueDeclaration, Diagnostics.Type_0_recursively_references_itself_as_a_base_type,
@@ -5125,19 +5123,14 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
 	                    if (isBothStructType(source, target)) {
 		                    // for struct assignability, check its inheritance chain
 		                    let baseTypes = (<InterfaceType>apparentType).resolvedBaseTypes;
-                            if (baseTypes) {
-	                            while (baseTypes && baseTypes.length > 0) {
-		                            if (baseTypes.indexOf(<ObjectType>target) > -1) { // target is on source's inheritance chain
-			                            errorInfo = saveErrorInfo;
-			                            return Ternary.True;
-		                            }
-		                            else {
-			                            baseTypes = (<InterfaceType>baseTypes[0]).resolvedBaseTypes; // expand the inheritance chain
-		                            }
+                            while (baseTypes && baseTypes.length > 0) {
+	                            if (baseTypes.indexOf(<ObjectType>target) > -1) { // target is on source's inheritance chain
+		                            errorInfo = saveErrorInfo;
+		                            return Ternary.True;
 	                            }
-                            }
-		                    else {  // struct declaration
-	                            return Ternary.True;
+	                            else {
+		                            baseTypes = (<InterfaceType>baseTypes[0]).resolvedBaseTypes; // expand the inheritance chain
+	                            }
                             }
 		                }
 		                else { // structural comparison
@@ -13791,9 +13784,9 @@ error(node.expression, Diagnostics.Struct_constructor_cannot_have_return_express
                             }
                         }
                     }
-                    checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name || node, Diagnostics.Struct_0_incorrectly_extends_base_struct_1);
+                    /* checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name || node, Diagnostics.Struct_0_incorrectly_extends_base_struct_1);
                     checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
-                        Diagnostics.Struct_static_side_0_incorrectly_extends_base_struct_static_side_1);
+                        Diagnostics.Struct_static_side_0_incorrectly_extends_base_struct_static_side_1); */
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Struct)) {
                         // When the static base type is a "struct-like" constructor function (but not actually a struct), we verify
@@ -13809,10 +13802,6 @@ error(node.expression, Diagnostics.Struct_constructor_cannot_have_return_express
                 }
             }
 
-            if (produceDiagnostics) {
-                // checkIndexConstraints(type);
-                checkTypeForDuplicateIndexSignatures(node);
-            }
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
