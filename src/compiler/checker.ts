@@ -11205,7 +11205,7 @@ namespace ts {
                         seen = c === node;
                     }
                 });
-                if (subsequentNode) {
+                if (subsequentNode && subsequentNode.pos === node.end) {
                     if (subsequentNode.kind === node.kind) {
                         const errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
                         // TODO(jfreeman): These are methods, so handle computed name case
