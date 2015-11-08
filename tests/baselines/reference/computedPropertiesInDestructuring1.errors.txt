@@ -1,41 +1,21 @@
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(3,21): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(8,25): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(10,25): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(11,28): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(20,8): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(20,27): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(21,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(21,41): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(24,18): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(28,22): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(30,21): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(31,24): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(33,4): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(33,23): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
 tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
-tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,26): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
 
 
-==== tests/cases/compiler/computedPropertiesInDestructuring1.ts (16 errors) ====
+==== tests/cases/compiler/computedPropertiesInDestructuring1.ts (4 errors) ====
     // destructuring in variable declarations
     let foo = "bar";
     let {[foo]: bar} = {bar: "bar"};
-                        ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     let {["bar"]: bar2} = {bar: "bar"};
     
     let foo2 = () => "bar";
     let {[foo2()]: bar3} = {bar: "bar"};
-                            ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     let [{[foo]: bar4}] = [{bar: "bar"}];
-                            ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     let [{[foo2()]: bar5}] = [{bar: "bar"}];
-                               ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     function f1({["bar"]: x}: { bar: number }) {}
     function f2({[foo]: x}: { bar: number }) {}
@@ -47,42 +27,26 @@ tests/cases/compiler/computedPropertiesInDestructuring1.ts(34,26): error TS2353:
     let [{[foo()]: bar6}] = [{bar: "bar"}];
            ~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
-                              ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
                ~~~~~~~~~~~~~
 !!! error TS2339: Property 'toExponential' does not exist on type 'string'.
-                                            ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     // destructuring assignment
     ({[foo]: bar} = {bar: "bar"});
-                     ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     ({["bar"]: bar2} = {bar: "bar"});
     
     ({[foo2()]: bar3} = {bar: "bar"});
-                         ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     [{[foo]: bar4}] = [{bar: "bar"}];
-                        ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     [{[foo2()]: bar5}] = [{bar: "bar"}];
-                           ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     [{[foo()]: bar4}] = [{bar: "bar"}];
        ~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
-                          ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     [{[(1 + {})]: bar4}] = [{bar: "bar"}];
         ~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
-                             ~~~
-!!! error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type '{}'.
     
     
     

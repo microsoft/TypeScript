@@ -2500,10 +2500,12 @@ namespace ts {
         // Return the type implied by an object binding pattern
         function getTypeFromObjectBindingPattern(pattern: BindingPattern, includePatternInType: boolean): Type {
             const members: SymbolTable = {};
+            let hasComputedProperties = false;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
                 if (isComputedNonLiteralName(name)) {
                     // do not include computed properties in the implied type
+                    hasComputedProperties = true;
                     return;
                 }
 
@@ -2517,6 +2519,9 @@ namespace ts {
             const result = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
             if (includePatternInType) {
                 result.pattern = pattern;
+            }
+            if (hasComputedProperties) {
+                result.flags |= TypeFlags.ObjectLiteralPatternWithComputedProperties;
             }
             return result;
         }
@@ -5010,7 +5015,7 @@ namespace ts {
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                if (someConstituentTypeHasKind(target, TypeFlags.ObjectType)) {
+                if (!(target.flags & TypeFlags.ObjectLiteralPatternWithComputedProperties) && someConstituentTypeHasKind(target, TypeFlags.ObjectType)) {
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.name)) {
                             if (reportErrors) {
@@ -7428,6 +7433,7 @@ namespace ts {
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             let typeFlags: TypeFlags = 0;
 
+            let patternWithComputedProperties = false;
             for (const memberDecl of node.properties) {
                 let member = memberDecl.symbol;
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
@@ -7455,8 +7461,11 @@ namespace ts {
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
                         }
+                        if (hasDynamicName(memberDecl)) {
+                            patternWithComputedProperties = true;
+                        }
                     }
-                    else if (contextualTypeHasPattern) {
+                    else if (contextualTypeHasPattern && !(contextualType.flags & TypeFlags.ObjectLiteralPatternWithComputedProperties)) {
                         // If object literal is contextually typed by the implied type of a binding pattern, and if the
                         // binding pattern specifies a default value for the property, make the property optional.
                         const impliedProp = getPropertyOfType(contextualType, member.name);
@@ -7513,7 +7522,7 @@ namespace ts {
             const numberIndexType = getIndexType(IndexKind.Number);
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexType, numberIndexType);
             const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshObjectLiteral;
-            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
+            result.flags |= TypeFlags.ObjectLiteral | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags) | (patternWithComputedProperties ? TypeFlags.ObjectLiteralPatternWithComputedProperties : 0);
             if (inDestructuringPattern) {
                 result.pattern = node;
             }
