@@ -2990,7 +2990,7 @@ namespace ts {
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
                     type.thisType.symbol = symbol;
-                    type.thisType.constraint = getTypeWithThisArgument(type);
+                    type.thisType.constraint = type;
                 }
             }
             return <InterfaceType>links.declaredType;
@@ -3534,18 +3534,28 @@ namespace ts {
         }
 
         /**
+         * The apparent type of a type parameter is the base constraint instantiated with the type parameter
+         * as the type argument for the 'this' type.
+         */
+        function getApparentTypeOfTypeParameter(type: TypeParameter) {
+            if (!type.resolvedApparentType) {
+                let constraintType = getConstraintOfTypeParameter(type);
+                while (constraintType && constraintType.flags & TypeFlags.TypeParameter) {
+                    constraintType = getConstraintOfTypeParameter(<TypeParameter>constraintType);
+                }
+                type.resolvedApparentType = getTypeWithThisArgument(constraintType || emptyObjectType, type);
+            }
+            return type.resolvedApparentType;
+        }
+
+        /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.TypeParameter) {
-                do {
-                    type = getConstraintOfTypeParameter(<TypeParameter>type);
-                } while (type && type.flags & TypeFlags.TypeParameter);
-                if (!type) {
-                    type = emptyObjectType;
-                }
+                type = getApparentTypeOfTypeParameter(<TypeParameter>type);
             }
             if (type.flags & TypeFlags.StringLike) {
                 type = globalStringType;
@@ -5603,18 +5613,31 @@ namespace ts {
             return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
         }
 
+        function isMatchingSignature(source: Signature, target: Signature, partialMatch: boolean) {
+            // A source signature matches a target signature if the two signatures have the same number of required,
+            // optional, and rest parameters.
+            if (source.parameters.length === target.parameters.length &&
+                source.minArgumentCount === target.minArgumentCount &&
+                source.hasRestParameter === target.hasRestParameter) {
+                return true;
+            }
+            // A source signature partially matches a target signature if the target signature has no fewer required
+            // parameters and no more overall parameters than the source signature (where a signature with a rest
+            // parameter is always considered to have more overall parameters than one without).
+            if (partialMatch && source.minArgumentCount <= target.minArgumentCount && (
+                source.hasRestParameter && !target.hasRestParameter ||
+                source.hasRestParameter === target.hasRestParameter && source.parameters.length >= target.parameters.length)) {
+                return true;
+            }
+            return false;
+        }
+
         function compareSignatures(source: Signature, target: Signature, partialMatch: boolean, ignoreReturnTypes: boolean, compareTypes: (s: Type, t: Type) => Ternary): Ternary {
             if (source === target) {
                 return Ternary.True;
             }
-            if (source.parameters.length !== target.parameters.length ||
-                source.minArgumentCount !== target.minArgumentCount ||
-                source.hasRestParameter !== target.hasRestParameter) {
-                if (!partialMatch ||
-                    source.parameters.length < target.parameters.length && !source.hasRestParameter ||
-                    source.minArgumentCount > target.minArgumentCount) {
-                    return Ternary.False;
-                }
+            if (!(isMatchingSignature(source, target, partialMatch))) {
+                return Ternary.False;
             }
             let result = Ternary.True;
             if (source.typeParameters && target.typeParameters) {
@@ -6421,9 +6444,10 @@ namespace ts {
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (isTypeAny(type) || !assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (isTypeAny(type) || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
                     return type;
                 }
+
                 // Check that right operand is a function type with a prototype property
                 const rightType = checkExpression(expr.right);
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
@@ -6455,6 +6479,13 @@ namespace ts {
                 }
 
                 if (targetType) {
+                    if (!assumeTrue) {
+                        if (type.flags & TypeFlags.Union) {
+                            return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, targetType)));
+                        }
+                        return type;
+                    }
+
                     return getNarrowedType(type, targetType);
                 }
 
