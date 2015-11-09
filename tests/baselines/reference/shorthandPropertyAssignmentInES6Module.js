@@ -1,23 +1,25 @@
 //// [tests/cases/compiler/shorthandPropertyAssignmentInES6Module.ts] ////
 
-//// [foo1.ts]
+//// [existingModule.ts]
 
 export var x = 1;
 
 //// [test.ts]
-import {x} from './foo1';
-import {foo} from './foo2';
+import {x} from './existingModule';
+import {foo} from './missingModule';
+
+declare function use(a: any): void;
 
 const test = { x, foo };
 
-console.log(x);
-console.log(foo);
+use(x);
+use(foo);
 
-//// [foo1.js]
+//// [existingModule.js]
 exports.x = 1;
 //// [test.js]
-var foo1_1 = require('./foo1');
-var foo2_1 = require('./foo2');
-const test = { x: foo1_1.x, foo: foo2_1.foo };
-console.log(foo1_1.x);
-console.log(foo2_1.foo);
+var existingModule_1 = require('./existingModule');
+var missingModule_1 = require('./missingModule');
+const test = { x: existingModule_1.x, foo: missingModule_1.foo };
+use(existingModule_1.x);
+use(missingModule_1.foo);

@@ -1,23 +1,19 @@
-tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './foo2'.
-tests/cases/compiler/test.ts(6,1): error TS2304: Cannot find name 'console'.
-tests/cases/compiler/test.ts(7,1): error TS2304: Cannot find name 'console'.
+tests/cases/compiler/test.ts(2,19): error TS2307: Cannot find module './missingModule'.
 
 
-==== tests/cases/compiler/foo1.ts (0 errors) ====
+==== tests/cases/compiler/existingModule.ts (0 errors) ====
     
     export var x = 1;
     
-==== tests/cases/compiler/test.ts (3 errors) ====
-    import {x} from './foo1';
-    import {foo} from './foo2';
-                      ~~~~~~~~
-!!! error TS2307: Cannot find module './foo2'.
+==== tests/cases/compiler/test.ts (1 errors) ====
+    import {x} from './existingModule';
+    import {foo} from './missingModule';
+                      ~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './missingModule'.
+    
+    declare function use(a: any): void;
     
     const test = { x, foo };
     
-    console.log(x);
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
-    console.log(foo);
-    ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
+    use(x);
+    use(foo);
