@@ -47,7 +47,7 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 class ProjectRunner extends RunnerBase {
     public initializeTests() {
         if (this.tests.length === 0) {
-            let testFiles = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
+            const testFiles = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
             testFiles.forEach(fn => {
                 fn = fn.replace(/\\/g, "/");
                 this.runProjectTestCase(fn);
@@ -101,7 +101,7 @@ class ProjectRunner extends RunnerBase {
         function cleanProjectUrl(url: string) {
             let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(testCase.projectRoot));
             let projectRootUrl = "file:///" + diskProjectPath;
-            let normalizedProjectRoot = ts.normalizeSlashes(testCase.projectRoot);
+            const normalizedProjectRoot = ts.normalizeSlashes(testCase.projectRoot);
             diskProjectPath = diskProjectPath.substr(0, diskProjectPath.lastIndexOf(normalizedProjectRoot));
             projectRootUrl = projectRootUrl.substr(0, projectRootUrl.lastIndexOf(normalizedProjectRoot));
             if (url && url.length) {
@@ -130,12 +130,12 @@ class ProjectRunner extends RunnerBase {
             getSourceFileTextImpl: (fileName: string) => string,
             writeFile: (fileName: string, data: string, writeByteOrderMark: boolean) => void): CompileProjectFilesResult {
 
-            let program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
+            const program = ts.createProgram(getInputFiles(), createCompilerOptions(), createCompilerHost());
             let errors = ts.getPreEmitDiagnostics(program);
 
-            let emitResult = program.emit();
+            const emitResult = program.emit();
             errors = ts.concatenate(errors, emitResult.diagnostics);
-            let sourceMapData = emitResult.sourceMaps;
+            const sourceMapData = emitResult.sourceMaps;
 
             // Clean up source map data that will be used in baselining
             if (sourceMapData) {
@@ -181,7 +181,7 @@ class ProjectRunner extends RunnerBase {
                     sourceFile = languageVersion === ts.ScriptTarget.ES6 ? Harness.Compiler.defaultES6LibSourceFile : Harness.Compiler.defaultLibSourceFile;
                 }
                 else {
-                    let text = getSourceFileText(fileName);
+                    const text = getSourceFileText(fileName);
                     if (text !== undefined) {
                         sourceFile = Harness.Compiler.createSourceFileAndAssertInvariants(fileName, text, languageVersion);
                     }
@@ -208,9 +208,9 @@ class ProjectRunner extends RunnerBase {
         function batchCompilerProjectTestCase(moduleKind: ts.ModuleKind): BatchCompileProjectTestCaseResult {
             let nonSubfolderDiskFiles = 0;
 
-            let outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
+            const outputFiles: BatchCompileProjectTestCaseEmittedFile[] = [];
 
-            let projectCompilerResult = compileProjectFiles(moduleKind, () => testCase.inputFiles, getSourceFileText, writeFile);
+            const projectCompilerResult = compileProjectFiles(moduleKind, () => testCase.inputFiles, getSourceFileText, writeFile);
             return {
                 moduleKind,
                 program: projectCompilerResult.program,
@@ -236,11 +236,11 @@ class ProjectRunner extends RunnerBase {
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
                 // convert file name to rooted name
                 // if filename is not rooted - concat it with project root and then expand project root relative to current directory
-                let diskFileName = ts.isRootedDiskPath(fileName)
+                const diskFileName = ts.isRootedDiskPath(fileName)
                     ? fileName
                     : Harness.IO.resolvePath(ts.normalizeSlashes(testCase.projectRoot) + "/" + ts.normalizeSlashes(fileName));
 
-                let currentDirectory = getCurrentDirectory();
+                const currentDirectory = getCurrentDirectory();
                 // compute file name relative to current directory (expanded project root)
                 let diskRelativeName = ts.getRelativePathToDirectoryOrUrl(currentDirectory, diskFileName, currentDirectory, Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 if (ts.isRootedDiskPath(diskRelativeName) || diskRelativeName.substr(0, 3) === "../") {
@@ -254,14 +254,14 @@ class ProjectRunner extends RunnerBase {
 
                 if (Harness.Compiler.isJS(fileName)) {
                     // Make sure if there is URl we have it cleaned up
-                    let indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
+                    const indexOfSourceMapUrl = data.lastIndexOf("//# sourceMappingURL=");
                     if (indexOfSourceMapUrl !== -1) {
                         data = data.substring(0, indexOfSourceMapUrl + 21) + cleanProjectUrl(data.substring(indexOfSourceMapUrl + 21));
                     }
                 }
                 else if (Harness.Compiler.isJSMap(fileName)) {
                     // Make sure sources list is cleaned
-                    let sourceMapData = JSON.parse(data);
+                    const sourceMapData = JSON.parse(data);
                     for (let i = 0; i < sourceMapData.sources.length; i++) {
                         sourceMapData.sources[i] = cleanProjectUrl(sourceMapData.sources[i]);
                     }
@@ -269,7 +269,7 @@ class ProjectRunner extends RunnerBase {
                     data = JSON.stringify(sourceMapData);
                 }
 
-                let outputFilePath = getProjectOutputFolder(diskRelativeName, moduleKind);
+                const outputFilePath = getProjectOutputFolder(diskRelativeName, moduleKind);
                 // Actual writing of file as in tc.ts
                 function ensureDirectoryStructure(directoryname: string) {
                     if (directoryname) {
@@ -287,8 +287,8 @@ class ProjectRunner extends RunnerBase {
         }
 
         function compileCompileDTsFiles(compilerResult: BatchCompileProjectTestCaseResult) {
-            let allInputFiles: { emittedFileName: string; code: string; }[] = [];
-            let compilerOptions = compilerResult.program.getCompilerOptions();
+            const allInputFiles: { emittedFileName: string; code: string; }[] = [];
+            const compilerOptions = compilerResult.program.getCompilerOptions();
 
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
                 if (Harness.Compiler.isDTS(sourceFile.fileName)) {
@@ -305,15 +305,15 @@ class ProjectRunner extends RunnerBase {
                         emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
                     }
 
-                    let outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    let file = findOutpuDtsFile(outputDtsFileName);
+                    const outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
+                    const file = findOutpuDtsFile(outputDtsFileName);
                     if (file) {
                         allInputFiles.unshift(file);
                     }
                 }
                 else {
-                    let outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
-                    let outputDtsFile = findOutpuDtsFile(outputDtsFileName);
+                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
+                    const outputDtsFile = findOutpuDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
                     }
@@ -346,7 +346,7 @@ class ProjectRunner extends RunnerBase {
         }
 
         function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
-            let inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
+            const inputFiles = ts.map(ts.filter(compilerResult.program.getSourceFiles(),
                 sourceFile => sourceFile.fileName !== "lib.d.ts"),
                 sourceFile => {
                     return { unitName: RunnerBase.removeFullPaths(sourceFile.fileName), content: sourceFile.text };
@@ -355,7 +355,7 @@ class ProjectRunner extends RunnerBase {
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
         }
 
-        let name = "Compiling project for " + testCase.scenario + ": testcase " + testCaseFileName;
+        const name = "Compiling project for " + testCase.scenario + ": testcase " + testCaseFileName;
 
         describe("Projects tests", () => {
             describe(name, () => {
@@ -363,7 +363,7 @@ class ProjectRunner extends RunnerBase {
                     let compilerResult: BatchCompileProjectTestCaseResult;
 
                     function getCompilerResolutionInfo() {
-                        let resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {
+                        const resolutionInfo: ProjectRunnerTestCaseResolutionInfo = {
                             scenario: testCase.scenario,
                             projectRoot: testCase.projectRoot,
                             inputFiles: testCase.inputFiles,
@@ -441,7 +441,7 @@ class ProjectRunner extends RunnerBase {
 
                     it("Errors in generated Dts files for (" + moduleNameToString(moduleKind) + "): " + testCaseFileName, () => {
                         if (!compilerResult.errors.length && testCase.declaration) {
-                            let dTsCompileResult = compileCompileDTsFiles(compilerResult);
+                            const dTsCompileResult = compileCompileDTsFiles(compilerResult);
                             if (dTsCompileResult.errors.length) {
                                 Harness.Baseline.runBaseline("Errors in generated Dts files for (" + moduleNameToString(compilerResult.moduleKind) + "): " + testCaseFileName, getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".dts.errors.txt", () => {
                                     return getErrorsBaseline(dTsCompileResult);

@@ -862,6 +862,7 @@ var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
     "noNullRule",
+    "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule"
 ]);
