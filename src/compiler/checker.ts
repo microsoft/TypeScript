@@ -2875,7 +2875,7 @@ namespace ts {
             let baseTypeNode = getBaseTypeNodeOfClass(type);
             let baseType: Type;
             let originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
-            if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class && 
+            if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
                 !baseTypeHasUnappliedOuterTypeParameters(originalBaseType)) {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
