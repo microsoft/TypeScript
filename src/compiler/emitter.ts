@@ -2490,7 +2490,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //       let obj = { y };
                 //   }
                 // Here we need to emit obj = { y : m.y } regardless of the output target.
-                if (languageVersion < ScriptTarget.ES6 || isNamespaceExportReference(node.name)) {
+                if (modulekind !== ModuleKind.ES6 || isNamespaceExportReference(node.name)) {
                     // Emit identifier as an identifier
                     write(": ");
                     emit(node.name);
