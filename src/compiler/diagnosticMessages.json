@@ -2101,6 +2101,10 @@
         "category": "Message",
         "code": 6010
     },
+    "Allow default imports from modules with no default export": {
+        "category": "Message",
+        "code": 6011
+    },
   "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
     "category": "Message",
     "code": 6015

@@ -279,6 +279,11 @@ namespace ts {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
+        },
+        {
+            name: "allowSyntheticDefaultImports",
+            type: "boolean",
+            description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export
         }
     ];
 
