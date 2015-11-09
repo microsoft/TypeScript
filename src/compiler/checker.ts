@@ -2916,13 +2916,14 @@ namespace ts {
         }
 
         function baseTypeHasUnappliedOuterTypeParameters(type: Type): boolean {
-            const originalBaseType = <InterfaceType>type;
-            const originalTypeReference = <TypeReference>type;
-            if (originalBaseType.outerTypeParameters) {
-                // an unapplied type type parameter is one 
+            const outerTypeParameters = (<InterfaceType>type).outerTypeParameters;
+            const typeArguments = (<TypeReference>type).typeArguments;
+            if (outerTypeParameters) {
+                // an unapplied type parameter is one 
                 // whose argument symbol is still the same as the parameter symbol
-                for (let i = 0; i < originalBaseType.outerTypeParameters.length; i++) {
-                    if (originalBaseType.outerTypeParameters[i].symbol === originalTypeReference.typeArguments[i].symbol) {
+                const numParameters = outerTypeParameters.length;
+                for (let i = 0; i < numParameters; i++) {
+                    if (outerTypeParameters[i].symbol === typeArguments[i].symbol) {
                         return true;
                     }
                 }
