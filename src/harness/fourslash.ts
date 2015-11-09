@@ -224,8 +224,8 @@ namespace FourSlash {
         // Add input file which has matched file name with the given reference-file path.
         // This is necessary when resolveReference flag is specified
         private addMatchedInputFile(referenceFilePath: string, extensions: string[]) {
-            let inputFiles = this.inputFiles;
-            let languageServiceAdapterHost = this.languageServiceAdapterHost;
+            const inputFiles = this.inputFiles;
+            const languageServiceAdapterHost = this.languageServiceAdapterHost;
             if (!extensions) {
                 tryAdd(referenceFilePath);
             }
@@ -234,7 +234,7 @@ namespace FourSlash {
             }
 
             function tryAdd(path: string) {
-                let inputFile = inputFiles[path];
+                const inputFile = inputFiles[path];
                 if (inputFile && !Harness.isLibraryFile(path)) {
                     languageServiceAdapterHost.addScript(path, inputFile);
                     return true;

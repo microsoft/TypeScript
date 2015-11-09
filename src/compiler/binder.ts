@@ -1,3 +1,4 @@
+/// <reference path="utilities.ts"/>
 /// <reference path="parser.ts"/>
 
 /* @internal */
@@ -108,8 +109,6 @@ namespace ts {
         let blockScopeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
-
-        const isJavaScriptFile = isSourceFileJavaScript(file);
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -1154,7 +1153,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
-                    if (isJavaScriptFile) {
+                    if (isInJavaScriptFile(node)) {
                         if (isExportsPropertyAssignment(node)) {
                             bindExportsPropertyAssignment(<BinaryExpression>node);
                         }
@@ -1229,7 +1228,7 @@ namespace ts {
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
 
                 case SyntaxKind.CallExpression:
-                    if (isJavaScriptFile) {
+                    if (isInJavaScriptFile(node)) {
                         bindCallExpression(<CallExpression>node);
                     }
                     break;
@@ -1275,8 +1274,8 @@ namespace ts {
             bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName) }"`);
         }
 
-        function bindExportAssignment(node: ExportAssignment|BinaryExpression) {
-            let boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
+        function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
+            const boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));

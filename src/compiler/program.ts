@@ -53,13 +53,13 @@ namespace ts {
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
+            let resolvedFileName = loadNodeModuleFromFile(supportedJsExtensions, candidate, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            resolvedFileName = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
+            resolvedFileName = loadNodeModuleFromDirectory(supportedJsExtensions, candidate, failedLookupLocations, host);
             return resolvedFileName
                 ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
                 : { resolvedModule: undefined, failedLookupLocations };
@@ -69,8 +69,8 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromFile(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
-        return forEach(supportedExtensions, tryLoad);
+    function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+        return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -84,7 +84,7 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
         const packageJsonPath = combinePaths(candidate, "package.json");
         if (host.fileExists(packageJsonPath)) {
 
@@ -100,7 +100,7 @@ namespace ts {
             }
 
             if (jsonContent.typings) {
-                const result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
+                const result = loadNodeModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
                 if (result) {
                     return result;
                 }
@@ -111,7 +111,7 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(combinePaths(candidate, "index"), failedLookupLocation, host);
+        return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
     }
 
     function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -122,12 +122,12 @@ namespace ts {
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(candidate, failedLookupLocations, host);
+                let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(candidate, failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -162,7 +162,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
 
         let referencedSourceFile: string;
-        let extensions = compilerOptions.allowNonTsExtensions ? supportedJsExtensions : supportedExtensions;
+        const extensions = compilerOptions.allowNonTsExtensions ? supportedJsExtensions : supportedExtensions;
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
             referencedSourceFile = forEach(extensions, extension => {
@@ -689,7 +689,7 @@ namespace ts {
                 return;
             }
 
-            let isJavaScriptFile = isSourceFileJavaScript(file);
+            const isJavaScriptFile = isSourceFileJavaScript(file);
 
             let imports: LiteralExpression[];
             for (const node of file.statements) {

@@ -1,5 +1,5 @@
-/// <reference path="scanner.ts"/>
 /// <reference path="utilities.ts"/>
+/// <reference path="scanner.ts"/>
 
 namespace ts {
     const nodeConstructors = new Array<new (pos: number, end: number) => Node>(SyntaxKind.Count);

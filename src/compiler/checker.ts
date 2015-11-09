@@ -990,7 +990,7 @@ namespace ts {
 
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
-            const moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+            let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
             if (moduleName === undefined) {
                 return;
@@ -3845,9 +3845,9 @@ namespace ts {
         }
 
         function resolveExternalModuleTypeByLiteral(name: StringLiteral) {
-            let moduleSym = resolveExternalModuleName(name, name);
+            const moduleSym = resolveExternalModuleName(name, name);
             if (moduleSym) {
-                let resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
+                const resolvedModuleSymbol = resolveExternalModuleSymbol(moduleSym);
                 if (resolvedModuleSymbol) {
                     return getTypeOfSymbol(resolvedModuleSymbol);
                 }

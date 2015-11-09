@@ -1,4 +1,3 @@
-/// <reference path="binder.ts" />
 /// <reference path="sys.ts" />
 
 /* @internal */

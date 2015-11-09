@@ -371,7 +371,7 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
-            if(projectOptions && projectOptions.files){
+            if (projectOptions && projectOptions.files) {
                 // If files are listed explicitly, allow all extensions
                 projectOptions.compilerOptions.allowNonTsExtensions = true;
             }
@@ -1321,7 +1321,7 @@ namespace ts.server {
                 this.setCompilerOptions(opt);
             }
             else {
-                var defaultOpts = ts.getDefaultCompilerOptions();
+                const defaultOpts = ts.getDefaultCompilerOptions();
                 defaultOpts.allowNonTsExtensions = true;
                 this.setCompilerOptions(defaultOpts);
             }
