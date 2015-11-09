@@ -2876,7 +2876,7 @@ namespace ts {
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
             let baseType: Type;
-            let originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
+            const originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
                 !baseTypeHasUnappliedOuterTypeParameters(originalBaseType)) {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
@@ -2916,8 +2916,8 @@ namespace ts {
         }
 
         function baseTypeHasUnappliedOuterTypeParameters(type: Type): boolean {
-            let originalBaseType = <InterfaceType>type;
-            let originalTypeReference = <TypeReference>type;
+            const originalBaseType = <InterfaceType>type;
+            const originalTypeReference = <TypeReference>type;
             if (originalBaseType.outerTypeParameters) {
                 // an unapplied type type parameter is one 
                 // whose argument symbol is still the same as the parameter symbol
