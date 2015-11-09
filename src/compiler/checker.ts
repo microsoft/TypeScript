@@ -14059,13 +14059,9 @@ namespace ts {
                 // Check whether the file has declared it is the default lib,
                 // and whether the user has specifically chosen to avoid checking it.
                 if (compilerOptions.skipDefaultLibCheck) {
-                    if (node.isDefaultLib) {
-                        return;
-                    }
-
                     // If the user specified '--noLib' and a file has a '/// <reference no-default-lib="true"/>',
                     // then we should treat that file as a default lib.
-                    if (compilerOptions.noLib && node.hasNoDefaultLib) {
+                    if (node.hasNoDefaultLib) {
                         return;
                     }
                 }
