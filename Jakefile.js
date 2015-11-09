@@ -228,7 +228,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--module commonjs --noImplicitAny --noEmitOnError --pretty";
+        var options = "--noImplicitAny --noEmitOnError --pretty";
 
         // Keep comments when specifically requested
         // or when in debug mode.
@@ -250,6 +250,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (!noOutFile) {
             options += " --out " + outFile;
+        }
+        else {
+            options += " --module commonjs"
         }
 
         if(noResolve) {

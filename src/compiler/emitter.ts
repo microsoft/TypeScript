@@ -7,6 +7,18 @@ namespace ts {
         return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
     }
 
+    export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string {
+        return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
+    }
+
+    export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
+        const file = resolver.getExternalModuleFileFromDeclaration(declaration);
+        if (!file || isDeclarationFile(file)) {
+            return undefined;
+        }
+        return getResolvedExternalModuleName(host, file);
+    }
+
     type DependencyGroup = Array<ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration>;
 
     const enum Jump {
@@ -332,17 +344,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         const newLine = host.getNewLine();
         const jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
         const shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
+        const outFile = compilerOptions.outFile || compilerOptions.out;
+
+        const emitJavaScript = createFileEmitter();
 
         if (targetSourceFile === undefined) {
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                    const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                    emitFile(jsFilePath, sourceFile);
-                }
-            });
-
-            if (compilerOptions.outFile || compilerOptions.out) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+            if (outFile) {
+                emitFile(outFile);
+            }
+            else {
+                forEach(host.getSourceFiles(), sourceFile => {
+                    if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
+                        const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
+                        emitFile(jsFilePath, sourceFile);
+                    }
+                });
             }
         }
         else {
@@ -351,8 +367,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
                 emitFile(jsFilePath, targetSourceFile);
             }
-            else if (!isDeclarationFile(targetSourceFile) && (compilerOptions.outFile || compilerOptions.out)) {
-                emitFile(compilerOptions.outFile || compilerOptions.out);
+            else if (!isDeclarationFile(targetSourceFile) && outFile) {
+                emitFile(outFile);
             }
         }
 
@@ -470,11 +486,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitJavaScript(jsFilePath: string, root?: SourceFile) {
-            const writer = createTextWriter(newLine);
+        function createFileEmitter(): (jsFilePath: string, root?: SourceFile) => void {
+            const writer: EmitTextWriter = createTextWriter(newLine);
             const { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
             let currentSourceFile: SourceFile;
+            let currentText: string;
+            let currentLineMap: number[];
+            let currentFileIdentifiers: Map<string>;
+            let renamedDependencies: Map<string>;
+            let isEs6Module: boolean;
+            let isCurrentFileExternalModule: boolean;
+
             // name of an exporter function if file is a System external module
             // System.register([...], function (<exporter>) {...})
             // exporting in System modules looks like:
@@ -483,17 +506,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             // var x;... exporter("x", x = 1)
             let exportFunctionForFile: string;
 
-            const generatedNameSet: Map<string> = {};
-            const nodeToGeneratedName: string[] = [];
+            let generatedNameSet: Map<string>;
+            let nodeToGeneratedName: string[];
             let computedPropertyNamesToGeneratedNames: string[];
 
             let convertedLoopState: ConvertedLoopState;
 
-            let extendsEmitted = false;
-            let decorateEmitted = false;
-            let paramEmitted = false;
-            let awaiterEmitted = false;
-            let tempFlags = 0;
+            let extendsEmitted: boolean;
+            let decorateEmitted: boolean;
+            let paramEmitted: boolean;
+            let awaiterEmitted: boolean;
+            let tempFlags: TempFlags;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
             let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
@@ -536,10 +559,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
+            /** The root file passed to the emit function (if present) */
+            let root: SourceFile;
+
             /** If removeComments is true, no leading-comments needed to be emitted **/
             const emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
 
-            const moduleEmitDelegates: Map<(node: SourceFile) => void> = {
+            const moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
                 [ModuleKind.AMD]: emitAMDModule,
                 [ModuleKind.System]: emitSystemModule,
@@ -547,35 +573,86 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 [ModuleKind.CommonJS]: emitCommonJSModule,
             };
 
-            if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
-                initializeEmitterWithSourceMaps();
-            }
+            const bundleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
+                [ModuleKind.ES6]() {},
+                [ModuleKind.AMD]: emitAMDModule,
+                [ModuleKind.System]: emitSystemModule,
+                [ModuleKind.UMD]() {},
+                [ModuleKind.CommonJS]() {},
+            };
 
-            if (root) {
-                // Do not call emit directly. It does not set the currentSourceFile.
-                emitSourceFile(root);
-            }
-            else {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                        emitSourceFile(sourceFile);
+            return doEmit;
+
+            function doEmit(jsFilePath: string, rootFile?: SourceFile) {
+                // reset the state
+                writer.reset();
+                currentSourceFile = undefined;
+                currentText = undefined;
+                currentLineMap = undefined;
+                exportFunctionForFile = undefined;
+                generatedNameSet = {};
+                nodeToGeneratedName = [];
+                computedPropertyNamesToGeneratedNames = undefined;
+                convertedLoopState = undefined;
+
+                extendsEmitted = false;
+                decorateEmitted = false;
+                paramEmitted = false;
+                awaiterEmitted = false;
+                tempFlags = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+                externalImports = undefined;
+                exportSpecifiers = undefined;
+                exportEquals = undefined;
+                hasExportStars = undefined;
+                detachedCommentsInfo = undefined;
+                sourceMapData = undefined;
+                isEs6Module = false;
+                renamedDependencies = undefined;
+                isCurrentFileExternalModule = false;
+                root = rootFile;
+
+                if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
+                    initializeEmitterWithSourceMaps(jsFilePath, root);
+                }
+
+                if (root) {
+                    // Do not call emit directly. It does not set the currentSourceFile.
+                    emitSourceFile(root);
+                }
+                else {
+                    if (modulekind) {
+                        forEach(host.getSourceFiles(), emitEmitHelpers);
                     }
-                });
-            }
+                    forEach(host.getSourceFiles(), sourceFile => {
+                        if ((!isExternalModuleOrDeclarationFile(sourceFile)) || (modulekind && isExternalModule(sourceFile))) {
+                            emitSourceFile(sourceFile);
+                        }
+                    });
+                }
 
-            writeLine();
-            writeEmittedFiles(writer.getText(), /*writeByteOrderMark*/ compilerOptions.emitBOM);
-            return;
+                writeLine();
+                writeEmittedFiles(writer.getText(), jsFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM);
+            }
 
             function emitSourceFile(sourceFile: SourceFile): void {
                 currentSourceFile = sourceFile;
+
+                currentText = sourceFile.text;
+                currentLineMap = getLineStarts(sourceFile);
                 exportFunctionForFile = undefined;
+                isEs6Module = sourceFile.symbol && sourceFile.symbol.exports && !!sourceFile.symbol.exports["___esModule"];
+                renamedDependencies = sourceFile.renamedDependencies;
+                currentFileIdentifiers = sourceFile.identifiers;
+                isCurrentFileExternalModule = isExternalModule(sourceFile);
+
                 emit(sourceFile);
             }
 
             function isUniqueName(name: string): boolean {
                 return !resolver.hasGlobalName(name) &&
-                    !hasProperty(currentSourceFile.identifiers, name) &&
+                    !hasProperty(currentFileIdentifiers, name) &&
                     !hasProperty(generatedNameSet, name);
             }
 
@@ -667,7 +744,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateNameForNode(node)));
             }
 
-            function initializeEmitterWithSourceMaps() {
+            function initializeEmitterWithSourceMaps(jsFilePath: string, root?: SourceFile) {
                 let sourceMapDir: string; // The directory in which sourcemap will be
 
                 // Current source map file and its index in the sources list
@@ -771,7 +848,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 function recordSourceMapSpan(pos: number) {
-                    const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
+                    const sourceLinePos = computeLineAndCharacterOfPosition(currentLineMap, pos);
 
                     // Convert the location to be one-based.
                     sourceLinePos.line++;
@@ -810,7 +887,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function recordEmitNodeStartSpan(node: Node) {
                     // Get the token pos after skipping to the token (ignoring the leading trivia)
-                    recordSourceMapSpan(skipTrivia(currentSourceFile.text, node.pos));
+                    recordSourceMapSpan(skipTrivia(currentText, node.pos));
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
@@ -818,7 +895,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 function writeTextWithSpanRecord(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
-                    const tokenStartPos = ts.skipTrivia(currentSourceFile.text, startPos);
+                    const tokenStartPos = ts.skipTrivia(currentText, startPos);
                     recordSourceMapSpan(tokenStartPos);
                     const tokenEndPos = emitTokenText(tokenKind, tokenStartPos, emitFn);
                     recordSourceMapSpan(tokenEndPos);
@@ -912,9 +989,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     sourceMapNameIndices.pop();
                 };
 
-                function writeCommentRangeWithMap(curentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
+                function writeCommentRangeWithMap(currentText: string, currentLineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
                     recordSourceMapSpan(comment.pos);
-                    writeCommentRange(currentSourceFile, writer, comment, newLine);
+                    writeCommentRange(currentText, currentLineMap, writer, comment, newLine);
                     recordSourceMapSpan(comment.end);
                 }
 
@@ -950,7 +1027,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                function writeJavaScriptAndSourceMapFile(emitOutput: string, writeByteOrderMark: boolean) {
+                function writeJavaScriptAndSourceMapFile(emitOutput: string, jsFilePath: string, writeByteOrderMark: boolean) {
                     encodeLastRecordedSourceMapSpan();
 
                     const sourceMapText = serializeSourceMapContents(
@@ -977,7 +1054,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     // Write sourcemap url to the js file and write the js file
-                    writeJavaScriptFile(emitOutput + sourceMapUrl, writeByteOrderMark);
+                    writeJavaScriptFile(emitOutput + sourceMapUrl, jsFilePath, writeByteOrderMark);
                 }
 
                 // Initialize source map data
@@ -1059,7 +1136,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeComment = writeCommentRangeWithMap;
             }
 
-            function writeJavaScriptFile(emitOutput: string, writeByteOrderMark: boolean) {
+            function writeJavaScriptFile(emitOutput: string, jsFilePath: string, writeByteOrderMark: boolean) {
                 writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
@@ -1269,7 +1346,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // If we don't need to downlevel and we can reach the original source text using
                 // the node's parent reference, then simply get the text as it was originally written.
                 if (node.parent) {
-                    return getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+                    return getTextOfNodeFromSourceText(currentText, node);
                 }
 
                 // If we can't reach the original source text, use the canonical form if it's a number,
@@ -1300,7 +1377,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Find original source text, since we need to emit the raw strings of the tagged template.
                 // The raw strings contain the (escaped) strings of what the user wrote.
                 // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
-                let text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
+                let text = getTextOfNodeFromSourceText(currentText, node);
 
                 // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
                 // thus we need to remove those characters.
@@ -1772,7 +1849,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write((<LiteralExpression>node).text);
                     }
                     else {
-                        writeTextOfNode(currentSourceFile, node);
+                        writeTextOfNode(currentText, node);
                     }
 
                     write("\"");
@@ -1876,7 +1953,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                 // Identifier references named import
                                 write(getGeneratedNameForNode(<ImportDeclaration>declaration.parent.parent.parent));
                                 const name =  (<ImportSpecifier>declaration).propertyName || (<ImportSpecifier>declaration).name;
-                                const identifier = getSourceTextOfNodeFromSourceFile(currentSourceFile, name);
+                                const identifier = getTextOfNodeFromSourceText(currentText, name);
                                 if (languageVersion === ScriptTarget.ES3 && identifier === "default") {
                                     write(`["default"]`);
                                 }
@@ -1902,7 +1979,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(node.text);
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
+                    writeTextOfNode(currentText, node);
                 }
             }
 
@@ -1943,7 +2020,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(node.text);
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
+                    writeTextOfNode(currentText, node);
                 }
             }
 
@@ -2403,7 +2480,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
                 // The name property of a short-hand property assignment is considered an expression position, so here
                 // we manually emit the identifier to avoid rewriting.
-                writeTextOfNode(currentSourceFile, node.name);
+                writeTextOfNode(currentText, node.name);
                 // If emitting pre-ES6 code, or if the name requires rewriting when resolved as an expression identifier,
                 // we emit a normal property assignment. For example:
                 //   module m {
@@ -2480,11 +2557,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // 1 .toString is a valid property access, emit a space after the literal
                 // Also emit a space if expression is a integer const enum value - it will appear in generated code as numeric literal
-                let shouldEmitSpace: boolean;
+                let shouldEmitSpace = false;
                 if (!indentedBeforeDot) {
                     if (node.expression.kind === SyntaxKind.NumericLiteral) {
                         // check if numeric literal was originally written with a dot
-                        const text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node.expression);
+                        const text = getTextOfNodeFromSourceText(currentText, node.expression);
                         shouldEmitSpace = text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
                     }
                     else {
@@ -3815,18 +3892,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function nodeStartPositionsAreOnSameLine(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node1.pos)) ===
-                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return getLineOfLocalPositionFromLineMap(currentLineMap, skipTrivia(currentText, node1.pos)) ===
+                    getLineOfLocalPositionFromLineMap(currentLineMap, skipTrivia(currentText, node2.pos));
             }
 
             function nodeEndPositionsAreOnSameLine(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
-                    getLineOfLocalPosition(currentSourceFile, node2.end);
+                return getLineOfLocalPositionFromLineMap(currentLineMap, node1.end) ===
+                    getLineOfLocalPositionFromLineMap(currentLineMap, node2.end);
             }
 
             function nodeEndIsOnSameLineAsNodeStart(node1: Node, node2: Node) {
-                return getLineOfLocalPosition(currentSourceFile, node1.end) ===
-                    getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node2.pos));
+                return getLineOfLocalPositionFromLineMap(currentLineMap, node1.end) ===
+                    getLineOfLocalPositionFromLineMap(currentLineMap, skipTrivia(currentText, node2.pos));
             }
 
             function emitCaseOrDefaultClause(node: CaseOrDefaultClause) {
@@ -3948,7 +4025,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     Debug.assert(!!(node.flags & NodeFlags.Default) || node.kind === SyntaxKind.ExportAssignment);
                     // only allow export default at a source file level
                     if (modulekind === ModuleKind.CommonJS || modulekind === ModuleKind.AMD || modulekind === ModuleKind.UMD) {
-                        if (!currentSourceFile.symbol.exports["___esModule"]) {
+                        if (!isEs6Module) {
                             if (languageVersion === ScriptTarget.ES5) {
                                 // default value of configurable, enumerable, writable are `false`.
                                 write("Object.defineProperty(exports, \"__esModule\", { value: true });");
@@ -6304,8 +6381,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * Here we check if alternative name was provided for a given moduleName and return it if possible.
              */
             function tryRenameExternalModule(moduleName: LiteralExpression): string {
-                if (currentSourceFile.renamedDependencies && hasProperty(currentSourceFile.renamedDependencies, moduleName.text)) {
-                    return `"${currentSourceFile.renamedDependencies[moduleName.text]}"`;
+                if (renamedDependencies && hasProperty(renamedDependencies, moduleName.text)) {
+                    return `"${renamedDependencies[moduleName.text]}"`;
                 }
                 return undefined;
             }
@@ -6467,7 +6544,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // - current file is not external module
                 // - import declaration is top level and target is value imported by entity name
                 if (resolver.isReferencedAliasDeclaration(node) ||
-                    (!isExternalModule(currentSourceFile) && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
+                    (!isCurrentFileExternalModule && resolver.isTopLevelValueImportEqualsWithEntityName(node))) {
                     emitLeadingComments(node);
                     emitStart(node);
 
@@ -6708,7 +6785,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getLocalNameForExternalImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
                 const namespaceDeclaration = getNamespaceDeclarationNode(node);
                 if (namespaceDeclaration && !isDefaultImport(node)) {
-                    return getSourceTextOfNodeFromSourceFile(currentSourceFile, namespaceDeclaration.name);
+                    return getTextOfNodeFromSourceText(currentText, namespaceDeclaration.name);
                 }
                 if (node.kind === SyntaxKind.ImportDeclaration && (<ImportDeclaration>node).importClause) {
                     return getGeneratedNameForNode(node);
@@ -7064,7 +7141,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function isCurrentFileSystemExternalModule() {
-                return modulekind === ModuleKind.System && isExternalModule(currentSourceFile);
+                return modulekind === ModuleKind.System && isCurrentFileExternalModule;
             }
 
             function emitSystemModuleBody(node: SourceFile, dependencyGroups: DependencyGroup[], startIndex: number): void {
@@ -7249,7 +7326,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("}"); // execute
             }
 
-            function emitSystemModule(node: SourceFile): void {
+            function writeModuleName(node: SourceFile, emitRelativePathAsModuleName?: boolean): void {
+                let moduleName = node.moduleName;
+                if (moduleName || (emitRelativePathAsModuleName && (moduleName = getResolvedExternalModuleName(host, node)))) {
+                    write(`"${moduleName}", `);
+                }
+            }
+
+            function emitSystemModule(node: SourceFile,  emitRelativePathAsModuleName?: boolean): void {
                 collectExternalModuleInfo(node);
                 // System modules has the following shape
                 // System.register(['dep-1', ... 'dep-n'], function(exports) {/* module body function */})
@@ -7264,16 +7348,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 exportFunctionForFile = makeUniqueName("exports");
                 writeLine();
                 write("System.register(");
-                if (node.moduleName) {
-                    write(`"${node.moduleName}", `);
-                }
+                writeModuleName(node, emitRelativePathAsModuleName);
                 write("[");
 
                 const groupIndices: Map<number> = {};
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; ++i) {
-                    const text = getExternalModuleNameText(externalImports[i]);
+                    let text = getExternalModuleNameText(externalImports[i]);
                     if (hasProperty(groupIndices, text)) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[text];
@@ -7289,6 +7371,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
+                    if (emitRelativePathAsModuleName) {
+                        const name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
+                        if (name) {
+                            text = `"${name}"`;
+                        }
+                    }
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
@@ -7309,7 +7397,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 importAliasNames: string[];
             }
 
-            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean): AMDDependencyNames {
+            function getAMDDependencyNames(node: SourceFile, includeNonAmdDependencies: boolean, emitRelativePathAsModuleName?: boolean): AMDDependencyNames {
                 // names of modules with corresponding parameter in the factory function
                 const aliasedModuleNames: string[] = [];
                 // names of modules with no corresponding parameters in factory function
@@ -7331,7 +7419,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 for (const importNode of externalImports) {
                     // Find the name of the external module
-                    const externalModuleName = getExternalModuleNameText(importNode);
+                    let externalModuleName = getExternalModuleNameText(importNode);
+
+                    if (emitRelativePathAsModuleName) {
+                        const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
+                        if (name) {
+                            externalModuleName = `"${name}"`;
+                        }
+                    }
 
                     // Find the name of the module alias, if there is one
                     const importAliasName = getLocalNameForExternalImport(importNode);
@@ -7347,7 +7442,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
             }
 
-            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean) {
+            function emitAMDDependencies(node: SourceFile, includeNonAmdDependencies: boolean, emitRelativePathAsModuleName?: boolean) {
                 // An AMD define function has the following shape:
                 //     define(id?, dependencies?, factory);
                 //
@@ -7360,7 +7455,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // `import "module"` or `<amd-dependency path= "a.css" />`
                 // we need to add modules without alias names to the end of the dependencies list
 
-                const dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies);
+                const dependencyNames = getAMDDependencyNames(node, includeNonAmdDependencies, emitRelativePathAsModuleName);
                 emitAMDDependencyList(dependencyNames);
                 write(", ");
                 emitAMDFactoryHeader(dependencyNames);
@@ -7388,16 +7483,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(") {");
             }
 
-            function emitAMDModule(node: SourceFile) {
+            function emitAMDModule(node: SourceFile, emitRelativePathAsModuleName?: boolean) {
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
 
                 writeLine();
                 write("define(");
-                if (node.moduleName) {
-                    write("\"" + node.moduleName + "\", ");
-                }
-                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true);
+                writeModuleName(node, emitRelativePathAsModuleName);
+                emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
@@ -7646,8 +7739,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitDetachedCommentsAndUpdateCommentsInfo(node);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    const emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
-                    emitModule(node);
+                    if (root || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
+                        const emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
+                        emitModule(node);
+                    }
+                    else {
+                        bundleEmitDelegates[modulekind](node, /*emitRelativePathAsModuleName*/true);
+                    }
                 }
                 else {
                     // emit prologue directives prior to __extends
@@ -7927,7 +8025,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function getLeadingCommentsWithoutDetachedComments() {
                 // get the leading comments from detachedPos
-                const leadingComments = getLeadingCommentRanges(currentSourceFile.text,
+                const leadingComments = getLeadingCommentRanges(currentText,
                     lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos);
                 if (detachedCommentsInfo.length - 1) {
                     detachedCommentsInfo.pop();
@@ -7947,10 +8045,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function isTripleSlashComment(comment: CommentRange) {
                 // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
                 // so that we don't end up computing comment string and doing match for all // comments
-                if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
+                if (currentText.charCodeAt(comment.pos + 1) === CharacterCodes.slash &&
                     comment.pos + 2 < comment.end &&
-                    currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
-                    const textSubStr = currentSourceFile.text.substring(comment.pos, comment.end);
+                    currentText.charCodeAt(comment.pos + 2) === CharacterCodes.slash) {
+                    const textSubStr = currentText.substring(comment.pos, comment.end);
                     return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
                         textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
                         true : false;
@@ -7968,7 +8066,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         else {
                             // get the leading comments from the node
-                            return getLeadingCommentRangesOfNode(node, currentSourceFile);
+                            return getLeadingCommentRangesOfNodeFromText(node, currentText);
                         }
                     }
                 }
@@ -7978,7 +8076,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Emit the trailing comments only if the parent's pos doesn't match because parent should take care of emitting these comments
                 if (node.parent) {
                     if (node.parent.kind === SyntaxKind.SourceFile || node.end !== node.parent.end) {
-                        return getTrailingCommentRanges(currentSourceFile.text, node.end);
+                        return getTrailingCommentRanges(currentText, node.end);
                     }
                 }
             }
@@ -8017,10 +8115,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                 }
 
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
+                emitNewLineBeforeLeadingComments(currentLineMap, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator:*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator:*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {
@@ -8032,7 +8130,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const trailingComments = getTrailingCommentsToEmit(node);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ false, newLine, writeComment);
             }
 
             /**
@@ -8045,10 +8143,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
-                const trailingComments = getTrailingCommentRanges(currentSourceFile.text, pos);
+                const trailingComments = getTrailingCommentRanges(currentText, pos);
 
                 // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment*/
-                emitComments(currentSourceFile, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, trailingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitLeadingCommentsOfPositionWorker(pos: number) {
@@ -8063,17 +8161,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 else {
                     // get the leading comments from the node
-                    leadingComments = getLeadingCommentRanges(currentSourceFile.text, pos);
+                    leadingComments = getLeadingCommentRanges(currentText, pos);
                 }
 
-                emitNewLineBeforeLeadingComments(currentSourceFile, writer, { pos: pos, end: pos }, leadingComments);
+                emitNewLineBeforeLeadingComments(currentLineMap, writer, { pos: pos, end: pos }, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentSourceFile, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitDetachedCommentsAndUpdateCommentsInfo(node: TextRange) {
-                const currentDetachedCommentInfo = emitDetachedComments(currentSourceFile, writer, writeComment, node, newLine, compilerOptions.removeComments);
+                const currentDetachedCommentInfo = emitDetachedComments(currentText, currentLineMap, writer, writeComment, node, newLine, compilerOptions.removeComments);
 
                 if (currentDetachedCommentInfo) {
                     if (detachedCommentsInfo) {
@@ -8086,7 +8184,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitShebang() {
-                const shebang = getShebang(currentSourceFile.text);
+                const shebang = getShebang(currentText);
                 if (shebang) {
                     write(shebang);
                 }

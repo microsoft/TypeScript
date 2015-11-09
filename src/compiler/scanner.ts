@@ -580,7 +580,7 @@ namespace ts {
     function getCommentRanges(text: string, pos: number, trailing: boolean): CommentRange[] {
         let result: CommentRange[];
         let collecting = trailing || pos === 0;
-        while (true) {
+        while (pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
                 case CharacterCodes.carriageReturn:
@@ -650,6 +650,8 @@ namespace ts {
             }
             return result;
         }
+
+        return result;
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] {
@@ -741,7 +743,7 @@ namespace ts {
             }
         }
 
-        function scanNumber(): number {
+        function scanNumber(): string {
             const start = pos;
             while (isDigit(text.charCodeAt(pos))) pos++;
             if (text.charCodeAt(pos) === CharacterCodes.dot) {
@@ -761,7 +763,7 @@ namespace ts {
                     error(Diagnostics.Digit_expected);
                 }
             }
-            return +(text.substring(start, end));
+            return "" + +(text.substring(start, end));
         }
 
         function scanOctalDigits(): number {
@@ -1229,7 +1231,7 @@ namespace ts {
                         return pos++, token = SyntaxKind.MinusToken;
                     case CharacterCodes.dot:
                         if (isDigit(text.charCodeAt(pos + 1))) {
-                            tokenValue = "" + scanNumber();
+                            tokenValue = scanNumber();
                             return token = SyntaxKind.NumericLiteral;
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
@@ -1343,7 +1345,7 @@ namespace ts {
                     case CharacterCodes._7:
                     case CharacterCodes._8:
                     case CharacterCodes._9:
-                        tokenValue = "" + scanNumber();
+                        tokenValue = scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     case CharacterCodes.colon:
                         return pos++, token = SyntaxKind.ColonToken;

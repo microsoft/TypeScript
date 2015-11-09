@@ -1,0 +1,26 @@
+===================================================================
+JsFile: all.js
+mapUrl: all.js.map
+sourceRoot: 
+sources: tests/cases/compiler/ref/a.ts,tests/cases/compiler/b.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:all.js
+sourceFile:tests/cases/compiler/ref/a.ts
+-------------------------------------------------------------------
+>>>var __extends = (this && this.__extends) || function (d, b) {
+>>>    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+>>>    function __() { this.constructor = d; }
+>>>    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+>>>};
+>>>// This should be an error
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                          ^^^^->
+1 >
+  >
+2 >// This should be an error
+1 >Emitted(6, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(6, 27) Source(2, 27) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=all.js.map

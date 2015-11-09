@@ -3003,7 +3003,7 @@ namespace ts {
                     (<GenericType>type).typeArguments = type.typeParameters;
                     type.thisType = <TypeParameter>createType(TypeFlags.TypeParameter | TypeFlags.ThisType);
                     type.thisType.symbol = symbol;
-                    type.thisType.constraint = getTypeWithThisArgument(type);
+                    type.thisType.constraint = type;
                 }
             }
             return <InterfaceType>links.declaredType;
@@ -3547,18 +3547,28 @@ namespace ts {
         }
 
         /**
+         * The apparent type of a type parameter is the base constraint instantiated with the type parameter
+         * as the type argument for the 'this' type.
+         */
+        function getApparentTypeOfTypeParameter(type: TypeParameter) {
+            if (!type.resolvedApparentType) {
+                let constraintType = getConstraintOfTypeParameter(type);
+                while (constraintType && constraintType.flags & TypeFlags.TypeParameter) {
+                    constraintType = getConstraintOfTypeParameter(<TypeParameter>constraintType);
+                }
+                type.resolvedApparentType = getTypeWithThisArgument(constraintType || emptyObjectType, type);
+            }
+            return type.resolvedApparentType;
+        }
+
+        /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
          * type itself. Note that the apparent type of a union type is the union type itself.
          */
         function getApparentType(type: Type): Type {
             if (type.flags & TypeFlags.TypeParameter) {
-                do {
-                    type = getConstraintOfTypeParameter(<TypeParameter>type);
-                } while (type && type.flags & TypeFlags.TypeParameter);
-                if (!type) {
-                    type = emptyObjectType;
-                }
+                type = getApparentTypeOfTypeParameter(<TypeParameter>type);
             }
             if (type.flags & TypeFlags.StringLike) {
                 type = globalStringType;
@@ -5099,9 +5109,6 @@ namespace ts {
             }
 
             function typeParameterIdenticalTo(source: TypeParameter, target: TypeParameter): Ternary {
-                if (source.symbol.name !== target.symbol.name) {
-                    return Ternary.False;
-                }
                 // covers case when both type parameters does not have constraint (both equal to noConstraintType)
                 if (source.constraint === target.constraint) {
                     return Ternary.True;
@@ -6462,9 +6469,10 @@ namespace ts {
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that type is not any, assumed result is true, and we have variable symbol on the left
-                if (isTypeAny(type) || !assumeTrue || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
+                if (isTypeAny(type) || expr.left.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>expr.left) !== symbol) {
                     return type;
                 }
+
                 // Check that right operand is a function type with a prototype property
                 const rightType = checkExpression(expr.right);
                 if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
@@ -6496,6 +6504,13 @@ namespace ts {
                 }
 
                 if (targetType) {
+                    if (!assumeTrue) {
+                        if (type.flags & TypeFlags.Union) {
+                            return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, targetType)));
+                        }
+                        return type;
+                    }
+
                     return getNarrowedType(type, targetType);
                 }
 
@@ -14944,8 +14959,18 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
-                isArgumentsLocalBinding
+                isArgumentsLocalBinding,
+                getExternalModuleFileFromDeclaration
             };
+        }
+
+        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
+                const specifier = getExternalModuleName(declaration);
+                const moduleSymbol = getSymbolAtLocation(specifier);
+                if (!moduleSymbol) {
+                    return undefined;
+                }
+                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
         function initializeTypeChecker() {
