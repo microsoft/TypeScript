@@ -1,9 +1,12 @@
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(46,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(47,32): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(48,32): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(68,1): error TS7028: Unused label.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(69,1): error TS7028: Unused label.
+tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts(70,1): error TS7028: Unused label.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts (3 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts (6 errors) ====
     // typeof  operator on any type
     
     var ANY: any;
@@ -78,8 +81,14 @@ tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperator
     var x: any[];
     var r: () => any;
     z: typeof ANY;
+    ~
+!!! error TS7028: Unused label.
     x: typeof ANY2;
+    ~
+!!! error TS7028: Unused label.
     r: typeof foo;
+    ~
+!!! error TS7028: Unused label.
     z: typeof objA.a;
     z: typeof A.foo;
     z: typeof M.n;

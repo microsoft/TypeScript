@@ -360,7 +360,6 @@ namespace ts.formatting {
                             return node;
                     }
                 }
-                return node;
             }
         }
 
