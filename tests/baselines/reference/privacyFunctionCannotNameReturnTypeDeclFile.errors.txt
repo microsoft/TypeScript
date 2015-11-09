@@ -1,19 +1,7 @@
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(3,12): error TS4050: Return type of public static method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(7,49): error TS7027: Unreachable code detected.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(9,5): error TS4053: Return type of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(10,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(13,49): error TS7027: Unreachable code detected.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(15,12): error TS4050: Return type of public static method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(19,49): error TS7027: Unreachable code detected.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(21,5): error TS4053: Return type of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(22,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(25,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(34,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(37,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(40,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(46,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(49,49): error TS7027: Unreachable code detected.
-tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(52,49): error TS7027: Unreachable code detected.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(56,17): error TS4058: Return type of exported function has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(62,17): error TS4058: Return type of exported function has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(70,12): error TS4050: Return type of public static method from exported class has or is using name 'SpecializedWidget.Widget2' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
@@ -24,7 +12,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(83,17): error
 tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error TS4058: Return type of exported function has or is using name 'SpecializedGlobalWidget.Widget4' from external module "GlobalWidgets" but cannot be named.
 
 
-==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts (24 errors) ====
+==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts (12 errors) ====
     import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod() { // Error
@@ -34,20 +22,14 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
         private static myPrivateStaticMethod() {
             return exporter.createExportedWidget1();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         myPublicMethod() { // Error
         ~~~~~~~~~~~~~~
 !!! error TS4053: Return type of public method from exported class has or is using name 'Widget1' from external module "tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets" but cannot be named.
             return exporter.createExportedWidget1();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         private myPrivateMethod() {
             return exporter.createExportedWidget1();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         static myPublicStaticMethod1() { // Error
                ~~~~~~~~~~~~~~~~~~~~~
@@ -56,20 +38,14 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
         private static myPrivateStaticMethod1() {
             return exporter.createExportedWidget3();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         myPublicMethod1() { // Error
         ~~~~~~~~~~~~~~~
 !!! error TS4053: Return type of public method from exported class has or is using name 'Widget3' from external module "GlobalWidgets" but cannot be named.
             return exporter.createExportedWidget3();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         private myPrivateMethod1() {
             return exporter.createExportedWidget3();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
@@ -79,36 +55,24 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
         }
         private static myPrivateStaticMethod() {
             return exporter.createExportedWidget1();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         myPublicMethod() { 
             return exporter.createExportedWidget1();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         private myPrivateMethod() {
             return exporter.createExportedWidget1();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         static myPublicStaticMethod1() { 
             return exporter.createExportedWidget3();
         }
         private static myPrivateStaticMethod1() {
             return exporter.createExportedWidget3();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         myPublicMethod1() { 
             return exporter.createExportedWidget3();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
         private myPrivateMethod1() {
             return exporter.createExportedWidget3();;
-                                                    ~
-!!! error TS7027: Unreachable code detected.
         }
     }
     
