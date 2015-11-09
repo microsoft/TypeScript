@@ -143,7 +143,7 @@ namespace ts {
 
                     // create asynchronous output for the importDeclarations
                     if (moduleElementDeclarationEmitInfo.length) {
-                        let oldWriter = writer;
+                        const oldWriter = writer;
                         forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
                             if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
                                 Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
@@ -744,7 +744,7 @@ namespace ts {
 
         function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
-                let moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
                 if (moduleName) {
                     write("\"");
                     write(moduleName);

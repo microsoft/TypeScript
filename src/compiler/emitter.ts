@@ -12,7 +12,7 @@ namespace ts {
     }
 
     export function getExternalModuleNameFromDeclaration(host: EmitHost, resolver: EmitResolver, declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): string {
-        let file = resolver.getExternalModuleFileFromDeclaration(declaration);
+        const file = resolver.getExternalModuleFileFromDeclaration(declaration);
         if (!file || isDeclarationFile(file)) {
             return undefined;
         }
@@ -355,7 +355,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             else {
                 forEach(host.getSourceFiles(), sourceFile => {
                     if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        let jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
+                        const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
                         emitFile(jsFilePath, sourceFile);
                     }
                 });
@@ -616,7 +616,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
                     initializeEmitterWithSourceMaps(jsFilePath, root);
                 }
-    
+
                 if (root) {
                     // Do not call emit directly. It does not set the currentSourceFile.
                     emitSourceFile(root);
@@ -7372,7 +7372,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
 
                     if (emitRelativePathAsModuleName) {
-                        let name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
+                        const name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
                         if (name) {
                             text = `"${name}"`;
                         }
@@ -7422,7 +7422,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let externalModuleName = getExternalModuleNameText(importNode);
 
                     if (emitRelativePathAsModuleName) {
-                        let name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
+                        const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
                         if (name) {
                             externalModuleName = `"${name}"`;
                         }
