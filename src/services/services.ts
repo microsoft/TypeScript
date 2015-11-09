@@ -174,7 +174,7 @@ namespace ts {
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        let node = <NodeObject> new (getNodeConstructor(kind))(pos, end);
+        let node = new NodeObject(kind, pos, end);
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -187,6 +187,14 @@ namespace ts {
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
+
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            this.kind = kind;
+            this.pos = pos;
+            this.end = end;
+            this.flags = NodeFlags.None;
+            this.parent = undefined;
+        }
 
         public getSourceFile(): SourceFile {
             return getSourceFileOfNode(this);
@@ -805,6 +813,10 @@ namespace ts {
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(kind, pos, end)
+        }
+        
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
         }
@@ -7970,18 +7982,8 @@ namespace ts {
 
     function initializeServices() {
         objectAllocator = {
-            getNodeConstructor: kind => {
-                function Node(pos: number, end: number) {
-                    this.pos = pos;
-                    this.end = end;
-                    this.flags = NodeFlags.None;
-                    this.parent = undefined;
-                }
-                let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
-                proto.kind = kind;
-                Node.prototype = proto;
-                return <any>Node;
-            },
+            getNodeConstructor: () => NodeObject,
+            getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
