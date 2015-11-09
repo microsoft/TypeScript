@@ -10401,8 +10401,6 @@ namespace ts {
         }
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
-            // TODO (drosen): Do we want to apply the same approach to no-sub template literals?
-
             const contextualType = getContextualType(node);
             if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
                 return getStringLiteralType(node);
