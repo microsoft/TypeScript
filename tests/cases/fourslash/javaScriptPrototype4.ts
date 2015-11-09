@@ -23,14 +23,9 @@ verify.completionListContains('qua', undefined, undefined, 'warning');
 
 // Check members of function.prototype
 edit.insert('prototype.');
-debugger;
 debug.printMemberListMembers();
 verify.completionListContains('foo', undefined, undefined, 'method');
 verify.completionListContains('bar', undefined, undefined, 'method');
 verify.completionListContains('qua', undefined, undefined, 'warning');
 verify.completionListContains('prototype', undefined, undefined, 'warning');
 
-// debug.printErrorList();
-// debug.printCurrentQuickInfo();
-// edit.insert('.');
-// verify.completionListContains('toFixed', undefined, undefined, 'method');
