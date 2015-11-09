@@ -2868,23 +2868,25 @@ namespace ts {
 
         function resolveBaseTypesOfClass(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
-            let baseContructorType = getBaseConstructorTypeOfClass(type);
-            if (!(baseContructorType.flags & TypeFlags.ObjectType)) {
+            let baseConstructorType = getBaseConstructorTypeOfClass(type);
+            if (!(baseConstructorType.flags & TypeFlags.ObjectType)) {
                 return;
             }
             let baseTypeNode = getBaseTypeNodeOfClass(type);
             let baseType: Type;
-            if (baseContructorType.symbol && baseContructorType.symbol.flags & SymbolFlags.Class) {
-                // When base constructor type is a class we know that the constructors all have the same type parameters as the
+            let originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
+            if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class && 
+                !baseTypeHasUnappliedOuterTypeParameters(originalBaseType)) {
+                // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
-                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseContructorType.symbol);
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
                 // with a matching number of type parameters and use the return type of the first instantiated signature. Elsewhere
                 // we check that all instantiated signatures return the same type.
-                let constructors = getInstantiatedConstructorsForTypeArguments(baseContructorType, baseTypeNode.typeArguments);
+                let constructors = getInstantiatedConstructorsForTypeArguments(baseConstructorType, baseTypeNode.typeArguments);
                 if (!constructors.length) {
                     error(baseTypeNode.expression, Diagnostics.No_base_constructor_has_the_specified_number_of_type_arguments);
                     return;
@@ -2909,6 +2911,21 @@ namespace ts {
             else {
                 type.resolvedBaseTypes.push(baseType);
             }
+        }
+
+        function baseTypeHasUnappliedOuterTypeParameters(type: Type): boolean {
+            let originalBaseType = <InterfaceType>type;
+            let originalTypeReference = <TypeReference>type;
+            if (originalBaseType.outerTypeParameters) {
+                // an unapplied type type parameter is one 
+                // whose argument symbol is still the same as the parameter symbol
+                for (let i = 0; i < originalBaseType.outerTypeParameters.length; i++) {
+                    if (originalBaseType.outerTypeParameters[i].symbol === originalTypeReference.typeArguments[i].symbol) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
