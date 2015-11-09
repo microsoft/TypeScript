@@ -206,7 +206,9 @@ namespace ts {
             IntrinsicElements: "IntrinsicElements",
             ElementClass: "ElementClass",
             ElementAttributesPropertyNameContainer: "ElementAttributesProperty",
-            Element: "Element"
+            Element: "Element",
+            IntrinsicAttributes: "IntrinsicAttributes",
+            IntrinsicClassAttributes: "IntrinsicClassAttributes"
         };
 
         let subtypeRelation: Map<RelationComparisonResult> = {};
