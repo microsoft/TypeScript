@@ -14931,8 +14931,18 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
-                isArgumentsLocalBinding
+                isArgumentsLocalBinding,
+                getExternalModuleFileFromDeclaration
             };
+        }
+
+        function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
+                const specifier = getExternalModuleName(declaration);
+                const moduleSymbol = getSymbolAtLocation(specifier);
+                if (!moduleSymbol) {
+                    return undefined;
+                }
+                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
         function initializeTypeChecker() {

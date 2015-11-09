@@ -58,8 +58,9 @@ namespace ts {
         let errorNameNode: DeclarationName;
         const emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
+        let noDeclare = !root;
 
-        const moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
+        let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
 
         // Contains the reference paths that needs to go in the declaration file.
@@ -107,15 +108,16 @@ namespace ts {
         else {
             // Emit references corresponding to this file
             const emittedReferencedFiles: SourceFile[] = [];
+            let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
             forEach(host.getSourceFiles(), sourceFile => {
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                if (!isDeclarationFile(sourceFile)) {
                     // Check what references need to be added
                     if (!compilerOptions.noResolve) {
                         forEach(sourceFile.referencedFiles, fileReference => {
                             const referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-                            // If the reference file is a declaration file or an external module, emit that reference
-                            if (referencedFile && (isExternalModuleOrDeclarationFile(referencedFile) &&
+                            // If the reference file is a declaration file, emit that reference
+                            if (referencedFile && (isDeclarationFile(referencedFile) &&
                                 !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
 
                                 writeReferencePath(referencedFile);
@@ -123,10 +125,43 @@ namespace ts {
                             }
                         });
                     }
+                }
 
+                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
+                    noDeclare = false;
                     emitSourceFile(sourceFile);
                 }
+                else if (isExternalModule(sourceFile)) {
+                    noDeclare = true;
+                    write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
+                    writeLine();
+                    increaseIndent();
+                    emitSourceFile(sourceFile);
+                    decreaseIndent();
+                    write("}");
+                    writeLine();
+
+                    // create asynchronous output for the importDeclarations
+                    if (moduleElementDeclarationEmitInfo.length) {
+                        const oldWriter = writer;
+                        forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                            if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
+                                Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
+                                createAndSetNewTextWriterWithSymbolWriter();
+                                Debug.assert(aliasEmitInfo.indent === 1);
+                                increaseIndent();
+                                writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
+                                aliasEmitInfo.asynchronousOutput = writer.getText();
+                                decreaseIndent();
+                            }
+                        });
+                        setWriter(oldWriter);
+                    }
+                    prevModuleElementDeclarationEmitInfo = prevModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                    moduleElementDeclarationEmitInfo = [];
+                }
             });
+            moduleElementDeclarationEmitInfo = moduleElementDeclarationEmitInfo.concat(prevModuleElementDeclarationEmitInfo);
         }
 
         return {
@@ -607,7 +642,7 @@ namespace ts {
                 if (node.flags & NodeFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
                     write("declare ");
                 }
             }
@@ -702,9 +737,23 @@ namespace ts {
                 }
                 write(" from ");
             }
-            writeTextOfNode(currentText, node.moduleSpecifier);
+            emitExternalModuleSpecifier(node.moduleSpecifier);
             write(";");
             writer.writeLine();
+        }
+
+        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
+            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
+                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+                if (moduleName) {
+                    write("\"");
+                    write(moduleName);
+                    write("\"");
+                    return;
+                }
+            }
+
+            writeTextOfNode(currentText, moduleSpecifier);
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
@@ -738,7 +787,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                writeTextOfNode(currentText, node.moduleSpecifier);
+                emitExternalModuleSpecifier(node.moduleSpecifier);
             }
             write(";");
             writer.writeLine();

@@ -1660,6 +1660,7 @@ namespace ts {
         "\u0085": "\\u0085"  // nextLine
     };
 
+
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
@@ -1798,6 +1799,15 @@ namespace ts {
             getText: () => output,
             reset
         };
+    }
+
+    /**
+     * Resolves a local path to a path which is absolute to the base of the emit
+     */
+    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
+        const dir = host.getCurrentDirectory();
+        const relativePath = getRelativePathToDirectoryOrUrl(dir, fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
+        return removeFileExtension(relativePath);
     }
 
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
