@@ -1,7 +1,6 @@
 class C1 {
     x: this;
     f(x: this): this { return undefined; }
-    constructor(x: this) { }
 }
 
 class C2 {

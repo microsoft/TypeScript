@@ -1,3 +1,5 @@
+// @allowUnusedLabels: true
+
 // test
 var f = ''
 // test #2

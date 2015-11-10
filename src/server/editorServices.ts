@@ -105,19 +105,19 @@ namespace ts.server {
         }
 
         resolveModuleNames(moduleNames: string[], containingFile: string): ResolvedModule[] {
-            let path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
-            let currentResolutionsInFile = this.resolvedModuleNames.get(path);
+            const path = toPath(containingFile, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const currentResolutionsInFile = this.resolvedModuleNames.get(path);
 
-            let newResolutions: Map<TimestampedResolvedModule> = {};
-            let resolvedModules: ResolvedModule[] = [];
+            const newResolutions: Map<TimestampedResolvedModule> = {};
+            const resolvedModules: ResolvedModule[] = [];
 
-            let compilerOptions = this.getCompilationSettings();
+            const compilerOptions = this.getCompilationSettings();
 
-            for (let moduleName of moduleNames) {
+            for (const moduleName of moduleNames) {
                 // check if this is a duplicate entry in the list
                 let resolution = lookUp(newResolutions, moduleName);
                 if (!resolution) {
-                    let existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
+                    const existingResolution = currentResolutionsInFile && ts.lookUp(currentResolutionsInFile, moduleName);
                     if (moduleResolutionIsValid(existingResolution)) {
                         // ok, it is safe to use existing module resolution results  
                         resolution = existingResolution;
@@ -211,7 +211,7 @@ namespace ts.server {
         }
 
         getScriptInfo(filename: string): ScriptInfo {
-            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             let scriptInfo = this.filenameToScript.get(path);
             if (!scriptInfo) {
                 scriptInfo = this.project.openReferencedFile(filename);
@@ -282,7 +282,7 @@ namespace ts.server {
          *  @param line 1 based index
          */
         lineToTextSpan(filename: string, line: number): ts.TextSpan {
-            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
 
@@ -303,7 +303,7 @@ namespace ts.server {
          * @param offset 1 based index
          */
         lineOffsetToPosition(filename: string, line: number, offset: number): number {
-            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
 
@@ -317,7 +317,7 @@ namespace ts.server {
          * @param offset 1-based index
          */
         positionToLineOffset(filename: string, position: number): ILineInfo {
-            let path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            const path = toPath(filename, this.host.getCurrentDirectory(), this.getCanonicalFileName);
             const script: ScriptInfo = this.filenameToScript.get(path);
             const index = script.snap().index;
             const lineOffset = index.charOffsetToLineNumberAndPos(position);
@@ -371,6 +371,10 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+            if (projectOptions && projectOptions.files) {
+                // If files are listed explicitly, allow all extensions
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
+            }
             this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
@@ -461,6 +465,7 @@ namespace ts.server {
         setProjectOptions(projectOptions: ProjectOptions) {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
         }
@@ -578,9 +583,9 @@ namespace ts.server {
         }
 
         handleProjectFilelistChanges(project: Project) {
-            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
-            let newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
-            let currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
+            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+            const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
+            const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
             // We check if the project file list has changed. If so, we update the project.
             if (!arrayIsEqualTo(currentRootFiles && currentRootFiles.sort(), newRootFiles && newRootFiles.sort())) {
@@ -606,13 +611,13 @@ namespace ts.server {
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(fileName);
-            let rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
-            let openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
+            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(fileName);
+            const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
+            const openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
 
             // We should only care about the new tsconfig file if it contains any
             // opened root files of existing inferred projects
-            for (let openFileRoot of openFileRoots) {
+            for (const openFileRoot of openFileRoots) {
                 if (rootFilesInTsconfig.indexOf(openFileRoot) >= 0) {
                     this.reloadProjects();
                     return;
@@ -621,7 +626,7 @@ namespace ts.server {
         }
 
         getCanonicalFileName(fileName: string) {
-            let name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return ts.normalizePath(name);
         }
 
@@ -737,7 +742,7 @@ namespace ts.server {
                 this.configuredProjects = copyListRemovingItem(project, this.configuredProjects);
             }
             else {
-                for (let directory of project.directoriesWatchedForTsconfig) {
+                for (const directory of project.directoriesWatchedForTsconfig) {
                     // if the ref count for this directory watcher drops to 0, it's time to close it
                     if (!(--project.projectService.directoryWatchersRefCount[directory])) {
                         this.log("Close directory watcher for: " + directory);
@@ -748,9 +753,9 @@ namespace ts.server {
                 this.inferredProjects = copyListRemovingItem(project, this.inferredProjects);
             }
 
-            let fileNames = project.getFileNames();
-            for (let fileName of fileNames) {
-                let info = this.getScriptInfo(fileName);
+            const fileNames = project.getFileNames();
+            for (const fileName of fileNames) {
+                const info = this.getScriptInfo(fileName);
                 if (info.defaultProject == project) {
                     info.defaultProject = undefined;
                 }
@@ -759,7 +764,7 @@ namespace ts.server {
 
         setConfiguredProjectRoot(info: ScriptInfo) {
             for (let i = 0, len = this.configuredProjects.length; i < len; i++) {
-                let configuredProject = this.configuredProjects[i];
+                const configuredProject = this.configuredProjects[i];
                 if (configuredProject.isRoot(info)) {
                     info.defaultProject = configuredProject;
                     configuredProject.addOpenRef();
@@ -903,7 +908,7 @@ namespace ts.server {
         reloadProjects() {
             this.log("reload projects.");
             // First check if there is new tsconfig file added for inferred project roots
-            for (let info of this.openFileRoots) {
+            for (const info of this.openFileRoots) {
                 this.openOrUpdateConfiguredProjectForFile(info.fileName);
             }
             this.updateProjectStructure();
@@ -918,10 +923,10 @@ namespace ts.server {
             this.log("updating project structure from ...", "Info");
             this.printProjects();
 
-            let unattachedOpenFiles: ScriptInfo[] = [];
-            let openFileRootsConfigured: ScriptInfo[] = [];
-            for (let info of this.openFileRootsConfigured) {
-                let project = info.defaultProject;
+            const unattachedOpenFiles: ScriptInfo[] = [];
+            const openFileRootsConfigured: ScriptInfo[] = [];
+            for (const info of this.openFileRootsConfigured) {
+                const project = info.defaultProject;
                 if (!project || !(project.getSourceFile(info))) {
                     info.defaultProject = undefined;
                     unattachedOpenFiles.push(info);
@@ -1016,7 +1021,6 @@ namespace ts.server {
                     }
                 }
                 if (content !== undefined) {
-                    let indentSize: number;
                     info = new ScriptInfo(this.host, fileName, content, openedByClient);
                     info.setFormatOptions(this.getFormatCodeOptions());
                     this.filenameToScriptInfo[fileName] = info;
@@ -1071,12 +1075,12 @@ namespace ts.server {
          * the tsconfig file content and update the project; otherwise we create a new one. 
          */
         openOrUpdateConfiguredProjectForFile(fileName: string) {
-            let searchPath = ts.normalizePath(getDirectoryPath(fileName));
+            const searchPath = ts.normalizePath(getDirectoryPath(fileName));
             this.log("Search path: " + searchPath, "Info");
-            let configFileName = this.findConfigFile(searchPath);
+            const configFileName = this.findConfigFile(searchPath);
             if (configFileName) {
                 this.log("Config file name: " + configFileName, "Info");
-                let project = this.findConfiguredProjectByConfigFile(configFileName);
+                const project = this.findConfiguredProjectByConfigFile(configFileName);
                 if (!project) {
                     const configResult = this.openConfigFile(configFileName, fileName);
                     if (!configResult.success) {
@@ -1215,15 +1219,15 @@ namespace ts.server {
         }
 
         openConfigFile(configFilename: string, clientFileName?: string): ProjectOpenResult {
-            let { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
+            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(configFilename);
             if (!succeeded) {
                 return error;
             }
             else {
-                let project = this.createProject(configFilename, projectOptions);
-                for (let rootFilename of projectOptions.files) {
+                const project = this.createProject(configFilename, projectOptions);
+                for (const rootFilename of projectOptions.files) {
                     if (this.host.fileExists(rootFilename)) {
-                        let info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
+                        const info = this.openFile(rootFilename, /*openedByClient*/ clientFileName == rootFilename);
                         project.addRoot(info);
                     }
                     else {
@@ -1248,24 +1252,24 @@ namespace ts.server {
                 this.removeProject(project);
             }
             else {
-                let { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+                const { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
                 if (!succeeded) {
                     return error;
                 }
                 else {
-                    let oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
-                    let newFileNames = projectOptions.files;
-                    let fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
-                    let fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
+                    const oldFileNames = project.compilerService.host.roots.map(info => info.fileName);
+                    const newFileNames = projectOptions.files;
+                    const fileNamesToRemove = oldFileNames.filter(f => newFileNames.indexOf(f) < 0);
+                    const fileNamesToAdd = newFileNames.filter(f => oldFileNames.indexOf(f) < 0);
 
-                    for (let fileName of fileNamesToRemove) {
-                        let info = this.getScriptInfo(fileName);
+                    for (const fileName of fileNamesToRemove) {
+                        const info = this.getScriptInfo(fileName);
                         if (info) {
                             project.removeRoot(info);
                         }
                     }
 
-                    for (let fileName of fileNamesToAdd) {
+                    for (const fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {
                             info = this.openFile(fileName, false);
@@ -1317,7 +1321,9 @@ namespace ts.server {
                 this.setCompilerOptions(opt);
             }
             else {
-                this.setCompilerOptions(ts.getDefaultCompilerOptions());
+                const defaultOpts = ts.getDefaultCompilerOptions();
+                defaultOpts.allowNonTsExtensions = true;
+                this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
             this.classifier = ts.createClassifier();
