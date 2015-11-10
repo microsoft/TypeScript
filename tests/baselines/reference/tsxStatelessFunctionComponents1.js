@@ -1,21 +1,25 @@
 //// [tsxStatelessFunctionComponents1.tsx]
-declare module JSX {
-	interface Element { el: any; }
-	interface IntrinsicElements { div: any; }
-}
-
 
 function Greet(x: {name: string}) {
 	return <div>Hello, {x}</div>;
 }
 function Meet({name = 'world'}) {
-	return <div>Hello, {x}</div>;
+	return <div>Hello, {name}</div>;
 }
 
 // OK
-let x = <Greet name='world' />;
+let a = <Greet name='world' />;
 // Error
-let y = <Greet naaame='world' />;
+let b = <Greet naaame='world' />;
+
+// OK
+let c = <Meet />;
+// OK
+let d = <Meet name='me' />;
+// Error
+let e = <Meet name={42} />;
+// Error
+let f = <Meet naaaaaaame='no' />;
 
 
 //// [tsxStatelessFunctionComponents1.jsx]
@@ -24,9 +28,17 @@ function Greet(x) {
 }
 function Meet(_a) {
     var _b = _a.name, name = _b === void 0 ? 'world' : _b;
-    return <div>Hello, {x}</div>;
+    return <div>Hello, {name}</div>;
 }
 // OK
-var x = <Greet name='world'/>;
+var a = <Greet name='world'/>;
 // Error
-var y = <Greet naaame='world'/>;
+var b = <Greet naaame='world'/>;
+// OK
+var c = <Meet />;
+// OK
+var d = <Meet name='me'/>;
+// Error
+var e = <Meet name={42}/>;
+// Error
+var f = <Meet naaaaaaame='no'/>;

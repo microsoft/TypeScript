@@ -975,6 +975,7 @@ namespace Harness {
             useCaseSensitiveFileNames?: boolean;
             includeBuiltFile?: string;
             baselineFile?: string;
+            libFiles?: string;
         }
 
         // Additional options not already in ts.optionDeclarations 
@@ -984,6 +985,7 @@ namespace Harness {
             { name: "baselineFile", type: "string" },
             { name: "includeBuiltFile", type: "string" },
             { name: "fileName", type: "string" },
+            { name: "libFiles", type: "string" },
             { name: "noErrorTruncation", type: "boolean" }
         ];
 
@@ -1114,6 +1116,15 @@ namespace Harness {
                     let builtFileName = libFolder + options.includeBuiltFile;
                     includeBuiltFiles.push({ unitName: builtFileName, content: normalizeLineEndings(IO.readFile(builtFileName), newLine) });
                 }
+
+                // Files from tests\lib that are requested by "@libFiles"
+                if (options.libFiles) {
+                    ts.forEach(options.libFiles.split(','), filename => {
+                        let libFileName = 'tests/lib/' + filename;
+                        includeBuiltFiles.push({ unitName: libFileName, content: normalizeLineEndings(IO.readFile(libFileName), newLine) });
+                    });
+                }
+
 
                 let useCaseSensitiveFileNames = options.useCaseSensitiveFileNames !== undefined ? options.useCaseSensitiveFileNames : Harness.IO.useCaseSensitiveFileNames();
 

@@ -141,8 +141,8 @@ namespace ts {
         let globalTemplateStringsArrayType: ObjectType;
         let globalESSymbolType: ObjectType;
         let jsxElementType: ObjectType;
-        /** Lazily loaded, use getJsxIntrinsicElementType() */
-        let jsxIntrinsicElementsType: ObjectType;
+        /** Things we lazy load from the JSX namespace */
+        let jsxTypes: {[name: string]: ObjectType} = {};
         let globalIterableType: GenericType;
         let globalIteratorType: GenericType;
         let globalIterableIteratorType: GenericType;
@@ -7641,12 +7641,11 @@ namespace ts {
             return type;
         }
 
-        /// Returns the type JSX.IntrinsicElements. May return `unknownType` if that type is not present.
-        function getJsxIntrinsicElementsType() {
-            if (!jsxIntrinsicElementsType) {
-                jsxIntrinsicElementsType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.IntrinsicElements) || unknownType;
+        function getJsxType(name: string) {
+            if (jsxTypes[name] === undefined) {
+                return jsxTypes[name] = getExportedTypeFromNamespace(JsxNames.JSX, name) || unknownType;
             }
-            return jsxIntrinsicElementsType;
+            return jsxTypes[name];
         }
 
         /// Given a JSX opening element or self-closing element, return the symbol of the property that the tag name points to if
@@ -7669,7 +7668,7 @@ namespace ts {
             return links.resolvedSymbol;
 
             function lookupIntrinsicTag(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
-                let intrinsicElementsType = getJsxIntrinsicElementsType();
+                let intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
                     // Property case
                     let intrinsicProp = getPropertyOfType(intrinsicElementsType, (<Identifier>node.tagName).text);
@@ -7701,7 +7700,7 @@ namespace ts {
 
                 // Look up the value in the current scope
                 if (valueSymbol && valueSymbol !== unknownSymbol) {
-                    links.jsxFlags |= JsxFlags.ClassElement;
+                    links.jsxFlags |= JsxFlags.ValueElement;
                     if (valueSymbol.flags & SymbolFlags.Alias) {
                         markAliasSymbolAsReferenced(valueSymbol);
                     }
@@ -7730,7 +7729,7 @@ namespace ts {
         function getJsxElementInstanceType(node: JsxOpeningLikeElement) {
             // There is no such thing as an instance type for a non-class element. This
             // line shouldn't be hit.
-            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ClassElement), "Should not call getJsxElementInstanceType on non-class Element");
+            Debug.assert(!!(getNodeLinks(node).jsxFlags & JsxFlags.ValueElement), "Should not call getJsxElementInstanceType on non-class Element");
 
             let classSymbol = getJsxElementTagSymbol(node);
             if (classSymbol === unknownSymbol) {
@@ -7808,18 +7807,21 @@ namespace ts {
             if (!links.resolvedJsxType) {
                 let sym = getJsxElementTagSymbol(node);
 
-                if (links.jsxFlags & JsxFlags.ClassElement) {
+                if (links.jsxFlags & JsxFlags.ValueElement) {
                     // Get the element instance type (the result of newing or invoking this tag)
                     let elemInstanceType = getJsxElementInstanceType(node);
 
                     // Is this is a stateless function component? See if its single signature is
-                    // assignable to the JSX Element Type with either 0 arguments, or 1 argument
-                    // that is an object type
+                    // assignable to the JSX Element Type
                     let callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
                     let callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                    let paramType = callSignature && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && paramType.flags & TypeFlags.ObjectType) {
-                        // TODO: Things like 'ref' and 'key' are always valid, how to account for that?
+                    let paramType = callReturnType && callSignature && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && (paramType.flags & TypeFlags.ObjectType)) {
+                        // Intersect in JSX.IntrinsicAttributes if it exists
+                        let intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                        if(intrinsicAttributes !== unknownType) {
+                            paramType = intersectTypes(intrinsicAttributes, paramType);
+                        }
                         return paramType;
                     }
 
@@ -7851,14 +7853,35 @@ namespace ts {
                             return links.resolvedJsxType = emptyObjectType;
                         }
                         else if (isTypeAny(attributesType) || (attributesType === unknownType)) {
+                            // Props is of type 'any' or unknown
                             return links.resolvedJsxType = attributesType;
                         }
                         else if (!(attributesType.flags & TypeFlags.ObjectType)) {
+                            // Props is not an object type
                             error(node.tagName, Diagnostics.JSX_element_attributes_type_0_must_be_an_object_type, typeToString(attributesType));
                             return links.resolvedJsxType = anyType;
                         }
                         else {
-                            return links.resolvedJsxType = attributesType;
+                            // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
+                            let apparentAttributesType = attributesType;
+                            let intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
+                            if (intrinsicClassAttribs !== unknownType) {
+                                let typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
+                                if(typeParams) {
+                                    if(typeParams.length === 1) {
+                                        apparentAttributesType = intersectTypes(createTypeReference(<GenericType>intrinsicClassAttribs, [elemInstanceType]), apparentAttributesType);
+                                    }
+                                } else {
+                                    apparentAttributesType = intersectTypes(attributesType, intrinsicClassAttribs);
+                                }
+                            }
+
+                            let intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
+                            if(intrinsicAttribs !== unknownType) {
+                                apparentAttributesType = intersectTypes(intrinsicAttribs, apparentAttributesType);
+                            }
+
+                            return links.resolvedJsxType = apparentAttributesType;
                         }
                     }
                 }
@@ -7898,7 +7921,7 @@ namespace ts {
 
         /// Returns all the properties of the Jsx.IntrinsicElements interface
         function getJsxIntrinsicTagNames(): Symbol[] {
-            let intrinsics = getJsxIntrinsicElementsType();
+            let intrinsics = getJsxType(JsxNames.IntrinsicElements);
             return intrinsics ? getPropertiesOfType(intrinsics) : emptyArray;
         }
 

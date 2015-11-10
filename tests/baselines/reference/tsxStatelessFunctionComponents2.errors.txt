@@ -1,0 +1,52 @@
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(20,16): error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(26,42): error TS2339: Property 'subtr' does not exist on type 'string'.
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(28,5): error TS2451: Cannot redeclare block-scoped variable 'f'.
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(28,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
+tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(31,5): error TS2451: Cannot redeclare block-scoped variable 'f'.
+
+
+==== tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx (6 errors) ====
+    
+    import React = require('react');
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+    
+    function Greet(x: {name?: string}) {
+    	return <div>Hello, {x}</div>;
+    }
+    
+    class BigGreeter extends React.Component<{ name?: string }, {}> {
+    	render() {
+    		return <div></div>;
+    	}
+    	greeting: string;
+    }
+    
+    // OK
+    let a = <Greet />;
+    // OK
+    let b = <Greet key="k" />;
+    // Error
+    let c = <Greet ref="myRef" />;
+                   ~~~
+!!! error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+    
+    
+    // OK
+    let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
+    // Error ('subtr')
+    let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
+                                             ~~~~~
+!!! error TS2339: Property 'subtr' does not exist on type 'string'.
+    // Error
+    let f = <BigGreeter ref={x => x.notARealProperty} />;
+        ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'f'.
+                                    ~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
+    
+    // OK
+    let f = <BigGreeter key={100} />;
+        ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'f'.
