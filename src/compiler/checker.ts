@@ -2878,7 +2878,7 @@ namespace ts {
             let baseType: Type;
             const originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
-                !baseTypeHasUnappliedOuterTypeParameters(originalBaseType)) {
+                areAllOuterTypeParametersApplied(originalBaseType)) {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
@@ -2915,20 +2915,16 @@ namespace ts {
             }
         }
 
-        function baseTypeHasUnappliedOuterTypeParameters(type: Type): boolean {
+        function areAllOuterTypeParametersApplied(type: Type): boolean {
             const outerTypeParameters = (<InterfaceType>type).outerTypeParameters;
-            const typeArguments = (<TypeReference>type).typeArguments;
             if (outerTypeParameters) {
                 // an unapplied type parameter is one 
                 // whose argument symbol is still the same as the parameter symbol
-                const numParameters = outerTypeParameters.length;
-                for (let i = 0; i < numParameters; i++) {
-                    if (outerTypeParameters[i].symbol === typeArguments[i].symbol) {
-                        return true;
-                    }
-                }
+                const last = outerTypeParameters.length - 1;
+                const typeArguments = (<TypeReference>type).typeArguments;
+                return outerTypeParameters[last].symbol !== typeArguments[last].symbol;
             }
-            return false;
+            return true;
         }
 
         function resolveBaseTypesOfInterface(type: InterfaceType): void {
