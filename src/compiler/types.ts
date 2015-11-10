@@ -701,7 +701,7 @@ namespace ts {
     }
 
     // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
-    // because string literals can appear in the type annotation of a parameter node.
+    // because string literals can appear in type annotations as well.
     export interface StringLiteral extends LiteralExpression, TypeNode {
         _stringLiteralBrand: any;
     }
@@ -1285,7 +1285,6 @@ namespace ts {
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
 
-        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1623,6 +1622,7 @@ namespace ts {
         isOptionalParameter(node: ParameterDeclaration): boolean;
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
     }
 
     export const enum SymbolFlags {

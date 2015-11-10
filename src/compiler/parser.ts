@@ -1992,9 +1992,7 @@ namespace ts {
 
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
-                return token === SyntaxKind.StringLiteral
-                    ? <StringLiteral>parseLiteralNode(/*internName*/ true)
-                    : parseType();
+                return parseType();
             }
 
             return undefined;
@@ -2382,6 +2380,8 @@ namespace ts {
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
+                case SyntaxKind.StringLiteral:
+                    return <StringLiteral>parseLiteralNode(/*internName*/ true);
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
@@ -2412,6 +2412,7 @@ namespace ts {
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
+                case SyntaxKind.StringLiteral:
                     return true;
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
@@ -5629,6 +5630,7 @@ namespace ts {
                         return parseTokenNode<JSDocType>();
                 }
 
+                // TODO (drosen): Parse string literal types in JSDoc as well.
                 return parseJSDocTypeReference();
             }
 
