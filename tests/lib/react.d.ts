@@ -1947,7 +1947,7 @@ declare namespace JSX {
         details: React.HTMLElementAttributes<HTMLElement>;
         dfn: React.HTMLElementAttributes<HTMLElement>;
         dialog: React.HTMLElementAttributes<HTMLElement>;
-        div: React.HTMLElementAttributes<HTMLElement>;
+        div: React.HTMLElementAttributes<HTMLDivElement>;
         dl: React.HTMLElementAttributes<HTMLDListElement>;
         dt: React.HTMLElementAttributes<HTMLElement>;
         em: React.HTMLElementAttributes<HTMLElement>;

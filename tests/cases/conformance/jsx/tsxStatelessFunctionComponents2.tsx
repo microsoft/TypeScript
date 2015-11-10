@@ -18,18 +18,24 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 
 // OK
 let a = <Greet />;
-// OK
+// OK - always valid to specify 'key'
 let b = <Greet key="k" />;
-// Error
+// Error - not allowed to specify 'ref' on SFCs
 let c = <Greet ref="myRef" />;
 
 
-// OK
+// OK - ref is valid for classes
 let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
-// Error ('subtr')
+// Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
-// Error
+// Error (ref callback is contextually typed)
 let f = <BigGreeter ref={x => x.notARealProperty} />;
 
-// OK
-let f = <BigGreeter key={100} />;
+// OK - key is always valid
+let g = <BigGreeter key={100} />;
+
+// OK - contextually typed intrinsic ref callback parameter
+let h = <div ref={x => x.innerText} />;
+// Error - property not on ontextually typed intrinsic ref callback parameter
+let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
+
