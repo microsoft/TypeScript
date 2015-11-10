@@ -1,3 +1,4 @@
+/// <reference path="utilities.ts"/>
 /// <reference path="parser.ts"/>
 
 /* @internal */
@@ -6,8 +7,8 @@ namespace ts {
 
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
-        Instantiated    = 1,
-        ConstEnumOnly   = 2
+        Instantiated = 1,
+        ConstEnumOnly = 2
     }
 
     const enum Reachability {
@@ -208,6 +209,9 @@ namespace ts {
                     return "__export";
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
+                case SyntaxKind.BinaryExpression:
+                    // Binary expression case is for JS module 'module.exports = expr'
+                    return "export=";
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
@@ -1069,7 +1073,7 @@ namespace ts {
             return "__" + indexOf((<SignatureDeclaration>node.parent).parameters, node);
         }
 
-        function bind(node: Node) {
+        function bind(node: Node): void {
             if (!node) {
                 return;
             }
@@ -1145,9 +1149,18 @@ namespace ts {
 
         function bindWorker(node: Node) {
             switch (node.kind) {
+                /* Strict mode checks */
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
+                    if (isInJavaScriptFile(node)) {
+                        if (isExportsPropertyAssignment(node)) {
+                            bindExportsPropertyAssignment(<BinaryExpression>node);
+                        }
+                        else if (isModuleExportsAssignment(node)) {
+                            bindModuleExportsAssignment(<BinaryExpression>node);
+                        }
+                    }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -1213,6 +1226,14 @@ namespace ts {
                     checkStrictModeFunctionName(<FunctionExpression>node);
                     const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
                     return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
+
+                case SyntaxKind.CallExpression:
+                    if (isInJavaScriptFile(node)) {
+                        bindCallExpression(<CallExpression>node);
+                    }
+                    break;
+
+                // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
                     return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
@@ -1224,6 +1245,8 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
+
+                // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
@@ -1243,16 +1266,21 @@ namespace ts {
         function bindSourceFileIfExternalModule() {
             setExportContextFlag(file);
             if (isExternalModule(file)) {
-                bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName)}"`);
+                bindSourceFileAsExternalModule();
             }
         }
 
-        function bindExportAssignment(node: ExportAssignment) {
+        function bindSourceFileAsExternalModule() {
+            bindAnonymousDeclaration(file, SymbolFlags.ValueModule, `"${removeFileExtension(file.fileName) }"`);
+        }
+
+        function bindExportAssignment(node: ExportAssignment | BinaryExpression) {
+            const boundExpression = node.kind === SyntaxKind.ExportAssignment ? (<ExportAssignment>node).expression : (<BinaryExpression>node).right;
             if (!container.symbol || !container.symbol.exports) {
                 // Export assignment in some sort of block construct
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node));
             }
-            else if (node.expression.kind === SyntaxKind.Identifier) {
+            else if (boundExpression.kind === SyntaxKind.Identifier) {
                 // An export default clause with an identifier exports all meanings of that identifier
                 declareSymbol(container.symbol.exports, container.symbol, node, SymbolFlags.Alias, SymbolFlags.PropertyExcludes | SymbolFlags.AliasExcludes);
             }
@@ -1276,6 +1304,34 @@ namespace ts {
         function bindImportClause(node: ImportClause) {
             if (node.name) {
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+            }
+        }
+
+        function setCommonJsModuleIndicator(node: Node) {
+            if (!file.commonJsModuleIndicator) {
+                file.commonJsModuleIndicator = node;
+                bindSourceFileAsExternalModule();
+            }
+        }
+
+        function bindExportsPropertyAssignment(node: BinaryExpression) {
+            // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
+            // expression is the declaration
+            setCommonJsModuleIndicator(node);
+            declareSymbol(file.symbol.exports, file.symbol, <PropertyAccessExpression>node.left, SymbolFlags.Property | SymbolFlags.Export, SymbolFlags.None);
+        }
+
+        function bindModuleExportsAssignment(node: BinaryExpression) {
+            // 'module.exports = expr' assignment
+            setCommonJsModuleIndicator(node);
+            bindExportAssignment(node);
+        }
+
+        function bindCallExpression(node: CallExpression) {
+            // We're only inspecting call expressions to detect CommonJS modules, so we can skip
+            // this check if we've already seen the module indicator
+            if (!file.commonJsModuleIndicator && isRequireCall(node)) {
+                setCommonJsModuleIndicator(node);
             }
         }
 
