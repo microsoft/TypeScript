@@ -513,6 +513,7 @@ declare namespace ts.server.protocol {
       *  Information found in an "open" request.
       */
     export interface OpenRequestArgs extends FileRequestArgs {
+        fileContent?: string;
     }
 
     /**
