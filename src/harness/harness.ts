@@ -1119,8 +1119,8 @@ namespace Harness {
 
                 // Files from tests\lib that are requested by "@libFiles"
                 if (options.libFiles) {
-                    ts.forEach(options.libFiles.split(','), filename => {
-                        let libFileName = 'tests/lib/' + filename;
+                    ts.forEach(options.libFiles.split(","), filename => {
+                        const libFileName = "tests/lib/" + filename;
                         includeBuiltFiles.push({ unitName: libFileName, content: normalizeLineEndings(IO.readFile(libFileName), newLine) });
                     });
                 }

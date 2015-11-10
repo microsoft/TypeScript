@@ -140,9 +140,6 @@ namespace ts {
         let globalRegExpType: ObjectType;
         let globalTemplateStringsArrayType: ObjectType;
         let globalESSymbolType: ObjectType;
-        let jsxElementType: ObjectType;
-        /** Things we lazy load from the JSX namespace */
-        let jsxTypes: {[name: string]: ObjectType} = {};
         let globalIterableType: GenericType;
         let globalIteratorType: GenericType;
         let globalIterableIteratorType: GenericType;
@@ -203,6 +200,9 @@ namespace ts {
             }
         };
 
+        let jsxElementType: ObjectType;
+        /** Things we lazy load from the JSX namespace */
+        const jsxTypes: {[name: string]: ObjectType} = {};
         const JsxNames = {
             JSX: "JSX",
             IntrinsicElements: "IntrinsicElements",
@@ -7831,18 +7831,7 @@ namespace ts {
                 }
             }
 
-            const returnType = getUnionType(signatures.map(getReturnTypeOfSignature));
-
-<<<<<<< HEAD
-=======
-            // Issue an error if this return type isn't assignable to JSX.ElementClass
-            const elemClassType = getJsxGlobalElementClassType();
-            if (elemClassType) {
-                checkTypeRelatedTo(returnType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
-            }
-
->>>>>>> master
-            return returnType;
+            return getUnionType(signatures.map(getReturnTypeOfSignature));
         }
 
         /// e.g. "props" for React.d.ts,
@@ -7897,20 +7886,20 @@ namespace ts {
 
                     // Is this is a stateless function component? See if its single signature is
                     // assignable to the JSX Element Type
-                    let callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
-                    let callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                    const callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
+                    const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                     let paramType = callReturnType && callSignature && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
                     if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && (paramType.flags & TypeFlags.ObjectType)) {
                         // Intersect in JSX.IntrinsicAttributes if it exists
-                        let intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                        if(intrinsicAttributes !== unknownType) {
+                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                        if (intrinsicAttributes !== unknownType) {
                             paramType = intersectTypes(intrinsicAttributes, paramType);
                         }
                         return paramType;
                     }
 
                     // Issue an error if this return type isn't assignable to JSX.ElementClass
-                    let elemClassType = getJsxGlobalElementClassType();
+                    const elemClassType = getJsxGlobalElementClassType();
                     if (elemClassType) {
                         checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
                     }
@@ -7948,20 +7937,21 @@ namespace ts {
                         else {
                             // Normal case -- add in IntrinsicClassElements<T> and IntrinsicElements
                             let apparentAttributesType = attributesType;
-                            let intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
+                            const intrinsicClassAttribs = getJsxType(JsxNames.IntrinsicClassAttributes);
                             if (intrinsicClassAttribs !== unknownType) {
-                                let typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
-                                if(typeParams) {
-                                    if(typeParams.length === 1) {
+                                const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
+                                if (typeParams) {
+                                    if (typeParams.length === 1) {
                                         apparentAttributesType = intersectTypes(createTypeReference(<GenericType>intrinsicClassAttribs, [elemInstanceType]), apparentAttributesType);
                                     }
-                                } else {
+                                }
+                                else {
                                     apparentAttributesType = intersectTypes(attributesType, intrinsicClassAttribs);
                                 }
                             }
 
-                            let intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
-                            if(intrinsicAttribs !== unknownType) {
+                            const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes);
+                            if (intrinsicAttribs !== unknownType) {
                                 apparentAttributesType = intersectTypes(intrinsicAttribs, apparentAttributesType);
                             }
 
