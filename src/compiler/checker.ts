@@ -1022,6 +1022,12 @@ namespace ts {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
                 }
+                else if (sourceFile.package && !isRelative) {
+                    const symbol = getSymbol(sourceFile.package.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                    if (symbol) {
+                        return symbol;
+                    }
+                }
                 error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
                 return;
             }
