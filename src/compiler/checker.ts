@@ -2915,11 +2915,9 @@ namespace ts {
             }
         }
 
-        /**
-         * An unapplied type parameter has its symbol still the same as the matching argument symbol.
-         * Since parameters are applied outer-to-inner, only the last outer parameter needs to be checked.
-         */
         function areAllOuterTypeParametersApplied(type: Type): boolean {
+            // An unapplied type parameter has its symbol still the same as the matching argument symbol.
+            // Since parameters are applied outer-to-inner, only the last outer parameter needs to be checked.
             const outerTypeParameters = (<InterfaceType>type).outerTypeParameters;
             if (outerTypeParameters) {
                 const last = outerTypeParameters.length - 1;
