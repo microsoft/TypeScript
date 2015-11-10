@@ -888,7 +888,7 @@ namespace ts {
 
         function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
             let commonPathComponents: string[];
-            forEach(files, sourceFile => {
+            const failed = forEach(files, sourceFile => {
                 // Each file contributes into common source file path
                 if (isDeclarationFile(sourceFile)) {
                     return;
@@ -903,11 +903,12 @@ namespace ts {
                     return;
                 }
 
+                const caseSensitive = host.useCaseSensitiveFileNames();
                 for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
-                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                    if (caseSensitive ? commonPathComponents[i] !== sourcePathComponents[i] : commonPathComponents[i].toLocaleLowerCase() !== sourcePathComponents[i].toLocaleLowerCase()) {
                         if (i === 0) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                            return;
+                            // Failed to find any common path component
+                            return true;
                         }
 
                         // New common path found that is 0 -> i-1
@@ -921,6 +922,11 @@ namespace ts {
                     commonPathComponents.length = sourcePathComponents.length;
                 }
             });
+
+            // A common path can not be found when paths span multiple drives on windows, for example
+            if (failed) {
+                return "";
+            }
 
             if (!commonPathComponents) { // Can happen when all input files are .d.ts files
                 return currentDirectory;
@@ -1045,6 +1051,10 @@ namespace ts {
                 else {
                     // Compute the commonSourceDirectory from the input files
                     commonSourceDirectory = computeCommonSourceDirectory(files);
+                    // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
+                    if (options.outDir && commonSourceDirectory === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                    }
                 }
 
                 if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
