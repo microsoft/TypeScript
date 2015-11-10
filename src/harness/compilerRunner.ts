@@ -45,14 +45,10 @@ class CompilerBaselineRunner extends RunnerBase {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
-            let content: string;
-            let testCaseContent: { settings: Harness.TestCaseParser.CompilerSettings; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
 
-            let units: Harness.TestCaseParser.TestUnitData[];
             let tcSettings: Harness.TestCaseParser.CompilerSettings;
 
             let lastUnit: Harness.TestCaseParser.TestUnitData;
-            let rootDir: string;
 
             let result: Harness.Compiler.CompilerResult;
             let program: ts.Program;
@@ -65,12 +61,12 @@ class CompilerBaselineRunner extends RunnerBase {
 
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
-                content = Harness.IO.readFile(fileName);
-                testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
-                units = testCaseContent.testUnitData;
+                const content = Harness.IO.readFile(fileName);
+                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+                const units = testCaseContent.testUnitData;
                 tcSettings = testCaseContent.settings;
                 lastUnit = units[units.length - 1];
-                rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
+                const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 harnessCompiler = Harness.Compiler.getCompiler();
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
@@ -78,16 +74,16 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = [];
                 otherFiles = [];
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: rootDir + lastUnit.name, content: lastUnit.content });
+                    toBeCompiled.push({ unitName: ts.isRootedDiskPath(lastUnit.name) ? lastUnit.name : rootDir + lastUnit.name, content: lastUnit.content });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: rootDir + unit.name, content: unit.content });
+                            otherFiles.push({ unitName: ts.isRootedDiskPath(unit.name) ? unit.name : rootDir + unit.name, content: unit.content });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: rootDir + unit.name, content: unit.content };
+                        return { unitName: ts.isRootedDiskPath(unit.name) ? unit.name : rootDir + unit.name, content: unit.content };
                     });
                 }
 
@@ -104,12 +100,8 @@ class CompilerBaselineRunner extends RunnerBase {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
                 justName = undefined;
-                content = undefined;
-                testCaseContent = undefined;
-                units = undefined;
                 tcSettings = undefined;
                 lastUnit = undefined;
-                rootDir = undefined;
                 result = undefined;
                 program = undefined;
                 options = undefined;
