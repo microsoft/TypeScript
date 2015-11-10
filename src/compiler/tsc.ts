@@ -346,6 +346,12 @@ namespace ts {
                     return;
                 }
             }
+            if (!cachedConfigFileText) {
+                const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
+                reportDiagnostics([error], /* compilerHost */ undefined);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
 
             const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
             const configObject = result.config;
