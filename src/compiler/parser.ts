@@ -3,16 +3,41 @@
 
 namespace ts {
     /* @internal */ export let parseTime = 0;
+    /* @internal */ export let nodeCount = 0;
 
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let createNodeFastOrSlow = createNodeSlow;
+    let createSourceFileFastOrSlow = createSourceFileSlow;
+
+    function createNodeSlow(kind: SyntaxKind, pos?: number, end?: number): Node {
+        NodeConstructor = objectAllocator.getNodeConstructor();
+        createNodeFastOrSlow = createNodeFast;
+        return createNodeFast(kind, pos, end);
+    }
+
+    function createNodeFast(kind: SyntaxKind, pos?: number, end?: number): Node {
+        nodeCount++;
+        return new NodeConstructor(kind, pos, end);
+    }
+
+    function createSourceFileSlow(kind: SyntaxKind, pos?: number, end?: number): Node {
+        SourceFileConstructor = objectAllocator.getSourceFileConstructor();
+        createSourceFileFastOrSlow = createSourceFileFast;
+        return createSourceFileFast(kind, pos, end);
+    }
+
+    function createSourceFileFast(kind: SyntaxKind, pos?: number, end?: number): Node {
+        nodeCount++;
+        return new SourceFileConstructor(kind, pos, end);
+    }
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
-            return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
+            return createSourceFileFastOrSlow(kind, pos, end);
         }
         else {
-            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
+            return createNodeFastOrSlow(kind, pos, end);
         }
     }
 
@@ -440,17 +465,12 @@ namespace ts {
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
         const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
-        // capture constructors in 'initializeState' to avoid null checks
-        let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-        let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-
         let sourceFile: SourceFile;
         let parseDiagnostics: Diagnostic[];
         let syntaxCursor: IncrementalParser.SyntaxCursor;
 
         let token: SyntaxKind;
         let sourceText: string;
-        let nodeCount: number;
         let identifiers: Map<string>;
         let identifierCount: number;
 
@@ -545,9 +565,6 @@ namespace ts {
         }
 
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, isJavaScriptFile: boolean, _syntaxCursor: IncrementalParser.SyntaxCursor) {
-            NodeConstructor = objectAllocator.getNodeConstructor();
-            SourceFileConstructor = objectAllocator.getSourceFileConstructor();
-
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
 
@@ -555,7 +572,6 @@ namespace ts {
             parsingContext = 0;
             identifiers = {};
             identifierCount = 0;
-            nodeCount = 0;
 
             contextFlags = isJavaScriptFile ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
@@ -581,6 +597,8 @@ namespace ts {
         }
 
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
+            const initialNodeCount = nodeCount;
+
             sourceFile = createSourceFile(fileName, languageVersion);
 
             if (contextFlags & ParserContextFlags.JavaScriptFile) {
@@ -597,7 +615,7 @@ namespace ts {
 
             setExternalModuleIndicator(sourceFile);
 
-            sourceFile.nodeCount = nodeCount;
+            sourceFile.nodeCount = nodeCount - initialNodeCount;
             sourceFile.identifierCount = identifierCount;
             sourceFile.identifiers = identifiers;
             sourceFile.parseDiagnostics = parseDiagnostics;
@@ -674,8 +692,7 @@ namespace ts {
         function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
-            const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
-            nodeCount++;
+            const sourceFile = <SourceFile>createSourceFileFastOrSlow(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
 
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
@@ -1009,12 +1026,11 @@ namespace ts {
 
         // note: this function creates only node
         function createNode(kind: SyntaxKind, pos?: number): Node {
-            nodeCount++;
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
 
-            return new NodeConstructor(kind, pos, pos);
+            return createNodeFastOrSlow(kind, pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
