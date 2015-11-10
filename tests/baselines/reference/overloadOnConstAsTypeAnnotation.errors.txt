@@ -1,8 +1,9 @@
-tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(1,8): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(1,37): error TS1005: ';' expected.
+tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(2,8): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts(2,37): error TS1005: ';' expected.
 
 
 ==== tests/cases/compiler/overloadOnConstAsTypeAnnotation.ts (2 errors) ====
+    
     var f: (x: 'hi') => number = ('hi') => { return 1; };
            ~~~~~~~~~~~~~~~~~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.

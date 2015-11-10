@@ -2,7 +2,7 @@ module M {
     export interface I { }
 }
 module M {
-    export class I { } // error
+    export class I { }
 }
 
 module M {

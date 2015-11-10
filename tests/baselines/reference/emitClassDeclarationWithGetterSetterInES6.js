@@ -10,16 +10,16 @@ class C {
     static get ["computedname"]() {
         return "";
     }
-    get ["computedname"]() {
+    get ["computedname1"]() {
         return "";
     }
-    get ["computedname"]() {
+    get ["computedname2"]() {
         return "";
     }
 
-    set ["computedname"](x: any) {
+    set ["computedname3"](x: any) {
     }
-    set ["computedname"](y: string) {
+    set ["computedname4"](y: string) {
     }
 
     set foo(a: string) { }
@@ -38,15 +38,15 @@ class C {
     static get ["computedname"]() {
         return "";
     }
-    get ["computedname"]() {
+    get ["computedname1"]() {
         return "";
     }
-    get ["computedname"]() {
+    get ["computedname2"]() {
         return "";
     }
-    set ["computedname"](x) {
+    set ["computedname3"](x) {
     }
-    set ["computedname"](y) {
+    set ["computedname4"](y) {
     }
     set foo(a) { }
     static set bar(b) { }

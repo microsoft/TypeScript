@@ -1,4 +1,5 @@
 // @target:es5
+// @allowUnreachableCode: true
 'use strict'
 
 declare function use(a: any);

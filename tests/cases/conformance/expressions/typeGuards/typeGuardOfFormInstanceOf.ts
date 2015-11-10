@@ -13,18 +13,55 @@ class C2 {
 class D1 extends C1 {
     p3: number;
 }
+class C3 {
+    p4: number;
+}
 var str: string;
 var num: number;
 var strOrNum: string | number;
 
-var c1Orc2: C1 | C2;
-str = c1Orc2 instanceof C1 && c1Orc2.p1; // C1
-num = c1Orc2 instanceof C2 && c1Orc2.p2; // C2
-str = c1Orc2 instanceof D1 && c1Orc2.p1; // D1
-num = c1Orc2 instanceof D1 && c1Orc2.p3; // D1
+var ctor1: C1 | C2;
+str = ctor1 instanceof C1 && ctor1.p1; // C1
+num = ctor1 instanceof C2 && ctor1.p2; // C2
+str = ctor1 instanceof D1 && ctor1.p1; // D1
+num = ctor1 instanceof D1 && ctor1.p3; // D1
 
-var c2Ord1: C2 | D1;
-num = c2Ord1 instanceof C2 && c2Ord1.p2; // C2
-num = c2Ord1 instanceof D1 && c2Ord1.p3; // D1
-str = c2Ord1 instanceof D1 && c2Ord1.p1; // D1
-var r2: D1 | C2 = c2Ord1 instanceof C1 && c2Ord1; // C2 | D1
+var ctor2: C2 | D1;
+num = ctor2 instanceof C2 && ctor2.p2; // C2
+num = ctor2 instanceof D1 && ctor2.p3; // D1
+str = ctor2 instanceof D1 && ctor2.p1; // D1
+var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
+
+var ctor3: C1 | C2;
+if (ctor3 instanceof C1) {
+    ctor3.p1; // C1
+}
+else {
+    ctor3.p2; // C2
+}
+
+var ctor4: C1 | C2 | C3;
+if (ctor4 instanceof C1) {
+    ctor4.p1; // C1
+}
+else if (ctor4 instanceof C2) {
+    ctor4.p2; // C2
+}
+else {
+    ctor4.p4; // C3
+}
+
+var ctor5: C1 | D1 | C2;
+if (ctor5 instanceof C1) {
+    ctor5.p1; // C1
+}
+else {
+    ctor5.p2; // C2
+}
+
+var ctor6: C1 | C2 | C3;
+if (ctor6 instanceof C1 || ctor6 instanceof C2) {
+}
+else {
+    ctor6.p4; // C3
+}

@@ -1,0 +1,73 @@
+=== tests/cases/compiler/downlevelLetConst18.ts ===
+
+'use strict'
+>'use strict' : string
+
+for (let x; ;) {
+>x : any
+
+    function foo() { x };
+>foo : () => void
+>x : any
+}
+
+for (let x; ;) {
+>x : any
+
+    function foo1() { x };
+>foo1 : () => void
+>x : any
+}
+
+for (let x; ;) {
+>x : any
+
+    (() => { x })();
+>(() => { x })() : void
+>(() => { x }) : () => void
+>() => { x } : () => void
+>x : any
+}
+
+for (const x = 1; ;) {
+>x : number
+>1 : number
+
+    (() => { x })();
+>(() => { x })() : void
+>(() => { x }) : () => void
+>() => { x } : () => void
+>x : number
+}
+
+for (let x; ;) {
+>x : any
+
+    ({ foo() { x }})
+>({ foo() { x }}) : { foo(): void; }
+>{ foo() { x }} : { foo(): void; }
+>foo : () => void
+>x : any
+}
+
+for (let x; ;) {
+>x : any
+
+    ({ get foo() { return x } })
+>({ get foo() { return x } }) : { foo: any; }
+>{ get foo() { return x } } : { foo: any; }
+>foo : any
+>x : any
+}
+
+for (let x; ;) {
+>x : any
+
+    ({ set foo(v) { x } })
+>({ set foo(v) { x } }) : { foo: any; }
+>{ set foo(v) { x } } : { foo: any; }
+>foo : any
+>v : any
+>x : any
+}
+

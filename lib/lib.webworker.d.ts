@@ -234,7 +234,7 @@ interface AudioBuffer {
     length: number;
     numberOfChannels: number;
     sampleRate: number;
-    getChannelData(channel: number): any;
+    getChannelData(channel: number): Float32Array;
 }
 
 declare var AudioBuffer: {
@@ -682,13 +682,11 @@ interface ImageData {
     width: number;
 }
 
-interface ImageDataConstructor {
+declare var ImageData: {
     prototype: ImageData;
     new(width: number, height: number): ImageData;
     new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
-
-declare var ImageData: ImageDataConstructor; 
 
 interface MSApp {
     clearTemporaryWebDataAsync(): MSAppAsyncOperation;
@@ -1111,7 +1109,6 @@ interface WorkerUtils extends Object, WindowBase64 {
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
-
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
@@ -1125,8 +1122,6 @@ interface FilePropertyBag {
 interface EventListenerObject {
     handleEvent(evt: Event): void;
 }
-
-declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface MessageEventInit extends EventInit {
     data?: any;
@@ -1142,6 +1137,8 @@ interface ProgressEventInit extends EventInit {
     loaded?: number;
     total?: number;
 }
+
+declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?:Error): void;
