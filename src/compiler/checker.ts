@@ -487,8 +487,9 @@ namespace ts {
                             (location.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>location).name.kind === SyntaxKind.StringLiteral)) {
 
                             // It's an external module. Because of module/namespace merging, a module's exports are in scope,
-                            // yet we never want to treat an export specifier as putting a member in scope. Therefore,
-                            // if the name we find is purely an export specifier, it is not actually considered in scope.
+                            // yet we never want to treat an export specifier as putting a member in scope, except 'default'. 
+                            // Therefore, if the name we find is purely an export specifier, it is not actually considered in scope,
+                            // unless it is 'default'.
                             // Two things to note about this:
                             //     1. We have to check this without calling getSymbol. The problem with calling getSymbol
                             //        on an export specifier is that it might find the export specifier itself, and try to
@@ -497,15 +498,16 @@ namespace ts {
                             //     2. We check === SymbolFlags.Alias in order to check that the symbol is *purely*
                             //        an alias. If we used &, we'd be throwing out symbols that have non alias aspects,
                             //        which is not the desired behavior.
+                            const isLocalSymbolForExportDefault = doesNameResolveToLocalSymbolForExportDefault(moduleExports, meaning, name);
                             if (hasProperty(moduleExports, name) &&
                                 moduleExports[name].flags === SymbolFlags.Alias &&
+                                !isLocalSymbolForExportDefault &&
                                 getDeclarationOfKind(moduleExports[name], SyntaxKind.ExportSpecifier)) {
                                 break;
                             }
 
-                            result = moduleExports["default"];
-                            const localSymbol = getLocalSymbolForExportDefault(result);
-                            if (result && localSymbol && (result.flags & meaning) && localSymbol.name === name) {
+                            if (isLocalSymbolForExportDefault) {
+                                result = moduleExports["default"];
                                 break loop;
                             }
                             result = undefined;
@@ -672,6 +674,12 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function doesNameResolveToLocalSymbolForExportDefault(exports: SymbolTable, meaning: SymbolFlags, name: string): boolean {
+            const defaultExport = exports["default"];
+            const localSymbol = getLocalSymbolForExportDefault(defaultExport);
+            return defaultExport && (defaultExport.flags & meaning) && localSymbol && localSymbol.name === name;
         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
@@ -4124,12 +4132,12 @@ namespace ts {
                 // We only support expressions that are simple qualified names. For other expressions this produces undefined.
                 const typeNameOrExpression = node.kind === SyntaxKind.TypeReference ? (<TypeReferenceNode>node).typeName :
                     isSupportedExpressionWithTypeArguments(<ExpressionWithTypeArguments>node) ? (<ExpressionWithTypeArguments>node).expression :
-                    undefined;
+                        undefined;
                 const symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
                 const type = symbol === unknownSymbol ? unknownType :
                     symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                    symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                    getTypeFromNonGenericTypeReference(node, symbol);
+                        symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
+                            getTypeFromNonGenericTypeReference(node, symbol);
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
                 links.resolvedSymbol = symbol;
@@ -11309,7 +11317,7 @@ namespace ts {
 
             // Abstract methods can't have an implementation -- in particular, they don't need one.
             if (!isExportSymbolInsideModule && lastSeenNonAmbientDeclaration && !lastSeenNonAmbientDeclaration.body &&
-                !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract) ) {
+                !(lastSeenNonAmbientDeclaration.flags & NodeFlags.Abstract)) {
                 reportImplementationExpectedError(lastSeenNonAmbientDeclaration);
             }
 
@@ -14221,8 +14229,8 @@ namespace ts {
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                            // fall through; this fall-through is necessary because we would like to handle
-                            // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
+                        // fall through; this fall-through is necessary because we would like to handle
+                        // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
                             // If we didn't come from static member of class or interface,
@@ -14378,8 +14386,8 @@ namespace ts {
                 return resolveEntityName(<EntityName>entityName, meaning);
             }
             else if ((entityName.parent.kind === SyntaxKind.JsxOpeningElement) ||
-                     (entityName.parent.kind === SyntaxKind.JsxSelfClosingElement) ||
-                     (entityName.parent.kind === SyntaxKind.JsxClosingElement)) {
+                (entityName.parent.kind === SyntaxKind.JsxSelfClosingElement) ||
+                (entityName.parent.kind === SyntaxKind.JsxClosingElement)) {
                 return getJsxElementTagSymbol(<JsxOpeningLikeElement>entityName.parent);
             }
             else if (isExpression(entityName)) {
@@ -14446,8 +14454,8 @@ namespace ts {
                         : getSymbolOfPartOfRightHandSideOfImportEquals(<Identifier>node);
                 }
                 else if (node.parent.kind === SyntaxKind.BindingElement &&
-                        node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
-                        node === (<BindingElement>node.parent).propertyName) {
+                    node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
+                    node === (<BindingElement>node.parent).propertyName) {
                     const typeOfPattern = getTypeOfNode(node.parent.parent);
                     const propertyDeclaration = typeOfPattern && getPropertyOfType(typeOfPattern, (<Identifier>node).text);
 
@@ -14484,7 +14492,7 @@ namespace ts {
                             (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    // Fall through
+                // Fall through
 
                 case SyntaxKind.NumericLiteral:
                     // index access
@@ -14680,7 +14688,7 @@ namespace ts {
                 if (links.isNestedRedeclaration === undefined) {
                     const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
                     links.isNestedRedeclaration = isStatementWithLocals(container) &&
-                    !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                        !!resolveName(container.parent, symbol.name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 }
                 return links.isNestedRedeclaration;
             }
