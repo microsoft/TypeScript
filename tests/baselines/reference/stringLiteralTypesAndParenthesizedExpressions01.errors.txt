@@ -1,0 +1,17 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts(4,5): error TS2322: Type 'string' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts(6,5): error TS2322: Type 'string' is not assignable to type '"foo"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts (2 errors) ====
+    
+    declare function myRandBool(): boolean;
+    
+    let a: "foo" = ("foo");
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
+    let b: "foo" | "bar" = ("foo");
+    let c: "foo" = (myRandBool ? "foo" : ("foo"));
+        ~
+!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
+    let d: "foo" | "bar" = (myRandBool ? "foo" : ("bar"));
+    
