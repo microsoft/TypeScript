@@ -701,7 +701,7 @@ namespace ts {
     }
 
     // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
-    // because string literals can appear in the type annotation of a parameter node.
+    // because string literals can appear in type annotations as well.
     export interface StringLiteral extends LiteralExpression, TypeNode {
         _stringLiteralBrand: any;
     }

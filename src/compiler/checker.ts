@@ -81,7 +81,7 @@ namespace ts {
             symbolToString,
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType,
+            getContextualType: getApparentTypeOfContextualType,
             getFullyQualifiedName,
             getResolvedSignature,
             getConstantValue,
@@ -1653,7 +1653,7 @@ namespace ts {
                         writeAnonymousType(<ObjectType>type, flags);
                     }
                     else if (type.flags & TypeFlags.StringLiteral) {
-                        writer.writeStringLiteral((<StringLiteralType>type).text);
+                        writer.writeStringLiteral(`"${escapeString((<StringLiteralType>type).text)}"`);
                     }
                     else {
                         // Should never get here
@@ -4411,12 +4411,13 @@ namespace ts {
         }
 
         function getStringLiteralType(node: StringLiteral): StringLiteralType {
-            if (hasProperty(stringLiteralTypes, node.text)) {
-                return stringLiteralTypes[node.text];
+            const text = node.text;
+            if (hasProperty(stringLiteralTypes, text)) {
+                return stringLiteralTypes[text];
             }
 
-            const type = stringLiteralTypes[node.text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
-            type.text = getTextOfNode(node);
+            const type = stringLiteralTypes[text] = <StringLiteralType>createType(TypeFlags.StringLiteral);
+            type.text = text;
             return type;
         }
 
@@ -5744,6 +5745,10 @@ namespace ts {
             return !!getPropertyOfType(type, "0");
         }
 
+        function isStringLiteralType(type: Type) {
+            return type.flags & TypeFlags.StringLiteral;
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -6976,7 +6981,7 @@ namespace ts {
             else if (operator === SyntaxKind.BarBarToken) {
                 // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                 // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                let type = getContextualType(binaryExpression);
+                let type = getApparentTypeOfContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
                     type = checkExpression(binaryExpression.left);
                 }
@@ -7023,6 +7028,10 @@ namespace ts {
             return applyToContextualType(type, t => getIndexTypeOfStructuredType(t, kind));
         }
 
+        function contextualTypeIsStringLiteralType(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isStringLiteralType) : isStringLiteralType(type));
+        }
+
         // Return true if the given contextual type is a tuple-like type
         function contextualTypeIsTupleLikeType(type: Type): boolean {
             return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isTupleLikeType) : isTupleLikeType(type));
@@ -7048,7 +7057,7 @@ namespace ts {
 
         function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElement) {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
-            const type = getContextualType(objectLiteral);
+            const type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
                 if (!hasDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
@@ -7074,7 +7083,7 @@ namespace ts {
         // type of T.
         function getContextualTypeForElementExpression(node: Expression): Type {
             const arrayLiteral = <ArrayLiteralExpression>node.parent;
-            const type = getContextualType(arrayLiteral);
+            const type = getApparentTypeOfContextualType(arrayLiteral);
             if (type) {
                 const index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
@@ -7087,7 +7096,7 @@ namespace ts {
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
         function getContextualTypeForConditionalOperand(node: Expression): Type {
             const conditional = <ConditionalExpression>node.parent;
-            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
+            return node === conditional.whenTrue || node === conditional.whenFalse ? getApparentTypeOfContextualType(conditional) : undefined;
         }
 
         function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
@@ -7112,12 +7121,22 @@ namespace ts {
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
-        function getContextualType(node: Expression): Type {
-            const type = getContextualTypeWorker(node);
+        function getApparentTypeOfContextualType(node: Expression): Type {
+            const type = getContextualType(node);
             return type && getApparentType(type);
         }
 
-        function getContextualTypeWorker(node: Expression): Type {
+        /**
+         * Woah! Do you really want to use this function?
+         *
+         * Unless you're trying to get the *non-apparent* type for a value-literal type,
+         * you probably meant to use 'getApparentTypeOfContextualType'.
+         * Otherwise this is slightly less useful.
+         *
+         * @param node the expression whose contextual type will be returned.
+         * @returns the contextual type of an expression.
+         */
+        function getContextualType(node: Expression): Type {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -7156,7 +7175,7 @@ namespace ts {
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return getContextualType(<ParenthesizedExpression>parent);
+                    return getApparentTypeOfContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
@@ -7196,7 +7215,7 @@ namespace ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             const type = isObjectLiteralMethod(node)
                 ? getContextualTypeForObjectLiteralMethod(node)
-                : getContextualType(node);
+                : getApparentTypeOfContextualType(node);
             if (!type) {
                 return undefined;
             }
@@ -7326,7 +7345,7 @@ namespace ts {
                     type.pattern = node;
                     return type;
                 }
-                const contextualType = getContextualType(node);
+                const contextualType = getApparentTypeOfContextualType(node);
                 if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
                     const pattern = contextualType.pattern;
                     // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
@@ -7418,7 +7437,7 @@ namespace ts {
 
             const propertiesTable: SymbolTable = {};
             const propertiesArray: Symbol[] = [];
-            const contextualType = getContextualType(node);
+            const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             let typeFlags: TypeFlags = 0;
@@ -9419,7 +9438,12 @@ namespace ts {
             const targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
-                if (!(isTypeAssignableTo(targetType, widenedType))) {
+
+                // Permit 'number[] | "foo"' to be asserted to 'string'.
+                const bothAreStringLike =
+                    someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
+                        someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
+                if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
@@ -10249,6 +10273,10 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
+                    // Permit 'number[] | "foo"' to be asserted to 'string'.
+                    if (someConstituentTypeHasKind(leftType, TypeFlags.StringLike) && someConstituentTypeHasKind(rightType, TypeFlags.StringLike)) {
+                        return booleanType;
+                    }
                     if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -10387,6 +10415,15 @@ namespace ts {
             return getUnionType([type1, type2]);
         }
 
+        function checkStringLiteralExpression(node: StringLiteral): Type {
+            const contextualType = getContextualType(node);
+            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
+                return getStringLiteralType(node);
+            }
+
+            return stringType;
+        }
+
         function checkTemplateExpression(node: TemplateExpression): Type {
             // We just want to check each expressions, but we are unconcerned with
             // the type of each expression, as any value may be coerced into a string.
@@ -10446,7 +10483,7 @@ namespace ts {
             if (isInferentialContext(contextualMapper)) {
                 const signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
-                    const contextualType = getContextualType(<Expression>node);
+                    const contextualType = getApparentTypeOfContextualType(<Expression>node);
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(contextualType);
                         if (contextualSignature && !contextualSignature.typeParameters) {
@@ -10517,6 +10554,7 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                     return checkTemplateExpression(<TemplateExpression>node);
                 case SyntaxKind.StringLiteral:
+                    return checkStringLiteralExpression(<StringLiteral>node);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                     return stringType;
                 case SyntaxKind.RegularExpressionLiteral:
@@ -12711,6 +12749,7 @@ namespace ts {
             let hasDuplicateDefaultClause = false;
 
             const expressionType = checkExpression(node.expression);
+            const expressionTypeIsStringLike = someConstituentTypeHasKind(expressionType, TypeFlags.StringLike);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -12731,6 +12770,12 @@ namespace ts {
                     // TypeScript 1.0 spec (April 2014):5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     const caseType = checkExpression(caseClause.expression);
+
+                    // Permit 'number[] | "foo"' to be asserted to 'string'.
+                    if (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) {
+                        return;
+                    }
+
                     if (!isTypeAssignableTo(expressionType, caseType)) {
                         // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
                         checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
