@@ -1255,7 +1255,7 @@ namespace ts {
     }
 
     export interface PackageDescriptor extends Scope {
-        packageFile: string;
+        packagePath: string; // This should be either the path to a named .d.ts, an index.d.ts, a package.json, or a directory which uniqely identifies the package
     }
 
     // Source files are declarations when they are external modules.

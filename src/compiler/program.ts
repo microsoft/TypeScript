@@ -53,13 +53,13 @@ namespace ts {
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(supportedJsExtensions, candidate, failedLookupLocations, host);
+            const resolvedFileName = loadNodeModuleFromFile(supportedJsExtensions, candidate, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            let res = loadNodeModuleFromDirectory(supportedJsExtensions, candidate, failedLookupLocations, host, /*mustBePackage*/false);
+            const res = loadNodeModuleFromDirectory(supportedJsExtensions, candidate, failedLookupLocations, host, /*mustBePackage*/false);
             return { resolvedModule: res, failedLookupLocations };
         }
         else {
@@ -109,7 +109,7 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        let result = loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
+        const result = loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
         if (result) {
             return { resolvedFileName: result, packageRoot: mustBePackage ? result : undefined };
         }
@@ -123,12 +123,12 @@ namespace ts {
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+                const result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, packageRoot: result }, failedLookupLocations };
                 }
 
-                let res = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host, /*mustBePackage*/ true);
+                const res = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host, /*mustBePackage*/ true);
                 if (res) {
                     return { resolvedModule: res, failedLookupLocations };
                 }
@@ -882,7 +882,7 @@ namespace ts {
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
                         const filePath = toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName);
-                        const package = resolution.packageRoot ? {packageFile: resolution.packageRoot, symbols: {} as SymbolTable} : file.package;
+                        const package = resolution.packageRoot ? {packagePath: resolution.packageRoot, symbols: {} as SymbolTable} : file.package;
                         findSourceFile(resolution.resolvedFileName, filePath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
                     }
                 }

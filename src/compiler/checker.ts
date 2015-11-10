@@ -15124,16 +15124,19 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             });
 
-            let packages: Map<PackageDescriptor> = {};
+            const packages: Map<PackageDescriptor> = {};
 
             // Initialize package/global symbol table(s)
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalOrCommonJsModule(file)) {
                     if (file.package) {
-                        if (!packages[file.package.packageFile]) {
-                            packages[file.package.packageFile] = file.package;
+                        // Dedupe/merge packages
+                        if (!packages[file.package.packagePath]) {
+                            packages[file.package.packagePath] = file.package;
                         }
-                        file.package = packages[file.package.packageFile]; // Dedupe packages
+                        else {
+                            file.package = packages[file.package.packagePath];
+                        }
                         mergeSymbolTable(file.package.symbols, file.locals);
                     }
                     else {
@@ -15194,7 +15197,8 @@ namespace ts {
 
             anyArrayType = createArrayType(anyType);
 
-            forEachValue(packages, package => { // Once all packages are merged and global scope is setup, merge global scope into each package
+            // Once all packages are merged and global scope is setup, merge global scope into each package
+            forEachValue(packages, package => {
                 mergeSymbolTable(package.symbols, globals);
             });
         }
