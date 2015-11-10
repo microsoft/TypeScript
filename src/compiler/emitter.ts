@@ -4244,15 +4244,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return node;
                 }
 
-                function createPropertyAccessForDestructuringProperty(object: Expression, propName: Identifier | LiteralExpression): Expression {
-                    // We create a synthetic copy of the identifier in order to avoid the rewriting that might
-                    // otherwise occur when the identifier is emitted.
-                    const syntheticName = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
-                    syntheticName.text = propName.text;
-                    if (syntheticName.kind !== SyntaxKind.Identifier) {
-                        return createElementAccessExpression(object, syntheticName);
+                function createPropertyAccessForDestructuringProperty(object: Expression, propName: PropertyName): Expression {
+                    let index: Expression;
+                    const nameIsComputed = propName.kind === SyntaxKind.ComputedPropertyName;
+                    if (nameIsComputed) {
+                        index = ensureIdentifier((<ComputedPropertyName>propName).expression, /* reuseIdentifierExpression */ false);
                     }
-                    return createPropertyAccessExpression(object, syntheticName);
+                    else {
+                        // We create a synthetic copy of the identifier in order to avoid the rewriting that might
+                        // otherwise occur when the identifier is emitted.
+                        index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
+                        (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
+                    }
+
+                    return !nameIsComputed && index.kind === SyntaxKind.Identifier
+                        ? createPropertyAccessExpression(object, <Identifier>index)
+                        : createElementAccessExpression(object, index);
                 }
 
                 function createSliceCall(value: Expression, sliceIndex: number): CallExpression {

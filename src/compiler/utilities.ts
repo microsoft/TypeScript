@@ -1,4 +1,3 @@
-/// <reference path="binder.ts" />
 /// <reference path="sys.ts" />
 
 /* @internal */
@@ -360,6 +359,10 @@ namespace ts {
 
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
+    }
+
+    export function isExternalOrCommonJsModule(file: SourceFile): boolean {
+        return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
     }
 
     export function isDeclarationFile(file: SourceFile): boolean {
@@ -1056,6 +1059,57 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    export function isSourceFileJavaScript(file: SourceFile): boolean {
+        return isInJavaScriptFile(file);
+    }
+
+    export function isInJavaScriptFile(node: Node): boolean {
+        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+    }
+
+    /**
+     * Returns true if the node is a CallExpression to the identifier 'require' with
+     * exactly one string literal argument.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isRequireCall(expression: Node): expression is CallExpression {
+        // of the form 'require("name")'
+        return expression.kind === SyntaxKind.CallExpression &&
+                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+                (<CallExpression>expression).arguments.length === 1 &&
+                (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
+    }
+
+    /**
+     * Returns true if the node is an assignment to a property on the identifier 'exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isExportsPropertyAssignment(expression: Node): boolean {
+        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
+    }
+
+    /**
+     * Returns true if the node is an assignment to the property access expression 'module.exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isModuleExportsAssignment(expression: Node): boolean {
+        // of the form 'module.exports = expr' where 'expr' is arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
+    }
+
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
@@ -1435,6 +1489,10 @@ namespace ts {
         return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
+    export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+    }
+
     /**
      * A declaration has a dynamic name if both of the following are true:
      *   1. The declaration has a computed property name
@@ -1443,9 +1501,13 @@ namespace ts {
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name &&
-            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
-            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
+        return declaration.name && isDynamicName(declaration.name);
+    }
+
+    export function isDynamicName(name: DeclarationName): boolean {
+        return name.kind === SyntaxKind.ComputedPropertyName &&
+            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind) &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
     }
 
     /**
@@ -2210,12 +2272,12 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 
-    export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+    export function allowsJsxExpressions(fileName: string) {
+        return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
     }
 
     /**

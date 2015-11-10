@@ -739,12 +739,7 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
-    /**
-     *  List of extensions that will be used to look for external modules.
-     *  This list is kept separate from supportedExtensions to for cases when we'll allow to include .js files in compilation,
-     *  but still would like to load only TypeScript files as modules 
-     */
-    export const moduleFileExtensions = supportedExtensions;
+    export const supportedJsExtensions = supportedExtensions.concat(".js", ".jsx");
 
     export function isSupportedSourceFileName(fileName: string) {
         if (!fileName) { return false; }

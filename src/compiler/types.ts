@@ -574,7 +574,7 @@ namespace ts {
 
     // @kind(SyntaxKind.BindingElement)
     export interface BindingElement extends Declaration {
-        propertyName?: Identifier;          // Binding property name (in object binding pattern)
+        propertyName?: PropertyName;        // Binding property name (in object binding pattern)
         dotDotDotToken?: Node;              // Present on rest binding element
         name: Identifier | BindingPattern;  // Declared binding element name
         initializer?: Expression;           // Optional initializer
@@ -626,7 +626,7 @@ namespace ts {
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     export interface VariableLikeDeclaration extends Declaration {
-        propertyName?: Identifier;
+        propertyName?: PropertyName;
         dotDotDotToken?: Node;
         name: DeclarationName;
         questionToken?: Node;
@@ -878,7 +878,8 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.BinaryExpression)
-    export interface BinaryExpression extends Expression {
+    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
+    export interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -959,7 +960,7 @@ namespace ts {
     }
 
     // @kind(SyntaxKind.PropertyAccessExpression)
-    export interface PropertyAccessExpression extends MemberExpression {
+    export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         dotToken: Node;
         name: Identifier;
@@ -1531,6 +1532,8 @@ namespace ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
+        // The first node that causes this file to be a CommonJS module
+        /* @internal */ commonJsModuleIndicator: Node;
 
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
@@ -2068,6 +2071,7 @@ namespace ts {
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
+        ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
