@@ -48,16 +48,6 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C, "", {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, 0, {
-        get: function () { return 0; },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(C.prototype, a, {
         set: function (v) { },
         enumerable: true,

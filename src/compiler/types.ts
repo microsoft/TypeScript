@@ -491,6 +491,7 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
+    export type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
@@ -543,7 +544,7 @@ namespace ts {
 
     // SyntaxKind.BindingElement
     export interface BindingElement extends Declaration {
-        propertyName?: Identifier;          // Binding property name (in object binding pattern)
+        propertyName?: PropertyName;        // Binding property name (in object binding pattern)
         dotDotDotToken?: Node;              // Present on rest binding element
         name: Identifier | BindingPattern;  // Declared binding element name
         initializer?: Expression;           // Optional initializer
@@ -587,7 +588,7 @@ namespace ts {
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     export interface VariableLikeDeclaration extends Declaration {
-        propertyName?: Identifier;
+        propertyName?: PropertyName;
         dotDotDotToken?: Node;
         name: DeclarationName;
         questionToken?: Node;
@@ -1824,6 +1825,7 @@ namespace ts {
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
+        ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
