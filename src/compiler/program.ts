@@ -882,19 +882,8 @@ namespace ts {
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
                         const filePath = toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName);
-                        const package = resolution.packageRoot ? {packageFile: resolution.packageRoot, symbols: {}} : file.package;
-                        const importedFile = findSourceFile(resolution.resolvedFileName, filePath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
-
-                        if (importedFile && resolution.packageRoot) {
-                            if (!isExternalModule(importedFile)) {
-                                const start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
-                            }
-                            else if (importedFile.referencedFiles.length) {
-                                const firstRef = importedFile.referencedFiles[0];
-                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
-                        }
+                        const package = resolution.packageRoot ? {packageFile: resolution.packageRoot, symbols: {} as SymbolTable} : file.package;
+                        findSourceFile(resolution.resolvedFileName, filePath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
                     }
                 }
             }

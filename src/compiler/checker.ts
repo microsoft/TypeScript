@@ -50,6 +50,7 @@ namespace ts {
         const emitResolver = createResolver();
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
         const checker: TypeChecker = {
@@ -125,9 +126,7 @@ namespace ts {
         const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
         const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
 
-        const globalScope: Scope = {
-            symbols: {}
-        };
+        const globals: SymbolTable = {};
 
         let globalESSymbolConstructorSymbol: Symbol;
 
@@ -640,7 +639,7 @@ namespace ts {
             }
 
             if (!result) {
-                result = getSymbol(globalScope.symbols, name, meaning);
+                result = getSymbol(globals, name, meaning);
             }
 
             if (!result) {
@@ -1011,7 +1010,7 @@ namespace ts {
             const isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 const file = getSourceFileOfNode(location);
-                const symbol = getSymbol(file.package ? file.package.symbols : globalScope.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                const symbol = getSymbol(file.package ? file.package.symbols : globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
                     return symbol;
                 }
@@ -1241,7 +1240,7 @@ namespace ts {
                 }
             }
 
-            return callback(globalScope.symbols);
+            return callback(globals);
         }
 
         function getQualifiedLeftMeaning(rightMeaning: SymbolFlags) {
@@ -14418,7 +14417,7 @@ namespace ts {
                     location = location.parent;
                 }
 
-                copySymbols(globalScope.symbols, meaning);
+                copySymbols(globals, meaning);
             }
 
             /**
@@ -15048,7 +15047,7 @@ namespace ts {
         }
 
         function hasGlobalName(name: string): boolean {
-            return hasProperty(globalScope.symbols, name);
+            return hasProperty(globals, name);
         }
 
         function hasPackageInternalName(file: SourceFile, name: string): boolean {
@@ -15138,7 +15137,7 @@ namespace ts {
                         mergeSymbolTable(file.package.symbols, file.locals);
                     }
                     else {
-                        mergeSymbolTable(globalScope.symbols, file.locals);
+                        mergeSymbolTable(globals, file.locals);
                     }
                 }
             });
@@ -15146,7 +15145,7 @@ namespace ts {
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
-            globalScope.symbols[undefinedSymbol.name] = undefinedSymbol;
+            globals[undefinedSymbol.name] = undefinedSymbol;
 
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
@@ -15196,7 +15195,7 @@ namespace ts {
             anyArrayType = createArrayType(anyType);
 
             forEachValue(packages, package => { // Once all packages are merged and global scope is setup, merge global scope into each package
-                mergeSymbolTable(package.symbols, globalScope.symbols);
+                mergeSymbolTable(package.symbols, globals);
             });
         }
 
