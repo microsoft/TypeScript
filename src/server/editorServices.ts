@@ -928,7 +928,8 @@ namespace ts.server {
 
         resolveTypingsForJs(fileName: string): { cachedTypingPaths: string[], newTypings: string[] } {
             this.log("Files for JS typing:" + fileName);
-            return ts.JsTyping.discoverTypings(sys, [fileName]);
+            let cachePath = "C:/Users/lizhe/.typingCache";
+            return ts.JsTyping.discoverTypings(sys, [fileName], cachePath);
         }
 
         downloadTypingFilesForJs(cachedTypingPaths: string[], newTypings: string[], project: Project) {
