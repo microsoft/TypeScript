@@ -7114,9 +7114,16 @@ namespace ts {
         /**
          * Woah! Do you really want to use this function?
          *
-         * Unless you're trying to get the *non-apparent* type for a value-literal type,
+         * Unless you're trying to get the *non-apparent* type for a
+         * value-literal type or you're authoring relevant portions of this algorithm,
          * you probably meant to use 'getApparentTypeOfContextualType'.
-         * Otherwise this is slightly less useful.
+         * Otherwise this may not be very useful.
+         *
+         * In cases where you *are* working on this function, you should understand
+         * when it is appropriate to use 'getContextualType' and 'getApparentTypeOfContetxualType'.
+         *
+         *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
+         *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
          *
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
