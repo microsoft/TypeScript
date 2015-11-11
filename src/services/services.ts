@@ -174,9 +174,7 @@ namespace ts {
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        let node = <NodeObject> new (getNodeConstructor(kind))();
-        node.pos = pos;
-        node.end = end;
+        let node = new NodeObject(kind, pos, end);
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -189,6 +187,14 @@ namespace ts {
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
+
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            this.kind = kind;
+            this.pos = pos;
+            this.end = end;
+            this.flags = NodeFlags.None;
+            this.parent = undefined;
+        }
 
         public getSourceFile(): SourceFile {
             return getSourceFileOfNode(this);
@@ -775,6 +781,7 @@ namespace ts {
     class SourceFileObject extends NodeObject implements SourceFile {
         public _declarationBrand: any;
         public fileName: string;
+        public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: number[];
@@ -794,6 +801,7 @@ namespace ts {
         public isDefaultLib: boolean;
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
+        public commonJsModuleIndicator: Node; // The first node that causes this file to be a CommonJS module
         public nodeCount: number;
         public identifierCount: number;
         public symbolCount: number;
@@ -806,6 +814,10 @@ namespace ts {
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(kind, pos, end)
+        }
+        
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
         }
@@ -1189,6 +1201,13 @@ namespace ts {
         TabSize: number;
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
+        IndentStyle: IndentStyle;
+    }
+
+    export enum IndentStyle {
+        None = 0,
+        Block = 1,
+        Smart = 2,
     }
 
     export interface FormatCodeOptions extends EditorOptions {
@@ -1690,15 +1709,17 @@ namespace ts {
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
+        private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
-            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName);
+            this.currentDirectory = host.getCurrentDirectory();
+            this.fileNameToEntry = createFileMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             let rootFileNames = host.getScriptFileNames();
             for (let fileName of rootFileNames) {
-                this.createEntry(fileName);
+                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
 
             // store the compilation settings
@@ -1709,7 +1730,7 @@ namespace ts {
             return this._compilationSettings;
         }
 
-        private createEntry(fileName: string) {
+        private createEntry(fileName: string, path: Path) {
             let entry: HostFileInformation;
             let scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
@@ -1720,30 +1741,31 @@ namespace ts {
                 };
             }
 
-            this.fileNameToEntry.set(fileName, entry);
+            this.fileNameToEntry.set(path, entry);
             return entry;
         }
 
-        private getEntry(fileName: string): HostFileInformation {
-            return this.fileNameToEntry.get(fileName);
+        private getEntry(path: Path): HostFileInformation {
+            return this.fileNameToEntry.get(path);
         }
 
-        private contains(fileName: string): boolean {
-            return this.fileNameToEntry.contains(fileName);
+        private contains(path: Path): boolean {
+            return this.fileNameToEntry.contains(path);
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
-            if (this.contains(fileName)) {
-                return this.getEntry(fileName);
+            let path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName)
+            if (this.contains(path)) {
+                return this.getEntry(path);
             }
 
-            return this.createEntry(fileName);
+            return this.createEntry(fileName, path);
         }
 
         public getRootFileNames(): string[] {
             let fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue(value => {
+            this.fileNameToEntry.forEachValue((path, value) => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1752,13 +1774,13 @@ namespace ts {
             return fileNames;
         }
 
-        public getVersion(fileName: string): string {
-            let file = this.getEntry(fileName);
+        public getVersion(path: Path): string {
+            let file = this.getEntry(path);
             return file && file.version;
         }
 
-        public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            let file = this.getEntry(fileName);
+        public getScriptSnapshot(path: Path): IScriptSnapshot {
+            let file = this.getEntry(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1850,8 +1872,8 @@ namespace ts {
         // so pass --noResolve to avoid reporting missing file errors.
         options.noResolve = true;
 
-        // Parse
-        let inputFileName = transpileOptions.fileName || "module.ts";
+        // if jsx is specified then treat file as .tsx
+        let inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
         let sourceFile = createSourceFile(inputFileName, input, options.target);
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
@@ -1988,7 +2010,7 @@ namespace ts {
     }
 
 
-    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean): DocumentRegistry {
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
@@ -2002,7 +2024,7 @@ namespace ts {
             let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName);
+                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
             }
             return bucket;
         }
@@ -2011,14 +2033,13 @@ namespace ts {
             let bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 let entries = lookUp(buckets, name);
                 let sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
-                for (let i in entries) {
-                    let entry = entries.get(i);
+                entries.forEachValue((key, entry) => {
                     sourceFiles.push({
-                        name: i,
+                        name: key,
                         refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
-                }
+                });
                 sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
                     bucket: name,
@@ -2044,7 +2065,8 @@ namespace ts {
             acquiring: boolean): SourceFile {
 
             let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            let entry = bucket.get(fileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            let entry = bucket.get(path);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
@@ -2056,7 +2078,7 @@ namespace ts {
                     languageServiceRefCount: 0,
                     owners: []
                 };
-                bucket.set(fileName, entry);
+                bucket.set(path, entry);
             }
             else {
                 // We have an entry for this file.  However, it may be for a different version of
@@ -2084,12 +2106,14 @@ namespace ts {
             let bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket !== undefined);
 
-            let entry = bucket.get(fileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
+
+            let entry = bucket.get(path);
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.remove(fileName);
+                bucket.remove(path);
             }
         }
 
@@ -2101,7 +2125,7 @@ namespace ts {
         };
     }
 
-    export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
+    export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         let referencedFiles: FileReference[] = [];
         let importedFiles: FileReference[] = [];
         let ambientExternalModules: string[];
@@ -2139,9 +2163,225 @@ namespace ts {
             });
         }
 
-        function processImport(): void {
+        /**
+         * Returns true if at least one token was consumed from the stream
+         */
+        function tryConsumeDeclare(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.DeclareKeyword) {
+                // declare module "mod"
+                token = scanner.scan();
+                if (token === SyntaxKind.ModuleKeyword) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.StringLiteral) {
+                        recordAmbientExternalModule();
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /**
+         * Returns true if at least one token was consumed from the stream
+         */
+        function tryConsumeImport(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.ImportKeyword) {
+                token = scanner.scan();
+                if (token === SyntaxKind.StringLiteral) {
+                    // import "mod";
+                    recordModuleName();
+                    return true;
+                }
+                else {
+                    if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.FromKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.StringLiteral) {
+                                // import d from "mod";
+                                recordModuleName();
+                                return true;
+                            }
+                        }
+                        else if (token === SyntaxKind.EqualsToken) {
+                            if (tryConsumeRequireCall(/* skipCurrentToken */ true)) {
+                                return true;
+                            }
+                        }
+                        else if (token === SyntaxKind.CommaToken) {
+                            // consume comma and keep going
+                            token = scanner.scan();
+                        }
+                        else {
+                            // unknown syntax
+                            return true;
+                        }
+                    }
+
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        token = scanner.scan();
+                        // consume "{ a as B, c, d as D}" clauses
+                        // make sure that it stops on EOF
+                        while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
+                            token = scanner.scan();
+                        }
+
+                        if (token === SyntaxKind.CloseBraceToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.FromKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.StringLiteral) {
+                                    // import {a as A} from "mod";
+                                    // import d, {a, b as B} from "mod"
+                                    recordModuleName();
+                                }
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.AsteriskToken) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.AsKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.FromKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.StringLiteral) {
+                                        // import * as NS from "mod"
+                                        // import d, * as NS from "mod"
+                                        recordModuleName();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        function tryConsumeExport(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.ExportKeyword) {
+                token = scanner.scan();
+                if (token === SyntaxKind.OpenBraceToken) {
+                    token = scanner.scan();
+                    // consume "{ a as B, c, d as D}" clauses
+                    // make sure it stops on EOF
+                    while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
+                        token = scanner.scan();
+                    }
+
+                    if (token === SyntaxKind.CloseBraceToken) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.FromKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.StringLiteral) {
+                                // export {a as A} from "mod";
+                                // export {a, b as B} from "mod"
+                                recordModuleName();
+                            }
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.AsteriskToken) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.FromKeyword) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.StringLiteral) {
+                            // export * from "mod"
+                            recordModuleName();
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.ImportKeyword) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.EqualsToken) {
+                            if (tryConsumeRequireCall(/* skipCurrentToken */ true)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+            
+            return false;
+        }
+
+        function tryConsumeRequireCall(skipCurrentToken: boolean): boolean {
+            let token = skipCurrentToken ? scanner.scan() : scanner.getToken();
+            if (token === SyntaxKind.RequireKeyword) {
+                token = scanner.scan();
+                if (token === SyntaxKind.OpenParenToken) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.StringLiteral) {
+                        //  require("mod");
+                        recordModuleName();
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+        
+        function tryConsumeDefine(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
+                token = scanner.scan();
+                if (token !== SyntaxKind.OpenParenToken) {
+                    return true;
+                }
+
+                token = scanner.scan();
+                if (token === SyntaxKind.StringLiteral) {
+                    // looks like define ("modname", ... - skip string literal and comma
+                    token = scanner.scan();
+                    if (token === SyntaxKind.CommaToken) {
+                        token = scanner.scan();
+                    }
+                    else {
+                        // unexpected token
+                        return true;
+                    }
+                }
+
+                // should be start of dependency list
+                if (token !== SyntaxKind.OpenBracketToken)  {
+                    return true;
+                }
+                
+                // skip open bracket
+                token = scanner.scan();
+                let i = 0;
+                // scan until ']' or EOF
+                while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
+                    // record string literals as module names
+                    if (token === SyntaxKind.StringLiteral) {
+                        recordModuleName();
+                        i++;
+                    }
+
+                    token = scanner.scan();
+                }
+                return true;
+                
+            }
+            return false;
+        }
+
+        function processImports(): void {
             scanner.setText(sourceText);
-            let token = scanner.scan();
+            scanner.scan();
             // Look for:
             //    import "mod";
             //    import d from "mod"
@@ -2153,157 +2393,30 @@ namespace ts {
             //    export * from "mod"
             //    export {a as b} from "mod"
             //    export import i = require("mod")
+            //    (for JavaScript files) require("mod")
 
-            while (token !== SyntaxKind.EndOfFileToken) {
-                if (token === SyntaxKind.DeclareKeyword) {
-                    // declare module "mod"
-                    token = scanner.scan();
-                    if (token === SyntaxKind.ModuleKeyword) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.StringLiteral) {
-                            recordAmbientExternalModule();
-                            continue;
-                        }
-                    }
+            while (true) {
+                if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
+                    break;
                 }
-                else if (token === SyntaxKind.ImportKeyword) {
-                    token = scanner.scan();
-                    if (token === SyntaxKind.StringLiteral) {
-                        // import "mod";
-                        recordModuleName();
-                        continue;
-                    }
-                    else {
-                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.FromKeyword) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.StringLiteral) {
-                                    // import d from "mod";
-                                    recordModuleName();
-                                    continue
-                                }
-                            }
-                            else if (token === SyntaxKind.EqualsToken) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.RequireKeyword) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.OpenParenToken) {
-                                        token = scanner.scan();
-                                        if (token === SyntaxKind.StringLiteral) {
-                                            //  import i = require("mod");
-                                            recordModuleName();
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (token === SyntaxKind.CommaToken) {
-                                // consume comma and keep going
-                                token = scanner.scan();
-                            }
-                            else {
-                                // unknown syntax
-                                continue;
-                            }
-                        }
 
-                        if (token === SyntaxKind.OpenBraceToken) {
-                            token = scanner.scan();
-                            // consume "{ a as B, c, d as D}" clauses
-                            while (token !== SyntaxKind.CloseBraceToken) {
-                                token = scanner.scan();
-                            }
-
-                            if (token === SyntaxKind.CloseBraceToken) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.FromKeyword) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.StringLiteral) {
-                                        // import {a as A} from "mod";
-                                        // import d, {a, b as B} from "mod"
-                                        recordModuleName();
-                                    }
-                                }
-                            }
-                        }
-                        else if (token === SyntaxKind.AsteriskToken) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.AsKeyword) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.FromKeyword) {
-                                        token = scanner.scan();
-                                        if (token === SyntaxKind.StringLiteral) {
-                                            // import * as NS from "mod"
-                                            // import d, * as NS from "mod"
-                                            recordModuleName();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                // check if at least one of alternative have moved scanner forward
+                if (tryConsumeDeclare() ||
+                    tryConsumeImport() ||
+                    tryConsumeExport() ||
+                    (detectJavaScriptImports && (tryConsumeRequireCall(/* skipCurrentToken */ false) || tryConsumeDefine()))) {
+                    continue;
                 }
-                else if (token === SyntaxKind.ExportKeyword) {
-                    token = scanner.scan();
-                    if (token === SyntaxKind.OpenBraceToken) {
-                        token = scanner.scan();
-                        // consume "{ a as B, c, d as D}" clauses
-                        while (token !== SyntaxKind.CloseBraceToken) {
-                            token = scanner.scan();
-                        }
-
-                        if (token === SyntaxKind.CloseBraceToken) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.FromKeyword) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.StringLiteral) {
-                                    // export {a as A} from "mod";
-                                    // export {a, b as B} from "mod"
-                                    recordModuleName();
-                                }
-                            }
-                        }
-                    }
-                    else if (token === SyntaxKind.AsteriskToken) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.FromKeyword) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.StringLiteral) {
-                                // export * from "mod"
-                                recordModuleName();
-                            }
-                        }
-                    }
-                    else if (token === SyntaxKind.ImportKeyword) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.EqualsToken) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.RequireKeyword) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.OpenParenToken) {
-                                        token = scanner.scan();
-                                        if (token === SyntaxKind.StringLiteral) {
-                                            //  export import i = require("mod");
-                                            recordModuleName();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                else {
+                    scanner.scan();
                 }
-                token = scanner.scan();
             }
+
             scanner.setText(undefined);
         }
 
         if (readImportFiles) {
-            processImport();
+            processImports();
         }
         processTripleSlashDirectives();
         return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules };
@@ -2551,7 +2664,9 @@ namespace ts {
         }
     }
 
-    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
+    export function createLanguageService(host: LanguageServiceHost, 
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
@@ -2560,6 +2675,7 @@ namespace ts {
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
+        let currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
@@ -2574,8 +2690,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
-            fileName = normalizeSlashes(fileName);
-            let sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
+            let sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
@@ -2636,7 +2751,7 @@ namespace ts {
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory(),
+                getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => { 
                     // stub missing host functionality
                     Debug.assert(!host.resolveModuleNames);
@@ -2660,9 +2775,8 @@ namespace ts {
             if (program) {
                 let oldSourceFiles = program.getSourceFiles();
                 for (let oldSourceFile of oldSourceFiles) {
-                    let fileName = oldSourceFile.fileName;
-                    if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(fileName, oldSettings);
+                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(oldSourceFile.fileName, oldSettings);
                     }
                 }
             }
@@ -2727,7 +2841,8 @@ namespace ts {
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.fileName);
+                let path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
+                return sourceFile && sourceFile.version === hostCache.getVersion(path);
             }
 
             function programUpToDate(): boolean {
@@ -2790,7 +2905,7 @@ namespace ts {
             // For JavaScript files, we don't want to report the normal typescript semantic errors.
             // Instead, we just report errors for using TypeScript-only constructs from within a
             // JavaScript file.
-            if (isJavaScript(fileName)) {
+            if (isSourceFileJavaScript(targetSourceFile)) {
                 return getJavaScriptSemanticDiagnostics(targetSourceFile);
             }
 
@@ -3029,7 +3144,7 @@ namespace ts {
             let typeChecker = program.getTypeChecker();
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
-            let isJavaScriptFile = isJavaScript(fileName);
+            let isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
             let isJsDocTagName = false;
 
@@ -3105,6 +3220,7 @@ namespace ts {
             let node = currentToken;
             let isRightOfDot = false;
             let isRightOfOpenTag = false;
+            let isStartingCloseTag = false;
 
             let location = getTouchingPropertyName(sourceFile, position);
             if (contextToken) {
@@ -3130,9 +3246,14 @@ namespace ts {
                         return undefined;
                     }
                 }
-                else if (kind === SyntaxKind.LessThanToken && sourceFile.languageVariant === LanguageVariant.JSX) {
-                    isRightOfOpenTag = true;
-                    location = contextToken;
+                else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                    if (kind === SyntaxKind.LessThanToken) {
+                        isRightOfOpenTag = true;
+                        location = contextToken;
+                    }
+                    else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
+                        isStartingCloseTag = true;
+                    }
                 }
             }
 
@@ -3152,6 +3273,13 @@ namespace ts {
                 else {
                     symbols = tagSymbols;
                 }
+                isMemberCompletion = true;
+                isNewIdentifierLocation = false;
+            }
+            else if (isStartingCloseTag) {
+                let tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
+                symbols = [typeChecker.getSymbolAtLocation(tagName)];
+
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
             }
@@ -3311,9 +3439,27 @@ namespace ts {
                 let start = new Date().getTime();
                 let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
-                    isDotOfNumericLiteral(contextToken);
+                    isDotOfNumericLiteral(contextToken) ||
+                    isInJsxText(contextToken);
                 log("getCompletionsAtPosition: isCompletionListBlocker: " + (new Date().getTime() - start));
                 return result;
+            }
+
+            function isInJsxText(contextToken: Node): boolean {
+                if (contextToken.kind === SyntaxKind.JsxText) {
+                    return true;
+                }
+
+                if (contextToken.kind === SyntaxKind.GreaterThanToken && contextToken.parent) {
+                    if (contextToken.parent.kind === SyntaxKind.JsxOpeningElement) {
+                        return true;
+                    }
+
+                    if (contextToken.parent.kind === SyntaxKind.JsxClosingElement || contextToken.parent.kind === SyntaxKind.JsxSelfClosingElement) {
+                        return contextToken.parent.parent && contextToken.parent.parent.kind === SyntaxKind.JsxElement;
+                    }
+                }
+                return false;
             }
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
@@ -3770,7 +3916,10 @@ namespace ts {
                     let existingName: string;
 
                     if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
-                        existingName = (<BindingElement>m).propertyName.text;
+                        // include only identifiers in completion list
+                        if ((<BindingElement>m).propertyName.kind === SyntaxKind.Identifier) {
+                            existingName = (<Identifier>(<BindingElement>m).propertyName).text
+                        }
                     }
                     else {
                         // TODO(jfreeman): Account for computed property name
@@ -3819,22 +3968,25 @@ namespace ts {
 
             let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
 
-            let entries: CompletionEntry[];
             if (isJsDocTagName) {
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
             }
 
-            if (isRightOfDot && isJavaScript(fileName)) {
-                entries = getCompletionEntriesFromSymbols(symbols);
-                addRange(entries, getJavaScriptCompletionEntries());
+            let sourceFile = getValidSourceFile(fileName);
+
+            let entries: CompletionEntry[] = [];
+            
+            if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
+                const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
+                addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqueNames));
             }
             else {
                 if (!symbols || symbols.length === 0) {
                     return undefined;
                 }
 
-                entries = getCompletionEntriesFromSymbols(symbols);
+                getCompletionEntriesFromSymbols(symbols, entries);
             }
 
             // Add keywords if this is not a member completion list
@@ -3844,26 +3996,23 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, uniqueNames: Map<string>): CompletionEntry[] {
                 let entries: CompletionEntry[] = [];
-                let allNames: Map<string> = {};
                 let target = program.getCompilerOptions().target;
 
-                for (let sourceFile of program.getSourceFiles()) {
-                    let nameTable = getNameTable(sourceFile);
-                    for (let name in nameTable) {
-                        if (!allNames[name]) {
-                            allNames[name] = name;
-                            let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
-                            if (displayName) {
-                                let entry = {
-                                    name: displayName,
-                                    kind: ScriptElementKind.warning,
-                                    kindModifiers: "",
-                                    sortText: "1"
-                                };
-                                entries.push(entry);
-                            }
+                let nameTable = getNameTable(sourceFile);
+                for (let name in nameTable) {
+                    if (!uniqueNames[name]) {
+                        uniqueNames[name] = name;
+                        let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
+                        if (displayName) {
+                            let entry = {
+                                name: displayName,
+                                kind: ScriptElementKind.warning,
+                                kindModifiers: "",
+                                sortText: "1"
+                            };
+                            entries.push(entry);
                         }
                     }
                 }
@@ -3907,26 +4056,24 @@ namespace ts {
                 };
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<string> {
                 let start = new Date().getTime();
-                let entries: CompletionEntry[] = [];
-
+                let uniqueNames: Map<string> = {};
                 if (symbols) {
-                    let nameToSymbol: Map<Symbol> = {};
                     for (let symbol of symbols) {
                         let entry = createCompletionEntry(symbol, location);
                         if (entry) {
                             let id = escapeIdentifier(entry.name);
-                            if (!lookUp(nameToSymbol, id)) {
+                            if (!lookUp(uniqueNames, id)) {
                                 entries.push(entry);
-                                nameToSymbol[id] = symbol;
+                                uniqueNames[id] = id;
                             }
                         }
                     }
                 }
 
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
-                return entries;
+                return uniqueNames;
             }
         }
 
@@ -4105,8 +4252,9 @@ namespace ts {
                         let useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
                         let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                        if (!contains(allSignatures, signature.target || signature)) {
-                            // Get the first signature if there
+                        if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                            // Get the first signature if there is one -- allSignatures may contain
+                            // either the original signature or its target, so check for either
                             signature = allSignatures.length ? allSignatures[0] : undefined;
                         }
 
@@ -4892,7 +5040,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 /**
@@ -4939,7 +5087,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
@@ -6248,8 +6396,6 @@ namespace ts {
             }
 
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-
-            Debug.fail("Unknown declaration type");
         }
 
         function isTypeReference(node: Node): boolean {
@@ -7323,7 +7469,7 @@ namespace ts {
                                 let sourceFile = current.getSourceFile();
                                 var canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
-                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library.key));
+                                    return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
                                 }
                             }
                         }
@@ -7345,7 +7491,7 @@ namespace ts {
                 }
             }
 
-            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element.key));
+            return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_this_element));
 
             function getRenameInfoError(localizedErrorMessage: string): RenameInfo {
                 return {
@@ -7927,18 +8073,8 @@ namespace ts {
 
     function initializeServices() {
         objectAllocator = {
-            getNodeConstructor: kind => {
-                function Node() {
-                }
-                let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
-                proto.kind = kind;
-                proto.pos = -1;
-                proto.end = -1;
-                proto.flags = 0;
-                proto.parent = undefined;
-                Node.prototype = proto;
-                return <any>Node;
-            },
+            getNodeConstructor: () => NodeObject,
+            getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,

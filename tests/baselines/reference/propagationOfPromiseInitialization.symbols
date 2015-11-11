@@ -36,9 +36,9 @@ foo.then((x) => {
 
     // x is inferred to be string
     x.length;
->x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(propagationOfPromiseInitialization.ts, 8, 9))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
     return 123;
 });

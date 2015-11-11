@@ -37,5 +37,13 @@ namespace M {
 >x : any
 >foo : any
 >y : any
+
+	// Quotes
+	var x = <div>This "quote" thing</div>;
+>x : JSX.Element
+><div>This "quote" thing</div> : JSX.Element
+>div : any
+>div : any
 }
+
 

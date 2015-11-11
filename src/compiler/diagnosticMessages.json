@@ -627,7 +627,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Cannot compile modules into 'es6' when targeting 'ES5' or lower.": {
+    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
         "category": "Error",
         "code": 1204
     },
@@ -783,10 +783,6 @@
         "category": "Error",
         "code": 1245
     },
-    "Experimental support for async functions is a feature that is subject to change in a future release. Specify '--experimentalAsyncFunctions' to remove this warning.": {
-        "category": "Error",
-        "code": 1246
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -799,6 +795,14 @@
     "Async functions are only available when targeting ECMAScript 6 and higher.": {
         "category": "Error",
         "code": 1311
+    },
+    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+        "category": "Error",
+        "code": 1312
+    },
+    "The body of an 'if' statement cannot be the empty statement.": {
+        "category": "Error",
+        "code": 1313
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1016,7 +1020,7 @@
         "category": "Error",
         "code": 2354
     },
-    "A function whose declared type is neither 'void' nor 'any' must return a value or consist of a single 'throw' statement.": {
+    "A function whose declared type is neither 'void' nor 'any' must return a value.": {
         "category": "Error",
         "code": 2355
     },
@@ -1100,7 +1104,7 @@
         "category": "Error",
         "code": 2377
     },
-    "A 'get' accessor must return a value or consist of a single 'throw' statement.": {
+    "A 'get' accessor must return a value.": {
         "category": "Error",
         "code": 2378
     },
@@ -1628,10 +1632,6 @@
         "category": "Error",
         "code":2517
     },
-    "Only an ambient class can be merged with an interface.": {
-        "category": "Error",
-        "code": 2518
-    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
@@ -1663,6 +1663,10 @@
     "The inferred type of '{0}' references an inaccessible 'this' type. A type annotation is necessary.": {
         "category": "Error",
         "code": 2527
+    },
+    "A module cannot have multiple default exports.": {
+        "category": "Error",
+        "code": 2528
     },
     "JSX element attributes type '{0}' must be an object type.": {
         "category": "Error",
@@ -1720,13 +1724,13 @@
         "category": "Error",
         "code": 2654
     },
-    "Exported external package typings can only be in '.d.ts' files. Please contact the package author to update the package definition.": {
-        "category": "Error",
-        "code": 2655
-    },
     "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
         "category": "Error",
         "code": 2656
+    },
+    "JSX expressions must have one parent element": {
+        "category": "Error",
+        "code": 2657
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2008,10 +2012,6 @@
         "category": "Error",
         "code": 4082
     },
-    "Loop contains block-scoped variable '{0}' referenced by a function in the loop. This is only supported in ECMAScript 6 or higher.": {
-        "category": "Error",
-        "code": 4091
-    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -2048,7 +2048,7 @@
         "category": "Error",
         "code": 5042
     },
-    "Option 'isolatedModules' can only be used when either option'--module' is provided or option 'target' is 'ES6' or higher.": {
+    "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
     },
@@ -2109,11 +2109,11 @@
         "category": "Message",
         "code": 6010
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES6' (experimental)": {
-        "category": "Message",
-        "code": 6015
-    },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es6'": {
+  "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
+    "category": "Message",
+    "code": 6015
+  },
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'": {
         "category": "Message",
         "code": 6016
     },
@@ -2197,14 +2197,14 @@
         "category": "Error",
         "code": 6045
     },
-    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es6'.": {
+    "Argument for '--module' option must be 'commonjs', 'amd', 'system', 'umd', or 'es2015'.": {
         "category": "Error",
         "code": 6046
     },
-    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES6'.": {
-        "category": "Error",
-        "code": 6047
-    },
+  "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
+    "category": "Error",
+    "code": 6047
+  },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
         "code": 6048
@@ -2266,14 +2266,6 @@
         "code": 6063
     },
 
-    "Specify JSX code generation: 'preserve' or 'react'": {
-        "category": "Message",
-        "code": 6080
-    },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
-        "code": 6081
-    },
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
@@ -2281,10 +2273,6 @@
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
-    },
-    "Option 'experimentalAsyncFunctions' cannot be specified when targeting ES5 or lower.": {
-        "category": "Message",
-        "code": 6067
     },
     "Enables experimental support for ES7 async functions.": {
         "category": "Message",
@@ -2306,7 +2294,42 @@
         "category": "Message",
         "code": 6072
     },
-
+    "Stylize errors and messages using color and context. (experimental)": {
+        "category": "Message",
+        "code": 6073
+    },
+    "Do not report errors on unused labels.": {
+        "category": "Message",
+        "code": 6074
+    },
+    "Report error when not all code paths in function return a value.": {
+        "category": "Message",
+        "code": 6075
+    },
+    "Report errors for fallthrough cases in switch statement.": {
+        "category": "Message",
+        "code": 6076
+    },
+    "Do not report errors on unreachable code.": {
+        "category": "Message",
+        "code": 6077
+    },
+    "Disallow inconsistently-cased references to the same file.": {
+        "category": "Message",
+        "code": 6078
+    },
+    "Specify JSX code generation: 'preserve' or 'react'": {
+        "category": "Message",
+        "code": 6080
+    },
+    "Argument for '--jsx' must be 'preserve' or 'react'.": {
+        "category": "Message",
+        "code": 6081
+    },
+    "Only 'amd' and 'system' modules are supported alongside --{0}.": {
+        "category": "Error",
+        "code": 6082
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2375,8 +2398,22 @@
         "category": "Error",
         "code": 7026
     },
-
-
+    "Unreachable code detected.": {
+        "category": "Error",
+        "code": 7027
+    },
+    "Unused label.": {
+        "category": "Error",
+        "code": 7028
+    },
+    "Fallthrough case in switch.": {
+        "category": "Error",
+        "code": 7029
+    },
+    "Not all code paths return a value.": {
+        "category": "Error",
+        "code": 7030
+    },    
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -2477,5 +2514,13 @@
     "A constructor cannot contain a 'super' call when its class extends 'null'": {
       "category": "Error",
       "code": 17005
+    },
+    "An unary expression with the '{0}' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17006
+    },
+    "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
+      "category": "Error",
+      "code": 17007
     }
 }

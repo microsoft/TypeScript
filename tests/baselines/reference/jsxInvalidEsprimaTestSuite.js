@@ -41,12 +41,10 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
     < ;
 a /  > ;
 <a b={d /  > }/>
-    < a > ;
+    ,
+        <a>;
 <a></b>;
-<a foo="bar;/>
-    < a;
-b > ;
-b > ;
+<a foo="bar;/>a:b></b>;
 <a b c></a>;
 b.c > ;
 <a.b c></a.b>;

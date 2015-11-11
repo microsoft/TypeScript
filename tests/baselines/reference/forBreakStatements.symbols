@@ -1,4 +1,5 @@
 === tests/cases/conformance/statements/breakStatements/forBreakStatements.ts ===
+
 for (; ;) {
     break;
 }
@@ -33,7 +34,7 @@ for (; ;) for (; ;) for (; ;) break SEVEN;
 EIGHT:
 for (; ;) {
     var fn = function () { }
->fn : Symbol(fn, Decl(forBreakStatements.ts, 33, 7))
+>fn : Symbol(fn, Decl(forBreakStatements.ts, 34, 7))
 
     break EIGHT;
 }
