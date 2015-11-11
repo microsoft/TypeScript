@@ -180,7 +180,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version));
+            printVersion();
             return sys.exit(ExitStatus.Success);
         }
 
