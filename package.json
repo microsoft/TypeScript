@@ -36,6 +36,7 @@
         "istanbul": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "tslint": "next",
+        "typescript": "next",
         "tsd": "latest"
     },
     "scripts": {
@@ -47,8 +48,7 @@
         "clean": "jake clean",
         "jake": "jake",
         "lint": "jake lint",
-        "setup-hooks": "node scripts/link-hooks.js",
-        "postinstall": "npm dedupe"
+        "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
         "buffer": false,
