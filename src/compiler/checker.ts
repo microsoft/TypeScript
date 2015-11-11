@@ -6386,6 +6386,8 @@ namespace ts {
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
+                    const declaration = getDeclarationOfKind(symbol, SyntaxKind.VariableDeclaration);
+                    const top = declaration && getDeclarationContainer(declaration);
                     const originalType = type;
                     const nodeStack: {node: Node, child: Node}[] = [];
                     loop: while (node.parent) {
@@ -6401,6 +6403,9 @@ namespace ts {
                             case SyntaxKind.ModuleDeclaration:
                                 // Stop at the first containing file or module declaration
                                 break loop;
+                        }
+                        if (node === top) {
+                            break;
                         }
                     }
 
