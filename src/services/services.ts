@@ -1612,6 +1612,9 @@ namespace ts {
         public static typeAliasName = "type alias name";
         public static parameterName = "parameter name";
         public static docCommentTagName = "doc comment tag name";
+        public static jsxOpenTagName = "jsx open tag name";
+        public static jsxCloseTagName = "jsx close tag name";
+        public static jsxSelfClosingTagName = "jsx self closing tag name";
     }
 
     export const enum ClassificationType {
@@ -1633,6 +1636,9 @@ namespace ts {
         typeAliasName = 16,
         parameterName = 17,
         docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
     }
 
     /// Language Service
@@ -6710,6 +6716,9 @@ namespace ts {
                 case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
                 case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
                 case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
+                case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
+                case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
+                case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
             }
         }
 
@@ -7022,6 +7031,23 @@ namespace ts {
                                 }
                                 return;
 
+                            case SyntaxKind.JsxOpeningElement:
+                                if ((<JsxOpeningElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxOpenTagName;
+                                }
+                                return;
+
+                            case SyntaxKind.JsxClosingElement:
+                                if ((<JsxClosingElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxCloseTagName;
+                                }
+                                return;
+
+                            case SyntaxKind.JsxSelfClosingElement:
+                                if ((<JsxSelfClosingElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxSelfClosingTagName;
+                                }
+                                return;
                         }
                     }
 

@@ -14,7 +14,7 @@ namespace ts.formatting {
             constructor(from: SyntaxKind, to: SyntaxKind, except: SyntaxKind[]) {
                 this.tokens = [];
                 for (let token = from; token <= to; token++) {
-                    if (except.indexOf(token) < 0) {
+                    if (ts.indexOf(except, token) < 0) {
                         this.tokens.push(token);
                     }
                 }
