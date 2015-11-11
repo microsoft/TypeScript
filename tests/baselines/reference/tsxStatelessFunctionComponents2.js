@@ -15,21 +15,28 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 
 // OK
 let a = <Greet />;
-// OK
+// OK - always valid to specify 'key'
 let b = <Greet key="k" />;
-// Error
+// Error - not allowed to specify 'ref' on SFCs
 let c = <Greet ref="myRef" />;
 
 
-// OK
+// OK - ref is valid for classes
 let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
-// Error ('subtr')
+// Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
-// Error
+// Error (ref callback is contextually typed)
 let f = <BigGreeter ref={x => x.notARealProperty} />;
 
-// OK
-let f = <BigGreeter key={100} />;
+// OK - key is always valid
+let g = <BigGreeter key={100} />;
+
+// OK - contextually typed intrinsic ref callback parameter
+let h = <div ref={x => x.innerText} />;
+// Error - property not on ontextually typed intrinsic ref callback parameter
+let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
+
+
 
 //// [tsxStatelessFunctionComponents2.jsx]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -53,15 +60,19 @@ var BigGreeter = (function (_super) {
 })(React.Component);
 // OK
 var a = <Greet />;
-// OK
+// OK - always valid to specify 'key'
 var b = <Greet key="k"/>;
-// Error
+// Error - not allowed to specify 'ref' on SFCs
 var c = <Greet ref="myRef"/>;
-// OK
+// OK - ref is valid for classes
 var d = <BigGreeter ref={function (x) { return x.greeting.substr(10); }}/>;
-// Error ('subtr')
+// Error ('subtr' not on string)
 var e = <BigGreeter ref={function (x) { return x.greeting.subtr(10); }}/>;
-// Error
+// Error (ref callback is contextually typed)
 var f = <BigGreeter ref={function (x) { return x.notARealProperty; }}/>;
-// OK
-var f = <BigGreeter key={100}/>;
+// OK - key is always valid
+var g = <BigGreeter key={100}/>;
+// OK - contextually typed intrinsic ref callback parameter
+var h = <div ref={function (x) { return x.innerText; }}/>;
+// Error - property not on ontextually typed intrinsic ref callback parameter
+var i = <div ref={function (x) { return x.propertyNotOnHtmlDivElement; }}/>;

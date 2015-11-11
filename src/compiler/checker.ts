@@ -202,7 +202,7 @@ namespace ts {
 
         let jsxElementType: ObjectType;
         /** Things we lazy load from the JSX namespace */
-        const jsxTypes: {[name: string]: ObjectType} = {};
+        const jsxTypes: Map<ObjectType> = {};
         const JsxNames = {
             JSX: "JSX",
             IntrinsicElements: "IntrinsicElements",
