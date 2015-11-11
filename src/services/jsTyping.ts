@@ -14,7 +14,7 @@ namespace ts.JsTyping {
         let cachedTypingNames: string[] = [];
         
         for (let fileName of fileNames) {
-            let dir = ts.getDirectoryPath(ts.normalizeSlashes(fileName));
+            let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
             if (searchDirs.indexOf(dir) < 0) {
                 searchDirs.push(dir);
             }
@@ -30,7 +30,7 @@ namespace ts.JsTyping {
             }
         }
         
-        let normalizedCachePath = ts.normalizeSlashes(cachePath);
+        let normalizedCachePath = ts.normalizePath(cachePath);
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
         let cacheTsdJsonPath = ts.combinePaths(normalizedCachePath, "tsd.json");
         if (host.fileExists(cacheTsdJsonPath)) {

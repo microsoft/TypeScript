@@ -1020,7 +1020,7 @@ namespace ts {
                 });
         }
 
-        public resolveTypeDefinitions(fileNamesJson: string, compilerOptionsJson?: string, cachePath: string, safeListJson?: string, noDevDependencies?: boolean): string {
+        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string {
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
