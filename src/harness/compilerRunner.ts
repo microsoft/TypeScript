@@ -43,7 +43,7 @@ class CompilerBaselineRunner extends RunnerBase {
     private makeUnitName(name: string, root: string) {
         return ts.isRootedDiskPath(name) ? name : (root + name);
     };
-            
+
     public checkTestCodeOutput(fileName: string) {
         describe("compiler tests for " + fileName, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
