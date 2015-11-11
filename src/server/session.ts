@@ -534,7 +534,7 @@ namespace ts.server {
 
         /**
          * @param fileName is the name of the file to be opened
-         * @param fileContent is a version of the file content that is known to be more up to date
+         * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
          */
         private openClientFile(fileName: string, fileContent?: string) {
             const file = ts.normalizePath(fileName);

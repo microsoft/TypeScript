@@ -1006,7 +1006,7 @@ namespace ts.server {
 
         /**
          * @param filename is absolute pathname
-         * @param fileContent is a known version of the file content that is more up to date
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openFile(fileName: string, openedByClient: boolean, fileContent?: string) {
             fileName = ts.normalizePath(fileName);
@@ -1014,7 +1014,7 @@ namespace ts.server {
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
-                    content = fileContent ? fileContent : this.host.readFile(fileName);
+                    content = fileContent || this.host.readFile(fileName);
                 }
                 if (!content) {
                     if (openedByClient) {
@@ -1061,7 +1061,7 @@ namespace ts.server {
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
-         * @param fileContent is a known version of the file content that is more up to date 
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
         openClientFile(fileName: string, fileContent?: string) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
