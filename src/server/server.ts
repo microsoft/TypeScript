@@ -1,13 +1,15 @@
 /// <reference path="node.d.ts" />
 /// <reference path="session.ts" />
+// used in fs.writeSync
+/* tslint:disable:no-null */
 
 namespace ts.server {
-    var nodeproto: typeof NodeJS._debugger = require('_debugger');
-    var readline: NodeJS.ReadLine = require('readline');
-    var path: NodeJS.Path = require('path');
-    var fs: typeof NodeJS.fs = require('fs');
+    const nodeproto: typeof NodeJS._debugger = require("_debugger");
+    const readline: NodeJS.ReadLine = require("readline");
+    const path: NodeJS.Path = require("path");
+    const fs: typeof NodeJS.fs = require("fs");
 
-    var rl = readline.createInterface({
+    const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
         terminal: false,
@@ -68,7 +70,7 @@ namespace ts.server {
             }
             if (this.fd >= 0) {
                 s = s + "\n";
-                var prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
+                const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
                 if (this.firstInGroup) {
                     s = prefix + s;
                     this.firstInGroup = false;
@@ -77,7 +79,7 @@ namespace ts.server {
                     this.seq++;
                     this.firstInGroup = true;
                 }
-                var buf = new Buffer(s);
+                const buf = new Buffer(s);
                 fs.writeSync(this.fd, buf, 0, buf.length, null);
             }
         }
@@ -95,12 +97,12 @@ namespace ts.server {
         }
 
         listen() {
-            rl.on('line', (input: string) => {
-                var message = input.trim();
+            rl.on("line", (input: string) => {
+                const message = input.trim();
                 this.onMessage(message);
             });
 
-            rl.on('close', () => {
+            rl.on("close", () => {
                 this.exit();
             });
         }
@@ -112,11 +114,11 @@ namespace ts.server {
     }
 
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
-        var logEnv: LogOptions = {};
-        var args = logEnvStr.split(' ');
-        for (var i = 0, len = args.length; i < (len - 1); i += 2) {
-            var option = args[i];
-            var value = args[i + 1];
+        const logEnv: LogOptions = {};
+        const args = logEnvStr.split(" ");
+        for (let i = 0, len = args.length; i < (len - 1); i += 2) {
+            const option = args[i];
+            const value = args[i + 1];
             if (option && value) {
                 switch (option) {
                     case "-file":
@@ -133,11 +135,11 @@ namespace ts.server {
 
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
     function createLoggerFromEnv() {
-        var fileName: string = undefined;
-        var detailLevel = "normal";
-        var logEnvStr = process.env["TSS_LOG"];
+        let fileName: string = undefined;
+        let detailLevel = "normal";
+        const logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
-            var logEnv = parseLoggingEnvironmentString(logEnvStr);
+            const logEnv = parseLoggingEnvironmentString(logEnvStr);
             if (logEnv.file) {
                 fileName = logEnv.file;
             }
@@ -153,9 +155,9 @@ namespace ts.server {
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
 
-    var logger = createLoggerFromEnv();
+    const logger = createLoggerFromEnv();
 
-    let pending: string[] = [];
+    const pending: string[] = [];
     let canWrite = true;
     function writeMessage(s: string) {
         if (!canWrite) {
@@ -177,8 +179,8 @@ namespace ts.server {
     // Override sys.write because fs.writeSync is not reliable on Node 4
     ts.sys.write = (s: string) => writeMessage(s);
 
-    var ioSession = new IOSession(ts.sys, logger);
-    process.on('uncaughtException', function(err: Error) {
+    const ioSession = new IOSession(ts.sys, logger);
+    process.on("uncaughtException", function(err: Error) {
         ioSession.logError(err, "unknown");
     });
     // Start listening

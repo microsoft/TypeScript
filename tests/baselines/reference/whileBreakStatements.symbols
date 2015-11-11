@@ -1,4 +1,5 @@
 === tests/cases/conformance/statements/breakStatements/whileBreakStatements.ts ===
+
 while(true) {
     break;
 } 
@@ -38,7 +39,7 @@ while (true)
 EIGHT:
 while (true) {
     var fn = function () { }
->fn : Symbol(fn, Decl(whileBreakStatements.ts, 38, 7))
+>fn : Symbol(fn, Decl(whileBreakStatements.ts, 39, 7))
 
     break EIGHT;
 }

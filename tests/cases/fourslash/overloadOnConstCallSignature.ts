@@ -11,7 +11,7 @@
 
 goTo.marker('1');
 verify.signatureHelpCountIs(4);
-verify.currentSignatureHelpIs('foo(name: \'order\'): string');
+verify.currentSignatureHelpIs('foo(name: "order"): string');
 edit.insert('"hi"');
 
 goTo.marker('2');
