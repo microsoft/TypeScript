@@ -7058,7 +7058,7 @@ namespace ts {
             else if (operator === SyntaxKind.BarBarToken) {
                 // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                 // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                let type = getApparentTypeOfContextualType(binaryExpression);
+                let type = getContextualType(binaryExpression);
                 if (!type && node === binaryExpression.right) {
                     type = checkExpression(binaryExpression.left);
                 }
@@ -7173,7 +7173,7 @@ namespace ts {
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
         function getContextualTypeForConditionalOperand(node: Expression): Type {
             const conditional = <ConditionalExpression>node.parent;
-            return node === conditional.whenTrue || node === conditional.whenFalse ? getApparentTypeOfContextualType(conditional) : undefined;
+            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
         function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
@@ -7206,9 +7206,16 @@ namespace ts {
         /**
          * Woah! Do you really want to use this function?
          *
-         * Unless you're trying to get the *non-apparent* type for a value-literal type,
+         * Unless you're trying to get the *non-apparent* type for a
+         * value-literal type or you're authoring relevant portions of this algorithm,
          * you probably meant to use 'getApparentTypeOfContextualType'.
-         * Otherwise this is slightly less useful.
+         * Otherwise this may not be very useful.
+         *
+         * In cases where you *are* working on this function, you should understand
+         * when it is appropriate to use 'getContextualType' and 'getApparentTypeOfContetxualType'.
+         *
+         *   - Use 'getContextualType' when you are simply going to propagate the result to the expression.
+         *   - Use 'getApparentTypeOfContextualType' when you're going to need the members of the type.
          *
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
@@ -7252,7 +7259,7 @@ namespace ts {
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return getApparentTypeOfContextualType(<ParenthesizedExpression>parent);
+                    return getContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
