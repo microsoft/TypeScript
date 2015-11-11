@@ -130,7 +130,7 @@ function foo4(x: number | string | boolean) {
         })(x); // x here is narrowed to number | boolean
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 32, 14))
 }
-// Type guards affect nested function expressions, but not nested function declarations
+// Type guards affect nested function expressions and nested function declarations
 function foo5(x: number | string | boolean) {
 >foo5 : Symbol(foo5, Decl(typeGuardsInFunctionAndModuleBlock.ts, 41, 1))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
@@ -145,7 +145,7 @@ function foo5(x: number | string | boolean) {
         function foo() {
 >foo : Symbol(foo, Decl(typeGuardsInFunctionAndModuleBlock.ts, 45, 18))
 
-            var z = x; // number | string | boolean, type guard has no effect
+            var z = x; // string
 >z : Symbol(z, Decl(typeGuardsInFunctionAndModuleBlock.ts, 47, 15))
 >x : Symbol(x, Decl(typeGuardsInFunctionAndModuleBlock.ts, 43, 14))
         }

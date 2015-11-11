@@ -1,0 +1,27 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardInClass.ts ===
+let x: string | number;
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+
+if (typeof x === "string") {
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+
+    let n = class {
+>n : Symbol(n, Decl(typeGuardInClass.ts, 3, 7))
+
+        constructor() {
+            x; // Should be "string"
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+        }
+    }
+}
+else {
+    let m = class {
+>m : Symbol(m, Decl(typeGuardInClass.ts, 10, 7))
+
+        constructor() {
+            x; // Should be "number"
+>x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
+        }
+    }
+}
+
