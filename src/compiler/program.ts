@@ -809,7 +809,12 @@ namespace ts {
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== normalizedAbsolutePath) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
-
+                const newLocation = package && package.packagePath;
+                const oldLocation = file && file.package && file.package.packagePath;
+                // Error if we've already encounted this file but via a different package
+                if (newLocation !== oldLocation) {
+                    fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, Diagnostics.File_0_was_referenced_by_a_package_1_but_is_already_included_by_package_2, fileName, newLocation, oldLocation));
+                }
                 return file;
             }
 
@@ -863,6 +868,9 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
+                if (file.package && !fileExtensionIs(referencedFileName, ".d.ts")) {
+                    fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_script_file_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
+                }
                 processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
             });
         }
@@ -882,7 +890,7 @@ namespace ts {
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
                         const filePath = toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName);
-                        const package = resolution.packageRoot ? {packagePath: resolution.packageRoot, symbols: {} as SymbolTable} : file.package;
+                        const package = resolution.packageRoot ? {packagePath: moduleFilePathToIdentifyingPath(filePath), symbols: {} as SymbolTable} : file.package;
                         findSourceFile(resolution.resolvedFileName, filePath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
                     }
                 }

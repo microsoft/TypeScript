@@ -15137,11 +15137,12 @@ namespace ts {
                 if (!isExternalOrCommonJsModule(file)) {
                     if (file.package) {
                         // Dedupe/merge packages
-                        if (!packages[file.package.packagePath]) {
-                            packages[file.package.packagePath] = file.package;
+                        const id = file.package.packagePath;
+                        if (!packages[id]) {
+                            packages[id] = file.package;
                         }
                         else {
-                            file.package = packages[file.package.packagePath];
+                            file.package = packages[id];
                         }
                         mergeSymbolTable(file.package.symbols, file.locals);
                     }

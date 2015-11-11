@@ -1,0 +1,26 @@
+tests/cases/compiler/node_modules/bar/index.d.ts(1,1): error TS6064: File 'tests/cases/compiler/node_modules/baz/include.d.ts' was referenced by a package 'g:/ts/typescript/tests/cases/compiler/bar' but is already included by package 'g:/ts/typescript/tests/cases/compiler/foo'.
+tests/cases/compiler/node_modules/bar/index.d.ts(2,26): error TS2304: Cannot find name 'BazShim'.
+
+
+==== tests/cases/compiler/start.ts (0 errors) ====
+    import foo = require("foo");
+    import bar = require("bar");
+    
+    new foo.Foo();
+    new bar.Bar();
+    
+==== tests/cases/compiler/node_modules/foo/index.d.ts (0 errors) ====
+    /// <reference path="../baz/include.d.ts" />
+    export class Foo extends BazShim {}
+    
+==== tests/cases/compiler/node_modules/bar/index.d.ts (2 errors) ====
+    /// <reference path="../baz/include.d.ts" />
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6064: File 'include.d.ts' was referenced by a package 'g:/ts/typescript/tests/cases/compiler/bar' but is already included by package 'g:/ts/typescript/tests/cases/compiler/foo'.
+    export class Bar extends BazShim {}
+                             ~~~~~~~
+!!! error TS2304: Cannot find name 'BazShim'.
+    
+==== tests/cases/compiler/node_modules/baz/include.d.ts (0 errors) ====
+    declare class BazShim {}
+    

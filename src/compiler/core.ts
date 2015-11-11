@@ -624,6 +624,21 @@ namespace ts {
         }
     }
 
+    /**
+     * Given a path to a file within a module, returns a path uniqely identifying that module
+     */
+    export function moduleFilePathToIdentifyingPath(path: Path): string {
+        const components = normalizedPathComponents(normalizeSlashes(path), getRootLength(path));
+        let part: string;
+        let lastPart: string;
+        while (lastPart = part, part = components.pop()) {
+            if (part === "node_modules") {
+                return getNormalizedPathFromPathComponents([...components, lastPart]);
+            }
+        }
+        return path;
+    }
+
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/foler2/
         // In this example the root is:  http://www.website.com/

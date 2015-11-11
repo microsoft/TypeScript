@@ -1,0 +1,31 @@
+=== tests/cases/compiler/start.ts ===
+import foo = require("foo");
+>foo : Symbol(foo, Decl(start.ts, 0, 0))
+
+import foofoo = require("foo/foo");
+>foofoo : Symbol(foofoo, Decl(start.ts, 0, 28))
+
+new foo.Foo();
+>foo.Foo : Symbol(foo.Foo, Decl(index.d.ts, 0, 35))
+>foo : Symbol(foo, Decl(start.ts, 0, 0))
+>Foo : Symbol(foo.Foo, Decl(index.d.ts, 0, 35))
+
+new foofoo.Foo_Internal();
+>foofoo.Foo_Internal : Symbol(foofoo.Foo_Internal, Decl(foo.d.ts, 0, 0))
+>foofoo : Symbol(foofoo, Decl(start.ts, 0, 28))
+>Foo_Internal : Symbol(foofoo.Foo_Internal, Decl(foo.d.ts, 0, 0))
+
+=== tests/cases/compiler/node_modules/foo/index.d.ts ===
+import internal = require("./foo");
+>internal : Symbol(internal, Decl(index.d.ts, 0, 0))
+
+export class Foo extends internal.Foo_Internal {}
+>Foo : Symbol(Foo, Decl(index.d.ts, 0, 35))
+>internal.Foo_Internal : Symbol(internal.Foo_Internal, Decl(foo.d.ts, 0, 0))
+>internal : Symbol(internal, Decl(index.d.ts, 0, 0))
+>Foo_Internal : Symbol(internal.Foo_Internal, Decl(foo.d.ts, 0, 0))
+
+=== tests/cases/compiler/node_modules/foo/foo.d.ts ===
+export class Foo_Internal {}
+>Foo_Internal : Symbol(Foo_Internal, Decl(foo.d.ts, 0, 0))
+
