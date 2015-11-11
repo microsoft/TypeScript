@@ -7888,7 +7888,7 @@ namespace ts {
                     // assignable to the JSX Element Type
                     const callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
                     const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                    let paramType = callReturnType && callSignature && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                    let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
                     if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && (paramType.flags & TypeFlags.ObjectType)) {
                         // Intersect in JSX.IntrinsicAttributes if it exists
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
