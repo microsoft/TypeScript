@@ -40,6 +40,10 @@ class CompilerBaselineRunner extends RunnerBase {
         this.basePath += "/" + this.testSuiteName;
     }
 
+    private makeUnitName(name: string, root: string) {
+        return ts.isRootedDiskPath(name) ? name : (root + name);
+    };
+            
     public checkTestCodeOutput(fileName: string) {
         describe("compiler tests for " + fileName, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
@@ -74,16 +78,16 @@ class CompilerBaselineRunner extends RunnerBase {
                 toBeCompiled = [];
                 otherFiles = [];
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: ts.isRootedDiskPath(lastUnit.name) ? lastUnit.name : rootDir + lastUnit.name, content: lastUnit.content });
+                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: ts.isRootedDiskPath(unit.name) ? unit.name : rootDir + unit.name, content: unit.content });
+                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: ts.isRootedDiskPath(unit.name) ? unit.name : rootDir + unit.name, content: unit.content };
+                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
                     });
                 }
 
