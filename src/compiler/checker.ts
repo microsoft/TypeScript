@@ -81,7 +81,7 @@ namespace ts {
             symbolToString,
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType: getApparentTypeOfContextualType,
+            getContextualType,
             getFullyQualifiedName,
             getResolvedSignature,
             getConstantValue,
