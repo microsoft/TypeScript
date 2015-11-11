@@ -677,12 +677,6 @@ namespace ts {
             return result;
         }
 
-        function doesNameResolveToLocalSymbolForExportDefault(exports: SymbolTable, meaning: SymbolFlags, name: string): boolean {
-            const defaultExport = exports["default"];
-            const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-            return defaultExport && (defaultExport.flags & meaning) && localSymbol && localSymbol.name === name;
-        }
-
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert((result.flags & SymbolFlags.BlockScopedVariable) !== 0);
             // Block-scoped variables cannot be used before their definition
