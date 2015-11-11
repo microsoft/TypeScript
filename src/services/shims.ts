@@ -224,6 +224,7 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
+        resolveTypeDefinitions(fileNamesJson: string, cachePath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -1017,6 +1018,15 @@ namespace ts {
                 () => {
                     return getDefaultCompilerOptions();
                 });
+        }
+
+        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string {
+            return this.forwardJSONCall("resolveTypeDefinitions()", () => {
+                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                let fileNames: string[] = JSON.parse(fileNamesJson);
+                let safeList: string[] = JSON.parse(safeListJson);
+                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, compilerOptions, safeList, noDevDependencies);
+            });
         }
     }
 

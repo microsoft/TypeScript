@@ -6,7 +6,7 @@
 /* @internal */
 namespace ts.JsTyping {
     export function discoverTypings(
-        host: ModuleResolutionHost | System, fileNames: string[], compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
+        host: ModuleResolutionHost | System, fileNames: string[], cachePath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
         : { cachedTypingPaths: string[], newTypings: string[] } {
         let searchDirs: string[] = [];
         let typingNames: string[] = [];
@@ -14,7 +14,7 @@ namespace ts.JsTyping {
         let cachedTypingNames: string[] = [];
         
         for (let fileName of fileNames) {
-            let dir = ts.getDirectoryPath(fileName);
+            let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
             if (searchDirs.indexOf(dir) < 0) {
                 searchDirs.push(dir);
             }
@@ -30,9 +30,9 @@ namespace ts.JsTyping {
             }
         }
         
-        let cachePath = "C:/Users/lizhe/.typingCache";
-        let typingsPath = "C:/Users/lizhe/.typingCache/typings";
-        let cacheTsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
+        let normalizedCachePath = ts.normalizePath(cachePath);
+        let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
+        let cacheTsdJsonPath = ts.combinePaths(normalizedCachePath, "tsd.json");
         if (host.fileExists(cacheTsdJsonPath)) {
             let cacheTsdJsonDict = JSON.parse(host.readFile(cacheTsdJsonPath));
             if (cacheTsdJsonDict.hasOwnProperty("installed")) {
