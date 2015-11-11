@@ -47,7 +47,8 @@
         "clean": "jake clean",
         "jake": "jake",
         "lint": "jake lint",
-        "setup-hooks": "node scripts/link-hooks.js"
+        "setup-hooks": "node scripts/link-hooks.js",
+        "postinstall": "npm dedupe"
     },
     "browser": {
         "buffer": false,
