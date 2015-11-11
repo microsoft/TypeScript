@@ -486,10 +486,19 @@ namespace ts {
                         if (location.kind === SyntaxKind.SourceFile ||
                             (location.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>location).name.kind === SyntaxKind.StringLiteral)) {
 
-                            // It's an external module. Because of module/namespace merging, a module's exports are in scope,
-                            // yet we never want to treat an export specifier as putting a member in scope, except 'default'. 
-                            // Therefore, if the name we find is purely an export specifier, it is not actually considered in scope,
-                            // unless it is 'default'.
+                            // It's an external module. First see if the module has an export default and if the local
+                            // name of that export default matches.
+                            if (result = moduleExports["default"]) {
+                                const localSymbol = getLocalSymbolForExportDefault(result);
+                                if (localSymbol && (result.flags & meaning) && localSymbol.name === name) {
+                                    break loop;
+                                }
+                                result = undefined;
+                            }
+
+                            // Because of module/namespace merging, a module's exports are in scope,
+                            // yet we never want to treat an export specifier as putting a member in scope. 
+                            // Therefore, if the name we find is purely an export specifier, it is not actually considered in scope.
                             // Two things to note about this:
                             //     1. We have to check this without calling getSymbol. The problem with calling getSymbol
                             //        on an export specifier is that it might find the export specifier itself, and try to
@@ -498,19 +507,11 @@ namespace ts {
                             //     2. We check === SymbolFlags.Alias in order to check that the symbol is *purely*
                             //        an alias. If we used &, we'd be throwing out symbols that have non alias aspects,
                             //        which is not the desired behavior.
-                            const isLocalSymbolForExportDefault = doesNameResolveToLocalSymbolForExportDefault(moduleExports, meaning, name);
                             if (hasProperty(moduleExports, name) &&
                                 moduleExports[name].flags === SymbolFlags.Alias &&
-                                !isLocalSymbolForExportDefault &&
                                 getDeclarationOfKind(moduleExports[name], SyntaxKind.ExportSpecifier)) {
                                 break;
                             }
-
-                            if (isLocalSymbolForExportDefault) {
-                                result = moduleExports["default"];
-                                break loop;
-                            }
-                            result = undefined;
                         }
 
                         if (result = getSymbol(moduleExports, name, meaning & SymbolFlags.ModuleMember)) {
