@@ -14009,14 +14009,14 @@ namespace ts {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                 }
-                let exports = getExportsOfModule(moduleSymbol); // Checks for export * conflicts
-                for (let id in exports) {
+                const exports = getExportsOfModule(moduleSymbol); // Checks for export * conflicts
+                for (const id in exports) {
                     if (id === "__export") continue;
-                    let exportedSymbol = exports[id];
+                    const exportedSymbol = exports[id];
                      // 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
                     if (!(exportedSymbol.flags & SymbolFlags.Namespace || exportedSymbol.flags & SymbolFlags.Interface || exportedSymbol.flags & SymbolFlags.Enum) && exportedSymbol.declarations.length > 1) {
-                        let exportedDeclarations: Declaration[] = [];
-                        for (let declaration of exportedSymbol.declarations) {
+                        const exportedDeclarations: Declaration[] = [];
+                        for (const declaration of exportedSymbol.declarations) {
                             if (declaration.kind === SyntaxKind.FunctionDeclaration) {
                                 if (!(declaration as FunctionDeclaration).body) {
                                     continue;
@@ -14025,7 +14025,7 @@ namespace ts {
                             exportedDeclarations.push(declaration);
                         }
                         if (exportedDeclarations.length > 1) {
-                            for (let declaration of exportedDeclarations) {
+                            for (const declaration of exportedDeclarations) {
                                 diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, id));
                             }
                         }
