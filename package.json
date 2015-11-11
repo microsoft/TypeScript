@@ -35,7 +35,7 @@
         "browserify": "latest",
         "istanbul": "latest",
         "mocha-fivemat-progress-reporter": "latest",
-        "tslint": "latest",
+        "tslint": "next",
         "tsd": "latest"
     },
     "scripts": {

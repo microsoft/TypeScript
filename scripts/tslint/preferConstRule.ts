@@ -1,5 +1,5 @@
-/// <reference path="../../node_modules/tslint/typings/typescriptServices.d.ts" />
-/// <reference path="../../node_modules/tslint/lib/tslint.d.ts" />
+import * as Lint from "tslint/lib/lint";
+import * as ts from "typescript";
 
 
 export class Rule extends Lint.Rules.AbstractRule {
@@ -101,13 +101,13 @@ class PreferConstWalker extends Lint.RuleWalker {
             this.visitBindingLiteralExpression(node as (ts.ArrayLiteralExpression | ts.ObjectLiteralExpression));
         }
     }
-    
+
     private visitBindingLiteralExpression(node: ts.ArrayLiteralExpression | ts.ObjectLiteralExpression) {
         if (node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
             const pattern = node as ts.ObjectLiteralExpression;
             for (const element of pattern.properties) {
                 if (element.name.kind === ts.SyntaxKind.Identifier) {
-                    this.markAssignment(element.name as ts.Identifier)
+                    this.markAssignment(element.name as ts.Identifier);
                 }
                 else if (isBindingPattern(element.name)) {
                     this.visitBindingPatternIdentifiers(element.name as ts.BindingPattern);
