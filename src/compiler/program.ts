@@ -947,7 +947,9 @@ namespace ts {
                 return currentDirectory;
             }
 
-            return getNormalizedPathFromPathComponents(commonPathComponents);
+            const path = getNormalizedPathFromPathComponents(commonPathComponents);
+            const relativePath = convertToRelativePath(path, currentDirectory, getCanonicalFileName);
+            return relativePath;
         }
 
         function checkSourceFilesBelongToPath(sourceFiles: SourceFile[], rootDirectory: string): boolean {
