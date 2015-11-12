@@ -24,13 +24,16 @@ sourceFile:sourceMapValidationLambdaSpanningMultipleLines.ts
 4 >Emitted(1, 16) Source(1, 15) + SourceIndex(0)
 ---
 >>>    return item;
-1->^^^^^^^^^^^
-2 >           ^^^^
+1->^^^^
+2 >    ^^^^^^^
+3 >           ^^^^
 1->) =>
   >    
-2 >           item
-1->Emitted(2, 12) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 16) Source(2, 9) + SourceIndex(0)
+2 >    
+3 >           item
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 12) Source(2, 5) + SourceIndex(0)
+3 >Emitted(2, 16) Source(2, 9) + SourceIndex(0)
 ---
 >>>});
 1 >

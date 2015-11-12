@@ -5003,8 +5003,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     increaseIndent();
                     writeLine();
                     emitLeadingComments(node.body);
+                    emitStart(body);
                     write("return ");
                     emit(body);
+                    emitEnd(body);
                     write(";");
                     emitTrailingComments(node.body);
 
