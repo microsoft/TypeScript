@@ -1,3 +1,4 @@
+// @useCaseSensitiveFileNames: false
 // @outDir: A:/
 // @Filename: A:/foo/bar.ts
 var x: number;
