@@ -517,7 +517,7 @@ namespace ts {
 
                         // If this is one of the output extension (which would be .d.ts and .js if we are allowing compilation of js files)
                         // do not include this file if we included .ts or .tsx file with same base name as it could be output of the earlier compilation
-                        if (extension === ".d.ts" || (options.allowJs && extension === ".js")) {
+                        if (extension === ".d.ts" || (options.allowJs && contains(supportedJavascriptExtensions, extension))) {
                             const baseName = fileName.substr(0, fileName.length - extension.length);
                             if (hasProperty(filesSeen, baseName + ".ts") || hasProperty(filesSeen, baseName + ".tsx")) {
                                 continue;
