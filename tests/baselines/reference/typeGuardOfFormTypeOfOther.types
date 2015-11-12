@@ -60,10 +60,9 @@ if (typeof strOrC === "Object") {
 >strOrC : C
 }
 else {
-    var r2: string | C = strOrC; // string | C
->r2 : string | C
->C : C
->strOrC : string | C
+    var r2: string = strOrC; // string
+>r2 : string
+>strOrC : string
 }
 if (typeof numOrC === "Object") {
 >typeof numOrC === "Object" : boolean
@@ -77,10 +76,9 @@ if (typeof numOrC === "Object") {
 >numOrC : C
 }
 else {
-    var r3: number | C = numOrC; // number | C
->r3 : number | C
->C : C
->numOrC : number | C
+    var r3: number  = numOrC; // number
+>r3 : number
+>numOrC : number
 }
 if (typeof boolOrC === "Object") {
 >typeof boolOrC === "Object" : boolean
@@ -94,10 +92,9 @@ if (typeof boolOrC === "Object") {
 >boolOrC : C
 }
 else {
-    var r4: boolean | C = boolOrC; // boolean | C
->r4 : boolean | C
->C : C
->boolOrC : boolean | C
+    var r4: boolean = boolOrC; // boolean
+>r4 : boolean
+>boolOrC : boolean
 }
 
 // Narrowing occurs only if target type is a subtype of variable type
@@ -126,10 +123,9 @@ if (typeof strOrC !== "Object") {
 >strOrC : string | C
 >"Object" : string
 
-    var r2: string | C = strOrC; // string | C
->r2 : string | C
->C : C
->strOrC : string | C
+    var r2: string = strOrC; // string
+>r2 : string
+>strOrC : string
 }
 else {
     c = strOrC; // C
@@ -143,10 +139,9 @@ if (typeof numOrC !== "Object") {
 >numOrC : number | C
 >"Object" : string
 
-    var r3: number | C = numOrC; // number | C
->r3 : number | C
->C : C
->numOrC : number | C
+    var r3: number = numOrC; // number
+>r3 : number
+>numOrC : number
 }
 else {
     c = numOrC; // C
@@ -160,10 +155,9 @@ if (typeof boolOrC !== "Object") {
 >boolOrC : boolean | C
 >"Object" : string
 
-    var r4: boolean | C = boolOrC; // boolean | C
->r4 : boolean | C
->C : C
->boolOrC : boolean | C
+    var r4: boolean = boolOrC; // boolean
+>r4 : boolean
+>boolOrC : boolean
 }
 else {
     c = boolOrC; // C
