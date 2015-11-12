@@ -932,7 +932,6 @@ namespace ts {
                         diagnosticArgument = [fileName];
                     }
                     else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
-                        // (TODO: shkamat) Should this message be different given we support multiple extensions
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
