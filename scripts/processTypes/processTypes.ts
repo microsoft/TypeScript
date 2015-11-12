@@ -3,6 +3,14 @@ import { loadSourceFiles } from "./types";
 import { discover, DiscoveryResult } from "./discovery";
 import { combinePaths } from "./utilities";
 
+declare var global: any, require: any;
+if (typeof global !== "undefined" && Object.prototype.toString.call(global.process) === '[object process]') {
+    try {
+        require("source-map-support").install();
+    }
+    catch (e) { }
+}
+
 main();
 
 function main() {

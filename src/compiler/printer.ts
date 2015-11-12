@@ -121,6 +121,7 @@ function __export(m) {
             let moduleKind = getModuleKind(compilerOptions);
             let diagnostics: Diagnostic[] = [];
             let currentSourceFile: SourceFile;
+            let currentSourceText: string;
             let helpersEmitted: NodeCheckFlags;
             let tempFlags: TempFlags;
             let temporaryVariables: string[] = [];
@@ -495,7 +496,7 @@ function __export(m) {
                     writeSynthesizedIdentifier(node);
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
+                    writeTextOfNode(currentSourceText, node);
                 }
             }
 
@@ -574,7 +575,7 @@ function __export(m) {
                     }
                 }
                 else {
-                    writeTextOfNode(currentSourceFile, node);
+                    writeTextOfNode(currentSourceText, node);
                 }
             }
 
@@ -946,7 +947,6 @@ function __export(m) {
                     // isFinite handles cases when constantValue is undefined
                     return isFinite(constantValue) && Math.floor(constantValue) === constantValue;
                 }
-                return false;
             }
 
             function emitElementAccessExpression(node: ElementAccessExpression) {
@@ -1800,6 +1800,7 @@ function __export(m) {
                 let savedTempFlags = tempFlags;
                 tempFlags = 0;
                 currentSourceFile = node;
+                currentSourceText = node.text;
 
                 setSourceFile(node);
 
@@ -1812,6 +1813,7 @@ function __export(m) {
                 emitList(node, statements, addHelpers(node, ListFormat.MultiLine), statementOffset);
 
                 currentSourceFile = undefined;
+                currentSourceText = undefined;
                 tempFlags = savedTempFlags;
             }
 
@@ -1910,7 +1912,7 @@ function __export(m) {
             //
 
             function emitShebang() {
-                let shebang = getShebang(currentSourceFile.text);
+                let shebang = getShebang(currentSourceText);
                 if (shebang) {
                     write(shebang);
                 }
@@ -2166,7 +2168,7 @@ function __export(m) {
             }
 
             function writeToken(token: SyntaxKind, pos?: number) {
-                let tokenStartPos = skipTrivia(currentSourceFile.text, pos);
+                let tokenStartPos = skipTrivia(currentSourceText, pos);
                 emitPos(tokenStartPos);
                 let tokenEndPos = writeTokenText(token, pos);
                 emitPos(tokenEndPos);
@@ -2310,7 +2312,7 @@ function __export(m) {
             }
 
             function getStartPos(range: TextRange) {
-                return range.pos === -1 ? -1 : skipTrivia(currentSourceFile.text, range.pos);
+                return range.pos === -1 ? -1 : skipTrivia(currentSourceText, range.pos);
             }
 
             function needsIndentation(parent: Node, node1: Node, node2: Node): boolean {

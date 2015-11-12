@@ -112,7 +112,7 @@ namespace ts {
                     if (name.kind === SyntaxKind.ObjectBindingPattern) {
                         // Rewrite element to a declaration with an initializer that fetches property
                         let propName = element.propertyName || <Identifier>element.name;
-                        emitBindingElement(element, createPropertyOrElementAccessExpression(value, propName), write);
+                        emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName, write), write);
                     }
                     else if (element.kind !== SyntaxKind.OmittedExpression) {
                         if (!element.dotDotDotToken) {
@@ -128,6 +128,24 @@ namespace ts {
             else {
                 emitAssignment(name, value, /*isTempVariable*/ false, /*originalNode*/ target, write);
             }
+        }
+
+        function createPropertyAccessForDestructuringProperty(object: Expression, propName: PropertyName, write: (node: Expression | VariableDeclaration) => void) {
+            let index: Expression;
+            const nameIsComputed = isComputedPropertyName(propName);
+            if (nameIsComputed) {
+                index = ensureIdentifier((<ComputedPropertyName>propName).expression, /* reuseIdentifierExpression */ false, write);
+            }
+            else {
+                // We create a synthetic copy of the identifier in order to avoid the rewriting that might
+                // otherwise occur when the identifier is emitted.
+                index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
+                (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
+            }
+
+            return !nameIsComputed && index.kind === SyntaxKind.Identifier
+                ? createPropertyAccessExpression2(object, <Identifier>index)
+                : createElementAccessExpression2(object, index);
         }
 
         function emitDestructuringExpressions(node: BinaryExpression, write: (node: Expression) => void): void {
@@ -213,7 +231,7 @@ namespace ts {
             if (originalNode) {
                 node.original = originalNode;
             }
-            
+
             write(node);
         }
 

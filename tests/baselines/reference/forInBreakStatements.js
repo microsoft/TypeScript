@@ -1,4 +1,5 @@
 //// [forInBreakStatements.ts]
+
 for(var x in {}) {
     break;
 }

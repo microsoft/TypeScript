@@ -286,7 +286,7 @@ export abstract class TypeInfo implements Annotated {
     private getInheritedAnnotations() {
         if (!this.allAnnotations) {
             this.allAnnotations = [];
-            let inheritedTypes = [this];
+            let inheritedTypes = [this as TypeInfo];
             let seen: Map<boolean> = {};
             while (inheritedTypes.length > 0) {
                 inheritedTypes = this.fillBreadthFirstInheritedAnnotations(inheritedTypes, seen);
@@ -769,7 +769,7 @@ function getTypeInfoOfTypeNode(typeNode: ts.TypeNode): TypeInfo {
         return getTypeInfoOfArrayTypeNode(typeNode);
     }
     else {
-        return getTypeInfoOfOtherType(typeNode.getText().trim());
+        return getTypeInfoOfOtherType(typeNode ? typeNode.getText().trim() : "UNKNOWN_TYPE");
     }
 }
 

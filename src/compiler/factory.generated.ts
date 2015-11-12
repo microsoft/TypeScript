@@ -150,7 +150,7 @@ namespace ts {
         if (elements) node.elements = createNodeArray(elements);
         return node;
     }
-    export function createBindingElement(propertyName?: Identifier, dotDotDotToken?: Node, name?: BindingPattern | Identifier, initializer?: Expression, location?: TextRange, flags?: NodeFlags): BindingElement {
+    export function createBindingElement(propertyName?: PropertyName, dotDotDotToken?: Node, name?: BindingPattern | Identifier, initializer?: Expression, location?: TextRange, flags?: NodeFlags): BindingElement {
         let node = createNode<BindingElement>(SyntaxKind.BindingElement, location, flags); 
         if (propertyName) node.propertyName = propertyName;
         if (dotDotDotToken) node.dotDotDotToken = dotDotDotToken;
@@ -660,7 +660,7 @@ namespace ts {
         if (initializer) node.initializer = initializer;
         return node;
     }
-    export function createSourceFileNode(statements?: Array<Statement>, endOfFileToken?: Node, fileName?: string, text?: string, amdDependencies?: Array<AmdDependency>, moduleName?: string, referencedFiles?: Array<FileReference>, languageVariant?: LanguageVariant, renamedDependencies?: Map<string>, hasNoDefaultLib?: boolean, languageVersion?: ScriptTarget, externalModuleIndicator?: Node, isDefaultLib?: boolean, identifiers?: Map<string>, parseDiagnostics?: Array<Diagnostic>, bindDiagnostics?: Array<Diagnostic>, lineMap?: Array<number>, classifiableNames?: Map<string>, resolvedModules?: Map<ResolvedModule>, imports?: Array<LiteralExpression>, location?: TextRange, flags?: NodeFlags): SourceFile {
+    export function createSourceFileNode(statements?: Array<Statement>, endOfFileToken?: Node, fileName?: string, text?: string, amdDependencies?: Array<AmdDependency>, moduleName?: string, referencedFiles?: Array<FileReference>, languageVariant?: LanguageVariant, renamedDependencies?: Map<string>, hasNoDefaultLib?: boolean, languageVersion?: ScriptTarget, externalModuleIndicator?: Node, commonJsModuleIndicator?: Node, identifiers?: Map<string>, parseDiagnostics?: Array<Diagnostic>, bindDiagnostics?: Array<Diagnostic>, lineMap?: Array<number>, classifiableNames?: Map<string>, resolvedModules?: Map<ResolvedModule>, imports?: Array<LiteralExpression>, location?: TextRange, flags?: NodeFlags): SourceFile {
         let node = createNode<SourceFile>(SyntaxKind.SourceFile, location, flags); 
         if (statements) node.statements = createNodeArray(statements);
         if (endOfFileToken) node.endOfFileToken = endOfFileToken;
@@ -674,7 +674,7 @@ namespace ts {
         if (hasNoDefaultLib) node.hasNoDefaultLib = hasNoDefaultLib;
         if (languageVersion) node.languageVersion = languageVersion;
         if (externalModuleIndicator) node.externalModuleIndicator = externalModuleIndicator;
-        if (isDefaultLib) node.isDefaultLib = isDefaultLib;
+        if (commonJsModuleIndicator) node.commonJsModuleIndicator = commonJsModuleIndicator;
         if (identifiers) node.identifiers = identifiers;
         if (parseDiagnostics) node.parseDiagnostics = parseDiagnostics;
         if (bindDiagnostics) node.bindDiagnostics = bindDiagnostics;
@@ -761,7 +761,7 @@ namespace ts {
         }
         return node;
     }
-    export function updateBindingElement(node: BindingElement, propertyName: Identifier, name: BindingPattern | Identifier, initializer: Expression): BindingElement {
+    export function updateBindingElement(node: BindingElement, propertyName: PropertyName, name: BindingPattern | Identifier, initializer: Expression): BindingElement {
         if (propertyName !== node.propertyName || name !== node.name || initializer !== node.initializer) {
             let newNode = createBindingElement(propertyName, node.dotDotDotToken, name, initializer);
             return updateFrom(node, newNode);
@@ -1302,7 +1302,7 @@ namespace ts {
     }
     export function updateSourceFileNode(node: SourceFile, statements: Array<Statement>, endOfFileToken: Node): SourceFile {
         if (statements !== node.statements || endOfFileToken !== node.endOfFileToken) {
-            let newNode = createSourceFileNode(statements, endOfFileToken, node.fileName, node.text, node.amdDependencies, node.moduleName, node.referencedFiles, node.languageVariant, node.renamedDependencies, node.hasNoDefaultLib, node.languageVersion, node.externalModuleIndicator, node.isDefaultLib, node.identifiers, node.parseDiagnostics, node.bindDiagnostics, node.lineMap, node.classifiableNames, node.resolvedModules, node.imports);
+            let newNode = createSourceFileNode(statements, endOfFileToken, node.fileName, node.text, node.amdDependencies, node.moduleName, node.referencedFiles, node.languageVariant, node.renamedDependencies, node.hasNoDefaultLib, node.languageVersion, node.externalModuleIndicator, node.commonJsModuleIndicator, node.identifiers, node.parseDiagnostics, node.bindDiagnostics, node.lineMap, node.classifiableNames, node.resolvedModules, node.imports);
             return updateFrom(node, newNode);
         }
         return node;
@@ -1649,11 +1649,9 @@ namespace ts {
         }
         return false;
     }
-    export function isDeclarationNameNode(node: Node): node is DeclarationName {
+    export function isPropertyName(node: Node): node is PropertyName {
         if (node) {
             switch (node.kind) {
-                case SyntaxKind.ObjectBindingPattern:
-                case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ComputedPropertyName:
                 case SyntaxKind.Identifier:
                 case SyntaxKind.NumericLiteral:
@@ -1668,9 +1666,11 @@ namespace ts {
         }
         return false;
     }
-    export function isPropertyName(node: Node): node is PropertyName {
+    export function isDeclarationNameNode(node: Node): node is DeclarationName {
         if (node) {
             switch (node.kind) {
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ComputedPropertyName:
                 case SyntaxKind.Identifier:
                 case SyntaxKind.NumericLiteral:
@@ -2125,7 +2125,7 @@ namespace ts {
                 case SyntaxKind.ArrayBindingPattern:
                     return updateArrayBindingPattern(<ArrayBindingPattern>node, transformer.visitNodes((<ArrayBindingPattern>node).elements, visitor, isBindingElement));
                 case SyntaxKind.BindingElement:
-                    return updateBindingElement(<BindingElement>node, transformer.visitNode((<BindingElement>node).propertyName, visitor, isIdentifier), transformer.visitNode((<BindingElement>node).name, visitor, isBindingPatternOrIdentifier), transformer.visitNode((<BindingElement>node).initializer, visitor, isExpressionNode));
+                    return updateBindingElement(<BindingElement>node, transformer.visitNode((<BindingElement>node).propertyName, visitor, isPropertyName), transformer.visitNode((<BindingElement>node).name, visitor, isBindingPatternOrIdentifier), transformer.visitNode((<BindingElement>node).initializer, visitor, isExpressionNode));
                 case SyntaxKind.ArrayLiteralExpression:
                     return updateArrayLiteralExpression(<ArrayLiteralExpression>node, transformer.visitNodes((<ArrayLiteralExpression>node).elements, visitor, isExpressionNode));
                 case SyntaxKind.ObjectLiteralExpression:

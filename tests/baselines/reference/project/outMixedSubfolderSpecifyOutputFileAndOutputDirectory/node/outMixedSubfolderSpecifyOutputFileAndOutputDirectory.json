@@ -15,8 +15,6 @@
         "test.ts"
     ],
     "emittedFiles": [
-        "outdir/outAndOutDirFolder/ref/m2.js",
-        "outdir/outAndOutDirFolder/ref/m2.d.ts",
         "bin/outAndOutDirFile.js",
         "bin/outAndOutDirFile.d.ts"
     ]

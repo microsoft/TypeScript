@@ -75,28 +75,28 @@ function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 199 /* ForStatement */:
-            case 200 /* ForInStatement */:
-            case 198 /* WhileStatement */:
-            case 197 /* DoStatement */:
-                if (node.statement.kind !== 192 /* Block */) {
+            case ts.SyntaxKind.ForStatement:
+            case ts.SyntaxKind.ForInStatement:
+            case ts.SyntaxKind.WhileStatement:
+            case ts.SyntaxKind.DoStatement:
+                if (node.statement.kind !== ts.SyntaxKind.Block) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 196 /* IfStatement */:
+            case ts.SyntaxKind.IfStatement:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 192 /* Block */) {
+                if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 192 /* Block */ &&
-                    ifStatement.elseStatement.kind !== 196 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 181 /* BinaryExpression */:
+            case ts.SyntaxKind.BinaryExpression:
                 var op = node.operatorToken.kind;
-                if (op === 30 /* EqualsEqualsToken */ || op == 31 /* ExclamationEqualsToken */) {
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.");
                 }
                 break;
@@ -112,7 +112,7 @@ exports.delint = delint;
 var fileNames = process.argv.slice(2);
 fileNames.forEach(function (fileName) {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), 2 /* ES6 */, /*setParentNodes */ true);
+    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

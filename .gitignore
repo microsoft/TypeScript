@@ -33,6 +33,7 @@ scripts/processTypes.d.ts
 scripts/processTypes.js
 src/harness/*.js
 src/compiler/diagnosticInformationMap.generated.ts
+src/compiler/diagnosticMessages.generated.json
 rwc-report.html
 *.swp
 build.json

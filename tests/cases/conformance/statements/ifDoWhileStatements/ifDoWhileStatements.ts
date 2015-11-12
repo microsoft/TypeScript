@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 interface I {
     id: number;
 }

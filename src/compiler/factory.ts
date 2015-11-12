@@ -1,11 +1,8 @@
 /// <reference path="core.ts"/>
 /// <reference path="factory.generated.ts" />
 namespace ts {
-    let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
-
-    export function getNodeConstructor(kind: SyntaxKind): new () => Node {
-        return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
-    }
+    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
     export function setNodeFlags<T extends Node>(node: T, flags: NodeFlags): T {
         if (!node || flags === undefined) {
@@ -95,14 +92,21 @@ namespace ts {
     }
 
     export function createNode<T extends Node>(kind: SyntaxKind, location?: TextRange, flags?: NodeFlags): T {
-        let node = <T>new (getNodeConstructor(kind))();
-        if (location) {
-            node.pos = location.pos;
-            node.end = location.end;
+        let pos = location !== undefined ? location.pos : -1;
+        let end = location !== undefined ? location.end : -1;
+
+        let node: T;
+        if (kind === SyntaxKind.SourceFile) {
+            node = <T>new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
         }
+        else {
+            node = <T>new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
+        }
+
         if (flags) {
             node.flags = flags;
         }
+
         return node;
     }
 

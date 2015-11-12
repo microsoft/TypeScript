@@ -21,7 +21,7 @@ class TypeWriterWalker {
     }
 
     public getTypeAndSymbols(fileName: string): TypeWriterResult[] {
-        let sourceFile = this.program.getSourceFile(fileName);
+        const sourceFile = this.program.getSourceFile(fileName);
         this.currentSourceFile = sourceFile;
         this.results = [];
         this.visitNode(sourceFile);
@@ -37,28 +37,28 @@ class TypeWriterWalker {
     }
 
     private logTypeAndSymbol(node: ts.Node): void {
-        let actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
-        let lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
-        let sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
+        const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
+        const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
+        const sourceText = ts.getTextOfNodeFromSourceText(this.currentSourceFile.text, node);
 
         // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
         // let type = this.checker.getTypeAtLocation(node);
-        let type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
+        const type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
 
         ts.Debug.assert(type !== undefined, "type doesn't exist");
-        let symbol = this.checker.getSymbolAtLocation(node);
+        const symbol = this.checker.getSymbolAtLocation(node);
 
-        let typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation);
+        const typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation);
         let symbolString: string;
         if (symbol) {
             symbolString = "Symbol(" + this.checker.symbolToString(symbol, node.parent);
             if (symbol.declarations) {
-                for (let declaration of symbol.declarations) {
+                for (const declaration of symbol.declarations) {
                     symbolString += ", ";
-                    let declSourceFile = declaration.getSourceFile();
-                    let declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
-                    let fileName = ts.getBaseFileName(declSourceFile.fileName);
-                    let isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
+                    const declSourceFile = declaration.getSourceFile();
+                    const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
+                    const fileName = ts.getBaseFileName(declSourceFile.fileName);
+                    const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
                     symbolString += `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
                 }
             }

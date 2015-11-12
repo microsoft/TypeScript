@@ -121,7 +121,7 @@ var servicesSources = [
     return path.join(servicesDirectory, f);
 }));
 
-var serverSources = [
+var serverCoreSources = [
     "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
@@ -129,7 +129,9 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-}).concat(servicesSources);
+});
+
+var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
     "editorServices.ts",
@@ -170,7 +172,8 @@ var harnessSources = harnessCoreSources.concat([
     "transpile.ts",
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
-    "moduleResolution.ts"
+    "moduleResolution.ts",
+    "tsconfigParsing.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -189,7 +192,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+        { target: "lib.es6.d.ts", sources: ["es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -266,7 +269,7 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
           , diagnostics = opts && opts.diagnostics;
 
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--module commonjs --noImplicitAny --noEmitOnError";
+        var options = "--noImplicitAny --noEmitOnError --pretty";
 
         // Keep comments when specifically requested
         // or when in debug mode.
@@ -288,6 +291,9 @@ function compileFile(outFile, sources, prereqs, opts, callback) {
 
         if (!noOutFile) {
             options += " --out " + outFile;
+        }
+        else {
+            options += " --module commonjs"
         }
 
         if(noResolve) {
@@ -377,6 +383,8 @@ var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnostic
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
+var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
+var builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "diagnosticMessages.generated.json");
 
 file(processDiagnosticMessagesTs);
 
@@ -402,6 +410,12 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     });
     ex.run();
 }, {async: true});
+
+file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
+    if (fs.existsSync(builtLocalDirectory)) {
+        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
+    }
+});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
@@ -566,6 +580,8 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
     // Stanalone/web definition file using global 'ts' namespace
     jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
     var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
+    definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+    fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
     // Official node package definition file, pointed to by 'typings' in package.json
     // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
@@ -598,7 +614,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "generate-factory", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
+task("local", ["generate-diagnostics", "generate-factory", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -749,9 +765,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-var testTimeout = 20000;
-desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
+function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     var tests = process.env.test || process.env.tests || process.env.t;
@@ -769,22 +783,50 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
         testTimeout = 100000;
     }
 
-    var colors = process.env.colors || process.env.color;
+    var colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
-    tests = tests ? ' -g ' + tests : '';
-    var reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
+    var reporter = process.env.reporter || process.env.r || defaultReporter;
+
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
-    exec(cmd, function() {
-        deleteTemporaryProjectOutput();
-        var lint = jake.Task['lint'];
-        lint.addListener('complete', function () {
-            complete();
+    var subsetRegexes;
+    if(defaultSubsets.length === 0) {
+        subsetRegexes = [tests]
+    }
+    else {
+        var subsets = tests ? tests.split("|") : defaultSubsets;
+        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
+        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
+    }
+    subsetRegexes.forEach(function (subsetRegex) {
+        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+        console.log(cmd);
+        exec(cmd, function () {
+            deleteTemporaryProjectOutput();
+            if (postLint) {
+                var lint = jake.Task['lint'];
+                lint.addListener('complete', function () {
+                    complete();
+                });
+                lint.invoke();
+            }
+            else {
+                complete();
+            }
         });
-        lint.invoke();
     });
+}
+
+var testTimeout = 20000;
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+}, {async: true});
+
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -953,7 +995,9 @@ var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
     "noNullRule",
-    "booleanTriviaRule"
+    "preferConstRule",
+    "booleanTriviaRule",
+    "typeOperatorSpacingRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -996,7 +1040,9 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var lintTargets = compilerSources.concat(harnessCoreSources);
+var lintTargets = compilerSources
+    .concat(harnessCoreSources)
+    .concat(serverCoreSources);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
