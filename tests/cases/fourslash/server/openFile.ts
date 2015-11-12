@@ -10,7 +10,6 @@
 ////{ "files": ["test.ts", "test1.ts"] }
 
 var overridingContent = "var t = 10; t.";
-debugger;
 goTo.file("test.ts", overridingContent);
 goTo.file("test1.ts");
 goTo.eof();
