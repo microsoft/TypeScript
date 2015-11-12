@@ -67,7 +67,7 @@ TypeScript is authored by:
 * Sheetal Nandi
 * Shengping Zhong
 * Shyyko Serhiy
-* Simon H�rlimann
+* Simon Hürlimann
 * Solal Pirelli
 * Stan Thomas
 * Steve Lucco
