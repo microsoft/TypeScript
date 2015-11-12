@@ -271,7 +271,7 @@ namespace ts.server {
     function createLoggerFromEnv() {
         var fileName: string = undefined;
         var detailLevel = "verbose";
-        var logEnvStr = process.env["TSS_LOG"];
+        var logEnvStr = '{"detailLevel": "verbose"}' //process.env["TSS_LOG"];
         if (logEnvStr) {
             var logEnv = parseLoggingEnvironmentString(logEnvStr);
             if (logEnv.file) {

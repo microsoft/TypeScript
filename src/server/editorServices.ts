@@ -922,20 +922,20 @@ namespace ts.server {
         }
 
         acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypingPaths, newTypings } = this.resolveTypingsForJs(path);
+            let { cachedTypingPaths, newTypings } = this.resolveTypingsForJs(path, project);
             this.downloadTypingFilesForJs(cachedTypingPaths, newTypings, project);
         }
 
-        resolveTypingsForJs(fileName: string): { cachedTypingPaths: string[], newTypings: string[] } {
+        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypings: string[] } {
             this.log("Files for JS typing:" + fileName);
-            let cachePath = "C:/Users/lizhe/.typingCache";
-            return ts.JsTyping.discoverTypings(sys, [fileName], cachePath);
+            let cachePath = "C:/Users/lan/.typingCache";
+            return ts.JsTyping.discoverTypings(sys, project.getFileNames(), cachePath);
         }
 
         downloadTypingFilesForJs(cachedTypingPaths: string[], newTypings: string[], project: Project) {
             let tsd = require("tsd");
-            let tsdJsonPath = 'C:/Users/lizhe/.typingCache/tsd.json';
-            let typingPath = 'C:/Users/lizhe/.typingCache/typings';
+            let tsdJsonPath = 'C:/Users/lan/.typingCache/tsd.json';
+            let typingPath = 'C:/Users/lan/.typingCache/typings';
             let api = tsd.getAPI(tsdJsonPath);
             let cachedInstalledPaths: Map<string>;
 
