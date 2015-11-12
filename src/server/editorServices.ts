@@ -1031,6 +1031,9 @@ namespace ts.server {
                 }
             }
             if (info) {
+                if (fileContent) {
+                    info.svc.reload(fileContent);
+                }
                 if (openedByClient) {
                     info.isOpen = true;
                 }
