@@ -502,41 +502,30 @@ namespace ts {
             else {
                 const filesSeen: Map<boolean> = {};
                 const exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                const extensionsByPriority = getSupportedExtensions(options);
-                for (let extensionsIndex = 0; extensionsIndex < extensionsByPriority.length; extensionsIndex++) {
-                    const currentExtension = extensionsByPriority[extensionsIndex];
-                    const filesInDirWithExtension = host.readDirectory(basePath, currentExtension, exclude);
-                    // Get list of conflicting extensions, conflicting extension is
-                    // - extension that is lower priority than current extension and 
-                    // - extension also is current extension (ends with "." + currentExtension)
-                    const conflictingExtensions: string[] = [];
-                    for (let i = extensionsIndex + 1; i < extensionsByPriority.length; i++) {
-                        const extension = extensionsByPriority[i]; // lower priority extension
-                        if (fileExtensionIs(extension, currentExtension)) { // also has current extension
-                            conflictingExtensions.push(extension);
-                        }
-                    }
+                const supportedExtensions = getSupportedExtensions(options);
+                Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
 
-                    // Add the files to fileNames list if the file is not any of conflicting extension
+                // Get files of supported extensions in their order of resolution
+                for (const extension of supportedExtensions) {
+                    const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
                     for (const fileName of filesInDirWithExtension) {
-                        let hasConflictingExtension = false;
-                        for (const conflictingExtension of conflictingExtensions) {
-                            // eg. 'f.d.ts' will match '.ts' extension but really should be process later with '.d.ts' files
-                            if (fileExtensionIs(fileName, conflictingExtension)) {
-                                hasConflictingExtension = true;
-                                break;
+                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension, 
+                        // lets pick them when its turn comes up
+                        if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
+                            continue;
+                        }
+
+                        // If this is one of the output extension (which would be .d.ts and .js if we are allowing compilation of js files)
+                        // do not include this file if we included .ts or .tsx file with same base name as it could be output of the earlier compilation
+                        if (extension === ".d.ts" || (options.allowJs && extension === ".js")) {
+                            const baseName = fileName.substr(0, fileName.length - extension.length);
+                            if (hasProperty(filesSeen, baseName + ".ts") || hasProperty(filesSeen, baseName + ".tsx")) {
+                                continue;
                             }
                         }
 
-                        if (!hasConflictingExtension) {
-                            // Add the file only if there is no higher priority extension file already included
-                            // eg. when a.d.ts and a.js are present in the folder, include only a.d.ts not a.js
-                            const baseName = fileName.substr(0, fileName.length - currentExtension.length);
-                            if (!hasProperty(filesSeen, baseName)) {
-                                filesSeen[baseName] = true;
-                                fileNames.push(fileName);
-                            }
-                        }
+                        filesSeen[fileName] = true;
+                        fileNames.push(fileName);
                     }
                 }
             }

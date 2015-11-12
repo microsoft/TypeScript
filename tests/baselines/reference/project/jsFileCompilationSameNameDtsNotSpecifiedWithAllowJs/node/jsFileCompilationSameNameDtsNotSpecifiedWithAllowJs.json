@@ -6,7 +6,8 @@
     "project": "SameNameDTsNotSpecifiedWithAllowJs",
     "resolvedInputFiles": [
         "lib.d.ts",
-        "SameNameDTsNotSpecifiedWithAllowJs/a.d.ts"
+        "SameNameDTsNotSpecifiedWithAllowJs/a.d.ts",
+        "SameNameDTsNotSpecifiedWithAllowJs/a.js"
     ],
     "emittedFiles": []
 }

@@ -297,8 +297,8 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T1, T2>(first: Map<T1>, second: Map<T2>): Map<T1 & T2> {
-        const result: Map<T1 & T2> = {};
+    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
+        const result: T1 & T2 = <any>{};
         for (const id in first) {
             (result as any)[id] = first[id];
         }
