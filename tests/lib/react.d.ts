@@ -27,7 +27,7 @@ declare namespace __React {
         ref: string | ((element: Element) => any);
     }
 
-    interface ReactHTMLElement extends DOMElement<HTMLProps> {
+    interface ReactHTMLElement extends DOMElement<HTMLProps<HTMLElement>> {
         ref: string | ((element: HTMLElement) => any);
     }
 
@@ -51,7 +51,7 @@ declare namespace __React {
         (props?: P, ...children: ReactNode[]): DOMElement<P>;
     }
 
-    type HTMLFactory = DOMFactory<HTMLProps>;
+    type HTMLFactory = DOMFactory<HTMLProps<HTMLElement>>;
     type SVGFactory = DOMFactory<SVGProps>;
 
     //
