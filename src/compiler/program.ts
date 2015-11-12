@@ -327,7 +327,6 @@ namespace ts {
         let files: SourceFile[] = [];
         let fileProcessingDiagnostics = createDiagnosticCollection();
         const programDiagnostics = createDiagnosticCollection();
-        const emitBlockingDiagnostics = createDiagnosticCollection();
 
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
@@ -835,7 +834,6 @@ namespace ts {
             const allDiagnostics: Diagnostic[] = [];
             addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
             addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
-            addRange(allDiagnostics, emitBlockingDiagnostics.getGlobalDiagnostics());
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
@@ -1263,7 +1261,7 @@ namespace ts {
                 });
             }
 
-            // Verify that all the emit files are unique and dont overwrite input files
+            // Verify that all the emit files are unique and don't overwrite input files
             function verifyEmitFilePath(emitFileName: string, emitFilesSeen: FileMap<boolean>) {
                 if (emitFileName) {
                     const emitFilePath = toPath(emitFileName, currentDirectory, getCanonicalFileName);
@@ -1286,7 +1284,7 @@ namespace ts {
 
         function createEmitBlockingDiagnostics(emitFileName: string, message: DiagnosticMessage) {
             hasEmitBlockingDiagnostics.set(toPath(emitFileName, currentDirectory, getCanonicalFileName), true);
-            emitBlockingDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
+            programDiagnostics.add(createCompilerDiagnostic(message, emitFileName));
         }
     }
 }
