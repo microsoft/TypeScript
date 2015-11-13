@@ -200,6 +200,10 @@ namespace ts {
             "symbol": {
                 type: esSymbolType,
                 flags: TypeFlags.ESSymbol
+            },
+            "undefined": {
+                type: undefinedType,
+                flags: TypeFlags.ContainsUndefinedOrNull
             }
         };
 
