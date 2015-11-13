@@ -910,7 +910,7 @@ namespace ts {
                     return;
                 }
 
-                const sourcePathComponents = getNormalizedPathComponents(getCanonicalFileName(sourceFile.fileName), currentDirectory);
+                const sourcePathComponents = getNormalizedPathComponents(sourceFile.fileName, currentDirectory);
                 sourcePathComponents.pop(); // The base file name is not part of the common directory path
 
                 if (!commonPathComponents) {
@@ -919,8 +919,9 @@ namespace ts {
                     return;
                 }
 
+                const caseSensitive = host.useCaseSensitiveFileNames();
                 for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
-                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                    if (caseSensitive ? commonPathComponents[i] !== sourcePathComponents[i] : commonPathComponents[i].toLocaleLowerCase() !== sourcePathComponents[i].toLocaleLowerCase()) {
                         if (i === 0) {
                             // Failed to find any common path component
                             return true;
@@ -947,9 +948,7 @@ namespace ts {
                 return currentDirectory;
             }
 
-            const path = getNormalizedPathFromPathComponents(commonPathComponents);
-            const relativePath = convertToRelativePath(path, currentDirectory, getCanonicalFileName);
-            return relativePath;
+            return getNormalizedPathFromPathComponents(commonPathComponents);
         }
 
         function checkSourceFilesBelongToPath(sourceFiles: SourceFile[], rootDirectory: string): boolean {
