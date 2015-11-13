@@ -1867,7 +1867,7 @@ namespace ts {
      * Resolves a local path to a path which is absolute to the base of the emit
      */
     export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
-        const dir = host.getCurrentDirectory();
+        const dir = host.getCommonSourceDirectory();
         const relativePath = getRelativePathToDirectoryOrUrl(dir, fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
         return removeFileExtension(relativePath);
     }
