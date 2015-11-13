@@ -223,9 +223,12 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param generateDeclarations: true to compile using --declaration
     * @param outDir: true to compile using --outDir
     * @param keepComments: false to compile using --removeComments
+    * @param noResolve: specify whether to add ///-references or module import targets to the list of compiled files --noResolve
+    * @param stripInternal: specify whether to emit declarations for code that has an @internal annotation --stripInternal
+    * @param target: a string to indicate ECMAScript target version --target
     * @param callback: a function to execute after the compilation process ends
     */
-function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
+function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, target, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
         var options = "--noImplicitAny --noEmitOnError --pretty";
@@ -265,6 +268,10 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (stripInternal) {
             options += " --stripInternal"
+        }
+
+        if (target) {
+            options += " --target " + target;
         }
 
         var cmd = host + " " + compilerPath + " " + options + " ";
@@ -450,6 +457,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
             /*keepComments*/ true,
             /*noResolve*/ false,
             /*stripInternal*/ true,
+            /*target*/ "ES3",
             /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -492,7 +500,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "distribute-version"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -875,7 +883,14 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(/*outFile*/ tslintRulesOutFiles[i],
+        /*sources*/ [ruleFile],
+        /*prereqs*/ [ruleFile],
+        /*prefixes*/ [],
+        /*useBuiltCompiler*/ false,
+        /*noOutFile*/ true,
+        /*generateDeclarations*/ false,
+        /*outDir*/ path.join(builtLocalDirectory, "tslint")); 
 });
 
 function getLinterOptions() {
@@ -968,3 +983,36 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
+
+var distributeVersionInputFolder = "scripts/distributeVersion";
+var distributeVersionOutputFolder = path.join(builtLocalDirectory, "distributeVersion");
+var distributeVersionJS = path.join(distributeVersionOutputFolder, "distribute.js");
+var distributeVersionTS = path.join(distributeVersionInputFolder, "distribute.ts");
+
+file(distributeVersionTS);
+
+compileFile(/*outFile*/ distributeVersionJS,
+        /*sources*/ [distributeVersionTS],
+        /*prereqs*/ [],
+        /*prefixes*/ [],
+        /*useBuiltCompiler*/ false,
+        /*noOutFile*/ true,
+        /*generateDeclarations*/ false,
+        /*outDir*/ distributeVersionOutputFolder,
+        /*preserveConstEnums*/ undefined,
+        /*keepComments*/ false,
+        /*noResolve*/ false,
+        /*stripInternal*/ false,
+        /*target*/ "ES2015");
+
+desc("Run version distribution script")
+task("distribute-version", [distributeVersionJS], function() {
+    // Copy version file to the builtLocalDirectory
+    jake.cpR(path.join(distributeVersionInputFolder, "version.json"), distributeVersionOutputFolder);
+    
+    console.log(host + " " + distributeVersionJS);
+    jake.exec([host + " " + distributeVersionJS], {printStdout: true}, function () {
+       console.log("Successfully distribute version");
+       complete();
+    });
+}, {async: true});
