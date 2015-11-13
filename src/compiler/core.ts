@@ -633,10 +633,10 @@ namespace ts {
         let lastPart: string;
         while (lastPart = part, part = components.pop()) {
             if (part === "node_modules") {
-                return convertToRelativePath(getNormalizedPathFromPathComponents([...components, lastPart]), currentDirectory, getCanonicalFileName);
+                return ts.convertToRelativePath(getNormalizedPathFromPathComponents([...components, lastPart]), currentDirectory, getCanonicalFileName);
             }
         }
-        return convertToRelativePath(path, currentDirectory, getCanonicalFileName);
+        return ts.convertToRelativePath(path, currentDirectory, getCanonicalFileName);
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {
