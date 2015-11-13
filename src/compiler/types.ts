@@ -491,6 +491,7 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
+    export type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
     export type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
@@ -543,7 +544,7 @@ namespace ts {
 
     // SyntaxKind.BindingElement
     export interface BindingElement extends Declaration {
-        propertyName?: Identifier;          // Binding property name (in object binding pattern)
+        propertyName?: PropertyName;        // Binding property name (in object binding pattern)
         dotDotDotToken?: Node;              // Present on rest binding element
         name: Identifier | BindingPattern;  // Declared binding element name
         initializer?: Expression;           // Optional initializer
@@ -587,7 +588,7 @@ namespace ts {
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     export interface VariableLikeDeclaration extends Declaration {
-        propertyName?: Identifier;
+        propertyName?: PropertyName;
         dotDotDotToken?: Node;
         name: DeclarationName;
         questionToken?: Node;
@@ -701,7 +702,7 @@ namespace ts {
     }
 
     // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
-    // because string literals can appear in the type annotation of a parameter node.
+    // because string literals can appear in type annotations as well.
     export interface StringLiteral extends LiteralExpression, TypeNode {
         _stringLiteralBrand: any;
     }
@@ -773,7 +774,8 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface BinaryExpression extends Expression {
+    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
+    export interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -834,7 +836,7 @@ namespace ts {
         properties: NodeArray<ObjectLiteralElement>;
     }
 
-    export interface PropertyAccessExpression extends MemberExpression {
+    export interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         dotToken: Node;
         name: Identifier;
@@ -1284,8 +1286,9 @@ namespace ts {
 
         // The first node that causes this file to be an external module
         /* @internal */ externalModuleIndicator: Node;
+        // The first node that causes this file to be a CommonJS module
+        /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ isDefaultLib: boolean;
         /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
@@ -1622,6 +1625,7 @@ namespace ts {
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
+        getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
     }
 
     export const enum SymbolFlags {
@@ -1821,6 +1825,7 @@ namespace ts {
         ContainsAnyFunctionType = 0x00800000,  // Type is or contains object literal type
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
+        ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -1956,6 +1961,8 @@ namespace ts {
         target?: TypeParameter;  // Instantiation target
         /* @internal */
         mapper?: TypeMapper;     // Instantiation mapper
+        /* @internal */
+        resolvedApparentType: Type;
     }
 
     export const enum SignatureKind {

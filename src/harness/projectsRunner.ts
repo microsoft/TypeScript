@@ -354,10 +354,10 @@ class ProjectRunner extends RunnerBase {
             const compilerOptions = compilerResult.program.getCompilerOptions();
 
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
-                if (Harness.Compiler.isDTS(sourceFile.fileName)) {
+                if (ts.isDeclarationFile(sourceFile)) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
-                else if (ts.shouldEmitToOwnFile(sourceFile, compilerResult.program.getCompilerOptions())) {
+                else if (!(compilerOptions.outFile || compilerOptions.out)) {
                     let emitOutputFilePathWithoutExtension: string = undefined;
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
@@ -369,7 +369,10 @@ class ProjectRunner extends RunnerBase {
                     }
 
                     const outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
-                    allInputFiles.unshift(findOutpuDtsFile(outputDtsFileName));
+                    const file = findOutpuDtsFile(outputDtsFileName);
+                    if (file) {
+                        allInputFiles.unshift(file);
+                    }
                 }
                 else {
                     const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
@@ -410,7 +413,12 @@ class ProjectRunner extends RunnerBase {
             const inputFiles = compilerResult.program ? ts.map(ts.filter(compilerResult.program.getSourceFiles(),
                 sourceFile => sourceFile.fileName !== "lib.d.ts"),
                 sourceFile => {
-                    return { unitName: sourceFile.fileName, content: sourceFile.text };
+                    return {
+                        unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
+                            RunnerBase.removeFullPaths(sourceFile.fileName) :
+                            sourceFile.fileName,
+                        content: sourceFile.text
+                    };
                 }) : [];
 
             return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
@@ -434,7 +442,7 @@ class ProjectRunner extends RunnerBase {
                         return resolutionInfo;
                     }
 
-                    it(name + ": " + moduleNameToString(moduleKind) , () => {
+                    it(name + ": " + moduleNameToString(moduleKind), () => {
                         // Compile using node
                         compilerResult = batchCompilerProjectTestCase(moduleKind);
                     });

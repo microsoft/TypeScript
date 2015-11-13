@@ -143,7 +143,7 @@ module ts {
                 "/a/b/c/node_modules/foo/package.json",
                 "/a/b/c/node_modules/foo/index.ts",
                 "/a/b/c/node_modules/foo/index.tsx",
-                "/a/b/c/node_modules/foo/index.d.ts"
+                "/a/b/c/node_modules/foo/index.d.ts",
             ])
         });
 

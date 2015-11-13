@@ -956,7 +956,8 @@ namespace ts {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
+                    // for now treat files as JavaScript 
+                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
@@ -1032,7 +1033,7 @@ namespace ts {
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
                 if (this.documentRegistry === undefined) {
-                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
                 var languageService = createLanguageService(hostAdapter, this.documentRegistry);
@@ -1068,7 +1069,7 @@ namespace ts {
         public close(): void {
             // Forget all the registered shims
             this._shims = [];
-            this.documentRegistry = createDocumentRegistry();
+            this.documentRegistry = undefined;
         }
 
         public registerShim(shim: Shim): void {

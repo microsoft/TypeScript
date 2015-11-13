@@ -1,0 +1,76 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts ===
+
+type T = "" | "foo";
+>T : Symbol(T, Decl(stringLiteralTypesInUnionTypes04.ts, 0, 0))
+
+let x: T = "";
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+>T : Symbol(T, Decl(stringLiteralTypesInUnionTypes04.ts, 0, 0))
+
+let y: T = "foo";
+>y : Symbol(y, Decl(stringLiteralTypesInUnionTypes04.ts, 4, 3))
+>T : Symbol(T, Decl(stringLiteralTypesInUnionTypes04.ts, 0, 0))
+
+if (x === "") {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let a = x;
+>a : Symbol(a, Decl(stringLiteralTypesInUnionTypes04.ts, 7, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (x !== "") {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let b = x;
+>b : Symbol(b, Decl(stringLiteralTypesInUnionTypes04.ts, 11, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (x == "") {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let c = x;
+>c : Symbol(c, Decl(stringLiteralTypesInUnionTypes04.ts, 15, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (x != "") {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let d = x;
+>d : Symbol(d, Decl(stringLiteralTypesInUnionTypes04.ts, 19, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (x) {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let e = x;
+>e : Symbol(e, Decl(stringLiteralTypesInUnionTypes04.ts, 23, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (!x) {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let f = x;
+>f : Symbol(f, Decl(stringLiteralTypesInUnionTypes04.ts, 27, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (!!x) {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let g = x;
+>g : Symbol(g, Decl(stringLiteralTypesInUnionTypes04.ts, 31, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}
+
+if (!!!x) {
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+
+    let h = x;
+>h : Symbol(h, Decl(stringLiteralTypesInUnionTypes04.ts, 35, 7))
+>x : Symbol(x, Decl(stringLiteralTypesInUnionTypes04.ts, 3, 3))
+}

@@ -1171,7 +1171,7 @@ namespace Harness {
                     }
                     else if (isTS(file.unitName)) {
                         const declFile = findResultCodeFile(file.unitName);
-                        if (!findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
+                        if (declFile && !findUnit(declFile.fileName, declInputFiles) && !findUnit(declFile.fileName, declOtherFiles)) {
                             dtsFiles.push({ unitName: declFile.fileName, content: declFile.code });
                         }
                     }
@@ -1182,7 +1182,7 @@ namespace Harness {
                         // Is this file going to be emitted separately
                         let sourceFileName: string;
                         const outFile = options.outFile || options.out;
-                        if (ts.isExternalModule(sourceFile) || !outFile) {
+                        if (!outFile) {
                             if (options.outDir) {
                                 let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.currentDirectoryForProgram);
                                 sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");

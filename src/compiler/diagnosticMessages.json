@@ -2318,7 +2318,6 @@
         "category": "Message",
         "code": 6078
     },
-
     "Specify JSX code generation: 'preserve' or 'react'": {
         "category": "Message",
         "code": 6080
@@ -2327,9 +2326,13 @@
         "category": "Message",
         "code": 6081
     },
+    "Only 'amd' and 'system' modules are supported alongside --{0}.": {
+        "category": "Error",
+        "code": 6082
+    },
     "Allow javascript files to be compiled.": {
         "category": "Message",
-        "code": 6082
+        "code": 6083
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

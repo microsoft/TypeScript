@@ -53,13 +53,13 @@ namespace ts {
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(candidate, supportedExtensions, failedLookupLocations, host);
+            let resolvedFileName = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            resolvedFileName = loadNodeModuleFromDirectory(candidate, supportedExtensions, failedLookupLocations, host);
+            resolvedFileName = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host);
             return resolvedFileName
                 ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
                 : { resolvedModule: undefined, failedLookupLocations };
@@ -69,8 +69,8 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromFile(candidate: string, supportedExtensions: string[], failedLookupLocation: string[], host: ModuleResolutionHost): string {
-        return forEach(supportedExtensions, tryLoad);
+    function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+        return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -84,7 +84,7 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(candidate: string, supportedExtensions: string[], failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
         const packageJsonPath = combinePaths(candidate, "package.json");
         if (host.fileExists(packageJsonPath)) {
 
@@ -100,7 +100,7 @@ namespace ts {
             }
 
             if (jsonContent.typings) {
-                const result = loadNodeModuleFromFile(normalizePath(combinePaths(candidate, jsonContent.typings)), supportedExtensions, failedLookupLocation, host);
+                const result = loadNodeModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
                 if (result) {
                     return result;
                 }
@@ -111,7 +111,7 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(combinePaths(candidate, "index"), supportedExtensions, failedLookupLocation, host);
+        return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
     }
 
     function loadModuleFromNodeModules(moduleName: string, directory: string, supportedExtensions: string[], host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -122,12 +122,12 @@ namespace ts {
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(candidate, supportedExtensions, failedLookupLocations, host);
+                let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(candidate, supportedExtensions, failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -162,9 +162,10 @@ namespace ts {
         const failedLookupLocations: string[] = [];
 
         let referencedSourceFile: string;
+        const supportedExtensions = getSupportedExtensions(compilerOptions);
         while (true) {
             searchName = normalizePath(combinePaths(searchPath, moduleName));
-            referencedSourceFile = forEach(getSupportedExtensions(compilerOptions), extension => {
+            referencedSourceFile = forEach(supportedExtensions, extension => {
                 if (extension === ".tsx" && !compilerOptions.jsx) {
                     // resolve .tsx files only if jsx support is enabled 
                     // 'logical not' handles both undefined and None cases
@@ -643,7 +644,7 @@ namespace ts {
             // For JavaScript files, we don't want to report the normal typescript semantic errors.
             // Instead, we just report errors for using TypeScript-only constructs from within a
             // JavaScript file.
-            if (isJavaScript(sourceFile.fileName)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 return getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken);
             }
 
@@ -864,45 +865,60 @@ namespace ts {
                 return;
             }
 
+            const isJavaScriptFile = isSourceFileJavaScript(file);
+
             let imports: LiteralExpression[];
             for (const node of file.statements) {
-                collect(node, /* allowRelativeModuleNames */ true);
+                collect(node, /* allowRelativeModuleNames */ true, /* collectOnlyRequireCalls */ false);
             }
 
             file.imports = imports || emptyArray;
 
-            function collect(node: Node, allowRelativeModuleNames: boolean): void {
-                switch (node.kind) {
-                    case SyntaxKind.ImportDeclaration:
-                    case SyntaxKind.ImportEqualsDeclaration:
-                    case SyntaxKind.ExportDeclaration:
-                        let moduleNameExpr = getExternalModuleName(node);
-                        if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
-                            break;
-                        }
-                        if (!(<LiteralExpression>moduleNameExpr).text) {
-                            break;
-                        }
+            return;
 
-                        if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
-                            (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
-                        }
-                        break;
-                    case SyntaxKind.ModuleDeclaration:
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
-                            // TypeScript 1.0 spec (April 2014): 12.1.6
-                            // An AmbientExternalModuleDeclaration declares an external module. 
-                            // This type of declaration is permitted only in the global module.
-                            // The StringLiteral must specify a top - level external module name.
-                            // Relative external module names are not permitted
-                            forEachChild((<ModuleDeclaration>node).body, node => {
+            function collect(node: Node, allowRelativeModuleNames: boolean, collectOnlyRequireCalls: boolean): void {
+                if (!collectOnlyRequireCalls) {
+                    switch (node.kind) {
+                        case SyntaxKind.ImportDeclaration:
+                        case SyntaxKind.ImportEqualsDeclaration:
+                        case SyntaxKind.ExportDeclaration:
+                            let moduleNameExpr = getExternalModuleName(node);
+                            if (!moduleNameExpr || moduleNameExpr.kind !== SyntaxKind.StringLiteral) {
+                                break;
+                            }
+                            if (!(<LiteralExpression>moduleNameExpr).text) {
+                                break;
+                            }
+
+                            if (allowRelativeModuleNames || !isExternalModuleNameRelative((<LiteralExpression>moduleNameExpr).text)) {
+                                (imports || (imports = [])).push(<LiteralExpression>moduleNameExpr);
+                            }
+                            break;
+                        case SyntaxKind.ModuleDeclaration:
+                            if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral && (node.flags & NodeFlags.Ambient || isDeclarationFile(file))) {
                                 // TypeScript 1.0 spec (April 2014): 12.1.6
-                                // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
-                                // only through top - level external module names. Relative external module names are not permitted.
-                                collect(node, /* allowRelativeModuleNames */ false);
-                            });
-                        }
-                        break;
+                                // An AmbientExternalModuleDeclaration declares an external module. 
+                                // This type of declaration is permitted only in the global module.
+                                // The StringLiteral must specify a top - level external module name.
+                                // Relative external module names are not permitted
+                                forEachChild((<ModuleDeclaration>node).body, node => {
+                                    // TypeScript 1.0 spec (April 2014): 12.1.6
+                                    // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
+                                    // only through top - level external module names. Relative external module names are not permitted.
+                                    collect(node, /* allowRelativeModuleNames */ false, collectOnlyRequireCalls);
+                                });
+                            }
+                            break;
+                    }
+                }
+
+                if (isJavaScriptFile) {
+                    if (isRequireCall(node)) {
+                        (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                    }
+                    else {
+                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /* collectOnlyRequireCalls */ true));
+                    }
                 }
             }
         }
@@ -1009,7 +1025,6 @@ namespace ts {
                 processImportedModules(file, basePath);
 
                 if (isDefaultLib) {
-                    file.isDefaultLib = true;
                     files.unshift(file);
                 }
                 else {
@@ -1099,6 +1114,10 @@ namespace ts {
                 }
             });
 
+            if (!commonPathComponents) { // Can happen when all input files are .d.ts files
+                return currentDirectory;
+            }
+
             return getNormalizedPathFromPathComponents(commonPathComponents);
         }
 
@@ -1147,15 +1166,14 @@ namespace ts {
                 if (options.mapRoot) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"));
                 }
-                if (options.sourceRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSourceMap"));
-                }
             }
-
 
             if (options.inlineSources) {
                 if (!options.sourceMap && !options.inlineSourceMap) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+                }
+                if (options.sourceRoot) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSources"));
                 }
             }
 
@@ -1168,10 +1186,9 @@ namespace ts {
                 if (options.mapRoot) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
                 }
-                if (options.sourceRoot) {
+                if (options.sourceRoot && !options.inlineSourceMap) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
                 }
-                return;
             }
 
             const languageVersion = options.target || ScriptTarget.ES3;
@@ -1200,12 +1217,16 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es2015_when_targeting_ES5_or_lower));
             }
 
+            // Cannot specify module gen that isn't amd or system with --out
+            if (outFile && options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+            }
+
             // there has to be common source directory if user specified --outdir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
                 options.sourceRoot || // there is --sourceRoot specified
-                (options.mapRoot &&  // there is --mapRoot specified and there would be multiple js files generated
-                    (!outFile || firstExternalModuleSourceFile !== undefined))) {
+                options.mapRoot) { // there is --mapRoot specified
 
                 if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
