@@ -2383,10 +2383,16 @@ namespace FourSlash {
     // here we cache the JS output and reuse it for every test.
     let fourslashJsOutput: string;
     {
-        const host = Harness.Compiler.createCompilerHost([{ unitName: Harness.Compiler.fourslashFileName, content: undefined }],
+        const fourslashFile: Harness.Compiler.TestFileWithPath = {
+            unitName: Harness.Compiler.fourslashFileName,
+            content: undefined,
+            path: ts.toPath(Harness.Compiler.fourslashFileName, Harness.IO.getCurrentDirectory(), Harness.Compiler.getCanonicalFileName)
+        };
+        const host = Harness.Compiler.createCompilerHost([fourslashFile],
             (fn, contents) => fourslashJsOutput = contents,
             ts.ScriptTarget.Latest,
-            Harness.IO.useCaseSensitiveFileNames());
+            Harness.IO.useCaseSensitiveFileNames(),
+            Harness.IO.getCurrentDirectory());
 
         const program = ts.createProgram([Harness.Compiler.fourslashFileName], { noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
@@ -2400,15 +2406,28 @@ namespace FourSlash {
 
         currentTestState = new TestState(basePath, testType, testData);
 
+        const currentDirectory = Harness.IO.getCurrentDirectory();
+        const useCaseSensitiveFileNames = Harness.IO.useCaseSensitiveFileNames();
+        const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
+
         let result = "";
+        const fourslashFile: Harness.Compiler.TestFileWithPath = {
+            unitName: Harness.Compiler.fourslashFileName,
+            content: undefined,
+            path: ts.toPath(Harness.Compiler.fourslashFileName, currentDirectory, getCanonicalFileName)
+        };
+        const testFile: Harness.Compiler.TestFileWithPath = {
+            unitName: fileName,
+            content: content,
+            path: ts.toPath(fileName, currentDirectory, getCanonicalFileName)
+        };
+
         const host = Harness.Compiler.createCompilerHost(
-            [
-                { unitName: Harness.Compiler.fourslashFileName, content: undefined },
-                { unitName: fileName, content: content }
-            ],
+            [ fourslashFile, testFile ],
             (fn, contents) => result = contents,
             ts.ScriptTarget.Latest,
-            Harness.IO.useCaseSensitiveFileNames());
+            useCaseSensitiveFileNames,
+            currentDirectory);
 
         const program = ts.createProgram([Harness.Compiler.fourslashFileName, fileName], { outFile: "fourslashTestOutput.js", noResolve: true, target: ts.ScriptTarget.ES3 }, host);
 
