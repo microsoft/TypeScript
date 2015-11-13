@@ -65,7 +65,7 @@ namespace ts {
                 : { resolvedModule: undefined, failedLookupLocations };
         }
         else {
-            return loadModuleFromNodeModules(moduleName, containingDirectory, supportedExtensions, host);
+            return loadModuleFromNodeModules(moduleName, containingDirectory, host);
         }
     }
 
@@ -114,7 +114,7 @@ namespace ts {
         return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
     }
 
-    function loadModuleFromNodeModules(moduleName: string, directory: string, supportedExtensions: string[], host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const failedLookupLocations: string[] = [];
         directory = normalizeSlashes(directory);
         while (true) {
@@ -122,12 +122,13 @@ namespace ts {
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+                // Load only typescript files irrespective of allowJs option if loading from node modules
+                let result = loadNodeModuleFromFile(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
