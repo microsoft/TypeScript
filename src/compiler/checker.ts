@@ -200,6 +200,10 @@ namespace ts {
             "symbol": {
                 type: esSymbolType,
                 flags: TypeFlags.ESSymbol
+            },
+            "undefined": {
+                type: undefinedType,
+                flags: TypeFlags.ContainsUndefinedOrNull
             }
         };
 
@@ -6475,6 +6479,10 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const typeInfo = primitiveTypeInfo[right.text];
+                // Don't narrow `undefined`
+                if (typeInfo && typeInfo.type === undefinedType) {
+                    return type;
+                }
                 // If the type to be narrowed is any and we're checking a primitive with assumeTrue=true, return the primitive
                 if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
                     return typeInfo.type;
