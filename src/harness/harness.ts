@@ -1069,7 +1069,7 @@ namespace Harness {
                     useCaseSensitiveFileNames = options.useCaseSensitiveFileNames;
                 }
                 const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
-                const inputFilesWiithPath = inputFiles.map(f => {
+                const inputFilesWithPath = inputFiles.map(f => {
                     return { unitName: f.unitName, content: f.content, path: ts.toPath(f.unitName, currentDirectory, getCanonicalFileName) };
                 });
                 const otherFilesWithPath = otherFiles.map(f => {
@@ -1094,7 +1094,7 @@ namespace Harness {
                 const programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
 
                 const compilerHost = createCompilerHost(
-                    inputFilesWiithPath.concat(includeBuiltFiles).concat(otherFilesWithPath),
+                    inputFilesWithPath.concat(includeBuiltFiles).concat(otherFilesWithPath),
                     (fn, contents, writeByteOrderMark) => fileOutputs.push({ fileName: fn, code: contents, writeByteOrderMark: writeByteOrderMark }),
                     options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine);
                 const program = ts.createProgram(programFiles, options, compilerHost);
