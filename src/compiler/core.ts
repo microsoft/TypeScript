@@ -627,16 +627,16 @@ namespace ts {
     /**
      * Given a path to a file within a module, returns a path uniqely identifying that module
      */
-    export function moduleFilePathToIdentifyingPath(path: Path): string {
+    export function moduleFilePathToIdentifyingPath(path: Path, currentDirectory: string, getCanonicalFileName: (filename: string) => string): string {
         const components = normalizedPathComponents(normalizeSlashes(path), getRootLength(path));
         let part: string;
         let lastPart: string;
         while (lastPart = part, part = components.pop()) {
             if (part === "node_modules") {
-                return getNormalizedPathFromPathComponents([...components, lastPart]);
+                return convertToRelativePath(getNormalizedPathFromPathComponents([...components, lastPart]), currentDirectory, getCanonicalFileName);
             }
         }
-        return path;
+        return convertToRelativePath(path, currentDirectory, getCanonicalFileName);
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {

@@ -890,7 +890,7 @@ namespace ts {
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
                         const filePath = toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName);
-                        const package = resolution.packageRoot ? {packagePath: moduleFilePathToIdentifyingPath(filePath), symbols: {} as SymbolTable} : file.package;
+                        const package = resolution.packageRoot ? {packagePath: moduleFilePathToIdentifyingPath(filePath, currentDirectory, getCanonicalFileName), symbols: {} as SymbolTable} : file.package;
                         findSourceFile(resolution.resolvedFileName, filePath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
                     }
                 }
