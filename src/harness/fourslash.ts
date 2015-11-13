@@ -373,17 +373,17 @@ namespace FourSlash {
         }
 
         // Opens a file given its 0-based index or fileName
-        public openFile(index: number): void;
-        public openFile(name: string): void;
-        public openFile(indexOrName: any) {
-            let fileToOpen: FourSlashFile = this.findFile(indexOrName);
+        public openFile(index: number, content?: string): void;
+        public openFile(name: string, content?: string): void;
+        public openFile(indexOrName: any, content?: string) {
+            const fileToOpen: FourSlashFile = this.findFile(indexOrName);
             fileToOpen.fileName = ts.normalizeSlashes(fileToOpen.fileName);
             this.activeFile = fileToOpen;
-            let fileName = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), "").substr(1);
+            const fileName = fileToOpen.fileName.replace(Harness.IO.directoryName(fileToOpen.fileName), "").substr(1);
             this.scenarioActions.push(`<OpenFile FileName="" SrcFileId="${fileName}" FileId="${fileName}" />`);
 
             // Let the host know that this file is now open
-            this.languageServiceAdapterHost.openFile(fileToOpen.fileName);
+            this.languageServiceAdapterHost.openFile(fileToOpen.fileName, content);
         }
 
         public verifyErrorExistsBetweenMarkers(startMarkerName: string, endMarkerName: string, negative: boolean) {

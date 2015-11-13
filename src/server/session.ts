@@ -4,7 +4,7 @@
 /// <reference path="editorServices.ts" />
 
 namespace ts.server {
-    var spaceCache:string[] = [];
+    const spaceCache: string[] = [];
 
     interface StackTraceError extends Error {
         stack?: string;
@@ -531,9 +531,13 @@ namespace ts.server {
             };
         }
 
-        private openClientFile(fileName: string) {
-            var file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file);
+        /**
+         * @param fileName is the name of the file to be opened
+         * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
+         */
+        private openClientFile(fileName: string, fileContent?: string) {
+            const file = ts.normalizePath(fileName);
+            this.projectService.openClientFile(file, fileContent);
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -966,7 +970,7 @@ namespace ts.server {
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 var openArgs = <protocol.OpenRequestArgs>request.arguments;
-                this.openClientFile(openArgs.file);
+                this.openClientFile(openArgs.file, openArgs.fileContent);
                 return {responseRequired: false}
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {

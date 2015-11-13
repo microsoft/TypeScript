@@ -513,6 +513,11 @@ declare namespace ts.server.protocol {
       *  Information found in an "open" request.
       */
     export interface OpenRequestArgs extends FileRequestArgs {
+        /**
+         * Used when a version of the file content is known to be more up to date than the one on disk. 
+         * Then the known content will be used upon opening instead of the disk copy   
+         */
+        fileContent?: string;
     }
 
     /**
