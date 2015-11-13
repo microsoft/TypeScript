@@ -1,4 +1,3 @@
-/// <reference path="binder.ts" />
 /// <reference path="sys.ts" />
 
 /* @internal */
@@ -362,6 +361,10 @@ namespace ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isExternalOrCommonJsModule(file: SourceFile): boolean {
+        return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
+    }
+
     export function isDeclarationFile(file: SourceFile): boolean {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
@@ -421,18 +424,26 @@ namespace ts {
         return getLeadingCommentRanges(sourceFileOfNode.text, node.pos);
     }
 
+    export function getLeadingCommentRangesOfNodeFromText(node: Node, text: string) {
+        return getLeadingCommentRanges(text, node.pos);
+    }
+
     export function getJsDocComments(node: Node, sourceFileOfNode: SourceFile) {
+        return getJsDocCommentsFromText(node, sourceFileOfNode.text);
+    }
+
+    export function getJsDocCommentsFromText(node: Node, text: string) {
         const commentRanges = (node.kind === SyntaxKind.Parameter || node.kind === SyntaxKind.TypeParameter) ?
-            concatenate(getTrailingCommentRanges(sourceFileOfNode.text, node.pos),
-                getLeadingCommentRanges(sourceFileOfNode.text, node.pos)) :
-            getLeadingCommentRangesOfNode(node, sourceFileOfNode);
+            concatenate(getTrailingCommentRanges(text, node.pos),
+                getLeadingCommentRanges(text, node.pos)) :
+            getLeadingCommentRangesOfNodeFromText(node, text);
         return filter(commentRanges, isJsDocComment);
 
         function isJsDocComment(comment: CommentRange) {
             // True if the comment starts with '/**' but not if it is '/**/'
-            return sourceFileOfNode.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                sourceFileOfNode.text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
-                sourceFileOfNode.text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
+            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
+                text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash;
         }
     }
 
@@ -1048,6 +1059,57 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
+    export function isSourceFileJavaScript(file: SourceFile): boolean {
+        return isInJavaScriptFile(file);
+    }
+
+    export function isInJavaScriptFile(node: Node): boolean {
+        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+    }
+
+    /**
+     * Returns true if the node is a CallExpression to the identifier 'require' with
+     * exactly one string literal argument.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isRequireCall(expression: Node): expression is CallExpression {
+        // of the form 'require("name")'
+        return expression.kind === SyntaxKind.CallExpression &&
+                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+                (<CallExpression>expression).arguments.length === 1 &&
+                (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
+    }
+
+    /**
+     * Returns true if the node is an assignment to a property on the identifier 'exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isExportsPropertyAssignment(expression: Node): boolean {
+        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
+    }
+
+    /**
+     * Returns true if the node is an assignment to the property access expression 'module.exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isModuleExportsAssignment(expression: Node): boolean {
+        // of the form 'module.exports = expr' where 'expr' is arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
+    }
+
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;
@@ -1383,8 +1445,8 @@ namespace ts {
     export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
         const simpleReferenceRegEx = /^\/\/\/\s*<reference\s+/gim;
         const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
-        if (simpleReferenceRegEx.exec(comment)) {
-            if (isNoDefaultLibRegEx.exec(comment)) {
+        if (simpleReferenceRegEx.test(comment)) {
+            if (isNoDefaultLibRegEx.test(comment)) {
                 return {
                     isNoDefaultLib: true
                 };
@@ -1427,6 +1489,10 @@ namespace ts {
         return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
+    export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+    }
+
     /**
      * A declaration has a dynamic name if both of the following are true:
      *   1. The declaration has a computed property name
@@ -1435,9 +1501,13 @@ namespace ts {
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name &&
-            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
-            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
+        return declaration.name && isDynamicName(declaration.name);
+    }
+
+    export function isDynamicName(name: DeclarationName): boolean {
+        return name.kind === SyntaxKind.ComputedPropertyName &&
+            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind) &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
     }
 
     /**
@@ -1652,6 +1722,7 @@ namespace ts {
         "\u0085": "\\u0085"  // nextLine
     };
 
+
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),
      * but augmented for a few select characters (e.g. lineSeparator, paragraphSeparator, nextLine)
@@ -1689,7 +1760,7 @@ namespace ts {
 
     export interface EmitTextWriter {
         write(s: string): void;
-        writeTextOfNode(sourceFile: SourceFile, node: Node): void;
+        writeTextOfNode(text: string, node: Node): void;
         writeLine(): void;
         increaseIndent(): void;
         decreaseIndent(): void;
@@ -1700,6 +1771,7 @@ namespace ts {
         getLine(): number;
         getColumn(): number;
         getIndent(): number;
+        reset(): void;
     }
 
     const indentStrings: string[] = ["", "    "];
@@ -1715,11 +1787,11 @@ namespace ts {
     }
 
     export function createTextWriter(newLine: String): EmitTextWriter {
-        let output = "";
-        let indent = 0;
-        let lineStart = true;
-        let lineCount = 0;
-        let linePos = 0;
+        let output: string;
+        let indent: number;
+        let lineStart: boolean;
+        let lineCount: number;
+        let linePos: number;
 
         function write(s: string) {
             if (s && s.length) {
@@ -1729,6 +1801,14 @@ namespace ts {
                 }
                 output += s;
             }
+        }
+
+        function reset(): void {
+            output = "";
+            indent = 0;
+            lineStart = true;
+            lineCount = 0;
+            linePos = 0;
         }
 
         function rawWrite(s: string) {
@@ -1760,9 +1840,11 @@ namespace ts {
             }
         }
 
-        function writeTextOfNode(sourceFile: SourceFile, node: Node) {
-            write(getSourceTextOfNodeFromSourceFile(sourceFile, node));
+        function writeTextOfNode(text: string, node: Node) {
+            write(getTextOfNodeFromSourceText(text, node));
         }
+
+        reset();
 
         return {
             write,
@@ -1777,7 +1859,17 @@ namespace ts {
             getLine: () => lineCount + 1,
             getColumn: () => lineStart ? indent * getIndentSize() + 1 : output.length - linePos + 1,
             getText: () => output,
+            reset
         };
+    }
+
+    /**
+     * Resolves a local path to a path which is absolute to the base of the emit
+     */
+    export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
+        const dir = host.getCurrentDirectory();
+        const relativePath = getRelativePathToDirectoryOrUrl(dir, fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
+        return removeFileExtension(relativePath);
     }
 
     export function getOwnEmitOutputFilePath(sourceFile: SourceFile, host: EmitHost, extension: string) {
@@ -1807,6 +1899,10 @@ namespace ts {
 
     export function getLineOfLocalPosition(currentSourceFile: SourceFile, pos: number) {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
+    }
+
+    export function getLineOfLocalPositionFromLineMap(lineMap: number[], pos: number) {
+        return computeLineAndCharacterOfPosition(lineMap, pos).line;
     }
 
     export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
@@ -1883,23 +1979,23 @@ namespace ts {
         };
     }
 
-    export function emitNewLineBeforeLeadingComments(currentSourceFile: SourceFile, writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
+    export function emitNewLineBeforeLeadingComments(lineMap: number[], writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
         // If the leading comments start on different line than the start of node, write new line
         if (leadingComments && leadingComments.length && node.pos !== leadingComments[0].pos &&
-            getLineOfLocalPosition(currentSourceFile, node.pos) !== getLineOfLocalPosition(currentSourceFile, leadingComments[0].pos)) {
+            getLineOfLocalPositionFromLineMap(lineMap, node.pos) !== getLineOfLocalPositionFromLineMap(lineMap, leadingComments[0].pos)) {
             writer.writeLine();
         }
     }
 
-    export function emitComments(currentSourceFile: SourceFile, writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
-        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
+    export function emitComments(text: string, lineMap: number[], writer: EmitTextWriter, comments: CommentRange[], trailingSeparator: boolean, newLine: string,
+        writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void) {
         let emitLeadingSpace = !trailingSeparator;
         forEach(comments, comment => {
             if (emitLeadingSpace) {
                 writer.write(" ");
                 emitLeadingSpace = false;
             }
-            writeComment(currentSourceFile, writer, comment, newLine);
+            writeComment(text, lineMap, writer, comment, newLine);
             if (comment.hasTrailingNewLine) {
                 writer.writeLine();
             }
@@ -1917,8 +2013,8 @@ namespace ts {
      * Detached comment is a comment at the top of file or function body that is separated from
      * the next statement by space.
      */
-    export function emitDetachedComments(currentSourceFile: SourceFile, writer: EmitTextWriter,
-        writeComment: (currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) => void,
+    export function emitDetachedComments(text: string, lineMap: number[], writer: EmitTextWriter,
+        writeComment: (text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) => void,
         node: TextRange, newLine: string, removeComments: boolean) {
         let leadingComments: CommentRange[];
         let currentDetachedCommentInfo: {nodePos: number, detachedCommentEndPos: number};
@@ -1929,12 +2025,12 @@ namespace ts {
             //
             //      var x = 10;
             if (node.pos === 0) {
-                leadingComments = filter(getLeadingCommentRanges(currentSourceFile.text, node.pos), isPinnedComment);
+                leadingComments = filter(getLeadingCommentRanges(text, node.pos), isPinnedComment);
             }
         }
         else {
             // removeComments is false, just get detached as normal and bypass the process to filter comment
-            leadingComments = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+            leadingComments = getLeadingCommentRanges(text, node.pos);
         }
 
         if (leadingComments) {
@@ -1943,8 +2039,8 @@ namespace ts {
 
             for (const comment of leadingComments) {
                 if (lastComment) {
-                    const lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastComment.end);
-                    const commentLine = getLineOfLocalPosition(currentSourceFile, comment.pos);
+                    const lastCommentLine = getLineOfLocalPositionFromLineMap(lineMap, lastComment.end);
+                    const commentLine = getLineOfLocalPositionFromLineMap(lineMap, comment.pos);
 
                     if (commentLine >= lastCommentLine + 2) {
                         // There was a blank line between the last comment and this comment.  This
@@ -1962,12 +2058,12 @@ namespace ts {
                 // All comments look like they could have been part of the copyright header.  Make
                 // sure there is at least one blank line between it and the node.  If not, it's not
                 // a copyright header.
-                const lastCommentLine = getLineOfLocalPosition(currentSourceFile, lastOrUndefined(detachedComments).end);
-                const nodeLine = getLineOfLocalPosition(currentSourceFile, skipTrivia(currentSourceFile.text, node.pos));
+                const lastCommentLine = getLineOfLocalPositionFromLineMap(lineMap, lastOrUndefined(detachedComments).end);
+                const nodeLine = getLineOfLocalPositionFromLineMap(lineMap, skipTrivia(text, node.pos));
                 if (nodeLine >= lastCommentLine + 2) {
                     // Valid detachedComments
-                    emitNewLineBeforeLeadingComments(currentSourceFile, writer, node, leadingComments);
-                    emitComments(currentSourceFile, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
+                    emitNewLineBeforeLeadingComments(lineMap, writer, node, leadingComments);
+                    emitComments(text, lineMap, writer, detachedComments, /*trailingSeparator*/ true, newLine, writeComment);
                     currentDetachedCommentInfo = { nodePos: node.pos, detachedCommentEndPos: lastOrUndefined(detachedComments).end };
                 }
             }
@@ -1976,25 +2072,26 @@ namespace ts {
         return currentDetachedCommentInfo;
 
         function isPinnedComment(comment: CommentRange) {
-            return currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
-                currentSourceFile.text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
+            return text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
+                text.charCodeAt(comment.pos + 2) === CharacterCodes.exclamation;
         }
+
     }
 
-    export function writeCommentRange(currentSourceFile: SourceFile, writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-        if (currentSourceFile.text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
-            const firstCommentLineAndCharacter = getLineAndCharacterOfPosition(currentSourceFile, comment.pos);
-            const lineCount = getLineStarts(currentSourceFile).length;
+    export function writeCommentRange(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
+        if (text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk) {
+            const firstCommentLineAndCharacter = computeLineAndCharacterOfPosition(lineMap, comment.pos);
+            const lineCount = lineMap.length;
             let firstCommentLineIndent: number;
             for (let pos = comment.pos, currentLine = firstCommentLineAndCharacter.line; pos < comment.end; currentLine++) {
                 const nextLineStart = (currentLine + 1) === lineCount
-                    ? currentSourceFile.text.length + 1
-                    : getStartPositionOfLine(currentLine + 1, currentSourceFile);
+                    ? text.length + 1
+                    : lineMap[currentLine + 1];
 
                 if (pos !== comment.pos) {
                     // If we are not emitting first line, we need to write the spaces to adjust the alignment
                     if (firstCommentLineIndent === undefined) {
-                        firstCommentLineIndent = calculateIndent(getStartPositionOfLine(firstCommentLineAndCharacter.line, currentSourceFile), comment.pos);
+                        firstCommentLineIndent = calculateIndent(text, lineMap[firstCommentLineAndCharacter.line], comment.pos);
                     }
 
                     // These are number of spaces writer is going to write at current indent
@@ -2014,7 +2111,7 @@ namespace ts {
                     //            More right indented comment */                  --4 = 8 - 4 + 11
                     //     class c { }
                     // }
-                    const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(pos, nextLineStart);
+                    const spacesToEmit = currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(text, pos, nextLineStart);
                     if (spacesToEmit > 0) {
                         let numberOfSingleSpacesToEmit = spacesToEmit % getIndentSize();
                         const indentSizeSpaceString = getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / getIndentSize());
@@ -2035,47 +2132,47 @@ namespace ts {
                 }
 
                 // Write the comment line text
-                writeTrimmedCurrentLine(pos, nextLineStart);
+                writeTrimmedCurrentLine(text, comment, writer, newLine, pos, nextLineStart);
 
                 pos = nextLineStart;
             }
         }
         else {
             // Single line comment of style //....
-            writer.write(currentSourceFile.text.substring(comment.pos, comment.end));
+            writer.write(text.substring(comment.pos, comment.end));
         }
+    }
 
-        function writeTrimmedCurrentLine(pos: number, nextLineStart: number) {
-            const end = Math.min(comment.end, nextLineStart - 1);
-            const currentLineText = currentSourceFile.text.substring(pos, end).replace(/^\s+|\s+$/g, "");
-            if (currentLineText) {
-                // trimmed forward and ending spaces text
-                writer.write(currentLineText);
-                if (end !== comment.end) {
-                    writer.writeLine();
-                }
+    function writeTrimmedCurrentLine(text: string, comment: CommentRange, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
+        const end = Math.min(comment.end, nextLineStart - 1);
+        const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
+        if (currentLineText) {
+            // trimmed forward and ending spaces text
+            writer.write(currentLineText);
+            if (end !== comment.end) {
+                writer.writeLine();
+            }
+        }
+        else {
+            // Empty string - make sure we write empty line
+            writer.writeLiteral(newLine);
+        }
+    }
+
+    function calculateIndent(text: string, pos: number, end: number) {
+        let currentLineIndent = 0;
+        for (; pos < end && isWhiteSpace(text.charCodeAt(pos)); pos++) {
+            if (text.charCodeAt(pos) === CharacterCodes.tab) {
+                // Tabs = TabSize = indent size and go to next tabStop
+                currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
             }
             else {
-                // Empty string - make sure we write empty line
-                writer.writeLiteral(newLine);
+                // Single space
+                currentLineIndent++;
             }
         }
 
-        function calculateIndent(pos: number, end: number) {
-            let currentLineIndent = 0;
-            for (; pos < end && isWhiteSpace(currentSourceFile.text.charCodeAt(pos)); pos++) {
-                if (currentSourceFile.text.charCodeAt(pos) === CharacterCodes.tab) {
-                    // Tabs = TabSize = indent size and go to next tabStop
-                    currentLineIndent += getIndentSize() - (currentLineIndent % getIndentSize());
-                }
-                else {
-                    // Single space
-                    currentLineIndent++;
-                }
-            }
-
-            return currentLineIndent;
-        }
+        return currentLineIndent;
     }
 
     export function modifierToFlag(token: SyntaxKind): NodeFlags {
@@ -2175,12 +2272,12 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
     }
 
-    export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+    export function allowsJsxExpressions(fileName: string) {
+        return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
     }
 
     /**

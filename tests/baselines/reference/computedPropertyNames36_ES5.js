@@ -27,10 +27,6 @@ var C = (function () {
     Object.defineProperty(C.prototype, "get1", {
         // Computed properties
         get: function () { return new Foo; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "set1", {
         set: function (p) { },
         enumerable: true,
         configurable: true

@@ -11,7 +11,7 @@ interface B extends A {
 >A : A
 
   (key:'foo'):string;
->key : 'foo'
+>key : "foo"
 }
 
 var b:B;
@@ -24,7 +24,7 @@ b('foo').charAt(0);
 >b('foo').charAt : (pos: number) => string
 >b('foo') : string
 >b : B
->'foo' : string
+>'foo' : "foo"
 >charAt : (pos: number) => string
 >0 : number
 
@@ -32,7 +32,7 @@ interface A {
 >A : A
 
     (x: 'A1'): string;
->x : 'A1'
+>x : "A1"
 
     (x: string): void;
 >x : string
@@ -43,21 +43,21 @@ interface B extends A {
 >A : A
 
     (x: 'B1'): number;
->x : 'B1'
+>x : "B1"
 }
 
 interface A {
 >A : A
 
     (x: 'A2'): boolean;
->x : 'A2'
+>x : "A2"
 }
 
 interface B  {
 >B : B
 
     (x: 'B2'): string[];
->x : 'B2'
+>x : "B2"
 }
 
 interface C1 extends B {
@@ -65,7 +65,7 @@ interface C1 extends B {
 >B : B
 
 	(x: 'C1'): number[];
->x : 'C1'
+>x : "C1"
 }
 
 interface C2 extends B {
@@ -73,7 +73,7 @@ interface C2 extends B {
 >B : B
 
 	(x: 'C2'): boolean[];
->x : 'C2'
+>x : "C2"
 }
 
 interface C extends C1, C2 {
@@ -82,7 +82,7 @@ interface C extends C1, C2 {
 >C2 : C2
 
 	(x: 'C'): string;
->x : 'C'
+>x : "C"
 }
 
 var c: C;
@@ -94,25 +94,25 @@ var x1: string[] = c('B2');
 >x1 : string[]
 >c('B2') : string[]
 >c : C
->'B2' : string
+>'B2' : "B2"
 
 var x2: number = c('B1');
 >x2 : number
 >c('B1') : number
 >c : C
->'B1' : string
+>'B1' : "B1"
 
 var x3: boolean = c('A2');
 >x3 : boolean
 >c('A2') : boolean
 >c : C
->'A2' : string
+>'A2' : "A2"
 
 var x4: string = c('A1');
 >x4 : string
 >c('A1') : string
 >c : C
->'A1' : string
+>'A1' : "A1"
 
 var x5: void = c('A0');
 >x5 : void
@@ -124,19 +124,19 @@ var x6: number[] = c('C1');
 >x6 : number[]
 >c('C1') : number[]
 >c : C
->'C1' : string
+>'C1' : "C1"
 
 var x7: boolean[] = c('C2');
 >x7 : boolean[]
 >c('C2') : boolean[]
 >c : C
->'C2' : string
+>'C2' : "C2"
 
 var x8: string = c('C');
 >x8 : string
 >c('C') : string
 >c : C
->'C' : string
+>'C' : "C"
 
 var x9: void = c('generic');
 >x9 : void

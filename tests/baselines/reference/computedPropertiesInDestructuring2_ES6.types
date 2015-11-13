@@ -1,0 +1,13 @@
+=== tests/cases/compiler/computedPropertiesInDestructuring2_ES6.ts ===
+
+let foo2 = () => "bar";
+>foo2 : () => string
+>() => "bar" : () => string
+>"bar" : string
+
+let {[foo2()]: bar3} = {};
+>foo2() : string
+>foo2 : () => string
+>bar3 : any
+>{} : {}
+

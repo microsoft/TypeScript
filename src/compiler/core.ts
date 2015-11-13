@@ -739,12 +739,7 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
-    /**
-     *  List of extensions that will be used to look for external modules.
-     *  This list is kept separate from supportedExtensions to for cases when we'll allow to include .js files in compilation,
-     *  but still would like to load only TypeScript files as modules 
-     */
-    export const moduleFileExtensions = supportedExtensions;
+    export const supportedJsExtensions = supportedExtensions.concat(".js", ".jsx");
 
     export function isSupportedSourceFileName(fileName: string) {
         if (!fileName) { return false; }
@@ -785,7 +780,8 @@ namespace ts {
     };
 
     export interface ObjectAllocator {
-        getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node;
+        getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+        getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
@@ -804,17 +800,17 @@ namespace ts {
     function Signature(checker: TypeChecker) {
     }
 
+    function Node(kind: SyntaxKind, pos: number, end: number) {
+        this.kind = kind;
+        this.pos = pos;
+        this.end = end;
+        this.flags = NodeFlags.None;
+        this.parent = undefined;
+    }
+
     export let objectAllocator: ObjectAllocator = {
-        getNodeConstructor: kind => {
-            function Node(pos: number, end: number) {
-                this.pos = pos;
-                this.end = end;
-                this.flags = NodeFlags.None;
-                this.parent = undefined;
-            }
-            Node.prototype = { kind };
-            return <any>Node;
-        },
+        getNodeConstructor: () => <any>Node,
+        getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
         getSignatureConstructor: () => <any>Signature

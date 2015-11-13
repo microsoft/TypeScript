@@ -5,7 +5,7 @@ import fs = require("fs");
 import path = require("path");
 import url = require("url");
 import child_process = require("child_process");
-import os = require('os');
+import os = require("os");
 
 /// Command line processing ///
 
@@ -276,7 +276,6 @@ if ((browser && browser === 'chrome')) {
             console.log(`default Chrome location is unknown for platform '${os.platform()}'`);
             break;
     }
-
     if (fs.existsSync(defaultChromePath)) {
         browserPath = defaultChromePath;
     } else {

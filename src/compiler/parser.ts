@@ -1,16 +1,19 @@
-/// <reference path="scanner.ts"/>
 /// <reference path="utilities.ts"/>
+/// <reference path="scanner.ts"/>
 
 namespace ts {
-    const nodeConstructors = new Array<new (pos: number, end: number) => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
 
-    export function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node {
-        return nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind));
-    }
+    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
-        return new (getNodeConstructor(kind))(pos, end);
+        if (kind === SyntaxKind.SourceFile) {
+            return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
+        }
+        else {
+            return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, pos, end);
+        }
     }
 
     function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
@@ -437,6 +440,10 @@ namespace ts {
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
         const disallowInAndDecoratorContext = ParserContextFlags.DisallowIn | ParserContextFlags.Decorator;
 
+        // capture constructors in 'initializeState' to avoid null checks
+        let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+
         let sourceFile: SourceFile;
         let parseDiagnostics: Diagnostic[];
         let syntaxCursor: IncrementalParser.SyntaxCursor;
@@ -527,7 +534,8 @@ namespace ts {
         let parseErrorBeforeNextFinishedNode = false;
 
         export function parseSourceFile(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, setParentNodes?: boolean): SourceFile {
-            initializeState(fileName, _sourceText, languageVersion, _syntaxCursor);
+            const isJavaScriptFile = hasJavaScriptFileExtension(fileName) || _sourceText.lastIndexOf("// @language=javascript", 0) === 0;
+            initializeState(fileName, _sourceText, languageVersion, isJavaScriptFile, _syntaxCursor);
 
             const result = parseSourceFileWorker(fileName, languageVersion, setParentNodes);
 
@@ -536,7 +544,10 @@ namespace ts {
             return result;
         }
 
-        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor) {
+        function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, isJavaScriptFile: boolean, _syntaxCursor: IncrementalParser.SyntaxCursor) {
+            NodeConstructor = objectAllocator.getNodeConstructor();
+            SourceFileConstructor = objectAllocator.getSourceFileConstructor();
+
             sourceText = _sourceText;
             syntaxCursor = _syntaxCursor;
 
@@ -546,14 +557,14 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = isJavaScript(fileName) ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
+            contextFlags = isJavaScriptFile ? ParserContextFlags.JavaScriptFile : ParserContextFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
             // Initialize and prime the scanner before parsing the source elements.
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(isTsx(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
+            scanner.setLanguageVariant(allowsJsxExpressions(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
         }
 
         function clearState() {
@@ -571,6 +582,10 @@ namespace ts {
 
         function parseSourceFileWorker(fileName: string, languageVersion: ScriptTarget, setParentNodes: boolean): SourceFile {
             sourceFile = createSourceFile(fileName, languageVersion);
+
+            if (contextFlags & ParserContextFlags.JavaScriptFile) {
+                sourceFile.parserContextFlags = ParserContextFlags.JavaScriptFile;
+            }
 
             // Prime the scanner.
             token = nextToken();
@@ -594,7 +609,7 @@ namespace ts {
             // If this is a javascript file, proactively see if we can get JSDoc comments for
             // relevant nodes in the file.  We'll use these to provide typing informaion if they're
             // available.
-            if (isJavaScript(fileName)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 addJSDocComments();
             }
 
@@ -657,21 +672,22 @@ namespace ts {
         }
 
         function createSourceFile(fileName: string, languageVersion: ScriptTarget): SourceFile {
-            const sourceFile = <SourceFile>createNode(SyntaxKind.SourceFile, /*pos*/ 0);
+            // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
+            // this is quite rare comparing to other nodes and createNode should be as fast as possible
+            const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
+            nodeCount++;
 
-            sourceFile.pos = 0;
-            sourceFile.end = sourceText.length;
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = isTsx(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
+            sourceFile.languageVariant = allowsJsxExpressions(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
 
             return sourceFile;
         }
 
-        function setContextFlag(val: Boolean, flag: ParserContextFlags) {
+        function setContextFlag(val: boolean, flag: ParserContextFlags) {
             if (val) {
                 contextFlags |= flag;
             }
@@ -991,12 +1007,14 @@ namespace ts {
             }
         }
 
+        // note: this function creates only node
         function createNode(kind: SyntaxKind, pos?: number): Node {
             nodeCount++;
             if (!(pos >= 0)) {
                 pos = scanner.getStartPos();
             }
-            return new (nodeConstructors[kind] || (nodeConstructors[kind] = objectAllocator.getNodeConstructor(kind)))(pos, pos);
+
+            return new NodeConstructor(kind, pos, pos);
         }
 
         function finishNode<T extends Node>(node: T, end?: number): T {
@@ -1069,7 +1087,7 @@ namespace ts {
                 token === SyntaxKind.NumericLiteral;
         }
 
-        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): DeclarationName {
+        function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token === SyntaxKind.StringLiteral || token === SyntaxKind.NumericLiteral) {
                 return parseLiteralNode(/*internName*/ true);
             }
@@ -1079,7 +1097,7 @@ namespace ts {
             return parseIdentifierName();
         }
 
-        function parsePropertyName(): DeclarationName {
+        function parsePropertyName(): PropertyName {
             return parsePropertyNameWorker(/*allowComputedPropertyNames:*/ true);
         }
 
@@ -1189,7 +1207,7 @@ namespace ts {
                 case ParsingContext.ObjectLiteralMembers:
                     return token === SyntaxKind.OpenBracketToken || token === SyntaxKind.AsteriskToken || isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
-                    return isLiteralPropertyName();
+                    return token === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:
                     // If we see { } then only consume it as an expression if it is followed by , or {
                     // That way we won't consume the body of a class in its heritage clause.
@@ -1979,9 +1997,7 @@ namespace ts {
 
         function parseParameterType(): TypeNode {
             if (parseOptional(SyntaxKind.ColonToken)) {
-                return token === SyntaxKind.StringLiteral
-                    ? <StringLiteral>parseLiteralNode(/*internName*/ true)
-                    : parseType();
+                return parseType();
             }
 
             return undefined;
@@ -2369,6 +2385,8 @@ namespace ts {
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
+                case SyntaxKind.StringLiteral:
+                    return <StringLiteral>parseLiteralNode(/*internName*/ true);
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
@@ -2399,6 +2417,7 @@ namespace ts {
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.LessThanToken:
                 case SyntaxKind.NewKeyword:
+                case SyntaxKind.StringLiteral:
                     return true;
                 case SyntaxKind.OpenParenToken:
                     // Only consider '(' the start of a type if followed by ')', '...', an identifier, a modifier,
@@ -4568,7 +4587,6 @@ namespace ts {
 
         function parseObjectBindingElement(): BindingElement {
             const node = <BindingElement>createNode(SyntaxKind.BindingElement);
-            // TODO(andersh): Handle computed properties
             const tokenIsIdentifier = isIdentifier();
             const propertyName = parsePropertyName();
             if (tokenIsIdentifier && token !== SyntaxKind.ColonToken) {
@@ -4576,7 +4594,7 @@ namespace ts {
             }
             else {
                 parseExpected(SyntaxKind.ColonToken);
-                node.propertyName = <Identifier>propertyName;
+                node.propertyName = propertyName;
                 node.name = parseIdentifierOrPattern();
             }
             node.initializer = parseBindingElementInitializer(/*inParameter*/ false);
@@ -5505,7 +5523,7 @@ namespace ts {
             }
 
             export function parseJSDocTypeExpressionForTests(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
+                initializeState("file.js", content, ScriptTarget.Latest, /*isJavaScriptFile*/ true, /*_syntaxCursor:*/ undefined);
                 const jsDocTypeExpression = parseJSDocTypeExpression(start, length);
                 const diagnostics = parseDiagnostics;
                 clearState();
@@ -5616,6 +5634,7 @@ namespace ts {
                         return parseTokenNode<JSDocType>();
                 }
 
+                // TODO (drosen): Parse string literal types in JSDoc as well.
                 return parseJSDocTypeReference();
             }
 
@@ -5825,7 +5844,7 @@ namespace ts {
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number, length: number) {
-                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined);
+                initializeState("file.js", content, ScriptTarget.Latest, /*isJavaScriptFile*/ true, /*_syntaxCursor:*/ undefined);
                 const jsDocComment = parseJSDocComment(/*parent:*/ undefined, start, length);
                 const diagnostics = parseDiagnostics;
                 clearState();
