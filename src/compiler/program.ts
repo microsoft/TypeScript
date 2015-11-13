@@ -329,7 +329,6 @@ namespace ts {
         let fileProcessingDiagnostics = createDiagnosticCollection();
         const programDiagnostics = createDiagnosticCollection();
 
-        let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
@@ -374,6 +373,8 @@ namespace ts {
             }
         }
 
+        // _Always_ compute a common source directory
+        let commonSourceDirectory = computeCommonSourceDirectory(files);
         verifyCompilerOptions();
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -1056,17 +1057,13 @@ namespace ts {
                     // If a rootDir is specified and is valid use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
                 }
-                else {
-                    // Compute the commonSourceDirectory from the input files
-                    commonSourceDirectory = computeCommonSourceDirectory(files);
-                }
+            }
 
-                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
-                    // Make sure directory path ends with directory separator so this string can directly
-                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                    // start with / making it rooted path
-                    commonSourceDirectory += directorySeparator;
-                }
+            if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+                // Make sure directory path ends with directory separator so this string can directly
+                // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                // start with / making it rooted path
+                commonSourceDirectory += directorySeparator;
             }
 
             if (options.noEmit) {
