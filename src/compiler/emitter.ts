@@ -5576,9 +5576,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDecoratorsOfClass(node);
                 }
 
+                if (!(node.flags & NodeFlags.Export)) {
+                    return;
+                }
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
-                if (!isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Export)) {
+                if (node.parent.kind !== SyntaxKind.SourceFile) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -5587,12 +5590,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitEnd(node);
                     write(";");
                 }
-                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
+                else if (node.parent.kind === SyntaxKind.SourceFile && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
                     // if this is a top level default export of decorated class, write the export after the declaration.
-                    writeLine();
-                    write("export default ");
-                    emitDeclarationName(node);
-                    write(";");
+                    if (modulekind === ModuleKind.ES6) {
+                        writeLine();
+                        write("export default ");
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                    else if (modulekind === ModuleKind.System) {
+                        writeLine();
+                        write(`${exportFunctionForFile}("default", `);
+                        emitDeclarationName(node);
+                        write(");");
+                    }
+                    else {
+                        writeLine();
+                        if (languageVersion === ScriptTarget.ES3) {
+                            write(`exports["default"] = `);
+                        }
+                        else {
+                            write(`exports.default = `);
+                        }
+                        emitDeclarationName(node);
+                        write(";");
+                    }
                 }
             }
 
