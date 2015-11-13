@@ -5581,7 +5581,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
-                if (node.parent.kind !== SyntaxKind.SourceFile) {
+                if (node.parent.kind === SyntaxKind.SourceFile && (node.flags & NodeFlags.Default)) {
+                    // if this is a top level default export of decorated class, write the export after the declaration.
+                    writeLine();
+                    if (thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
+                        write("export default ");
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                    else if (modulekind === ModuleKind.System) {
+                        write(`${exportFunctionForFile}("default", `);
+                        emitDeclarationName(node);
+                        write(");");
+                    }
+                    else if (modulekind !== ModuleKind.ES6) {
+                        write(`exports.default = `);
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                }
+                else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
@@ -5589,32 +5608,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDeclarationName(node);
                     emitEnd(node);
                     write(";");
-                }
-                else if (node.parent.kind === SyntaxKind.SourceFile && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
-                    // if this is a top level default export of decorated class, write the export after the declaration.
-                    if (modulekind === ModuleKind.ES6) {
-                        writeLine();
-                        write("export default ");
-                        emitDeclarationName(node);
-                        write(";");
-                    }
-                    else if (modulekind === ModuleKind.System) {
-                        writeLine();
-                        write(`${exportFunctionForFile}("default", `);
-                        emitDeclarationName(node);
-                        write(");");
-                    }
-                    else {
-                        writeLine();
-                        if (languageVersion === ScriptTarget.ES3) {
-                            write(`exports["default"] = `);
-                        }
-                        else {
-                            write(`exports.default = `);
-                        }
-                        emitDeclarationName(node);
-                        write(";");
-                    }
                 }
             }
 
