@@ -153,7 +153,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string): void {
+        public openFile(fileName: string, content?: string): void {
         }
 
         /**
@@ -493,9 +493,9 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string): void {
-            super.openFile(fileName);
-            this.client.openFile(fileName);
+        openFile(fileName: string, content?: string): void {
+            super.openFile(fileName, content);
+            this.client.openFile(fileName, content);
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {
