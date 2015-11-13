@@ -76,8 +76,7 @@ async function distributeVersion() {
 		try {
 			let fileInfo = await getFileInformation(filePath);
 			let format = formats[filePath];
-			fs.writeFileSync(fileInfo.filePath, fileInfo.content.replace(format.pattern, format.serialize(version)));
-			console.log("Wrote version in "+ fileInfo.filePath);
+			fs.writeFile(fileInfo.filePath, fileInfo.content.replace(format.pattern, format.serialize(version)));
 		} catch (err) {
 			console.log(err);
 		}

@@ -363,7 +363,7 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     ex.run();
 }, {async: true});
 
-file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
+file(builtGeneratedDiagnosticMessagesJSON, [generatedDiagnosticMessagesJSON], function() {
     if (fs.existsSync(builtLocalDirectory)) {
         jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
     }
@@ -372,6 +372,42 @@ file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], fun
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
+// Generate version file
+
+var distributeVersionInputFolder = "scripts/distributeVersion";
+var distributeVersionOutputFolder = path.join(builtLocalDirectory, "distributeVersion");
+var distributeVersionJS = path.join(distributeVersionOutputFolder, "distribute.js");
+var distributeVersionTS = path.join(distributeVersionInputFolder, "distribute.ts");
+var builtVersionFileJSON = path.join(distributeVersionOutputFolder, "version.json");
+
+file(distributeVersionTS);
+compileFile(/*outFile*/ distributeVersionJS,
+        /*sources*/ [distributeVersionTS],
+        /*prereqs*/ [],
+        /*prefixes*/ [],
+        /*useBuiltCompiler*/ false,
+        /*noOutFile*/ true,
+        /*generateDeclarations*/ false,
+        /*outDir*/ distributeVersionOutputFolder,
+        /*preserveConstEnums*/ undefined,
+        /*keepComments*/ false,
+        /*noResolve*/ false,
+        /*stripInternal*/ false,
+        /*target*/ "ES2015");
+
+directory(distributeVersionOutputFolder);
+file(builtVersionFileJSON, [distributeVersionOutputFolder], function() {
+    if (fs.existsSync(distributeVersionOutputFolder)) {
+        jake.cpR(path.join(distributeVersionInputFolder, "version.json"), builtVersionFileJSON);
+    }
+});
+
+desc("Run version distribution script")
+task("distribute-version", [distributeVersionJS, builtVersionFileJSON], function() {
+    jake.exec([host + " " + distributeVersionJS], {printStdout: true}, function () {
+       complete();
+    });
+}, {async: true});
 
 // Publish nightly
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
@@ -500,7 +536,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, "distribute-version"]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, builtVersionFileJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -554,7 +590,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
+task("LKG", ["clean", "release", "distribute-version", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
@@ -983,36 +1019,3 @@ task("lint-server", ["build-rules"], function() {
         lintWatchFile(lintTargets[i]);
     }
 });
-
-var distributeVersionInputFolder = "scripts/distributeVersion";
-var distributeVersionOutputFolder = path.join(builtLocalDirectory, "distributeVersion");
-var distributeVersionJS = path.join(distributeVersionOutputFolder, "distribute.js");
-var distributeVersionTS = path.join(distributeVersionInputFolder, "distribute.ts");
-
-file(distributeVersionTS);
-
-compileFile(/*outFile*/ distributeVersionJS,
-        /*sources*/ [distributeVersionTS],
-        /*prereqs*/ [],
-        /*prefixes*/ [],
-        /*useBuiltCompiler*/ false,
-        /*noOutFile*/ true,
-        /*generateDeclarations*/ false,
-        /*outDir*/ distributeVersionOutputFolder,
-        /*preserveConstEnums*/ undefined,
-        /*keepComments*/ false,
-        /*noResolve*/ false,
-        /*stripInternal*/ false,
-        /*target*/ "ES2015");
-
-desc("Run version distribution script")
-task("distribute-version", [distributeVersionJS], function() {
-    // Copy version file to the builtLocalDirectory
-    jake.cpR(path.join(distributeVersionInputFolder, "version.json"), distributeVersionOutputFolder);
-    
-    console.log(host + " " + distributeVersionJS);
-    jake.exec([host + " " + distributeVersionJS], {printStdout: true}, function () {
-       console.log("Successfully distribute version");
-       complete();
-    });
-}, {async: true});
