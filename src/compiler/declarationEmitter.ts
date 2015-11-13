@@ -680,7 +680,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentText, getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(getExternalModuleImportEqualsDeclarationExpression(node));
                 write(");");
             }
             writer.writeLine();
