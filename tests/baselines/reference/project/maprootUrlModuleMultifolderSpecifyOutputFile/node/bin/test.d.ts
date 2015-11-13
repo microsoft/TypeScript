@@ -15,8 +15,8 @@ declare module "outputdir_module_multifolder_ref/m2" {
     export function m2_f1(): m2_c1;
 }
 declare module "test" {
-    import m1 = require("ref/m1");
-    import m2 = require("../outputdir_module_multifolder_ref/m2");
+    import m1 = require("outputdir_module_multifolder/ref/m1");
+    import m2 = require("outputdir_module_multifolder_ref/m2");
     export var a1: number;
     export class c1 {
         p1: number;
