@@ -296,7 +296,12 @@ namespace ts {
                     target.constEnumOnlyModule = false;
                 }
                 target.flags |= source.flags;
-                if (!target.valueDeclaration && source.valueDeclaration) target.valueDeclaration = source.valueDeclaration;
+                if (source.valueDeclaration &&
+                    (!target.valueDeclaration ||
+                     (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
+                    // other kinds of value declarations take precedence over modules
+                    target.valueDeclaration = source.valueDeclaration;
+                }
                 forEach(source.declarations, node => {
                     target.declarations.push(node);
                 });
@@ -12905,13 +12910,13 @@ namespace ts {
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     const caseType = checkExpression(caseClause.expression);
 
-                    // Permit 'number[] | "foo"' to be asserted to 'string'.
-                    if (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) {
-                        return;
-                    }
+                    const expressionTypeIsAssignableToCaseType =
+                        // Permit 'number[] | "foo"' to be asserted to 'string'.
+                        (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) ||
+                        isTypeAssignableTo(expressionType, caseType);
 
-                    if (!isTypeAssignableTo(expressionType, caseType)) {
-                        // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
+                    if (!expressionTypeIsAssignableToCaseType) {
+                        // 'expressionType is not assignable to caseType', try the reversed check and report errors if it fails
                         checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }

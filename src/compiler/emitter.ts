@@ -1593,13 +1593,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 /// these emit into an object literal property name, we don't need to be worried
                 /// about keywords, just non-identifier characters
                 function emitAttributeName(name: Identifier) {
-                    if (/[A-Za-z_]+[\w*]/.test(name.text)) {
-                        write("\"");
+                    if (/^[A-Za-z_]\w*$/.test(name.text)) {
                         emit(name);
-                        write("\"");
                     }
                     else {
+                        write("\"");
                         emit(name);
+                        write("\"");
                     }
                 }
 
@@ -5004,8 +5004,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     increaseIndent();
                     writeLine();
                     emitLeadingComments(node.body);
+                    emitStart(body);
                     write("return ");
                     emit(body);
+                    emitEnd(body);
                     write(";");
                     emitTrailingComments(node.body);
 

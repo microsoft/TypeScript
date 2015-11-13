@@ -20,6 +20,6 @@ declare var Foo, React;
 //// [app.js]
 var mod_1 = require('mod');
 // Should see mod_1['default'] in emit here
-React.createElement(Foo, {"handler": mod_1["default"]});
+React.createElement(Foo, {handler: mod_1["default"]});
 // Should see mod_1['default'] in emit here
 React.createElement(Foo, React.__spread({}, mod_1["default"]));
