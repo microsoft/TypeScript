@@ -1,4 +1,4 @@
-define("ref/m1", ["require", "exports"], function (require, exports) {
+define("outputdir_module_multifolder/ref/m1", ["require", "exports"], function (require, exports) {
     exports.m1_a1 = 10;
     var m1_c1 = (function () {
         function m1_c1() {
@@ -12,7 +12,7 @@ define("ref/m1", ["require", "exports"], function (require, exports) {
     }
     exports.m1_f1 = m1_f1;
 });
-define("../outputdir_module_multifolder_ref/m2", ["require", "exports"], function (require, exports) {
+define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (require, exports) {
     exports.m2_a1 = 10;
     var m2_c1 = (function () {
         function m2_c1() {
@@ -26,7 +26,7 @@ define("../outputdir_module_multifolder_ref/m2", ["require", "exports"], functio
     }
     exports.m2_f1 = m2_f1;
 });
-define("test", ["require", "exports", "ref/m1", "../outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
+define("test", ["require", "exports", "outputdir_module_multifolder/ref/m1", "outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
     exports.a1 = 10;
     var c1 = (function () {
         function c1() {
