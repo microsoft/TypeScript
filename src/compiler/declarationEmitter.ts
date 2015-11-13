@@ -680,7 +680,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                emitExternalModuleSpecifier(getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(node);
                 write(");");
             }
             writer.writeLine();
@@ -737,14 +737,23 @@ namespace ts {
                 }
                 write(" from ");
             }
-            emitExternalModuleSpecifier(node.moduleSpecifier);
+            emitExternalModuleSpecifier(node);
             write(";");
             writer.writeLine();
         }
 
-        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
+        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration) {
+            let moduleSpecifier: Node;
+            if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+                const node = parent as ImportEqualsDeclaration;
+                moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
+            }
+            else {
+                const node = parent as (ImportDeclaration | ExportDeclaration);
+                moduleSpecifier = node.moduleSpecifier;
+            }
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
-                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
                     write("\"");
                     write(moduleName);
@@ -787,7 +796,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                emitExternalModuleSpecifier(node.moduleSpecifier);
+                emitExternalModuleSpecifier(node);
             }
             write(";");
             writer.writeLine();
