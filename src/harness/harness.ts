@@ -628,7 +628,7 @@ namespace Harness {
                 function getResolvedPathFromServer(path: string) {
                     const xhr = new XMLHttpRequest();
                     try {
-                        xhr.open("GET", path + "?resolve", false);
+                        xhr.open("GET", path + "?resolve", /*async*/ false);
                         xhr.send();
                     }
                     catch (e) {
@@ -647,7 +647,7 @@ namespace Harness {
                 export function getFileFromServerSync(url: string): XHRResponse {
                     const xhr = new XMLHttpRequest();
                     try {
-                        xhr.open("GET", url, false);
+                        xhr.open("GET", url, /*async*/ false);
                         xhr.send();
                     }
                     catch (e) {
@@ -662,7 +662,7 @@ namespace Harness {
                     const xhr = new XMLHttpRequest();
                     try {
                         const actionMsg = "?action=" + action;
-                        xhr.open("POST", url + actionMsg, false);
+                        xhr.open("POST", url + actionMsg, /*async*/ false);
                         xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
                         xhr.send(contents);
                     }

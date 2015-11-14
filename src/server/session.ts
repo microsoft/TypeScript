@@ -901,7 +901,7 @@ namespace ts.server {
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
-            const { configFileName, fileNames } = this.getProjectInfo(fileName, true);
+            const { configFileName, fileNames } = this.getProjectInfo(fileName, /*needFileNameList*/ true);
             // No need to analyze lib.d.ts
             let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
 

@@ -190,7 +190,7 @@ namespace Harness.SourceMapRecoder {
                 return { error: errorDecodeOfEncodedMapping, sourceMapSpan: decodeOfEncodedMapping };
             }
 
-            createErrorIfCondition(true, "No encoded entry found");
+            createErrorIfCondition(/*condition*/ true, "No encoded entry found");
         }
 
         export function hasCompletedDecoding() {
