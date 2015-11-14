@@ -66,7 +66,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 const content = Harness.IO.readFile(fileName);
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
                 const units = testCaseContent.testUnitData;
-                const tcSettings = testCaseContent.settings;
+                tcSettings = testCaseContent.settings;
                 lastUnit = units[units.length - 1];
                 const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
