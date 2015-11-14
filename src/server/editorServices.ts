@@ -388,7 +388,7 @@ namespace ts.server {
         }
 
         openReferencedFile(filename: string) {
-            return this.projectService.openFile(filename, false);
+            return this.projectService.openFile(filename, /*openedByClient*/ false);
         }
 
         getRootFiles() {
@@ -1068,7 +1068,7 @@ namespace ts.server {
          */
         openClientFile(fileName: string, fileContent?: string) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
-            const info = this.openFile(fileName, true, fileContent);
+            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent);
             this.addOpenFile(info);
             this.printProjects();
             return info;
@@ -1277,7 +1277,7 @@ namespace ts.server {
                     for (const fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {
-                            info = this.openFile(fileName, false);
+                            info = this.openFile(fileName, /*openedByClient*/ false);
                         }
                         else {
                             // if the root file was opened by client, it would belong to either 

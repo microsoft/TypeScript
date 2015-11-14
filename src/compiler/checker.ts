@@ -122,8 +122,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const globals: SymbolTable = {};
 
@@ -2276,7 +2276,7 @@ namespace ts {
                 return false;
             }
             resolutionTargets.push(target);
-            resolutionResults.push(true);
+            resolutionResults.push(/*items*/ true);
             resolutionPropertyNames.push(propertyName);
             return true;
         }
@@ -3348,7 +3348,7 @@ namespace ts {
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             if (!hasClassBaseType(classType)) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -3973,7 +3973,7 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), true);
+            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
         }
 
         function getErasedSignature(signature: Signature): Signature {
@@ -3983,7 +3983,7 @@ namespace ts {
                     signature.erasedSignatureCache = instantiateSignature(getErasedSignature(signature.target), signature.mapper);
                 }
                 else {
-                    signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), true);
+                    signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true);
                 }
             }
             return signature.erasedSignatureCache;
@@ -5099,7 +5099,7 @@ namespace ts {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
-                    const related = typeRelatedToSomeType(sourceType, target, false);
+                    const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -5497,7 +5497,7 @@ namespace ts {
                     const saveErrorInfo = errorInfo;
                     let related = isRelatedTo(s, t, reportErrors);
                     if (!related) {
-                        related = isRelatedTo(t, s, false);
+                        related = isRelatedTo(t, s, /*reportErrors*/ false);
                         if (!related) {
                             if (reportErrors) {
                                 reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
@@ -5624,7 +5624,7 @@ namespace ts {
                     let related: Ternary;
                     if (sourceStringType && sourceNumberType) {
                         // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        related = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        related = isRelatedTo(sourceStringType, targetType, /*reportErrors*/ false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
                     }
                     else {
                         related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);

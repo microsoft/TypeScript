@@ -364,13 +364,13 @@ namespace ts {
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            forEach(rootNames, name => processRootFile(name, false));
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
             if (!skipDefaultLib) {
-                processRootFile(host.getDefaultLibFileName(options), true);
+                processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
             }
         }
 
@@ -693,7 +693,7 @@ namespace ts {
 
             let imports: LiteralExpression[];
             for (const node of file.statements) {
-                collect(node, /* allowRelativeModuleNames */ true, /* collectOnlyRequireCalls */ false);
+                collect(node, /*allowRelativeModuleNames*/ true, /*collectOnlyRequireCalls*/ false);
             }
 
             file.imports = imports || emptyArray;
@@ -729,7 +729,7 @@ namespace ts {
                                     // TypeScript 1.0 spec (April 2014): 12.1.6
                                     // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
                                     // only through top - level external module names. Relative external module names are not permitted.
-                                    collect(node, /* allowRelativeModuleNames */ false, collectOnlyRequireCalls);
+                                    collect(node, /*allowRelativeModuleNames*/ false, collectOnlyRequireCalls);
                                 });
                             }
                             break;
@@ -741,7 +741,7 @@ namespace ts {
                         (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                     }
                     else {
-                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /* collectOnlyRequireCalls */ true));
+                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /*collectOnlyRequireCalls*/ true));
                     }
                 }
             }
@@ -862,7 +862,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, /*isDefaultLib*/ false, file, ref.pos, ref.end);
             });
         }
 
@@ -880,7 +880,7 @@ namespace ts {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
+                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
                             if (!isExternalModule(importedFile)) {
