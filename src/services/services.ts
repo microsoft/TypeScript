@@ -2847,8 +2847,11 @@ namespace ts {
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
+                if (!sourceFile) {
+                    return false;
+                }
                 let path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
-                return sourceFile && sourceFile.version === hostCache.getVersion(path);
+                return sourceFile.version === hostCache.getVersion(path);
             }
 
             function programUpToDate(): boolean {
