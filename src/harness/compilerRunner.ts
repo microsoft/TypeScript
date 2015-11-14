@@ -182,7 +182,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                         const declFileCompilationResult =
                             Harness.Compiler.HarnessCompiler.compileDeclarationFiles(
-                                toBeCompiled, otherFiles, result, harnessSettings, options, /* currentDirectory */ undefined);
+                                toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
@@ -255,8 +255,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                     const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
-                    const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ true);
-                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ false);
+                    const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
+                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ false);
 
                     const fullResults: ts.Map<TypeWriterResult[]> = {};
                     const pullResults: ts.Map<TypeWriterResult[]> = {};
@@ -270,14 +270,14 @@ class CompilerBaselineRunner extends RunnerBase {
                     // The second gives symbols for all identifiers.
                     let e1: Error, e2: Error;
                     try {
-                        checkBaseLines(/*isSymbolBaseLine:*/ false);
+                        checkBaseLines(/*isSymbolBaseLine*/ false);
                     }
                     catch (e) {
                         e1 = e;
                     }
 
                     try {
-                        checkBaseLines(/*isSymbolBaseLine:*/ true);
+                        checkBaseLines(/*isSymbolBaseLine*/ true);
                     }
                     catch (e) {
                         e2 = e;

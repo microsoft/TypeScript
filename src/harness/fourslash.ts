@@ -514,7 +514,7 @@ namespace FourSlash {
             this.scenarioActions.push(`<CheckErrorList ExpectedNumOfErrors="${expected}" />`);
 
             if (actual !== expected) {
-                this.printErrorLog(false, errors);
+                this.printErrorLog(/*expectErrors*/ false, errors);
                 const errorMsg = "Actual number of errors (" + actual + ") does not match expected number (" + expected + ")";
                 Harness.IO.log(errorMsg);
                 this.raiseError(errorMsg);
@@ -567,7 +567,7 @@ namespace FourSlash {
         public verifyMemberListCount(expectedCount: number, negative: boolean) {
             if (expectedCount === 0) {
                 if (negative) {
-                    this.verifyMemberListIsEmpty(false);
+                    this.verifyMemberListIsEmpty(/*negative*/ false);
                     return;
                 }
                 else {
@@ -1347,7 +1347,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                         // this.checkPostEditInletiants();
                     }
                 }
@@ -1389,7 +1389,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                     }
                 }
             }
@@ -1449,7 +1449,7 @@ namespace FourSlash {
                 if (this.enableFormatting) {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeOptions);
                     if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                         // this.checkPostEditInletiants();
                     }
                 }
@@ -1477,7 +1477,7 @@ namespace FourSlash {
             if (this.enableFormatting) {
                 const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeOptions);
                 if (edits.length) {
-                    offset += this.applyEdits(this.activeFile.fileName, edits, true);
+                    offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                     this.checkPostEditInletiants();
                 }
             }
@@ -1563,7 +1563,7 @@ namespace FourSlash {
             this.scenarioActions.push("<FormatDocument />");
 
             const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeOptions);
-            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, true);
+            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
@@ -1571,7 +1571,7 @@ namespace FourSlash {
             this.taoInvalidReason = "formatSelection NYI";
 
             const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeOptions);
-            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, true);
+            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
