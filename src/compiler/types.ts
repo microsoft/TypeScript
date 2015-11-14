@@ -2179,17 +2179,17 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: string | Map<number>;         // "string", "number", "boolean", or an object literal mapping named values to actual values
-        isFilePath?: boolean;               // True if option value is a path or fileName
-        shortName?: string;                 // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
-        description?: DiagnosticMessage;    // The message describing what the command line switch does
-        paramType?: DiagnosticMessage;      // The name to be used for a non-boolean option's parameter
+        type: "string" | "number" | "boolean" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        isFilePath?: boolean;                                   // True if option value is a path or fileName
+        shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
+        description?: DiagnosticMessage;                        // The message describing what the command line switch does
+        paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         experimental?: boolean;
     }
 
     /* @internal */
     export interface CommandLineOptionOfPrimitiveType extends CommandLineOptionBase {
-        type: string;                   // "string" | "number" | "boolean"
+        type: "string" | "number" | "boolean";
     }
 
     /* @internal */
