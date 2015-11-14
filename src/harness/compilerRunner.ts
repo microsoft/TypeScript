@@ -50,9 +50,8 @@ class CompilerBaselineRunner extends RunnerBase {
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
 
-            let tcSettings: Harness.TestCaseParser.CompilerSettings;
-
             let lastUnit: Harness.TestCaseParser.TestUnitData;
+            let tcSettings: Harness.TestCaseParser.CompilerSettings;
 
             let result: Harness.Compiler.CompilerResult;
             let program: ts.Program;
@@ -67,7 +66,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 const content = Harness.IO.readFile(fileName);
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
                 const units = testCaseContent.testUnitData;
-                harnessSettings = testCaseContent.settings;
+                const tcSettings = testCaseContent.settings;
                 lastUnit = units[units.length - 1];
                 const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
@@ -90,7 +89,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 const output = Harness.Compiler.HarnessCompiler.compileFiles(
-                    toBeCompiled, otherFiles, harnessSettings, /* options */ undefined, /* currentDirectory */ undefined);
+                    toBeCompiled, otherFiles, tcSettings, /* options */ undefined, /* currentDirectory */ undefined);
 
                 options = output.options;
                 result = output.result;
@@ -101,7 +100,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
                 justName = undefined;
-                harnessSettings = undefined;
                 lastUnit = undefined;
                 result = undefined;
                 program = undefined;
@@ -178,7 +176,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
                         const declFileCompilationResult =
                             Harness.Compiler.HarnessCompiler.compileDeclarationFiles(
-                                toBeCompiled, otherFiles, result, harnessSettings, options, /* currentDirectory */ undefined);
+                                toBeCompiled, otherFiles, result, tcSettings, options, /* currentDirectory */ undefined);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
