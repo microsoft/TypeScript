@@ -200,6 +200,10 @@ namespace ts {
             "symbol": {
                 type: esSymbolType,
                 flags: TypeFlags.ESSymbol
+            },
+            "undefined": {
+                type: undefinedType,
+                flags: TypeFlags.ContainsUndefinedOrNull
             }
         };
 
@@ -295,7 +299,12 @@ namespace ts {
                     target.constEnumOnlyModule = false;
                 }
                 target.flags |= source.flags;
-                if (!target.valueDeclaration && source.valueDeclaration) target.valueDeclaration = source.valueDeclaration;
+                if (source.valueDeclaration &&
+                    (!target.valueDeclaration ||
+                     (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
+                    // other kinds of value declarations take precedence over modules
+                    target.valueDeclaration = source.valueDeclaration;
+                }
                 forEach(source.declarations, node => {
                     target.declarations.push(node);
                 });
@@ -6470,6 +6479,10 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const typeInfo = primitiveTypeInfo[right.text];
+                // Don't narrow `undefined`
+                if (typeInfo && typeInfo.type === undefinedType) {
+                    return type;
+                }
                 // If the type to be narrowed is any and we're checking a primitive with assumeTrue=true, return the primitive
                 if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
                     return typeInfo.type;
@@ -11347,11 +11360,15 @@ namespace ts {
                         const errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
                         // TODO(jfreeman): These are methods, so handle computed name case
                         if (node.name && (<FunctionLikeDeclaration>subsequentNode).name && (<Identifier>node.name).text === (<Identifier>(<FunctionLikeDeclaration>subsequentNode).name).text) {
-                            // the only situation when this is possible (same kind\same name but different symbol) - mixed static and instance class members
                             Debug.assert(node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature);
-                            Debug.assert((node.flags & NodeFlags.Static) !== (subsequentNode.flags & NodeFlags.Static));
-                            const diagnostic = node.flags & NodeFlags.Static ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
-                            error(errorNode, diagnostic);
+                            // we can get here in two cases
+                            // 1. mixed static and instance class members
+                            // 2. something with the same name was defined before the set of overloads that prevents them from merging
+                            // here we'll report error only for the first case since for second we should already report error in binder 
+                            if ((node.flags & NodeFlags.Static) !== (subsequentNode.flags & NodeFlags.Static)) {
+                                const diagnostic = node.flags & NodeFlags.Static ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
+                                error(errorNode, diagnostic);
+                            }
                             return;
                         }
                         else if (nodeIsPresent((<FunctionLikeDeclaration>subsequentNode).body)) {
