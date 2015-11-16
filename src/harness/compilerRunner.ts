@@ -49,7 +49,7 @@ class CompilerBaselineRunner extends RunnerBase {
             let testCaseContent: { settings: Harness.TestCaseParser.CompilerSettings; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
 
             let units: Harness.TestCaseParser.TestUnitData[];
-            let tcSettings: Harness.TestCaseParser.CompilerSettings;
+            let harnessSettings: Harness.TestCaseParser.CompilerSettings;
 
             let lastUnit: Harness.TestCaseParser.TestUnitData;
             let rootDir: string;
@@ -58,46 +58,43 @@ class CompilerBaselineRunner extends RunnerBase {
             let program: ts.Program;
             let options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
-            let toBeCompiled: { unitName: string; content: string }[];
+            let toBeCompiled: Harness.Compiler.TestFile[];
             // equivalent to other files on the file system not directly passed to the compiler (ie things that are referenced by other files)
-            let otherFiles: { unitName: string; content: string }[];
-            let harnessCompiler: Harness.Compiler.HarnessCompiler;
+            let otherFiles: Harness.Compiler.TestFile[];
 
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
                 content = Harness.IO.readFile(fileName);
                 testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
                 units = testCaseContent.testUnitData;
-                tcSettings = testCaseContent.settings;
+                harnessSettings = testCaseContent.settings;
                 lastUnit = units[units.length - 1];
                 rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
-                harnessCompiler = Harness.Compiler.getCompiler();
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
                 toBeCompiled = [];
                 otherFiles = [];
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: rootDir + lastUnit.name, content: lastUnit.content });
+                    toBeCompiled.push({ unitName: ts.combinePaths(rootDir, lastUnit.name), content: lastUnit.content });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: rootDir + unit.name, content: unit.content });
+                            otherFiles.push({ unitName: ts.combinePaths(rootDir, unit.name), content: unit.content });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: rootDir + unit.name, content: unit.content };
+                        return { unitName: ts.combinePaths(rootDir, unit.name), content: unit.content };
                     });
                 }
 
-                options = harnessCompiler.compileFiles(toBeCompiled, otherFiles, function (compileResult, _program) {
-                    result = compileResult;
-                    // The program will be used by typeWriter
-                    program = _program;
-                }, function (settings) {
-                        harnessCompiler.setCompilerSettings(tcSettings);
-                    });
+                const output = Harness.Compiler.HarnessCompiler.compileFiles(
+                    toBeCompiled, otherFiles, harnessSettings, /* options */ undefined, /* currentDirectory */ undefined);
+
+                options = output.options;
+                result = output.result;
+                program = output.program;
             });
 
             after(() => {
@@ -107,7 +104,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 content = undefined;
                 testCaseContent = undefined;
                 units = undefined;
-                tcSettings = undefined;
+                harnessSettings = undefined;
                 lastUnit = undefined;
                 rootDir = undefined;
                 result = undefined;
@@ -115,14 +112,13 @@ class CompilerBaselineRunner extends RunnerBase {
                 options = undefined;
                 toBeCompiled = undefined;
                 otherFiles = undefined;
-                harnessCompiler = undefined;
             });
 
             function getByteOrderMarkText(file: Harness.Compiler.GeneratedFile): string {
                 return file.writeByteOrderMark ? "\u00EF\u00BB\u00BF" : "";
             }
 
-            function getErrorBaseline(toBeCompiled: { unitName: string; content: string }[], otherFiles: { unitName: string; content: string }[], result: Harness.Compiler.CompilerResult) {
+            function getErrorBaseline(toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], result: Harness.Compiler.CompilerResult) {
                 return Harness.Compiler.getErrorBaseline(toBeCompiled.concat(otherFiles), result.errors);
             }
 
@@ -184,9 +180,9 @@ class CompilerBaselineRunner extends RunnerBase {
                             }
                         }
 
-                        const declFileCompilationResult = harnessCompiler.compileDeclarationFiles(toBeCompiled, otherFiles, result, function (settings) {
-                            harnessCompiler.setCompilerSettings(tcSettings);
-                        }, options);
+                        const declFileCompilationResult =
+                            Harness.Compiler.HarnessCompiler.compileDeclarationFiles(
+                                toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
@@ -259,8 +255,8 @@ class CompilerBaselineRunner extends RunnerBase {
 
                     const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
-                    const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ true);
-                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck:*/ false);
+                    const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
+                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ false);
 
                     const fullResults: ts.Map<TypeWriterResult[]> = {};
                     const pullResults: ts.Map<TypeWriterResult[]> = {};
@@ -274,14 +270,14 @@ class CompilerBaselineRunner extends RunnerBase {
                     // The second gives symbols for all identifiers.
                     let e1: Error, e2: Error;
                     try {
-                        checkBaseLines(/*isSymbolBaseLine:*/ false);
+                        checkBaseLines(/*isSymbolBaseLine*/ false);
                     }
                     catch (e) {
                         e1 = e;
                     }
 
                     try {
-                        checkBaseLines(/*isSymbolBaseLine:*/ true);
+                        checkBaseLines(/*isSymbolBaseLine*/ true);
                     }
                     catch (e) {
                         e2 = e;
@@ -367,7 +363,6 @@ class CompilerBaselineRunner extends RunnerBase {
     public initializeTests() {
         describe(this.testSuiteName + " tests", () => {
             describe("Setup compiler for compiler baselines", () => {
-                const harnessCompiler = Harness.Compiler.getCompiler();
                 this.parseOptions();
             });
 

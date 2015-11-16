@@ -169,10 +169,10 @@ module FourSlashInterface {
         // Opens a file, given either its index as it
         // appears in the test source, or its filename
         // as specified in the test metadata
-        public file(index: number);
-        public file(name: string);
-        public file(indexOrName: any) {
-            FourSlash.currentTestState.openFile(indexOrName);
+        public file(index: number, content?: string);
+        public file(name: string, content?: string);
+        public file(indexOrName: any, content?: string) {
+            FourSlash.currentTestState.openFile(indexOrName, content);
         }
     }
 
