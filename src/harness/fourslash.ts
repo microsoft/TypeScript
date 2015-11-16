@@ -2174,31 +2174,11 @@ namespace FourSlash {
         runFourSlashTestContent(basePath, testType, content, fileName);
     }
 
-    // We don't want to recompile 'fourslash.ts' for every test, so
-    // here we cache the JS output and reuse it for every test.
-    let fourslashJsOutput: string;
-    {
-        const fourslashFile: Harness.Compiler.TestFile = {
-            unitName: Harness.Compiler.fourslashFileName,
-            content: undefined
-        };
-        const host = Harness.Compiler.createCompilerHost([fourslashFile],
-            (fn, contents) => fourslashJsOutput = contents,
-            ts.ScriptTarget.Latest,
-            Harness.IO.useCaseSensitiveFileNames(),
-            Harness.IO.getCurrentDirectory());
-
-        const program = ts.createProgram([Harness.Compiler.fourslashFileName], { noResolve: true, target: ts.ScriptTarget.ES3 }, host);
-
-        program.emit(host.getSourceFile(Harness.Compiler.fourslashFileName, ts.ScriptTarget.ES3));
-    }
-
-    export let currentTestState: TestState;
     export function runFourSlashTestContent(basePath: string, testType: FourSlashTestType, content: string, fileName: string): void {
         // Parse out the files and their metadata
         const testData = parseTestData(basePath, content, fileName);
 
-        currentTestState = new TestState(basePath, testType, testData);
+        const state = new TestState(basePath, testType, testData);
 
         let result = "";
         const fourslashFile: Harness.Compiler.TestFile = {
@@ -2228,17 +2208,27 @@ namespace FourSlash {
         }
 
         program.emit(sourceFile);
-        result = result || ""; // Might have an empty fourslash file
 
-        result = fourslashJsOutput + "\r\n" + result;
-
-        runCode(result);
+        ts.Debug.assert(!!result);
+        runCode(result, state);
     }
 
-    function runCode(code: string): void {
+    function runCode(code: string, state: TestState): void {
         // Compile and execute the test
+        const wrappedCode =
+`(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
+${code}
+})`;
         try {
-            eval(code);
+            const test = new FourSlashInterface.Test(state);
+            const goTo = new FourSlashInterface.GoTo(state);
+            const verify = new FourSlashInterface.Verify(state);
+            const edit = new FourSlashInterface.Edit(state);
+            const debug = new FourSlashInterface.Debug(state);
+            const format = new FourSlashInterface.Format(state);
+            const cancellation = new FourSlashInterface.Cancellation(state);
+            const f = eval(wrappedCode);
+            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlash.verifyOperationIsCancelled);
         }
         catch (err) {
             // Debugging: FourSlash.currentTestState.printCurrentFileState();
@@ -2658,5 +2648,630 @@ namespace FourSlash {
             version: 0,
             fileName: fileName
         };
+    }
+}
+
+namespace FourSlashInterface {
+    export class Test {
+        constructor(private state: FourSlash.TestState) {
+        }
+
+        public markers(): FourSlash.Marker[] {
+            return this.state.getMarkers();
+        }
+
+        public marker(name?: string): FourSlash.Marker {
+            return this.state.getMarkerByName(name);
+        }
+
+        public ranges(): FourSlash.Range[] {
+            return this.state.getRanges();
+        }
+
+        public markerByName(s: string): FourSlash.Marker {
+            return this.state.getMarkerByName(s);
+        }
+    }
+
+    export class GoTo {
+        constructor(private state: FourSlash.TestState) {
+        }
+        // Moves the caret to the specified marker,
+        // or the anonymous marker ('/**/') if no name
+        // is given
+        public marker(name?: string) {
+            this.state.goToMarker(name);
+        }
+
+        public bof() {
+            this.state.goToBOF();
+        }
+
+        public eof() {
+            this.state.goToEOF();
+        }
+
+        public definition(definitionIndex = 0) {
+            this.state.goToDefinition(definitionIndex);
+        }
+
+        public type(definitionIndex = 0) {
+            this.state.goToTypeDefinition(definitionIndex);
+        }
+
+        public position(position: number, fileIndex?: number): void;
+        public position(position: number, fileName?: string): void;
+        public position(position: number, fileNameOrIndex?: any): void {
+            if (fileNameOrIndex !== undefined) {
+                this.file(fileNameOrIndex);
+            }
+            this.state.goToPosition(position);
+        }
+
+        // Opens a file, given either its index as it
+        // appears in the test source, or its filename
+        // as specified in the test metadata
+        public file(index: number, content?: string): void;
+        public file(name: string, content?: string): void;
+        public file(indexOrName: any, content?: string): void {
+            this.state.openFile(indexOrName, content);
+        }
+    }
+
+    export class VerifyNegatable {
+        public not: VerifyNegatable;
+
+        constructor(protected state: FourSlash.TestState, private negative = false) {
+            if (!negative) {
+                this.not = new VerifyNegatable(state, true);
+            }
+        }
+
+        // Verifies the member list contains the specified symbol. The
+        // member list is brought up if necessary
+        public memberListContains(symbol: string, text?: string, documenation?: string, kind?: string) {
+            if (this.negative) {
+                this.state.verifyMemberListDoesNotContain(symbol);
+            }
+            else {
+                this.state.verifyMemberListContains(symbol, text, documenation, kind);
+            }
+        }
+
+        public memberListCount(expectedCount: number) {
+            this.state.verifyMemberListCount(expectedCount, this.negative);
+        }
+
+        // Verifies the completion list contains the specified symbol. The
+        // completion list is brought up if necessary
+        public completionListContains(symbol: string, text?: string, documentation?: string, kind?: string) {
+            if (this.negative) {
+                this.state.verifyCompletionListDoesNotContain(symbol, text, documentation, kind);
+            }
+            else {
+                this.state.verifyCompletionListContains(symbol, text, documentation, kind);
+            }
+        }
+
+        // Verifies the completion list items count to be greater than the specified amount. The
+        // completion list is brought up if necessary
+        public completionListItemsCountIsGreaterThan(count: number) {
+            this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
+        }
+
+        public completionListIsEmpty() {
+            this.state.verifyCompletionListIsEmpty(this.negative);
+        }
+
+        public completionListAllowsNewIdentifier() {
+            this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
+        }
+
+        public memberListIsEmpty() {
+            this.state.verifyMemberListIsEmpty(this.negative);
+        }
+
+        public referencesCountIs(count: number) {
+            this.state.verifyReferencesCountIs(count, /*localFilesOnly*/ false);
+        }
+
+        public referencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
+            this.state.verifyReferencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
+        }
+
+        public signatureHelpPresent() {
+            this.state.verifySignatureHelpPresent(!this.negative);
+        }
+
+        public errorExistsBetweenMarkers(startMarker: string, endMarker: string) {
+            this.state.verifyErrorExistsBetweenMarkers(startMarker, endMarker, !this.negative);
+        }
+
+        public errorExistsAfterMarker(markerName = "") {
+            this.state.verifyErrorExistsAfterMarker(markerName, !this.negative, /*after*/ true);
+        }
+
+        public errorExistsBeforeMarker(markerName = "") {
+            this.state.verifyErrorExistsAfterMarker(markerName, !this.negative, /*after*/ false);
+        }
+
+        public quickInfoIs(expectedText?: string, expectedDocumentation?: string) {
+            this.state.verifyQuickInfoString(this.negative, expectedText, expectedDocumentation);
+        }
+
+        public quickInfoExists() {
+            this.state.verifyQuickInfoExists(this.negative);
+        }
+
+        public definitionCountIs(expectedCount: number) {
+            this.state.verifyDefinitionsCount(this.negative, expectedCount);
+        }
+
+        public typeDefinitionCountIs(expectedCount: number) {
+            this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
+        }
+
+        public definitionLocationExists() {
+            this.state.verifyDefinitionLocationExists(this.negative);
+        }
+
+        public verifyDefinitionsName(name: string, containerName: string) {
+            this.state.verifyDefinitionsName(this.negative, name, containerName);
+        }
+    }
+
+    export class Verify extends VerifyNegatable {
+        constructor(state: FourSlash.TestState) {
+            super(state);
+        }
+
+        public caretAtMarker(markerName?: string) {
+            this.state.verifyCaretAtMarker(markerName);
+        }
+
+        public indentationIs(numberOfSpaces: number) {
+            this.state.verifyIndentationAtCurrentPosition(numberOfSpaces);
+        }
+
+        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart) {
+            this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle);
+        }
+
+        public textAtCaretIs(text: string) {
+            this.state.verifyTextAtCaretIs(text);
+        }
+
+        /**
+         * Compiles the current file and evaluates 'expr' in a context containing
+         * the emitted output, then compares (using ===) the result of that expression
+         * to 'value'. Do not use this function with external modules as it is not supported.
+         */
+        public eval(expr: string, value: any) {
+            this.state.verifyEval(expr, value);
+        }
+
+        public currentLineContentIs(text: string) {
+            this.state.verifyCurrentLineContent(text);
+        }
+
+        public currentFileContentIs(text: string) {
+            this.state.verifyCurrentFileContent(text);
+        }
+
+        public verifyGetEmitOutputForCurrentFile(expected: string): void {
+            this.state.verifyGetEmitOutputForCurrentFile(expected);
+        }
+
+        public currentParameterHelpArgumentNameIs(name: string) {
+            this.state.verifyCurrentParameterHelpName(name);
+        }
+
+        public currentParameterSpanIs(parameter: string) {
+            this.state.verifyCurrentParameterSpanIs(parameter);
+        }
+
+        public currentParameterHelpArgumentDocCommentIs(docComment: string) {
+            this.state.verifyCurrentParameterHelpDocComment(docComment);
+        }
+
+        public currentSignatureHelpDocCommentIs(docComment: string) {
+            this.state.verifyCurrentSignatureHelpDocComment(docComment);
+        }
+
+        public signatureHelpCountIs(expected: number) {
+            this.state.verifySignatureHelpCount(expected);
+        }
+
+        public signatureHelpArgumentCountIs(expected: number) {
+            this.state.verifySignatureHelpArgumentCount(expected);
+        }
+
+        public currentSignatureParameterCountIs(expected: number) {
+            this.state.verifyCurrentSignatureHelpParameterCount(expected);
+        }
+
+        public currentSignatureHelpIs(expected: string) {
+            this.state.verifyCurrentSignatureHelpIs(expected);
+        }
+
+        public numberOfErrorsInCurrentFile(expected: number) {
+            this.state.verifyNumberOfErrorsInCurrentFile(expected);
+        }
+
+        public baselineCurrentFileBreakpointLocations() {
+            this.state.baselineCurrentFileBreakpointLocations();
+        }
+
+        public baselineCurrentFileNameOrDottedNameSpans() {
+            this.state.baselineCurrentFileNameOrDottedNameSpans();
+        }
+
+        public baselineGetEmitOutput() {
+            this.state.baselineGetEmitOutput();
+        }
+
+        public nameOrDottedNameSpanTextIs(text: string) {
+            this.state.verifyCurrentNameOrDottedNameSpanText(text);
+        }
+
+        public outliningSpansInCurrentFile(spans: FourSlash.TextSpan[]) {
+            this.state.verifyOutliningSpans(spans);
+        }
+
+        public todoCommentsInCurrentFile(descriptors: string[]) {
+            this.state.verifyTodoComments(descriptors, this.state.getRanges());
+        }
+
+        public matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number) {
+            this.state.verifyMatchingBracePosition(bracePosition, expectedMatchPosition);
+        }
+
+        public noMatchingBracePositionInCurrentFile(bracePosition: number) {
+            this.state.verifyNoMatchingBracePosition(bracePosition);
+        }
+
+        public DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean) {
+            this.state.verifyDocCommentTemplate(empty ? undefined : { newText: expectedText, caretOffset: expectedOffset });
+        }
+
+        public noDocCommentTemplate() {
+            this.DocCommentTemplate(/*expectedText*/ undefined, /*expectedOffset*/ undefined, /*empty*/ true);
+        }
+
+        public getScriptLexicalStructureListCount(count: number) {
+            this.state.verifyGetScriptLexicalStructureListCount(count);
+        }
+
+        // TODO: figure out what to do with the unused arguments.
+        public getScriptLexicalStructureListContains(
+            name: string,
+            kind: string,
+            fileName?: string,
+            parentName?: string,
+            isAdditionalSpan?: boolean,
+            markerPosition?: number) {
+            this.state.verifyGetScriptLexicalStructureListContains(name, kind);
+        }
+
+        public navigationItemsListCount(count: number, searchValue: string, matchKind?: string) {
+            this.state.verifyNavigationItemsCount(count, searchValue, matchKind);
+        }
+
+        public navigationItemsListContains(
+            name: string,
+            kind: string,
+            searchValue: string,
+            matchKind: string,
+            fileName?: string,
+            parentName?: string) {
+            this.state.verifyNavigationItemsListContains(
+                name,
+                kind,
+                searchValue,
+                matchKind,
+                fileName,
+                parentName);
+        }
+
+        public occurrencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
+            this.state.verifyOccurrencesAtPositionListContains(range.fileName, range.start, range.end, isWriteAccess);
+        }
+
+        public occurrencesAtPositionCount(expectedCount: number) {
+            this.state.verifyOccurrencesAtPositionListCount(expectedCount);
+        }
+
+        public documentHighlightsAtPositionContains(range: FourSlash.Range, fileNamesToSearch: string[], kind?: string) {
+            this.state.verifyDocumentHighlightsAtPositionListContains(range.fileName, range.start, range.end, fileNamesToSearch, kind);
+        }
+
+        public documentHighlightsAtPositionCount(expectedCount: number, fileNamesToSearch: string[]) {
+            this.state.verifyDocumentHighlightsAtPositionListCount(expectedCount, fileNamesToSearch);
+        }
+
+        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string) {
+            this.state.verifyCompletionEntryDetails(entryName, text, documentation, kind);
+        }
+
+        /**
+         * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
+         */
+        public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+            this.state.verifySyntacticClassifications(classifications);
+        }
+
+        /**
+         * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
+         */
+        public semanticClassificationsAre(...classifications: { classificationType: string; text: string; textSpan?: FourSlash.TextSpan }[]) {
+            this.state.verifySemanticClassifications(classifications);
+        }
+
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers);
+        }
+
+        public renameInfoFailed(message?: string) {
+            this.state.verifyRenameInfoFailed(message);
+        }
+
+        public renameLocations(findInStrings: boolean, findInComments: boolean) {
+            this.state.verifyRenameLocations(findInStrings, findInComments);
+        }
+
+        public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: { start: number; length: number; },
+            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]) {
+            this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation);
+        }
+
+        public getSyntacticDiagnostics(expected: string) {
+            this.state.getSyntacticDiagnostics(expected);
+        }
+
+        public getSemanticDiagnostics(expected: string) {
+            this.state.getSemanticDiagnostics(expected);
+        }
+
+        public ProjectInfo(expected: string []) {
+            this.state.verifyProjectInfo(expected);
+        }
+    }
+
+    export class Edit {
+        constructor(private state: FourSlash.TestState) {
+        }
+        public backspace(count?: number) {
+            this.state.deleteCharBehindMarker(count);
+        }
+
+        public deleteAtCaret(times?: number) {
+            this.state.deleteChar(times);
+        }
+
+        public replace(start: number, length: number, text: string) {
+            this.state.replace(start, length, text);
+        }
+
+        public paste(text: string) {
+            this.state.paste(text);
+        }
+
+        public insert(text: string) {
+            this.insertLines(text);
+        }
+
+        public insertLine(text: string) {
+            this.insertLines(text + "\n");
+        }
+
+        public insertLines(...lines: string[]) {
+            this.state.type(lines.join("\n"));
+        }
+
+        public moveRight(count?: number) {
+            this.state.moveCaretRight(count);
+        }
+
+        public moveLeft(count?: number) {
+            if (typeof count === "undefined") {
+                count = 1;
+            }
+            this.state.moveCaretRight(count * -1);
+        }
+
+        public enableFormatting() {
+            this.state.enableFormatting = true;
+        }
+
+        public disableFormatting() {
+            this.state.enableFormatting = false;
+        }
+    }
+
+    export class Debug {
+        constructor(private state: FourSlash.TestState) {
+        }
+
+        public printCurrentParameterHelp() {
+            this.state.printCurrentParameterHelp();
+        }
+
+        public printCurrentFileState() {
+            this.state.printCurrentFileState();
+        }
+
+        public printCurrentFileStateWithWhitespace() {
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/true);
+        }
+
+        public printCurrentFileStateWithoutCaret() {
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/false, /*makeCaretVisible*/false);
+        }
+
+        public printCurrentQuickInfo() {
+            this.state.printCurrentQuickInfo();
+        }
+
+        public printCurrentSignatureHelp() {
+            this.state.printCurrentSignatureHelp();
+        }
+
+        public printMemberListMembers() {
+            this.state.printMemberListMembers();
+        }
+
+        public printCompletionListMembers() {
+            this.state.printCompletionListMembers();
+        }
+
+        public printBreakpointLocation(pos: number) {
+            this.state.printBreakpointLocation(pos);
+        }
+        public printBreakpointAtCurrentLocation() {
+            this.state.printBreakpointAtCurrentLocation();
+        }
+
+        public printNameOrDottedNameSpans(pos: number) {
+            this.state.printNameOrDottedNameSpans(pos);
+        }
+
+        public printErrorList() {
+            this.state.printErrorList();
+        }
+
+        public printNavigationItems(searchValue = ".*") {
+            this.state.printNavigationItems(searchValue);
+        }
+
+        public printScriptLexicalStructureItems() {
+            this.state.printScriptLexicalStructureItems();
+        }
+
+        public printReferences() {
+            this.state.printReferences();
+        }
+
+        public printContext() {
+            this.state.printContext();
+        }
+    }
+
+    export class Format {
+        constructor(private state: FourSlash.TestState) {
+        }
+
+        public document() {
+            this.state.formatDocument();
+        }
+
+        public copyFormatOptions(): ts.FormatCodeOptions {
+            return this.state.copyFormatOptions();
+        }
+
+        public setFormatOptions(options: ts.FormatCodeOptions) {
+            return this.state.setFormatOptions(options);
+        }
+
+        public selection(startMarker: string, endMarker: string) {
+            this.state.formatSelection(this.state.getMarkerByName(startMarker).position, this.state.getMarkerByName(endMarker).position);
+        }
+
+        public setOption(name: string, value: number): void;
+        public setOption(name: string, value: string): void;
+        public setOption(name: string, value: boolean): void;
+        public setOption(name: string, value: any): void {
+            this.state.formatCodeOptions[name] = value;
+        }
+    }
+
+    export class Cancellation {
+        constructor(private state: FourSlash.TestState) {
+        }
+
+        public resetCancelled() {
+            this.state.resetCancelled();
+        }
+
+        public setCancelled(numberOfCalls = 0) {
+            this.state.setCancelled(numberOfCalls);
+        }
+    }
+
+    export namespace Classification {
+        export function comment(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("comment", text, position);
+        }
+
+        export function identifier(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("identifier", text, position);
+        }
+
+        export function keyword(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("keyword", text, position);
+        }
+
+        export function numericLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("numericLiteral", text, position);
+        }
+
+        export function operator(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("operator", text, position);
+        }
+
+        export function stringLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("stringLiteral", text, position);
+        }
+
+        export function whiteSpace(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("whiteSpace", text, position);
+        }
+
+        export function text(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("text", text, position);
+        }
+
+        export function punctuation(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("punctuation", text, position);
+        }
+
+        export function docCommentTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("docCommentTagName", text, position);
+        }
+
+        export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("className", text, position);
+        }
+
+        export function enumName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("enumName", text, position);
+        }
+
+        export function interfaceName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("interfaceName", text, position);
+        }
+
+        export function moduleName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("moduleName", text, position);
+        }
+
+        export function typeParameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("typeParameterName", text, position);
+        }
+
+        export function parameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("parameterName", text, position);
+        }
+
+        export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("typeAliasName", text, position);
+        }
+
+        function getClassification(type: string, text: string, position?: number) {
+            return {
+                classificationType: type,
+                text: text,
+                textSpan: position === undefined ? undefined : { start: position, end: position + text.length }
+            };
+        }
     }
 }
