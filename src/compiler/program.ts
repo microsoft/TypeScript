@@ -42,14 +42,14 @@ namespace ts {
             : compilerOptions.module === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
 
         switch (moduleResolution) {
-            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, getSupportedExtensions(compilerOptions), host);
+            case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host);
             case ModuleResolutionKind.Classic: return classicNameResolver(moduleName, containingFile, compilerOptions, host);
         }
     }
 
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, supportedExtensions: string[], host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
-
+        const supportedExtensions = getSupportedExtensions(compilerOptions);
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
