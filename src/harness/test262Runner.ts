@@ -5,9 +5,9 @@
 class Test262BaselineRunner extends RunnerBase {
     private static basePath = "internal/cases/test262";
     private static helpersFilePath = "tests/cases/test262-harness/helpers.d.ts";
-    private static helperFile = {
+    private static helperFile: Harness.Compiler.TestFile = {
         unitName: Test262BaselineRunner.helpersFilePath,
-        content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath)
+        content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath),
     };
     private static testFileExtensionRegex = /\.js$/;
     private static options: ts.CompilerOptions = {
@@ -31,7 +31,7 @@ class Test262BaselineRunner extends RunnerBase {
             let testState: {
                 filename: string;
                 compilerResult: Harness.Compiler.CompilerResult;
-                inputFiles: { unitName: string; content: string }[];
+                inputFiles: Harness.Compiler.TestFile[];
                 program: ts.Program;
             };
 
@@ -40,8 +40,9 @@ class Test262BaselineRunner extends RunnerBase {
                 const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, testFilename);
 
-                const inputFiles = testCaseContent.testUnitData.map(unit => {
-                    return { unitName: Test262BaselineRunner.getTestFilePath(unit.name), content: unit.content };
+                const inputFiles: Harness.Compiler.TestFile[] = testCaseContent.testUnitData.map(unit => {
+                    const unitName = Test262BaselineRunner.getTestFilePath(unit.name);
+                    return { unitName, content: unit.content };
                 });
 
                 // Emit the results
@@ -52,10 +53,15 @@ class Test262BaselineRunner extends RunnerBase {
                     program: undefined,
                 };
 
-                Harness.Compiler.getCompiler().compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), /*otherFiles*/ [], (compilerResult, program) => {
-                    testState.compilerResult = compilerResult;
-                    testState.program = program;
-                }, /*settingsCallback*/ undefined, Test262BaselineRunner.options);
+                const output = Harness.Compiler.HarnessCompiler.compileFiles(
+                    [Test262BaselineRunner.helperFile].concat(inputFiles),
+                    /*otherFiles*/ [],
+                    /* harnessOptions */ undefined,
+                    Test262BaselineRunner.options,
+                    /* currentDirectory */ undefined
+                    );
+                testState.compilerResult = output.result;
+                testState.program = output.program;
             });
 
             after(() => {

@@ -174,7 +174,7 @@ namespace Playback {
                     return true;
                 }
                 else {
-                    return findResultByFields(replayLog.fileExists, { path }, false);
+                    return findResultByFields(replayLog.fileExists, { path }, /*defaultValue*/ false);
                 }
             })
         );

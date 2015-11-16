@@ -842,7 +842,7 @@ namespace ts {
         }
 
         export function fail(message?: string): void {
-            Debug.assert(false, message);
+            Debug.assert(/*expression*/ false, message);
         }
     }
 

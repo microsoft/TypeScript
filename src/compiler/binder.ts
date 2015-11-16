@@ -175,9 +175,14 @@ namespace ts {
                 symbol.members = {};
             }
 
-            if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
-                symbol.valueDeclaration = node;
-            }
+            if (symbolFlags & SymbolFlags.Value) {
+                const valueDeclaration = symbol.valueDeclaration;
+                if (!valueDeclaration ||
+                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    // other kinds of value declarations take precedence over modules
+                    symbol.valueDeclaration = node;
+                }
+        }
         }
 
         // Should not be called on a declaration with a computed property name,
