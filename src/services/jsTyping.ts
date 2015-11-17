@@ -5,40 +5,51 @@
 
 /* @internal */
 namespace ts.JsTyping {
-    var _host: ModuleResolutionHost | System;
+
+    type HostType = {
+        fileExists: (fileName: string) => boolean;
+        readFile: (path: string, encoding?: string) => string;
+        readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[]; 
+    };
+    
+    var _host: HostType;
+    
+    // a typing name to typing file path mapping
+    var inferredTypings: Map<string> = {};
+    
     /**
      * @param cachePath is the path to the cache location, which contains a tsd.json file and a typings folder
      */
     export function discoverTypings(
-        host: ModuleResolutionHost | System, fileNames: string[], cachePath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
-        : { cachedTypingPaths: string[], newTypings: string[] } {
-        _host = host
+        host: HostType, fileNames: string[], cachePath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
+        : { cachedTypingPaths: string[], newTypingNames: string[] } {
+        _host = host;
         // Directories to search for package.json, bower.json and other typing information
         let searchDirs: string[] = [];
-        // Names of the typing package. For example, "angular", "underscore" etc.
-        let typingNames: string[] = [];
-        // Absolute paths of locally cached typing files. For example, "C:/Users/xxx/.typingCache/typings/angularjs/angular.d.ts"
-        let cachedTypingPaths: string[] = [];
-        // Package names of the locally cached typing files. For example, "angular", "underscore"
-        let cachedTypingNames: string[] = [];
         
         for (let fileName of fileNames) {
-            let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
-            if (searchDirs.indexOf(dir) < 0) {
-                searchDirs.push(dir);
+            if (ts.getBaseFileName(fileName) !== "lib.d.ts") {
+                let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
+                if (searchDirs.indexOf(dir) < 0) {
+                    searchDirs.push(dir);
+                }
             }
         }
         
         for (let searchDir of searchDirs) {
             let packageJsonPath = ts.combinePaths(searchDir, "package.json");
+            getTypingNamesFromPackageJson(packageJsonPath);
+
             let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
-            typingNames = typingNames
-                .concat(getTypingNamesFromPackageJson(packageJsonPath))
-                .concat(getTypingNamesFromBowerJson(bowerJsonPath));
+            getTypingNamesFromBowerJson(bowerJsonPath);
+            
+            let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
+            getTypingNamesFromNodeModuleFolder(nodeModulesPath);
         }
         
-        let typingNamesFromSourceFileNames = getTypingNamesFromSourceFileNames(fileNames, ["react", "jquery"]);
-        typingNames = typingNames.concat(typingNamesFromSourceFileNames);
+        // Todo: use a real safe list
+        getTypingNamesFromSourceFileNames(fileNames, ["react", "jquery"]);
+        getTypingNamesFromCompilerOptions(compilerOptions);
 
         let normalizedCachePath = ts.normalizePath(cachePath);
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
@@ -56,9 +67,8 @@ namespace ts.JsTyping {
                         // is written as "angular", however the resolved typing is "angularjs/..", therefore it would never
                         // match cached version
                         let cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf('/'));
-                        if (typingNames.indexOf(cachedTypingName) >= 0) {
-                            cachedTypingNames.push(cachedTypingName);
-                            cachedTypingPaths.push(ts.combinePaths(typingsPath, cachedTypingPath));
+                        if (inferredTypings.hasOwnProperty(cachedTypingName) && !inferredTypings[cachedTypingName]) {
+                            inferredTypings[cachedTypingName] = ts.combinePaths(typingsPath, cachedTypingPath);
                         }
                     }
                 }
@@ -66,44 +76,64 @@ namespace ts.JsTyping {
             catch(e) { }
         }
         
-        let newTypingNames = typingNames.filter(t => cachedTypingNames.indexOf(t) < 0);
+        let newTypingNames: string[] = [];
+        let cachedTypingPaths: string[] = [];
+        for (let typing in inferredTypings) {
+            if(inferredTypings[typing]) {
+                cachedTypingPaths.push(inferredTypings[typing]);
+            }
+            else {
+                newTypingNames.push(typing);
+            }
+        }
         
-        return { cachedTypingPaths, newTypings: newTypingNames };
+        return { cachedTypingPaths, newTypingNames };
     }
     
-    function getTypingNamesFromPackageJson(packageJsonPath: string): string[] {
-        let res: string[] = [];
+    function mergeTypings(typingNames: string[]) {
+        for (let typing of typingNames) {
+            if (!inferredTypings.hasOwnProperty(typing)) {
+                inferredTypings[typing] = undefined;
+            }
+        }
+    }
+
+    function getTypingNamesFromPackageJson(packageJsonPath: string) {
         if (_host.fileExists(packageJsonPath)) {
             // Guide against malformed package.json
             try{
                 let packageJsonDict = JSON.parse(_host.readFile(packageJsonPath));
                 if (packageJsonDict.hasOwnProperty("dependencies")) {
-                    res = Object.keys(packageJsonDict.dependencies);
+                    mergeTypings(Object.keys(packageJsonDict.dependencies));
                 }
             }
             catch(e) {
             }
         }
-        return res;
     }
-    
-    function getTypingNamesFromBowerJson(bowerJsonPath: string): string[] {
-        let res: string[] = [];
+
+    function getTypingNamesFromBowerJson(bowerJsonPath: string) {
         if (_host.fileExists(bowerJsonPath)) {
             // Guide against malformed package.json
             try{
                 let packageJsonDict = JSON.parse(_host.readFile(bowerJsonPath));
                 if (packageJsonDict.hasOwnProperty("dependencies")) {
-                    res = Object.keys(packageJsonDict.dependencies);
+                    mergeTypings(Object.keys(packageJsonDict.dependencies));
                 }
             }
             catch(e) {
             }
         }
-        return res;
     }
-    
-    function getTypingNamesFromSourceFileNames(fileNames: string[], safeList: string[]): string[] {
+
+    /**
+     * Infer typing names from given file names. For example, the file name "jquery-min.2.3.4.js"
+     * should be inferred to the 'jquery' typing name; and "angular-route.1.2.3.js" should be inferred
+     * to the 'angular-route' typing name.
+     * @param fileNames are the names for source files in the project
+     * @param safeList is the list of names that we are confident they are library names that requires typing
+     */
+    function getTypingNamesFromSourceFileNames(fileNames: string[], safeList: string[]) {
         safeList = safeList.map(s => s.toLowerCase());
         fileNames = fileNames.map(f => f.toLowerCase());
         let exactlyMatched: string[] = []
@@ -114,15 +144,51 @@ namespace ts.JsTyping {
             (safeList.indexOf(baseNameWithoutExtension) >= 0) ? exactlyMatched.push(baseNameWithoutExtension) : notExactlyMatched.push(baseNameWithoutExtension);
         }
         
-        let regex = /((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g
+        let regex = /((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g;
         notExactlyMatched = notExactlyMatched.map(f => f.replace(regex, ""));
-        return exactlyMatched.concat(notExactlyMatched.filter(f => ts.contains(safeList, f)));
+        let typingNames = exactlyMatched.concat(notExactlyMatched.filter(f => ts.contains(safeList, f)));
+        mergeTypings(typingNames);
+    }
+
+    /**
+     * Infer typing names from node_module folder
+     * @param nodeModulesPath is the path to the "node_modules" folder
+     */
+    function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string) {
+        // Todo: add support for ModuleResolutionHost too
+        if (!_host.fileExists(nodeModulesPath)) {
+            return;
+        }
+        
+        let typingNames: string[] = [];
+        let packageJsonFiles = 
+            _host.readDirectory(nodeModulesPath, /*extension*/undefined, /*exclude*/undefined, /*depth*/ 2).filter(f => ts.getBaseFileName(f) === "package.json");
+        for (let packageJsonFile of packageJsonFiles) {
+            let packageJsonContent = JSON.parse(_host.readFile(packageJsonFile));
+            // npm 3 has the package.json contains a "_requiredBy" field
+            // we should include all the top level module names for npm 2, and only module names whose
+            // "_requiredBy" field starts with "#" or equals "/" for npm 3.
+            if (packageJsonContent._requiredBy &&
+                packageJsonContent._requiredBy.filter((r: string) => r[0] === "#" || r === "/").length == 0) {
+                continue;
+            }
+            let packageName = packageJsonContent["name"];
+            if (packageJsonContent.hasOwnProperty("typings")) {
+                let absPath = ts.getNormalizedAbsolutePath(packageJsonContent.typings, ts.getDirectoryPath(packageJsonFile));
+                inferredTypings[packageName] = absPath;
+            }
+            else {
+                typingNames.push(packageName);
+            }
+        }
+        mergeTypings(typingNames);
     }
     
-    function getTypingNamesFromNodeModuleFolder(fileNames: string[]): string[] {
-        // Todo: implement this
-        return [];
+    function getTypingNamesFromCompilerOptions(options: CompilerOptions) {
+        let typingNames: string[] = [];
+        if (options && options.jsx === JsxEmit.React) {
+            typingNames.push("react");
+        }
+        mergeTypings(typingNames);
     }
-    
-    
 }

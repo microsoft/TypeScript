@@ -922,11 +922,11 @@ namespace ts.server {
         }
 
         acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypingPaths, newTypings } = this.resolveTypingsForJs(path, project);
-            this.downloadTypingFilesForJs(cachedTypingPaths, newTypings, project);
+            let { cachedTypingPaths, newTypingNames } = this.resolveTypingsForJs(path, project);
+            this.downloadTypingFilesForJs(cachedTypingPaths, newTypingNames, project);
         }
 
-        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypings: string[] } {
+        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[] } {
             this.log("Files for JS typing:" + fileName);
             let cachePath = "C:/Users/lan/.typingCache";
             return ts.JsTyping.discoverTypings(sys, project.getFileNames(), cachePath);
