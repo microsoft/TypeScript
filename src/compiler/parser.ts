@@ -722,10 +722,10 @@ namespace ts {
             const contextFlagsToClear = context & contextFlags;
             if (contextFlagsToClear) {
                 // clear the requested context flags
-                setContextFlag(false, contextFlagsToClear);
+                setContextFlag(/*val*/ false, contextFlagsToClear);
                 const result = func();
                 // restore the context flags we just cleared
-                setContextFlag(true, contextFlagsToClear);
+                setContextFlag(/*val*/ true, contextFlagsToClear);
                 return result;
             }
 
@@ -743,10 +743,10 @@ namespace ts {
             const contextFlagsToSet = context & ~contextFlags;
             if (contextFlagsToSet) {
                 // set the requested context flags
-                setContextFlag(true, contextFlagsToSet);
+                setContextFlag(/*val*/ true, contextFlagsToSet);
                 const result = func();
                 // reset the context flags we just set
-                setContextFlag(false, contextFlagsToSet);
+                setContextFlag(/*val*/ false, contextFlagsToSet);
                 return result;
             }
 
@@ -1098,11 +1098,11 @@ namespace ts {
         }
 
         function parsePropertyName(): PropertyName {
-            return parsePropertyNameWorker(/*allowComputedPropertyNames:*/ true);
+            return parsePropertyNameWorker(/*allowComputedPropertyNames*/ true);
         }
 
         function parseSimplePropertyName(): Identifier | LiteralExpression {
-            return <Identifier | LiteralExpression>parsePropertyNameWorker(/*allowComputedPropertyNames:*/ false);
+            return <Identifier | LiteralExpression>parsePropertyNameWorker(/*allowComputedPropertyNames*/ false);
         }
 
         function isSimplePropertyName() {
@@ -1385,7 +1385,7 @@ namespace ts {
         function isInSomeParsingContext(): boolean {
             for (let kind = 0; kind < ParsingContext.Count; kind++) {
                 if (parsingContext & (1 << kind)) {
-                    if (isListElement(kind, /* inErrorRecovery */ true) || isListTerminator(kind)) {
+                    if (isListElement(kind, /*inErrorRecovery*/ true) || isListTerminator(kind)) {
                         return true;
                     }
                 }
@@ -1402,7 +1402,7 @@ namespace ts {
             result.pos = getNodePos();
 
             while (!isListTerminator(kind)) {
-                if (isListElement(kind, /* inErrorRecovery */ false)) {
+                if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     const element = parseListElement(kind, parseElement);
                     result.push(element);
 
@@ -1751,7 +1751,7 @@ namespace ts {
 
             let commaStart = -1; // Meaning the previous token was not a comma
             while (true) {
-                if (isListElement(kind, /* inErrorRecovery */ false)) {
+                if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     result.push(parseListElement(kind, parseElement));
                     commaStart = scanner.getTokenPos();
                     if (parseOptional(SyntaxKind.CommaToken)) {
@@ -1859,7 +1859,7 @@ namespace ts {
                     // Report that we need an identifier.  However, report it right after the dot,
                     // and not on the next token.  This is because the next token might actually
                     // be an identifier and the error would be quite confusing.
-                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentToken*/ true, Diagnostics.Identifier_expected);
+                    return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
                 }
             }
 
@@ -2609,7 +2609,7 @@ namespace ts {
             // clear the decorator context when parsing Expression, as it should be unambiguous when parsing a decorator
             const saveDecoratorContext = inDecoratorContext();
             if (saveDecoratorContext) {
-                setDecoratorContext(false);
+                setDecoratorContext(/*val*/ false);
             }
 
             let expr = parseAssignmentExpressionOrHigher();
@@ -2619,7 +2619,7 @@ namespace ts {
             }
 
             if (saveDecoratorContext) {
-                setDecoratorContext(true);
+                setDecoratorContext(/*val*/ true);
             }
             return expr;
         }
@@ -2773,7 +2773,7 @@ namespace ts {
             node.parameters.pos = parameter.pos;
             node.parameters.end = parameter.end;
 
-            node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, false, Diagnostics._0_expected, "=>");
+            node.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
             node.body = parseArrowFunctionExpressionBody(/*isAsync*/ false);
 
             return finishNode(node);
@@ -3573,7 +3573,7 @@ namespace ts {
                     parseExpected(SyntaxKind.GreaterThanToken);
                 }
                 else {
-                    parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*advance*/ false);
+                    parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
                     scanJsxText();
                 }
                 node = <JsxSelfClosingElement>createNode(SyntaxKind.JsxSelfClosingElement, fullStart);
@@ -3609,7 +3609,7 @@ namespace ts {
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {
-                parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*advance*/ false);
+                parseExpected(SyntaxKind.CloseBraceToken, /*message*/ undefined, /*shouldAdvance*/ false);
                 scanJsxText();
             }
 
@@ -3654,7 +3654,7 @@ namespace ts {
                 parseExpected(SyntaxKind.GreaterThanToken);
             }
             else {
-                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*advance*/ false);
+                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
                 scanJsxText();
             }
             return finishNode(node);
@@ -3973,7 +3973,7 @@ namespace ts {
             //      function BindingIdentifier[opt](FormalParameters){ FunctionBody }
             const saveDecoratorContext = inDecoratorContext();
             if (saveDecoratorContext) {
-                setDecoratorContext(false);
+                setDecoratorContext(/*val*/ false);
             }
 
             const node = <FunctionExpression>createNode(SyntaxKind.FunctionExpression);
@@ -3993,7 +3993,7 @@ namespace ts {
             node.body = parseFunctionBlock(/*allowYield*/ isGenerator, /*allowAwait*/ isAsync, /*ignoreMissingOpenBrace*/ false);
 
             if (saveDecoratorContext) {
-                setDecoratorContext(true);
+                setDecoratorContext(/*val*/ true);
             }
 
             return finishNode(node);
@@ -4039,13 +4039,13 @@ namespace ts {
             // arrow function. The body of the function is not in [Decorator] context.
             const saveDecoratorContext = inDecoratorContext();
             if (saveDecoratorContext) {
-                setDecoratorContext(false);
+                setDecoratorContext(/*val*/ false);
             }
 
             const block = parseBlock(ignoreMissingOpenBrace, diagnosticMessage);
 
             if (saveDecoratorContext) {
-                setDecoratorContext(true);
+                setDecoratorContext(/*val*/ true);
             }
 
             setYieldContext(savedYieldContext);
@@ -6162,7 +6162,7 @@ namespace ts {
             if (sourceFile.statements.length === 0) {
                 // If we don't have any statements in the current source file, then there's no real
                 // way to incrementally parse.  So just do a full parse instead.
-                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setNodeParents*/ true);
+                return Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, /*syntaxCursor*/ undefined, /*setParentNodes*/ true);
             }
 
             // Make sure we're not trying to incrementally update a source file more than once.  Once
@@ -6226,7 +6226,7 @@ namespace ts {
             // inconsistent tree.  Setting the parents on the new tree should be very fast.  We
             // will immediately bail out of walking any subtrees when we can see that their parents
             // are already correct.
-            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /* setParentNode */ true);
+            const result = Parser.parseSourceFile(sourceFile.fileName, newText, sourceFile.languageVersion, syntaxCursor, /*setParentNodes*/ true);
 
             return result;
         }
