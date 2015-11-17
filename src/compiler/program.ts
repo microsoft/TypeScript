@@ -919,9 +919,8 @@ namespace ts {
                     return;
                 }
 
-                const caseSensitive = host.useCaseSensitiveFileNames();
                 for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
-                    if (caseSensitive ? commonPathComponents[i] !== sourcePathComponents[i] : commonPathComponents[i].toLocaleLowerCase() !== sourcePathComponents[i].toLocaleLowerCase()) {
+                    if (getCanonicalFileName(commonPathComponents[i]) !== getCanonicalFileName(sourcePathComponents[i])) {
                         if (i === 0) {
                             // Failed to find any common path component
                             return true;
