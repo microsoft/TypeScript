@@ -204,6 +204,7 @@ namespace ts {
         UnionType,
         IntersectionType,
         ParenthesizedType,
+        ThisType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -349,7 +350,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ParenthesizedType,
+        LastTypeNode = ThisType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -726,6 +727,7 @@ namespace ts {
     // @kind(SyntaxKind.StringKeyword)
     // @kind(SyntaxKind.SymbolKeyword)
     // @kind(SyntaxKind.VoidKeyword)
+    // @kind(SyntaxKind.ThisType)
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }

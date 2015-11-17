@@ -2314,7 +2314,7 @@ namespace ts {
 
                 return true;
             }
-            
+
             return false;
         }
 
@@ -2333,7 +2333,7 @@ namespace ts {
             }
             return false;
         }
-        
+
         function tryConsumeDefine(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
@@ -2359,7 +2359,7 @@ namespace ts {
                 if (token !== SyntaxKind.OpenBracketToken)  {
                     return true;
                 }
-                
+
                 // skip open bracket
                 token = scanner.scan();
                 let i = 0;
@@ -2374,7 +2374,7 @@ namespace ts {
                     token = scanner.scan();
                 }
                 return true;
-                
+
             }
             return false;
         }
@@ -3976,7 +3976,7 @@ namespace ts {
             let sourceFile = getValidSourceFile(fileName);
 
             let entries: CompletionEntry[] = [];
-            
+
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
                 const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
                 addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqueNames));
@@ -4595,6 +4595,7 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.ThisType:
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
                         let type = typeChecker.getTypeAtLocation(node);
@@ -4866,6 +4867,7 @@ namespace ts {
             function getSemanticDocumentHighlights(node: Node): DocumentHighlights[] {
                 if (node.kind === SyntaxKind.Identifier ||
                     node.kind === SyntaxKind.ThisKeyword ||
+                    node.kind === SyntaxKind.ThisType ||
                     node.kind === SyntaxKind.SuperKeyword ||
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
@@ -5561,7 +5563,7 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.ThisKeyword) {
+            if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.ThisType) {
                 return getReferencesForThisKeyword(node, sourceFiles);
             }
 
@@ -6043,7 +6045,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
 
                         let node = getTouchingWord(sourceFile, position);
-                        if (!node || node.kind !== SyntaxKind.ThisKeyword) {
+                        if (!node || (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.ThisType)) {
                             return;
                         }
 
@@ -6405,7 +6407,8 @@ namespace ts {
 
             return node.parent.kind === SyntaxKind.TypeReference ||
                 (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
+                (node.kind === SyntaxKind.ThisKeyword && !isExpression(node)) ||
+                node.kind === SyntaxKind.ThisType;
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -6525,6 +6528,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                 case SyntaxKind.Identifier:
                     break;
 
