@@ -6,7 +6,7 @@
 /* @internal */
 namespace ts.JsTyping {
     export function discoverTypings(
-        host: ModuleResolutionHost | System, fileNames: string[], cachePath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
+        host: TypeDefinitionResolutionHost | System, fileNames: string[], cachePath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
         : { cachedTypingPaths: string[], newTypings: string[] } {
         let searchDirs: string[] = [];
         let typingNames: string[] = [];

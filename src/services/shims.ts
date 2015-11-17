@@ -65,7 +65,7 @@ namespace ts {
     }
 
     /** Public interface of the the of a config service shim instance.*/
-    export interface CoreServicesShimHost extends Logger, ModuleResolutionHost {
+    export interface CoreServicesShimHost extends Logger, TypeDefinitionResolutionHost {
         /**
          * Returns a JSON-encoded value of the type: string[]
          *
@@ -433,6 +433,10 @@ namespace ts {
         
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        public writeFile(fileName: string, data: string): void {
+            this.shimHost.writeFile(fileName, data);
         }
     }
 
