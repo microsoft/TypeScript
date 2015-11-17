@@ -51,10 +51,9 @@ class CompilerBaselineRunner extends RunnerBase {
             let justName: string;
 
             let lastUnit: Harness.TestCaseParser.TestUnitData;
-            let tcSettings: Harness.TestCaseParser.CompilerSettings;
+            let harnessSettings: Harness.TestCaseParser.CompilerSettings;
 
             let result: Harness.Compiler.CompilerResult;
-            let program: ts.Program;
             let options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
             let toBeCompiled: Harness.Compiler.TestFile[];
@@ -66,7 +65,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 const content = Harness.IO.readFile(fileName);
                 const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
                 const units = testCaseContent.testUnitData;
-                tcSettings = testCaseContent.settings;
+                harnessSettings = testCaseContent.settings;
                 lastUnit = units[units.length - 1];
                 const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
@@ -88,12 +87,11 @@ class CompilerBaselineRunner extends RunnerBase {
                     });
                 }
 
-                const output = Harness.Compiler.HarnessCompiler.compileFiles(
-                    toBeCompiled, otherFiles, tcSettings, /* options */ undefined, /* currentDirectory */ undefined);
+                const output = Harness.Compiler.compileFiles(
+                    toBeCompiled, otherFiles, harnessSettings, /* options */ undefined, /* currentDirectory */ undefined);
 
                 options = output.options;
                 result = output.result;
-                program = output.program;
             });
 
             after(() => {
@@ -102,7 +100,6 @@ class CompilerBaselineRunner extends RunnerBase {
                 justName = undefined;
                 lastUnit = undefined;
                 result = undefined;
-                program = undefined;
                 options = undefined;
                 toBeCompiled = undefined;
                 otherFiles = undefined;
@@ -175,8 +172,8 @@ class CompilerBaselineRunner extends RunnerBase {
                         }
 
                         const declFileCompilationResult =
-                            Harness.Compiler.HarnessCompiler.compileDeclarationFiles(
-                                toBeCompiled, otherFiles, result, tcSettings, options, /*currentDirectory*/ undefined);
+                            Harness.Compiler.compileDeclarationFiles(
+                                toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                             jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
@@ -247,6 +244,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     // These types are equivalent, but depend on what order the compiler observed
                     // certain parts of the program.
 
+                    const program = result.program;
                     const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
                     const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
