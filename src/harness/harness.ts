@@ -767,9 +767,9 @@ namespace Harness {
 }
 
 namespace Harness {
-    const tcServicesFileName = "built/local/typescriptServices.js";
     export const libFolder = "built/local/";
-    export let tcServicesFile = IO.readFile(tcServicesFileName);
+    const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
+    export const tcServicesFile = IO.readFile(tcServicesFileName);
 
     export interface SourceMapEmitterCallback {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
@@ -990,7 +990,6 @@ namespace Harness {
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = true;
 
-            const newLine = "\r\n";
             currentDirectory = currentDirectory || Harness.IO.getCurrentDirectory();
 
             // Parse settings
@@ -1002,27 +1001,30 @@ namespace Harness {
                 useCaseSensitiveFileNames = options.useCaseSensitiveFileNames;
             }
 
+            const programFiles: TestFile[] = inputFiles.slice();
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.
             // Treat them as library files, so include them in build, but not in baselines.
-            const includeBuiltFiles: TestFile[] = [];
             if (options.includeBuiltFile) {
-                const builtFileName = libFolder + options.includeBuiltFile;
+                const builtFileName = ts.combinePaths(libFolder, options.includeBuiltFile);
                 const builtFile: TestFile = {
                     unitName: builtFileName,
-                    content: normalizeLineEndings(IO.readFile(builtFileName), newLine),
+                    content: normalizeLineEndings(IO.readFile(builtFileName), Harness.IO.newLine()),
                 };
-                includeBuiltFiles.push(builtFile);
+                programFiles.push(builtFile);
             }
 
             const fileOutputs: GeneratedFile[] = [];
 
-            const programFiles = inputFiles.concat(includeBuiltFiles).map(file => file.unitName);
+            const programFileNames = programFiles.map(file => file.unitName);
 
             const compilerHost = createCompilerHost(
-                inputFiles.concat(includeBuiltFiles).concat(otherFiles),
+                programFiles.concat(otherFiles),
                 (fileName, code, writeByteOrderMark) => fileOutputs.push({ fileName, code, writeByteOrderMark }),
-                options.target, useCaseSensitiveFileNames, currentDirectory, options.newLine);
-            const program = ts.createProgram(programFiles, options, compilerHost);
+                options.target,
+                useCaseSensitiveFileNames,
+                currentDirectory,
+                options.newLine);
+            const program = ts.createProgram(programFileNames, options, compilerHost);
 
             const emitResult = program.emit();
 

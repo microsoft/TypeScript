@@ -250,10 +250,11 @@ class CompilerBaselineRunner extends RunnerBase {
                     // These types are equivalent, but depend on what order the compiler observed
                     // certain parts of the program.
 
-                    const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!result.program.getSourceFile(file.unitName));
+                    const program = result.program;
+                    const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
-                    const fullWalker = new TypeWriterWalker(result.program, /*fullTypeCheck*/ true);
-                    const pullWalker = new TypeWriterWalker(result.program, /*fullTypeCheck*/ false);
+                    const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
+                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ false);
 
                     const fullResults: ts.Map<TypeWriterResult[]> = {};
                     const pullResults: ts.Map<TypeWriterResult[]> = {};

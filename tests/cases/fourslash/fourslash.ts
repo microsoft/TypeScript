@@ -55,7 +55,7 @@ declare module ts {
     }    
 }
 
-declare module FourSlashInterface {
+declare namespace FourSlashInterface {
     interface Marker {
         fileName: string;
         position: number;
@@ -330,15 +330,6 @@ declare module FourSlashInterface {
             textSpan?: TextSpan;
         };
     }
-}
-declare module fs {
-    var test: FourSlashInterface.test_;
-    var goTo: FourSlashInterface.goTo;
-    var verify: FourSlashInterface.verify;
-    var edit: FourSlashInterface.edit;
-    var debug: FourSlashInterface.debug;
-    var format: FourSlashInterface.format;
-    var cancellation: FourSlashInterface.cancellation;
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
