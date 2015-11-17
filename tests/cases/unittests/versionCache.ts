@@ -187,15 +187,14 @@ and grew 1cm per day`;
         let ersa: number[] = [];
         let ela: number[] = [];
         const iterationCount = 20;
+        //const iterationCount = 20000; // uncomment for testing
         let lines: string[];
         let lineMap: number[];
         let lineIndex: server.LineIndex;
         let testContent: string;
 
         before(() => {
-            //const interationCount = 20000; // uncomment for testing
-
-            // Use scanner.ts, decent size, does not change frequentlly
+            // Use scanner.ts, decent size, does not change frequently
             let testFileName = "src/compiler/scanner.ts";
             testContent = Harness.IO.readFile(testFileName);
             let totalChars = testContent.length;
