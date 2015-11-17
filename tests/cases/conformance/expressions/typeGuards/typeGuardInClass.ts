@@ -3,14 +3,14 @@ let x: string | number;
 if (typeof x === "string") {
     let n = class {
         constructor() {
-            x; // Should be "string"
+            let y: string = x;
         }
     }
 }
 else {
     let m = class {
         constructor() {
-            x; // Should be "number"
+            let y: number = x;
         }
     }
 }

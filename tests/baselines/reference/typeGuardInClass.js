@@ -4,14 +4,14 @@ let x: string | number;
 if (typeof x === "string") {
     let n = class {
         constructor() {
-            x; // Should be "string"
+            let y: string = x;
         }
     }
 }
 else {
     let m = class {
         constructor() {
-            x; // Should be "number"
+            let y: number = x;
         }
     }
 }
@@ -22,7 +22,7 @@ var x;
 if (typeof x === "string") {
     var n = (function () {
         function class_1() {
-            x; // Should be "string"
+            var y = x;
         }
         return class_1;
     })();
@@ -30,7 +30,7 @@ if (typeof x === "string") {
 else {
     var m = (function () {
         function class_2() {
-            x; // Should be "number"
+            var y = x;
         }
         return class_2;
     })();

@@ -9,7 +9,8 @@ if (typeof x === "string") {
 >n : Symbol(n, Decl(typeGuardInClass.ts, 3, 7))
 
         constructor() {
-            x; // Should be "string"
+            let y: string = x;
+>y : Symbol(y, Decl(typeGuardInClass.ts, 5, 15))
 >x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
         }
     }
@@ -19,7 +20,8 @@ else {
 >m : Symbol(m, Decl(typeGuardInClass.ts, 10, 7))
 
         constructor() {
-            x; // Should be "number"
+            let y: number = x;
+>y : Symbol(y, Decl(typeGuardInClass.ts, 12, 15))
 >x : Symbol(x, Decl(typeGuardInClass.ts, 0, 3))
         }
     }

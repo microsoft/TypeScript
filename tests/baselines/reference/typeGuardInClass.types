@@ -10,10 +10,11 @@ if (typeof x === "string") {
 
     let n = class {
 >n : typeof (Anonymous class)
->class {        constructor() {            x; // Should be "string"        }    } : typeof (Anonymous class)
+>class {        constructor() {            let y: string = x;        }    } : typeof (Anonymous class)
 
         constructor() {
-            x; // Should be "string"
+            let y: string = x;
+>y : string
 >x : string
         }
     }
@@ -21,10 +22,11 @@ if (typeof x === "string") {
 else {
     let m = class {
 >m : typeof (Anonymous class)
->class {        constructor() {            x; // Should be "number"        }    } : typeof (Anonymous class)
+>class {        constructor() {            let y: number = x;        }    } : typeof (Anonymous class)
 
         constructor() {
-            x; // Should be "number"
+            let y: number = x;
+>y : number
 >x : number
         }
     }
