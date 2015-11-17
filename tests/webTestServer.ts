@@ -269,6 +269,9 @@ if ((browser && browser === 'chrome')) {
         case "win64":
             defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
             break;
+        case "darwin":
+            defaultChromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+            break;
         case "linux":
             defaultChromePath = "/opt/google/chrome/chrome"
             break;

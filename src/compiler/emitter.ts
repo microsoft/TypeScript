@@ -1293,7 +1293,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitCommaList(nodes: Node[]) {
                 if (nodes) {
-                    emitList(nodes, 0, nodes.length, /*multiline*/ false, /*trailingComma*/ false);
+                    emitList(nodes, 0, nodes.length, /*multiLine*/ false, /*trailingComma*/ false);
                 }
             }
 
@@ -2192,7 +2192,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 else if (languageVersion >= ScriptTarget.ES6 || !forEach(elements, isSpreadElementExpression)) {
                     write("[");
-                    emitLinePreservingList(node, node.elements, elements.hasTrailingComma, /*spacesBetweenBraces:*/ false);
+                    emitLinePreservingList(node, node.elements, elements.hasTrailingComma, /*spacesBetweenBraces*/ false);
                     write("]");
                 }
                 else {
@@ -2216,7 +2216,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // then try to preserve the original shape of the object literal.
                     // Otherwise just try to preserve the formatting.
                     if (numElements === properties.length) {
-                        emitLinePreservingList(node, properties, /* allowTrailingComma */ languageVersion >= ScriptTarget.ES5, /* spacesBetweenBraces */ true);
+                        emitLinePreservingList(node, properties, /*allowTrailingComma*/ languageVersion >= ScriptTarget.ES5, /*spacesBetweenBraces*/ true);
                     }
                     else {
                         const multiLine = (node.flags & NodeFlags.MultiLine) !== 0;
@@ -2766,7 +2766,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(".bind.apply(");
                     emit(target);
                     write(", [void 0].concat(");
-                    emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiline*/ false, /*trailingComma*/ false, /*useConcat*/ false);
+                    emitListWithSpread(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*trailingComma*/ false, /*useConcat*/ false);
                     write(")))");
                     write("()");
                 }
@@ -2983,7 +2983,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                         synthesizedLHS = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression, /*startsOnNewLine*/ false);
 
-                        const identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
+                        const identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefineTempVariablesInPlace*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
                         synthesizedLHS.expression = identifier;
 
                         if (leftHandSideExpression.argumentExpression.kind !== SyntaxKind.NumericLiteral &&
@@ -3002,7 +3002,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write("(");
                         synthesizedLHS = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression, /*startsOnNewLine*/ false);
 
-                        const identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefinedTempVariablesInPlaces*/ false, /*shouldemitCommaBeforeAssignment*/ false);
+                        const identifier = emitTempVariableAssignment(leftHandSideExpression.expression, /*canDefineTempVariablesInPlace*/ false, /*shouldEmitCommaBeforeAssignment*/ false);
                         synthesizedLHS.expression = identifier;
 
                         (<PropertyAccessExpression>synthesizedLHS).dotToken = leftHandSideExpression.dotToken;
@@ -3182,10 +3182,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitDoStatementWorker(node: DoStatement, loop: ConvertedLoop) {
                 write("do");
                 if (loop) {
-                    emitConvertedLoopCall(loop, /* emitAsBlock */ true);
+                    emitConvertedLoopCall(loop, /*emitAsBlock*/ true);
                 }
                 else {
-                    emitNormalLoopBody(node, /* emitAsEmbeddedStatement */ true);
+                    emitNormalLoopBody(node, /*emitAsEmbeddedStatement*/ true);
                 }
                 if (node.statement.kind === SyntaxKind.Block) {
                     write(" ");
@@ -3208,10 +3208,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(")");
 
                 if (loop) {
-                    emitConvertedLoopCall(loop, /* emitAsBlock */ true);
+                    emitConvertedLoopCall(loop, /*emitAsBlock*/ true);
                 }
                 else {
-                    emitNormalLoopBody(node, /* emitAsEmbeddedStatement */ true);
+                    emitNormalLoopBody(node, /*emitAsEmbeddedStatement*/ true);
                 }
             }
 
@@ -3533,8 +3533,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(`switch(${loopResultVariable}) {`);
                     increaseIndent();
 
-                    emitDispatchEntriesForLabeledJumps(currentLoop.labeledNonLocalBreaks, /* isBreak */ true, loopResultVariable, outerLoop);
-                    emitDispatchEntriesForLabeledJumps(currentLoop.labeledNonLocalContinues, /* isBreak */ false, loopResultVariable, outerLoop);
+                    emitDispatchEntriesForLabeledJumps(currentLoop.labeledNonLocalBreaks, /*isBreak*/ true, loopResultVariable, outerLoop);
+                    emitDispatchEntriesForLabeledJumps(currentLoop.labeledNonLocalContinues, /*isBreak*/ false, loopResultVariable, outerLoop);
 
                     decreaseIndent();
                     writeLine();
@@ -3598,10 +3598,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(")");
 
                 if (loop) {
-                    emitConvertedLoopCall(loop, /* emitAsBlock */ true);
+                    emitConvertedLoopCall(loop, /*emitAsBlock*/ true);
                 }
                 else {
-                    emitNormalLoopBody(node, /* emitAsEmbeddedStatement */ true);
+                    emitNormalLoopBody(node, /*emitAsEmbeddedStatement*/ true);
                 }
             }
 
@@ -3639,10 +3639,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
 
                 if (loop) {
-                    emitConvertedLoopCall(loop, /* emitAsBlock */ true);
+                    emitConvertedLoopCall(loop, /*emitAsBlock*/ true);
                 }
                 else {
-                    emitNormalLoopBody(node, /* emitAsEmbeddedStatement */ true);
+                    emitNormalLoopBody(node, /*emitAsEmbeddedStatement*/ true);
                 }
             }
 
@@ -3782,10 +3782,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (loop) {
                     writeLine();
-                    emitConvertedLoopCall(loop, /* emitAsBlock */ false);
+                    emitConvertedLoopCall(loop, /*emitAsBlock*/ false);
                 }
                 else {
-                    emitNormalLoopBody(node, /* emitAsEmbeddedStatement */ false);
+                    emitNormalLoopBody(node, /*emitAsEmbeddedStatement*/ false);
                 }
 
                 writeLine();
@@ -3819,11 +3819,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             let labelMarker: string;
                             if (node.kind === SyntaxKind.BreakStatement) {
                                 labelMarker = `break-${node.label.text}`;
-                                setLabeledJump(convertedLoopState, /* isBreak */ true, node.label.text, labelMarker);
+                                setLabeledJump(convertedLoopState, /*isBreak*/ true, node.label.text, labelMarker);
                             }
                             else {
                                 labelMarker = `continue-${node.label.text}`;
-                                setLabeledJump(convertedLoopState, /* isBreak */ false, node.label.text, labelMarker);
+                                setLabeledJump(convertedLoopState, /*isBreak*/ false, node.label.text, labelMarker);
                             }
                             write(`return "${labelMarker}";`);
                         }
@@ -4249,7 +4249,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     let index: Expression;
                     const nameIsComputed = propName.kind === SyntaxKind.ComputedPropertyName;
                     if (nameIsComputed) {
-                        index = ensureIdentifier((<ComputedPropertyName>propName).expression, /* reuseIdentifierExpression */ false);
+                        index = ensureIdentifier((<ComputedPropertyName>propName).expression, /*reuseIdentifierExpressions*/ false);
                     }
                     else {
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
@@ -5381,7 +5381,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitEnd(baseTypeElement);
                     }
                 }
-                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ false));
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*isStatic*/ false));
                 if (ctor) {
                     let statements: Node[] = (<Block>ctor.body).statements;
                     if (superCall) {
@@ -5503,7 +5503,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
                 // This keeps the expression as an expression, while ensuring that the static parts
                 // of it have been initialized by the time it is used.
-                const staticProperties = getInitializedProperties(node, /*static:*/ true);
+                const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
                 const isClassExpressionWithStaticProperties = staticProperties.length > 0 && node.kind === SyntaxKind.ClassExpression;
                 let tempVariable: Identifier;
 
@@ -5565,7 +5565,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     for (var property of staticProperties) {
                         write(",");
                         writeLine();
-                        emitPropertyDeclaration(node, property, /*receiver:*/ tempVariable, /*isExpression:*/ true);
+                        emitPropertyDeclaration(node, property, /*receiver*/ tempVariable, /*isExpression*/ true);
                     }
                     write(",");
                     writeLine();
@@ -5639,7 +5639,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES5AndLower(node);
-                emitPropertyDeclarations(node, getInitializedProperties(node, /*static:*/ true));
+                emitPropertyDeclarations(node, getInitializedProperties(node, /*isStatic*/ true));
                 writeLine();
                 emitDecoratorsOfClass(node);
                 writeLine();
@@ -8095,11 +8095,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * Emit comments associated with node that will not be emitted into JS file
              */
             function emitCommentsOnNotEmittedNode(node: Node) {
-                emitLeadingCommentsWorker(node, /*isEmittedNode:*/ false);
+                emitLeadingCommentsWorker(node, /*isEmittedNode*/ false);
             }
 
             function emitLeadingComments(node: Node) {
-                return emitLeadingCommentsWorker(node, /*isEmittedNode:*/ true);
+                return emitLeadingCommentsWorker(node, /*isEmittedNode*/ true);
             }
 
             function emitLeadingCommentsWorker(node: Node, isEmittedNode: boolean) {
@@ -8128,7 +8128,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitNewLineBeforeLeadingComments(currentLineMap, writer, node, leadingComments);
 
                 // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator:*/ true, newLine, writeComment);
+                emitComments(currentText, currentLineMap, writer, leadingComments, /*trailingSeparator*/ true, newLine, writeComment);
             }
 
             function emitTrailingComments(node: Node) {

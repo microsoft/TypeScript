@@ -365,13 +365,13 @@ namespace ts {
         }
 
         if (!tryReuseStructureFromOldProgram()) {
-            forEach(rootNames, name => processRootFile(name, false));
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
             if (!skipDefaultLib) {
-                processRootFile(host.getDefaultLibFileName(options), true);
+                processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
             }
         }
 
@@ -694,7 +694,7 @@ namespace ts {
 
             let imports: LiteralExpression[];
             for (const node of file.statements) {
-                collect(node, /* allowRelativeModuleNames */ true, /* collectOnlyRequireCalls */ false);
+                collect(node, /*allowRelativeModuleNames*/ true, /*collectOnlyRequireCalls*/ false);
             }
 
             file.imports = imports || emptyArray;
@@ -730,7 +730,7 @@ namespace ts {
                                     // TypeScript 1.0 spec (April 2014): 12.1.6
                                     // An ExternalImportDeclaration in anAmbientExternalModuleDeclaration may reference other external modules 
                                     // only through top - level external module names. Relative external module names are not permitted.
-                                    collect(node, /* allowRelativeModuleNames */ false, collectOnlyRequireCalls);
+                                    collect(node, /*allowRelativeModuleNames*/ false, collectOnlyRequireCalls);
                                 });
                             }
                             break;
@@ -742,7 +742,7 @@ namespace ts {
                         (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                     }
                     else {
-                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /* collectOnlyRequireCalls */ true));
+                        forEachChild(node, node => collect(node, allowRelativeModuleNames, /*collectOnlyRequireCalls*/ true));
                     }
                 }
             }
@@ -801,12 +801,12 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, normalizedAbsolutePath: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, package?: PackageDescriptor): SourceFile {
-            if (filesByName.contains(normalizedAbsolutePath)) {
-                const file = filesByName.get(normalizedAbsolutePath);
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, package?: PackageDescriptor): SourceFile {
+            if (filesByName.contains(path)) {
+                const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
-                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== normalizedAbsolutePath) {
+                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
                 const newLocation = package && package.packagePath;
@@ -828,19 +828,19 @@ namespace ts {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
             });
-            filesByName.set(normalizedAbsolutePath, file);
+            filesByName.set(path, file);
             if (file) {
-                file.path = normalizedAbsolutePath;
+                file.path = path;
                 file.package = package;
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
-                    const existingFile = filesByNameIgnoreCase.get(normalizedAbsolutePath);
+                    const existingFile = filesByNameIgnoreCase.get(path);
                     if (existingFile) {
                         reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
                     }
                     else {
-                        filesByNameIgnoreCase.set(normalizedAbsolutePath, file);
+                        filesByNameIgnoreCase.set(path, file);
                     }
                 }
 
@@ -871,7 +871,7 @@ namespace ts {
                 if (file.package && !fileExtensionIs(referencedFileName, ".d.ts")) {
                     fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_script_file_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
                 }
-                processSourceFile(referencedFileName, /* isDefaultLib */ false, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, /*isDefaultLib*/ false, file, ref.pos, ref.end);
             });
         }
 
@@ -891,7 +891,7 @@ namespace ts {
                     if (resolution && !options.noResolve) {
                         const filePath = toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName);
                         const package = resolution.packageRoot ? {packagePath: moduleFilePathToIdentifyingPath(filePath, currentDirectory, getCanonicalFileName), symbols: {} as SymbolTable} : file.package;
-                        findSourceFile(resolution.resolvedFileName, filePath, /* isDefaultLib */ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
+                        findSourceFile(resolution.resolvedFileName, filePath, /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
                     }
                 }
             }
