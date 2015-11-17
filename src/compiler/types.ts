@@ -1077,7 +1077,6 @@ namespace ts {
     export interface DebuggerStatement extends Statement { }
 
     // @kind(SyntaxKind.MissingDeclaration)
-    // @factoryhidden("name", true)
     export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
         name?: Identifier;
     }
@@ -1234,7 +1233,6 @@ namespace ts {
     export interface TypeElement extends Declaration {
         _typeElementBrand: any;
         name?: PropertyName;
-        // @factoryparam
         questionToken?: Node;
     }
 
