@@ -492,12 +492,16 @@ namespace ts {
                                     : false;
                             }
                             if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.FunctionScopedVariable) {
-                                // function scoped variables are visible only inside function body and parameter list
-                                // technically here we might mix parameters and variables declared in function,
-                                // however this case is detected separately when checking initializers of parameters
+                                // parameters are visible only inside function body, parameter list and return type
+                                // technically for parameter list case here we might mix parameters and variables declared in function,
+                                // however it is detected separately when checking initializers of parameters
                                 // to make sure that they reference no variables declared after them.
-                                useResult = lastLocation === (<FunctionLikeDeclaration>location).type ||
-                                    lastLocation.kind === SyntaxKind.Parameter;
+                                useResult =
+                                    lastLocation.kind === SyntaxKind.Parameter ||
+                                    (
+                                        lastLocation === (<FunctionLikeDeclaration>location).type &&
+                                        result.valueDeclaration.kind === SyntaxKind.Parameter
+                                    );
                             }
                         }
 
