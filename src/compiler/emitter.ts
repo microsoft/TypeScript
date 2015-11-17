@@ -5583,7 +5583,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
-                if (node.parent.kind === SyntaxKind.SourceFile && (node.flags & NodeFlags.Default)) {
+                if (node.flags & NodeFlags.Default) {
                     // if this is a top level default export of decorated class, write the export after the declaration.
                     writeLine();
                     if (thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
