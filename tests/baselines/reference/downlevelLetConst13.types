@@ -10,8 +10,8 @@ export let foo = 10;
 >10 : number
 
 export const bar = "123"
->bar : string
->"123" : string
+>bar : "123"
+>"123" : "123"
 
 export let [bar1] = [1];
 >bar1 : number
