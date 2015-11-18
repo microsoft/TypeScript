@@ -329,6 +329,7 @@ namespace ts {
         let fileProcessingDiagnostics = createDiagnosticCollection();
         const programDiagnostics = createDiagnosticCollection();
 
+        let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
@@ -373,8 +374,6 @@ namespace ts {
             }
         }
 
-        // _Always_ compute a common source directory
-        let commonSourceDirectory: string;
         verifyCompilerOptions();
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
