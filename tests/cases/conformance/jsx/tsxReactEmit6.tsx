@@ -19,4 +19,8 @@ namespace M {
 	//  and M.React.__spread
 	var foo;
 	var spread1 = <div x='' {...foo} y='' />;
+
+	// Quotes
+	var x = <div>This "quote" thing</div>;
 }
+

@@ -11,8 +11,6 @@
             "check-open-brace",
             "check-whitespace"
         ],
-        "no-unreachable": true,
-        "no-use-before-declare": true,
         "no-var-keyword": true,
         "quotemark": [true,
             "double"
@@ -40,6 +38,8 @@
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
         "no-null": true,
-        "boolean-trivia": true
+        "boolean-trivia": true,
+        "type-operator-spacing": true,
+        "prefer-const": true
   }
 }

@@ -4,6 +4,7 @@ var fs = require("fs");
 var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
+var Linter = require("tslint");
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -95,7 +96,7 @@ var servicesSources = [
     return path.join(servicesDirectory, f);
 }));
 
-var serverSources = [
+var serverCoreSources = [
     "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
@@ -103,7 +104,9 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-}).concat(servicesSources);
+});
+
+var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
     "editorServices.ts",
@@ -144,7 +147,8 @@ var harnessSources = harnessCoreSources.concat([
     "transpile.ts",
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
-    "moduleResolution.ts"
+    "moduleResolution.ts",
+    "tsconfigParsing.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -163,7 +167,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+        { target: "lib.es6.d.ts", sources: ["es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -224,7 +228,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--module commonjs --noImplicitAny --noEmitOnError";
+        var options = "--noImplicitAny --noEmitOnError --pretty";
 
         // Keep comments when specifically requested
         // or when in debug mode.
@@ -246,6 +250,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (!noOutFile) {
             options += " --out " + outFile;
+        }
+        else {
+            options += " --module commonjs"
         }
 
         if(noResolve) {
@@ -319,6 +326,8 @@ var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnostic
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
+var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
+var builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "diagnosticMessages.generated.json");
 
 file(processDiagnosticMessagesTs);
 
@@ -346,6 +355,12 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     });
     ex.run();
 }, {async: true});
+
+file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
+    if (fs.existsSync(builtLocalDirectory)) {
+        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
+    }
+});
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
@@ -443,6 +458,8 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Stanalone/web definition file using global 'ts' namespace
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
+                definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+                fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
                 // Official node package definition file, pointed to by 'typings' in package.json
                 // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
@@ -475,7 +492,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -625,12 +642,9 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-var testTimeout = 20000;
-desc("Runs the tests using the built run.js file. Syntax is jake runtests. Optional parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]', debug=true.");
-task("runtests", ["tests", builtLocalDirectory], function() {
+function runConsoleTests(defaultReporter, defaultSubsets, postLint) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
-    host = "mocha"
     tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var testConfigFile = 'test.config';
@@ -638,7 +652,7 @@ task("runtests", ["tests", builtLocalDirectory], function() {
         fs.unlinkSync(testConfigFile);
     }
 
-    if(tests || light) {
+    if (tests || light) {
         writeTestConfigFile(tests, light, testConfigFile);
     }
 
@@ -648,13 +662,48 @@ task("runtests", ["tests", builtLocalDirectory], function() {
 
     colors = process.env.colors || process.env.color
     colors = colors ? ' --no-colors ' : ' --colors ';
-    tests = tests ? ' -g ' + tests : '';
-    reporter = process.env.reporter || process.env.r || 'mocha-fivemat-progress-reporter';
+    reporter = process.env.reporter || process.env.r || defaultReporter;
+
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var cmd = host + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-    console.log(cmd);
-    exec(cmd, deleteTemporaryProjectOutput);
+    var subsetRegexes;
+    if(defaultSubsets.length === 0) {
+        subsetRegexes = [tests]
+    }
+    else {
+        var subsets = tests ? tests.split("|") : defaultSubsets;
+        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
+        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
+    }
+    subsetRegexes.forEach(function (subsetRegex) {
+        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
+        console.log(cmd);
+        exec(cmd, function () {
+            deleteTemporaryProjectOutput();
+            if (postLint) {
+                var lint = jake.Task['lint'];
+                lint.addListener('complete', function () {
+                    complete();
+                });
+                lint.invoke();
+            }
+            else {
+                complete();
+            }
+        });
+    });
+}
+
+var testTimeout = 20000;
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+}, {async: true});
+
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false.");
+task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
+    runConsoleTests('mocha-fivemat-progress-reporter', [], /*postLint*/ true);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -812,9 +861,10 @@ task("update-sublime", ["local", serverFile], function() {
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
-    "noInferrableTypesRule",
     "noNullRule",
-    "booleanTriviaRule"
+    "preferConstRule",
+    "booleanTriviaRule",
+    "typeOperatorSpacingRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -825,20 +875,96 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ true, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
 });
 
-// if the codebase were free of linter errors we could make jake runtests
-// run this task automatically
+function getLinterOptions() {
+    return {
+        configuration: require("./tslint.json"),
+        formatter: "prose",
+        formattersDirectory: undefined,
+        rulesDirectory: "built/local/tslint"
+    };
+}
+
+function lintFileContents(options, path, contents) {
+    var ll = new Linter(path, contents, options);
+    return ll.lint();
+}
+
+function lintFile(options, path) {
+    var contents = fs.readFileSync(path, "utf8");
+    return lintFileContents(options, path, contents);
+}
+
+function lintFileAsync(options, path, cb) {
+    fs.readFile(path, "utf8", function(err, contents) {
+        if (err) {
+            return cb(err);
+        }
+        var result = lintFileContents(options, path, contents);
+        cb(undefined, result);
+    });
+}
+
+var lintTargets = compilerSources
+    .concat(harnessCoreSources)
+    .concat(serverCoreSources);
+
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
-    function success(f) { return function() { console.log('SUCCESS: No linter errors in ' + f + '\n'); }};
-    function failure(f) { return function() { console.log('FAILURE: Please fix linting errors in ' + f + '\n') }};
-
-    var lintTargets = compilerSources.concat(harnessCoreSources);
+    var lintOptions = getLinterOptions();
     for (var i in lintTargets) {
-        var f = lintTargets[i];
-        var cmd = 'tslint --rules-dir built/local/tslint -c tslint.json ' + f;
-        exec(cmd, success(f), failure(f));
+        var result = lintFile(lintOptions, lintTargets[i]);
+        if (result.failureCount > 0) {
+            console.log(result.output);
+            fail('Linter errors.', result.failureCount);
+        }
     }
-}, { async: true });
+});
+
+/**
+ * This is required because file watches on Windows get fires _twice_
+ * when a file changes on some node/windows version configuations
+ * (node v4 and win 10, for example). By not running a lint for a file
+ * which already has a pending lint, we avoid duplicating our work.
+ * (And avoid printing duplicate results!)
+ */
+var lintSemaphores = {};
+
+function lintWatchFile(filename) {
+    fs.watch(filename, {persistent: true}, function(event) {
+        if (event !== "change") {
+            return;
+        }
+     
+        if (!lintSemaphores[filename]) {
+            lintSemaphores[filename] = true;
+            lintFileAsync(getLinterOptions(), filename, function(err, result) {
+                delete lintSemaphores[filename];
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                if (result.failureCount > 0) {
+                    console.log("***Lint failure***");
+                    for (var i = 0; i < result.failures.length; i++) {
+                        var failure = result.failures[i];
+                        var start = failure.startPosition.lineAndCharacter;
+                        var end = failure.endPosition.lineAndCharacter;
+                        console.log("warning " + filename + " (" + (start.line + 1) + "," + (start.character + 1) + "," + (end.line + 1) + "," + (end.character + 1) + "): " + failure.failure);
+                    }
+                    console.log("*** Total " + result.failureCount + " failures.");
+                }
+            });
+        }
+    });
+}
+
+desc("Watches files for changes to rerun a lint pass");
+task("lint-server", ["build-rules"], function() {
+    console.log("Watching ./src for changes to linted files");
+    for (var i = 0; i < lintTargets.length; i++) {
+        lintWatchFile(lintTargets[i]);
+    }
+});

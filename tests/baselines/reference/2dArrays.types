@@ -28,7 +28,7 @@ class Board {
 >this.ships.every(function (val) { return val.isSunk; }) : boolean
 >this.ships.every : (callbackfn: (value: Ship, index: number, array: Ship[]) => boolean, thisArg?: any) => boolean
 >this.ships : Ship[]
->this : Board
+>this : this
 >ships : Ship[]
 >every : (callbackfn: (value: Ship, index: number, array: Ship[]) => boolean, thisArg?: any) => boolean
 >function (val) { return val.isSunk; } : (val: Ship) => boolean

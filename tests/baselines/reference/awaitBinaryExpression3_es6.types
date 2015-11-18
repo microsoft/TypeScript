@@ -16,7 +16,8 @@ async function func(): Promise<void> {
     var b = await p + a;
 >b : number
 >await p + a : number
->p : any
+>await p : number
+>p : Promise<number>
 >a : number
 
     "after";

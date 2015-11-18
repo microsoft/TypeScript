@@ -1,4 +1,5 @@
 === tests/cases/compiler/conditionalExpressions2.ts ===
+
 var a = false ? 1 : null;
 >a : number
 >false ? 1 : null : number

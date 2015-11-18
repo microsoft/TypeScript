@@ -1,0 +1,33 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(4,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts(5,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts (2 errors) ====
+    
+    type Kind = "A" | "B"
+    
+    function kindIs(kind: Kind, is: "A"): kind is "A";
+             ~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function kindIs(kind: Kind, is: "B"): kind is "B";
+             ~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function kindIs(kind: Kind, is: Kind): boolean {
+        return kind === is;
+    }
+    
+    var x: Kind = "A";
+    
+    if (kindIs(x, "A")) {
+        let a = x;
+    }
+    else {
+        let b = x;
+    }
+    
+    if (!kindIs(x, "B")) {
+        let c = x;
+    }
+    else {
+        let d = x;
+    }
