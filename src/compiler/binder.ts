@@ -139,6 +139,8 @@ namespace ts {
                 file.classifiableNames = classifiableNames;
             }
 
+            file = undefined;
+            options = undefined;
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;

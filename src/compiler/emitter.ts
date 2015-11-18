@@ -484,7 +484,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let decorateEmitted: boolean;
             let paramEmitted: boolean;
             let awaiterEmitted: boolean;
-            let tempFlags: TempFlags;
+            let tempFlags: TempFlags = 0;
             let tempVariables: Identifier[];
             let tempParameters: Identifier[];
             let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
@@ -553,33 +553,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             return doEmit;
 
             function doEmit(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
-                // reset the state
-                writer.reset();
-                currentSourceFile = undefined;
-                currentText = undefined;
-                currentLineMap = undefined;
-                exportFunctionForFile = undefined;
                 generatedNameSet = {};
                 nodeToGeneratedName = [];
-                computedPropertyNamesToGeneratedNames = undefined;
-                convertedLoopState = undefined;
-
-                extendsEmitted = false;
-                decorateEmitted = false;
-                paramEmitted = false;
-                awaiterEmitted = false;
-                tempFlags = 0;
-                tempVariables = undefined;
-                tempParameters = undefined;
-                externalImports = undefined;
-                exportSpecifiers = undefined;
-                exportEquals = undefined;
-                hasExportStars = undefined;
-                detachedCommentsInfo = undefined;
-                sourceMapData = undefined;
-                isEs6Module = false;
-                renamedDependencies = undefined;
-                isCurrentFileExternalModule = false;
                 isOwnFileEmit = !isBundledEmit;
 
                 if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
@@ -596,6 +571,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 writeLine();
                 writeEmittedFiles(writer.getText(), jsFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM);
+
+                // reset the state
+                writer.reset();
+                currentSourceFile = undefined;
+                currentText = undefined;
+                currentLineMap = undefined;
+                exportFunctionForFile = undefined;
+                generatedNameSet = undefined;
+                nodeToGeneratedName = undefined;
+                computedPropertyNamesToGeneratedNames = undefined;
+                convertedLoopState = undefined;
+                extendsEmitted = false;
+                decorateEmitted = false;
+                paramEmitted = false;
+                awaiterEmitted = false;
+                tempFlags = 0;
+                tempVariables = undefined;
+                tempParameters = undefined;
+                externalImports = undefined;
+                exportSpecifiers = undefined;
+                exportEquals = undefined;
+                hasExportStars = undefined;
+                detachedCommentsInfo = undefined;
+                sourceMapData = undefined;
+                isEs6Module = false;
+                renamedDependencies = undefined;
+                isCurrentFileExternalModule = false;
             }
 
             function emitSourceFile(sourceFile: SourceFile): void {

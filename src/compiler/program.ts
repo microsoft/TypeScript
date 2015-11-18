@@ -977,12 +977,12 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, normalizedAbsolutePath: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
-            if (filesByName.contains(normalizedAbsolutePath)) {
-                const file = filesByName.get(normalizedAbsolutePath);
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+            if (filesByName.contains(path)) {
+                const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems
-                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== normalizedAbsolutePath) {
+                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
@@ -1000,18 +1000,18 @@ namespace ts {
                 }
             });
 
-            filesByName.set(normalizedAbsolutePath, file);
+            filesByName.set(path, file);
             if (file) {
-                file.path = normalizedAbsolutePath;
+                file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
-                    const existingFile = filesByNameIgnoreCase.get(normalizedAbsolutePath);
+                    const existingFile = filesByNameIgnoreCase.get(path);
                     if (existingFile) {
                         reportFileNamesDifferOnlyInCasingError(fileName, existingFile.fileName, refFile, refPos, refEnd);
                     }
                     else {
-                        filesByNameIgnoreCase.set(normalizedAbsolutePath, file);
+                        filesByNameIgnoreCase.set(path, file);
                     }
                 }
 
@@ -1081,7 +1081,7 @@ namespace ts {
 
         function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
             let commonPathComponents: string[];
-            forEach(files, sourceFile => {
+            const failed = forEach(files, sourceFile => {
                 // Each file contributes into common source file path
                 if (isDeclarationFile(sourceFile)) {
                     return;
@@ -1097,10 +1097,10 @@ namespace ts {
                 }
 
                 for (let i = 0, n = Math.min(commonPathComponents.length, sourcePathComponents.length); i < n; i++) {
-                    if (commonPathComponents[i] !== sourcePathComponents[i]) {
+                    if (getCanonicalFileName(commonPathComponents[i]) !== getCanonicalFileName(sourcePathComponents[i])) {
                         if (i === 0) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                            return;
+                            // Failed to find any common path component
+                            return true;
                         }
 
                         // New common path found that is 0 -> i-1
@@ -1114,6 +1114,11 @@ namespace ts {
                     commonPathComponents.length = sourcePathComponents.length;
                 }
             });
+
+            // A common path can not be found when paths span multiple drives on windows, for example
+            if (failed) {
+                return "";
+            }
 
             if (!commonPathComponents) { // Can happen when all input files are .d.ts files
                 return currentDirectory;
@@ -1236,6 +1241,10 @@ namespace ts {
                 else {
                     // Compute the commonSourceDirectory from the input files
                     commonSourceDirectory = computeCommonSourceDirectory(files);
+                    // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
+                    if (options.outDir && commonSourceDirectory === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                    }
                 }
 
                 if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {

@@ -352,6 +352,31 @@ export = C;
                 "moduleC.ts": "export var x"
             };
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /* useCaseSensitiveFileNames */ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+        });
+
+        it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
+            const files: Map<string> = {
+                "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
+                "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
+                "/a/B/c/moduleC.ts": "export var x",
+                "/a/B/c/moduleD.ts": `
+import a = require("./moduleA.ts");
+import b = require("./moduleB.ts");
+                `
+            };
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /* useCaseSensitiveFileNames */ false, ["moduleD.ts"], [1149]);
+        });
+        it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
+            const files: Map<string> = {
+                "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
+                "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
+                "/a/B/c/moduleC.ts": "export var x",
+                "/a/B/c/moduleD.ts": `
+import a = require("./moduleA.ts");
+import b = require("./moduleB.ts");
+                `
+            };
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /* useCaseSensitiveFileNames */ false, ["moduleD.ts"], []);
         })
     });
 }

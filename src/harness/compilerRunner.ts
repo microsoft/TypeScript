@@ -40,22 +40,21 @@ class CompilerBaselineRunner extends RunnerBase {
         this.basePath += "/" + this.testSuiteName;
     }
 
+    private makeUnitName(name: string, root: string) {
+        return ts.isRootedDiskPath(name) ? name : ts.combinePaths(root, name);
+    };
+
     public checkTestCodeOutput(fileName: string) {
         describe("compiler tests for " + fileName, () => {
             // Mocha holds onto the closure environment of the describe callback even after the test is done.
             // Everything declared here should be cleared out in the "after" callback.
             let justName: string;
-            let content: string;
-            let testCaseContent: { settings: Harness.TestCaseParser.CompilerSettings; testUnitData: Harness.TestCaseParser.TestUnitData[]; };
-
-            let units: Harness.TestCaseParser.TestUnitData[];
-            let harnessSettings: Harness.TestCaseParser.CompilerSettings;
 
             let lastUnit: Harness.TestCaseParser.TestUnitData;
-            let rootDir: string;
+            let harnessSettings: Harness.TestCaseParser.CompilerSettings;
+            let hasNonDtsFiles: boolean;
 
             let result: Harness.Compiler.CompilerResult;
-            let program: ts.Program;
             let options: ts.CompilerOptions;
             // equivalent to the files that will be passed on the command line
             let toBeCompiled: Harness.Compiler.TestFile[];
@@ -64,51 +63,46 @@ class CompilerBaselineRunner extends RunnerBase {
 
             before(() => {
                 justName = fileName.replace(/^.*[\\\/]/, ""); // strips the fileName from the path.
-                content = Harness.IO.readFile(fileName);
-                testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
-                units = testCaseContent.testUnitData;
+                const content = Harness.IO.readFile(fileName);
+                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, fileName);
+                const units = testCaseContent.testUnitData;
                 harnessSettings = testCaseContent.settings;
                 lastUnit = units[units.length - 1];
-                rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
+                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
+                const rootDir = lastUnit.originalFilePath.indexOf("conformance") === -1 ? "tests/cases/compiler/" : lastUnit.originalFilePath.substring(0, lastUnit.originalFilePath.lastIndexOf("/")) + "/";
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
                 toBeCompiled = [];
                 otherFiles = [];
                 if (/require\(/.test(lastUnit.content) || /reference\spath/.test(lastUnit.content)) {
-                    toBeCompiled.push({ unitName: ts.combinePaths(rootDir, lastUnit.name), content: lastUnit.content });
+                    toBeCompiled.push({ unitName: this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content });
                     units.forEach(unit => {
                         if (unit.name !== lastUnit.name) {
-                            otherFiles.push({ unitName: ts.combinePaths(rootDir, unit.name), content: unit.content });
+                            otherFiles.push({ unitName: this.makeUnitName(unit.name, rootDir), content: unit.content });
                         }
                     });
                 }
                 else {
                     toBeCompiled = units.map(unit => {
-                        return { unitName: ts.combinePaths(rootDir, unit.name), content: unit.content };
+                        return { unitName: this.makeUnitName(unit.name, rootDir), content: unit.content };
                     });
                 }
 
-                const output = Harness.Compiler.HarnessCompiler.compileFiles(
+                const output = Harness.Compiler.compileFiles(
                     toBeCompiled, otherFiles, harnessSettings, /* options */ undefined, /* currentDirectory */ undefined);
 
                 options = output.options;
                 result = output.result;
-                program = output.program;
             });
 
             after(() => {
                 // Mocha holds onto the closure environment of the describe callback even after the test is done.
                 // Therefore we have to clean out large objects after the test is done.
                 justName = undefined;
-                content = undefined;
-                testCaseContent = undefined;
-                units = undefined;
-                harnessSettings = undefined;
                 lastUnit = undefined;
-                rootDir = undefined;
+                hasNonDtsFiles = undefined;
                 result = undefined;
-                program = undefined;
                 options = undefined;
                 toBeCompiled = undefined;
                 otherFiles = undefined;
@@ -147,7 +141,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it("Correct JS output for " + fileName, () => {
-                if (!(units.length === 1 && ts.fileExtensionIs(lastUnit.name, ".d.ts")) && this.emit) {
+                if (hasNonDtsFiles && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
                         throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
                     }
@@ -181,7 +175,7 @@ class CompilerBaselineRunner extends RunnerBase {
                         }
 
                         const declFileCompilationResult =
-                            Harness.Compiler.HarnessCompiler.compileDeclarationFiles(
+                            Harness.Compiler.compileDeclarationFiles(
                                 toBeCompiled, otherFiles, result, harnessSettings, options, /*currentDirectory*/ undefined);
 
                         if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
@@ -253,6 +247,7 @@ class CompilerBaselineRunner extends RunnerBase {
                     // These types are equivalent, but depend on what order the compiler observed
                     // certain parts of the program.
 
+                    const program = result.program;
                     const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
                     const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);

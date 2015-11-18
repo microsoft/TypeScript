@@ -126,7 +126,7 @@ namespace RWC {
 
                     // Emit the results
                     compilerOptions = null;
-                    const output = Harness.Compiler.HarnessCompiler.compileFiles(
+                    const output = Harness.Compiler.compileFiles(
                         inputFiles,
                         otherFiles,
                         /* harnessOptions */ undefined,
@@ -202,7 +202,7 @@ namespace RWC {
             it("has the expected errors in generated declaration files", () => {
                 if (compilerOptions.declaration && !compilerResult.errors.length) {
                     Harness.Baseline.runBaseline("has the expected errors in generated declaration files", baseName + ".dts.errors.txt", () => {
-                        const declFileCompilationResult = Harness.Compiler.HarnessCompiler.compileDeclarationFiles(
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
                             inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
 
                         if (declFileCompilationResult.declResult.errors.length === 0) {

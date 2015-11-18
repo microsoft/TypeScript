@@ -32,7 +32,6 @@ class Test262BaselineRunner extends RunnerBase {
                 filename: string;
                 compilerResult: Harness.Compiler.CompilerResult;
                 inputFiles: Harness.Compiler.TestFile[];
-                program: ts.Program;
             };
 
             before(() => {
@@ -50,10 +49,9 @@ class Test262BaselineRunner extends RunnerBase {
                     filename: testFilename,
                     inputFiles: inputFiles,
                     compilerResult: undefined,
-                    program: undefined,
                 };
 
-                const output = Harness.Compiler.HarnessCompiler.compileFiles(
+                const output = Harness.Compiler.compileFiles(
                     [Test262BaselineRunner.helperFile].concat(inputFiles),
                     /*otherFiles*/ [],
                     /* harnessOptions */ undefined,
@@ -61,7 +59,6 @@ class Test262BaselineRunner extends RunnerBase {
                     /* currentDirectory */ undefined
                     );
                 testState.compilerResult = output.result;
-                testState.program = output.program;
             });
 
             after(() => {
@@ -86,14 +83,14 @@ class Test262BaselineRunner extends RunnerBase {
                 }, false, Test262BaselineRunner.baselineOptions);
             });
 
-            it("satisfies inletiants", () => {
-                const sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+            it("satisfies invariants", () => {
+                const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                 Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it("has the expected AST", () => {
                 Harness.Baseline.runBaseline("has the expected AST", testState.filename + ".AST.txt", () => {
-                    const sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                    const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                     return Utils.sourceFileToJSON(sourceFile);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
