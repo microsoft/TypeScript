@@ -59,6 +59,16 @@ namespace ts.JsTyping {
         return { cachedTypingPaths, newTypings: newTypingNames };
     }
 
+    /**
+     * Updates the tsd.json cache's "notFound" custom property. This property is used to determine if an attempt has already been
+     * made to resolve a particular typing. Also updates typings.json, a project scope configuration file that can be used
+     * to turn off the typing auto-acquisition feature, verify the list of typings that are being auto-referenced and exclude
+     * typings from this list.
+     * @param cachedTypingsPaths The list of resolved cached d.ts paths
+     * @param newTypings The list of new typings that the host attempted to acquire using TSD
+     * @param cachePath The path to the local tsd.json cache
+     * @param typingsConfigPath The path to the project's typings.json
+     */
     export function updateTypingsConfig(
         host: TypeDefinitionResolutionHost | System, cachedTypingsPaths: string[], newTypings: string[], cachePath: string, typingsConfigPath: string): void {
         let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
@@ -70,7 +80,7 @@ namespace ts.JsTyping {
                 notFound = ts.filter(newTypings, i => !isInstalled(i, installedTypings));
             }
             if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
-                notFound = ts.deduplicate<string>(cacheTsdJsonDict["notFound"].concat(notFound));
+                notFound = cacheTsdJsonDict["notFound"].concat(notFound);
             }
             if (notFound.length > 0) {
                 cacheTsdJsonDict["notFound"] = notFound;
