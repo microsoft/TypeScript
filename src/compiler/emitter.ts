@@ -548,14 +548,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
               * @param emitFn if given will be invoked to emit the text instead of actual token emit */
             let emitToken = emitTokenText;
 
-            /** Called to before starting the lexical scopes as in function/class in the emitted code because of node
-              * @param scopeDeclaration node that starts the lexical scope
-              * @param scopeName Optional name of this scope instead of deducing one from the declaration node */
-            let scopeEmitStart = function(scopeDeclaration: Node, scopeName?: string) { };
-
-            /** Called after coming out of the scope */
-            let scopeEmitEnd = function() { };
-
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
@@ -753,13 +745,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // Current source map file and its index in the sources list
                 let sourceMapSourceIndex = -1;
 
-                // Names and its index map
-                const sourceMapNameIndexMap: Map<number> = {};
-                const sourceMapNameIndices: number[] = [];
-                function getSourceMapNameIndex() {
-                    return sourceMapNameIndices.length ? lastOrUndefined(sourceMapNameIndices) : -1;
-                }
-
                 // Last recorded and encoded spans
                 let lastRecordedSourceMapSpan: SourceMapSpan;
                 let lastEncodedSourceMapSpan: SourceMapSpan = {
@@ -769,7 +754,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     sourceColumn: 1,
                     sourceIndex: 0
                 };
-                let lastEncodedNameIndex = 0;
 
                 // Encoding for sourcemap span
                 function encodeLastRecordedSourceMapSpan() {
@@ -804,12 +788,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     // 4. Relative sourceColumn 0 based
                     sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan.sourceColumn);
-
-                    // 5. Relative namePosition 0 based
-                    if (lastRecordedSourceMapSpan.nameIndex >= 0) {
-                        sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex - lastEncodedNameIndex);
-                        lastEncodedNameIndex = lastRecordedSourceMapSpan.nameIndex;
-                    }
 
                     lastEncodedSourceMapSpan = lastRecordedSourceMapSpan;
                     sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
@@ -876,7 +854,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             emittedColumn: emittedColumn,
                             sourceLine: sourceLinePos.line,
                             sourceColumn: sourceLinePos.character,
-                            nameIndex: getSourceMapNameIndex(),
                             sourceIndex: sourceMapSourceIndex
                         };
                     }
@@ -928,69 +905,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         sourceMapData.sourceMapSourcesContent.push(node.text);
                     }
                 }
-
-                function recordScopeNameOfNode(node: Node, scopeName?: string) {
-                    function recordScopeNameIndex(scopeNameIndex: number) {
-                        sourceMapNameIndices.push(scopeNameIndex);
-                    }
-
-                    function recordScopeNameStart(scopeName: string) {
-                        let scopeNameIndex = -1;
-                        if (scopeName) {
-                            const parentIndex = getSourceMapNameIndex();
-                            if (parentIndex !== -1) {
-                                // Child scopes are always shown with a dot (even if they have no name),
-                                // unless it is a computed property. Then it is shown with brackets,
-                                // but the brackets are included in the name.
-                                const name = (<Declaration>node).name;
-                                if (!name || name.kind !== SyntaxKind.ComputedPropertyName) {
-                                    scopeName = "." + scopeName;
-                                }
-                                scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
-                            }
-
-                            scopeNameIndex = getProperty(sourceMapNameIndexMap, scopeName);
-                            if (scopeNameIndex === undefined) {
-                                scopeNameIndex = sourceMapData.sourceMapNames.length;
-                                sourceMapData.sourceMapNames.push(scopeName);
-                                sourceMapNameIndexMap[scopeName] = scopeNameIndex;
-                            }
-                        }
-                        recordScopeNameIndex(scopeNameIndex);
-                    }
-
-                    if (scopeName) {
-                        // The scope was already given a name  use it
-                        recordScopeNameStart(scopeName);
-                    }
-                    else if (node.kind === SyntaxKind.FunctionDeclaration ||
-                        node.kind === SyntaxKind.FunctionExpression ||
-                        node.kind === SyntaxKind.MethodDeclaration ||
-                        node.kind === SyntaxKind.MethodSignature ||
-                        node.kind === SyntaxKind.GetAccessor ||
-                        node.kind === SyntaxKind.SetAccessor ||
-                        node.kind === SyntaxKind.ModuleDeclaration ||
-                        node.kind === SyntaxKind.ClassDeclaration ||
-                        node.kind === SyntaxKind.EnumDeclaration) {
-                        // Declaration and has associated name use it
-                        if ((<Declaration>node).name) {
-                            const name = (<Declaration>node).name;
-                            // For computed property names, the text will include the brackets
-                            scopeName = name.kind === SyntaxKind.ComputedPropertyName
-                                ? getTextOfNode(name)
-                                : (<Identifier>(<Declaration>node).name).text;
-                        }
-                        recordScopeNameStart(scopeName);
-                    }
-                    else {
-                        // Block just use the name from upper level scope
-                        recordScopeNameIndex(getSourceMapNameIndex());
-                    }
-                }
-
-                function recordScopeNameEnd() {
-                    sourceMapNameIndices.pop();
-                };
 
                 function writeCommentRangeWithMap(currentText: string, currentLineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
                     recordSourceMapSpan(comment.pos);
@@ -1134,8 +1048,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitStart = recordEmitNodeStartSpan;
                 emitEnd = recordEmitNodeEndSpan;
                 emitToken = writeTextWithSpanRecord;
-                scopeEmitStart = recordScopeNameOfNode;
-                scopeEmitEnd = recordScopeNameEnd;
                 writeComment = writeCommentRangeWithMap;
             }
 
@@ -3124,7 +3036,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
-                scopeEmitStart(node.parent);
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     Debug.assert(node.parent.kind === SyntaxKind.ModuleDeclaration);
                     emitCaptureThisForNodeIfNecessary(node.parent);
@@ -3136,7 +3047,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
-                scopeEmitEnd();
             }
 
             function emitEmbeddedStatement(node: Node) {
@@ -4981,8 +4891,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitDownLevelExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
                 write(" {");
-                scopeEmitStart(node);
-
                 increaseIndent();
                 const outPos = writer.getTextPos();
                 emitDetachedCommentsAndUpdateCommentsInfo(node.body);
@@ -5021,14 +4929,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitStart(node.body);
                 write("}");
                 emitEnd(node.body);
-
-                scopeEmitEnd();
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
-                scopeEmitStart(node);
-
                 const initialTextPos = writer.getTextPos();
 
                 increaseIndent();
@@ -5062,7 +4966,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
-                scopeEmitEnd();
             }
 
             function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
@@ -5348,7 +5251,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let startIndex = 0;
 
                 write(" {");
-                scopeEmitStart(node, "constructor");
                 increaseIndent();
                 if (ctor) {
                     // Emit all the directive prologues (like "use strict").  These have to come before
@@ -5398,7 +5300,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 decreaseIndent();
                 emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
-                scopeEmitEnd();
                 emitEnd(<Node>ctor || node);
                 if (ctor) {
                     emitTrailingComments(ctor);
@@ -5535,14 +5436,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 write(" {");
                 increaseIndent();
-                scopeEmitStart(node);
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES6AndHigher(node);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
-                scopeEmitEnd();
 
                 // TODO(rbuckton): Need to go back to `let _a = class C {}` approach, removing the defineProperty call for now.
 
@@ -5629,7 +5528,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 tempParameters = undefined;
                 computedPropertyNamesToGeneratedNames = undefined;
                 increaseIndent();
-                scopeEmitStart(node);
                 if (baseTypeNode) {
                     writeLine();
                     emitStart(baseTypeNode);
@@ -5662,7 +5560,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
-                scopeEmitEnd();
                 emitStart(node);
                 write(")(");
                 if (baseTypeNode) {
@@ -6225,12 +6122,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitEnd(node.name);
                 write(") {");
                 increaseIndent();
-                scopeEmitStart(node);
                 emitLines(node.members);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
-                scopeEmitEnd();
                 write(")(");
                 emitModuleMemberName(node);
                 write(" || (");
@@ -6354,7 +6249,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write("{");
                     increaseIndent();
-                    scopeEmitStart(node);
                     emitCaptureThisForNodeIfNecessary(node);
                     writeLine();
                     emit(node.body);
@@ -6362,7 +6256,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                     emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
-                    scopeEmitEnd();
                 }
                 write(")(");
                 // write moduleDecl = containingModule.m only if it is not exported es6 module member
