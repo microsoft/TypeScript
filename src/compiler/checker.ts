@@ -12034,7 +12034,10 @@ namespace ts {
                 const symbol = getSymbolOfNode(node);
                 const localSymbol = node.localSymbol || symbol;
 
-                const firstDeclaration = forEach(symbol.declarations,
+                // Since the javascript won't do semantic analysis like typescript, 
+                // if the javascript file comes before the typescript file and both contain same name functions, 
+                // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
+                const firstDeclaration = forEach(localSymbol.declarations,
                     // Get first non javascript function declaration
                     declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFile(declaration)) ?
                         declaration : undefined);

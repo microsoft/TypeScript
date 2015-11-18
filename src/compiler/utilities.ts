@@ -1913,11 +1913,11 @@ namespace ts {
         }
         else {
             const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
-            forEach(sourceFiles, sourceFile => {
+            for (const sourceFile of sourceFiles) {
                 if (!isDeclarationFile(sourceFile)) {
                     onSingleFileEmit(host, sourceFile);
                 }
-            });
+            }
         }
 
         function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
@@ -1936,7 +1936,7 @@ namespace ts {
             const bundledSources = filter(host.getSourceFiles(),
                 sourceFile => !isDeclarationFile(sourceFile) && // Not a declaration file
                     (!isExternalModule(sourceFile) || // non module file
-                        (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit
+                        (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted 
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
                 const emitFileNames: EmitFileNames = {

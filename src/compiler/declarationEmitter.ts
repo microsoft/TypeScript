@@ -77,64 +77,67 @@ namespace ts {
         let addedGlobalFileReference = false;
         let allSourcesModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         forEach(sourceFiles, sourceFile => {
-            if (!isSourceFileJavaScript(sourceFile)) {
-                // Check what references need to be added
-                if (!compilerOptions.noResolve) {
-                    forEach(sourceFile.referencedFiles, fileReference => {
-                        const referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+            // Dont emit for javascript file
+            if (isSourceFileJavaScript(sourceFile)) {
+                return;
+            }
 
-                        // Emit reference in dts, if the file reference was not already emitted
-                        if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
-                            // Add a reference to generated dts file,
-                            // global file reference is added only 
-                            //  - if it is not bundled emit (because otherwise it would be self reference)
-                            //  - and it is not already added
-                            if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
-                                addedGlobalFileReference = true;
-                            }
-                            emittedReferencedFiles.push(referencedFile);
+            // Check what references need to be added
+            if (!compilerOptions.noResolve) {
+                forEach(sourceFile.referencedFiles, fileReference => {
+                    const referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
+
+                    // Emit reference in dts, if the file reference was not already emitted
+                    if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
+                        // Add a reference to generated dts file,
+                        // global file reference is added only 
+                        //  - if it is not bundled emit (because otherwise it would be self reference)
+                        //  - and it is not already added
+                        if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
+                            addedGlobalFileReference = true;
                         }
-                    });
-                }
+                        emittedReferencedFiles.push(referencedFile);
+                    }
+                });
+            }
 
-                if (!isBundledEmit || !isExternalModule(sourceFile)) {
-                    noDeclare = false;
-                    emitSourceFile(sourceFile);
-                }
-                else if (isExternalModule(sourceFile)) {
-                    noDeclare = true;
-                    write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
-                    writeLine();
-                    increaseIndent();
-                    emitSourceFile(sourceFile);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-                }
+            if (!isBundledEmit || !isExternalModule(sourceFile)) {
+                noDeclare = false;
+                emitSourceFile(sourceFile);
+            }
+            else if (isExternalModule(sourceFile)) {
+                noDeclare = true;
+                write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
+                writeLine();
+                increaseIndent();
+                emitSourceFile(sourceFile);
+                decreaseIndent();
+                write("}");
+                writeLine();
+            }
 
-                // create asynchronous output for the importDeclarations
-                if (moduleElementDeclarationEmitInfo.length) {
-                    const oldWriter = writer;
-                    forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                        if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
-                            Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
-                            createAndSetNewTextWriterWithSymbolWriter();
-                            Debug.assert(aliasEmitInfo.indent === 0 || (aliasEmitInfo.indent === 1 && isBundledEmit));
-                            for (let i = 0; i < aliasEmitInfo.indent; i++) {
-                                increaseIndent();
-                            }
-                            writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
-                            aliasEmitInfo.asynchronousOutput = writer.getText();
-                            for (let i = 0; i < aliasEmitInfo.indent; i++) {
-                                decreaseIndent();
-                            }
+            // create asynchronous output for the importDeclarations
+            if (moduleElementDeclarationEmitInfo.length) {
+                const oldWriter = writer;
+                forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
+                    if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
+                        Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
+                        createAndSetNewTextWriterWithSymbolWriter();
+                        Debug.assert(aliasEmitInfo.indent === 0 || (aliasEmitInfo.indent === 1 && isBundledEmit));
+                        for (let i = 0; i < aliasEmitInfo.indent; i++) {
+                            increaseIndent();
                         }
-                    });
-                    setWriter(oldWriter);
+                        writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
+                        aliasEmitInfo.asynchronousOutput = writer.getText();
+                        for (let i = 0; i < aliasEmitInfo.indent; i++) {
+                            decreaseIndent();
+                        }
+                    }
+                });
+                setWriter(oldWriter);
 
-                    allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
-                    moduleElementDeclarationEmitInfo = [];
-                }
+                allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                moduleElementDeclarationEmitInfo = [];
             }
         });
 
