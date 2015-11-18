@@ -112,17 +112,10 @@ class PreferConstWalker extends Lint.RuleWalker {
                     this.markAssignment((element as ts.ShorthandPropertyAssignment).name);
                 }
                 else if (kind === ts.SyntaxKind.PropertyAssignment) {
-                    const rhs = (element as ts.PropertyAssignment).initializer;
-
-                    if (rhs.kind === ts.SyntaxKind.Identifier) {
-                        this.markAssignment(rhs as ts.Identifier);
-                    }
-                    else if (rhs.kind === ts.SyntaxKind.ObjectLiteralExpression || rhs.kind === ts.SyntaxKind.ArrayLiteralExpression) {
-                        this.visitBindingLiteralExpression(rhs as ts.ObjectLiteralExpression | ts.ArrayLiteralExpression);
-                    }
-                    else {
-                        // Should be an error, but do nothing for now.
-                    }
+                    this.visitLHSExpressions((element as ts.PropertyAssignment).initializer);
+                }
+                else {
+                    // Should we throw an exception?
                 }
             }
         }
