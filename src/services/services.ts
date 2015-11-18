@@ -1581,6 +1581,36 @@ namespace ts {
         export const letElement = "let";
     }
 
+    export type ScriptElementKind = typeof ScriptElementKind.alias
+                                  | typeof ScriptElementKind.callSignatureElement
+                                  | typeof ScriptElementKind.classElement
+                                  | typeof ScriptElementKind.constElement
+                                  | typeof ScriptElementKind.constructorImplementationElement
+                                  | typeof ScriptElementKind.constructSignatureElement
+                                  | typeof ScriptElementKind.enumElement
+                                  | typeof ScriptElementKind.functionElement
+                                  | typeof ScriptElementKind.indexSignatureElement
+                                  | typeof ScriptElementKind.interfaceElement
+                                  | typeof ScriptElementKind.keyword
+                                  | typeof ScriptElementKind.label
+                                  | typeof ScriptElementKind.letElement
+                                  | typeof ScriptElementKind.localClassElement
+                                  | typeof ScriptElementKind.localFunctionElement
+                                  | typeof ScriptElementKind.localVariableElement
+                                  | typeof ScriptElementKind.memberFunctionElement
+                                  | typeof ScriptElementKind.memberGetAccessorElement
+                                  | typeof ScriptElementKind.memberSetAccessorElement
+                                  | typeof ScriptElementKind.memberVariableElement
+                                  | typeof ScriptElementKind.moduleElement
+                                  | typeof ScriptElementKind.parameterElement
+                                  | typeof ScriptElementKind.primitiveType
+                                  | typeof ScriptElementKind.scriptElement
+                                  | typeof ScriptElementKind.typeElement
+                                  | typeof ScriptElementKind.typeParameterElement
+                                  | typeof ScriptElementKind.unknown
+                                  | typeof ScriptElementKind.variableElement
+                                  | typeof ScriptElementKind.warning;
+
     export module ScriptElementKindModifier {
         export const none = "";
         export const publicMemberModifier = "public";
@@ -4129,7 +4159,7 @@ namespace ts {
         }
 
         // TODO(drosen): use contextual SemanticMeaning.
-        function getSymbolKind(symbol: Symbol, location: Node): string {
+        function getSymbolKind(symbol: Symbol, location: Node): ScriptElementKind {
             let flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
@@ -4150,7 +4180,7 @@ namespace ts {
             return result;
         }
 
-        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, location: Node) {
+        function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, location: Node): ScriptElementKind {
             let typeChecker = program.getTypeChecker();
 
             if (typeChecker.isUndefinedSymbol(symbol)) {
