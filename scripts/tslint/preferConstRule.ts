@@ -106,11 +106,23 @@ class PreferConstWalker extends Lint.RuleWalker {
         if (node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
             const pattern = node as ts.ObjectLiteralExpression;
             for (const element of pattern.properties) {
-                if (element.name.kind === ts.SyntaxKind.Identifier) {
-                    this.markAssignment(element.name as ts.Identifier);
+                const kind = element.kind;
+
+                if (kind === ts.SyntaxKind.ShorthandPropertyAssignment) {
+                    this.markAssignment((element as ts.ShorthandPropertyAssignment).name);
                 }
-                else if (isBindingPattern(element.name)) {
-                    this.visitBindingPatternIdentifiers(element.name as ts.BindingPattern);
+                else if (kind === ts.SyntaxKind.PropertyAssignment) {
+                    const rhs = (element as ts.PropertyAssignment).initializer;
+
+                    if (rhs.kind === ts.SyntaxKind.Identifier) {
+                        this.markAssignment(rhs as ts.Identifier);
+                    }
+                    else if (rhs.kind === ts.SyntaxKind.ObjectLiteralExpression || rhs.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+                        this.visitBindingLiteralExpression(rhs as ts.ObjectLiteralExpression | ts.ArrayLiteralExpression);
+                    }
+                    else {
+                        // Should be an error, but do nothing for now.
+                    }
                 }
             }
         }
