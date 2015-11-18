@@ -374,7 +374,7 @@ namespace ts {
         }
 
         // _Always_ compute a common source directory
-        let commonSourceDirectory = computeCommonSourceDirectory(files);
+        let commonSourceDirectory: string;
         verifyCompilerOptions();
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -395,7 +395,9 @@ namespace ts {
             getTypeChecker,
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
-            getCommonSourceDirectory: () => commonSourceDirectory,
+            getCommonSourceDirectory: () => {
+                return typeof commonSourceDirectory === "undefined" ? (commonSourceDirectory = computeCommonSourceDirectory(files)) : commonSourceDirectory;
+            },
             emit,
             getCurrentDirectory: () => currentDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
@@ -1071,11 +1073,12 @@ namespace ts {
                     }
                 }
 
-            if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
-                // Make sure directory path ends with directory separator so this string can directly
-                // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                // start with / making it rooted path
-                commonSourceDirectory += directorySeparator;
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+                    // Make sure directory path ends with directory separator so this string can directly
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                    // start with / making it rooted path
+                    commonSourceDirectory += directorySeparator;
+                }
             }
 
             if (options.noEmit) {
