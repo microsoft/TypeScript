@@ -3,7 +3,7 @@ tests/cases/compiler/errorsOnImportedSymbol_1.ts(3,9): error TS2304: Cannot find
 
 
 ==== tests/cases/compiler/errorsOnImportedSymbol_1.ts (2 errors) ====
-    import Sammy = require("errorsOnImportedSymbol_0");
+    import Sammy = require("./errorsOnImportedSymbol_0");
     var x = new Sammy.Sammy();
                 ~~~~~
 !!! error TS2304: Cannot find name 'Sammy'.

@@ -1,8 +1,9 @@
 tests/cases/compiler/sourceMapValidationFor.ts(2,5): error TS2304: Cannot find name 'WScript'.
 tests/cases/compiler/sourceMapValidationFor.ts(6,5): error TS2304: Cannot find name 'WScript'.
+tests/cases/compiler/sourceMapValidationFor.ts(20,1): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/sourceMapValidationFor.ts (2 errors) ====
+==== tests/cases/compiler/sourceMapValidationFor.ts (3 errors) ====
     for (var i = 0; i < 10; i++) {
         WScript.Echo("i: " + i);
         ~~~~~~~
@@ -27,6 +28,8 @@ tests/cases/compiler/sourceMapValidationFor.ts(6,5): error TS2304: Cannot find n
     for (var k = 0;; k++) {
     }
     for (k = 0;; k++)
+    ~~~
+!!! error TS7027: Unreachable code detected.
     {
     }
     for (; k < 10; k++) {

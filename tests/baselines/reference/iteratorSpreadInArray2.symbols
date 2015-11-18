@@ -13,7 +13,7 @@ class SymbolIterator {
         return {
             value: Symbol(),
 >value : Symbol(value, Decl(iteratorSpreadInArray2.ts, 4, 16))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
             done: false
 >done : Symbol(done, Decl(iteratorSpreadInArray2.ts, 5, 28))
@@ -22,9 +22,9 @@ class SymbolIterator {
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
         return this;
 >this : Symbol(SymbolIterator, Decl(iteratorSpreadInArray2.ts, 0, 59))
@@ -48,9 +48,9 @@ class NumberIterator {
     }
 
     [Symbol.iterator]() {
->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
->Symbol : Symbol(Symbol, Decl(lib.d.ts, 1199, 52), Decl(lib.d.ts, 1305, 11))
->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, 1249, 31))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.d.ts, --, --))
 
         return this;
 >this : Symbol(NumberIterator, Decl(iteratorSpreadInArray2.ts, 13, 1))

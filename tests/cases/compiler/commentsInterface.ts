@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 /** this is interface 1*/
 interface i1 {
 }

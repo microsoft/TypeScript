@@ -24,5 +24,5 @@ console.log(JSON.stringify(result));
  */
 var ts = require("typescript");
 var source = "let x: string  = 'string'";
-var result = ts.transpile(source, { module: 1 /* CommonJS */ });
+var result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 console.log(JSON.stringify(result));

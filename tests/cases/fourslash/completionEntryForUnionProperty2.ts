@@ -1,12 +1,12 @@
 ///<reference path="fourslash.ts" />
 
 ////interface One {
-////    commonProperty: number;
+////    commonProperty: string;
 ////    commonFunction(): number;
 ////}
 ////
 ////interface Two {
-////    commonProperty: string
+////    commonProperty: number;
 ////    commonFunction(): number;
 ////}
 ////
@@ -16,5 +16,5 @@
 
 goTo.marker();
 verify.memberListContains("toString", "(method) toString(): string");
-verify.memberListContains("valueOf", "(method) valueOf(): number | string");
+verify.memberListContains("valueOf", "(method) valueOf(): string | number");
 verify.memberListCount(2);

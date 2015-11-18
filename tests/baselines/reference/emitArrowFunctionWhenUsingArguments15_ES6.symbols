@@ -7,9 +7,9 @@ function f() {
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 2, 7))
 
     if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11), Decl(lib.d.ts, 1721, 60))
->random : Symbol(Math.random, Decl(lib.d.ts, 608, 38))
+>Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.d.ts, --, --))
 
         const arguments = 100;
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 4, 13))

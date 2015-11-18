@@ -6,7 +6,7 @@ export class Greeter {
 }
 
 //// [importAsBaseClass_1.ts]
-import Greeter = require("importAsBaseClass_0");
+import Greeter = require("./importAsBaseClass_0");
 class Hello extends Greeter { }
 
 
@@ -24,7 +24,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Greeter = require("importAsBaseClass_0");
+var Greeter = require("./importAsBaseClass_0");
 var Hello = (function (_super) {
     __extends(Hello, _super);
     function Hello() {

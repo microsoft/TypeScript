@@ -8,19 +8,19 @@
 
 type arrayString = Array<String>
 >arrayString : Symbol(arrayString, Decl(destructuringParameterDeclaration3ES6.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 1455, 1))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(lib.d.ts, 1573, 1))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type someArray = Array<String> | number[];
 >someArray : Symbol(someArray, Decl(destructuringParameterDeclaration3ES6.ts, 7, 32))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 1455, 1))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(lib.d.ts, 1573, 1))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 type stringOrNumArray = Array<String|Number>;
 >stringOrNumArray : Symbol(stringOrNumArray, Decl(destructuringParameterDeclaration3ES6.ts, 8, 42))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 1455, 1))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(lib.d.ts, 1573, 1))
->Number : Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function a1(...x: (number|string)[]) { }
 >a1 : Symbol(a1, Decl(destructuringParameterDeclaration3ES6.ts, 9, 45))
@@ -33,8 +33,8 @@ function a2(...a) { }
 function a3(...a: Array<String>) { }
 >a3 : Symbol(a3, Decl(destructuringParameterDeclaration3ES6.ts, 12, 21))
 >a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 13, 12))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(lib.d.ts, 1455, 1))
->String : Symbol(String, Decl(lib.d.ts, 275, 1), Decl(lib.d.ts, 443, 11), Decl(lib.d.ts, 1573, 1))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 function a4(...a: arrayString) { }
 >a4 : Symbol(a4, Decl(destructuringParameterDeclaration3ES6.ts, 13, 36))
@@ -122,7 +122,7 @@ const enum E1 { a, b }
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : Symbol(foo1, Decl(destructuringParameterDeclaration3ES6.ts, 39, 22))
 >T : Symbol(T, Decl(destructuringParameterDeclaration3ES6.ts, 40, 14))
->Number : Symbol(Number, Decl(lib.d.ts, 456, 40), Decl(lib.d.ts, 518, 11))
+>Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(destructuringParameterDeclaration3ES6.ts, 40, 32))
 >T : Symbol(T, Decl(destructuringParameterDeclaration3ES6.ts, 40, 14))
 

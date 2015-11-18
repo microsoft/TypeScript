@@ -1,8 +1,8 @@
-// In the true branch statement of an ‘if’ statement, 
-// the type of a variable or parameter is narrowed by any type guard in the ‘if’ condition when true, 
+// In the true branch statement of an 'if' statement, 
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true, 
 // provided the true branch statement contains no assignments to the variable or parameter.
-// In the false branch statement of an ‘if’ statement, 
-// the type of a variable or parameter is narrowed by any type guard in the ‘if’ condition when false, 
+// In the false branch statement of an 'if' statement, 
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false, 
 // provided the false branch statement contains no assignments to the variable or parameter
 function foo(x: number | string) {
     if (typeof x === "string") {

@@ -41,15 +41,13 @@ var x = <div>one</div> /* intervening comment */ <div>two</div>;;
     < ;
 a /  > ;
 <a b={d /  > }/>
-    < a > ;
+    ,
+        <a>;
 <a></b>;
-<a foo="bar;/>
-    < a;
-b > ;
-b > ;
-<a b= c=></a>;
+<a foo="bar;/>a:b></b>;
+<a b c></a>;
 b.c > ;
-<a.b c=></a.b>;
+<a.b c></a.b>;
 c > ;
 <a.b.c></a>;
     < .a > ;
@@ -67,7 +65,7 @@ var x = <div>one</div><div>two</div>;;
 var x = <div>one</div> /* intervening comment */ /* intervening comment */ <div>two</div>;;
 <a>{"str"}}</a>;
 <span className="a"/> id="b" />;
-<div className=/>>;
+<div className/>>;
 <div {...props}/>;
 
 <div>stuff</div>...props}>;

@@ -5,7 +5,12 @@ declare class E extends C {
 >C : C
 }
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=========
+    Keep this pinned comment
+   =========
+*/
+
+/*! Don't keep this pinned comment */
 declare class C {
 >C : C
 }

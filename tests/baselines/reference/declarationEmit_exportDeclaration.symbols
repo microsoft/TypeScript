@@ -10,7 +10,7 @@ export interface Buzz { }
 >Buzz : Symbol(Buzz, Decl(utils.ts, 2, 25))
 
 === tests/cases/compiler/index.ts ===
-import {foo, bar, Buzz} from "utils";
+import {foo, bar, Buzz} from "./utils";
 >foo : Symbol(foo, Decl(index.ts, 0, 8))
 >bar : Symbol(bar, Decl(index.ts, 0, 12))
 >Buzz : Symbol(Buzz, Decl(index.ts, 0, 17))

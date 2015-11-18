@@ -1,0 +1,8 @@
+=== tests/cases/compiler/sourceMapValidationLambdaSpanningMultipleLines.ts ===
+((item: string) =>
+>item : Symbol(item, Decl(sourceMapValidationLambdaSpanningMultipleLines.ts, 0, 2))
+
+    item
+>item : Symbol(item, Decl(sourceMapValidationLambdaSpanningMultipleLines.ts, 0, 2))
+
+)

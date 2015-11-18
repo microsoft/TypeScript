@@ -9,7 +9,7 @@ namespace ts {
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
         Debug.assert(line >= 0);
         let lineStarts = sourceFile.getLineStarts();
-        
+
         let lineIndex = line;
         if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
@@ -128,7 +128,8 @@ namespace ts {
                 return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
 
             case SyntaxKind.ExpressionStatement:
-                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
+                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -170,7 +171,7 @@ namespace ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElementExpression:
-                let unaryWordExpression = (<TypeOfExpression|DeleteExpression|VoidExpression|YieldExpression|SpreadElementExpression>n);
+                let unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -252,7 +253,7 @@ namespace ts {
         });
 
         // Either we didn't find an appropriate list, or the list must contain us.
-        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node)); 
+        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node));
         return syntaxList;
     }
 
@@ -360,7 +361,7 @@ namespace ts {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
-            if (isToken(n)) {
+            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
                 return n;
             }
 
@@ -371,24 +372,35 @@ namespace ts {
         }
 
         function find(n: Node): Node {
-            if (isToken(n)) {
+            if (isToken(n) || n.kind === SyntaxKind.JsxText) {
                 return n;
             }
 
-            let children = n.getChildren();
+            const children = n.getChildren();
             for (let i = 0, len = children.length; i < len; i++) {
                 let child = children[i];
-                if (nodeHasTokens(child)) {
-                    if (position <= child.end) {
-                        if (child.getStart(sourceFile) >= position) {
-                            // actual start of the node is past the position - previous token should be at the end of previous child
-                            let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                            return candidate && findRightmostToken(candidate)
-                        }
-                        else {
-                            // candidate should be in this node
-                            return find(child);
-                        }
+                // condition 'position < child.end' checks if child node end after the position
+                // in the example below this condition will be false for 'aaaa' and 'bbbb' and true for 'ccc'
+                // aaaa___bbbb___$__ccc
+                // after we found child node with end after the position we check if start of the node is after the position.
+                // if yes - then position is in the trivia and we need to look into the previous child to find the token in question.
+                // if no - position is in the node itself so we should recurse in it.
+                // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
+                // if this is the case - then we should assume that token in question is located in previous child.
+                if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
+                    const start = child.getStart(sourceFile);
+                    const lookInPreviousChild =
+                        (start >= position) || // cursor in the leading trivia
+                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText 
+                    
+                    if (lookInPreviousChild) {
+                        // actual start of the node is past the position - previous token should be at the end of previous child
+                        let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
+                        return candidate && findRightmostToken(candidate)
+                    }
+                    else {
+                        // candidate should be in this node
+                        return find(child);
                     }
                 }
             }
@@ -414,7 +426,7 @@ namespace ts {
             }
         }
     }
-    
+
     export function isInString(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
         return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
@@ -462,11 +474,44 @@ namespace ts {
         let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
         return forEach(commentRanges, jsDocPrefix);
-        
+
         function jsDocPrefix(c: CommentRange): boolean {
             var text = sourceFile.text;
             return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
         }
+    }
+
+    /**
+     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
+     */
+    export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
+        let node = ts.getTokenAtPosition(sourceFile, position);
+        if (isToken(node)) {
+            switch (node.kind) {
+                case SyntaxKind.VarKeyword:
+                case SyntaxKind.LetKeyword:
+                case SyntaxKind.ConstKeyword:
+                    // if the current token is var, let or const, skip the VariableDeclarationList
+                    node = node.parent === undefined ? undefined : node.parent.parent;
+                    break;
+                default:
+                    node = node.parent;
+                    break;
+            }
+        }
+
+        if (node) {
+            let jsDocComment = node.jsDocComment;
+            if (jsDocComment) {
+                for (let tag of jsDocComment.tags) {
+                    if (tag.pos <= position && position <= tag.end) {
+                        return tag;
+                    }
+                }
+            }
+        }
+
+        return undefined;
     }
 
     function nodeHasTokens(n: Node): boolean {
@@ -516,6 +561,15 @@ namespace ts {
 
     export function isComment(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
+    }
+
+    export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): boolean {
+        if (kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.RegularExpressionLiteral
+            || isTemplateLiteralKind(kind)) {
+            return true;
+        }
+        return false;
     }
 
     export function isPunctuation(kind: SyntaxKind): boolean {
@@ -582,7 +636,8 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { }
+            trackSymbol: () => { },
+            reportInaccessibleThisError: () => { }
         };
 
         function writeIndent() {
@@ -640,13 +695,12 @@ namespace ts {
             else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
             else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
 
-
             return SymbolDisplayPartKind.text;
         }
     }
 
     export function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
-        return <SymbolDisplayPart> {
+        return <SymbolDisplayPart>{
             text: text,
             kind: SymbolDisplayPartKind[kind]
         };

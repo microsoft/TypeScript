@@ -1,0 +1,25 @@
+=== tests/cases/compiler/keywordInJsxIdentifier.tsx ===
+
+declare var React: any;
+>React : any
+
+<foo class-id/>;
+><foo class-id/> : any
+>foo : any
+>class-id : any
+
+<foo class/>;
+><foo class/> : any
+>foo : any
+>class : any
+
+<foo class-id="1"/>;
+><foo class-id="1"/> : any
+>foo : any
+>class-id : any
+
+<foo class="1"/>;
+><foo class="1"/> : any
+>foo : any
+>class : any
+

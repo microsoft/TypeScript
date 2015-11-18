@@ -273,7 +273,7 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
         
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => string[];
+        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
         
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
@@ -281,7 +281,10 @@ namespace ts {
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
                     let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
-                    return map(moduleNames, name => lookUp(resolutionsInFile, name));
+                    return map(moduleNames, name => {
+                        const result = lookUp(resolutionsInFile, name);
+                        return result ? { resolvedFileName: result } : undefined;
+                    });
                 };
             }
         }
@@ -320,7 +323,6 @@ namespace ts {
             // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
-                return null;
             }
             return <CompilerOptions>JSON.parse(settingsJson);
         }
@@ -942,7 +944,11 @@ namespace ts {
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                return resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
+                return {
+                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName: undefined,
+                    failedLookupLocations: result.failedLookupLocations
+                };
             }); 
         }
 
@@ -950,7 +956,8 @@ namespace ts {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()));
+                    // for now treat files as JavaScript 
+                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
@@ -983,7 +990,7 @@ namespace ts {
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = parseConfigFileText(fileName, text);
+                    let result = parseConfigFileTextToJson(fileName, text);
 
                     if (result.error) {
                         return {
@@ -993,7 +1000,7 @@ namespace ts {
                         };
                     }
 
-                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    var configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
@@ -1026,7 +1033,7 @@ namespace ts {
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
                 if (this.documentRegistry === undefined) {
-                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
                 var languageService = createLanguageService(hostAdapter, this.documentRegistry);
@@ -1062,7 +1069,7 @@ namespace ts {
         public close(): void {
             // Forget all the registered shims
             this._shims = [];
-            this.documentRegistry = createDocumentRegistry();
+            this.documentRegistry = undefined;
         }
 
         public registerShim(shim: Shim): void {
@@ -1097,4 +1104,4 @@ module TypeScript.Services {
 }
 
 /* @internal */
-let toolsVersion = "1.5";
+const toolsVersion = "1.6";

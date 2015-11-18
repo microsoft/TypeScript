@@ -4,15 +4,16 @@ declare var a: number;
 
 declare var p: Promise<number>;
 >p : Symbol(p, Decl(awaitBinaryExpression3_es6.ts, 1, 11))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4832, 1), Decl(lib.d.ts, 4918, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 async function func(): Promise<void> {
 >func : Symbol(func, Decl(awaitBinaryExpression3_es6.ts, 1, 31))
->Promise : Symbol(Promise, Decl(lib.d.ts, 4832, 1), Decl(lib.d.ts, 4918, 11))
+>Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     "before";
     var b = await p + a;
 >b : Symbol(b, Decl(awaitBinaryExpression3_es6.ts, 4, 7))
+>p : Symbol(p, Decl(awaitBinaryExpression3_es6.ts, 1, 11))
 >a : Symbol(a, Decl(awaitBinaryExpression3_es6.ts, 0, 11))
 
     "after";
