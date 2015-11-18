@@ -300,19 +300,19 @@ namespace ts {
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
 
-            let fileOrDirectory = normalizePath(commandLine.options.project);
+            const fileOrDirectory = normalizePath(commandLine.options.project);
             if (!fileOrDirectory /* current directory */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
             }
             else {
                 if (!/^tsconfig(?:-.*)?\.json$/.test(getBaseFileName(fileOrDirectory))) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_project_file_name_is_not_in_tsconfig_Asterisk_json_format_Colon_0, commandLine.options.project));
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_project_file_name_is_not_in_tsconfig_Asterisk_json_format_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
                 configFileName = fileOrDirectory;
             }
             if (!sys.fileExists(configFileName)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_any_project_file_in_specified_path_Colon_0, commandLine.options.project));
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_any_project_file_in_specified_path_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
