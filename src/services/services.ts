@@ -132,43 +132,43 @@ namespace ts {
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     let emptyArray: any[] = [];
-    
+
     const jsDocTagNames = [
-        "augments", 
-        "author", 
-        "argument", 
-        "borrows", 
-        "class", 
-        "constant", 
-        "constructor", 
-        "constructs", 
-        "default", 
-        "deprecated", 
-        "description", 
-        "event", 
-        "example", 
-        "extends", 
-        "field", 
-        "fileOverview", 
-        "function", 
-        "ignore", 
-        "inner", 
-        "lends", 
-        "link", 
-        "memberOf", 
-        "name", 
-        "namespace", 
-        "param", 
-        "private", 
-        "property", 
-        "public", 
-        "requires", 
-        "returns", 
-        "see", 
-        "since", 
-        "static", 
-        "throws", 
-        "type", 
+        "augments",
+        "author",
+        "argument",
+        "borrows",
+        "class",
+        "constant",
+        "constructor",
+        "constructs",
+        "default",
+        "deprecated",
+        "description",
+        "event",
+        "example",
+        "extends",
+        "field",
+        "fileOverview",
+        "function",
+        "ignore",
+        "inner",
+        "lends",
+        "link",
+        "memberOf",
+        "name",
+        "namespace",
+        "param",
+        "private",
+        "property",
+        "public",
+        "requires",
+        "returns",
+        "see",
+        "since",
+        "static",
+        "throws",
+        "type",
         "version"
     ];
     let jsDocCompletionEntries: CompletionEntry[];
@@ -817,7 +817,7 @@ namespace ts {
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end)
         }
-        
+
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
         }
@@ -1031,7 +1031,7 @@ namespace ts {
 
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
-         * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
+         * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
@@ -1861,7 +1861,7 @@ namespace ts {
      * - allowNonTsExtensions = true
      * - noLib = true
      * - noResolve = true
-     */    
+     */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
@@ -2670,7 +2670,7 @@ namespace ts {
         }
     }
 
-    export function createLanguageService(host: LanguageServiceHost, 
+    export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
@@ -2758,10 +2758,10 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => currentDirectory,
-                fileExists: (fileName): boolean => { 
+                fileExists: (fileName): boolean => {
                     // stub missing host functionality
                     Debug.assert(!host.resolveModuleNames);
-                    return hostCache.getOrCreateEntry(fileName) !== undefined; 
+                    return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
@@ -3167,7 +3167,7 @@ namespace ts {
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                // The current position is next to the '@' sign, when no tag name being provided yet. 
+                // The current position is next to the '@' sign, when no tag name being provided yet.
                 // Provide a full list of tag names
                 if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
                     isJsDocTagName = true;
@@ -3200,7 +3200,7 @@ namespace ts {
                 }
 
                 if (!insideJsDocTagExpression) {
-                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal 
+                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal
                     // comment or the plain text part of a jsDoc comment, so no completion should be available
                     log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
                     return undefined;
@@ -3721,8 +3721,8 @@ namespace ts {
 
                         case SyntaxKind.CloseBraceToken:
                             if (parent &&
-                                parent.kind === SyntaxKind.JsxExpression && 
-                                parent.parent && 
+                                parent.kind === SyntaxKind.JsxExpression &&
+                                parent.parent &&
                                 (parent.parent.kind === SyntaxKind.JsxAttribute)) {
                                 return <JsxOpeningLikeElement>parent.parent.parent;
                             }
@@ -3771,7 +3771,7 @@ namespace ts {
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
                             containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
                             containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
-                                                                                                          
+
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
 
@@ -5006,7 +5006,7 @@ namespace ts {
                                 }
                                 break;
                             default:
-                                if (isModifier(node.kind) && node.parent &&
+                                if (isModifierKind(node.kind) && node.parent &&
                                     (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
                                     return getModifierOccurrences(node.kind, node.parent);
                                 }
