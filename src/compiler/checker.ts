@@ -1103,9 +1103,10 @@ namespace ts {
                             );
                         }
                         for (const id in lookupTable) {
+                            const { exportsWithDuplicate } = lookupTable[id];
                             // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
-                            if (id !== "export=" && lookupTable[id].exportsWithDuplicate.length && !(id in symbols)) {
-                                for (const node of lookupTable[id].exportsWithDuplicate) {
+                            if (id !== "export=" && exportsWithDuplicate.length && !(id in symbols)) {
+                                for (const node of exportsWithDuplicate) {
                                     diagnostics.add(createDiagnosticForNode(
                                         node,
                                         Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
@@ -14009,21 +14010,16 @@ namespace ts {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                 }
-                const exports = getExportsOfModule(moduleSymbol); // Checks for export * conflicts
+                // Checks for export * conflicts
+                const exports = getExportsOfModule(moduleSymbol);
                 for (const id in exports) {
-                    if (id === "__export") continue;
+                    if (id === "__export") {
+                        continue;
+                    }
                     const exportedSymbol = exports[id];
                      // 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
                     if (!(exportedSymbol.flags & SymbolFlags.Namespace || exportedSymbol.flags & SymbolFlags.Interface || exportedSymbol.flags & SymbolFlags.Enum) && exportedSymbol.declarations.length > 1) {
-                        const exportedDeclarations: Declaration[] = [];
-                        for (const declaration of exportedSymbol.declarations) {
-                            if (declaration.kind === SyntaxKind.FunctionDeclaration) {
-                                if (!(declaration as FunctionDeclaration).body) {
-                                    continue;
-                                }
-                            }
-                            exportedDeclarations.push(declaration);
-                        }
+                        const exportedDeclarations: Declaration[] = filter(exportedSymbol.declarations, isNotOverload);
                         if (exportedDeclarations.length > 1) {
                             for (const declaration of exportedDeclarations) {
                                 diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, id));
@@ -14032,6 +14028,10 @@ namespace ts {
                     }
                 }
                 links.exportsChecked = true;
+            }
+
+            function isNotOverload(declaration: Declaration): boolean {
+                return (declaration.kind !== SyntaxKind.FunctionDeclaration || typeof (declaration as FunctionDeclaration).body !== "undefined");
             }
         }
 
