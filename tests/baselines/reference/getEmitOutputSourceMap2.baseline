@@ -1,6 +1,6 @@
 EmitSkipped: false
 FileName : sample/outDir/inputFile1.js.map
-{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile1.ts"],"names":["M","M.constructor"],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB;IAAAA;IAGAC,CAACA;IAADD,QAACA;AAADA,CAACA,AAHD,IAGC"}FileName : sample/outDir/inputFile1.js
+{"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,GAAG,CAAC;AACZ,IAAI,GAAG,GAAG,aAAa,CAAC;AACxB;IAAA;IAGA,CAAC;IAAD,QAAC;AAAD,CAAC,AAHD,IAGC"}FileName : sample/outDir/inputFile1.js
 var x = 109;
 var foo = "hello world";
 var M = (function () {
