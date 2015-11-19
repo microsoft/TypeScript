@@ -6006,6 +6006,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         case SyntaxKind.UnionType:
                         case SyntaxKind.IntersectionType:
                         case SyntaxKind.AnyKeyword:
+                        case SyntaxKind.ThisType:
                             break;
 
                         default:
