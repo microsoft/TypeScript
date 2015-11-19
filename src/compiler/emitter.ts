@@ -428,7 +428,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * var loop = function(x) { <code where 'arguments' is replaced witg 'arguments_1'> }
              * var arguments_1 = arguments
              * for (var x;;) loop(x);
-             * otherwise semantics of the code will be different since 'arguments' inside converted loop body 
+             * otherwise semantics of the code will be different since 'arguments' inside converted loop body
              * will refer to function that holds converted loop.
              * This value is set on demand.
              */
@@ -436,10 +436,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /*
              * list of non-block scoped variable declarations that appear inside converted loop
-             * such variable declarations should be moved outside the loop body 
+             * such variable declarations should be moved outside the loop body
              * for (let x;;) {
              *     var y = 1;
-             *     ... 
+             *     ...
              * }
              * should be converted to
              * var loop = function(x) {
@@ -3229,7 +3229,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 if (convertedLoopState && (getCombinedNodeFlags(decl) & NodeFlags.BlockScoped) === 0) {
-                    // we are inside a converted loop - this can only happen in downlevel scenarios 
+                    // we are inside a converted loop - this can only happen in downlevel scenarios
                     // record names for all variable declarations
                     for (const varDecl of decl.declarations) {
                         hoistVariableDeclarationFromLoop(convertedLoopState, varDecl);
@@ -3554,7 +3554,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`case "${labelMarker}": `);
                         // if there are no outer converted loop or outer label in question is located inside outer converted loop
                         // then emit labeled break\continue
-                        // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do  
+                        // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
                         if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
                             if (isBreak) {
                                 write("break ");
@@ -6011,6 +6011,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         case SyntaxKind.UnionType:
                         case SyntaxKind.IntersectionType:
                         case SyntaxKind.AnyKeyword:
+                        case SyntaxKind.ThisType:
                             break;
 
                         default:

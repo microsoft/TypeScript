@@ -204,6 +204,7 @@ namespace ts {
         UnionType,
         IntersectionType,
         ParenthesizedType,
+        ThisType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -349,7 +350,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ParenthesizedType,
+        LastTypeNode = ThisType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -726,6 +727,7 @@ namespace ts {
     // @kind(SyntaxKind.StringKeyword)
     // @kind(SyntaxKind.SymbolKeyword)
     // @kind(SyntaxKind.VoidKeyword)
+    // @kind(SyntaxKind.ThisType)
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
     }
@@ -1075,7 +1077,6 @@ namespace ts {
     export interface DebuggerStatement extends Statement { }
 
     // @kind(SyntaxKind.MissingDeclaration)
-    // @factoryhidden("name", true)
     export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
         name?: Identifier;
     }
@@ -1232,7 +1233,6 @@ namespace ts {
     export interface TypeElement extends Declaration {
         _typeElementBrand: any;
         name?: PropertyName;
-        // @factoryparam
         questionToken?: Node;
     }
 

@@ -1956,6 +1956,12 @@ namespace ts {
             return finishNode(node);
         }
 
+        function parseThisTypeNode(): TypeNode {
+            const node = <TypeNode>createNode(SyntaxKind.ThisType);
+            nextToken();
+            return finishNode(node);
+        }
+
         function parseTypeQuery(): TypeQueryNode {
             const node = <TypeQueryNode>createNode(SyntaxKind.TypeQuery);
             parseExpected(SyntaxKind.TypeOfKeyword);
@@ -2388,8 +2394,9 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                     return <StringLiteral>parseLiteralNode(/*internName*/ true);
                 case SyntaxKind.VoidKeyword:
-                case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
+                case SyntaxKind.ThisKeyword:
+                    return parseThisTypeNode();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
