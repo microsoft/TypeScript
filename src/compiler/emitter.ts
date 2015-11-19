@@ -2651,7 +2651,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCallTarget(node: Expression): Expression {
-                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || /*node.kind === SyntaxKind.ThisType ||*/ node.kind === SyntaxKind.SuperKeyword) {
+                if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword) {
                     emit(node);
                     return node;
                 }
@@ -7869,8 +7869,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return emitAccessor(<AccessorDeclaration>node);
-                    // case SyntaxKind.ThisType:
-                    //     console.log("ThisType: emitJavaScriptWorker");
                     case SyntaxKind.ThisKeyword:
                         return emitThis(node);
                     case SyntaxKind.SuperKeyword:
