@@ -851,7 +851,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function recordEmitNodeStartSpan(node: Node) {
                     // Get the token pos after skipping to the token (ignoring the leading trivia)
-                    recordSourceMapSpan(skipTrivia(currentText, node.pos));
+                    recordSourceMapSpan(skipTrivia(currentText, node.decorators ? node.decorators.end : node.pos));
                 }
 
                 function recordEmitNodeEndSpan(node: Node) {
