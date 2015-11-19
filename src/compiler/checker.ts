@@ -6427,6 +6427,8 @@ namespace ts {
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
+                    const declaration = getDeclarationOfKind(symbol, SyntaxKind.VariableDeclaration);
+                    const top = declaration && getDeclarationContainer(declaration);
                     const originalType = type;
                     const nodeStack: {node: Node, child: Node}[] = [];
                     loop: while (node.parent) {
@@ -6440,14 +6442,11 @@ namespace ts {
                                 break;
                             case SyntaxKind.SourceFile:
                             case SyntaxKind.ModuleDeclaration:
-                            case SyntaxKind.FunctionDeclaration:
-                            case SyntaxKind.MethodDeclaration:
-                            case SyntaxKind.MethodSignature:
-                            case SyntaxKind.GetAccessor:
-                            case SyntaxKind.SetAccessor:
-                            case SyntaxKind.Constructor:
-                                // Stop at the first containing function or module declaration
+                                // Stop at the first containing file or module declaration
                                 break loop;
+                        }
+                        if (node === top) {
+                            break;
                         }
                     }
 
