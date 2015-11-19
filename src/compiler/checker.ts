@@ -1143,15 +1143,16 @@ namespace ts {
                         for (const id in lookupTable) {
                             const { exportsWithDuplicate } = lookupTable[id];
                             // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
-                            if (id !== "export=" && exportsWithDuplicate.length && !(id in symbols)) {
-                                for (const node of exportsWithDuplicate) {
-                                    diagnostics.add(createDiagnosticForNode(
-                                        node,
-                                        Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
-                                        lookupTable[id].specifierText,
-                                        id
-                                    ));
-                                }
+                            if (id === "export=" || !exportsWithDuplicate.length || id in symbols) {
+                                continue;
+                            }
+                            for (const node of exportsWithDuplicate) {
+                                diagnostics.add(createDiagnosticForNode(
+                                    node,
+                                    Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
+                                    lookupTable[id].specifierText,
+                                    id
+                                ));
                             }
                         }
                         extendExportSymbols(symbols, nestedSymbols);
