@@ -1,4 +1,5 @@
 //// [throwStatements.ts]
+
 // all legal
 
 interface I {

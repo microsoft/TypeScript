@@ -1,4 +1,5 @@
 //// [localTypes4.ts]
+
 function f1() {
     // Type parameters are in scope in parameters and return types
     function f<T>(x: T): T {

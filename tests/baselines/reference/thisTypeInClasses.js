@@ -2,7 +2,6 @@
 class C1 {
     x: this;
     f(x: this): this { return undefined; }
-    constructor(x: this) { }
 }
 
 class C2 {
@@ -53,7 +52,7 @@ class C5 {
 
 //// [thisTypeInClasses.js]
 var C1 = (function () {
-    function C1(x) {
+    function C1() {
     }
     C1.prototype.f = function (x) { return undefined; };
     return C1;

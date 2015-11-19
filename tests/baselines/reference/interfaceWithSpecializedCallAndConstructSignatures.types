@@ -3,13 +3,13 @@ interface Foo {
 >Foo : Foo
 
     (x: 'a'): number;
->x : 'a'
+>x : "a"
 
     (x: string): any;
 >x : string
 
     new (x: 'a'): any;
->x : 'a'
+>x : "a"
 
     new (x: string): Object;
 >x : string
@@ -24,7 +24,7 @@ var r = f('a');
 >r : number
 >f('a') : number
 >f : Foo
->'a' : string
+>'a' : "a"
 
 var r2 = f('A');
 >r2 : any
@@ -36,7 +36,7 @@ var r3 = new f('a');
 >r3 : any
 >new f('a') : any
 >f : Foo
->'a' : string
+>'a' : "a"
 
 var r4 = new f('A');
 >r4 : Object
