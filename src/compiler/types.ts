@@ -2310,8 +2310,13 @@ namespace ts {
 
     export const enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs  = 2
+        NodeJs   = 2,
+        BaseUrl  = 3
     }
+
+    export type RootPaths = string[];
+    export type PathSubstitutions = Map<string[]>;
+    export type TsConfigOnlyOptions = RootPaths | PathSubstitutions;
 
     export interface CompilerOptions {
         allowNonTsExtensions?: boolean;
@@ -2360,12 +2365,17 @@ namespace ts {
         noImplicitReturns?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        baseUrl?: string;
+        paths?: PathSubstitutions;
+        rootDirs?: RootPaths;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.
         /* @internal */ skipDefaultLibCheck?: boolean;
+        // inferred baseUrl - currently this will be set in 'parseJsonConfigFileContent' to 'baseDir'
+        /* @internal */ inferredBaseUrl?: string;
 
-        [option: string]: string | number | boolean;
+        [option: string]: string | number | boolean | TsConfigOnlyOptions;
     }
 
     export const enum ModuleKind {
@@ -2425,12 +2435,13 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | Map<number>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         experimental?: boolean;
+        isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     }
 
     /* @internal */
@@ -2445,7 +2456,12 @@ namespace ts {
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType;
+    export interface TsConfigOnlyOption extends CommandLineOptionBase {
+        type: "object";
+    }
+
+    /* @internal */
+    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
 
     /* @internal */
     export const enum CharacterCodes {

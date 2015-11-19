@@ -37,23 +37,221 @@ namespace ts {
     }
 
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-        const moduleResolution = compilerOptions.moduleResolution !== undefined
-            ? compilerOptions.moduleResolution
-            : compilerOptions.module === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+        let moduleResolution = compilerOptions.moduleResolution;
+        if (moduleResolution === undefined) {
+            if (compilerOptions.module === ModuleKind.CommonJS) {
+                moduleResolution = ModuleResolutionKind.NodeJs;
+            }
+            else if (compilerOptions.baseUrl !== undefined || compilerOptions.paths || compilerOptions.rootDirs) {
+                moduleResolution = ModuleResolutionKind.BaseUrl;
+            }
+            else {
+                moduleResolution = ModuleResolutionKind.Classic;
+            }
+        }
 
         switch (moduleResolution) {
             case ModuleResolutionKind.NodeJs: return nodeModuleNameResolver(moduleName, containingFile, host);
             case ModuleResolutionKind.Classic: return classicNameResolver(moduleName, containingFile, compilerOptions, host);
+            case ModuleResolutionKind.BaseUrl: return baseUrlModuleNameResolver(moduleName, containingFile, compilerOptions, host);
         }
+    }
+
+    // Path mapping based module resolution strategy uses base url to resolve relative file names. This resolution strategy can be enabled 
+    // by setting 'moduleResolution' option to 'baseUrl' and as it implied by the name it uses base url to resolve module names.
+    // Base url can be specified:
+    //   - explicitly via command line option 'baseUrl'. If this value is relative it will be computed relative to current directory.
+    //   - explicitly in 'tsconfig.json' via 'baseUrl' compiler option. If this value is relative it will be computed relative to the location 
+    //     of 'tsconfig.json'.
+    //   - if value is not provided explicitly but project uses tsconfig.json then 'baseUrl' will be set of folder that contains 'tsconfig.json'
+    // If baseUrl is the only provided option then non-relative module names will be resolved relative to baseUrl. Relative module names
+    // will still be resolved relative to the folder that contains file with import.
+    // User can specify additional options in tsconfig.json to tweak module resolution.
+    // - 'paths' option allows to tune how non-relative module names will be resolved based on the content of the module name. 
+    // Structure of 'paths' compiler options
+    // 'paths': {
+    //    pattern-1: list of substitutions 1,
+    //    pattern-2: list of substitutions 2,
+    //    ...
+    //    pattern-n: list of substitutions-n
+    // }
+    // Pattern here is a string that can contain zero or one '*' character. During module resolution module name will be matched against 
+    // all patterns in the list. Matching for patterns that don't contain '*' means that module name must be equal to pattern respecting the case.
+    // If pattern contains '*' then to match pattern "<prefix>*<suffix>" module name must start with the <prefix> and end with <suffix>. 
+    // <MatchedStar> denotes part of the module name between <prefix> and <suffix>. 
+    // If module name can be matches with multiple patterns then pattern with the longest prefix will be picked.
+    // After selecting pattern we'll use list of substitutions to get candidate locations of the module and the try to load module from the candidate location. 
+    // Substitiution is a string that can contain zero or one '*'. To get candidate location from substitution we'll pick every substitution in the list 
+    // and replace '*' with <MatchedStar> string. If candidate location is not rooted it  will be converted to absolute using baseUrl.
+    // For example:
+    // baseUrl: /a/b/c
+    // "paths": {
+    //     // match all module names
+    //     "*": [ 
+    //         "*",        // use matched name as is,
+    //                     // <matched name> will be looked as /a/b/c/<matched name>
+    //
+    //         "folder1/*" // substitution will convert matched name to 'folder1/<matched name>',
+    //                     // since it is not rooted then final candidate location will be /a/b/c/folder1/<matched name> 
+    //     ],
+    //     // match module names that start with 'components/'
+    //     "components/*": [ "/root/components/*" ] // substitution will convert /components/folder1/<matched name> to '/root/components/folder1/<matched name>',
+    //                                              // it is rooted so it will be final candidate location
+    // }
+    // 'paths' allows to remap locations of non-relative module names. Relative module names usually are resolved relative to the folder
+    // that contains import. However sometimes it might  be useful to apply mappings to relative module names as well.
+    // Since the there might be different relative file names that refer to the same file we need to convert relative module name to non-relative 
+    // so we can just apply path mapping to it. This conversion can be performed using 'rootDirs' compiler option - this options stores list of root directories
+    // for the project (if root directory is not absolute it will be converted to absolute using baseUrl as a base path).
+    // First - we convert relative module name to absolute using location of file that contains import. 
+    // Then we try to find what element is rootDirs is the longest prefix for this absolute file name (respecting case):
+    //      <absoluteFileName> = <longestRootDir><suffix> 
+    // Once it is done - value of <suffix> is a be non-relative name for initially relative module name.
+    // Note that if element in rootDirs should always end with '/' so it will be appended automatically if value in configuration does not have it. 
+    // For example:
+    // baseUrl: /a/b/c
+    // "paths": {
+    //     "*": [ "*", "generated/*" ] // try to resolve module name as '/a/b/c/<name>' then look it in '/a/b/c/generated/<name>'
+    // }
+    // "rootDirs": [
+    //     "./src",      // root dir is project baseUrl/src
+    //     "./generated" // root dir is baseUrl/generated
+    //     "/e/f"        // root dir is /e/f 
+    // ]
+    // @file: /a/b/c/src/form1.ts
+    //     import {x} from "./form.content.ts"
+    // @file: /a/b/c/generated/form1.content.ts
+    //     export var x = ...
+    // first './form.content.ts' needs to be converted to non-relative name.
+    // 1. convert it to absolute name '/a/b/c/src/form1.content.ts' ->
+    //    find longest prefix in rootDirs that match this path, it will be './src' (after expansion '/a/b/c/src/') ->
+    //    suffix is form1.content.ts
+    // 2. apply path mappings to 'form1.content.ts' ->
+    //    '*' pattern will be matched ->
+    //    '*' substitution yields '/a/b/c/form1.content.ts' - file does not exists
+    //    'generated/*' substitution yields '/a/b/c/generated/form1.content' - file exists - OK
+    export function baseUrlModuleNameResolver(moduleName: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        const baseUrl = options.baseUrl !== undefined ? options.baseUrl : options.inferredBaseUrl;
+        Debug.assert(baseUrl !== undefined);
+
+        if (isRootedDiskPath(moduleName)) {
+            return { resolvedModule: { resolvedFileName: moduleName }, failedLookupLocations: emptyArray };
+        }
+
+        if (nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
+            // relative name
+            return baseUrlResolveRelativeModuleName(moduleName, containingFile, baseUrl, options, host);
+        }
+        else {
+            // non-relative name
+            return baseUrlResolveNonRelativeModuleName(moduleName, baseUrl, options, host);
+        }
+    }
+
+    export function baseUrlResolveRelativeModuleName(moduleName: string, containingFile: string, baseUrl: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        const failedLookupLocations: string[] = [];
+
+        const containingDirectory = getDirectoryPath(containingFile);
+        const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+
+        if (options.rootDirs) {
+            let matchedPrefix: string;
+            for (const rootDir of options.rootDirs) {
+                let normalizedRoot = getNormalizedAbsolutePath(rootDir, baseUrl);
+                if (!endsWith(normalizedRoot, directorySeparator)) {
+                    normalizedRoot += directorySeparator;
+                }
+                if (startsWith(candidate, normalizedRoot) && (matchedPrefix === undefined || matchedPrefix.length < normalizedRoot.length)) {
+                    matchedPrefix = normalizedRoot;
+                }
+            }
+            if (matchedPrefix) {
+                const suffix = candidate.substr(matchedPrefix.length);
+                return baseUrlResolveNonRelativeModuleName(suffix, baseUrl, options, host);
+            }
+            return { resolvedModule: undefined, failedLookupLocations };
+        }
+        else {
+            const resolvedFileName = loadModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+            return {
+                resolvedModule: resolvedFileName ? { resolvedFileName } : undefined,
+                failedLookupLocations
+            };
+        }
+    }
+
+    export function baseUrlResolveNonRelativeModuleName(moduleName: string, baseUrl: string, options: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        let longestMatchPrefixLength = -1;
+        let matchedPattern: string;
+        let matchedStar: string;
+
+        const failedLookupLocations: string[] = [];
+        if (options.paths) {
+            for (const key in options.paths) {
+                const pattern: string = key;
+                const indexOfStar = pattern.indexOf("*");
+                if (indexOfStar !== -1) {
+                    const prefix = pattern.substr(0, indexOfStar);
+                    const suffix = pattern.substr(indexOfStar + 1);
+                    if (moduleName.length >= prefix.length + suffix.length &&
+                        startsWith(moduleName, prefix) &&
+                        endsWith(moduleName, suffix)) {
+
+                        // use length of prefix as betterness criteria
+                        if (prefix.length > longestMatchPrefixLength) {
+                            longestMatchPrefixLength = prefix.length;
+                            matchedPattern = pattern;
+                            matchedStar = moduleName.substr(prefix.length, moduleName.length - suffix.length);
+                        }
+                    }
+                }
+                else if (pattern === moduleName) {
+                    // pattern was matched as is - no need to seatch further
+                    matchedPattern = pattern;
+                    matchedStar = undefined;
+                    break;
+                }
+            }
+        }
+
+        if (matchedPattern) {
+            for (const subst of options.paths[matchedPattern]) {
+                const path = matchedStar ? subst.replace("\*", matchedStar) : subst;
+                const candidate = normalizePath(combinePaths(baseUrl, path));
+                const resolvedFileName = loadModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+                if (resolvedFileName) {
+                    return { resolvedModule: { resolvedFileName }, failedLookupLocations };
+                }
+            }
+
+            return { resolvedModule: undefined, failedLookupLocations };
+        }
+        else {
+            const candidate = normalizePath(combinePaths(baseUrl, moduleName));
+            const resolvedFileName = loadModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+            return {
+                resolvedModule: resolvedFileName ? { resolvedFileName } : undefined,
+                failedLookupLocations
+            };
+        }
+    }
+
+    function startsWith(str: string, prefix: string): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
+    }
+
+    function endsWith(str: string, suffix: string): boolean {
+        const expectedPos = str.length - suffix.length;
+        return str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         const containingDirectory = getDirectoryPath(containingFile);
 
-        if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
+        if (isRootedDiskPath(moduleName) || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(supportedJsExtensions, candidate, failedLookupLocations, host);
+            let resolvedFileName = loadModuleFromFile(supportedJsExtensions, candidate, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
@@ -69,7 +267,7 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
@@ -100,7 +298,7 @@ namespace ts {
             }
 
             if (jsonContent.typings) {
-                const result = loadNodeModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
+                const result = loadModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
                 if (result) {
                     return result;
                 }
@@ -111,7 +309,7 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
+        return loadModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
     }
 
     function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -122,7 +320,7 @@ namespace ts {
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                let result = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+                let result = loadModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -147,6 +345,22 @@ namespace ts {
     function nameStartsWithDotSlashOrDotDotSlash(name: string) {
         const i = name.lastIndexOf("./", 1);
         return i === 0 || (i === 1 && name.charCodeAt(0) === CharacterCodes.dot);
+    }
+
+    function hasZeroOrOneAsteriskCharacter(str: string): boolean {
+        let seenAsterisk = false;
+        for (let i = 0; i < str.length; ++i) {
+            if (str.charCodeAt(i) === CharacterCodes.asterisk) {
+                if (!seenAsterisk) {
+                    seenAsterisk = true;
+                }
+                else {
+                    // have already seen asterisk
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -994,6 +1208,47 @@ namespace ts {
                 }
                 if (options.mapRoot) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"));
+                }
+            }
+
+            if (options.moduleResolution === ModuleResolutionKind.BaseUrl) {
+                if (options.baseUrl === undefined && options.inferredBaseUrl === undefined) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.moduleResolution_kind_baseUrl_cannot_be_used_without_specifying_baseUrl_option));
+                }
+            }
+            else if (options.moduleResolution === undefined) {
+                // if module resolution kind is not specified it is an error to have baseUrl\paths\rootDirs and module === CommonJs 
+                // since the former one implies moduleResolutionKind to be BaseUrl and the latter one - Node 
+                if (options.module === ModuleKind.CommonJS && (options.baseUrl || options.paths || options.rootDirs)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Module_resolution_kind_cannot_be_determined_automatically_Please_specify_module_resolution_explicitly_via_moduleResolution_option));
+                }
+            }
+            else {
+                // here it is known that moduleResolution is not baseurl and is not undefined
+                if (options.baseUrl !== undefined) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_option_moduleResolution_is_baseUrl, "baseUrl"));
+                }
+                if (options.paths) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_option_moduleResolution_is_baseUrl, "paths"));
+                }
+                if (options.rootDirs) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_option_moduleResolution_is_baseUrl, "rootDirs"));
+                }
+            }
+
+            if (options.paths) {
+                for (const key in options.paths) {
+                    if (!hasProperty(options.paths, key)) {
+                        continue;
+                    }
+                    if (!hasZeroOrOneAsteriskCharacter(key)) {
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key));
+                    }
+                    for (const subst of options.paths[key]) {
+                        if (!hasZeroOrOneAsteriskCharacter(subst)) {
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitution_0_in_pattern_1_in_can_have_at_most_one_Asterisk_character, subst, key));
+                        }
+                    }
                 }
             }
 

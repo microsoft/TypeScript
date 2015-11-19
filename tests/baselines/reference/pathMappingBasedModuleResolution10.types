@@ -1,0 +1,32 @@
+=== tests/cases/compiler/root/folder1/file1.ts ===
+import {x} from "./file2" // should be resolved to 'generated/folder1/file2.ts' 
+>x : number
+
+export var z = x.toExponential();
+>z : string
+>x.toExponential() : string
+>x.toExponential : (fractionDigits?: number) => string
+>x : number
+>toExponential : (fractionDigits?: number) => string
+
+=== tests/cases/compiler/root/generated/folder1/file2.ts ===
+export {x} from "folder1/file3" // should be resolved to 'folder1/file3.ts' 
+>x : number
+
+=== tests/cases/compiler/root/folder1/file3.ts ===
+export var x = 1;
+>x : number
+>1 : number
+
+=== tests/cases/compiler/root/generated/folder2/file3.ts ===
+import {z as y} from "../folder1/file1" // should be resolved to 'folder1/file1.ts'
+>z : string
+>y : string
+
+let z = y.toLowerCase();
+>z : string
+>y.toLowerCase() : string
+>y.toLowerCase : () => string
+>y : string
+>toLowerCase : () => string
+

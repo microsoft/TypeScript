@@ -1,0 +1,25 @@
+=== c:/root/folder1/file1.ts ===
+import {x} from "folder2/file2"
+>x : number
+
+declare function use(a: any): void;
+>use : (a: any) => void
+>a : any
+
+use(x.toExponential());
+>use(x.toExponential()) : void
+>use : (a: any) => void
+>x.toExponential() : string
+>x.toExponential : (fractionDigits?: number) => string
+>x : number
+>toExponential : (fractionDigits?: number) => string
+
+=== c:/root/folder2/file2.ts ===
+export {x} from "./file3"
+>x : number
+
+=== c:/root/folder2/file3.ts ===
+export var x = 1;
+>x : number
+>1 : number
+

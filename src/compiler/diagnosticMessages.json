@@ -2060,7 +2060,26 @@
         "category": "Error",
         "code": 5054
     },
-
+    "Option '{0}' can only be used when option 'moduleResolution' is 'baseUrl'.": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Pattern '{0}' can have at most one '*' character": {
+        "category": "Error",
+        "code": 5056
+    },
+    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character": {
+        "category": "Error",
+        "code": 5057
+    },
+    "'moduleResolution' kind 'baseUrl' cannot be used without specifying '--baseUrl' option.": {
+        "category": "Error",
+        "code": 5058
+    },
+    "Module resolution kind cannot be determined automatically. Please specify module resolution explicitly via 'moduleResolution' option.": {
+        "category": "Error",
+        "code": 5059
+    },
     "Concatenate and emit output to single file.": {
         "category": "Message",
         "code": 6001
@@ -2253,9 +2272,13 @@
         "category": "Error",
         "code": 6062
     },
-    "Argument for '--moduleResolution' option must be 'node' or 'classic'.": {
+    "Argument for '--moduleResolution' option must be 'node', 'classic' or 'baseUrl'.": {
         "category": "Error",
         "code": 6063
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+        "category": "Error",
+        "code": 6064
     },
 
     "Enables experimental support for ES7 decorators.": {
@@ -2322,6 +2345,10 @@
         "category": "Error",
         "code": 6082
     },
+    "Base directory to resolve relative module names.": {
+        "category": "Message",
+        "code": 6083
+    },    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -250,10 +250,12 @@ namespace ts {
             name: "moduleResolution",
             type: {
                 "node": ModuleResolutionKind.NodeJs,
-                "classic": ModuleResolutionKind.Classic
+                "classic": ModuleResolutionKind.Classic,
+                // name is lowercased so we can still use hasProperty(userValue.toLower()) to check if user has entered the right value
+                "baseurl": ModuleResolutionKind.BaseUrl,
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
-            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+            error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_classic_or_baseUrl,
         },
         {
             name: "allowUnusedLabels",
@@ -279,6 +281,26 @@ namespace ts {
             name: "forceConsistentCasingInFileNames",
             type: "boolean",
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
+        },
+        {
+            name: "baseUrl",
+            type: "string",
+            isFilePath: true,
+            description: Diagnostics.Base_directory_to_resolve_relative_module_names
+        },
+        {
+            // this option can only be specified in tsconfig.json
+            // use type = object to copy the value as-is
+            name: "paths",
+            type: "object",
+            isTSConfigOnly: true
+        },
+        {
+            // this option can only be specified in tsconfig.json
+            // use type = object to copy the value as-is
+            name: "rootDirs",
+            type: "object",
+            isTSConfigOnly: true
         }
     ];
 
@@ -339,31 +361,36 @@ namespace ts {
                     if (hasProperty(optionNameMap, s)) {
                         const opt = optionNameMap[s];
 
-                        // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                        if (!args[i] && opt.type !== "boolean") {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                        if (opt.isTSConfigOnly) {
+                            errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
                         }
+                        else {
+                            // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
+                            if (!args[i] && opt.type !== "boolean") {
+                                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, opt.name));
+                            }
 
-                        switch (opt.type) {
-                            case "number":
-                                options[opt.name] = parseInt(args[i++]);
-                                break;
-                            case "boolean":
-                                options[opt.name] = true;
-                                break;
-                            case "string":
-                                options[opt.name] = args[i++] || "";
-                                break;
-                            // If not a primitive, the possible types are specified in what is effectively a map of options.
-                            default:
-                                let map = <Map<number>>opt.type;
-                                let key = (args[i++] || "").toLowerCase();
-                                if (hasProperty(map, key)) {
-                                    options[opt.name] = map[key];
-                                }
-                                else {
-                                    errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
-                                }
+                            switch (opt.type) {
+                                case "number":
+                                    options[opt.name] = parseInt(args[i++]);
+                                    break;
+                                case "boolean":
+                                    options[opt.name] = true;
+                                    break;
+                                case "string":
+                                    options[opt.name] = args[i++] || "";
+                                    break;
+                                // If not a primitive, the possible types are specified in what is effectively a map of options.
+                                default:
+                                    let map = <Map<number>>opt.type;
+                                    let key = (args[i++] || "").toLowerCase();
+                                    if (hasProperty(map, key)) {
+                                        options[opt.name] = map[key];
+                                    }
+                                    else {
+                                        errors.push(createCompilerDiagnostic((<CommandLineOptionOfCustomType>opt).error));
+                                    }
+                            }
                         }
                     }
                     else {
@@ -466,7 +493,6 @@ namespace ts {
         return output;
     }
 
-
     /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
@@ -476,6 +502,9 @@ namespace ts {
       */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         const { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+
+        // set basePath as inferredBaseUrl so baseUrl module resolution strategy can still work even if user have not specified baseUrl explicity
+        options.inferredBaseUrl = basePath;
 
         return {
             options,

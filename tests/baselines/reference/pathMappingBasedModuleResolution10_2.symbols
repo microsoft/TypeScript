@@ -1,0 +1,29 @@
+=== c:/root/src/generated/folder1/file2.ts ===
+export {x} from "folder1/file3" // should be resolved to 'folder1/file3.ts' 
+>x : Symbol(x, Decl(file2.ts, 0, 8))
+
+=== c:/root/src/folder1/file3.ts ===
+export var x = 1;
+>x : Symbol(x, Decl(file3.ts, 0, 10))
+
+=== c:/root/src/generated/folder2/file3.ts ===
+import {z as y} from "../folder1/file1" // should be resolved to 'folder1/file1.ts'
+>z : Symbol(y, Decl(file3.ts, 0, 8))
+>y : Symbol(y, Decl(file3.ts, 0, 8))
+
+let z = y.toLowerCase();
+>z : Symbol(z, Decl(file3.ts, 1, 3))
+>y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>y : Symbol(y, Decl(file3.ts, 0, 8))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+
+=== c:/root/src/folder1/file1.ts ===
+import {x} from "./file2" // should be resolved to 'generated/folder1/file2.ts' 
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+
+export var z = x.toExponential();
+>z : Symbol(z, Decl(file1.ts, 2, 10))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(file1.ts, 0, 8))
+>toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+
