@@ -1,12 +1,10 @@
 error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
-error TS5053: Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'.
 tests/cases/compiler/inlineSourceMap2.ts(5,1): error TS2304: Cannot find name 'console'.
 
 
 !!! error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 !!! error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
-!!! error TS5053: Option 'sourceRoot' cannot be specified with option 'inlineSourceMap'.
 ==== tests/cases/compiler/inlineSourceMap2.ts (1 errors) ====
     
     // configuration errors

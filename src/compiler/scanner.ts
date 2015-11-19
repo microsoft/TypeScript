@@ -1634,11 +1634,11 @@ namespace ts {
         }
 
         function lookAhead<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookahead:*/ true);
+            return speculationHelper(callback, /*isLookahead*/ true);
         }
 
         function tryScan<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookahead:*/ false);
+            return speculationHelper(callback, /*isLookahead*/ false);
         }
 
         function setText(newText: string, start: number, length: number) {
