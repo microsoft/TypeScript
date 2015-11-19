@@ -280,7 +280,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version), /* compilerHost */ undefined);
+            printVersion();
             return sys.exit(ExitStatus.Success);
         }
 
