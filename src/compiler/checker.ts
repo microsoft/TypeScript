@@ -6255,11 +6255,11 @@ namespace ts {
         }
 
         function typeIdenticalToSomeType(source: Type, target: UnionOrIntersectionType): boolean {
-            for (let t of target.types) {
+            for (const t of target.types) {
                 if (isTypeIdenticalTo(source, t)) {
                     return true;
                 }
-            } 
+            }
             return false;
         }
 
@@ -6288,7 +6288,7 @@ namespace ts {
             }
             return source;
         }
-        
+
         function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
             const inferences = context.inferences[index];
             return inferences.primary || inferences.secondary || emptyArray;
