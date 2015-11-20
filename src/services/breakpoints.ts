@@ -39,7 +39,10 @@ namespace ts.BreakpointResolver {
         return spanInNode(tokenAtLocation);
 
         function textSpan(startNode: Node, endNode?: Node) {
-            return createTextSpanFromBounds(startNode.getStart(sourceFile), (endNode || startNode).getEnd());
+            const start = startNode.decorators ?
+                skipTrivia(sourceFile.text, startNode.decorators.end) :
+                startNode.getStart(sourceFile);
+            return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TextSpan {

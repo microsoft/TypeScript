@@ -29,9 +29,7 @@
 --------------------------------
 8  >@ClassDecorator1
 
-    ~                                             => Pos: (594 to 594)  SpanInfo: {"start":594,"length":952}
-    >@ClassDecorator1
-    >@ClassDecorator2(10)
+    ~                                             => Pos: (594 to 594)  SpanInfo: {"start":632,"length":914}
     >class Greeter {
     >    constructor(
     >        @ParameterDecorator1
@@ -77,7 +75,7 @@
     >        this.greeting = greetings;
     >    }
     >}
-    >:=> (line 8, col 0) to (line 54, col 1)
+    >:=> (line 10, col 0) to (line 54, col 1)
 8  >@ClassDecorator1
 
      ~~~~~~~~~~~~~~~~                             => Pos: (595 to 610)  SpanInfo: {"start":595,"length":36}
@@ -94,9 +92,7 @@
 --------------------------------
 10 >class Greeter {
 
-    ~~~~~~~~~~~~~~~~                              => Pos: (632 to 647)  SpanInfo: {"start":594,"length":952}
-    >@ClassDecorator1
-    >@ClassDecorator2(10)
+    ~~~~~~~~~~~~~~~~                              => Pos: (632 to 647)  SpanInfo: {"start":632,"length":914}
     >class Greeter {
     >    constructor(
     >        @ParameterDecorator1
@@ -142,7 +138,7 @@
     >        this.greeting = greetings;
     >    }
     >}
-    >:=> (line 8, col 0) to (line 54, col 1)
+    >:=> (line 10, col 0) to (line 54, col 1)
 --------------------------------
 11 >    constructor(
 
@@ -152,11 +148,9 @@
 --------------------------------
 12 >        @ParameterDecorator1
 
-    ~~~~~~~~~                                     => Pos: (665 to 673)  SpanInfo: {"start":673,"length":85}
-    >@ParameterDecorator1
-    >        @ParameterDecorator2(20)
-    >        public greeting: string
-    >:=> (line 12, col 8) to (line 14, col 31)
+    ~~~~~~~~~                                     => Pos: (665 to 673)  SpanInfo: {"start":735,"length":23}
+    >public greeting: string
+    >:=> (line 14, col 8) to (line 14, col 31)
 12 >        @ParameterDecorator1
 
              ~~~~~~~~~~~~~~~~~~~~                 => Pos: (674 to 693)  SpanInfo: {"start":674,"length":52}
@@ -173,11 +167,9 @@
 --------------------------------
 14 >        public greeting: string,
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (727 to 759)  SpanInfo: {"start":673,"length":85}
-    >@ParameterDecorator1
-    >        @ParameterDecorator2(20)
-    >        public greeting: string
-    >:=> (line 12, col 8) to (line 14, col 31)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (727 to 759)  SpanInfo: {"start":735,"length":23}
+    >public greeting: string
+    >:=> (line 14, col 8) to (line 14, col 31)
 --------------------------------
 15 >
 
@@ -185,11 +177,9 @@
 --------------------------------
 16 >        @ParameterDecorator1
 
-    ~~~~~~~~~                                     => Pos: (761 to 769)  SpanInfo: {"start":769,"length":80}
-    >@ParameterDecorator1
-    >        @ParameterDecorator2(30)
-    >            ...b: string[]
-    >:=> (line 16, col 8) to (line 18, col 26)
+    ~~~~~~~~~                                     => Pos: (761 to 769)  SpanInfo: {"start":835,"length":14}
+    >...b: string[]
+    >:=> (line 18, col 12) to (line 18, col 26)
 16 >        @ParameterDecorator1
 
              ~~~~~~~~~~~~~~~~~~~~                 => Pos: (770 to 789)  SpanInfo: {"start":770,"length":52}
@@ -206,11 +196,9 @@
 --------------------------------
 18 >            ...b: string[]) {
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (823 to 849)  SpanInfo: {"start":769,"length":80}
-    >@ParameterDecorator1
-    >        @ParameterDecorator2(30)
-    >            ...b: string[]
-    >:=> (line 16, col 8) to (line 18, col 26)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (823 to 849)  SpanInfo: {"start":835,"length":14}
+    >...b: string[]
+    >:=> (line 18, col 12) to (line 18, col 26)
 18 >            ...b: string[]) {
 
                                ~~~                => Pos: (850 to 852)  SpanInfo: {"start":857,"length":1}
@@ -229,13 +217,11 @@
 --------------------------------
 21 >    @PropertyDecorator1
 
-    ~~~~~                                         => Pos: (860 to 864)  SpanInfo: {"start":864,"length":116}
-    >@PropertyDecorator1
-    >    @PropertyDecorator2(40)
-    >    greet() {
+    ~~~~~                                         => Pos: (860 to 864)  SpanInfo: {"start":916,"length":64}
+    >greet() {
     >        return "<h1>" + this.greeting + "</h1>";
     >    }
-    >:=> (line 21, col 4) to (line 25, col 5)
+    >:=> (line 23, col 4) to (line 25, col 5)
 21 >    @PropertyDecorator1
 
          ~~~~~~~~~~~~~~~~~~~                      => Pos: (865 to 883)  SpanInfo: {"start":865,"length":46}
@@ -252,13 +238,11 @@
 --------------------------------
 23 >    greet() {
 
-    ~~~~~~~~~~~                                   => Pos: (912 to 922)  SpanInfo: {"start":864,"length":116}
-    >@PropertyDecorator1
-    >    @PropertyDecorator2(40)
-    >    greet() {
+    ~~~~~~~~~~~                                   => Pos: (912 to 922)  SpanInfo: {"start":916,"length":64}
+    >greet() {
     >        return "<h1>" + this.greeting + "</h1>";
     >    }
-    >:=> (line 21, col 4) to (line 25, col 5)
+    >:=> (line 23, col 4) to (line 25, col 5)
 23 >    greet() {
 
                ~~~                                => Pos: (923 to 925)  SpanInfo: {"start":934,"length":39}
@@ -308,11 +292,9 @@
 --------------------------------
 31 >    @PropertyDecorator1
 
-    ~~~~~                                         => Pos: (1058 to 1062)  SpanInfo: {"start":1062,"length":83}
-    >@PropertyDecorator1
-    >    @PropertyDecorator2(60)
-    >    private static x1: number = 10;
-    >:=> (line 31, col 4) to (line 33, col 35)
+    ~~~~~                                         => Pos: (1058 to 1062)  SpanInfo: {"start":1114,"length":31}
+    >private static x1: number = 10;
+    >:=> (line 33, col 4) to (line 33, col 35)
 31 >    @PropertyDecorator1
 
          ~~~~~~~~~~~~~~~~~~~                      => Pos: (1063 to 1081)  SpanInfo: {"start":1063,"length":46}
@@ -329,11 +311,9 @@
 --------------------------------
 33 >    private static x1: number = 10;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          => Pos: (1110 to 1145)  SpanInfo: {"start":1062,"length":83}
-    >@PropertyDecorator1
-    >    @PropertyDecorator2(60)
-    >    private static x1: number = 10;
-    >:=> (line 31, col 4) to (line 33, col 35)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~          => Pos: (1110 to 1145)  SpanInfo: {"start":1114,"length":31}
+    >private static x1: number = 10;
+    >:=> (line 33, col 4) to (line 33, col 35)
 --------------------------------
 34 >
 
@@ -393,13 +373,11 @@
 --------------------------------
 42 >    @PropertyDecorator1
 
-    ~~~~~                                         => Pos: (1283 to 1287)  SpanInfo: {"start":1287,"length":105}
-    >@PropertyDecorator1
-    >    @PropertyDecorator2(80)
-    >    get greetings() {
+    ~~~~~                                         => Pos: (1283 to 1287)  SpanInfo: {"start":1339,"length":53}
+    >get greetings() {
     >        return this.greeting;
     >    }
-    >:=> (line 42, col 4) to (line 46, col 5)
+    >:=> (line 44, col 4) to (line 46, col 5)
 42 >    @PropertyDecorator1
 
          ~~~~~~~~~~~~~~~~~~~                      => Pos: (1288 to 1306)  SpanInfo: {"start":1288,"length":46}
@@ -416,13 +394,11 @@
 --------------------------------
 44 >    get greetings() {
 
-    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1335 to 1353)  SpanInfo: {"start":1287,"length":105}
-    >@PropertyDecorator1
-    >    @PropertyDecorator2(80)
-    >    get greetings() {
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1335 to 1353)  SpanInfo: {"start":1339,"length":53}
+    >get greetings() {
     >        return this.greeting;
     >    }
-    >:=> (line 42, col 4) to (line 46, col 5)
+    >:=> (line 44, col 4) to (line 46, col 5)
 44 >    get greetings() {
 
                        ~~~                        => Pos: (1354 to 1356)  SpanInfo: {"start":1365,"length":20}
