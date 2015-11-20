@@ -1597,7 +1597,7 @@ namespace ts {
             : <T>createSynthesizedNode(node.kind);
 
         for (const key in node) {
-            if (isExcludedPropertyForClone(key) || !node.hasOwnProperty(key)) {
+            if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
                 continue;
             }
 
@@ -1613,13 +1613,6 @@ namespace ts {
         }
 
         return clone;
-    }
-
-    function isExcludedPropertyForClone(property: string) {
-        return property === "pos"
-            || property === "end"
-            || property === "flags"
-            || property === "parent";
     }
 
     /**
