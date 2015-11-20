@@ -783,6 +783,10 @@
         "category": "Error",
         "code": 1245
     },
+    "An interface property cannot have an initializer.": {
+        "category": "Error",
+        "code": 1246
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -2418,7 +2422,7 @@
     "Not all code paths return a value.": {
         "category": "Error",
         "code": 7030
-    },    
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
