@@ -2248,8 +2248,8 @@ namespace ts {
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
 
-                // Although interfaces cannot not have initializers, we attempt to parse an initializer
-                // so we can report that an interface cannot have an initializer.
+                // Although object type properties cannot not have initializers, we attempt to parse an initializer
+                // so we can report that an object type property cannot have an initializer.
                 if (token === SyntaxKind.EqualsToken && lookAhead(() => parseNonParameterInitializer()) !== undefined) {
                     parseErrorAtCurrentToken(Diagnostics.An_object_type_property_cannot_have_an_initializer);
                 }
