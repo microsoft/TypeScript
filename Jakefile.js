@@ -372,13 +372,14 @@ file(builtGeneratedDiagnosticMessagesJSON, [generatedDiagnosticMessagesJSON], fu
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
-// Generate version file
+// Generate version files
 
-var distributeVersionInputFolder = "scripts/distributeVersion";
 var distributeVersionOutputFolder = path.join(builtLocalDirectory, "distributeVersion");
-var distributeVersionJS = path.join(distributeVersionOutputFolder, "distribute.js");
-var distributeVersionTS = path.join(distributeVersionInputFolder, "distribute.ts");
-var builtVersionFileJSON = path.join(distributeVersionOutputFolder, "version.json");
+var distributeVersionJS = path.join(distributeVersionOutputFolder, "distributeVersion.js");
+var distributeVersionTS = path.join(scriptsDirectory, "distributeVersion.ts");
+
+var packageJson = "package.json";
+var builtPackageJSON = path.join(distributeVersionOutputFolder, "package.json");
 
 file(distributeVersionTS);
 compileFile(/*outFile*/ distributeVersionJS,
@@ -396,46 +397,29 @@ compileFile(/*outFile*/ distributeVersionJS,
         /*target*/ "ES2015");
 
 directory(distributeVersionOutputFolder);
-file(builtVersionFileJSON, [distributeVersionOutputFolder], function() {
+file(builtPackageJSON, [distributeVersionOutputFolder], function() {
     if (fs.existsSync(distributeVersionOutputFolder)) {
-        jake.cpR(path.join(distributeVersionInputFolder, "version.json"), builtVersionFileJSON);
+        console.log("Copy package.json to the buitl\local");
+        jake.cpR(packageJson, builtPackageJSON);
     }
 });
 
+// Distribute release version
+
 desc("Run version distribution script")
-task("distribute-version", [distributeVersionJS, builtVersionFileJSON], function() {
-    jake.exec([host + " " + distributeVersionJS], {printStdout: true}, function () {
-       complete();
-    });
+task("distribute-version", [distributeVersionJS, builtPackageJSON], function() {
+    var cmd = host + " " + distributeVersionJS;
+    console.log(cmd);
+    exec(cmd);
 }, {async: true});
 
-// Publish nightly
-var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
-var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
-var packageJson = "package.json";
-var programTs = path.join(compilerDirectory, "program.ts");
-
-file(configureNightlyTs);
-
-compileFile(/*outfile*/configureNightlyJs,
-            /*sources*/ [configureNightlyTs],
-            /*prereqs*/ [configureNightlyTs],
-            /*prefixes*/ [],
-            /*useBuiltCompiler*/ false,
-            /*noOutFile*/ false,
-            /*generateDeclarations*/ false,
-            /*outDir*/ undefined,
-            /*preserveConstEnums*/ undefined,
-            /*keepComments*/ false,
-            /*noResolve*/ false,
-            /*stripInternal*/ false);
-
+// Publish nightly version
 task("setDebugMode", function() {
     useDebugMode = true;
 });
 
-task("configure-nightly", [configureNightlyJs], function() {
-    var cmd = host + " " + configureNightlyJs + " " + packageJson + " " + programTs;
+task("configure-nightly", [distributeVersionJS], function() {
+    var cmd = host + " " + distributeVersionJS + " --nightly";
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -536,7 +520,9 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON, builtVersionFileJSON]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile,
+                nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON,
+                builtPackageJSON, "distribute-version"]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -590,7 +576,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "distribute-version", "local"].concat(libraryTargets), function() {
+task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
@@ -960,7 +946,7 @@ function lintFileAsync(options, path, cb) {
 
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
-    .concat(serverCoreSources);
+    .concat(serverCoreSources)
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
