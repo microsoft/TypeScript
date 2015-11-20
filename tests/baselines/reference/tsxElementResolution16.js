@@ -1,4 +1,4 @@
-//// [tsxElementResolution16.tsx]
+//// [file.tsx]
 declare module JSX {
 }
 
@@ -9,6 +9,6 @@ var obj1: Obj1;
 <obj1 x={10} />; // Error (JSX.Element is implicit any)
 
 
-//// [tsxElementResolution16.jsx]
+//// [file.jsx]
 var obj1;
 <obj1 x={10}/>; // Error (JSX.Element is implicit any)
