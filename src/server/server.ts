@@ -267,11 +267,11 @@ namespace ts.server {
         return logEnv;
     }
 
-    // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
+    // TSS_LOG '{ detailLevel: "normal | verbose | terse", file?: string}'
     function createLoggerFromEnv() {
         var fileName: string = undefined;
         var detailLevel = "verbose";
-        var logEnvStr = '{"detailLevel": "verbose"}' //process.env["TSS_LOG"];
+        var logEnvStr = process.env["TSS_LOG"];
         if (logEnvStr) {
             var logEnv = parseLoggingEnvironmentString(logEnvStr);
             if (logEnv.file) {

@@ -127,7 +127,7 @@ namespace ts {
             function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {
                 let result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
+                visitDirectory(path, depth);
                 return result;
 
                 function visitDirectory(path: string, depth?: number) {

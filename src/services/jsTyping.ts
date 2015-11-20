@@ -12,7 +12,7 @@ namespace ts.JsTyping {
         readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
         writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void;
     };
-    
+
     interface TsdJsonCacheInfo {
         path: string;
         value: any;
@@ -22,6 +22,13 @@ namespace ts.JsTyping {
     
     // a typing name to typing file path mapping
     var inferredTypings: Map<string> = {};
+
+    function tryParseJson(jsonPath: string) {
+        try {
+            return JSON.parse(jsonPath);
+        }
+        catch (e) { return undefined; }
+    }
     
     /**
      * @param cachePath is the path to the cache location, which contains a tsd.json file and a typings folder
@@ -32,7 +39,7 @@ namespace ts.JsTyping {
         _host = host;
         // Directories to search for package.json, bower.json and other typing information
         let searchDirs: string[] = [];
-        
+
         for (let fileName of fileNames) {
             if (ts.getBaseFileName(fileName) !== "lib.d.ts") {
                 let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
@@ -44,11 +51,11 @@ namespace ts.JsTyping {
 
         for (let searchDir of searchDirs) {
             let packageJsonPath = ts.combinePaths(searchDir, "package.json");
-            getTypingNamesFromPackageJson(packageJsonPath);
+            getTypingNamesFromJson(packageJsonPath);
 
             let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
-            getTypingNamesFromBowerJson(bowerJsonPath);
-            
+            getTypingNamesFromJson(bowerJsonPath);
+
             let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
             getTypingNamesFromNodeModuleFolder(nodeModulesPath);
         }
@@ -61,7 +68,7 @@ namespace ts.JsTyping {
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
         let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
         if (tsdJsonCacheInfo) {
-            try{
+            try {
                 let cacheTsdJsonDict = tsdJsonCacheInfo.value;
                 // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped. 
                 // Therefore if they don't come with d.ts files, we should not retry downloading these packages.
@@ -97,14 +104,14 @@ namespace ts.JsTyping {
         let newTypingNames: string[] = [];
         let cachedTypingPaths: string[] = [];
         for (let typing in inferredTypings) {
-            if(inferredTypings[typing]) {
+            if (inferredTypings[typing]) {
                 cachedTypingPaths.push(inferredTypings[typing]);
             }
             else {
                 newTypingNames.push(typing);
             }
         }
-        
+
         return { cachedTypingPaths, newTypingNames };
     }
 
@@ -119,30 +126,14 @@ namespace ts.JsTyping {
         }
     }
 
-    function getTypingNamesFromPackageJson(packageJsonPath: string) {
-        if (_host.fileExists(packageJsonPath)) {
-            // Guide against malformed package.json
-            try {
-                let packageJsonDict = JSON.parse(_host.readFile(packageJsonPath));
-                if (packageJsonDict.hasOwnProperty("dependencies")) {
-                    mergeTypings(Object.keys(packageJsonDict.dependencies));
-                }
-            }
-            catch (e) {
-            }
-        }
-    }
-
-    function getTypingNamesFromBowerJson(bowerJsonPath: string) {
-        if (_host.fileExists(bowerJsonPath)) {
-            // Guide against malformed package.json
-            try {
-                let packageJsonDict = JSON.parse(_host.readFile(bowerJsonPath));
-                if (packageJsonDict.hasOwnProperty("dependencies")) {
-                    mergeTypings(Object.keys(packageJsonDict.dependencies));
-                }
-            }
-            catch (e) {
+    /**
+     * Get the typing info from common package manager json files like package.json or bower.json
+     */
+    function getTypingNamesFromJson(jsonPath: string) {
+        if (_host.fileExists(jsonPath)) {
+            let jsonDict = tryParseJson(_host.readFile(jsonPath));
+            if (jsonDict && jsonDict.hasOwnProperty("dependencies")) {
+                mergeTypings(Object.keys(jsonDict.dependencies));
             }
         }
     }
@@ -164,10 +155,10 @@ namespace ts.JsTyping {
             let baseNameWithoutExtension = baseName.substring(0, baseName.lastIndexOf("."));
             (safeList.indexOf(baseNameWithoutExtension) >= 0) ? exactlyMatched.push(baseNameWithoutExtension) : notExactlyMatched.push(baseNameWithoutExtension);
         }
-        
+
         let regex = /((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g;
         notExactlyMatched = notExactlyMatched.map(f => f.replace(regex, ""));
-        let typingNames = exactlyMatched.concat(notExactlyMatched.filter(f => ts.contains(safeList, f)));
+        let typingNames = exactlyMatched.concat(ts.filter(notExactlyMatched, f => ts.contains(safeList, f)));
         mergeTypings(typingNames);
     }
 
@@ -180,17 +171,19 @@ namespace ts.JsTyping {
         if (!_host.fileExists(nodeModulesPath)) {
             return;
         }
-        
+
         let typingNames: string[] = [];
-        let packageJsonFiles = 
+        let packageJsonFiles =
             _host.readDirectory(nodeModulesPath, /*extension*/undefined, /*exclude*/undefined, /*depth*/ 2).filter(f => ts.getBaseFileName(f) === "package.json");
         for (let packageJsonFile of packageJsonFiles) {
-            let packageJsonContent = JSON.parse(_host.readFile(packageJsonFile));
+            let packageJsonContent = tryParseJson(_host.readFile(packageJsonFile));
+            if (!packageJsonContent) { continue; }
+
             // npm 3 has the package.json contains a "_requiredBy" field
             // we should include all the top level module names for npm 2, and only module names whose
             // "_requiredBy" field starts with "#" or equals "/" for npm 3.
             if (packageJsonContent._requiredBy &&
-                packageJsonContent._requiredBy.filter((r: string) => r[0] === "#" || r === "/").length == 0) {
+                packageJsonContent._requiredBy.filter((r: string) => r[0] === "#" || r === "/").length === 0) {
                 continue;
             }
             let packageName = packageJsonContent["name"];
@@ -204,7 +197,7 @@ namespace ts.JsTyping {
         }
         mergeTypings(typingNames);
     }
-    
+
     function getTypingNamesFromCompilerOptions(options: CompilerOptions) {
         let typingNames: string[] = [];
         if (options && options.jsx === JsxEmit.React) {
@@ -246,7 +239,10 @@ namespace ts.JsTyping {
     function tryGetTsdJsonCacheInfo(host: HostType, cachePath: string): TsdJsonCacheInfo {
         let cacheTsdJsonPath = ts.combinePaths(ts.normalizePath(cachePath), "tsd.json");
         if (host.fileExists(cacheTsdJsonPath)) {
-            return { path: cacheTsdJsonPath, value: JSON.parse(host.readFile(cacheTsdJsonPath)) };
+            let value = tryParseJson(host.readFile(cacheTsdJsonPath));
+            if (value) {
+                return { path: cacheTsdJsonPath, value };
+            }
         }
         return undefined;
     }
