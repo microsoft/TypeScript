@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: a.js
 //// @internal class C {}
 

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/primitives/stringLiteral/stringLiteralType.ts ===
+var x: 'hi';
+>x : Symbol(x, Decl(stringLiteralType.ts, 0, 3))
+
+function f(x: 'hi');
+>f : Symbol(f, Decl(stringLiteralType.ts, 0, 12), Decl(stringLiteralType.ts, 2, 20), Decl(stringLiteralType.ts, 3, 22))
+>x : Symbol(x, Decl(stringLiteralType.ts, 2, 11))
+
+function f(x: string);
+>f : Symbol(f, Decl(stringLiteralType.ts, 0, 12), Decl(stringLiteralType.ts, 2, 20), Decl(stringLiteralType.ts, 3, 22))
+>x : Symbol(x, Decl(stringLiteralType.ts, 3, 11))
+
+function f(x: any) {
+>f : Symbol(f, Decl(stringLiteralType.ts, 0, 12), Decl(stringLiteralType.ts, 2, 20), Decl(stringLiteralType.ts, 3, 22))
+>x : Symbol(x, Decl(stringLiteralType.ts, 4, 11))
+}

@@ -1,0 +1,48 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'number' and '"ABC" | "XYZ" | number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and '"ABC" | "XYZ" | number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'boolean'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2365: Operator '+' cannot be applied to types 'boolean' and '"ABC" | "XYZ" | number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,9): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,11): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(15,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (9 errors) ====
+    
+    let abc: "ABC" = "ABC";
+    let xyz: "XYZ" = "XYZ";
+    let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
+    let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
+    
+    let a = abcOrXyzOrNumber + 100;
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'number'.
+    let b = 100 + abcOrXyzOrNumber;
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and '"ABC" | "XYZ" | number'.
+    let c = abcOrXyzOrNumber + abcOrXyzOrNumber;
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and '"ABC" | "XYZ" | number'.
+    let d = abcOrXyzOrNumber + true;
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '"ABC" | "XYZ" | number' and 'boolean'.
+    let e = false + abcOrXyzOrNumber;
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'boolean' and '"ABC" | "XYZ" | number'.
+    let f = abcOrXyzOrNumber++;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    let g = --abcOrXyzOrNumber;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    let h = abcOrXyzOrNumber ^ 10;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    let i = abcOrXyzOrNumber | 10;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    let j = abc < xyz;
+    let k = abc === xyz;
+    let l = abc != xyz;

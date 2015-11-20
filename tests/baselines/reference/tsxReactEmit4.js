@@ -1,4 +1,4 @@
-//// [tsxReactEmit4.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -17,7 +17,7 @@ var openClosed1 = <div>
 // Should emit React.__spread({}, p, {x: 0})
 var spread1 = <div {...p} x={0} />;
 
-//// [tsxReactEmit4.js]
+//// [file.js]
 var p;
 var openClosed1 = React.createElement("div", null, blah);
 // Should emit React.__spread({}, p, {x: 0})

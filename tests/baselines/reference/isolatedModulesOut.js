@@ -6,7 +6,5 @@ export var x;
 //// [file2.ts]
 var y;
 
-//// [file1.js]
-export var x;
 //// [all.js]
 var y;

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/doNotEmitPinnedCommentOnNotEmittedNode.ts ===
+=== tests/cases/compiler/file1.ts ===
 
 class C {
 >C : C

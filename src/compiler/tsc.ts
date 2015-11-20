@@ -280,7 +280,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version), /* compilerHost */ undefined);
+            printVersion();
             return sys.exit(ExitStatus.Success);
         }
 
@@ -303,7 +303,7 @@ namespace ts {
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
             const searchPath = normalizePath(sys.getCurrentDirectory());
-            configFileName = findConfigFile(searchPath);
+            configFileName = findConfigFile(searchPath, sys.fileExists);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
@@ -346,10 +346,21 @@ namespace ts {
                     return;
                 }
             }
+            if (!cachedConfigFileText) {
+                const error = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
+                reportDiagnostics([error], /* compilerHost */ undefined);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
 
             const result = parseConfigFileTextToJson(configFileName, cachedConfigFileText);
             const configObject = result.config;
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
+            if (!configObject) {
+                reportDiagnostics([result.error], /* compilerHost */ undefined);
+                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return;
+            }
+            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -365,7 +376,7 @@ namespace ts {
                 if (configFileName) {
                     const configParseResult = parseConfigFile();
                     rootFileNames = configParseResult.fileNames;
-                    compilerOptions = extend(commandLine.options, configParseResult.options);
+                    compilerOptions = configParseResult.options;
                 }
                 else {
                     rootFileNames = commandLine.fileNames;
@@ -458,7 +469,7 @@ namespace ts {
         }
 
         function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, commandLine.options)) {
                 return;
             }
 

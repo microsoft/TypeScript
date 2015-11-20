@@ -297,8 +297,8 @@ namespace ts {
         return <T>result;
     }
 
-    export function extend<T1, T2>(first: Map<T1>, second: Map<T2>): Map<T1 & T2> {
-        const result: Map<T1 & T2> = {};
+    export function extend<T1 extends Map<{}>, T2 extends Map<{}>>(first: T1 , second: T2): T1 & T2 {
+        const result: T1 & T2 = <any>{};
         for (const id in first) {
             (result as any)[id] = first[id];
         }
@@ -714,7 +714,7 @@ namespace ts {
     }
 
     export function getBaseFileName(path: string) {
-        if (!path) {
+        if (path === undefined) {
             return undefined;
         }
         const i = path.lastIndexOf(directorySeparator);
@@ -738,18 +738,18 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedExtensions = [".ts", ".tsx", ".d.ts"];
-    /**
-     *  List of extensions that will be used to look for external modules.
-     *  This list is kept separate from supportedExtensions to for cases when we'll allow to include .js files in compilation,
-     *  but still would like to load only TypeScript files as modules 
-     */
-    export const moduleFileExtensions = supportedExtensions;
+    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    export const supportedJavascriptExtensions = [".js", ".jsx"];
+    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function isSupportedSourceFileName(fileName: string) {
+    export function getSupportedExtensions(options?: CompilerOptions): string[] {
+        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+    }
+
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
         if (!fileName) { return false; }
 
-        for (const extension of supportedExtensions) {
+        for (const extension of getSupportedExtensions(compilerOptions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -847,7 +847,7 @@ namespace ts {
         }
 
         export function fail(message?: string): void {
-            Debug.assert(false, message);
+            Debug.assert(/*expression*/ false, message);
         }
     }
 

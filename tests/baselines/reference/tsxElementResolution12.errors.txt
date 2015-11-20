@@ -1,9 +1,9 @@
-tests/cases/conformance/jsx/tsxElementResolution12.tsx(17,2): error TS2304: Cannot find name 'Obj2'.
-tests/cases/conformance/jsx/tsxElementResolution12.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
-tests/cases/conformance/jsx/tsxElementResolution12.tsx(30,7): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(17,2): error TS2304: Cannot find name 'Obj2'.
+tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property
+tests/cases/conformance/jsx/file.tsx(30,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution12.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementAttributesProperty { pr: any; }

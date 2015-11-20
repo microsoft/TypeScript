@@ -1,23 +1,23 @@
-=== tests/cases/conformance/jsx/tsxReactEmit3.tsx ===
+=== tests/cases/conformance/jsx/test.tsx ===
 
 declare module JSX { interface Element { } }
->JSX : Symbol(JSX, Decl(tsxReactEmit3.tsx, 0, 0))
->Element : Symbol(Element, Decl(tsxReactEmit3.tsx, 1, 20))
+>JSX : Symbol(JSX, Decl(test.tsx, 0, 0))
+>Element : Symbol(Element, Decl(test.tsx, 1, 20))
 
 declare var React: any;
->React : Symbol(React, Decl(tsxReactEmit3.tsx, 2, 11))
+>React : Symbol(React, Decl(test.tsx, 2, 11))
 
 declare var Foo, Bar, baz;
->Foo : Symbol(Foo, Decl(tsxReactEmit3.tsx, 4, 11))
->Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
->baz : Symbol(baz, Decl(tsxReactEmit3.tsx, 4, 21))
+>Foo : Symbol(Foo, Decl(test.tsx, 4, 11))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>baz : Symbol(baz, Decl(test.tsx, 4, 21))
 
 <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
->Foo : Symbol(Foo, Decl(tsxReactEmit3.tsx, 4, 11))
->Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
->Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
->Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
->Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
->Bar : Symbol(Bar, Decl(tsxReactEmit3.tsx, 4, 16))
->Foo : Symbol(Foo, Decl(tsxReactEmit3.tsx, 4, 11))
+>Foo : Symbol(Foo, Decl(test.tsx, 4, 11))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Bar : Symbol(Bar, Decl(test.tsx, 4, 16))
+>Foo : Symbol(Foo, Decl(test.tsx, 4, 11))
 
