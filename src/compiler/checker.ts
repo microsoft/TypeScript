@@ -4531,8 +4531,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getStringLiteralType(node: StringLiteral | StringLiteralTypeNode): StringLiteralType {
-            const text = node.text;
+        function getStringLiteralType(text: string): StringLiteralType {
             if (hasProperty(stringLiteralTypes, text)) {
                 return stringLiteralTypes[text];
             }
@@ -4545,7 +4544,7 @@ namespace ts {
         function getTypeFromStringLiteral(node: StringLiteral | StringLiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getStringLiteralType(node);
+                links.resolvedType = getStringLiteralType(node.text);
             }
             return links.resolvedType;
         }
@@ -8747,7 +8746,7 @@ namespace ts {
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
                         argType = arg.kind === SyntaxKind.StringLiteral && !reportErrors
-                            ? getStringLiteralType(<StringLiteral>arg)
+                            ? getStringLiteralType((<StringLiteral>arg).text)
                             : checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                     }
 
@@ -8942,7 +8941,7 @@ namespace ts {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
-                        return getStringLiteralType(<StringLiteral>element.name);
+                        return getStringLiteralType((<Identifier | LiteralExpression>element.name).text);
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
@@ -10564,7 +10563,8 @@ namespace ts {
         function checkStringLiteralExpression(node: StringLiteral): Type {
             const contextualType = getContextualType(node);
             if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
-                return getStringLiteralType(node);
+                // TODO (drosen): Consider using getTypeFromStringLiteral instead
+                return getStringLiteralType(node.text);
             }
 
             return stringType;
