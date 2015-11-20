@@ -12,6 +12,10 @@ declare var decorator: any;
 class MyComponent {
     constructor(public Service: Service) {
     }
+
+    @decorator
+    method(x: this) {
+    }
 }
 
 //// [service.js]
@@ -37,6 +41,14 @@ var MyComponent = (function () {
     function MyComponent(Service) {
         this.Service = Service;
     }
+    MyComponent.prototype.method = function (x) {
+    };
+    __decorate([
+        decorator, 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], MyComponent.prototype, "method", null);
     MyComponent = __decorate([
         decorator, 
         __metadata('design:paramtypes', [service_1.default])

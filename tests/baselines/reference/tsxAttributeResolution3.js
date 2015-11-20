@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution3.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -40,7 +40,7 @@ var obj7 = { x: 'foo' };
 <test1 x={32} {...obj7} />
 
 
-//// [tsxAttributeResolution3.jsx]
+//// [file.jsx]
 // OK
 var obj1 = { x: 'foo' };
 <test1 {...obj1}/>;

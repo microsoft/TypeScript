@@ -1,0 +1,10 @@
+=== tests/cases/compiler/a.ts ===
+export class c {
+>c : Symbol(c, Decl(a.ts, 0, 0))
+}
+
+=== tests/cases/compiler/b.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(b.ts, 0, 0))
+}
+

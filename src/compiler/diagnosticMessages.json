@@ -2060,13 +2060,21 @@
         "category": "Error",
         "code": 5054
     },
-    "The project file name is not in 'tsconfig(-*).json' format: '{0}'": {
+    "Cannot write file '{0}' because it would overwrite input file.": {
         "category": "Error",
         "code": 5055
     },
-    "Cannot find any project file in specified path: '{0}'": {
+    "Cannot write file '{0}' because it would be overwritten by multiple input files.": {
         "category": "Error",
         "code": 5056
+    },
+    "The project file name is not in 'tsconfig(-*).json' format: '{0}'": {
+        "category": "Error",
+        "code": 5057
+    },
+    "Cannot find any project file in specified path: '{0}'": {
+        "category": "Error",
+        "code": 5058
     },
 
     "Concatenate and emit output to single file.": {
@@ -2330,6 +2338,11 @@
         "category": "Error",
         "code": 6082
     },
+    "Allow javascript files to be compiled.": {
+        "category": "Message",
+        "code": 6083
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

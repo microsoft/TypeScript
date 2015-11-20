@@ -1,9 +1,9 @@
-=== tests/cases/conformance/jsx/tsxElementResolution5.tsx ===
+=== tests/cases/conformance/jsx/file1.tsx ===
 declare module JSX {
->JSX : Symbol(JSX, Decl(tsxElementResolution5.tsx, 0, 0))
+>JSX : Symbol(JSX, Decl(file1.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(tsxElementResolution5.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file1.tsx, 0, 20))
 }
 
 // OK, but implicit any

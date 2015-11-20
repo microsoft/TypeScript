@@ -1,10 +1,10 @@
-//// [isolatedModulesNonAmbientConstEnum.ts]
+//// [file1.ts]
 
 const enum E { X = 100 };
 var e = E.X;
 export var x;
 
-//// [isolatedModulesNonAmbientConstEnum.js]
+//// [file1.js]
 var E;
 (function (E) {
     E[E["X"] = 100] = "X";

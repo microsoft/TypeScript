@@ -38,6 +38,8 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
 
+        isEmitBlocked(emitFileName: string): boolean;
+
         writeFile: WriteFileCallback;
     }
 
@@ -1885,15 +1887,85 @@ namespace ts {
         return emitOutputFilePathWithoutExtension + extension;
     }
 
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+        return compilerOptions.module ?
+            compilerOptions.module :
+            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
+    }
+
+    export interface EmitFileNames {
+        jsFilePath: string;
+        sourceMapFilePath: string;
+        declarationFilePath: string;
+    }
+
+    export function forEachExpectedEmitFile(host: EmitHost,
+        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
+        targetSourceFile?: SourceFile) {
+        const options = host.getCompilerOptions();
+        // Emit on each source file
+        if (options.outFile || options.out) {
+            onBundledEmit(host);
+        }
+        else {
+            const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
+            for (const sourceFile of sourceFiles) {
+                if (!isDeclarationFile(sourceFile)) {
+                    onSingleFileEmit(host, sourceFile);
+                }
+            }
+        }
+
+        function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
+            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
+                sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+            const emitFileNames: EmitFileNames = {
+                jsFilePath,
+                sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
+                declarationFilePath: !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitFilePath(jsFilePath, options) : undefined
+            };
+            action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
+        }
+
+        function onBundledEmit(host: EmitHost) {
+            // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
+            const bundledSources = filter(host.getSourceFiles(),
+                sourceFile => !isDeclarationFile(sourceFile) && // Not a declaration file
+                    (!isExternalModule(sourceFile) || // non module file
+                        (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted 
+            if (bundledSources.length) {
+                const jsFilePath = options.outFile || options.out;
+                const emitFileNames: EmitFileNames = {
+                    jsFilePath,
+                    sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
+                    declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+                };
+                action(emitFileNames, bundledSources, /*isBundledEmit*/true);
+            }
+        }
+
+        function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+            return options.sourceMap ? jsFilePath + ".map" : undefined;
+        }
+
+        function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
+            return options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
+        }
+    }
+
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean) {
+    export function writeFile(host: EmitHost, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean) {
         host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
-            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
+            diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         });
     }
 
@@ -1915,18 +1987,6 @@ namespace ts {
 
     export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
         return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
-    }
-
-    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
-                // 1. in-browser single file compilation scenario
-                // 2. non .js file
-                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
-            }
-            return false;
-        }
-        return false;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
@@ -2273,11 +2333,7 @@ namespace ts {
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
-        return fileExtensionIs(fileName, ".js") || fileExtensionIs(fileName, ".jsx");
-    }
-
-    export function allowsJsxExpressions(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx");
+        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     /**

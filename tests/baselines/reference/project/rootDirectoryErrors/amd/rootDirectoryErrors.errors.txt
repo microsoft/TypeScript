@@ -2,11 +2,11 @@ error TS6059: File 'FolderA/FolderB/fileB.ts' is not under 'rootDir' 'FolderA/Fo
 
 
 !!! error TS6059: File 'fileB.ts' is not under 'rootDir' 'FolderA/FolderB/FolderC'. 'rootDir' is expected to contain all source files.
-==== fileC.ts (0 errors) ====
+==== FolderA/FolderB/FolderC/fileC.ts (0 errors) ====
     class C {
     }
     
-==== fileB.ts (0 errors) ====
+==== FolderA/FolderB/fileB.ts (0 errors) ====
     /// <reference path='FolderC/fileC.ts'/>
     class B {
         public c: C;
