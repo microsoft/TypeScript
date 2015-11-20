@@ -5991,9 +5991,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 // Clone the type name and parent it to a location outside of the current declaration.
-                const typeName = cloneEntityName(node.typeName);
-                typeName.parent = location;
-
+                const typeName = cloneEntityName(node.typeName, location);
                 const result = resolver.getTypeReferenceSerializationKind(typeName);
                 switch (result) {
                     case TypeReferenceSerializationKind.Unknown:

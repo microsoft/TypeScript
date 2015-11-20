@@ -1580,20 +1580,66 @@ namespace ts {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
 
-    export function cloneEntityName(node: EntityName): EntityName {
-        if (node.kind === SyntaxKind.Identifier) {
-            const clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-            clone.text = (<Identifier>node).text;
-            return clone;
+    /**
+     * Creates a shallow, memberwise clone of a node. The "pos", "end", "flags", and "parent" properties
+     * are excluded by default, and can be provided via the "location", "flags", and "parent" parameters.
+     * @param node The node to clone.
+     * @param location An optional TextRange to use to supply the new position.
+     * @param flags The NodeFlags to use for the cloned node.
+     * @param parent The parent for the new node.
+     */
+    export function cloneNode<T extends Node>(node: T, location?: TextRange, flags?: NodeFlags, parent?: Node): T {
+        // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
+        // the original node. We also need to exclude specific properties and only include own-
+        // properties (to skip members already defined on the shared prototype).
+        const clone = location !== undefined
+            ? <T>createNode(node.kind, location.pos, location.end)
+            : <T>createSynthesizedNode(node.kind);
+
+        for (const key in node) {
+            if (isExcludedPropertyForClone(key) || !node.hasOwnProperty(key)) {
+                continue;
+            }
+
+            (<any>clone)[key] = (<any>node)[key];
         }
-        else {
-            const clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
-            clone.left = cloneEntityName((<QualifiedName>node).left);
-            clone.left.parent = clone;
-            clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
-            clone.right.parent = clone;
-            return clone;
+
+        if (flags !== undefined) {
+            clone.flags = flags;
         }
+
+        if (parent !== undefined) {
+            clone.parent = parent;
+        }
+
+        return clone;
+    }
+
+    function isExcludedPropertyForClone(property: string) {
+        return property === "pos"
+            || property === "end"
+            || property === "flags"
+            || property === "parent";
+    }
+
+    /**
+     * Creates a deep clone of an EntityName, with new parent pointers.
+     * @param node The EntityName to clone.
+     * @param parent The parent for the cloned node.
+     */
+    export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
+        const clone = cloneNode(node, node, node.flags, parent);
+        if (isQualifiedName(clone)) {
+            const { left, right } = clone;
+            clone.left = cloneEntityName(left, clone);
+            clone.right = cloneNode(right, right, right.flags, parent);
+        }
+
+        return clone;
+    }
+
+    export function isQualifiedName(node: Node): node is QualifiedName {
+        return node.kind === SyntaxKind.QualifiedName;
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
@@ -1936,7 +1982,7 @@ namespace ts {
             const bundledSources = filter(host.getSourceFiles(),
                 sourceFile => !isDeclarationFile(sourceFile) && // Not a declaration file
                     (!isExternalModule(sourceFile) || // non module file
-                        (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted 
+                        (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted
             if (bundledSources.length) {
                 const jsFilePath = options.outFile || options.out;
                 const emitFileNames: EmitFileNames = {
