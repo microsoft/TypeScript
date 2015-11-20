@@ -1310,7 +1310,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function isBinaryOrOctalIntegerLiteral(node: LiteralExpression, text: string): boolean {
+            function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string): boolean {
                 if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
                     switch (text.charCodeAt(1)) {
                         case CharacterCodes.b:
@@ -1324,7 +1324,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return false;
             }
 
-            function emitLiteral(node: LiteralExpression) {
+            function emitLiteral(node: LiteralExpression | TemplateLiteralFragment) {
                 const text = getLiteralText(node);
 
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
@@ -1339,7 +1339,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getLiteralText(node: LiteralExpression) {
+            function getLiteralText(node: LiteralExpression | TemplateLiteralFragment) {
                 // Any template literal or string literal with an extended escape
                 // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
@@ -1398,7 +1398,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`"${text}"`);
             }
 
-            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression | TemplateLiteralFragment) => void) {
                 write("[");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     literalEmitter(<LiteralExpression>node.template);
@@ -5964,7 +5964,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitSerializedTypeNode(node: TypeNode) {
                 if (node) {
-
                     switch (node.kind) {
                         case SyntaxKind.VoidKeyword:
                             write("void 0");
@@ -5990,7 +5989,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.StringLiteralType:
                             write("String");
                             return;
 

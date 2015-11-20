@@ -464,9 +464,6 @@ namespace ts {
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
-            case SyntaxKind.StringLiteral:
-                // Specialized signatures can have string literals as their parameters' type names
-                return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 

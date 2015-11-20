@@ -3535,6 +3535,7 @@ namespace ts {
 
             function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
                 if (contextToken.kind === SyntaxKind.StringLiteral
+                    || contextToken.kind === SyntaxKind.StringLiteralType
                     || contextToken.kind === SyntaxKind.RegularExpressionLiteral
                     || isTemplateLiteralKind(contextToken.kind)) {
                     let start = contextToken.getStart();
@@ -6532,6 +6533,7 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.NullKeyword:
@@ -6993,7 +6995,7 @@ namespace ts {
                 else if (tokenKind === SyntaxKind.NumericLiteral) {
                     return ClassificationType.numericLiteral;
                 }
-                else if (tokenKind === SyntaxKind.StringLiteral) {
+                else if (tokenKind === SyntaxKind.StringLiteral || tokenKind === SyntaxKind.StringLiteralType) {
                     return ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
@@ -7912,7 +7914,7 @@ namespace ts {
                 addResult(start, end, classFromKind(token));
 
                 if (end >= text.length) {
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.StringLiteralType) {
                         // Check to see if we finished up on a multiline string literal.
                         let tokenText = scanner.getTokenText();
                         if (scanner.isUnterminated()) {
@@ -8062,6 +8064,7 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                     return ClassificationType.numericLiteral;
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                     return ClassificationType.stringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return ClassificationType.regularExpressionLiteral;
