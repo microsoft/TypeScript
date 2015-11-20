@@ -2220,10 +2220,10 @@
         "category": "Error",
         "code": 6046
     },
-  "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
-    "category": "Error",
-    "code": 6047
-  },
+    "Argument for '--target' option must be 'ES3', 'ES5', or 'ES2015'.": {
+        "category": "Error",
+        "code": 6047
+    },
     "Locale must be of the form <language> or <language>-<territory>. For example '{0}' or '{1}'.": {
         "category": "Error",
         "code": 6048
@@ -2353,14 +2353,114 @@
         "category": "Error",
         "code": 6082
     },
-    "Allow javascript files to be compiled.": {
+    "Base directory to resolve relative module names.": {
         "category": "Message",
         "code": 6083
     },
-    "Base directory to resolve relative module names.": {
+    "Enable tracing of the module resolution process.": {
         "category": "Message",
         "code": 6084
-    },    
+    },
+    "======== Resolving module '{0}' from '{1}'. ========": {
+        "category": "Message",
+        "code": 6085
+    },
+    "Explicitly specified module resolution kind: '{0}'.": {
+        "category": "Message",
+        "code": 6086
+    },
+    "Module resolution kind is not specified, using '{0}'.": {
+        "category": "Message",
+        "code": 6087
+    },
+    "======== Module name '{0}' was successfully resolved to '{1}'. ========": {
+        "category": "Message",
+        "code": 6088
+    },
+    "======== Module name '{0}' was not resolved. ========": {
+        "category": "Message",
+        "code": 6089
+    },
+    "Resolving rooted module name '{0}' - use it as a candidate location.": {
+        "category": "Message",
+        "code": 6090
+    },
+    "Resolving relative module name '{0}'.": {
+        "category": "Message",
+        "code": 6091
+    },
+    "Resolving non-relative module name '{0}'.": {
+        "category": "Message",
+        "code": 6092
+    },
+    "Converting relative module name '{0}' to absolute using '{1}' as a base directory => '{2}'.": {
+        "category": "Message",
+        "code": 6093
+    },
+    "'rootDirs' option is specified, searching for a longest matching prefix...": {
+        "category": "Message",
+        "code": 6094
+    },
+    "Found longest matching rootDir '{0}', 'converted relative path '{1}', to non-relative path '{2}'": {
+        "category": "Message",
+        "code": 6095
+    },
+    "'rootDirs' option is not specified, using '{0}' as candidate location.": {
+        "category": "Message",
+        "code": 6096
+    },
+    "'paths' option is specified, looking for a pattern to match module name '{0}'.": {
+        "category": "Message",
+        "code": 6097
+    },
+    "Module name '{0}', matched pattern '{1}'.": {
+        "category": "Message",
+        "code": 6098
+    },
+    "Trying substitution '{0}', candidate module location: '{1}'.": {
+        "category": "Message",
+        "code": 6099
+    },
+    "Resolving module name '{0}' relative to base url '{1}' - '{2}'.": {
+        "category": "Message",
+        "code": 6100
+    },
+    "Loading module '{0}' as file / folder, candidate module location '{1}'.": {
+        "category": "Message",
+        "code": 6101
+    },
+    "File '{0}' does not exist.": {
+        "category": "Message",
+        "code": 6102
+    },
+    "File '{0}' exist - use it as a module resolution result.": {
+        "category": "Message",
+        "code": 6103
+    },
+    "Loading module '{0}' from 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6104
+    },
+    "Found 'package.json' at '{0}'.": {
+        "category": "Message",
+        "code": 6105
+    },
+    "'package.json' does not have 'typings' field.": {
+        "category": "Message",
+        "code": 6106
+    },
+    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
+        "category": "Message",
+        "code": 6107
+    },
+    "Module name '{0}' contains '!' character.": {
+        "category": "Message",
+        "code": 6108
+    },
+    "Allow javascript files to be compiled.": {
+        "category": "Message",
+        "code": 6109
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

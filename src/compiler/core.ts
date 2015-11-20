@@ -410,6 +410,17 @@ namespace ts {
         };
     }
 
+    /* internal */
+    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 2) {
+            text = formatStringFromArgs(text, arguments, 2);
+        }
+
+        return text;
+    }
+
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);

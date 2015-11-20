@@ -303,6 +303,11 @@ namespace ts {
             isTSConfigOnly: true
         },
         {
+            name: "traceModuleResolution",
+            type: "boolean",
+            description: Diagnostics.Enable_tracing_of_the_module_resolution_process
+        },
+        {
             name: "allowJs",
             type: "boolean",
             description: Diagnostics.Allow_javascript_files_to_be_compiled,
