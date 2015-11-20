@@ -2577,9 +2577,11 @@ namespace ts {
                     return links.type = checkExpression((<BinaryExpression>declaration).right);
                 }
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
+                    // Declarations only exist for property access expressions for certain
+                    // special assignment kinds
                     if (declaration.parent.kind === SyntaxKind.BinaryExpression) {
                         // Handle exports.p = expr or this.p = expr or className.prototype.method = expr
-                        return links.type = checkExpression((<BinaryExpression>declaration.parent).right);
+                        return links.type = checkExpressionCached((<BinaryExpression>declaration.parent).right);
                     }
                     else {
                         // Declaration for className.prototype in inferred JS class
@@ -3860,6 +3862,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.PropertyAccessExpression:
+                        // Inferred class method
                         result = getSignaturesOfType(checkExpressionCached((<BinaryExpression>node.parent).right), SignatureKind.Call);
                         break;
                 }

@@ -1093,64 +1093,6 @@ namespace ts {
         return SpecialPropertyAssignmentKind.None;
     }
 
-    /**
-     * Returns true if the node is an assignment to a property on the identifier 'exports'.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isExportsPropertyAssignment(expression: Node): boolean {
-        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
-        return isInJavaScriptFile(expression) &&
-            (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
-    }
-
-    /**
-     * Returns true if the node is an assignment to the property access expression 'module.exports'.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isModuleExportsAssignment(expression: Node): boolean {
-        // of the form 'module.exports = expr' where 'expr' is arbitrary
-        return isInJavaScriptFile(expression) &&
-            (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
-    }
-
-    /**
-     * Returns true if this expression is an assignment to the given named property
-    */
-    function isAssignmentToProperty(expression: Node, name?: string): expression is BinaryExpression {
-        return (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            isNamedPropertyAccess((<BinaryExpression>expression).left, name);
-    }
-
-    /**
-     * Returns true if this expression is a PropertyAccessExpression where the property name is the provided name
-    */
-    function isNamedPropertyAccess(expression: Node, name?: string): expression is PropertyAccessExpression {
-        return expression.kind === SyntaxKind.PropertyAccessExpression &&
-            (!name || (<PropertyAccessExpression>expression).name.text === name);
-    }
-
-    /**
-     * Returns true if the node is an assignment in the form 'id1.prototype.id2 = expr' where id1 and id2
-     * are any identifier.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isPrototypePropertyAssignment(expression: Node): expression is BinaryExpression {
-        return isAssignmentToProperty(expression) &&
-            isNamedPropertyAccess(expression.left) &&
-            isNamedPropertyAccess((<PropertyAccessExpression>expression.left).expression, "prototype") &&
-            (<PropertyAccessExpression>(<PropertyAccessExpression>expression.left).expression).expression.kind === SyntaxKind.Identifier;
-    }
-
     export function getExternalModuleName(node: Node): Expression {
         if (node.kind === SyntaxKind.ImportDeclaration) {
             return (<ImportDeclaration>node).moduleSpecifier;

@@ -635,7 +635,6 @@ namespace ts {
         function bindAnonymousDeclaration(node: Declaration, symbolFlags: SymbolFlags, name: string) {
             let symbol = createSymbol(symbolFlags, name);
             addDeclarationToSymbol(symbol, node, symbolFlags);
-            return symbol;
         }
 
         function bindBlockScopedDeclaration(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
@@ -889,6 +888,11 @@ namespace ts {
                             case SpecialPropertyAssignmentKind.ThisProperty:
                                 bindThisPropertyAssignment(<BinaryExpression>node);
                                 break;
+                            case SpecialPropertyAssignmentKind.None:
+                                // Nothing to do
+                                break;
+                            default:
+                                Debug.fail("Unknown special property assignment kind");
                         }
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
@@ -1080,19 +1084,19 @@ namespace ts {
 
             // The function is now a constructor rather than a normal function
             if (!funcSymbol.inferredConstructor) {
+                // Have the binder set up all the related class symbols for us
                 declareSymbol(container.locals, funcSymbol, funcSymbol.valueDeclaration, SymbolFlags.Class, SymbolFlags.None);
-                // funcSymbol.flags = (funcSymbol.flags | SymbolFlags.Class) & ~SymbolFlags.Function;
-                funcSymbol.members = funcSymbol.members || {};
+                // funcSymbol.members = funcSymbol.members || {};
                 funcSymbol.members["__constructor"] = funcSymbol;
                 funcSymbol.inferredConstructor = true;
             }
 
-            // Declare the 'prototype' member of the function
-            let prototypeSymbol = declareSymbol(funcSymbol.exports, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.ObjectLiteral | SymbolFlags.Property, SymbolFlags.None);
+            // Get the exports of the class so we can add the method to it
+            let funcExports = declareSymbol(funcSymbol.exports, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.ObjectLiteral | SymbolFlags.Property, SymbolFlags.None);
 
-            // Declare the property on the prototype symbol
-            declareSymbol(prototypeSymbol.members, prototypeSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.None);
-            // and on the class type
+            // Declare the method
+            declareSymbol(funcExports.members, funcExports, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.None);
+            // and on the members of the function so it appears in 'prototype'
             declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.PropertyExcludes);
         }
 
