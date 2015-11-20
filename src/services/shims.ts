@@ -65,7 +65,7 @@ namespace ts {
     }
 
     /** Public interface of the the of a config service shim instance.*/
-    export interface CoreServicesShimHost extends Logger, ModuleResolutionHost {
+    export interface CoreServicesShimHost extends Logger, TypeDefinitionResolutionHost {
         /**
          * Returns a JSON-encoded value of the type: string[]
          *
@@ -225,6 +225,7 @@ namespace ts {
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
         resolveTypeDefinitions(fileNamesJson: string, cachePath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
+        updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, typingsConfigPath: string): string 
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -433,6 +434,10 @@ namespace ts {
         
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        public writeFile(fileName: string, data: string): void {
+            this.shimHost.writeFile(fileName, data);
         }
     }
 
@@ -1026,6 +1031,14 @@ namespace ts {
                 let fileNames: string[] = JSON.parse(fileNamesJson);
                 let safeList: string[] = JSON.parse(safeListJson);
                 return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, compilerOptions, safeList, noDevDependencies);
+            });
+        }
+
+        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, typingsConfigPath: string): string {
+            return this.forwardJSONCall("updateTypingsConfig()", () => {
+                let cachedTypingsPaths: string[] = JSON.parse(cachedTypingsPathsJson);
+                let newTypings: string[] = JSON.parse(newTypingsJson);
+                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypings, cachePath, typingsConfigPath);
             });
         }
     }

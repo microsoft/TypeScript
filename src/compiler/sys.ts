@@ -124,17 +124,17 @@ namespace ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {                
+            function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {
                 let result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
-                
+
                 function visitDirectory(path: string, depth?: number) {
                     if (depth <= 0) {
                         return;
                     }
-                    
+
                     let folder = fso.GetFolder(path || ".");
                     let files = getNames(folder.files);
                     for (let current of files) {
@@ -253,7 +253,7 @@ namespace ts {
                     if (depth <= 0) {
                         return;
                     }
-                    
+
                     let files = _fs.readdirSync(path || ".").sort();
                     let directories: string[] = [];
                     for (let current of files) {

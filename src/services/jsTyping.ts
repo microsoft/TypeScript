@@ -9,9 +9,15 @@ namespace ts.JsTyping {
     type HostType = {
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
-        readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[]; 
+        readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
+        writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void;
     };
     
+    interface TsdJsonCacheInfo {
+        path: string;
+        value: any;
+    }
+
     var _host: HostType;
     
     // a typing name to typing file path mapping
@@ -35,7 +41,7 @@ namespace ts.JsTyping {
                 }
             }
         }
-        
+
         for (let searchDir of searchDirs) {
             let packageJsonPath = ts.combinePaths(searchDir, "package.json");
             getTypingNamesFromPackageJson(packageJsonPath);
@@ -53,11 +59,21 @@ namespace ts.JsTyping {
 
         let normalizedCachePath = ts.normalizePath(cachePath);
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
-        let cacheTsdJsonPath = ts.combinePaths(normalizedCachePath, "tsd.json");
-        if (host.fileExists(cacheTsdJsonPath)) {
+        let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
+        if (tsdJsonCacheInfo) {
             try{
-                let cacheTsdJsonDict = JSON.parse(host.readFile(cacheTsdJsonPath));
-                // The "installed" property in the tsd.json servers as a registry of installed typings. Each item 
+                let cacheTsdJsonDict = tsdJsonCacheInfo.value;
+                // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped. 
+                // Therefore if they don't come with d.ts files, we should not retry downloading these packages.
+                if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
+                    for (let notFoundTypingName of cacheTsdJsonDict["notFound"]) {
+                        if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
+                            delete inferredTypings[notFoundTypingName];
+                        }
+                    }
+                }
+
+                // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
                 // of this object has a key of the relative file path, and a value that contains the corresponding
                 // commit hash.
                 if (cacheTsdJsonDict.hasOwnProperty("installed")) {
@@ -67,15 +83,17 @@ namespace ts.JsTyping {
                         // is written as "angular", however the resolved typing is "angularjs/..", therefore it would never
                         // match cached version
                         let cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf('/'));
+                        // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
+                        // d.ts file that coming with the package. That one should take higher priority.
                         if (inferredTypings.hasOwnProperty(cachedTypingName) && !inferredTypings[cachedTypingName]) {
                             inferredTypings[cachedTypingName] = ts.combinePaths(typingsPath, cachedTypingPath);
                         }
                     }
                 }
             }
-            catch(e) { }
+            catch (e) { }
         }
-        
+
         let newTypingNames: string[] = [];
         let cachedTypingPaths: string[] = [];
         for (let typing in inferredTypings) {
@@ -89,7 +107,10 @@ namespace ts.JsTyping {
         
         return { cachedTypingPaths, newTypingNames };
     }
-    
+
+    /**
+     * Merge a given list of typingNames to the inferredTypings map
+     */
     function mergeTypings(typingNames: string[]) {
         for (let typing of typingNames) {
             if (!inferredTypings.hasOwnProperty(typing)) {
@@ -101,13 +122,13 @@ namespace ts.JsTyping {
     function getTypingNamesFromPackageJson(packageJsonPath: string) {
         if (_host.fileExists(packageJsonPath)) {
             // Guide against malformed package.json
-            try{
+            try {
                 let packageJsonDict = JSON.parse(_host.readFile(packageJsonPath));
                 if (packageJsonDict.hasOwnProperty("dependencies")) {
                     mergeTypings(Object.keys(packageJsonDict.dependencies));
                 }
             }
-            catch(e) {
+            catch (e) {
             }
         }
     }
@@ -115,13 +136,13 @@ namespace ts.JsTyping {
     function getTypingNamesFromBowerJson(bowerJsonPath: string) {
         if (_host.fileExists(bowerJsonPath)) {
             // Guide against malformed package.json
-            try{
+            try {
                 let packageJsonDict = JSON.parse(_host.readFile(bowerJsonPath));
                 if (packageJsonDict.hasOwnProperty("dependencies")) {
                     mergeTypings(Object.keys(packageJsonDict.dependencies));
                 }
             }
-            catch(e) {
+            catch (e) {
             }
         }
     }
@@ -190,5 +211,52 @@ namespace ts.JsTyping {
             typingNames.push("react");
         }
         mergeTypings(typingNames);
+    }
+
+    /**
+     * Updates the tsd.json cache's "notFound" custom property. This property is used to determine if an attempt has already been
+     * made to resolve a particular typing. Also updates typings.json, a project scope configuration file that can be used
+     * to turn off the typing auto-acquisition feature, verify the list of typings that are being auto-referenced and exclude
+     * typings from this list.
+     * @param cachedTypingsPaths The list of resolved cached d.ts paths
+     * @param newTypings The list of new typings that the host attempted to acquire using TSD
+     * @param cachePath The path to the local tsd.json cache
+     * @param typingsConfigPath The path to the project's typings.json
+     */
+    export function updateTypingsConfig(
+        host: HostType, cachedTypingsPaths: string[], newTypings: string[], cachePath: string, typingsConfigPath: string): void {
+        let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
+        if (tsdJsonCacheInfo) {
+            let notFound: string[] = [];
+            let cacheTsdJsonDict = tsdJsonCacheInfo.value;
+            if (cacheTsdJsonDict.hasOwnProperty("installed")) {
+                let installedTypings = Object.keys(cacheTsdJsonDict.installed);
+                notFound = ts.filter(newTypings, i => !isInstalled(i, installedTypings));
+            }
+            if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
+                notFound = cacheTsdJsonDict["notFound"].concat(notFound);
+            }
+            if (notFound.length > 0) {
+                cacheTsdJsonDict["notFound"] = notFound;
+                host.writeFile(tsdJsonCacheInfo.path, JSON.stringify(cacheTsdJsonDict));
+            }
+        }
+    }
+
+    function tryGetTsdJsonCacheInfo(host: HostType, cachePath: string): TsdJsonCacheInfo {
+        let cacheTsdJsonPath = ts.combinePaths(ts.normalizePath(cachePath), "tsd.json");
+        if (host.fileExists(cacheTsdJsonPath)) {
+            return { path: cacheTsdJsonPath, value: JSON.parse(host.readFile(cacheTsdJsonPath)) };
+        }
+        return undefined;
+    }
+
+    function isInstalled(typing: string, installedKeys: string[]) {
+        for (let key of installedKeys) {
+            if (key.indexOf(typing + '/') === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

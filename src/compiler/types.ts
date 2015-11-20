@@ -1309,12 +1309,12 @@ namespace ts {
         getCurrentDirectory(): string;
     }
 
-    export interface ParseConfigHost extends ModuleResolutionHost {
+    export interface ParseConfigHost extends TypeDefinitionResolutionHost {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
     }
 
     export interface WriteFileCallback {
-        (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void;
+        (fileName: string, data: string, writeByteOrderMark?: boolean, onError?: (message: string) => void): void;
     }
 
     export class OperationCanceledException { }
@@ -2306,6 +2306,12 @@ namespace ts {
         byteOrderMark = 0xFEFF,
         tab = 0x09,                   // \t
         verticalTab = 0x0B,           // \v
+    }
+
+    export interface TypeDefinitionResolutionHost extends ModuleResolutionHost {
+        // The writeFile function creates a new file, writes the specified string to the file,
+        // and then closes the file. If the target file already exists, it is overwritten.
+        writeFile(path: string, data: string): void;
     }
 
     export interface ModuleResolutionHost {
