@@ -9815,13 +9815,19 @@ namespace ts {
         // An explicitly typed function whose return type isn't the Void or the Any type
         // must have at least one return statement somewhere in its body.
         // An exception to this rule is if the function implementation consists of a single 'throw' statement.
+        // @param returnType - return type of the function, can be undefined if return type is not explicitly specified 
         function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration, returnType: Type): void {
             if (!produceDiagnostics) {
                 return;
             }
 
-            // Functions that return 'void' or 'any' don't need any return expressions.
-            if (returnType === voidType || isTypeAny(returnType)) {
+            // Functions with explicitly specified return type which is either 'void' or 'any' don't need any return expressions.
+            if (returnType && (returnType === voidType || isTypeAny(returnType))) {
+                return;
+            }
+
+            // if return type is not specified then we'll do the check only if 'noImplicitReturns' option is set
+            if (!returnType && !compilerOptions.noImplicitReturns) {
                 return;
             }
 
@@ -9831,13 +9837,14 @@ namespace ts {
                 return;
             }
 
-            if (func.flags & NodeFlags.HasExplicitReturn) {
+            if (!returnType || func.flags & NodeFlags.HasExplicitReturn) {
                 if (compilerOptions.noImplicitReturns) {
-                    error(func.type, Diagnostics.Not_all_code_paths_return_a_value);
+                    error(func.type || func, Diagnostics.Not_all_code_paths_return_a_value);
                 }
             }
             else {
                 // This function does not conform to the specification.
+                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present 
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
         }
@@ -9912,14 +9919,10 @@ namespace ts {
                 emitAwaiter = true;
             }
 
-            const returnType = node.type && getTypeFromTypeNode(node.type);
-            let promisedType: Type;
-            if (returnType && isAsync) {
-                promisedType = checkAsyncFunctionReturnType(node);
-            }
-
-            if (returnType && !node.asteriskToken) {
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, isAsync ? promisedType : returnType);
+            const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
+            if (!node.asteriskToken) {
+                // return is not necessary in the body of generators
+                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
 
             if (node.body) {
@@ -9942,13 +9945,13 @@ namespace ts {
                     // check assignability of the awaited type of the expression body against the promised type of
                     // its return type annotation.
                     const exprType = checkExpression(<Expression>node.body);
-                    if (returnType) {
+                    if (returnOrPromisedType) {
                         if (isAsync) {
                             const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.Expression_body_for_async_arrow_function_does_not_have_a_valid_callable_then_member);
-                            checkTypeAssignableTo(awaitedType, promisedType, node.body);
+                            checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
                         }
                         else {
-                            checkTypeAssignableTo(exprType, returnType, node.body);
+                            checkTypeAssignableTo(exprType, returnOrPromisedType, node.body);
                         }
                     }
 
@@ -12088,14 +12091,9 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
-            if (node.type && !isAccessor(node.kind) && !node.asteriskToken) {
-                const returnType = getTypeFromTypeNode(node.type);
-                let promisedType: Type;
-                if (isAsync) {
-                    promisedType = checkAsyncFunctionReturnType(node);
-                }
-
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, isAsync ? promisedType : returnType);
+            if (!isAccessor(node.kind) && !node.asteriskToken) {
+                const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
+                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
 
             if (produceDiagnostics && !node.type) {
