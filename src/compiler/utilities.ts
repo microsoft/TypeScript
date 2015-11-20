@@ -1581,8 +1581,9 @@ namespace ts {
     }
 
     /**
-     * Creates a shallow, memberwise clone of a node. The "pos", "end", "flags", and "parent" properties
-     * are excluded by default, and can be provided via the "location", "flags", and "parent" parameters.
+     * Creates a shallow, memberwise clone of a node. The "kind", "pos", "end", "flags", and "parent"
+     * properties are excluded by default, and can be provided via the "location", "flags", and
+     * "parent" parameters.
      * @param node The node to clone.
      * @param location An optional TextRange to use to supply the new position.
      * @param flags The NodeFlags to use for the cloned node.
