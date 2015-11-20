@@ -196,7 +196,7 @@ namespace ts {
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = (<ComputedPropertyName>node.name).expression;
-                    // treat computed property names where expression is string/numeric literal as just string/numeric literal 
+                    // treat computed property names where expression is string/numeric literal as just string/numeric literal
                     if (isStringOrNumericLiteral(nameExpression.kind)) {
                         return (<LiteralExpression>nameExpression).text;
                     }
@@ -457,7 +457,7 @@ namespace ts {
 
         /**
          * Returns true if node and its subnodes were successfully traversed.
-         * Returning false means that node was not examined and caller needs to dive into the node himself. 
+         * Returning false means that node was not examined and caller needs to dive into the node himself.
          */
         function bindReachableStatement(node: Node): void {
             if (checkUnreachable(node)) {
@@ -567,7 +567,7 @@ namespace ts {
         }
 
         function bindIfStatement(n: IfStatement): void {
-            // denotes reachability state when entering 'thenStatement' part of the if statement: 
+            // denotes reachability state when entering 'thenStatement' part of the if statement:
             // i.e. if condition is false then thenStatement is unreachable
             const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
             // denotes reachability state when entering 'elseStatement':
@@ -1186,7 +1186,7 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
-                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                     seenThisKeyword = true;
                     return;
 
@@ -1535,7 +1535,7 @@ namespace ts {
 
                         // unreachable code is reported if
                         // - user has explicitly asked about it AND
-                        // - statement is in not ambient context (statements in ambient context is already an error 
+                        // - statement is in not ambient context (statements in ambient context is already an error
                         //   so we should not report extras) AND
                         //   - node is not variable statement OR
                         //   - node is block scoped variable statement OR

@@ -1,4 +1,5 @@
 //// [moduledecl.ts]
+
 module a {
 }
 

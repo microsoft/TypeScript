@@ -301,6 +301,11 @@ namespace ts {
             name: "rootDirs",
             type: "object",
             isTSConfigOnly: true
+        },
+        {
+            name: "allowJs",
+            type: "boolean",
+            description: Diagnostics.Allow_javascript_files_to_be_compiled,
         }
     ];
 
@@ -500,9 +505,10 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
-        const { options, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}): ParsedCommandLine {
+        const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
 
+        const options = extend(existingOptions, optionsFromJsonConfigFile);
         // set basePath as inferredBaseUrl so baseUrl module resolution strategy can still work even if user have not specified baseUrl explicity
         options.inferredBaseUrl = basePath;
 
@@ -523,23 +529,32 @@ namespace ts {
                 }
             }
             else {
+                const filesSeen: Map<boolean> = {};
                 const exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                const sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
-                for (let i = 0; i < sysFiles.length; i++) {
-                    const name = sysFiles[i];
-                    if (fileExtensionIs(name, ".d.ts")) {
-                        const baseName = name.substr(0, name.length - ".d.ts".length);
-                        if (!contains(sysFiles, baseName + ".tsx") && !contains(sysFiles, baseName + ".ts")) {
-                            fileNames.push(name);
+                const supportedExtensions = getSupportedExtensions(options);
+                Debug.assert(indexOf(supportedExtensions, ".ts") < indexOf(supportedExtensions, ".d.ts"), "Changed priority of extensions to pick");
+
+                // Get files of supported extensions in their order of resolution
+                for (const extension of supportedExtensions) {
+                    const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
+                    for (const fileName of filesInDirWithExtension) {
+                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension, 
+                        // lets pick them when its turn comes up
+                        if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
+                            continue;
                         }
-                    }
-                    else if (fileExtensionIs(name, ".ts")) {
-                        if (!contains(sysFiles, name + "x")) {
-                            fileNames.push(name);
+
+                        // If this is one of the output extension (which would be .d.ts and .js if we are allowing compilation of js files)
+                        // do not include this file if we included .ts or .tsx file with same base name as it could be output of the earlier compilation
+                        if (extension === ".d.ts" || (options.allowJs && contains(supportedJavascriptExtensions, extension))) {
+                            const baseName = fileName.substr(0, fileName.length - extension.length);
+                            if (hasProperty(filesSeen, baseName + ".ts") || hasProperty(filesSeen, baseName + ".tsx")) {
+                                continue;
+                            }
                         }
-                    }
-                    else {
-                        fileNames.push(name);
+
+                        filesSeen[fileName] = true;
+                        fileNames.push(fileName);
                     }
                 }
             }

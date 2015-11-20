@@ -176,7 +176,9 @@ namespace Utils {
             ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
 
             for (const childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator") {
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
+                    // for now ignore jsdoc comments
+                    childName === "jsDocComment") {
                     continue;
                 }
                 const child = (<any>node)[childName];
@@ -1031,7 +1033,7 @@ namespace Harness {
 
             const emitResult = program.emit();
 
-            const errors = ts.getPreEmitDiagnostics(program).concat(emitResult.diagnostics);
+            const errors = ts.getPreEmitDiagnostics(program);
 
             const result = new CompilerResult(fileOutputs, errors, program, Harness.IO.getCurrentDirectory(), emitResult.sourceMaps);
             return { result, options };
@@ -1056,7 +1058,6 @@ namespace Harness {
                 ts.forEach(inputFiles, file => addDtsFile(file, declInputFiles));
                 ts.forEach(otherFiles, file => addDtsFile(file, declOtherFiles));
                 const output = compileFiles(declInputFiles, declOtherFiles, harnessSettings, options, currentDirectory);
-
                 return { declInputFiles, declOtherFiles, declResult: output.result };
             }
 
@@ -1078,7 +1079,7 @@ namespace Harness {
                 // Is this file going to be emitted separately
                 let sourceFileName: string;
                 const outFile = options.outFile || options.out;
-                if (ts.isExternalModule(sourceFile) || !outFile) {
+                if (!outFile) {
                     if (options.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, result.currentDirectoryForProgram);
                         sourceFilePath = sourceFilePath.replace(result.program.getCommonSourceDirectory(), "");
@@ -1441,7 +1442,7 @@ namespace Harness {
             }
 
             // normalize the fileName for the single file case
-            currentFileName = testUnitData.length > 0 ? currentFileName : Path.getFileName(fileName);
+            currentFileName = testUnitData.length > 0 || currentFileName ? currentFileName : Path.getFileName(fileName);
 
             // EOF, push whatever remains
             const newTestFile2 = {
@@ -1584,7 +1585,7 @@ namespace Harness {
             const encoded_actual =  Utils.encodeString(actual);
             if (expected != encoded_actual) {
                 // Overwrite & issue error
-                const errMsg = "The baseline file " + relativeFileName + " has changed";
+                const errMsg = "The baseline file " + relativeFileName + " has changed.";
                 throw new Error(errMsg);
             }
         }

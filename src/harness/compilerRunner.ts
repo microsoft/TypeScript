@@ -51,6 +51,7 @@ class CompilerBaselineRunner extends RunnerBase {
             let justName: string;
             let lastUnit: Harness.TestCaseParser.TestUnitData;
             let harnessSettings: Harness.TestCaseParser.CompilerSettings;
+            let hasNonDtsFiles: boolean;
 
             let result: Harness.Compiler.CompilerResult;
             let options: ts.CompilerOptions;
@@ -80,6 +81,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 lastUnit = units[units.length - 1];
+                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
@@ -112,6 +114,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 // Therefore we have to clean out large objects after the test is done.
                 justName = undefined;
                 lastUnit = undefined;
+                hasNonDtsFiles = undefined;
                 result = undefined;
                 options = undefined;
                 toBeCompiled = undefined;
@@ -151,7 +154,7 @@ class CompilerBaselineRunner extends RunnerBase {
             });
 
             it("Correct JS output for " + fileName, () => {
-                if (!ts.fileExtensionIs(lastUnit.name, ".d.ts") && this.emit) {
+                if (hasNonDtsFiles && this.emit) {
                     if (result.files.length === 0 && result.errors.length === 0) {
                         throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
                     }
