@@ -114,9 +114,6 @@ class PreferConstWalker extends Lint.RuleWalker {
                 else if (kind === ts.SyntaxKind.PropertyAssignment) {
                     this.visitLeftHandSideExpression((element as ts.PropertyAssignment).initializer);
                 }
-                else {
-                    // Should we throw an exception?
-                }
             }
         }
         else if (node.kind === ts.SyntaxKind.ArrayLiteralExpression) {
