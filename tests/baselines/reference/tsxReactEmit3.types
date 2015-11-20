@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxReactEmit3.tsx ===
+=== tests/cases/conformance/jsx/test.tsx ===
 
 declare module JSX { interface Element { } }
 >JSX : any

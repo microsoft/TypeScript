@@ -1,4 +1,4 @@
-//// [tsxReactEmit7.tsx]
+//// [file.tsx]
 
 declare module JSX {
 	interface Element { }
@@ -20,7 +20,7 @@ var d = <div xxxx="val"></div>;
 var e = <div xxxxx="val"></div>;
 
 
-//// [tsxReactEmit7.js]
+//// [file.js]
 var m = React.createElement("div", {"x-y": "val"});
 var n = React.createElement("div", {"xx-y": "val"});
 var o = React.createElement("div", {"x-yy": "val"});

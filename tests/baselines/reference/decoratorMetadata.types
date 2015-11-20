@@ -19,4 +19,12 @@ class MyComponent {
 >Service : Service
 >Service : Service
     }
+
+    @decorator
+>decorator : any
+
+    method(x: this) {
+>method : (x: this) => void
+>x : this
+    }
 }
