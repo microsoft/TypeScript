@@ -783,7 +783,7 @@
         "category": "Error",
         "code": 1245
     },
-    "An interface property cannot have an initializer.": {
+    "An object type property cannot have an initializer.": {
         "category": "Error",
         "code": 1246
     },

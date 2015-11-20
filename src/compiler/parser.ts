@@ -2230,7 +2230,6 @@ namespace ts {
             const fullStart = scanner.getStartPos();
             const name = parsePropertyName();
             const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
-            const modifiers = parseModifiers();
 
             if (token === SyntaxKind.OpenParenToken || token === SyntaxKind.LessThanToken) {
                 const method = <MethodSignature>createNode(SyntaxKind.MethodSignature, fullStart);
@@ -2251,21 +2250,8 @@ namespace ts {
 
                 // Although interfaces cannot not have initializers, we attempt to parse an initializer
                 // so we can report that an interface cannot have an initializer.
-                //
-                // For instance properties specifically, since they are evaluated inside the constructor,
-                // we do *not * want to parse yield expressions, so we specifically turn the yield context
-                // off. The grammar would look something like this:
-                //
-                //    MemberVariableDeclaration[Yield]:
-                //        AccessibilityModifier_opt   PropertyName   TypeAnnotation_opt   Initialiser_opt[In];
-                //        AccessibilityModifier_opt  static_opt  PropertyName   TypeAnnotation_opt   Initialiser_opt[In, ?Yield];
-                //
-                // The checker may still error in the static case to explicitly disallow the yield expression.
-                const initializer = modifiers && modifiers.flags & NodeFlags.Static
-                    ? allowInAnd(parseNonParameterInitializer)
-                    : doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.DisallowIn, parseNonParameterInitializer);
-                if (initializer !== undefined) {
-                    parseErrorAtCurrentToken(Diagnostics.An_interface_property_cannot_have_an_initializer);
+                if (token === SyntaxKind.EqualsToken && lookAhead(() => parseNonParameterInitializer()) !== undefined) {
+                    parseErrorAtCurrentToken(Diagnostics.An_object_type_property_cannot_have_an_initializer);
                 }
 
                 parseTypeMemberSemicolon();
