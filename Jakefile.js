@@ -393,8 +393,7 @@ compileFile(/*outFile*/ distributeVersionJS,
         /*preserveConstEnums*/ undefined,
         /*keepComments*/ false,
         /*noResolve*/ false,
-        /*stripInternal*/ false,
-        /*target*/ "ES2015");
+        /*stripInternal*/ false);
 
 directory(distributeVersionOutputFolder);
 file(builtPackageJSON, [distributeVersionOutputFolder], function() {
