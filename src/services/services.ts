@@ -132,43 +132,43 @@ namespace ts {
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     let emptyArray: any[] = [];
-    
+
     const jsDocTagNames = [
-        "augments", 
-        "author", 
-        "argument", 
-        "borrows", 
-        "class", 
-        "constant", 
-        "constructor", 
-        "constructs", 
-        "default", 
-        "deprecated", 
-        "description", 
-        "event", 
-        "example", 
-        "extends", 
-        "field", 
-        "fileOverview", 
-        "function", 
-        "ignore", 
-        "inner", 
-        "lends", 
-        "link", 
-        "memberOf", 
-        "name", 
-        "namespace", 
-        "param", 
-        "private", 
-        "property", 
-        "public", 
-        "requires", 
-        "returns", 
-        "see", 
-        "since", 
-        "static", 
-        "throws", 
-        "type", 
+        "augments",
+        "author",
+        "argument",
+        "borrows",
+        "class",
+        "constant",
+        "constructor",
+        "constructs",
+        "default",
+        "deprecated",
+        "description",
+        "event",
+        "example",
+        "extends",
+        "field",
+        "fileOverview",
+        "function",
+        "ignore",
+        "inner",
+        "lends",
+        "link",
+        "memberOf",
+        "name",
+        "namespace",
+        "param",
+        "private",
+        "property",
+        "public",
+        "requires",
+        "returns",
+        "see",
+        "since",
+        "static",
+        "throws",
+        "type",
         "version"
     ];
     let jsDocCompletionEntries: CompletionEntry[];
@@ -817,7 +817,7 @@ namespace ts {
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end)
         }
-        
+
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
         }
@@ -1031,7 +1031,7 @@ namespace ts {
 
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
-         * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
+         * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
@@ -1612,6 +1612,9 @@ namespace ts {
         public static typeAliasName = "type alias name";
         public static parameterName = "parameter name";
         public static docCommentTagName = "doc comment tag name";
+        public static jsxOpenTagName = "jsx open tag name";
+        public static jsxCloseTagName = "jsx close tag name";
+        public static jsxSelfClosingTagName = "jsx self closing tag name";
     }
 
     export const enum ClassificationType {
@@ -1633,6 +1636,9 @@ namespace ts {
         typeAliasName = 16,
         parameterName = 17,
         docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
     }
 
     /// Language Service
@@ -1855,7 +1861,7 @@ namespace ts {
      * - allowNonTsExtensions = true
      * - noLib = true
      * - noResolve = true
-     */    
+     */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
@@ -2017,7 +2023,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx;
+            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx + +"|" + settings.allowJs;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
@@ -2314,7 +2320,7 @@ namespace ts {
 
                 return true;
             }
-            
+
             return false;
         }
 
@@ -2333,7 +2339,7 @@ namespace ts {
             }
             return false;
         }
-        
+
         function tryConsumeDefine(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
@@ -2359,7 +2365,7 @@ namespace ts {
                 if (token !== SyntaxKind.OpenBracketToken)  {
                     return true;
                 }
-                
+
                 // skip open bracket
                 token = scanner.scan();
                 let i = 0;
@@ -2374,7 +2380,7 @@ namespace ts {
                     token = scanner.scan();
                 }
                 return true;
-                
+
             }
             return false;
         }
@@ -2664,7 +2670,7 @@ namespace ts {
         }
     }
 
-    export function createLanguageService(host: LanguageServiceHost, 
+    export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
@@ -2740,7 +2746,8 @@ namespace ts {
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
                  oldSettings.noResolve !== newSettings.noResolve ||
-                 oldSettings.jsx !== newSettings.jsx);
+                 oldSettings.jsx !== newSettings.jsx || 
+                 oldSettings.allowJs !== newSettings.allowJs);
 
             // Now create a new compiler
             let compilerHost: CompilerHost = {
@@ -2752,10 +2759,10 @@ namespace ts {
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
                 getCurrentDirectory: () => currentDirectory,
-                fileExists: (fileName): boolean => { 
+                fileExists: (fileName): boolean => {
                     // stub missing host functionality
                     Debug.assert(!host.resolveModuleNames);
-                    return hostCache.getOrCreateEntry(fileName) !== undefined; 
+                    return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
@@ -2841,8 +2848,11 @@ namespace ts {
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
+                if (!sourceFile) {
+                    return false;
+                }
                 let path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
-                return sourceFile && sourceFile.version === hostCache.getVersion(path);
+                return sourceFile.version === hostCache.getVersion(path);
             }
 
             function programUpToDate(): boolean {
@@ -2902,13 +2912,6 @@ namespace ts {
 
             let targetSourceFile = getValidSourceFile(fileName);
 
-            // For JavaScript files, we don't want to report the normal typescript semantic errors.
-            // Instead, we just report errors for using TypeScript-only constructs from within a
-            // JavaScript file.
-            if (isSourceFileJavaScript(targetSourceFile)) {
-                return getJavaScriptSemanticDiagnostics(targetSourceFile);
-            }
-
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
@@ -2920,163 +2923,6 @@ namespace ts {
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
-        }
-
-        function getJavaScriptSemanticDiagnostics(sourceFile: SourceFile): Diagnostic[] {
-            let diagnostics: Diagnostic[] = [];
-            walk(sourceFile);
-
-            return diagnostics;
-
-            function walk(node: Node): boolean {
-                if (!node) {
-                    return false;
-                }
-
-                switch (node.kind) {
-                    case SyntaxKind.ImportEqualsDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.ExportAssignment:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.ClassDeclaration:
-                        let classDeclaration = <ClassDeclaration>node;
-                        if (checkModifiers(classDeclaration.modifiers) ||
-                            checkTypeParameters(classDeclaration.typeParameters)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.HeritageClause:
-                        let heritageClause = <HeritageClause>node;
-                        if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.InterfaceDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.ModuleDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.TypeAliasDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.FunctionDeclaration:
-                        let functionDeclaration = <FunctionLikeDeclaration>node;
-                        if (checkModifiers(functionDeclaration.modifiers) ||
-                            checkTypeParameters(functionDeclaration.typeParameters) ||
-                            checkTypeAnnotation(functionDeclaration.type)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.VariableStatement:
-                        let variableStatement = <VariableStatement>node;
-                        if (checkModifiers(variableStatement.modifiers)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.VariableDeclaration:
-                        let variableDeclaration = <VariableDeclaration>node;
-                        if (checkTypeAnnotation(variableDeclaration.type)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression:
-                        let expression = <CallExpression>node;
-                        if (expression.typeArguments && expression.typeArguments.length > 0) {
-                            let start = expression.typeArguments.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
-                                Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.Parameter:
-                        let parameter = <ParameterDeclaration>node;
-                        if (parameter.modifiers) {
-                            let start = parameter.modifiers.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
-                                Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        if (parameter.questionToken) {
-                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, '?'));
-                            return true;
-                        }
-                        if (parameter.type) {
-                            diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.PropertyDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.EnumDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.TypeAssertionExpression:
-                        let typeAssertionExpression = <TypeAssertion>node;
-                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.Decorator:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
-                        return true;
-                }
-
-                return forEachChild(node, walk);
-            }
-
-            function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
-                if (typeParameters) {
-                    let start = typeParameters.pos;
-                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
-                    return true;
-                }
-                return false;
-            }
-
-            function checkTypeAnnotation(type: TypeNode): boolean {
-                if (type) {
-                    diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
-                    return true;
-                }
-
-                return false;
-            }
-
-            function checkModifiers(modifiers: ModifiersArray): boolean {
-                if (modifiers) {
-                    for (let modifier of modifiers) {
-                        switch (modifier.kind) {
-                            case SyntaxKind.PublicKeyword:
-                            case SyntaxKind.PrivateKeyword:
-                            case SyntaxKind.ProtectedKeyword:
-                            case SyntaxKind.DeclareKeyword:
-                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
-                                return true;
-
-                            // These are all legal modifiers.
-                            case SyntaxKind.StaticKeyword:
-                            case SyntaxKind.ExportKeyword:
-                            case SyntaxKind.ConstKeyword:
-                            case SyntaxKind.DefaultKeyword:
-                            case SyntaxKind.AbstractKeyword:
-                        }
-                    }
-                }
-
-                return false;
-            }
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -3158,7 +3004,7 @@ namespace ts {
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                // The current position is next to the '@' sign, when no tag name being provided yet. 
+                // The current position is next to the '@' sign, when no tag name being provided yet.
                 // Provide a full list of tag names
                 if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
                     isJsDocTagName = true;
@@ -3191,7 +3037,7 @@ namespace ts {
                 }
 
                 if (!insideJsDocTagExpression) {
-                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal 
+                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal
                     // comment or the plain text part of a jsDoc comment, so no completion should be available
                     log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
                     return undefined;
@@ -3712,8 +3558,8 @@ namespace ts {
 
                         case SyntaxKind.CloseBraceToken:
                             if (parent &&
-                                parent.kind === SyntaxKind.JsxExpression && 
-                                parent.parent && 
+                                parent.kind === SyntaxKind.JsxExpression &&
+                                parent.parent &&
                                 (parent.parent.kind === SyntaxKind.JsxAttribute)) {
                                 return <JsxOpeningLikeElement>parent.parent.parent;
                             }
@@ -3762,7 +3608,7 @@ namespace ts {
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
                             containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
                             containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
-                                                                                                          
+
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
 
@@ -3976,7 +3822,7 @@ namespace ts {
             let sourceFile = getValidSourceFile(fileName);
 
             let entries: CompletionEntry[] = [];
-            
+
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
                 const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
                 addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqueNames));
@@ -4595,6 +4441,7 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.ThisType:
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
                         let type = typeChecker.getTypeAtLocation(node);
@@ -4866,6 +4713,7 @@ namespace ts {
             function getSemanticDocumentHighlights(node: Node): DocumentHighlights[] {
                 if (node.kind === SyntaxKind.Identifier ||
                     node.kind === SyntaxKind.ThisKeyword ||
+                    node.kind === SyntaxKind.ThisType ||
                     node.kind === SyntaxKind.SuperKeyword ||
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
@@ -4997,7 +4845,7 @@ namespace ts {
                                 }
                                 break;
                             default:
-                                if (isModifier(node.kind) && node.parent &&
+                                if (isModifierKind(node.kind) && node.parent &&
                                     (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
                                     return getModifierOccurrences(node.kind, node.parent);
                                 }
@@ -5561,7 +5409,7 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.ThisKeyword) {
+            if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.ThisType) {
                 return getReferencesForThisKeyword(node, sourceFiles);
             }
 
@@ -6043,7 +5891,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
 
                         let node = getTouchingWord(sourceFile, position);
-                        if (!node || node.kind !== SyntaxKind.ThisKeyword) {
+                        if (!node || (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.ThisType)) {
                             return;
                         }
 
@@ -6405,7 +6253,8 @@ namespace ts {
 
             return node.parent.kind === SyntaxKind.TypeReference ||
                 (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
+                (node.kind === SyntaxKind.ThisKeyword && !isExpression(node)) ||
+                node.kind === SyntaxKind.ThisType;
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -6525,6 +6374,7 @@ namespace ts {
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                 case SyntaxKind.Identifier:
                     break;
 
@@ -6572,7 +6422,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile);
+            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -6710,6 +6560,9 @@ namespace ts {
                 case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
                 case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
                 case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
+                case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
+                case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
+                case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
             }
         }
 
@@ -7022,6 +6875,23 @@ namespace ts {
                                 }
                                 return;
 
+                            case SyntaxKind.JsxOpeningElement:
+                                if ((<JsxOpeningElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxOpenTagName;
+                                }
+                                return;
+
+                            case SyntaxKind.JsxClosingElement:
+                                if ((<JsxClosingElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxCloseTagName;
+                                }
+                                return;
+
+                            case SyntaxKind.JsxSelfClosingElement:
+                                if ((<JsxSelfClosingElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxSelfClosingTagName;
+                                }
+                                return;
                         }
                     }
 

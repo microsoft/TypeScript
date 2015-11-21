@@ -387,6 +387,7 @@ declare namespace ts {
         right: Identifier;
     }
     type EntityName = Identifier | QualifiedName;
+    type PropertyName = Identifier | LiteralExpression | ComputedPropertyName;
     type DeclarationName = Identifier | LiteralExpression | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
@@ -425,7 +426,7 @@ declare namespace ts {
         initializer?: Expression;
     }
     interface BindingElement extends Declaration {
-        propertyName?: Identifier;
+        propertyName?: PropertyName;
         dotDotDotToken?: Node;
         name: Identifier | BindingPattern;
         initializer?: Expression;
@@ -452,7 +453,7 @@ declare namespace ts {
         objectAssignmentInitializer?: Expression;
     }
     interface VariableLikeDeclaration extends Declaration {
-        propertyName?: Identifier;
+        propertyName?: PropertyName;
         dotDotDotToken?: Node;
         name: DeclarationName;
         questionToken?: Node;
@@ -581,7 +582,7 @@ declare namespace ts {
         asteriskToken?: Node;
         expression?: Expression;
     }
-    interface BinaryExpression extends Expression {
+    interface BinaryExpression extends Expression, Declaration {
         left: Expression;
         operatorToken: Node;
         right: Expression;
@@ -625,7 +626,7 @@ declare namespace ts {
     interface ObjectLiteralExpression extends PrimaryExpression, Declaration {
         properties: NodeArray<ObjectLiteralElement>;
     }
-    interface PropertyAccessExpression extends MemberExpression {
+    interface PropertyAccessExpression extends MemberExpression, Declaration {
         expression: LeftHandSideExpression;
         dotToken: Node;
         name: Identifier;
@@ -1220,6 +1221,7 @@ declare namespace ts {
         ObjectLiteral = 524288,
         ESSymbol = 16777216,
         ThisType = 33554432,
+        ObjectLiteralPatternWithComputedProperties = 67108864,
         StringLike = 258,
         NumberLike = 132,
         ObjectType = 80896,
@@ -1537,7 +1539,6 @@ declare namespace ts {
     function getTypeParameterOwner(d: Declaration): Declaration;
 }
 declare namespace ts {
-    function getNodeConstructor(kind: SyntaxKind): new (pos?: number, end?: number) => Node;
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
     function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean): SourceFile;
@@ -2126,6 +2127,9 @@ declare namespace ts {
         static typeAliasName: string;
         static parameterName: string;
         static docCommentTagName: string;
+        static jsxOpenTagName: string;
+        static jsxCloseTagName: string;
+        static jsxSelfClosingTagName: string;
     }
     enum ClassificationType {
         comment = 1,
@@ -2146,6 +2150,9 @@ declare namespace ts {
         typeAliasName = 16,
         parameterName = 17,
         docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
     }
     interface DisplayPartsSymbolWriter extends SymbolWriter {
         displayParts(): SymbolDisplayPart[];
@@ -2171,7 +2178,7 @@ declare namespace ts {
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string;
     function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry;
-    function preProcessFile(sourceText: string, readImportFiles?: boolean): PreProcessedFileInfo;
+    function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry): LanguageService;
     function createClassifier(): Classifier;
     /**

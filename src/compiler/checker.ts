@@ -81,7 +81,7 @@ namespace ts {
             symbolToString,
             getAugmentedPropertiesOfType,
             getRootSymbols,
-            getContextualType: getApparentTypeOfContextualType,
+            getContextualType,
             getFullyQualifiedName,
             getResolvedSignature,
             getConstantValue,
@@ -109,9 +109,9 @@ namespace ts {
         const undefinedType = createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsUndefinedOrNull, "undefined");
         const nullType = createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsUndefinedOrNull, "null");
         const unknownType = createIntrinsicType(TypeFlags.Any, "unknown");
-        const circularType = createIntrinsicType(TypeFlags.Any, "__circular__");
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyUnionType = emptyObjectType;
         const emptyGenericType = <GenericType><ObjectType>createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyGenericType.instantiations = {};
 
@@ -122,8 +122,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, false, false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, false, false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const globals: SymbolTable = {};
 
@@ -200,6 +200,10 @@ namespace ts {
             "symbol": {
                 type: esSymbolType,
                 flags: TypeFlags.ESSymbol
+            },
+            "undefined": {
+                type: undefinedType,
+                flags: TypeFlags.ContainsUndefinedOrNull
             }
         };
 
@@ -295,7 +299,12 @@ namespace ts {
                     target.constEnumOnlyModule = false;
                 }
                 target.flags |= source.flags;
-                if (!target.valueDeclaration && source.valueDeclaration) target.valueDeclaration = source.valueDeclaration;
+                if (source.valueDeclaration &&
+                    (!target.valueDeclaration ||
+                     (target.valueDeclaration.kind === SyntaxKind.ModuleDeclaration && source.valueDeclaration.kind !== SyntaxKind.ModuleDeclaration))) {
+                    // other kinds of value declarations take precedence over modules
+                    target.valueDeclaration = source.valueDeclaration;
+                }
                 forEach(source.declarations, node => {
                     target.declarations.push(node);
                 });
@@ -467,15 +476,41 @@ namespace ts {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
                     if (result = getSymbol(location.locals, name, meaning)) {
-                        // Type parameters of a function are in scope in the entire function declaration, including the parameter
-                        // list and return type. However, local types are only in scope in the function body.
-                        if (!(meaning & SymbolFlags.Type) ||
-                            !(result.flags & (SymbolFlags.Type & ~SymbolFlags.TypeParameter)) ||
-                            !isFunctionLike(location) ||
-                            lastLocation === (<FunctionLikeDeclaration>location).body) {
+                        let useResult = true;
+                        if (isFunctionLike(location) && lastLocation && lastLocation !== (<FunctionLikeDeclaration>location).body) {
+                            // symbol lookup restrictions for function-like declarations
+                            // - Type parameters of a function are in scope in the entire function declaration, including the parameter
+                            //   list and return type. However, local types are only in scope in the function body.
+                            // - parameters are only in the scope of function body
+                            if (meaning & result.flags & SymbolFlags.Type) {
+                                useResult = result.flags & SymbolFlags.TypeParameter
+                                    // type parameters are visible in parameter list, return type and type parameter list
+                                    ? lastLocation === (<FunctionLikeDeclaration>location).type ||
+                                      lastLocation.kind === SyntaxKind.Parameter ||
+                                      lastLocation.kind === SyntaxKind.TypeParameter
+                                    // local types not visible outside the function body
+                                    : false;
+                            }
+                            if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.FunctionScopedVariable) {
+                                // parameters are visible only inside function body, parameter list and return type
+                                // technically for parameter list case here we might mix parameters and variables declared in function,
+                                // however it is detected separately when checking initializers of parameters
+                                // to make sure that they reference no variables declared after them.
+                                useResult =
+                                    lastLocation.kind === SyntaxKind.Parameter ||
+                                    (
+                                        lastLocation === (<FunctionLikeDeclaration>location).type &&
+                                        result.valueDeclaration.kind === SyntaxKind.Parameter
+                                    );
+                            }
+                        }
+
+                        if (useResult) {
                             break loop;
                         }
-                        result = undefined;
+                        else {
+                            result = undefined;
+                        }
                     }
                 }
                 switch (location.kind) {
@@ -2267,7 +2302,7 @@ namespace ts {
                 return false;
             }
             resolutionTargets.push(target);
-            resolutionResults.push(true);
+            resolutionResults.push(/*items*/ true);
             resolutionPropertyNames.push(propertyName);
             return true;
         }
@@ -3339,7 +3374,7 @@ namespace ts {
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             if (!hasClassBaseType(classType)) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, false, false)];
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -3799,7 +3834,7 @@ namespace ts {
             if (node.initializer) {
                 const signatureDeclaration = <SignatureDeclaration>node.parent;
                 const signature = getSignatureFromDeclaration(signatureDeclaration);
-                const parameterIndex = signatureDeclaration.parameters.indexOf(node);
+                const parameterIndex = ts.indexOf(signatureDeclaration.parameters, node);
                 Debug.assert(parameterIndex >= 0);
                 return parameterIndex >= signature.minArgumentCount;
             }
@@ -3820,7 +3855,13 @@ namespace ts {
                 let minArgumentCount = -1;
                 for (let i = 0, n = declaration.parameters.length; i < n; i++) {
                     const param = declaration.parameters[i];
-                    parameters.push(param.symbol);
+                    let paramSymbol = param.symbol;
+                    // Include parameter symbol instead of property symbol in the signature
+                    if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
+                        const resolvedSymbol = resolveName(param, paramSymbol.name, SymbolFlags.Value, undefined, undefined);
+                        paramSymbol = resolvedSymbol;
+                    }
+                    parameters.push(paramSymbol);
                     if (param.type && param.type.kind === SyntaxKind.StringLiteral) {
                         hasStringLiterals = true;
                     }
@@ -3964,7 +4005,7 @@ namespace ts {
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), true);
+            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
         }
 
         function getErasedSignature(signature: Signature): Signature {
@@ -3974,7 +4015,7 @@ namespace ts {
                     signature.erasedSignatureCache = instantiateSignature(getErasedSignature(signature.target), signature.mapper);
                 }
                 else {
-                    signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), true);
+                    signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true);
                 }
             }
             return signature.erasedSignatureCache;
@@ -4413,7 +4454,7 @@ namespace ts {
         // a named type that circularly references itself.
         function getUnionType(types: Type[], noSubtypeReduction?: boolean): Type {
             if (types.length === 0) {
-                return emptyObjectType;
+                return emptyUnionType;
             }
             const typeSet: Type[] = [];
             addTypesToSet(typeSet, types, TypeFlags.Union);
@@ -4544,7 +4585,7 @@ namespace ts {
                     return esSymbolType;
                 case SyntaxKind.VoidKeyword:
                     return voidType;
-                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.StringLiteral:
                     return getTypeFromStringLiteral(<StringLiteral>node);
@@ -5090,7 +5131,7 @@ namespace ts {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
-                    const related = typeRelatedToSomeType(sourceType, target, false);
+                    const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -5488,7 +5529,7 @@ namespace ts {
                     const saveErrorInfo = errorInfo;
                     let related = isRelatedTo(s, t, reportErrors);
                     if (!related) {
-                        related = isRelatedTo(t, s, false);
+                        related = isRelatedTo(t, s, /*reportErrors*/ false);
                         if (!related) {
                             if (reportErrors) {
                                 reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
@@ -5615,7 +5656,7 @@ namespace ts {
                     let related: Ternary;
                     if (sourceStringType && sourceNumberType) {
                         // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        related = isRelatedTo(sourceStringType, targetType, false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        related = isRelatedTo(sourceStringType, targetType, /*reportErrors*/ false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
                     }
                     else {
                         related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
@@ -6285,27 +6326,6 @@ namespace ts {
             Debug.fail("should not get here");
         }
 
-        // For a union type, remove all constituent types that are of the given type kind (when isOfTypeKind is true)
-        // or not of the given type kind (when isOfTypeKind is false)
-        function removeTypesFromUnionType(type: Type, typeKind: TypeFlags, isOfTypeKind: boolean, allowEmptyUnionResult: boolean): Type {
-            if (type.flags & TypeFlags.Union) {
-                const types = (<UnionType>type).types;
-                if (forEach(types, t => !!(t.flags & typeKind) === isOfTypeKind)) {
-                    // Above we checked if we have anything to remove, now use the opposite test to do the removal
-                    const narrowedType = getUnionType(filter(types, t => !(t.flags & typeKind) === isOfTypeKind));
-                    if (allowEmptyUnionResult || narrowedType !== emptyObjectType) {
-                        return narrowedType;
-                    }
-                }
-            }
-            else if (allowEmptyUnionResult && !!(type.flags & typeKind) === isOfTypeKind) {
-                // Use getUnionType(emptyArray) instead of emptyObjectType in case the way empty union types
-                // are represented ever changes.
-                return getUnionType(emptyArray);
-            }
-            return type;
-        }
-
         function hasInitializer(node: VariableLikeDeclaration): boolean {
             return !!(node.initializer || isBindingPattern(node.parent) && hasInitializer(<VariableLikeDeclaration>node.parent.parent));
         }
@@ -6407,52 +6427,69 @@ namespace ts {
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
             if (node && symbol.flags & SymbolFlags.Variable) {
                 if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
+                    const declaration = getDeclarationOfKind(symbol, SyntaxKind.VariableDeclaration);
+                    const top = declaration && getDeclarationContainer(declaration);
+                    const originalType = type;
+                    const nodeStack: {node: Node, child: Node}[] = [];
                     loop: while (node.parent) {
                         const child = node;
                         node = node.parent;
-                        let narrowedType = type;
+                        switch (node.kind) {
+                            case SyntaxKind.IfStatement:
+                            case SyntaxKind.ConditionalExpression:
+                            case SyntaxKind.BinaryExpression:
+                                nodeStack.push({node, child});
+                                break;
+                            case SyntaxKind.SourceFile:
+                            case SyntaxKind.ModuleDeclaration:
+                                // Stop at the first containing file or module declaration
+                                break loop;
+                        }
+                        if (node === top) {
+                            break;
+                        }
+                    }
+
+                    let nodes: {node: Node, child: Node};
+                    while (nodes = nodeStack.pop()) {
+                        const {node, child} = nodes;
                         switch (node.kind) {
                             case SyntaxKind.IfStatement:
                                 // In a branch of an if statement, narrow based on controlling expression
                                 if (child !== (<IfStatement>node).expression) {
-                                    narrowedType = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
+                                    type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
                                 }
                                 break;
                             case SyntaxKind.ConditionalExpression:
                                 // In a branch of a conditional expression, narrow based on controlling condition
                                 if (child !== (<ConditionalExpression>node).condition) {
-                                    narrowedType = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
+                                    type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
                                 }
                                 break;
                             case SyntaxKind.BinaryExpression:
                                 // In the right operand of an && or ||, narrow based on left operand
                                 if (child === (<BinaryExpression>node).right) {
                                     if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                                        narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
+                                        type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
                                     }
                                     else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                                        narrowedType = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
+                                        type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
                                     }
                                 }
                                 break;
-                            case SyntaxKind.SourceFile:
-                            case SyntaxKind.ModuleDeclaration:
-                            case SyntaxKind.FunctionDeclaration:
-                            case SyntaxKind.MethodDeclaration:
-                            case SyntaxKind.MethodSignature:
-                            case SyntaxKind.GetAccessor:
-                            case SyntaxKind.SetAccessor:
-                            case SyntaxKind.Constructor:
-                                // Stop at the first containing function or module declaration
-                                break loop;
+                            default:
+                                Debug.fail("Unreachable!");
                         }
-                        // Use narrowed type if construct contains no assignments to variable
-                        if (narrowedType !== type) {
-                            if (isVariableAssignedWithin(symbol, node)) {
-                                break;
-                            }
-                            type = narrowedType;
+
+                        // Use original type if construct contains assignments to variable
+                        if (type !== originalType && isVariableAssignedWithin(symbol, node)) {
+                            type = originalType;
                         }
+                    }
+
+                    // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
+                    if (type === emptyUnionType) {
+                        type = originalType;
                     }
                 }
             }
@@ -6469,31 +6506,35 @@ namespace ts {
                 if (left.expression.kind !== SyntaxKind.Identifier || getResolvedSymbol(<Identifier>left.expression) !== symbol) {
                     return type;
                 }
-                const typeInfo = primitiveTypeInfo[right.text];
                 if (expr.operatorToken.kind === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
                 }
-                if (assumeTrue) {
-                    // Assumed result is true. If check was not for a primitive type, remove all primitive types
-                    if (!typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.Boolean | TypeFlags.ESSymbol,
-                            /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ false);
-                    }
-                    // Check was for a primitive type, return that primitive type if it is a subtype
-                    if (isTypeSubtypeOf(typeInfo.type, type)) {
-                        return typeInfo.type;
-                    }
-                    // Otherwise, remove all types that aren't of the primitive type kind. This can happen when the type is
-                    // union of enum types and other types.
-                    return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ false, /*allowEmptyUnionResult*/ false);
+                const typeInfo = primitiveTypeInfo[right.text];
+                // Don't narrow `undefined`
+                if (typeInfo && typeInfo.type === undefinedType) {
+                    return type;
+                }
+                // If the type to be narrowed is any and we're checking a primitive with assumeTrue=true, return the primitive
+                if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
+                    return typeInfo.type;
+                }
+                let flags: TypeFlags;
+                if (typeInfo) {
+                    flags = typeInfo.flags;
                 }
                 else {
-                    // Assumed result is false. If check was for a primitive type, remove that primitive type
-                    if (typeInfo) {
-                        return removeTypesFromUnionType(type, /*typeKind*/ typeInfo.flags, /*isOfTypeKind*/ true, /*allowEmptyUnionResult*/ false);
-                    }
-                    // Otherwise we don't have enough information to do anything.
-                    return type;
+                    assumeTrue = !assumeTrue;
+                    flags = TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol | TypeFlags.Boolean;
+                }
+                // At this point we can bail if it's not a union
+                if (!(type.flags & TypeFlags.Union)) {
+                    // If the active non-union type would be removed from a union by this type guard, return an empty union
+                    return filterUnion(type) ? type : emptyUnionType;
+                }
+                return getUnionType(filter((type as UnionType).types, filterUnion), /*noSubtypeReduction*/ true);
+
+                function filterUnion(type: Type) {
+                    return assumeTrue === !!(type.flags & flags);
                 }
             }
 
@@ -6507,7 +6548,7 @@ namespace ts {
                     // and the second operand was false. We narrow with those assumptions and union the two resulting types.
                     return getUnionType([
                         narrowType(type, expr.left, /*assumeTrue*/ false),
-                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ false)
+                        narrowType(type, expr.right, /*assumeTrue*/ false)
                     ]);
                 }
             }
@@ -6518,7 +6559,7 @@ namespace ts {
                     // and the second operand was true. We narrow with those assumptions and union the two resulting types.
                     return getUnionType([
                         narrowType(type, expr.left, /*assumeTrue*/ true),
-                        narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ true)
+                        narrowType(type, expr.right, /*assumeTrue*/ true)
                     ]);
                 }
                 else {
@@ -9863,7 +9904,7 @@ namespace ts {
             return type;
         }
 
-        function checkFunctionExpressionOrObjectLiteralMethodBody(node: FunctionExpression | MethodDeclaration) {
+        function checkFunctionExpressionOrObjectLiteralMethodBody(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
 
             const isAsync = isAsyncFunctionLike(node);
@@ -10167,7 +10208,7 @@ namespace ts {
                             checkDestructuringAssignment(<ShorthandPropertyAssignment>p, type);
                         }
                         else {
-                            // non-shorthand property assignments should always have initializers 
+                            // non-shorthand property assignments should always have initializers
                             checkDestructuringAssignment((<PropertyAssignment>p).initializer, type);
                         }
                     }
@@ -10993,6 +11034,7 @@ namespace ts {
 
             const symbol = getSymbolOfNode(node);
             const firstDeclaration = getDeclarationOfKind(symbol, node.kind);
+
             // Only type check the symbol once
             if (node === firstDeclaration) {
                 checkFunctionOrConstructorSymbol(symbol);
@@ -11350,11 +11392,17 @@ namespace ts {
                         const errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
                         // TODO(jfreeman): These are methods, so handle computed name case
                         if (node.name && (<FunctionLikeDeclaration>subsequentNode).name && (<Identifier>node.name).text === (<Identifier>(<FunctionLikeDeclaration>subsequentNode).name).text) {
-                            // the only situation when this is possible (same kind\same name but different symbol) - mixed static and instance class members
-                            Debug.assert(node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature);
-                            Debug.assert((node.flags & NodeFlags.Static) !== (subsequentNode.flags & NodeFlags.Static));
-                            const diagnostic = node.flags & NodeFlags.Static ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
-                            error(errorNode, diagnostic);
+                            const reportError =
+                                (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) &&
+                                (node.flags & NodeFlags.Static) !== (subsequentNode.flags & NodeFlags.Static);
+                            // we can get here in two cases
+                            // 1. mixed static and instance class members
+                            // 2. something with the same name was defined before the set of overloads that prevents them from merging
+                            // here we'll report error only for the first case since for second we should already report error in binder 
+                            if (reportError) {
+                                const diagnostic = node.flags & NodeFlags.Static ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
+                                error(errorNode, diagnostic);
+                            }
                             return;
                         }
                         else if (nodeIsPresent((<FunctionLikeDeclaration>subsequentNode).body)) {
@@ -12017,7 +12065,14 @@ namespace ts {
                 const symbol = getSymbolOfNode(node);
                 const localSymbol = node.localSymbol || symbol;
 
-                const firstDeclaration = getDeclarationOfKind(localSymbol, node.kind);
+                // Since the javascript won't do semantic analysis like typescript, 
+                // if the javascript file comes before the typescript file and both contain same name functions, 
+                // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
+                const firstDeclaration = forEach(localSymbol.declarations,
+                    // Get first non javascript function declaration
+                    declaration => declaration.kind === node.kind && !isSourceFileJavaScript(getSourceFile(declaration)) ?
+                        declaration : undefined);
+
                 // Only type check the symbol once
                 if (node === firstDeclaration) {
                     checkFunctionOrConstructorSymbol(localSymbol);
@@ -12736,9 +12791,14 @@ namespace ts {
 
             // After we remove all types that are StringLike, we will know if there was a string constituent
             // based on whether the remaining type is the same as the initial type.
-            const arrayType = removeTypesFromUnionType(arrayOrStringType, TypeFlags.StringLike, /*isTypeOfKind*/ true, /*allowEmptyUnionResult*/ true);
+            let arrayType = arrayOrStringType;
+            if (arrayOrStringType.flags & TypeFlags.Union) {
+                arrayType = getUnionType(filter((arrayOrStringType as UnionType).types, t => !(t.flags & TypeFlags.StringLike)));
+            }
+            else if (arrayOrStringType.flags & TypeFlags.StringLike) {
+                arrayType = emptyUnionType;
+            }
             const hasStringConstituent = arrayOrStringType !== arrayType;
-
             let reportedError = false;
             if (hasStringConstituent) {
                 if (languageVersion < ScriptTarget.ES5) {
@@ -12884,13 +12944,13 @@ namespace ts {
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     const caseType = checkExpression(caseClause.expression);
 
-                    // Permit 'number[] | "foo"' to be asserted to 'string'.
-                    if (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) {
-                        return;
-                    }
+                    const expressionTypeIsAssignableToCaseType =
+                        // Permit 'number[] | "foo"' to be asserted to 'string'.
+                        (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) ||
+                        isTypeAssignableTo(expressionType, caseType);
 
-                    if (!isTypeAssignableTo(expressionType, caseType)) {
-                        // check 'expressionType isAssignableTo caseType' failed, try the reversed check and report errors if it fails
+                    if (!expressionTypeIsAssignableToCaseType) {
+                        // 'expressionType is not assignable to caseType', try the reversed check and report errors if it fails
                         checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
                 }
@@ -14629,6 +14689,9 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                     const type = isExpression(node) ? checkExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
                     return type.symbol;
+
+                case SyntaxKind.ThisType:
+                    return getTypeFromTypeNode(<TypeNode>node).symbol;
 
                 case SyntaxKind.ConstructorKeyword:
                     // constructor keyword for an overload, should take us to the definition if it exist
