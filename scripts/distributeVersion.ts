@@ -49,44 +49,40 @@ function getFileExtension(filePath: string): string {
     return pieces.length < 2 ? "" : pieces[pieces.length - 1];
 }
 
-function getFileInformation(filePath: string): Promise<FileInformation> {
-    return new Promise<FileInformation>((resolve, reject) => {
-        const result: FileInformation;
-        fs.readFile(filePath, (err, data) => {
-            if (err) {
-                reject(new Error("getFileInformation error: " + err));
-            }
+function getFileInformationSync(filePath: string): FileInformation {
+    try {
+        const data = fs.readFileSync(filePath, "utf8")
+        return {
+            filePath,
+            content: data,
+            ext: getFileExtension(filePath)
+        }
+    }
+    catch (error) {
+        throw new Error("Error in getFileInformationSync: " + error);
+    }
 
-            resolve({
-                filePath,
-                content: data.toString(),
-                ext: getFileExtension(filePath)
-            });
-        });
-    });
 }
 
-function getVersion(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        fs.readFile(versionFilePath, "utf8", function (err, data) {
-            if (err) {
-                reject(new Error("getVersion error: " + err));
-            }
-            const packageJsonValue: PackageJson = JSON.parse(data);
-            resolve(packageJsonValue.version);
-        });
-    });
+function getVersionSync(): string {
+    try {
+        const packageJson: PackageJson = JSON.parse(fs.readFileSync(versionFilePath, "utf8"));
+        return packageJson.version;
+    }
+    catch (error) {
+        throw new Error("Error in getVersionSync: " + error);
+    }
 }
 
-async function distributeVersion() {
-    const version = await getVersion();
+function distributeVersion() {
+    const version = getVersionSync();
 
     for (const filePath in formats) {
         if (!fs.existsSync(filePath)) {
             continue;
         }
         try {
-            const fileInfo = await getFileInformation(filePath);
+            const fileInfo = getFileInformationSync(filePath);
             const format = formats[filePath];
             fs.writeFile(fileInfo.filePath, fileInfo.content.replace(format.pattern,
                 format.serialize(version)));
@@ -97,7 +93,7 @@ async function distributeVersion() {
     }
 }
 
-async function distributeNightlyVersion() {
+function distributeNightlyVersion() {
     function computeNightlyVersion(versionString: string): string {
         // If the version string already contains "-nightly",
         // then get the base string and update based on that.
@@ -116,7 +112,7 @@ async function distributeNightlyVersion() {
         return `${versionString}-dev.${timeStr}`;
     }
 
-    const nightlyVersion = computeNightlyVersion(await getVersion());
+    const nightlyVersion = computeNightlyVersion(getVersionSync());
 
     for (const filePath in formats) {
         if (!fs.existsSync(filePath)) {
@@ -128,7 +124,7 @@ async function distributeNightlyVersion() {
             continue;
         }
         try {
-            const fileInfo = await getFileInformation(filePath);
+            const fileInfo = getFileInformationSync(filePath);
 
             fs.writeFile(fileInfo.filePath, fileInfo.content.replace(format.pattern,
                                             format.nightlySerialize(nightlyVersion)));
@@ -139,8 +135,8 @@ async function distributeNightlyVersion() {
     }
 }
 
-async function main() {
-    const distributeNightly = false;
+function main() {
+    let  distributeNightly = false;
 
     // Parse command line input checking if the users specify whether to configure version for nightly publishing
     if (process.argv.length > 2) {
