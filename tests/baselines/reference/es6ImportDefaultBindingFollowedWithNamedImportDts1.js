@@ -20,6 +20,7 @@ import defaultBinding6, { m,  } from "./server";
 export var x6 = new defaultBinding6();
 
 //// [server.js]
+"use strict";
 var a = (function () {
     function a() {
     }
@@ -28,6 +29,7 @@ var a = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.x1 = new server_1.default();
 var server_2 = require("./server");

@@ -16,6 +16,7 @@ export module X {
 }
 
 //// [mergedModuleDeclarationCodeGen.js]
+"use strict";
 var X;
 (function (X) {
     var Y;

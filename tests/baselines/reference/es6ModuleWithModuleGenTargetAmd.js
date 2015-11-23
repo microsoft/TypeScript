@@ -13,6 +13,7 @@ export class A
 
 //// [es6ModuleWithModuleGenTargetAmd.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     class A {
         constructor() {
         }

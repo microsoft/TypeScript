@@ -15,6 +15,7 @@ var t: typeof C = C;
 
 
 //// [es5ExportDefaultClassDeclaration3.js]
+"use strict";
 var before = new C();
 var C = (function () {
     function C() {

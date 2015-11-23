@@ -12,12 +12,14 @@ f.foo();
 
 
 //// [file1.js]
+"use strict";
 function foo() {
     var classes = undefined;
     return new classes(null);
 }
 exports.foo = foo;
 //// [file2.js]
+"use strict";
 var f = require('./file1');
 f.foo();
 

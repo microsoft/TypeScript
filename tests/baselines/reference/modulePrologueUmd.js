@@ -13,6 +13,7 @@ export class Foo {}
     }
 })(function (require, exports) {
     "use strict";
+    "use strict";
     var Foo = (function () {
         function Foo() {
         }

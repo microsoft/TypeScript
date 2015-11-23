@@ -4,7 +4,7 @@
 export class Foo {}
 
 //// [modulePrologueCommonjs.js]
-"use strict";
+"use strict";"use strict";
 var Foo = (function () {
     function Foo() {
     }
