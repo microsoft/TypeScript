@@ -403,7 +403,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             argumentsName?: string;
 
             /*
-             * alias for 'this' from the calline code stack frame in case if this was used inside the converted loop
+             * alias for 'this' from the calling code stack frame in case if this was used inside the converted loop
              */
             thisName?: string;
 
