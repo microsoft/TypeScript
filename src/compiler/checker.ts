@@ -1142,7 +1142,7 @@ namespace ts {
                         }
                         for (const id in lookupTable) {
                             const { exportsWithDuplicate } = lookupTable[id];
-                            // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
+                            // Its not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
                             if (id === "export=" || !exportsWithDuplicate.length || id in symbols) {
                                 continue;
                             }
@@ -14079,10 +14079,10 @@ namespace ts {
                     if (id === "__export") {
                         continue;
                     }
-                    const exportedSymbol = exports[id];
-                     // 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
-                    if (!(exportedSymbol.flags & SymbolFlags.Namespace || exportedSymbol.flags & SymbolFlags.Interface || exportedSymbol.flags & SymbolFlags.Enum) && exportedSymbol.declarations.length > 1) {
-                        const exportedDeclarations: Declaration[] = filter(exportedSymbol.declarations, isNotOverload);
+                    const {declarations, flags} = exports[id];
+                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
+                    if (!(flags & (SymbolFlags.Namespace |SymbolFlags.Interface | SymbolFlags.Enum)) && declarations.length > 1) {
+                        const exportedDeclarations: Declaration[] = filter(declarations, isNotOverload);
                         if (exportedDeclarations.length > 1) {
                             for (const declaration of exportedDeclarations) {
                                 diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, id));
