@@ -9811,17 +9811,19 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        // TypeScript Specification 1.0 (6.3) - July 2014
-        // An explicitly typed function whose return type isn't the Void or the Any type
-        // must have at least one return statement somewhere in its body.
-        // An exception to this rule is if the function implementation consists of a single 'throw' statement.
-        // @param returnType - return type of the function, can be undefined if return type is not explicitly specified 
+        /* 
+         *TypeScript Specification 1.0 (6.3) - July 2014
+         * An explicitly typed function whose return type isn't the Void or the Any type
+         * must have at least one return statement somewhere in its body.
+         * An exception to this rule is if the function implementation consists of a single 'throw' statement.
+         * @param returnType - return type of the function, can be undefined if return type is not explicitly specified
+         */
         function checkAllCodePathsInNonVoidFunctionReturnOrThrow(func: FunctionLikeDeclaration, returnType: Type): void {
             if (!produceDiagnostics) {
                 return;
             }
 
-            // Functions with explicitly specified return type which is either 'void' or 'any' don't need any return expressions.
+            // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
             if (returnType && (returnType === voidType || isTypeAny(returnType))) {
                 return;
             }
