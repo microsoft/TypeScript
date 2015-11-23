@@ -1034,10 +1034,6 @@ namespace ts {
                 return;
             }
 
-            if (moduleName.indexOf("!") >= 0) {
-                moduleName = moduleName.substr(0, moduleName.indexOf("!"));
-            }
-
             const isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
                 const symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
