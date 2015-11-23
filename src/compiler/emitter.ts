@@ -6208,7 +6208,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // do not emit var if variable was already hoisted
 
                     const isES6ExportedEnum = isES6ExportedDeclaration(node);
-                    if (!(node.flags & NodeFlags.Export) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.ModuleDeclaration))) {
+                    if ((!(node.flags & NodeFlags.Export)) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.EnumDeclaration))) {
                         emitStart(node);
                         if (isES6ExportedEnum) {
                             write("export ");
