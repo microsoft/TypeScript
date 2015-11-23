@@ -1,11 +1,19 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(28,1): error TS2322: Type 'S2' is not assignable to type 'T'.
+  Signature 'new (x: number): void' has no corresponding signature in 'S2'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(29,1): error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+  Signature 'new (x: number): void' has no corresponding signature in '(x: string) => void'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(30,1): error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+  Signature 'new (x: number): void' has no corresponding signature in '(x: string) => number'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(31,1): error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+  Signature 'new (x: number): void' has no corresponding signature in '(x: string) => string'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(32,1): error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
+  Signature 'new (x: number): void' has no corresponding signature in 'S2'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(33,1): error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
+  Signature 'new (x: number): void' has no corresponding signature in '(x: string) => void'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(34,1): error TS2322: Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
+  Signature 'new (x: number): void' has no corresponding signature in '(x: string) => number'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts(35,1): error TS2322: Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
+  Signature 'new (x: number): void' has no corresponding signature in '(x: string) => string'
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts (8 errors) ====
@@ -39,25 +47,33 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     t = s2;
     ~
 !!! error TS2322: Type 'S2' is not assignable to type 'T'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in 'S2'
     t = a3;
     ~
 !!! error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in '(x: string) => void'
     t = (x: string) => 1;
     ~
 !!! error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in '(x: string) => number'
     t = function (x: string) { return ''; }
     ~
 !!! error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in '(x: string) => string'
     a = s2;
     ~
 !!! error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in 'S2'
     a = a3;
     ~
 !!! error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in '(x: string) => void'
     a = (x: string) => 1;
     ~
 !!! error TS2322: Type '(x: string) => number' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in '(x: string) => number'
     a = function (x: string) { return ''; }
     ~
 !!! error TS2322: Type '(x: string) => string' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322:   Signature 'new (x: number): void' has no corresponding signature in '(x: string) => string'
     

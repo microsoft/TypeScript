@@ -1,6 +1,7 @@
 tests/cases/compiler/promiseChaining2.ts(7,45): error TS2345: Argument of type '(x: S) => string' is not assignable to parameter of type '(x: S) => Function'.
-  Type 'string' is not assignable to type 'Function'.
-    Property 'apply' is missing in type 'String'.
+  Signature 'new (x: S): Function' has no corresponding signature in '(x: S) => string'
+    Type 'string' is not assignable to type 'Function'.
+      Property 'apply' is missing in type 'String'.
 
 
 ==== tests/cases/compiler/promiseChaining2.ts (1 errors) ====
@@ -13,8 +14,9 @@ tests/cases/compiler/promiseChaining2.ts(7,45): error TS2345: Argument of type '
             var z = this.then(x => result).then(x => "abc").then(x => x.length);
                                                 ~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: S) => string' is not assignable to parameter of type '(x: S) => Function'.
-!!! error TS2345:   Type 'string' is not assignable to type 'Function'.
-!!! error TS2345:     Property 'apply' is missing in type 'String'.
+!!! error TS2345:   Signature 'new (x: S): Function' has no corresponding signature in '(x: S) => string'
+!!! error TS2345:     Type 'string' is not assignable to type 'Function'.
+!!! error TS2345:       Property 'apply' is missing in type 'String'.
             return new Chain2(result);
         }
     }

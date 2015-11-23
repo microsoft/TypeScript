@@ -1,5 +1,6 @@
 tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts(2,9): error TS2352: Neither type '(v: number) => number' nor type '(x: number) => string' is assignable to the other.
-  Type 'number' is not assignable to type 'string'.
+  Signature 'new (x: number): string' has no corresponding signature in '(v: number) => number'
+    Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts (1 errors) ====
@@ -7,4 +8,5 @@ tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts(2,9):
     var x = (v => v) as (x: number) => string;
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Neither type '(v: number) => number' nor type '(x: number) => string' is assignable to the other.
-!!! error TS2352:   Type 'number' is not assignable to type 'string'.
+!!! error TS2352:   Signature 'new (x: number): string' has no corresponding signature in '(v: number) => number'
+!!! error TS2352:     Type 'number' is not assignable to type 'string'.

@@ -1,7 +1,8 @@
 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(14,1): error TS2322: Type 'NotBoolean' is not assignable to type 'Boolean'.
   Types of property 'valueOf' are incompatible.
     Type '() => Object' is not assignable to type '() => boolean'.
-      Type 'Object' is not assignable to type 'boolean'.
+      Signature 'new (): boolean' has no corresponding signature in '() => Object'
+        Type 'Object' is not assignable to type 'boolean'.
 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(19,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(20,1): error TS2322: Type 'NotBoolean' is not assignable to type 'boolean'.
 
@@ -25,7 +26,8 @@ tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(
 !!! error TS2322: Type 'NotBoolean' is not assignable to type 'Boolean'.
 !!! error TS2322:   Types of property 'valueOf' are incompatible.
 !!! error TS2322:     Type '() => Object' is not assignable to type '() => boolean'.
-!!! error TS2322:       Type 'Object' is not assignable to type 'boolean'.
+!!! error TS2322:       Signature 'new (): boolean' has no corresponding signature in '() => Object'
+!!! error TS2322:         Type 'Object' is not assignable to type 'boolean'.
     
     b = a;
     b = x;

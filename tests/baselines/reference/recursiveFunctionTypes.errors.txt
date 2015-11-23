@@ -1,23 +1,30 @@
 tests/cases/compiler/recursiveFunctionTypes.ts(1,35): error TS2322: Type 'number' is not assignable to type '() => typeof fn'.
+  Signature 'new (): () => typeof fn' has no corresponding signature in 'Number'
 tests/cases/compiler/recursiveFunctionTypes.ts(3,5): error TS2322: Type '() => typeof fn' is not assignable to type 'number'.
 tests/cases/compiler/recursiveFunctionTypes.ts(4,5): error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
-  Type '() => typeof fn' is not assignable to type 'number'.
+  Signature 'new (): number' has no corresponding signature in '() => typeof fn'
+    Type '() => typeof fn' is not assignable to type 'number'.
 tests/cases/compiler/recursiveFunctionTypes.ts(11,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/recursiveFunctionTypes.ts(12,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/recursiveFunctionTypes.ts(17,5): error TS2322: Type '() => I<typeof f3>' is not assignable to type 'number'.
 tests/cases/compiler/recursiveFunctionTypes.ts(22,5): error TS2345: Argument of type 'number' is not assignable to parameter of type '(t: typeof g) => void'.
+  Signature 'new (t: (t: typeof g) => void): void' has no corresponding signature in 'Number'
 tests/cases/compiler/recursiveFunctionTypes.ts(25,1): error TS2322: Type 'number' is not assignable to type '() => any'.
+  Signature 'new (): () => any' has no corresponding signature in 'Number'
 tests/cases/compiler/recursiveFunctionTypes.ts(30,10): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/compiler/recursiveFunctionTypes.ts(33,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/recursiveFunctionTypes.ts(34,4): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
+  Signature 'new (): { (): typeof f6; (a: typeof f6): () => number; }' has no corresponding signature in 'String'
 tests/cases/compiler/recursiveFunctionTypes.ts(42,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+  Signature 'new (): { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }' has no corresponding signature in 'String'
 
 
 ==== tests/cases/compiler/recursiveFunctionTypes.ts (13 errors) ====
     function fn(): typeof fn { return 1; }
                                       ~
 !!! error TS2322: Type 'number' is not assignable to type '() => typeof fn'.
+!!! error TS2322:   Signature 'new (): () => typeof fn' has no corresponding signature in 'Number'
     
     var x: number = fn; // error
         ~
@@ -25,7 +32,8 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     var y: () => number = fn; // ok
         ~
 !!! error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
-!!! error TS2322:   Type '() => typeof fn' is not assignable to type 'number'.
+!!! error TS2322:   Signature 'new (): number' has no corresponding signature in '() => typeof fn'
+!!! error TS2322:     Type '() => typeof fn' is not assignable to type 'number'.
     
     var f: () => typeof g;
     var g: () => typeof f;
@@ -52,11 +60,13 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     C.g(3); // error
         ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type '(t: typeof g) => void'.
+!!! error TS2345:   Signature 'new (t: (t: typeof g) => void): void' has no corresponding signature in 'Number'
     
     var f4: () => typeof f4;
     f4 = 3; // error
     ~~
 !!! error TS2322: Type 'number' is not assignable to type '() => any'.
+!!! error TS2322:   Signature 'new (): () => any' has no corresponding signature in 'Number'
     
     function f5() { return f5; }
     
@@ -72,6 +82,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     f6(""); // ok (function takes an any param)
        ~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
+!!! error TS2345:   Signature 'new (): { (): typeof f6; (a: typeof f6): () => number; }' has no corresponding signature in 'String'
     f6(); // ok
     
     declare function f7(): typeof f7;
@@ -85,4 +96,5 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     f7(""); // ok (function takes an any param)
        ~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+!!! error TS2345:   Signature 'new (): { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }' has no corresponding signature in 'String'
     f7(); // ok
