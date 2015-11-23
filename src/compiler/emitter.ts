@@ -7383,6 +7383,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
+                emitUseStrictPrologueDirective();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
@@ -7493,6 +7494,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeModuleName(node, emitRelativePathAsModuleName);
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
+                emitUseStrictPrologueDirective();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
@@ -7505,6 +7507,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCommonJSModule(node: SourceFile) {
+                emitUseStrictPrologueDirective();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
@@ -7513,6 +7516,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitLinesStartingAt(node.statements, startIndex);
                 emitTempDeclarations(/*newLine*/ true);
                 emitExportEquals(/*emitAsReturn*/ false);
+            }
+
+            function emitUseStrictPrologueDirective() {
+                writeLine();
+                write("\"use strict\";");
             }
 
             function emitUMDModule(node: SourceFile) {
@@ -7534,6 +7542,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 })(`);
                 emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
+                emitUseStrictPrologueDirective();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
