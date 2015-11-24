@@ -2068,11 +2068,11 @@
         "category": "Error",
         "code": 5056
     },
-    "The project file name is not in 'tsconfig(-*).json' format: '{0}'": {
+    "Cannot find a tsconfig.json file at the specified directory: '{0}'": {
         "category": "Error",
         "code": 5057
     },
-    "Cannot find any project file in specified path: '{0}'": {
+    "The specified path does not exist: '{0}'": {
         "category": "Error",
         "code": 5058
     },

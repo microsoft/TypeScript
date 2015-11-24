@@ -301,19 +301,19 @@ namespace ts {
             }
 
             const fileOrDirectory = normalizePath(commandLine.options.project);
-            if (!fileOrDirectory /* current directory */ || sys.directoryExists(fileOrDirectory)) {
+            if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
-            }
-            else {
-                if (!/^tsconfig(?:-.*)?\.json$/.test(getBaseFileName(fileOrDirectory))) {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_project_file_name_is_not_in_tsconfig_Asterisk_json_format_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                if (!sys.fileExists(configFileName)) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 }
-                configFileName = fileOrDirectory;
             }
-            if (!sys.fileExists(configFileName)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_any_project_file_in_specified_path_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            else {
+                configFileName = fileOrDirectory;
+                if (!sys.fileExists(configFileName)) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
             }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
