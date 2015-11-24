@@ -1093,12 +1093,16 @@ namespace ts {
             return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        interface ExportedSymbolDiagnostics {
+        interface ExportCollisionTracker {
             specifierText: string;
             exportsWithDuplicate: ExportDeclaration[];
         }
 
-        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: Map<ExportedSymbolDiagnostics>, exportNode?: ExportDeclaration) {
+        /**
+         * Extends one symbol table with abother while collecting information on name collisions for error message generation into the `lookupTable` argument
+         * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
+         */
+        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: Map<ExportCollisionTracker>, exportNode?: ExportDeclaration) {
             for (const id in source) {
                 if (id !== "default" && !hasProperty(target, id)) {
                     target[id] = source[id];
@@ -1129,7 +1133,7 @@ namespace ts {
                     const exportStars = symbol.exports["__export"];
                     if (exportStars) {
                         const nestedSymbols: SymbolTable = {};
-                        const lookupTable: Map<ExportedSymbolDiagnostics> = {};
+                        const lookupTable: Map<ExportCollisionTracker> = {};
                         for (const node of exportStars.declarations) {
                             const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
                             const exportedSymbols = visit(resolvedModule);
@@ -1149,7 +1153,7 @@ namespace ts {
                             for (const node of exportsWithDuplicate) {
                                 diagnostics.add(createDiagnosticForNode(
                                     node,
-                                    Diagnostics.An_export_Asterisk_from_0_declaration_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
+                                    Diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
                                     lookupTable[id].specifierText,
                                     id
                                 ));
@@ -14094,7 +14098,7 @@ namespace ts {
             }
 
             function isNotOverload(declaration: Declaration): boolean {
-                return (declaration.kind !== SyntaxKind.FunctionDeclaration || typeof (declaration as FunctionDeclaration).body !== "undefined");
+                return declaration.kind !== SyntaxKind.FunctionDeclaration || !!(declaration as FunctionDeclaration).body;
             }
         }
 
