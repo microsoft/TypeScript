@@ -2414,6 +2414,27 @@ namespace ts {
         return output;
     }
 
+    export const stringify: (value: any) => string = JSON && JSON.stringify ? JSON.stringify : function stringify(value: any): string {
+        /* tslint:disable:no-null */
+        return value == null ? "null"
+             : typeof value === "string" ? `"${escapeString(value)}"`
+             : typeof value === "number" ? String(value)
+             : typeof value === "boolean" ? value ? "true" : "false"
+             : isArray(value) ? `[${reduceLeft(value, stringifyElement, "")}]`
+             : typeof value === "object" ? `{${reduceProperties(value, stringifyProperty, "")}}`
+             : "null";
+        /* tslint:enable:no-null */
+    };
+
+    function stringifyElement(memo: string, value: any) {
+        return (memo ? memo + "," : memo) + stringify(value);
+    }
+
+    function stringifyProperty(memo: string, value: any, key: string) {
+        return value === undefined ? memo
+             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringify(value)}`;
+    }
+
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
     /**
