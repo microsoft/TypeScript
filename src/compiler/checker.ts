@@ -43,6 +43,8 @@ namespace ts {
         let emptyArray: any[] = [];
         let emptySymbols: SymbolTable = {};
 
+        let jsxElementClassType: Type = undefined;
+
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
@@ -5928,6 +5930,17 @@ namespace ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
+                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
+                    source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
+                    // Source and target are both unions or both intersections. To improve the quality of
+                    // inferences we first reduce the types by removing constituents that are identically
+                    // matched by a constituent in the other type. For example, when inferring from
+                    // 'string | string[]' to 'string | T', we reduce the types to 'string[]' and 'T'.
+                    const reducedSource = reduceUnionOrIntersectionType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target);
+                    const reducedTarget = reduceUnionOrIntersectionType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source);
+                    source = reducedSource;
+                    target = reducedTarget;
+                }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
@@ -5938,8 +5951,7 @@ namespace ts {
                     if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                         return;
                     }
-
-                    let typeParameters = context.typeParameters;
+                    const typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
                             let inferences = context.inferences[i];
@@ -6084,6 +6096,41 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function typeIdenticalToSomeType(source: Type, target: UnionOrIntersectionType): boolean {
+            for (const t of target.types) {
+                if (isTypeIdenticalTo(source, t)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Return the reduced form of the source type. This type is computed by by removing all source
+         * constituents that have an identical match in the target type.
+         */
+        function reduceUnionOrIntersectionType(source: UnionOrIntersectionType, target: UnionOrIntersectionType) {
+            let sourceTypes = source.types;
+            let sourceIndex = 0;
+            let modified = false;
+            while (sourceIndex < sourceTypes.length) {
+                if (typeIdenticalToSomeType(sourceTypes[sourceIndex], target)) {
+                    if (!modified) {
+                        sourceTypes = sourceTypes.slice(0);
+                        modified = true;
+                    }
+                    sourceTypes.splice(sourceIndex, 1);
+                }
+                else {
+                    sourceIndex++;
+                }
+            }
+            if (modified) {
+                return source.flags & TypeFlags.Union ? getUnionType(sourceTypes, /*noSubtypeReduction*/ true) : getIntersectionType(sourceTypes);
+            }
+            return source;
         }
 
         function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
@@ -7859,7 +7906,6 @@ namespace ts {
             return prop || unknownSymbol;
         }
 
-        let jsxElementClassType: Type = undefined;
         function getJsxGlobalElementClassType(): Type {
             if (!jsxElementClassType) {
                 jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
