@@ -1028,14 +1028,10 @@ namespace ts {
 
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
-            let moduleName = escapeIdentifier(moduleReferenceLiteral.text);
+            const moduleName = escapeIdentifier(moduleReferenceLiteral.text);
 
             if (moduleName === undefined) {
                 return;
-            }
-
-            if (moduleName.indexOf("!") >= 0) {
-                moduleName = moduleName.substr(0, moduleName.indexOf("!"));
             }
 
             const isRelative = isExternalModuleNameRelative(moduleName);
@@ -5228,9 +5224,12 @@ namespace ts {
                 const id = relation !== identityRelation || apparentSource.id < target.id ? apparentSource.id + "," + target.id : target.id + "," + apparentSource.id;
                 const related = relation[id];
                 if (related !== undefined) {
-                    // If we computed this relation already and it was failed and reported, or if we're not being asked to elaborate
-                    // errors, we can use the cached value. Otherwise, recompute the relation
-                    if (!elaborateErrors || (related === RelationComparisonResult.FailedAndReported)) {
+                    if (elaborateErrors && related === RelationComparisonResult.Failed) {
+                        // We are elaborating errors and the cached result is an unreported failure. Record the result as a reported
+                        // failure and continue computing the relation such that errors get reported.
+                        relation[id] = RelationComparisonResult.FailedAndReported;
+                    }
+                    else {
                         return related === RelationComparisonResult.Succeeded ? Ternary.True : Ternary.False;
                     }
                 }
