@@ -20,7 +20,7 @@ export module M {
 }
 
 //// [downlevelLetConst13.js]
-"use strict";'use strict';
+'use strict';
 // exported let\const bindings should not be renamed
 exports.foo = 10;
 exports.bar = "123";

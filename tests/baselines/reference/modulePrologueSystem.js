@@ -6,7 +6,6 @@ export class Foo {}
 //// [modulePrologueSystem.js]
 System.register([], function(exports_1) {
     "use strict";
-    "use strict";
     var Foo;
     return {
         setters:[],

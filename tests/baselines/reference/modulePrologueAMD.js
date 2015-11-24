@@ -6,7 +6,6 @@ export class Foo {}
 //// [modulePrologueAMD.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    "use strict";
     var Foo = (function () {
         function Foo() {
         }

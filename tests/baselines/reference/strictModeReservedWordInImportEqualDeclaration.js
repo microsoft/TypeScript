@@ -4,4 +4,4 @@
 import public = require("1");
 
 //// [strictModeReservedWordInImportEqualDeclaration.js]
-"use strict";"use strict";
+"use strict";
