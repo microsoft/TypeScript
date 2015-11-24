@@ -1,15 +1,19 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(24,38): error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-  Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-    Type 'number' is not assignable to type 'string'.
+  Signature '(x: number): Promise<string>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; }'
+    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+      Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(53,38): error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-  Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-    Type 'number' is not assignable to type 'string'.
+  Signature '(x: number): Promise<string>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; }'
+    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+      Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(69,38): error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-  Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-    Type 'number' is not assignable to type 'string'.
+  Signature '(x: number): Promise<string>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; }'
+    Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+      Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts(85,38): error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
-  Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
-    Type 'number' is not assignable to type 'boolean'.
+  Signature '(x: number): Promise<boolean>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }'
+    Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+      Type 'number' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts (4 errors) ====
@@ -39,8 +43,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+!!! error TS2345:   Signature '(x: number): Promise<string>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; }'
+!!! error TS2345:     Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
     }
     
     //////////////////////////////////////
@@ -72,8 +77,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+!!! error TS2345:   Signature '(x: number): Promise<string>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; }'
+!!! error TS2345:     Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
     }
     
     //////////////////////////////////////
@@ -92,8 +98,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; }' is not assignable to parameter of type '(x: number) => Promise<string>'.
-!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
-!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+!!! error TS2345:   Signature '(x: number): Promise<string>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; }'
+!!! error TS2345:     Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2345:       Type 'number' is not assignable to type 'string'.
     }
     
     //////////////////////////////////////
@@ -112,7 +119,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverl
         var newPromise = numPromise.then(testFunction);
                                          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }' is not assignable to parameter of type '(x: number) => Promise<boolean>'.
-!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
-!!! error TS2345:     Type 'number' is not assignable to type 'boolean'.
+!!! error TS2345:   Signature '(x: number): Promise<boolean>' has no corresponding signature in '{ (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }'
+!!! error TS2345:     Type 'Promise<number>' is not assignable to type 'Promise<boolean>'.
+!!! error TS2345:       Type 'number' is not assignable to type 'boolean'.
     }
     

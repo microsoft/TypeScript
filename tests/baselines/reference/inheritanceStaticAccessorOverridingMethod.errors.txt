@@ -1,6 +1,7 @@
 tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts(7,7): error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '() => string'.
+      Signature '(): string' has no corresponding signature in 'String'
 tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts(11,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
@@ -17,6 +18,7 @@ tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts(11,16): error 
 !!! error TS2417: Class static side 'typeof b' incorrectly extends base class static side 'typeof a'.
 !!! error TS2417:   Types of property 'x' are incompatible.
 !!! error TS2417:     Type 'string' is not assignable to type '() => string'.
+!!! error TS2417:       Signature '(): string' has no corresponding signature in 'String'
         static get x() {
                    ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

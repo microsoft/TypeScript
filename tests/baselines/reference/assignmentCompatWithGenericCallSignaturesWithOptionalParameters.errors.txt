@@ -1,9 +1,15 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(14,13): error TS2322: Type '(x: T) => any' is not assignable to type '() => T'.
+  Signature '(): T' has no corresponding signature in '(x: T) => any'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(23,13): error TS2322: Type '(x: T, y: T) => any' is not assignable to type '(x: T) => T'.
+  Signature '(x: T): T' has no corresponding signature in '(x: T, y: T) => any'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(65,9): error TS2322: Type '(x: T) => T' is not assignable to type '<T>() => T'.
+  Signature '<T>(): T' has no corresponding signature in '(x: T) => T'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(66,9): error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>() => T'.
+  Signature '<T>(): T' has no corresponding signature in '(x: T, y?: T) => T'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(107,13): error TS2322: Type '<T>(x: T) => any' is not assignable to type '<T>() => T'.
+  Signature '<T>(): T' has no corresponding signature in '<T>(x: T) => any'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts(116,13): error TS2322: Type '<T>(x: T, y: T) => any' is not assignable to type '<T>(x: T) => T'.
+  Signature '<T>(x: T): T' has no corresponding signature in '<T>(x: T, y: T) => any'
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts (6 errors) ====
@@ -23,6 +29,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a = (x: T) => null; // error, too many required params
                 ~~~~~~
 !!! error TS2322: Type '(x: T) => any' is not assignable to type '() => T'.
+!!! error TS2322:   Signature '(): T' has no corresponding signature in '(x: T) => any'
     
                 this.a2 = () => null; // ok, same T of required params
                 this.a2 = (x?: T) => null; // ok, same T of required params
@@ -34,6 +41,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a3 = (x: T, y: T) => null;  // error, too many required params
                 ~~~~~~~
 !!! error TS2322: Type '(x: T, y: T) => any' is not assignable to type '(x: T) => T'.
+!!! error TS2322:   Signature '(x: T): T' has no corresponding signature in '(x: T, y: T) => any'
     
                 this.a4 = () => null; // ok, fewer required params
                 this.a4 = (x?: T, y?: T) => null; // ok, fewer required params
@@ -78,9 +86,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             b.a = t.a3;
             ~~~
 !!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>() => T'.
+!!! error TS2322:   Signature '<T>(): T' has no corresponding signature in '(x: T) => T'
             b.a = t.a4;
             ~~~
 !!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>() => T'.
+!!! error TS2322:   Signature '<T>(): T' has no corresponding signature in '(x: T, y?: T) => T'
             b.a = t.a5;
     
             b.a2 = t.a;
@@ -124,6 +134,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a = <T>(x: T) => null; // error, too many required params
                 ~~~~~~
 !!! error TS2322: Type '<T>(x: T) => any' is not assignable to type '<T>() => T'.
+!!! error TS2322:   Signature '<T>(): T' has no corresponding signature in '<T>(x: T) => any'
     
                 this.a2 = <T>() => null; // ok, same T of required params
                 this.a2 = <T>(x?: T) => null; // ok, same T of required params
@@ -135,6 +146,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a3 = <T>(x: T, y: T) => null;  // error, too many required params
                 ~~~~~~~
 !!! error TS2322: Type '<T>(x: T, y: T) => any' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322:   Signature '<T>(x: T): T' has no corresponding signature in '<T>(x: T, y: T) => any'
     
                 this.a4 = <T>() => null; // ok, fewer required params
                 this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params

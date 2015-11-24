@@ -1,6 +1,7 @@
 tests/cases/compiler/requiredInitializedParameter2.ts(5,7): error TS2420: Class 'C1' incorrectly implements interface 'I1'.
   Types of property 'method' are incompatible.
     Type '(a: number, b: any) => void' is not assignable to type '() => any'.
+      Signature '(): any' has no corresponding signature in '(a: number, b: any) => void'
 
 
 ==== tests/cases/compiler/requiredInitializedParameter2.ts (1 errors) ====
@@ -13,5 +14,6 @@ tests/cases/compiler/requiredInitializedParameter2.ts(5,7): error TS2420: Class 
 !!! error TS2420: Class 'C1' incorrectly implements interface 'I1'.
 !!! error TS2420:   Types of property 'method' are incompatible.
 !!! error TS2420:     Type '(a: number, b: any) => void' is not assignable to type '() => any'.
+!!! error TS2420:       Signature '(): any' has no corresponding signature in '(a: number, b: any) => void'
         method(a = 0, b) { }
     }

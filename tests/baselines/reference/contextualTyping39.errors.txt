@@ -1,9 +1,11 @@
 tests/cases/compiler/contextualTyping39.ts(1,11): error TS2352: Neither type '() => string' nor type '() => number' is assignable to the other.
-  Type 'string' is not assignable to type 'number'.
+  Signature '(): number' has no corresponding signature in '() => string'
+    Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/contextualTyping39.ts (1 errors) ====
     var foo = <{ (): number; }> function() { return "err"; };
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Neither type '() => string' nor type '() => number' is assignable to the other.
-!!! error TS2352:   Type 'string' is not assignable to type 'number'.
+!!! error TS2352:   Signature '(): number' has no corresponding signature in '() => string'
+!!! error TS2352:     Type 'string' is not assignable to type 'number'.

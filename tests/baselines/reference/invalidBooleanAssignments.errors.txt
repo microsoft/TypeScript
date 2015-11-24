@@ -7,6 +7,7 @@ tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(12
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(15,5): error TS2322: Type 'boolean' is not assignable to type 'I'.
   Property 'bar' is missing in type 'Boolean'.
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(17,5): error TS2322: Type 'boolean' is not assignable to type '() => string'.
+  Signature '(): string' has no corresponding signature in 'Boolean'
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(21,1): error TS2364: Invalid left-hand side of assignment expression.
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(24,5): error TS2322: Type 'boolean' is not assignable to type 'T'.
 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26,1): error TS2364: Invalid left-hand side of assignment expression.
@@ -46,6 +47,7 @@ tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26
     var h: { (): string } = x;
         ~
 !!! error TS2322: Type 'boolean' is not assignable to type '() => string'.
+!!! error TS2322:   Signature '(): string' has no corresponding signature in 'Boolean'
     var h2: { toString(): string } = x; // no error
     
     module M { export var a = 1; }

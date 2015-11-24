@@ -1,15 +1,18 @@
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts(7,1): error TS2322: Type 'I' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type '() => void' is not assignable to type '() => string'.
-      Type 'void' is not assignable to type 'string'.
+      Signature '(): string' has no corresponding signature in '() => void'
+        Type 'void' is not assignable to type 'string'.
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts(14,1): error TS2322: Type 'C' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type '() => void' is not assignable to type '() => string'.
-      Type 'void' is not assignable to type 'string'.
+      Signature '(): string' has no corresponding signature in '() => void'
+        Type 'void' is not assignable to type 'string'.
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts(20,1): error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type '() => void' is not assignable to type '() => string'.
-      Type 'void' is not assignable to type 'string'.
+      Signature '(): string' has no corresponding signature in '() => void'
+        Type 'void' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts (3 errors) ====
@@ -24,7 +27,8 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
 !!! error TS2322: Type 'I' is not assignable to type 'Object'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
-!!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! error TS2322:       Signature '(): string' has no corresponding signature in '() => void'
+!!! error TS2322:         Type 'void' is not assignable to type 'string'.
     i = o; // ok
     
     class C {
@@ -36,7 +40,8 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
 !!! error TS2322: Type 'C' is not assignable to type 'Object'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
-!!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! error TS2322:       Signature '(): string' has no corresponding signature in '() => void'
+!!! error TS2322:         Type 'void' is not assignable to type 'string'.
     c = o; // ok
     
     var a = {
@@ -47,5 +52,6 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
 !!! error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
-!!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! error TS2322:       Signature '(): string' has no corresponding signature in '() => void'
+!!! error TS2322:         Type 'void' is not assignable to type 'string'.
     a = o; // ok

@@ -1,8 +1,10 @@
 tests/cases/compiler/optionalFunctionArgAssignability.ts(7,1): error TS2322: Type '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' is not assignable to type '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>'.
-  Types of parameters 'onFulFill' and 'onFulfill' are incompatible.
-    Type '(value: number) => any' is not assignable to type '(value: string) => any'.
-      Types of parameters 'value' and 'value' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+  Signature '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U>' has no corresponding signature in '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>'
+    Types of parameters 'onFulFill' and 'onFulfill' are incompatible.
+      Type '(value: number) => any' is not assignable to type '(value: string) => any'.
+        Signature '(value: string): any' has no corresponding signature in '(value: number) => any'
+          Types of parameters 'value' and 'value' are incompatible.
+            Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/optionalFunctionArgAssignability.ts (1 errors) ====
@@ -15,8 +17,10 @@ tests/cases/compiler/optionalFunctionArgAssignability.ts(7,1): error TS2322: Typ
     a = b; // error because number is not assignable to string
     ~
 !!! error TS2322: Type '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' is not assignable to type '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>'.
-!!! error TS2322:   Types of parameters 'onFulFill' and 'onFulfill' are incompatible.
-!!! error TS2322:     Type '(value: number) => any' is not assignable to type '(value: string) => any'.
-!!! error TS2322:       Types of parameters 'value' and 'value' are incompatible.
-!!! error TS2322:         Type 'number' is not assignable to type 'string'.
+!!! error TS2322:   Signature '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U>' has no corresponding signature in '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>'
+!!! error TS2322:     Types of parameters 'onFulFill' and 'onFulfill' are incompatible.
+!!! error TS2322:       Type '(value: number) => any' is not assignable to type '(value: string) => any'.
+!!! error TS2322:         Signature '(value: string): any' has no corresponding signature in '(value: number) => any'
+!!! error TS2322:           Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:             Type 'number' is not assignable to type 'string'.
     

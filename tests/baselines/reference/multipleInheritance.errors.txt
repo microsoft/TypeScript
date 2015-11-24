@@ -3,6 +3,7 @@ tests/cases/compiler/multipleInheritance.ts(18,21): error TS1174: Classes can on
 tests/cases/compiler/multipleInheritance.ts(34,7): error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
   Types of property 'g' are incompatible.
     Type '(n: number) => number' is not assignable to type '() => number'.
+      Signature '(): number' has no corresponding signature in '(n: number) => number'
 tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
 
 
@@ -49,6 +50,7 @@ tests/cases/compiler/multipleInheritance.ts(35,12): error TS2425: Class 'Good' d
 !!! error TS2415: Class 'Baad' incorrectly extends base class 'Good'.
 !!! error TS2415:   Types of property 'g' are incompatible.
 !!! error TS2415:     Type '(n: number) => number' is not assignable to type '() => number'.
+!!! error TS2415:       Signature '(): number' has no corresponding signature in '(n: number) => number'
         public f(): number { return 0; }
                ~
 !!! error TS2425: Class 'Good' defines instance member property 'f', but extended class 'Baad' defines it as instance member function.
