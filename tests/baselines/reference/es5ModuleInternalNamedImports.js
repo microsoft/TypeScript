@@ -34,6 +34,7 @@ export module M {
 
 //// [es5ModuleInternalNamedImports.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var M;
     (function (M) {
         // variable

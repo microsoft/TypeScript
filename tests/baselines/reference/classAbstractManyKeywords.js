@@ -5,6 +5,7 @@ default abstract class C {}
 import abstract class D {}
 
 //// [classAbstractManyKeywords.js]
+"use strict";
 var A = (function () {
     function A() {
     }

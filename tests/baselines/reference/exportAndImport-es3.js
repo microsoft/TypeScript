@@ -13,11 +13,13 @@ export default function f2() {
 
 
 //// [m1.js]
+"use strict";
 function f1() {
 }
 exports.__esModule = true;
 exports["default"] = f1;
 //// [m2.js]
+"use strict";
 var m1_1 = require("./m1");
 function f2() {
     m1_1["default"]();

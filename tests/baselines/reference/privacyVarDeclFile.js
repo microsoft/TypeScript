@@ -426,6 +426,7 @@ module publicModuleInGlobal {
 }
 
 //// [privacyVarDeclFile_externalModule.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }

@@ -153,6 +153,7 @@ module import_private {
 }
 
 //// [privacyLocalInternalReferenceImportWithExport.js]
+"use strict";
 // private elements
 var m_private;
 (function (m_private) {

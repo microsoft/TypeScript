@@ -10,6 +10,7 @@ export = M2; // should not error
 
 //// [exportEqualsModule_A.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var M;
     (function (M) {
     })(M || (M = {}));

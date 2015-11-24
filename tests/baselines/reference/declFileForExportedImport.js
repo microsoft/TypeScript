@@ -12,7 +12,9 @@ export import b = a;
 var z = b.x;
 
 //// [declFileForExportedImport_0.js]
+"use strict";
 //// [declFileForExportedImport_1.js]
+"use strict";
 ///<reference path='declFileForExportedImport_0.ts'/>
 exports.a = require('./declFileForExportedImport_0');
 var y = exports.a.x;

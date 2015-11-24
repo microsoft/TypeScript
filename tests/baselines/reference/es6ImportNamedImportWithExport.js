@@ -41,6 +41,7 @@ export import { aaaa as bbbb } from "./server";
 
 
 //// [server.js]
+"use strict";
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;
@@ -50,6 +51,7 @@ exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.xxxx = server_1.a;
 var server_2 = require("./server");
