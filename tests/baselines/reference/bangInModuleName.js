@@ -20,4 +20,5 @@ import * as http from 'intern/dojo/node!http';
 //// [a.js]
 /// <reference path="a.d.ts"/>
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });

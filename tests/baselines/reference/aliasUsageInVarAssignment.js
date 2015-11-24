@@ -21,6 +21,7 @@ var i: IHasVisualizationModel;
 var m: typeof moduleA = i;
 
 //// [aliasUsageInVarAssignment_backbone.js]
+"use strict";
 var Model = (function () {
     function Model() {
     }
@@ -28,6 +29,7 @@ var Model = (function () {
 })();
 exports.Model = Model;
 //// [aliasUsageInVarAssignment_moduleA.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -43,5 +45,6 @@ var VisualizationModel = (function (_super) {
 })(Backbone.Model);
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInVarAssignment_main.js]
+"use strict";
 var i;
 var m = i;

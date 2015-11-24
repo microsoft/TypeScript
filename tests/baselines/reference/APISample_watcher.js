@@ -109,6 +109,7 @@ watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+"use strict";
 var ts = require("typescript");
 function watch(rootFileNames, options) {
     var files = {};

@@ -16,6 +16,7 @@ export var __esModule = 1;
 
 
 //// [es5-commonjs4.js]
+"use strict";
 var A = (function () {
     function A() {
     }

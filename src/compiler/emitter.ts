@@ -7383,7 +7383,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
@@ -7493,7 +7493,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeModuleName(node, emitRelativePathAsModuleName);
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7505,7 +7505,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCommonJSModule(node: SourceFile) {
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false, /*ensureUseStrict*/ true);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
@@ -7534,7 +7534,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 })(`);
                 emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7676,19 +7676,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
+            function isUseStrictPrologue(node: ExpressionStatement): boolean {
+                return !!(node.expression as StringLiteral).text.match(/use strict/);
+            }
+
+            function ensureUseStrictPrologue(startWithNewLine: boolean, writeUseStrict: boolean) {
+                if (writeUseStrict) {
+                    if (startWithNewLine) {
+                        writeLine();
+                    }
+                    write("\"use strict\";");
+                }
+            }
+
+            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean, ensureUseStrict?: boolean): number {
+                let foundUseStrict = false;
                 for (let i = 0; i < statements.length; ++i) {
                     if (isPrologueDirective(statements[i])) {
+                        if (isUseStrictPrologue(statements[i] as ExpressionStatement)) {
+                            foundUseStrict = true;
+                        }
                         if (startWithNewLine || i > 0) {
                             writeLine();
                         }
                         emit(statements[i]);
                     }
                     else {
+                        ensureUseStrictPrologue(startWithNewLine || i > 0, !foundUseStrict && ensureUseStrict);
                         // return index of the first non prologue directive
                         return i;
                     }
                 }
+                ensureUseStrictPrologue(startWithNewLine, !foundUseStrict && ensureUseStrict);
                 return statements.length;
             }
 

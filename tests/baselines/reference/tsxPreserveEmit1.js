@@ -27,6 +27,7 @@ var routes = <Route />;
 
 //// [test.jsx]
 define(["require", "exports", 'react-router'], function (require, exports, ReactRouter) {
+    "use strict";
     var Route = ReactRouter.Route;
     var routes = <Route />;
 });

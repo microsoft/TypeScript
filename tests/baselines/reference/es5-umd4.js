@@ -25,6 +25,7 @@ export = A;
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
     var A = (function () {
         function A() {
         }

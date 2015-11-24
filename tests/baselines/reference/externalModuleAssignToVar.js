@@ -28,6 +28,7 @@ y3 = ext3; // ok
 
 //// [externalModuleAssignToVar_core_require.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C = (function () {
         function C() {
         }
@@ -37,6 +38,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [externalModuleAssignToVar_core_require2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C = (function () {
         function C() {
         }
@@ -46,6 +48,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [externalModuleAssignToVar_ext.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var D = (function () {
         function D() {
         }
@@ -55,6 +58,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [externalModuleAssignToVar_core.js]
 define(["require", "exports", 'externalModuleAssignToVar_core_require', 'externalModuleAssignToVar_core_require2', 'externalModuleAssignToVar_ext'], function (require, exports, ext, ext2, ext3) {
+    "use strict";
     var y1 = ext;
     y1 = ext; // ok
     var y2 = ext2;

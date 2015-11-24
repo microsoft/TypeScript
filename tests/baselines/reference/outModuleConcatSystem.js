@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 System.register("tests/cases/compiler/ref/a", [], function(exports_1) {
+    "use strict";
     var A;
     return {
         setters:[],
@@ -29,6 +30,7 @@ System.register("tests/cases/compiler/ref/a", [], function(exports_1) {
     }
 });
 System.register("tests/cases/compiler/b", ["tests/cases/compiler/ref/a"], function(exports_2) {
+    "use strict";
     var a_1;
     var B;
     return {

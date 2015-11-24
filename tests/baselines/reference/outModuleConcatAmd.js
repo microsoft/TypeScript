@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define("tests/cases/compiler/ref/a", ["require", "exports"], function (require, exports) {
+    "use strict";
     var A = (function () {
         function A() {
         }
@@ -23,6 +24,7 @@ define("tests/cases/compiler/ref/a", ["require", "exports"], function (require, 
     exports.A = A;
 });
 define("tests/cases/compiler/b", ["require", "exports", "tests/cases/compiler/ref/a"], function (require, exports, a_1) {
+    "use strict";
     var B = (function (_super) {
         __extends(B, _super);
         function B() {

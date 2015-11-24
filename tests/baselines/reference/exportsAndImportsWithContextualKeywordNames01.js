@@ -20,6 +20,7 @@ import { set as yield } from "./t1";
 import { get } from "./t1";
 
 //// [t1.js]
+"use strict";
 var set = {
     set foo(x) {
     }
@@ -28,5 +29,8 @@ exports.set = set;
 var get = 10;
 exports.get = get;
 //// [t2.js]
+"use strict";
 //// [t3.js]
+"use strict";
 //// [t4.js]
+"use strict";

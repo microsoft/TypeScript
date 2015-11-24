@@ -11,8 +11,10 @@ import * as nameSpaceBinding2 from "./es6ImportNameSpaceImportInEs5_0"; // elide
 
 
 //// [es6ImportNameSpaceImportInEs5_0.js]
+"use strict";
 exports.a = 10;
 //// [es6ImportNameSpaceImportInEs5_1.js]
+"use strict";
 var nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
 var x = nameSpaceBinding.a;
 

@@ -17,6 +17,7 @@ var x = foo; // Cause a runtime dependency
 
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C1 = (function () {
         function C1() {
             this.m1 = 42;
@@ -28,9 +29,11 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var answer = 42; // No exports
 });
 //// [foo_2.js]
 define(["require", "exports", "./foo_1"], function (require, exports, foo) {
+    "use strict";
     var x = foo; // Cause a runtime dependency
 });

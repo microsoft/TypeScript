@@ -21,6 +21,7 @@ export { uninstantiated } from "./server";
 export { x } from "./server";
 
 //// [server.js]
+"use strict";
 var c = (function () {
     function c() {
     }
@@ -33,6 +34,7 @@ var m;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.c = server_1.c;
 var server_2 = require("./server");
