@@ -1,7 +1,7 @@
 tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
-  Signature 'new (): any' has no corresponding signature in 'Object'
+  Type 'Object' provides no match for the signature 'new (): any'
 tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2322: Type 'Object' is not assignable to type 'new () => any'.
-  Signature 'new (): any' has no corresponding signature in 'Object'
+  Type 'Object' provides no match for the signature 'new (): any'
 
 
 ==== tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
@@ -15,7 +15,7 @@ tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMemb
     i = f;
     ~
 !!! error TS2322: Type 'Object' is not assignable to type 'I'.
-!!! error TS2322:   Signature 'new (): any' has no corresponding signature in 'Object'
+!!! error TS2322:   Type 'Object' provides no match for the signature 'new (): any'
     
     var a: {
         new(): any
@@ -24,4 +24,4 @@ tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMemb
     a = f;
     ~
 !!! error TS2322: Type 'Object' is not assignable to type 'new () => any'.
-!!! error TS2322:   Signature 'new (): any' has no corresponding signature in 'Object'
+!!! error TS2322:   Type 'Object' provides no match for the signature 'new (): any'

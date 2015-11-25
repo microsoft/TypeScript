@@ -1,5 +1,5 @@
 tests/cases/compiler/assignToFn.ts(8,5): error TS2322: Type 'string' is not assignable to type '(n: number) => boolean'.
-  Signature '(n: number): boolean' has no corresponding signature in 'String'
+  Type 'String' provides no match for the signature '(n: number): boolean'
 
 
 ==== tests/cases/compiler/assignToFn.ts (1 errors) ====
@@ -13,6 +13,6 @@ tests/cases/compiler/assignToFn.ts(8,5): error TS2322: Type 'string' is not assi
         x.f="hello";
         ~~~
 !!! error TS2322: Type 'string' is not assignable to type '(n: number) => boolean'.
-!!! error TS2322:   Signature '(n: number): boolean' has no corresponding signature in 'String'
+!!! error TS2322:   Type 'String' provides no match for the signature '(n: number): boolean'
     }
     

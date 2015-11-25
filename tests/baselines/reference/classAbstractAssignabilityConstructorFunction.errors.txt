@@ -1,7 +1,7 @@
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts(7,1): error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
   Cannot assign an abstract constructor type to a non-abstract constructor type.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts(8,1): error TS2322: Type 'string' is not assignable to type 'new () => A'.
-  Signature 'new (): A' has no corresponding signature in 'String'
+  Type 'String' provides no match for the signature 'new (): A'
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts (2 errors) ====
@@ -18,4 +18,4 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     AAA = "asdf";
     ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'new () => A'.
-!!! error TS2322:   Signature 'new (): A' has no corresponding signature in 'String'
+!!! error TS2322:   Type 'String' provides no match for the signature 'new (): A'

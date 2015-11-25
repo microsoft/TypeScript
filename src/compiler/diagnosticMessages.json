@@ -1724,7 +1724,7 @@
         "category": "Error",
         "code": 2657
     },
-    "Signature '{0}' has no corresponding signature in '{1}'": {
+    "Type '{0}' provides no match for the signature '{1}'": {
         "category": "Error",
         "code": 2658
     },

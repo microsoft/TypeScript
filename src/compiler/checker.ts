@@ -5454,9 +5454,9 @@ namespace ts {
                             }
                         }
                         if (localErrors) {
-                            reportError(Diagnostics.Signature_0_has_no_corresponding_signature_in_1,
-                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind),
-                                typeToString(source));
+                            reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
+                                typeToString(source),
+                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
                         }
                         return Ternary.False;
                     }

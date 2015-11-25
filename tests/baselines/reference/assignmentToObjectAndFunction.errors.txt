@@ -1,13 +1,13 @@
 tests/cases/compiler/assignmentToObjectAndFunction.ts(1,5): error TS2322: Type '{ toString: number; }' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type 'number' is not assignable to type '() => string'.
-      Signature '(): string' has no corresponding signature in 'Number'
+      Type 'Number' provides no match for the signature '(): string'
 tests/cases/compiler/assignmentToObjectAndFunction.ts(8,5): error TS2322: Type '{}' is not assignable to type 'Function'.
   Property 'apply' is missing in type '{}'.
 tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 'typeof bad' is not assignable to type 'Function'.
   Types of property 'apply' are incompatible.
     Type 'number' is not assignable to type '(thisArg: any, argArray?: any) => any'.
-      Signature '(thisArg: any, argArray?: any): any' has no corresponding signature in 'Number'
+      Type 'Number' provides no match for the signature '(thisArg: any, argArray?: any): any'
 
 
 ==== tests/cases/compiler/assignmentToObjectAndFunction.ts (3 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 
 !!! error TS2322: Type '{ toString: number; }' is not assignable to type 'Object'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type '() => string'.
-!!! error TS2322:       Signature '(): string' has no corresponding signature in 'Number'
+!!! error TS2322:       Type 'Number' provides no match for the signature '(): string'
     var goodObj: Object = {
         toString(x?) {
             return "";
@@ -52,4 +52,4 @@ tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 
 !!! error TS2322: Type 'typeof bad' is not assignable to type 'Function'.
 !!! error TS2322:   Types of property 'apply' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type '(thisArg: any, argArray?: any) => any'.
-!!! error TS2322:       Signature '(thisArg: any, argArray?: any): any' has no corresponding signature in 'Number'
+!!! error TS2322:       Type 'Number' provides no match for the signature '(thisArg: any, argArray?: any): any'

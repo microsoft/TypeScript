@@ -6,11 +6,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
   Property 'toDateString' is missing in type 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(33,9): error TS2322: Type 'E' is not assignable to type 'void'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(36,9): error TS2322: Type 'E' is not assignable to type '() => {}'.
-  Signature '(): {}' has no corresponding signature in 'Number'
+  Type 'Number' provides no match for the signature '(): {}'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(37,9): error TS2322: Type 'E' is not assignable to type 'Function'.
   Property 'apply' is missing in type 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(38,9): error TS2322: Type 'E' is not assignable to type '(x: number) => string'.
-  Signature '(x: number): string' has no corresponding signature in 'Number'
+  Type 'Number' provides no match for the signature '(x: number): string'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(39,5): error TS2322: Type 'E' is not assignable to type 'C'.
   Property 'foo' is missing in type 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(40,5): error TS2322: Type 'E' is not assignable to type 'I'.
@@ -20,7 +20,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(42,9): error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
   Property 'foo' is missing in type 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(43,9): error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
-  Signature '<T>(x: T): T' has no corresponding signature in 'Number'
+  Type 'Number' provides no match for the signature '<T>(x: T): T'
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String'.
   Property 'charAt' is missing in type 'Number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(47,21): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
@@ -83,7 +83,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
         var j: () => {} = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type '() => {}'.
-!!! error TS2322:   Signature '(): {}' has no corresponding signature in 'Number'
+!!! error TS2322:   Type 'Number' provides no match for the signature '(): {}'
         var k: Function = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type 'Function'.
@@ -91,7 +91,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
         var l: (x: number) => string = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type '(x: number) => string'.
-!!! error TS2322:   Signature '(x: number): string' has no corresponding signature in 'Number'
+!!! error TS2322:   Type 'Number' provides no match for the signature '(x: number): string'
         ac = e;
         ~~
 !!! error TS2322: Type 'E' is not assignable to type 'C'.
@@ -111,7 +111,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
         var o: <T>(x: T) => T = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2322:   Signature '<T>(x: T): T' has no corresponding signature in 'Number'
+!!! error TS2322:   Type 'Number' provides no match for the signature '<T>(x: T): T'
         var p: Number = e;
         var q: String = e;
             ~
