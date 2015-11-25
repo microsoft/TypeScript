@@ -1,10 +1,8 @@
 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,27): error TS2345: Argument of type '(d: Derived) => Base' is not assignable to parameter of type '(p: Derived) => Derived'.
-  Signature '(p: Derived): Derived' has no corresponding signature in '(d: Derived) => Base'
-    Type 'Base' is not assignable to type 'Derived'.
-      Property 'toBase' is missing in type 'Base'.
+  Type 'Base' is not assignable to type 'Derived'.
+    Property 'toBase' is missing in type 'Base'.
 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,27): error TS2345: Argument of type '(d: Derived) => Base' is not assignable to parameter of type '(p: Derived) => Derived'.
-  Signature '(p: Derived): Derived' has no corresponding signature in '(d: Derived) => Base'
-    Type 'Base' is not assignable to type 'Derived'.
+  Type 'Base' is not assignable to type 'Derived'.
 
 
 ==== tests/cases/compiler/fixingTypeParametersRepeatedly2.ts (2 errors) ====
@@ -21,9 +19,8 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,27): error TS2345: Ar
     var result = foo(derived, d => d.toBase());
                               ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(d: Derived) => Base' is not assignable to parameter of type '(p: Derived) => Derived'.
-!!! error TS2345:   Signature '(p: Derived): Derived' has no corresponding signature in '(d: Derived) => Base'
-!!! error TS2345:     Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2345:       Property 'toBase' is missing in type 'Base'.
+!!! error TS2345:   Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2345:     Property 'toBase' is missing in type 'Base'.
     
     // bar should type check just like foo.
     // The same error should be observed in both cases.
@@ -32,5 +29,4 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,27): error TS2345: Ar
     var result = bar(derived, d => d.toBase());
                               ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(d: Derived) => Base' is not assignable to parameter of type '(p: Derived) => Derived'.
-!!! error TS2345:   Signature '(p: Derived): Derived' has no corresponding signature in '(d: Derived) => Base'
-!!! error TS2345:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2345:   Type 'Base' is not assignable to type 'Derived'.

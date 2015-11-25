@@ -2,8 +2,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(1,35): error TS2322: Type 'number
   Signature '(): () => typeof fn' has no corresponding signature in 'Number'
 tests/cases/compiler/recursiveFunctionTypes.ts(3,5): error TS2322: Type '() => typeof fn' is not assignable to type 'number'.
 tests/cases/compiler/recursiveFunctionTypes.ts(4,5): error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
-  Signature '(): number' has no corresponding signature in '() => typeof fn'
-    Type '() => typeof fn' is not assignable to type 'number'.
+  Type '() => typeof fn' is not assignable to type 'number'.
 tests/cases/compiler/recursiveFunctionTypes.ts(11,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/recursiveFunctionTypes.ts(12,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/compiler/recursiveFunctionTypes.ts(17,5): error TS2322: Type '() => I<typeof f3>' is not assignable to type 'number'.
@@ -32,8 +31,7 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     var y: () => number = fn; // ok
         ~
 !!! error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
-!!! error TS2322:   Signature '(): number' has no corresponding signature in '() => typeof fn'
-!!! error TS2322:     Type '() => typeof fn' is not assignable to type 'number'.
+!!! error TS2322:   Type '() => typeof fn' is not assignable to type 'number'.
     
     var f: () => typeof g;
     var g: () => typeof f;

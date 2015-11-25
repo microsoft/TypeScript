@@ -66,8 +66,7 @@ tests/cases/compiler/intTypeCheck.ts(170,17): error TS2350: Only a void function
 tests/cases/compiler/intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not assignable to type 'i6'.
   Signature '(): any' has no corresponding signature in 'Base'
 tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
-  Signature '(): number' has no corresponding signature in '() => void'
-    Type 'void' is not assignable to type 'number'.
+  Type 'void' is not assignable to type 'number'.
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
   Signature '(): any' has no corresponding signature in 'Boolean'
 tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
@@ -382,8 +381,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj61: i6 = function () { };
         ~~~~~
 !!! error TS2322: Type '() => void' is not assignable to type 'i6'.
-!!! error TS2322:   Signature '(): number' has no corresponding signature in '() => void'
-!!! error TS2322:     Type 'void' is not assignable to type 'number'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
     //var obj62: i6 = function foo() { };
     var obj63: i6 = <i6> anyVar;
     var obj64: i6 = new <i6> anyVar;

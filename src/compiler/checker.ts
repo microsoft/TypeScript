@@ -5453,7 +5453,7 @@ namespace ts {
                                 localErrors = false;
                             }
                         }
-                        if (reportErrors) {
+                        if (localErrors) {
                             reportError(Diagnostics.Signature_0_has_no_corresponding_signature_in_1,
                                 signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind),
                                 typeToString(source));

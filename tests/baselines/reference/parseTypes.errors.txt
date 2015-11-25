@@ -1,7 +1,5 @@
 tests/cases/compiler/parseTypes.ts(9,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
-  Signature '(): number' has no corresponding signature in '(s: string) => void'
 tests/cases/compiler/parseTypes.ts(10,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
-  Signature '(): number' has no corresponding signature in '(s: string) => void'
 tests/cases/compiler/parseTypes.ts(11,1): error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }'.
   Index signature is missing in type '(s: string) => void'.
 tests/cases/compiler/parseTypes.ts(12,1): error TS2322: Type '(s: string) => void' is not assignable to type 'new () => number'.
@@ -20,11 +18,9 @@ tests/cases/compiler/parseTypes.ts(12,1): error TS2322: Type '(s: string) => voi
     y=g;
     ~
 !!! error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
-!!! error TS2322:   Signature '(): number' has no corresponding signature in '(s: string) => void'
     x=g;
     ~
 !!! error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
-!!! error TS2322:   Signature '(): number' has no corresponding signature in '(s: string) => void'
     w=g;
     ~
 !!! error TS2322: Type '(s: string) => void' is not assignable to type '{ [x: number]: number; }'.
