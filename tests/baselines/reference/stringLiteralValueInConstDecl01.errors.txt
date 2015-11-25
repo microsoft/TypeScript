@@ -1,0 +1,10 @@
+tests/cases/compiler/stringLiteralValueInConstDecl01.ts(4,1): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+
+
+==== tests/cases/compiler/stringLiteralValueInConstDecl01.ts (1 errors) ====
+    
+    const foo = "foo";
+    var bar = foo;
+    bar = "bar";
+    ~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
