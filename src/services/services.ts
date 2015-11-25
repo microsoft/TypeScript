@@ -4247,24 +4247,22 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let container = getContainingFunction(location);
-                    if (container) {
-                        let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                        let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
-                        if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
+                    let declaration = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
+                    if (declaration && isFunctionLikeKind(declaration.kind)) {
+                        let signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
+                        if (declaration.kind === SyntaxKind.ConstructSignature) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                             displayParts.push(spacePart());
                         }
-                        else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
-                            addFullSymbolName(signatureDeclaration.symbol);
+                        else if (declaration.kind !== SyntaxKind.CallSignature && (<SignatureDeclaration>declaration).name) {
+                            addFullSymbolName(declaration.symbol);
                         }
                         addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                     }
                     else {
-                        // Type  aliash type parameter
+                        // Type alias type parameter
                         // For example
                         //      type list<T> = T[];  // Both T will go through same code path
-                        let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
                         addFullSymbolName(declaration.symbol);
