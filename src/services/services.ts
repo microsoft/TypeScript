@@ -4247,26 +4247,30 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let declaration = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                    if (declaration && isFunctionLikeKind(declaration.kind)) {
-                        let signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
-                        if (declaration.kind === SyntaxKind.ConstructSignature) {
-                            displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                    let declaration = <Node>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
+                    declaration = declaration ? declaration.parent : undefined;
+
+                    if (declaration) {
+                        if (isFunctionLikeKind(declaration.kind)) {
+                            let signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
+                            if (declaration.kind === SyntaxKind.ConstructSignature) {
+                                displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                displayParts.push(spacePart());
+                            }
+                            else if (declaration.kind !== SyntaxKind.CallSignature && (<SignatureDeclaration>declaration).name) {
+                                addFullSymbolName(declaration.symbol);
+                            }
+                            addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                        }
+                        else {
+                            // Type alias type parameter
+                            // For example
+                            //      type list<T> = T[];  // Both T will go through same code path
+                            displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                             displayParts.push(spacePart());
-                        }
-                        else if (declaration.kind !== SyntaxKind.CallSignature && (<SignatureDeclaration>declaration).name) {
                             addFullSymbolName(declaration.symbol);
+                            writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                         }
-                        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
-                    }
-                    else {
-                        // Type alias type parameter
-                        // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
-                        displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
-                        displayParts.push(spacePart());
-                        addFullSymbolName(declaration.symbol);
-                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
                 }
             }
