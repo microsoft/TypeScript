@@ -1,0 +1,15 @@
+=== tests/cases/compiler/stringLiteralValueInDestructuredConstDecl01.ts ===
+
+const {a: {b = "foo"}} = {
+>a : Symbol(a, Decl(stringLiteralValueInDestructuredConstDecl01.ts, 1, 26))
+>b : Symbol(b, Decl(stringLiteralValueInDestructuredConstDecl01.ts, 1, 11))
+
+    a: {
+>a : Symbol(a, Decl(stringLiteralValueInDestructuredConstDecl01.ts, 1, 26))
+    }
+};
+
+var foo1: "foo" = b;
+>foo1 : Symbol(foo1, Decl(stringLiteralValueInDestructuredConstDecl01.ts, 6, 3))
+>b : Symbol(b, Decl(stringLiteralValueInDestructuredConstDecl01.ts, 1, 11))
+

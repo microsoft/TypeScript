@@ -1,0 +1,15 @@
+tests/cases/compiler/stringLiteralValueInDestructuredConstDecl02.ts(8,5): error TS2322: Type 'string' is not assignable to type '"foo"'.
+
+
+==== tests/cases/compiler/stringLiteralValueInDestructuredConstDecl02.ts (1 errors) ====
+    
+    const {x: {y}} = {
+        x: {
+            y: "foo"
+        } 
+    };
+    
+    var foo2: "foo" = y;
+        ~~~~
+!!! error TS2322: Type 'string' is not assignable to type '"foo"'.
+    
