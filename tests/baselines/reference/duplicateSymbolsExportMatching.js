@@ -67,6 +67,7 @@ export interface D { }
 
 //// [duplicateSymbolsExportMatching.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     // Should report error only once for instantiated module
     var M;
     (function (M) {

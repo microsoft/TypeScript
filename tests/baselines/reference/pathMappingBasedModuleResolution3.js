@@ -14,10 +14,13 @@ export {x} from "./file3"
 export var x = 1;
 
 //// [file3.js]
+"use strict";
 exports.x = 1;
 //// [file2.js]
+"use strict";
 var file3_1 = require("./file3");
 exports.x = file3_1.x;
 //// [file1.js]
+"use strict";
 var file2_1 = require("folder2/file2");
 use(file2_1.x.toExponential());

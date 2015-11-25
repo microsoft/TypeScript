@@ -20,6 +20,7 @@ class C {
 }
 
 //// [protoAsIndexInIndexExpression_0.js]
+"use strict";
 //// [protoAsIndexInIndexExpression_1.js]
 ///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;

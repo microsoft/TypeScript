@@ -683,6 +683,7 @@ export declare module eaM {
 
 //// [giant.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     /*
         Prefixes
         p -> public

@@ -22,18 +22,22 @@ export var z = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.x = 1;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.y = 1;
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.z = 1;
 });
 //// [file1.js]
 define(["require", "exports", "folder2/file1", "folder3/file2", "components/file3"], function (require, exports, file1_1, file2_1, file3_1) {
+    "use strict";
     use(file1_1.x.toExponential());
     use(file2_1.y.toExponential());
     use(file3_1.z.toExponential());

@@ -154,6 +154,7 @@ module import_private {
 
 //// [privacyLocalInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     // private elements
     var m_private;
     (function (m_private) {

@@ -6,6 +6,7 @@ export function f() {
 }
 
 //// [nonMergedOverloads.js]
+"use strict";
 var f = 10;
 function f() {
 }

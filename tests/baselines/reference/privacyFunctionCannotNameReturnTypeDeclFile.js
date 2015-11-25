@@ -165,6 +165,7 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.js]
 //// [privacyFunctionReturnTypeDeclFile_Widgets.js]
+"use strict";
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -191,6 +192,7 @@ var SpecializedWidget;
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
+"use strict";
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -211,6 +213,7 @@ function createExportedWidget4() {
 }
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionReturnTypeDeclFile_consumer.js]
+"use strict";
 var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = (function () {
     function publicClassWithWithPrivateParmeterTypes() {

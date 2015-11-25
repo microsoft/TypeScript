@@ -8,4 +8,5 @@ export declare var a: {
 
 //// [badExternalModuleReference.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });

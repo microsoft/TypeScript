@@ -18,17 +18,21 @@ let z = y.toLowerCase();
 
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.x = 1;
 });
 //// [file2.js]
 define(["require", "exports", "folder1/file3"], function (require, exports, file3_1) {
+    "use strict";
     exports.x = file3_1.x; // should be resolved to 'folder1/file3.ts' 
 });
 //// [file1.js]
 define(["require", "exports", "./file2"], function (require, exports, file2_1) {
+    "use strict";
     exports.z = file2_1.x.toExponential();
 });
 //// [file3.js]
 define(["require", "exports", "../folder1/file1"], function (require, exports, file1_1) {
+    "use strict";
     var z = file1_1.z.toLowerCase();
 });

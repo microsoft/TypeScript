@@ -4,6 +4,7 @@ export type A<a> = { value: a };
 
 //// [typeAliasDeclarationEmit2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 
 
