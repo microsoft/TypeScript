@@ -380,7 +380,7 @@ namespace ts {
      * Tests whether a value is an array.
      */
     export function isArray(value: any): value is any[] {
-        return Array.isArray ? Array.isArray(value) : typeof value === "object" && value instanceof Array;
+        return Array.isArray ? Array.isArray(value) : value instanceof Array;
     }
 
     export function memoize<T>(callback: () => T): () => T {
