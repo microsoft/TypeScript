@@ -22,17 +22,17 @@ namespace ts {
     export function getNullSourceMapWriter(): SourceMapWriter {
         if (nullSourceMapWriter === undefined) {
             nullSourceMapWriter = {
-                getSourceMapData: nop,
-                setSourceFile: nop,
-                emitStart: nop,
-                emitEnd: nop,
-                emitPos: nop,
-                pushScope: nop,
-                popScope: nop,
-                getText: nop,
-                getSourceMappingURL: nop,
-                initialize: nop,
-                reset: nop,
+                getSourceMapData(): SourceMapData { return undefined; },
+                setSourceFile(sourceFile: SourceFile): void { },
+                emitStart(range: TextRange): void { },
+                emitEnd(range: TextRange): void { },
+                emitPos(pos: number): void { },
+                pushScope(scopeDeclaration: Node, scopeName?: string): void { },
+                popScope(): void { },
+                getText(): string { return undefined; },
+                getSourceMappingURL(): string { return undefined; },
+                initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
+                reset(): void { },
             };
         }
 
