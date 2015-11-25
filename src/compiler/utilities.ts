@@ -2422,38 +2422,10 @@ namespace ts {
         ? JSON.stringify
         : stringifyFallback;
 
-    function hasCycles(value: any, stack: any[]) {
-        /* tslint:disable:no-null */
-        if (typeof value !== "object" || value === null) {
-            return false;
-        }
-        /* tslint:enable:no-null */
-
-        if (stack.lastIndexOf(value) !== -1) {
-            return true;
-        }
-
-        stack.push(value);
-
-        for (const key in value) {
-            if (hasProperty(value, key) && hasCycles(value[key], stack)) {
-                return true;
-            }
-        }
-
-        stack.pop();
-        return false;
-    }
-
     /**
-     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
-     * as the fallback implementation does not check for circular references by default.
+     * Serialize an object graph into a JSON string.
      */
     function stringifyFallback(value: any): string {
-        if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
-            Debug.assert(!hasCycles(value, []), "Detected circular reference before serializing object graph.");
-        }
-
         // JSON.stringify returns `undefined` here, instead of the string "undefined".
         return value === undefined ? undefined : stringifyValue(value);
     }
@@ -2462,8 +2434,16 @@ namespace ts {
         return typeof value === "string" ? `"${escapeString(value)}"`
              : typeof value === "number" ? isFinite(value) ? String(value) : "null"
              : typeof value === "boolean" ? value ? "true" : "false"
-             : typeof value === "object" ? isArray(value) ? stringifyArray(value) : stringifyObject(value)
+             : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
              : /*fallback*/ "null";
+    }
+
+    function cycleCheck(cb: (value: any) => string, value: any) {
+        Debug.assert(!value.hasOwnProperty("__cycle"), "Converting circular structure to JSON");
+        value.__cycle = true;
+        const result = cb(value);
+        delete value.__cycle;
+        return result;
     }
 
     function stringifyArray(value: any) {
@@ -2475,11 +2455,11 @@ namespace ts {
     }
 
     function stringifyObject(value: any) {
-        return value ? `{${reduceProperties(value, stringifyProperty, "")}}` : "null";
+        return `{${reduceProperties(value, stringifyProperty, "")}}`;
     }
 
     function stringifyProperty(memo: string, value: any, key: string) {
-        return value === undefined || typeof value === "function" ? memo
+        return value === undefined || typeof value === "function" || key === "__cycle" ? memo
              : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
     }
 
