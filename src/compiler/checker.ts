@@ -10608,7 +10608,7 @@ namespace ts {
             const parentKind = node.parent.kind;
             if (parentKind === SyntaxKind.VariableDeclaration || parentKind === SyntaxKind.BindingElement) {
                 if (getCombinedNodeFlags(node.parent) & NodeFlags.Const) {
-                    return getStringLiteralType(node);
+                    return getStringLiteralTypeForText(node.text);
                 }
             }
 
