@@ -1,0 +1,20 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowStaticMemberSetters.ts(5,25): error TS20025: Unexpected token. A constructor, method, or property was expected.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowStaticMemberSetters.ts (1 errors) ====
+    // doc 2.2
+    // Due to Typed Objects being nonextensible and non-configurable, accessors are not allowed.
+    
+    struct C {
+        static _bar: number;
+                            
+    
+    
+    	static set bar(new_bar: number) { // error, setters are not allowed in struct
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    		C._bar = new_bar;
+    ~~~~~~~~~~~~~~~~~~~
+    	}
+    ~~
+!!! error TS20025: Unexpected token. A constructor, method, or property was expected.
+    }

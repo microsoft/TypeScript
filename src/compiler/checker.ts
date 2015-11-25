@@ -8327,7 +8327,7 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
 
             getNodeLinks(node).resolvedSymbol = prop;
 
-            if (prop.parent && prop.parent.flags & (SymbolFlags.Class | SymbolFlags.Struct)) {
+            if (prop.parent && (prop.parent.flags & (SymbolFlags.Class | SymbolFlags.Struct))) {
                 checkClassOrStructPropertyAccess(node, left, apparentType, prop);
             }
             return getTypeOfSymbol(prop);
@@ -8341,7 +8341,7 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
             let type = checkExpression(left);
             if (type !== unknownType && !isTypeAny(type)) {
                 let prop = getPropertyOfType(getWidenedType(type), propertyName);
-                if (prop && prop.parent && prop.parent.flags & (SymbolFlags.Class | SymbolFlags.Struct)) {
+                if (prop && prop.parent && (prop.parent.flags & (SymbolFlags.Class | SymbolFlags.Struct))) {
                     return checkClassOrStructPropertyAccess(node, left, type, prop);
                 }
             }
@@ -16167,6 +16167,7 @@ return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_s
                         flags |= NodeFlags.Async;
                         lastAsync = modifier;
                         break;
+
                 }
             }
 

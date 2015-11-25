@@ -3,7 +3,7 @@
 
 namespace ts {
 	// use for protected modifier in struct
-	export let isProtectedAllowedInStruct = false;
+export let isProtectedAllowedInStruct = false;
 
     let nodeConstructors = new Array<new () => Node>(SyntaxKind.Count);
     /* @internal */ export let parseTime = 0;
@@ -1748,7 +1748,7 @@ namespace ts {
                 case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
                 case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
                 case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-                case ParsingContext.StructMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
+                case ParsingContext.StructMembers: return Diagnostics.Unexpected_token_A_constructor_method_or_property_was_expected;
                 case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
                 case ParsingContext.HeritageClauseElement: return Diagnostics.Expression_expected;
                 case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
@@ -4901,9 +4901,9 @@ namespace ts {
         }
 
         function isStructMemberModifier(idToken: SyntaxKind) {
-	        if ((idToken === SyntaxKind.ProtectedKeyword) && isProtectedAllowedInStruct) {
-				return true;
-	        }
+        if ((idToken === SyntaxKind.ProtectedKeyword) && isProtectedAllowedInStruct) {
+return true;
+        }
             switch (idToken) {
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.PrivateKeyword:
@@ -4960,6 +4960,8 @@ namespace ts {
                 if (!isKeyword(idToken)) {
                     return true;
                 }
+
+
 
                 // If it *is* a keyword, but not an accessor, check a little farther along
                 // to see if it should actually be parsed as a struct member.
@@ -5100,14 +5102,20 @@ namespace ts {
             let decorators = parseDecorators();
             let modifiers = parseModifiers();
 
+            let accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
+            if (accessor) {
+                parseErrorAtPosition(accessor.pos, accessor.end - accessor.pos, Diagnostics.Unexpected_token_A_constructor_method_or_property_was_expected);
+                return accessor;
+            }
+
             if (token === SyntaxKind.ConstructorKeyword) {
                 return parseConstructorDeclaration(fullStart, decorators, modifiers);
             }
 
-            // index signature not allowed in struct
+            /* index signature not allowed in struct
             if (token === SyntaxKind.OpenBracketToken) {
 
-            }
+            } */
 
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(fullStart, decorators, modifiers);
@@ -5188,13 +5196,13 @@ namespace ts {
             node.name = parseNameOfStructDeclarationOrExpression();
             node.typeParameters = parseTypeParameters();
             node.heritageClauses = parseHeritageClauses(/*isStructHeritageClause*/ true);
-            if (node.heritageClauses) {
-	            for (let hc of node.heritageClauses) {
-		            if (hc.token === SyntaxKind.ImplementsKeyword) {
-						parseErrorAtPosition(hc.pos, hc.end - hc.pos, Diagnostics.A_struct_can_not_implement_a_class_or_interface);
-		            }
-	            }
-            }
+        if (node.heritageClauses) {
+        for (let hc of node.heritageClauses) {
+        if (hc.token === SyntaxKind.ImplementsKeyword) {
+parseErrorAtPosition(hc.pos, hc.end - hc.pos, Diagnostics.A_struct_can_not_implement_a_class_or_interface);
+        }
+        }
+        }
 
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 // StructTail[Yield,Await] : (Modified) See 14.5
