@@ -2439,18 +2439,9 @@ namespace ts {
 
         stack.push(value);
 
-        if (isArray(value)) {
-            for (const entry of value) {
-                if (hasCycles(entry, stack)) {
-                    return true;
-                }
-            }
-        }
-        else {
-            for (const key in value) {
-                if (hasProperty(value, key) && hasCycles(value[key], stack)) {
-                    return true;
-                }
+        for (const key in value) {
+            if (hasProperty(value, key) && hasCycles(value[key], stack)) {
+                return true;
             }
         }
 
