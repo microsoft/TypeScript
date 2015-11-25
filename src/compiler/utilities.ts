@@ -2415,24 +2415,28 @@ namespace ts {
     }
 
     export const stringify: (value: any) => string = JSON && JSON.stringify ? JSON.stringify : function stringify(value: any): string {
+        return value === undefined ? undefined : stringifyValue(value);
+    };
+
+    function stringifyValue(value: any): string {
         /* tslint:disable:no-null */
-        return value == null ? "null"
+        return value === null ? "null" // explicit test for `null` as `typeof null` is "object"
              : typeof value === "string" ? `"${escapeString(value)}"`
              : typeof value === "number" ? String(value)
              : typeof value === "boolean" ? value ? "true" : "false"
              : isArray(value) ? `[${reduceLeft(value, stringifyElement, "")}]`
              : typeof value === "object" ? `{${reduceProperties(value, stringifyProperty, "")}}`
-             : "null";
+             : /*fallback*/ "null";
         /* tslint:enable:no-null */
-    };
+    }
 
     function stringifyElement(memo: string, value: any) {
-        return (memo ? memo + "," : memo) + stringify(value);
+        return (memo ? memo + "," : memo) + stringifyValue(value);
     }
 
     function stringifyProperty(memo: string, value: any, key: string) {
-        return value === undefined ? memo
-             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringify(value)}`;
+        return value === undefined || typeof value === "function" ? memo
+             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
     }
 
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
