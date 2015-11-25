@@ -16,6 +16,7 @@ var v3: number = (new a<number>()).foo;
 
 
 //// [externalModuleExportingGenericClass_file0.js]
+"use strict";
 var C = (function () {
     function C() {
     }
@@ -23,6 +24,7 @@ var C = (function () {
 })();
 module.exports = C;
 //// [externalModuleExportingGenericClass_file1.js]
+"use strict";
 var a = require('./externalModuleExportingGenericClass_file0');
 var v; // this should report error
 var v2 = (new a()).foo;

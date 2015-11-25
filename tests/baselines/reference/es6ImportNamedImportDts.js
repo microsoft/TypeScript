@@ -47,6 +47,7 @@ import { aaaa1 as bbbb } from "./server";
 
 
 //// [server.js]
+"use strict";
 var a = (function () {
     function a() {
     }
@@ -132,6 +133,7 @@ var aaaa1 = (function () {
 })();
 exports.aaaa1 = aaaa1;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.xxxx = new server_1.a();
 var server_2 = require("./server");

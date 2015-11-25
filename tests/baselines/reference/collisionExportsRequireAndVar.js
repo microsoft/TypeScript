@@ -28,6 +28,7 @@ module m4 {
 
 //// [collisionExportsRequireAndVar_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function foo() {
     }
     exports.foo = foo;

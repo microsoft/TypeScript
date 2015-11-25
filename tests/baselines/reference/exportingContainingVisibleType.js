@@ -12,6 +12,7 @@ export var x = 5;
 
 //// [exportingContainingVisibleType.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Foo = (function () {
         function Foo() {
         }

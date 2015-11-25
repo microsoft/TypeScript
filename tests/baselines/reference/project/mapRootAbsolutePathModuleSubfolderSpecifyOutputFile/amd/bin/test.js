@@ -1,4 +1,5 @@
 define("ref/m1", ["require", "exports"], function (require, exports) {
+    "use strict";
     exports.m1_a1 = 10;
     var m1_c1 = (function () {
         function m1_c1() {
@@ -13,6 +14,7 @@ define("ref/m1", ["require", "exports"], function (require, exports) {
     exports.m1_f1 = m1_f1;
 });
 define("test", ["require", "exports", "ref/m1"], function (require, exports, m1) {
+    "use strict";
     exports.a1 = 10;
     var c1 = (function () {
         function c1() {

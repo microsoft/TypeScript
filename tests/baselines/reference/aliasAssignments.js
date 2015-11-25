@@ -14,6 +14,7 @@ y = moduleA; // should be error
 
 
 //// [aliasAssignments_moduleA.js]
+"use strict";
 var someClass = (function () {
     function someClass() {
     }
@@ -21,6 +22,7 @@ var someClass = (function () {
 })();
 exports.someClass = someClass;
 //// [aliasAssignments_1.js]
+"use strict";
 var moduleA = require("./aliasAssignments_moduleA");
 var x = moduleA;
 x = 1; // Should be error

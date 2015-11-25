@@ -1622,7 +1622,7 @@
     },
     "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
-        "code":2517
+        "code": 2517
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -2060,6 +2060,22 @@
         "category": "Error",
         "code": 5054
     },
+    "Cannot write file '{0}' because it would overwrite input file.": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Cannot write file '{0}' because it would be overwritten by multiple input files.": {
+        "category": "Error",
+        "code": 5056
+    },
+    "Cannot find a tsconfig.json file at the specified directory: '{0}'": {
+        "category": "Error",
+        "code": 5057
+    },
+    "The specified path does not exist: '{0}'": {
+        "category": "Error",
+        "code": 5058
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2322,6 +2338,11 @@
         "category": "Error",
         "code": 6082
     },
+    "Allow javascript files to be compiled.": {
+        "category": "Message",
+        "code": 6083
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -9,6 +9,7 @@ import defaultBinding, * as nameSpaceBinding  from "./server";
 export var x = new nameSpaceBinding.a();
 
 //// [server.js]
+"use strict";
 var a = (function () {
     function a() {
     }
@@ -16,6 +17,7 @@ var a = (function () {
 })();
 exports.a = a;
 //// [client.js]
+"use strict";
 var server_1 = require("./server"), nameSpaceBinding = server_1;
 exports.x = new nameSpaceBinding.a();
 

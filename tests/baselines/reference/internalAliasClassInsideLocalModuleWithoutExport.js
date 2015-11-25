@@ -16,6 +16,7 @@ export module m2 {
 }
 
 //// [internalAliasClassInsideLocalModuleWithoutExport.js]
+"use strict";
 var x;
 (function (x) {
     var c = (function () {

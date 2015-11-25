@@ -14,6 +14,7 @@ export module c {
 }
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithExport.js]
+"use strict";
 var c;
 (function (c) {
     c.x.foo();

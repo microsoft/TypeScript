@@ -26,6 +26,7 @@ export = Foo;
 
 
 //// [clinterfaces.js]
+"use strict";
 var M;
 (function (M) {
     var C = (function () {

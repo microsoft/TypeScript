@@ -20,6 +20,7 @@ x.m2();
 
 //// [genericTypeWithMultipleBases2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x;
     x.p1;
     x.m1();

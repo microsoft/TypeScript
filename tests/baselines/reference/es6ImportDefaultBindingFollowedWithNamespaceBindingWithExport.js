@@ -9,8 +9,10 @@ export import defaultBinding, * as nameSpaceBinding  from "./server";
 export var x: number = nameSpaceBinding.a;
 
 //// [server.js]
+"use strict";
 exports.a = 10;
 //// [client.js]
+"use strict";
 var server_1 = require("./server"), nameSpaceBinding = server_1;
 exports.x = nameSpaceBinding.a;
 

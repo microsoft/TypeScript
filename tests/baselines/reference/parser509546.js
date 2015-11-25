@@ -5,6 +5,7 @@ export class Logger {
 
 
 //// [parser509546.js]
+"use strict";
 var Logger = (function () {
     function Logger() {
     }
