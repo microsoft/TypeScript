@@ -5439,21 +5439,21 @@ namespace ts {
 
                 outer: for (const t of targetSignatures) {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
-                        // Only report errors from the first failure
-                        let reportMoreErrors = reportErrors;
+                        // Only elaborate errors from the first failure
+                        let shouldElaborateErrors = reportErrors;
                         const checkedAbstractAssignability = false;
                         for (const s of sourceSignatures) {
                             if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
-                                const related = signatureRelatedTo(s, t, reportMoreErrors);
+                                const related = signatureRelatedTo(s, t, shouldElaborateErrors);
                                 if (related) {
                                     result &= related;
                                     errorInfo = saveErrorInfo;
                                     continue outer;
                                 }
-                                reportMoreErrors = false;
+                                shouldElaborateErrors = false;
                             }
                         }
-                        if (reportMoreErrors) {
+                        if (shouldElaborateErrors) {
                             reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
                                 typeToString(source),
                                 signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
