@@ -1,0 +1,80 @@
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(3,11): error TS20026: A struct can not have index members.
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(4,22): error TS20026: A struct can not have index members.
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(10,12): error TS20026: A struct can not have index members.
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(24,12): error TS20026: A struct can not have index members.
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(28,12): error TS20026: A struct can not have index members.
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(38,12): error TS20026: A struct can not have index members.
+tests/cases/conformance/structs/structNotAllowIndexMember.ts(42,12): error TS20026: A struct can not have index members.
+
+
+==== tests/cases/conformance/structs/structNotAllowIndexMember.ts (7 errors) ====
+    // doc 5
+    // no indexers are allowed
+    struct S {
+              
+    	[x: string]: string;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    	                    
+    	[y: number]: string;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    }
+    
+    // private indexers not allowed
+    
+    struct C1 {
+               
+    	private [x: string]: string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    }
+    
+    /* struct D1 {
+    	private [x: number]: string;
+    }
+    
+    struct E1<T> {
+    	private [x: string]: T;
+    } */
+    
+    // public indexers not allowed
+    
+    struct C2 {
+               
+    	public [x: string]: string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    }
+    
+    struct D2 {
+               
+    	public [x: number]: string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    }
+    
+    /* struct E2<T> {
+    	public [x: string]: T;
+    } */
+    
+    // static indexers not allowed
+    
+    struct C3 {
+               
+    	static [x: string]: string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    }
+    
+    struct D3 {
+               
+    	static [x: number]: string;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS20026: A struct can not have index members.
+    }
+    
+    /* struct E3<T> {
+    	static [x: string]: T;
+    } */
+    

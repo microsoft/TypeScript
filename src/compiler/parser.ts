@@ -5112,13 +5112,11 @@ return true;
                 return parseConstructorDeclaration(fullStart, decorators, modifiers);
             }
 
-            /* index signature not allowed in struct
-            if (token === SyntaxKind.OpenBracketToken) {
-
-            } */
-
+            // index signature not allowed in struct
             if (isIndexSignature()) {
-                return parseIndexSignatureDeclaration(fullStart, decorators, modifiers);
+	            let indexSingature: IndexSignatureDeclaration = parseIndexSignatureDeclaration(fullStart, decorators, modifiers);
+	            parseErrorAtPosition(indexSingature.pos, indexSingature.end - indexSingature.pos, Diagnostics.A_struct_can_not_have_index_members);
+                return indexSingature
             }
 
             // It is very important that we check this *after* checking indexers because
