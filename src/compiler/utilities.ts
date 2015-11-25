@@ -2418,10 +2418,10 @@ namespace ts {
      * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
      * as the fallback implementation does not check for circular references by default.
      */
-    export const stringify: (value: any) => string = JSON && JSON.stringify 
+    export const stringify: (value: any) => string = JSON && JSON.stringify
         ? JSON.stringify
         : stringifyFallback;
-    
+
     function hasCycles(value: any, stack: any[]) {
         /* tslint:disable:no-null */
         if (typeof value !== "object" || value === null) {
