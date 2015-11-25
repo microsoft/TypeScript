@@ -2414,24 +2414,68 @@ namespace ts {
         return output;
     }
 
+    /**
+     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
+     * as the fallback implementation does not check for circular references by default.
+     */
     export const stringify: (value: any) => string = JSON && JSON.stringify ? JSON.stringify : function stringify(value: any): string {
+        if (Debug.shouldAssert(AssertionLevel.Aggressive)) {
+            Debug.assert(!hasCycles(value, []), "Detected circular reference before serializing object graph.");
+        }
+
         return value === undefined ? undefined : stringifyValue(value);
     };
 
-    function stringifyValue(value: any): string {
+    function hasCycles(value: any, stack: any[]) {
         /* tslint:disable:no-null */
-        return value === null ? "null" // explicit test for `null` as `typeof null` is "object"
-             : typeof value === "string" ? `"${escapeString(value)}"`
-             : typeof value === "number" ? String(value)
-             : typeof value === "boolean" ? value ? "true" : "false"
-             : isArray(value) ? `[${reduceLeft(value, stringifyElement, "")}]`
-             : typeof value === "object" ? `{${reduceProperties(value, stringifyProperty, "")}}`
-             : /*fallback*/ "null";
+        if (typeof value !== "object" || value === null) {
+            return false;
+        }
         /* tslint:enable:no-null */
+
+        if (stack.lastIndexOf(value) !== -1) {
+            return true;
+        }
+
+        stack.push(value);
+
+        if (isArray(value)) {
+            for (const entry of value) {
+                if (hasCycles(entry, stack)) {
+                    return true;
+                }
+            }
+        }
+        else {
+            for (const key in value) {
+                if (hasProperty(value, key) && hasCycles(value[key], stack)) {
+                    return true;
+                }
+            }
+        }
+
+        stack.pop();
+        return false;
+    }
+
+    function stringifyValue(value: any): string {
+        return typeof value === "string" ? `"${escapeString(value)}"`
+             : typeof value === "number" ? isFinite(value) ? String(value) : "null"
+             : typeof value === "boolean" ? value ? "true" : "false"
+             : typeof value === "object" ? isArray(value) ? stringifyArray(value) : stringifyObject(value)
+             : /*fallback*/ "null";
+    }
+
+    function stringifyArray(value: any) {
+        return `[${reduceLeft(value, stringifyElement, "")}]`;
     }
 
     function stringifyElement(memo: string, value: any) {
         return (memo ? memo + "," : memo) + stringifyValue(value);
+    }
+
+    function stringifyObject(value: any) {
+        return value ? `{${reduceProperties(value, stringifyProperty, "")}}` : "null";
     }
 
     function stringifyProperty(memo: string, value: any, key: string) {
