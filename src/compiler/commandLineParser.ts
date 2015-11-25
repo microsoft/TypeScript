@@ -286,7 +286,7 @@ namespace ts {
             name: "baseUrl",
             type: "string",
             isFilePath: true,
-            description: Diagnostics.Base_directory_to_resolve_relative_module_names
+            description: Diagnostics.Base_directory_to_resolve_non_absolute_module_names
         },
         {
             // this option can only be specified in tsconfig.json

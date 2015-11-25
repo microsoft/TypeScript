@@ -2361,7 +2361,7 @@
         "category": "Error",
         "code": 6082
     },
-    "Base directory to resolve relative module names.": {
+    "Base directory to resolve non-absolute module names.": {
         "category": "Message",
         "code": 6083
     },

@@ -98,7 +98,7 @@ namespace ts {
         return result;
     }
 
-    // Path mapping based module resolution strategy uses base url to resolve relative file names. This resolution strategy can be enabled 
+    // Path mapping based module resolution strategy uses base url to resolve non-absolute file names. This resolution strategy can be enabled 
     // by setting 'moduleResolution' option to 'baseUrl' and as it implied by the name it uses base url to resolve module names.
     // Base url can be specified:
     //   - explicitly via command line option 'baseUrl'. If this value is relative it will be computed relative to current directory.
@@ -161,12 +161,12 @@ namespace ts {
     // ]
     // @file: /a/b/c/src/form1.ts
     //     import {x} from "./form.content.ts"
-    // @file: /a/b/c/generated/form1.content.ts
+    // @file: /a/b/c/generated/form.content.ts
     //     export var x = ...
     // first './form.content.ts' needs to be converted to non-relative name.
-    // 1. convert it to absolute name '/a/b/c/src/form1.content.ts' ->
+    // 1. convert it to absolute name '/a/b/c/src/form.content.ts' ->
     //    find longest prefix in rootDirs that match this path, it will be './src' (after expansion '/a/b/c/src/') ->
-    //    suffix is form1.content.ts
+    //    suffix is form.content.ts
     // 2. apply path mappings to 'form1.content.ts' ->
     //    '*' pattern will be matched ->
     //    '*' substitution yields '/a/b/c/form1.content.ts' - file does not exists
@@ -176,6 +176,7 @@ namespace ts {
         Debug.assert(baseUrl !== undefined);
 
         const supportedExtensions = getSupportedExtensions(compilerOptions);
+        // NOTE: traceEnabled check is delibirately no inside the 'trace' at evert callside to avoid runtime impact of calling vararg function 
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         if (isRootedDiskPath(moduleName)) {
