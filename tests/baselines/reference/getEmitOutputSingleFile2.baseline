@@ -23,7 +23,7 @@ declare class Foo {
     x: string;
     y: number;
 }
-declare module "tests/cases/fourslash/inputFile3" {
+declare module "inputFile3" {
     export var foo: number;
     export var bar: string;
 }

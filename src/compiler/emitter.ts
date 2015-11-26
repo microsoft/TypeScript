@@ -6810,7 +6810,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
+            function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, emitRelativePathAsModuleName: boolean): string {
+                if (emitRelativePathAsModuleName) {
+                    const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
+                    if (name) {
+                        return `"${name}"`;
+                    }
+                }
                 const moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
                     return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName);
@@ -7370,7 +7376,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; ++i) {
-                    let text = getExternalModuleNameText(externalImports[i]);
+                    const text = getExternalModuleNameText(externalImports[i], emitRelativePathAsModuleName);
                     if (hasProperty(groupIndices, text)) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[text];
@@ -7386,12 +7392,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
-                    if (emitRelativePathAsModuleName) {
-                        const name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
-                        if (name) {
-                            text = `"${name}"`;
-                        }
-                    }
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
@@ -7434,14 +7434,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 for (const importNode of externalImports) {
                     // Find the name of the external module
-                    let externalModuleName = getExternalModuleNameText(importNode);
-
-                    if (emitRelativePathAsModuleName) {
-                        const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
-                        if (name) {
-                            externalModuleName = `"${name}"`;
-                        }
-                    }
+                    const externalModuleName = getExternalModuleNameText(importNode, emitRelativePathAsModuleName);
 
                     // Find the name of the module alias, if there is one
                     const importAliasName = getLocalNameForExternalImport(importNode);
