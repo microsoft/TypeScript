@@ -13,6 +13,7 @@ export var x = new Foo();
 
 //// [a.js]
 System.register(["./b"], function(exports_1) {
+    "use strict";
     var b_1;
     var x;
     return {

@@ -11,6 +11,7 @@ export class Foo {
 
 
 //// [b.js]
+"use strict";
 var Foo = (function () {
     function Foo() {
     }
@@ -18,5 +19,6 @@ var Foo = (function () {
 })();
 exports.Foo = Foo;
 //// [a.js]
+"use strict";
 var b_1 = require("./b");
 exports.x = new b_1["default"].Foo();

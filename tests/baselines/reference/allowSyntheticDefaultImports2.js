@@ -11,6 +11,7 @@ export class Foo {
 
 //// [b.js]
 System.register([], function(exports_1) {
+    "use strict";
     var Foo;
     return {
         setters:[],
@@ -26,6 +27,7 @@ System.register([], function(exports_1) {
 });
 //// [a.js]
 System.register(["./b"], function(exports_1) {
+    "use strict";
     var b_1;
     var x;
     return {
