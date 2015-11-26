@@ -124,6 +124,7 @@ namespace ts {
         NewKeyword,
         NullKeyword,
         ReturnKeyword,
+        StructKeyword,
         SuperKeyword,
         SwitchKeyword,
         ThisKeyword,
@@ -204,6 +205,7 @@ namespace ts {
         TypeQuery,
         TypeLiteral,
         ArrayType,
+        StructArrayType,
         TupleType,
         UnionType,
         IntersectionType,
@@ -258,7 +260,6 @@ namespace ts {
         ContinueStatement,
         BreakStatement,
         ReturnStatement,
-        StructKeyword,
         WithStatement,
         SwitchStatement,
         LabeledStatement,
@@ -685,6 +686,9 @@ namespace ts {
 
     export interface ArrayTypeNode extends TypeNode {
         elementType: TypeNode;
+    }
+
+    export interface StructArrayTypeNode extends ArrayTypeNode {
     }
 
     export interface TupleTypeNode extends TypeNode {

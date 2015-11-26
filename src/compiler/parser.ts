@@ -5116,7 +5116,7 @@ return true;
             if (isIndexSignature()) {
 	            let indexSingature: IndexSignatureDeclaration = parseIndexSignatureDeclaration(fullStart, decorators, modifiers);
 	            parseErrorAtPosition(indexSingature.pos, indexSingature.end - indexSingature.pos, Diagnostics.A_struct_can_not_have_index_members);
-                return indexSingature
+                return indexSingature;
             }
 
             // It is very important that we check this *after* checking indexers because
