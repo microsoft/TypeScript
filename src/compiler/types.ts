@@ -2372,6 +2372,7 @@ namespace ts {
         noImplicitReturns?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
 
