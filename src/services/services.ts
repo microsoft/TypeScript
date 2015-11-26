@@ -1901,7 +1901,7 @@ namespace ts {
                     sourceMapText = text;
                 }
                 else {
-                    Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                    Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
                     outputText = text;
                 }
             },
@@ -4248,7 +4248,8 @@ namespace ts {
                 else {
                     // Method/function type parameter
                     let declaration = <Node>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
-                    declaration = declaration ? declaration.parent : undefined;
+                    Debug.assert(declaration !== undefined);
+                    declaration = declaration.parent;
 
                     if (declaration) {
                         if (isFunctionLikeKind(declaration.kind)) {
