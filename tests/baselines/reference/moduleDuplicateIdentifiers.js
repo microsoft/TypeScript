@@ -41,6 +41,7 @@ export enum Utensils { // Shouldn't error
 
 
 //// [moduleDuplicateIdentifiers.js]
+"use strict";
 exports.Foo = 2;
 exports.Foo = 42; // Should error
 var FooBar;
