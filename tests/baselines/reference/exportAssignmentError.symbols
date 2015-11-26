@@ -1,15 +1,15 @@
-=== tests/cases/compiler/exportAssignmentError.ts ===
+=== tests/cases/compiler/exportEqualsModule_A.ts ===
 module M {
->M : Symbol(M, Decl(exportAssignmentError.ts, 0, 0))
+>M : Symbol(M, Decl(exportEqualsModule_A.ts, 0, 0))
 
 	export var x;
->x : Symbol(x, Decl(exportAssignmentError.ts, 1, 11))
+>x : Symbol(x, Decl(exportEqualsModule_A.ts, 1, 11))
 }
 
 import M2 = M;
->M2 : Symbol(M2, Decl(exportAssignmentError.ts, 2, 1))
->M : Symbol(M, Decl(exportAssignmentError.ts, 0, 0))
+>M2 : Symbol(M2, Decl(exportEqualsModule_A.ts, 2, 1))
+>M : Symbol(M, Decl(exportEqualsModule_A.ts, 0, 0))
 
 export = M2; // should not error
->M2 : Symbol(M2, Decl(exportAssignmentError.ts, 2, 1))
+>M2 : Symbol(M2, Decl(exportEqualsModule_A.ts, 2, 1))
 

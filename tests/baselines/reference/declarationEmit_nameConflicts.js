@@ -50,6 +50,7 @@ export module M.Q {
 }
 
 //// [declarationEmit_nameConflicts_1.js]
+"use strict";
 var f;
 (function (f) {
     var c = (function () {
@@ -61,6 +62,7 @@ var f;
 })(f || (f = {}));
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
+"use strict";
 var im = require('./declarationEmit_nameConflicts_1');
 var M;
 (function (M) {

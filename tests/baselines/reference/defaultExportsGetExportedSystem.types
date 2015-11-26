@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/moduleExportsSystem/defaultExportsGetExportedSystem.ts ===
+export default class Foo {}
+>Foo : Foo
+

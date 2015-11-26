@@ -52,6 +52,7 @@ export module foo {
 export var r13: typeof foo;
 
 //// [typeofAnExportedType.js]
+"use strict";
 exports.x = 1;
 exports.y = { foo: '' };
 var C = (function () {

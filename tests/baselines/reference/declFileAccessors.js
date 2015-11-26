@@ -102,6 +102,7 @@ class c2 {
 }
 
 //// [declFileAccessors_0.js]
+"use strict";
 /** This is comment for c1*/
 var c1 = (function () {
     function c1() {

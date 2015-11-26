@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/moduleExportsUmd/defaultExportsGetExportedUmd.ts ===
+export default class Foo {}
+>Foo : Symbol(Foo, Decl(defaultExportsGetExportedUmd.ts, 0, 0))
+

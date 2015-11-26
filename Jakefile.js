@@ -106,6 +106,16 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
+var scriptSources = [
+    "tslint/booleanTriviaRule.ts",
+    "tslint/nextLineRule.ts",
+    "tslint/noNullRule.ts",
+    "tslint/preferConstRule.ts",
+    "tslint/typeOperatorSpacingRule.ts"
+].map(function (f) {
+    return path.join(scriptsDirectory, f);
+});
+
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -364,7 +374,6 @@ file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], fun
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
-
 
 // Publish nightly
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
@@ -909,7 +918,8 @@ function lintFileAsync(options, path, cb) {
 
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
-    .concat(serverCoreSources);
+    .concat(serverCoreSources)
+    .concat(scriptSources);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

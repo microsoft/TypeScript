@@ -1,8 +1,8 @@
-//// [isolatedModulesAmbientConstEnum.ts]
+//// [file1.ts]
 
 
 declare const enum E { X = 1}
 export var y;
 
-//// [isolatedModulesAmbientConstEnum.js]
+//// [file1.js]
 export var y;

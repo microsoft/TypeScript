@@ -120,7 +120,7 @@ var x = 0;`,
             test(`var x = 0;`, 
                 { 
                     options: { compilerOptions: { module: ModuleKind.AMD } }, 
-                    expectedOutput: `define(["require", "exports"], function (require, exports) {\r\n    var x = 0;\r\n});\r\n`
+                    expectedOutput: `define(["require", "exports"], function (require, exports) {\r\n    "use strict";\r\n    var x = 0;\r\n});\r\n`
                 });
         });
 
@@ -128,13 +128,13 @@ var x = 0;`,
             test(`var x = 0;`, 
                 { 
                     options: { compilerOptions: { module: ModuleKind.CommonJS, newLine: NewLineKind.LineFeed } }, 
-                    expectedOutput: `var x = 0;\n`
+                    expectedOutput: `"use strict";\nvar x = 0;\n`
                 });
         });
 
         it("Sets module name", () => {
             let output =
-                `System.register("NamedModule", [], function(exports_1) {\n    var x;\n` +
+                `System.register("NamedModule", [], function(exports_1) {\n    "use strict";\n    var x;\n` +
                 `    return {\n` +
                 `        setters:[],\n` +
                 `        execute: function() {\n` +
@@ -150,7 +150,7 @@ var x = 0;`,
         });
 
         it("No extra errors for file without extension", () => {
-            test(`var x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "file" } });
+            test(`"use strict";\r\nvar x = 0;`, { options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "file" } });
         });
 
         it("Rename dependencies - System", () => {
@@ -160,6 +160,7 @@ var x = 0;`,
                 `use(foo);`
             let output =
                 `System.register(["SomeOtherName"], function(exports_1) {\n` +
+                `    "use strict";\n` +
                 `    var SomeName_1;\n` +
                 `    return {\n` +
                 `        setters:[\n` +
@@ -186,6 +187,7 @@ var x = 0;`,
                 `use(foo);`
             let output =
                 `define(["require", "exports", "SomeOtherName"], function (require, exports, SomeName_1) {\n` +
+                `    "use strict";\n` +
                 `    use(SomeName_1.foo);\n` +
                 `});\n`;
 
@@ -210,6 +212,7 @@ var x = 0;`,
                 `        define(["require", "exports", "SomeOtherName"], factory);\n` +
                 `    }\n` +
                 `})(function (require, exports) {\n` +
+                `    "use strict";\n` +
                 `    var SomeName_1 = require("SomeOtherName");\n` +
                 `    use(SomeName_1.foo);\n` +
                 `});\n`;
@@ -237,6 +240,7 @@ var x = 0;`,
                 `}\n` +
                 `export {MyClass}; \n`
             let output =
+                `"use strict";\n` +
                 `var db_1 = require(\'./db\');\n` + 
                 `function someDecorator(target) {\n` +
                 `    return target;\n` +
@@ -272,12 +276,12 @@ var x = 0;`,
         });
 
         it("Supports backslashes in file name", () => {
-            test("var x", { expectedOutput: "var x;\r\n", options: { fileName: "a\\b.ts" }});
+            test("var x", { expectedOutput: `"use strict";\r\nvar x;\r\n`, options: { fileName: "a\\b.ts" }});
         });
         
         it("transpile file as 'tsx' if 'jsx' is specified", () => {
             let input = `var x = <div/>`;
-            let output = `var x = React.createElement("div", null);\n`;
+            let output = `"use strict";\nvar x = React.createElement("div", null);\n`;
             test(input, {
                 expectedOutput: output,
                 options: { compilerOptions: { jsx: JsxEmit.React, newLine: NewLineKind.LineFeed } }

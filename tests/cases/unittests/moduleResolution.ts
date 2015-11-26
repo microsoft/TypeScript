@@ -50,16 +50,16 @@ module ts {
     describe("Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (let ext of supportedExtensions) {
+            for (let ext of supportedTypeScriptExtensions) {
                 let containingFile = { name: containingFileName }
                 let moduleFile = { name: moduleFileNameNoExt + ext }
-                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
                 assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
                 assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
 
                 let failedLookupLocations: string[] = [];
                 let dir = getDirectoryPath(containingFileName);
-                for (let e of supportedExtensions) {
+                for (let e of supportedTypeScriptExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -92,11 +92,11 @@ module ts {
             let containingFile = { name: containingFileName };
             let packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
             let moduleFile = { name: moduleFileName };
-            let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, packageJson, moduleFile));
+            let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
-            // expect five failed lookup location - attempt to load module as file with all supported extensions
-            assert.equal(resolution.failedLookupLocations.length, 5);
+            // expect three failed lookup location - attempt to load module as file with all supported extensions
+            assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
         }
 
         it("module name as directory - load from typings", () => {
@@ -110,15 +110,13 @@ module ts {
             let containingFile = { name: "/a/b/c.ts" };
             let packageJson = { name: "/a/b/foo/package.json", content: JSON.stringify({ main: "/c/d" }) };
             let indexFile = { name: "/a/b/foo/index.d.ts" };
-            let resolution = nodeModuleNameResolver("./foo", containingFile.name, createModuleResolutionHost(containingFile, packageJson, indexFile));
+            let resolution = nodeModuleNameResolver("./foo", containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, indexFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, indexFile.name);
             assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
             assert.deepEqual(resolution.failedLookupLocations, [
                 "/a/b/foo.ts",
                 "/a/b/foo.tsx",
                 "/a/b/foo.d.ts",
-                "/a/b/foo.js",
-                "/a/b/foo.jsx",
                 "/a/b/foo/index.ts",
                 "/a/b/foo/index.tsx",
             ]);
@@ -129,7 +127,7 @@ module ts {
         it("load module as file - ts files not loaded", () => {
             let containingFile = { name: "/a/b/c/d/e.ts" };
             let moduleFile = { name: "/a/b/node_modules/foo.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.deepEqual(resolution.failedLookupLocations, [
                 "/a/b/c/d/node_modules/foo.ts",
@@ -152,7 +150,7 @@ module ts {
         it("load module as file", () => {
             let containingFile = { name: "/a/b/c/d/e.ts" };
             let moduleFile = { name: "/a/b/node_modules/foo.d.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
         });
@@ -160,7 +158,7 @@ module ts {
         it("load module as directory", () => {
             let containingFile = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
             let moduleFile = { name: "/a/node_modules/foo/index.d.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
             assert.deepEqual(resolution.failedLookupLocations, [
