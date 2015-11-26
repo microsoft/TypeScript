@@ -1,0 +1,78 @@
+=== tests/cases/conformance/structs/members/inheritanceAndOverriding/derivedStructOverrideStaticProperyMembers.ts ===
+// doc 2.3
+// derived struct can override base struct's static property members
+
+var x: { foo: string; }
+>x : { foo: string; }
+>foo : string
+
+var y: { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+
+struct Base {
+>Base : Base
+
+    static r: typeof x;
+>r : { foo: string; }
+>x : { foo: string; }
+
+    static s(a: typeof x) { return 1; }
+>s : (a: { foo: string; }) => number
+>a : { foo: string; }
+>x : { foo: string; }
+>1 : number
+
+    static u: (a: typeof x) => any;
+>u : (a: { foo: string; }) => any
+>a : { foo: string; }
+>x : { foo: string; }
+
+    constructor(a: typeof x) { }
+>a : { foo: string; }
+>x : { foo: string; }
+}
+
+struct Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    static r: typeof y; // ok
+>r : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
+
+    static s(a: typeof y) { } // ok
+>s : (a: { foo: string; bar: string; }) => void
+>a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
+
+    static u: (a: typeof y) => void; // ok
+>u : (a: { foo: string; bar: string; }) => void
+>a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
+
+    constructor(a: typeof y) { super(x) }
+>a : { foo: string; bar: string; }
+>y : { foo: string; bar: string; }
+>super(x) : void
+>super : typeof Base
+>x : { foo: string; }
+}
+
+
+/* struct Base2 {
+    [i: string]: Object;
+    [i: number]: typeof x;
+}
+
+struct Derived2 extends Base2 {
+    [i: string]: typeof x;
+    [i: number]: typeof y;
+}
+
+var d2: Derived2;
+var r7 = d2[''];
+var r8 = d2[1]; */
+
+

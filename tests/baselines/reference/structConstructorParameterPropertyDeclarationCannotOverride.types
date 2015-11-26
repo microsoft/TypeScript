@@ -1,0 +1,63 @@
+=== tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterPropertyDeclarationCannotOverride.ts ===
+// doc 3.1
+// derived struct cannot override inherited member variables from base struct
+
+struct Base {
+>Base : Base
+
+    constructor(public x: number) { }
+>x : number
+}
+
+struct Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+	constructor(public x: number) { // cannot overrides inherited member variables
+>x : number
+
+        super(x);
+>super(x) : void
+>super : typeof Base
+>x : number
+
+        this.x; // OK
+>this.x : number
+>this : this
+>x : number
+    }
+}
+
+struct Derived1 extends Base {
+>Derived1 : Derived1
+>Base : Base
+
+	constructor(public y: number) { // ok
+>y : number
+
+		super(y);
+>super(y) : void
+>super : typeof Base
+>y : number
+
+		this.x; // OK
+>this.x : number
+>this : this
+>x : number
+
+		this.y; // OK
+>this.y : number
+>this : this
+>y : number
+	}
+}
+
+var d: Derived1;
+>d : Derived1
+>Derived1 : Derived1
+
+d.x;  // public, OK
+>d.x : number
+>d : Derived1
+>x : number
+

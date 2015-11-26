@@ -1,0 +1,63 @@
+=== tests/cases/conformance/structs/members/inheritanceAndOverriding/derivedStructCannotOverrideInstanceMemberVariables.ts ===
+// doc 2.3
+// only public function members can be overridden.
+
+struct Base {
+>Base : Symbol(Base, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 0, 0))
+
+    private x: { foo: string };
+>x : Symbol(x, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 3, 13))
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 4, 16))
+}
+
+struct Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 5, 1))
+>Base : Symbol(Base, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 0, 0))
+
+    private x: { foo: string; bar: string; }; // error
+>x : Symbol(x, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 7, 29))
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 8, 16))
+>bar : Symbol(bar, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 8, 29))
+}
+
+struct Base1 {
+>Base1 : Symbol(Base1, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 9, 1))
+
+	public foo: any;
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 11, 14))
+}
+
+struct Derived1 extends Base1 {
+>Derived1 : Symbol(Derived1, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 13, 1))
+>Base1 : Symbol(Base1, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 9, 1))
+
+	public foo: string; // error}
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 15, 31))
+}
+
+struct Base2 {
+>Base2 : Symbol(Base2, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 17, 1))
+
+	static y: { foo: string };
+>y : Symbol(Base2.y, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 19, 14))
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 20, 12))
+}
+
+struct Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 21, 1))
+>Base2 : Symbol(Base2, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 17, 1))
+
+	static y: { foo: string; bar: string; }; // ok
+>y : Symbol(Derived2.y, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 23, 31))
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 24, 12))
+>bar : Symbol(bar, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 24, 25))
+}
+
+struct Derived3 extends Base2 {
+>Derived3 : Symbol(Derived3, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 25, 1))
+>Base2 : Symbol(Base2, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 17, 1))
+
+	static y: { foo: any }; // ok
+>y : Symbol(Derived3.y, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 27, 31))
+>foo : Symbol(foo, Decl(derivedStructCannotOverrideInstanceMemberVariables.ts, 28, 12))
+}

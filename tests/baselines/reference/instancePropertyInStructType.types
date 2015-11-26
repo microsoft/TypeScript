@@ -1,0 +1,60 @@
+=== tests/cases/conformance/structs/members/structTypes/instancePropertyInStructType.ts ===
+// doc 2.4
+// struct type contains all instance member variables and function members.
+// ok
+
+module NonGeneric {
+>NonGeneric : typeof NonGeneric
+
+    struct C {
+>C : C
+
+        x: string;
+>x : string
+
+        fn() { return this; }
+>fn : () => this
+>this : this
+
+        constructor(public a: number, private b: number) { }
+>a : number
+>b : number
+    }
+
+    var c = new C(1, 2);
+>c : C
+>new C(1, 2) : C
+>C : typeof C
+>1 : number
+>2 : number
+
+    var r = c.fn();
+>r : C
+>c.fn() : C
+>c.fn : () => C
+>c : C
+>fn : () => C
+
+    var r2 = r.x;
+>r2 : string
+>r.x : string
+>r : C
+>x : string
+
+	c.a;
+>c.a : number
+>c : C
+>a : number
+}
+
+/* module Generic {
+    struct C<T,U> {
+        x: T;
+        fn() { return this; }
+        constructor(public a: T, private b: U) { }
+    }
+
+    var c = new C(1, '');
+    var r = c.fn();
+    var r2 = r.x;
+} */

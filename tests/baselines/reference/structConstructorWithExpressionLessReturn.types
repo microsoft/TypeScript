@@ -1,0 +1,45 @@
+=== tests/cases/conformance/structs/constructorDeclarations/structConstructorWithExpressionLessReturn.ts ===
+// doc 3
+// just return keyword is ok.
+// no error
+
+struct C {
+>C : C
+
+    constructor() {
+        return;
+    }
+}
+
+struct D {
+>D : D
+
+    x: number;
+>x : number
+
+    constructor() {
+        return;
+    }
+}
+
+struct E {
+>E : E
+
+    constructor(public x: number) {
+>x : number
+
+        return;
+    }
+}
+
+struct F<T> {
+>F : F<T>
+>T : T
+
+    constructor(public x: T) {
+>x : T
+>T : T
+
+        return;
+    }
+}

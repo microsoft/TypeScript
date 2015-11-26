@@ -1,0 +1,20 @@
+tests/cases/conformance/structs/constructorDeclarations/structSuperCalls/superCallInStructConstructorWithNoBaseType.ts(6,9): error TS20016: 'super' can only be referenced in a derived struct.
+
+
+==== tests/cases/conformance/structs/constructorDeclarations/structSuperCalls/superCallInStructConstructorWithNoBaseType.ts (1 errors) ====
+    // doc 3.2
+    // 'super' can only be referenced in a derived struct
+    
+    struct C {
+        constructor() {
+            super(); // error
+            ~~~~~
+!!! error TS20016: 'super' can only be referenced in a derived struct.
+        }
+    }
+    
+    /* struct D<T> {
+        public constructor(public x: T) {
+            super(); // error
+        }
+    } */

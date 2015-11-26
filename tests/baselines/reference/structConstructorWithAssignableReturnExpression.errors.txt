@@ -1,0 +1,48 @@
+tests/cases/conformance/structs/constructorDeclarations/structConstructorWithAssignableReturnExpression.ts(6,16): error TS20020: Cannot have return expression in struct constructor.
+tests/cases/conformance/structs/constructorDeclarations/structConstructorWithAssignableReturnExpression.ts(13,16): error TS20020: Cannot have return expression in struct constructor.
+tests/cases/conformance/structs/constructorDeclarations/structConstructorWithAssignableReturnExpression.ts(20,16): error TS20020: Cannot have return expression in struct constructor.
+
+
+==== tests/cases/conformance/structs/constructorDeclarations/structConstructorWithAssignableReturnExpression.ts (3 errors) ====
+    // doc 3
+    // A struct constructor canot return an expression.
+    
+    struct C {
+        constructor() {
+            return 1;  // error
+                   ~
+!!! error TS20020: Cannot have return expression in struct constructor.
+        }
+    }
+    
+    struct D {
+        x: number;
+        constructor() {
+            return 1; // error
+                   ~
+!!! error TS20020: Cannot have return expression in struct constructor.
+        }
+    }
+    
+    struct E {
+        x: number;
+        constructor() {
+            return { x: 1 }; // error
+                   ~~~~~~~~
+!!! error TS20020: Cannot have return expression in struct constructor.
+        }
+    }
+    
+    /* struct F<T> {
+        x: T;
+        constructor() {
+            return { x: 1 }; // error
+        }
+    }
+    
+    struct G<T> {
+        x: T;
+        constructor() {
+            return { x: <T>null }; // error
+        }
+    } */

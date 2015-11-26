@@ -1,0 +1,42 @@
+tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterProperties2.ts(12,5): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterProperties2.ts(13,24): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterProperties2.ts(20,5): error TS2300: Duplicate identifier 'y'.
+tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterProperties2.ts(21,25): error TS2300: Duplicate identifier 'y'.
+
+
+==== tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterProperties2.ts (4 errors) ====
+    // doc 3.1
+    
+    struct C {
+        y: number;
+        constructor(y: number) { } // ok
+    }
+    
+    var c: C;
+    var r = c.y;
+    
+    struct D {
+        y: number;
+        ~
+!!! error TS2300: Duplicate identifier 'y'.
+        constructor(public y: number) { } // error, Duplicate identifier 'y'
+                           ~
+!!! error TS2300: Duplicate identifier 'y'.
+    }
+    
+    var d: D;
+    var r2 = d.y;
+    
+    struct E {
+        y: number;
+        ~
+!!! error TS2300: Duplicate identifier 'y'.
+        constructor(private y: number) { } // error, Duplicate identifier 'y'
+                            ~
+!!! error TS2300: Duplicate identifier 'y'.
+    }
+    
+    var e: E;
+    var r3 = e.y; // error
+    
+    

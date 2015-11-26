@@ -1,0 +1,45 @@
+=== tests/cases/conformance/structs/constructorDeclarations/structConstructorWithExpressionLessReturn.ts ===
+// doc 3
+// just return keyword is ok.
+// no error
+
+struct C {
+>C : Symbol(C, Decl(structConstructorWithExpressionLessReturn.ts, 0, 0))
+
+    constructor() {
+        return;
+    }
+}
+
+struct D {
+>D : Symbol(D, Decl(structConstructorWithExpressionLessReturn.ts, 8, 1))
+
+    x: number;
+>x : Symbol(x, Decl(structConstructorWithExpressionLessReturn.ts, 10, 10))
+
+    constructor() {
+        return;
+    }
+}
+
+struct E {
+>E : Symbol(E, Decl(structConstructorWithExpressionLessReturn.ts, 15, 1))
+
+    constructor(public x: number) {
+>x : Symbol(x, Decl(structConstructorWithExpressionLessReturn.ts, 18, 16))
+
+        return;
+    }
+}
+
+struct F<T> {
+>F : Symbol(F, Decl(structConstructorWithExpressionLessReturn.ts, 21, 1))
+>T : Symbol(T, Decl(structConstructorWithExpressionLessReturn.ts, 23, 9))
+
+    constructor(public x: T) {
+>x : Symbol(x, Decl(structConstructorWithExpressionLessReturn.ts, 24, 16))
+>T : Symbol(T, Decl(structConstructorWithExpressionLessReturn.ts, 23, 9))
+
+        return;
+    }
+}

@@ -1,0 +1,34 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structDerivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts(17,21): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: number; }'.
+  Property 'b' is missing in type '{ a: number; }'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structDerivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts(18,36): error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; }'.
+  Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structDerivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts (2 errors) ====
+    // doc 4.2
+    // A member function can access overridden base struct members using a super property access.
+    
+    struct Base {
+        foo(x: { a: number }): { a: number } {
+            return null;
+        }
+    }
+    
+    struct Derived extends Base {
+        foo(x: { a: number; b: number }): { a: number; b: number } {
+            return null;
+        }
+    
+        bar() {
+            var r = super.foo({ a: 1 }); // { a: number }
+    		var r2 = this.foo({a: 1}); // error, Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: number; }'.
+    		                  ~~~~~~
+!!! error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: number; }'.
+!!! error TS2345:   Property 'b' is missing in type '{ a: number; }'.
+            var r3 = super.foo({ a: 1, b: 2 }); // { a: number }
+                                       ~~~~
+!!! error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; }'.
+!!! error TS2345:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+            var r4 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
+        }
+    }

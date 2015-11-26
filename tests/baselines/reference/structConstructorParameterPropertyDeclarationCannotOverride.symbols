@@ -1,0 +1,61 @@
+=== tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterPropertyDeclarationCannotOverride.ts ===
+// doc 3.1
+// derived struct cannot override inherited member variables from base struct
+
+struct Base {
+>Base : Symbol(Base, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 0, 0))
+
+    constructor(public x: number) { }
+>x : Symbol(x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 4, 16))
+}
+
+struct Derived extends Base {
+>Derived : Symbol(Derived, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 5, 1))
+>Base : Symbol(Base, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 0, 0))
+
+	constructor(public x: number) { // cannot overrides inherited member variables
+>x : Symbol(x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 8, 13))
+
+        super(x);
+>super : Symbol(Base, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 0, 0))
+>x : Symbol(x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 8, 13))
+
+        this.x; // OK
+>this.x : Symbol(x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 8, 13))
+>this : Symbol(Derived, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 5, 1))
+>x : Symbol(x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 8, 13))
+    }
+}
+
+struct Derived1 extends Base {
+>Derived1 : Symbol(Derived1, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 12, 1))
+>Base : Symbol(Base, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 0, 0))
+
+	constructor(public y: number) { // ok
+>y : Symbol(y, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 15, 13))
+
+		super(y);
+>super : Symbol(Base, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 0, 0))
+>y : Symbol(y, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 15, 13))
+
+		this.x; // OK
+>this.x : Symbol(Base.x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 4, 16))
+>this : Symbol(Derived1, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 12, 1))
+>x : Symbol(Base.x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 4, 16))
+
+		this.y; // OK
+>this.y : Symbol(y, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 15, 13))
+>this : Symbol(Derived1, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 12, 1))
+>y : Symbol(y, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 15, 13))
+	}
+}
+
+var d: Derived1;
+>d : Symbol(d, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 22, 3))
+>Derived1 : Symbol(Derived1, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 12, 1))
+
+d.x;  // public, OK
+>d.x : Symbol(Base.x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 4, 16))
+>d : Symbol(d, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 22, 3))
+>x : Symbol(Base.x, Decl(structConstructorParameterPropertyDeclarationCannotOverride.ts, 4, 16))
+

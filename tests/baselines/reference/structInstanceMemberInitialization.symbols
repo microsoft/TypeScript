@@ -1,0 +1,33 @@
+=== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInstanceMemberInitialization.ts ===
+// 4.1
+// ok
+
+struct C {
+>C : Symbol(C, Decl(structInstanceMemberInitialization.ts, 0, 0))
+
+    x = 1;
+>x : Symbol(x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+}
+
+var c = new C();
+>c : Symbol(c, Decl(structInstanceMemberInitialization.ts, 7, 3))
+>C : Symbol(C, Decl(structInstanceMemberInitialization.ts, 0, 0))
+
+c.x = 3;
+>c.x : Symbol(C.x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+>c : Symbol(c, Decl(structInstanceMemberInitialization.ts, 7, 3))
+>x : Symbol(C.x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+
+var c2 = new C();
+>c2 : Symbol(c2, Decl(structInstanceMemberInitialization.ts, 9, 3))
+>C : Symbol(C, Decl(structInstanceMemberInitialization.ts, 0, 0))
+
+var r = c.x === c2.x;
+>r : Symbol(r, Decl(structInstanceMemberInitialization.ts, 10, 3))
+>c.x : Symbol(C.x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+>c : Symbol(c, Decl(structInstanceMemberInitialization.ts, 7, 3))
+>x : Symbol(C.x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+>c2.x : Symbol(C.x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+>c2 : Symbol(c2, Decl(structInstanceMemberInitialization.ts, 9, 3))
+>x : Symbol(C.x, Decl(structInstanceMemberInitialization.ts, 3, 10))
+

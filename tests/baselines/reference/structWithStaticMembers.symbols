@@ -1,0 +1,51 @@
+=== tests/cases/conformance/structs/members/constructorFunctionTypes/structWithStaticMembers.ts ===
+// doc 2.5
+// ok
+
+struct C {
+>C : Symbol(C, Decl(structWithStaticMembers.ts, 0, 0))
+
+    static fn() { return this; }
+>fn : Symbol(C.fn, Decl(structWithStaticMembers.ts, 3, 10))
+>this : Symbol(C, Decl(structWithStaticMembers.ts, 0, 0))
+
+    constructor(public a: number, private b: number) { }
+>a : Symbol(a, Decl(structWithStaticMembers.ts, 5, 16))
+>b : Symbol(b, Decl(structWithStaticMembers.ts, 5, 33))
+
+    static foo: string; 
+>foo : Symbol(C.foo, Decl(structWithStaticMembers.ts, 5, 56))
+}
+
+var r = C.fn();
+>r : Symbol(r, Decl(structWithStaticMembers.ts, 9, 3), Decl(structWithStaticMembers.ts, 16, 3))
+>C.fn : Symbol(C.fn, Decl(structWithStaticMembers.ts, 3, 10))
+>C : Symbol(C, Decl(structWithStaticMembers.ts, 0, 0))
+>fn : Symbol(C.fn, Decl(structWithStaticMembers.ts, 3, 10))
+
+var r2 = r.foo;
+>r2 : Symbol(r2, Decl(structWithStaticMembers.ts, 10, 3), Decl(structWithStaticMembers.ts, 17, 3))
+>r.foo : Symbol(C.foo, Decl(structWithStaticMembers.ts, 5, 56))
+>r : Symbol(r, Decl(structWithStaticMembers.ts, 9, 3), Decl(structWithStaticMembers.ts, 16, 3))
+>foo : Symbol(C.foo, Decl(structWithStaticMembers.ts, 5, 56))
+
+struct D extends C {
+>D : Symbol(D, Decl(structWithStaticMembers.ts, 10, 15))
+>C : Symbol(C, Decl(structWithStaticMembers.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(bar, Decl(structWithStaticMembers.ts, 12, 20))
+}
+
+var r = D.fn();
+>r : Symbol(r, Decl(structWithStaticMembers.ts, 9, 3), Decl(structWithStaticMembers.ts, 16, 3))
+>D.fn : Symbol(C.fn, Decl(structWithStaticMembers.ts, 3, 10))
+>D : Symbol(D, Decl(structWithStaticMembers.ts, 10, 15))
+>fn : Symbol(C.fn, Decl(structWithStaticMembers.ts, 3, 10))
+
+var r2 = r.foo;
+>r2 : Symbol(r2, Decl(structWithStaticMembers.ts, 10, 3), Decl(structWithStaticMembers.ts, 17, 3))
+>r.foo : Symbol(C.foo, Decl(structWithStaticMembers.ts, 5, 56))
+>r : Symbol(r, Decl(structWithStaticMembers.ts, 9, 3), Decl(structWithStaticMembers.ts, 16, 3))
+>foo : Symbol(C.foo, Decl(structWithStaticMembers.ts, 5, 56))
+

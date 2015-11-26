@@ -1,0 +1,24 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/staticMemberAssignsToStructConstructorFunctionMembers.ts(11,9): error TS2322: Type '() => void' is not assignable to type '(x: number) => number'.
+  Type 'void' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/staticMemberAssignsToStructConstructorFunctionMembers.ts (1 errors) ====
+    // doc 4.2
+    // A static member function declaration declares a property in the constructor function type and
+    // assigns a function object to a property on the constructor function object.
+    
+    struct C {
+        static foo() {
+            C.foo = () => { }
+        }
+    
+        static bar(x: number): number {
+            C.bar = () => { } // error, Type '() => void' is not assignable to type '(x: number) => number'
+            ~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type '(x: number) => number'.
+!!! error TS2322:   Type 'void' is not assignable to type 'number'.
+            C.bar = (x) => x; // ok
+            C.bar = (x: number) => 1; // ok
+            return 1;
+        }
+    }

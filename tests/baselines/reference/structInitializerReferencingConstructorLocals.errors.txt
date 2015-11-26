@@ -1,0 +1,45 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts(7,9): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts(8,15): error TS2304: Cannot find name 'z'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts(9,14): error TS2339: Property 'z' does not exist on type 'C'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts(10,15): error TS1003: Identifier expected.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts(10,20): error TS2339: Property 'z' does not exist on type 'C'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts(12,9): error TS2304: Cannot find name 'z'.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorLocals.ts (6 errors) ====
+    // doc 4.1
+    // Initializer expressions for instance member variables are evaluated in the scope of the
+    // struct constructor body but are not permitted to reference parameters or local variables
+    // of the constructor.
+    
+    struct C {
+        a = z; // error
+            ~
+!!! error TS2304: Cannot find name 'z'.
+        b: typeof z; // error
+                  ~
+!!! error TS2304: Cannot find name 'z'.
+        c = this.z; // error
+                 ~
+!!! error TS2339: Property 'z' does not exist on type 'C'.
+        d: typeof this.z; // error
+                  ~~~~
+!!! error TS1003: Identifier expected.
+                       ~
+!!! error TS2339: Property 'z' does not exist on type 'C'.
+        constructor(x) {
+            z = 1;
+            ~
+!!! error TS2304: Cannot find name 'z'.
+        }
+    }
+    
+    /* struct D<T> {
+        a = z; // error
+        b: typeof z; // error
+        c = this.z; // error
+        d: typeof this.z; // error
+        constructor(x: T) {
+            z = 1;
+        }
+    } */

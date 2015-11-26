@@ -1,0 +1,56 @@
+tests/cases/conformance/structs/members/structTypes/staticPropertyNotInStructType.ts(17,16): error TS2339: Property 'foo' does not exist on type 'C'.
+tests/cases/conformance/structs/members/structTypes/staticPropertyNotInStructType.ts(18,16): error TS2339: Property 'bar' does not exist on type 'C'.
+tests/cases/conformance/structs/members/structTypes/staticPropertyNotInStructType.ts(21,2): error TS2322: Type 'any' is not assignable to type 'C'.
+tests/cases/conformance/structs/members/structTypes/staticPropertyNotInStructType.ts(21,9): error TS2339: Property 'fn' does not exist on type 'typeof C'.
+
+
+==== tests/cases/conformance/structs/members/structTypes/staticPropertyNotInStructType.ts (4 errors) ====
+    // doc 2.4
+    // Static members are declared using the static modifier and are members of the constructor function type.
+    
+    module NonGeneric {
+        struct C {
+            fn() { return this; }
+            constructor(public a: number, private b: number) { }
+            static foo: string; // not reflected in struct type
+        }
+    
+        module C {
+            export var bar = ''; // not reflected in struct type
+        }
+    
+        var c = new C(1, 2);
+        var r = c.fn();
+        var r4 = c.foo; // error
+                   ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'C'.
+        var r5 = c.bar; // error
+                   ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'C'.
+    
+    	var cs: typeof C;
+    	r = cs.fn(); // error
+    	~
+!!! error TS2322: Type 'any' is not assignable to type 'C'.
+    	       ~~
+!!! error TS2339: Property 'fn' does not exist on type 'typeof C'.
+    	r4 = cs.foo; // ok
+    	r5 = cs.bar; // ok
+    }
+    
+    /* module Generic {
+        struct C<T, U> {
+            fn() { return this; }
+            constructor(public a: T, private b: U) { }
+            static foo: T; // not reflected in struct type
+        }
+    
+        module C {
+            export var bar = ''; // not reflected in struct type
+        }
+    
+        var c = new C(1, '');
+        var r = c.fn();
+        var r4 = c.foo; // error
+        var r5 = c.bar; // error
+    } */

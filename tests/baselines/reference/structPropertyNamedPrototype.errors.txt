@@ -1,0 +1,13 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structPropertyNamedPrototype.ts(6,12): error TS2300: Duplicate identifier 'prototype'.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structPropertyNamedPrototype.ts (1 errors) ====
+    // doc 4
+    // It is an error to explicitly declare a static property member with the name ‘prototype’.
+    
+    struct C {
+        prototype: number; // ok
+        static prototype: C; // error
+               ~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'prototype'.
+    }

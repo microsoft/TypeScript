@@ -1,0 +1,21 @@
+tests/cases/conformance/structs/constructorDeclarations/structWithTwoConstructorDefinitions.ts(5,5): error TS2392: Multiple constructor implementations are not allowed.
+tests/cases/conformance/structs/constructorDeclarations/structWithTwoConstructorDefinitions.ts(6,5): error TS2392: Multiple constructor implementations are not allowed.
+
+
+==== tests/cases/conformance/structs/constructorDeclarations/structWithTwoConstructorDefinitions.ts (2 errors) ====
+    // doc 3
+    // Multiple constructor implementations are not allowed
+    
+    struct C {
+        constructor() { } // error
+        ~~~~~~~~~~~~~~~~~
+!!! error TS2392: Multiple constructor implementations are not allowed.
+        constructor(x) { } // error
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2392: Multiple constructor implementations are not allowed.
+    }
+    
+    /* struct D<T> {
+        constructor(x: T) { } // error
+        constructor(x: T, y: T) { } // error
+    } */

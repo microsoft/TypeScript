@@ -1,0 +1,37 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structMemberFunctionOverloadMixingStaticAndInstance.ts(6,12): error TS2388: Function overload must not be static.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structMemberFunctionOverloadMixingStaticAndInstance.ts(6,12): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structMemberFunctionOverloadMixingStaticAndInstance.ts(11,5): error TS2387: Function overload must be static.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structMemberFunctionOverloadMixingStaticAndInstance.ts(11,5): error TS2391: Function implementation is missing or not immediately following the declaration.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structMemberFunctionOverloadMixingStaticAndInstance.ts (4 errors) ====
+    // doc 4.2
+    // All overloads of a member function must have the same accessibility (public or private) and
+    // kind (instance or static).
+    struct C {
+        foo();
+        static foo(); // error, Function overload must not be static.
+               ~~~
+!!! error TS2388: Function overload must not be static.
+               ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    struct D {
+        static foo();
+        foo(); // error, Function overload must be static.
+        ~~~
+!!! error TS2387: Function overload must be static.
+        ~~~
+!!! error TS2391: Function implementation is missing or not immediately following the declaration.
+    }
+    
+    /* struct E<T> {
+        foo(x: T);
+        static foo(x: number); // error, Function overload must not be static.
+    }
+    
+    struct F<T> {
+        static foo(x: number);
+        foo(x: T); // error, Function overload must be static.
+    } */

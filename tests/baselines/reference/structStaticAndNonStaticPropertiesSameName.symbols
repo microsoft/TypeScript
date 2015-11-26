@@ -1,0 +1,21 @@
+=== tests/cases/conformance/structs/structPropertyMemberDeclarations/structStaticAndNonStaticPropertiesSameName.ts ===
+// doc 4
+// the declaration spaces of instance and static property members are separate.
+// Thus, it is possible to have instance and static property members with the same name
+// ok
+
+struct C {
+>C : Symbol(C, Decl(structStaticAndNonStaticPropertiesSameName.ts, 0, 0))
+
+    x: number;
+>x : Symbol(x, Decl(structStaticAndNonStaticPropertiesSameName.ts, 5, 10))
+
+    static x: number;
+>x : Symbol(C.x, Decl(structStaticAndNonStaticPropertiesSameName.ts, 6, 14))
+
+    f() { }
+>f : Symbol(f, Decl(structStaticAndNonStaticPropertiesSameName.ts, 7, 21))
+
+    static f() { }
+>f : Symbol(C.f, Decl(structStaticAndNonStaticPropertiesSameName.ts, 9, 11))
+}

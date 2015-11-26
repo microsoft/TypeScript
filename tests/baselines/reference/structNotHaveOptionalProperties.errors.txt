@@ -1,0 +1,25 @@
+tests/cases/conformance/structs/structNotHaveOptionalProperties.ts(10,3): error TS1112: A class member cannot be declared optional.
+tests/cases/conformance/structs/structNotHaveOptionalProperties.ts(14,3): error TS20013: A struct member cannot be declared optional.
+
+
+==== tests/cases/conformance/structs/structNotHaveOptionalProperties.ts (2 errors) ====
+    /**
+     * inspired by conformance/types/objectTypeLiteral/methodSignatures/objectTypesWithOptionalProperties
+     */
+    
+    interface I {
+    	x?: number; // ok
+    }
+    
+    class C {
+    	x?: number; // error, cannot be declared optional
+    	 ~
+!!! error TS1112: A class member cannot be declared optional.
+    }
+    
+    struct S {
+    	x?: number; // error, cannot be declared optional
+    	 ~
+!!! error TS20013: A struct member cannot be declared optional.
+    }
+    

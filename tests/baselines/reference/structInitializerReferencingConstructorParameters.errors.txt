@@ -1,0 +1,44 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorParameters.ts(5,9): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorParameters.ts(6,15): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorParameters.ts(11,9): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorParameters.ts(12,15): error TS2304: Cannot find name 'x'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorParameters.ts(18,15): error TS1003: Identifier expected.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structInitializerReferencingConstructorParameters.ts (5 errors) ====
+    // doc 4.1
+    // Initializer expressions for instance member variables are evaluated in the scope of the struct constructor body but are not permitted to reference parameters or local variables of the constructor.
+    
+    struct C {
+        a = x; // error
+            ~
+!!! error TS2304: Cannot find name 'x'.
+        b: typeof x; // error
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+        constructor(x) { }
+    }
+    
+    struct D {
+        a = x; // error
+            ~
+!!! error TS2304: Cannot find name 'x'.
+        b: typeof x; // error
+                  ~
+!!! error TS2304: Cannot find name 'x'.
+        constructor(public x) { }
+    }
+    
+    struct E {
+        a = this.x; // ok
+        b: typeof this.x; // error
+                  ~~~~
+!!! error TS1003: Identifier expected.
+        constructor(public x) { }
+    }
+    
+    /* struct F<T> {
+        a = this.x; // ok
+        b = x; // error
+        constructor(public x: T) { }
+    }*/

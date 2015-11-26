@@ -1,0 +1,93 @@
+=== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structMemberFunctionsWithPublicOverloads.ts ===
+// doc 4.2
+// All overloads of a member function must have the same accessibility (public or private) and
+// kind (instance or static).
+// ok
+struct C {
+>C : Symbol(C, Decl(structMemberFunctionsWithPublicOverloads.ts, 0, 0))
+
+    public foo(x: number);
+>foo : Symbol(foo, Decl(structMemberFunctionsWithPublicOverloads.ts, 4, 10), Decl(structMemberFunctionsWithPublicOverloads.ts, 5, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 6, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 5, 15))
+
+    public foo(x: number, y: string);
+>foo : Symbol(foo, Decl(structMemberFunctionsWithPublicOverloads.ts, 4, 10), Decl(structMemberFunctionsWithPublicOverloads.ts, 5, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 6, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 6, 15))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 6, 25))
+
+    public foo(x: any, y?: any) { }
+>foo : Symbol(foo, Decl(structMemberFunctionsWithPublicOverloads.ts, 4, 10), Decl(structMemberFunctionsWithPublicOverloads.ts, 5, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 6, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 7, 15))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 7, 22))
+
+    public bar(x: 'hi');
+>bar : Symbol(bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 7, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 9, 24), Decl(structMemberFunctionsWithPublicOverloads.ts, 10, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 11, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 9, 15))
+
+    public bar(x: string);
+>bar : Symbol(bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 7, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 9, 24), Decl(structMemberFunctionsWithPublicOverloads.ts, 10, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 11, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 10, 15))
+
+    public bar(x: number, y: string);
+>bar : Symbol(bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 7, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 9, 24), Decl(structMemberFunctionsWithPublicOverloads.ts, 10, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 11, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 11, 15))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 11, 25))
+
+    public bar(x: any, y?: any) { }
+>bar : Symbol(bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 7, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 9, 24), Decl(structMemberFunctionsWithPublicOverloads.ts, 10, 26), Decl(structMemberFunctionsWithPublicOverloads.ts, 11, 37))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 12, 15))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 12, 22))
+
+    public static foo(x: number);
+>foo : Symbol(C.foo, Decl(structMemberFunctionsWithPublicOverloads.ts, 12, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 14, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 15, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 14, 22))
+
+    public static foo(x: number, y: string);
+>foo : Symbol(C.foo, Decl(structMemberFunctionsWithPublicOverloads.ts, 12, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 14, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 15, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 15, 22))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 15, 32))
+
+    public static foo(x: any, y?: any) { }
+>foo : Symbol(C.foo, Decl(structMemberFunctionsWithPublicOverloads.ts, 12, 35), Decl(structMemberFunctionsWithPublicOverloads.ts, 14, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 15, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 16, 22))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 16, 29))
+
+    public static bar(x: 'hi');
+>bar : Symbol(C.bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 16, 42), Decl(structMemberFunctionsWithPublicOverloads.ts, 18, 31), Decl(structMemberFunctionsWithPublicOverloads.ts, 19, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 20, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 18, 22))
+
+    public static bar(x: string);
+>bar : Symbol(C.bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 16, 42), Decl(structMemberFunctionsWithPublicOverloads.ts, 18, 31), Decl(structMemberFunctionsWithPublicOverloads.ts, 19, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 20, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 19, 22))
+
+    public static bar(x: number, y: string);
+>bar : Symbol(C.bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 16, 42), Decl(structMemberFunctionsWithPublicOverloads.ts, 18, 31), Decl(structMemberFunctionsWithPublicOverloads.ts, 19, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 20, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 20, 22))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 20, 32))
+
+    public static bar(x: any, y?: any) { }
+>bar : Symbol(C.bar, Decl(structMemberFunctionsWithPublicOverloads.ts, 16, 42), Decl(structMemberFunctionsWithPublicOverloads.ts, 18, 31), Decl(structMemberFunctionsWithPublicOverloads.ts, 19, 33), Decl(structMemberFunctionsWithPublicOverloads.ts, 20, 44))
+>x : Symbol(x, Decl(structMemberFunctionsWithPublicOverloads.ts, 21, 22))
+>y : Symbol(y, Decl(structMemberFunctionsWithPublicOverloads.ts, 21, 29))
+}
+
+/* struct D<T> {
+    public foo(x: number);
+    public foo(x: T, y: T);
+    public foo(x: any, y?: any) { }
+
+    public bar(x: 'hi');
+    public bar(x: string);
+    public bar(x: T, y: T);
+    public bar(x: any, y?: any) { }
+
+    public static foo(x: number);
+    public static foo(x: number, y: string);
+    public static foo(x: any, y?: any) { }
+
+    public static bar(x: 'hi');
+    public static bar(x: string);
+    public static bar(x: number, y: string);
+    public static bar(x: any, y?: any) { }
+
+}*/

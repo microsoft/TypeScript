@@ -1,0 +1,58 @@
+=== tests/cases/conformance/structs/members/inheritanceAndOverriding/derivedStructIncludesInheritedMembers.ts ===
+// doc 2.3
+// A derived struct inherits all members from its base struct it doesn’t override.
+// all ok
+
+struct Base {
+>Base : Symbol(Base, Decl(derivedStructIncludesInheritedMembers.ts, 0, 0))
+
+    a: string;
+>a : Symbol(a, Decl(derivedStructIncludesInheritedMembers.ts, 4, 13))
+
+    b() { }
+>b : Symbol(b, Decl(derivedStructIncludesInheritedMembers.ts, 5, 14))
+
+    static r: string;
+>r : Symbol(Base.r, Decl(derivedStructIncludesInheritedMembers.ts, 6, 11))
+
+    static s() { }
+>s : Symbol(Base.s, Decl(derivedStructIncludesInheritedMembers.ts, 8, 21))
+
+    constructor(x) { }
+>x : Symbol(x, Decl(derivedStructIncludesInheritedMembers.ts, 11, 16))
+}
+
+struct Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedStructIncludesInheritedMembers.ts, 12, 1))
+>Base : Symbol(Base, Decl(derivedStructIncludesInheritedMembers.ts, 0, 0))
+}
+
+var d: Derived = new Derived(1);
+>d : Symbol(d, Decl(derivedStructIncludesInheritedMembers.ts, 17, 3))
+>Derived : Symbol(Derived, Decl(derivedStructIncludesInheritedMembers.ts, 12, 1))
+>Derived : Symbol(Derived, Decl(derivedStructIncludesInheritedMembers.ts, 12, 1))
+
+var r1 = d.a;
+>r1 : Symbol(r1, Decl(derivedStructIncludesInheritedMembers.ts, 18, 3))
+>d.a : Symbol(Base.a, Decl(derivedStructIncludesInheritedMembers.ts, 4, 13))
+>d : Symbol(d, Decl(derivedStructIncludesInheritedMembers.ts, 17, 3))
+>a : Symbol(Base.a, Decl(derivedStructIncludesInheritedMembers.ts, 4, 13))
+
+var r2 = d.b();
+>r2 : Symbol(r2, Decl(derivedStructIncludesInheritedMembers.ts, 19, 3))
+>d.b : Symbol(Base.b, Decl(derivedStructIncludesInheritedMembers.ts, 5, 14))
+>d : Symbol(d, Decl(derivedStructIncludesInheritedMembers.ts, 17, 3))
+>b : Symbol(Base.b, Decl(derivedStructIncludesInheritedMembers.ts, 5, 14))
+
+var r3 = Derived.r;
+>r3 : Symbol(r3, Decl(derivedStructIncludesInheritedMembers.ts, 20, 3))
+>Derived.r : Symbol(Base.r, Decl(derivedStructIncludesInheritedMembers.ts, 6, 11))
+>Derived : Symbol(Derived, Decl(derivedStructIncludesInheritedMembers.ts, 12, 1))
+>r : Symbol(Base.r, Decl(derivedStructIncludesInheritedMembers.ts, 6, 11))
+
+var r4 = Derived.s();
+>r4 : Symbol(r4, Decl(derivedStructIncludesInheritedMembers.ts, 21, 3))
+>Derived.s : Symbol(Base.s, Decl(derivedStructIncludesInheritedMembers.ts, 8, 21))
+>Derived : Symbol(Derived, Decl(derivedStructIncludesInheritedMembers.ts, 12, 1))
+>s : Symbol(Base.s, Decl(derivedStructIncludesInheritedMembers.ts, 8, 21))
+

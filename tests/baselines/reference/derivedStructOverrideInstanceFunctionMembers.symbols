@@ -1,0 +1,62 @@
+=== tests/cases/conformance/structs/members/inheritanceAndOverriding/derivedStructOverrideInstanceFunctionMembers.ts ===
+// doc 2.3
+// derived struct can override base struct's instance function members
+
+var x: { foo: string; }
+>x : Symbol(x, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 3, 3))
+>foo : Symbol(foo, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 3, 8))
+
+var y: { foo: string; bar: string; }
+>y : Symbol(y, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 3))
+>foo : Symbol(foo, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 8))
+>bar : Symbol(bar, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 21))
+
+struct Base {
+>Base : Symbol(Base, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 36))
+
+    a: typeof x;
+>a : Symbol(a, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 6, 13))
+>x : Symbol(x, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 3, 3))
+
+    b(a: typeof x) { }
+>b : Symbol(b, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 7, 16))
+>a : Symbol(a, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 8, 6))
+>x : Symbol(x, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 3, 3))
+
+    constructor(a: typeof x) { }
+>a : Symbol(a, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 9, 16))
+>x : Symbol(x, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 3, 3))
+}
+
+struct Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 10, 1))
+>Base : Symbol(Base, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 36))
+
+    b(a: typeof y) { return 1; } // ok
+>b : Symbol(b, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 12, 29))
+>a : Symbol(a, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 13, 6))
+>y : Symbol(y, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 3))
+
+    constructor(a: typeof y) { super(x) }
+>a : Symbol(a, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 14, 16))
+>y : Symbol(y, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 3))
+>super : Symbol(Base, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 4, 36))
+>x : Symbol(x, Decl(derivedStructOverrideInstanceFunctionMembers.ts, 3, 3))
+}
+
+
+/* struct Base2 {
+    [i: string]: Object;
+    [i: number]: typeof x;
+}
+
+struct Derived2 extends Base2 {
+    [i: string]: typeof x;
+    [i: number]: typeof y;
+}
+
+var d2: Derived2;
+var r7 = d2[''];
+var r8 = d2[1]; */
+
+

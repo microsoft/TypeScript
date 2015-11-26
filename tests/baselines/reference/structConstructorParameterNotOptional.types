@@ -1,0 +1,25 @@
+=== tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorParameterNotOptional.ts ===
+// doc 3.1
+// optional parameters are not allowed for struct constructor.
+
+struct C1 {
+>C1 : C1
+
+    constructor(public x?: number) { } // error
+>x : number
+}
+
+struct C2 {
+>C2 : C2
+
+    constructor(private p?: number) { } // error
+>p : number
+}
+
+struct C3 {
+>C3 : C3
+
+    constructor(protected p?: number) { } // error
+>p : number
+}
+

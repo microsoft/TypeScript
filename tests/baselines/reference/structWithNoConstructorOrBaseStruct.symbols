@@ -1,0 +1,31 @@
+=== tests/cases/conformance/structs/members/constructorFunctionTypes/structWithNoConstructorOrBaseStruct.ts ===
+// doc 2.5
+// If the struct contains no constructor declaration and has no base struct, a single construct signature
+// with no parameters, having the same type parameters as the struct and returning the instance type of
+// the struct.
+// ok
+
+struct C {
+>C : Symbol(C, Decl(structWithNoConstructorOrBaseStruct.ts, 0, 0))
+
+    x: string;
+>x : Symbol(x, Decl(structWithNoConstructorOrBaseStruct.ts, 6, 10))
+}
+
+var c = new C();
+>c : Symbol(c, Decl(structWithNoConstructorOrBaseStruct.ts, 10, 3))
+>C : Symbol(C, Decl(structWithNoConstructorOrBaseStruct.ts, 0, 0))
+
+var r = C;
+>r : Symbol(r, Decl(structWithNoConstructorOrBaseStruct.ts, 11, 3))
+>C : Symbol(C, Decl(structWithNoConstructorOrBaseStruct.ts, 0, 0))
+
+/* struct D<T,U> {
+    x: T;
+    y: U;
+}
+
+var d = new D();
+var d2 = new D<string, number>();
+var r2 = D; */
+

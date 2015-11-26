@@ -1,0 +1,63 @@
+=== tests/cases/conformance/structs/members/constructorFunctionTypes/structConstructorHasPrototypeProperty.ts ===
+// doc 2.5
+// Every struct automatically contains a static property member named ‘prototype’,
+// the type of which is the containing struct with type Any substituted for each type parameter.
+// ok
+
+module NonGeneric {
+>NonGeneric : typeof NonGeneric
+
+    struct C {
+>C : C
+
+        foo: string;
+>foo : string
+    }
+
+    struct D extends C {
+>D : D
+>C : C
+
+        bar: string;
+>bar : string
+    }
+
+    var r = C.prototype;
+>r : C
+>C.prototype : C
+>C : typeof C
+>prototype : C
+
+    r.foo; // any
+>r.foo : string
+>r : C
+>foo : string
+
+    var r2 = D.prototype;
+>r2 : D
+>D.prototype : D
+>D : typeof D
+>prototype : D
+
+    r2.bar; // any
+>r2.bar : string
+>r2 : D
+>bar : string
+}
+
+/* module Generic {
+    struct C<T,U> {
+        foo: T;
+        bar: U;
+    }
+
+    struct D<T,U> extends C<T,U> {
+        baz: T;
+        bing: U;
+    }
+
+    var r = C.prototype; // C<any, any>
+    var ra = r.foo; // any
+    var r2 = D.prototype; // D<any, any>
+    var rb = r2.baz; // any
+} */

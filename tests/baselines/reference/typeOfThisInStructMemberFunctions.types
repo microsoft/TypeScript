@@ -1,0 +1,46 @@
+=== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/typeOfThisInStructMemberFunctions.ts ===
+// doc 4.2
+// In the body of a static member function declaration, the type of this is the constructor
+// function type.
+// ok
+struct C {
+>C : C
+
+    foo() {
+>foo : () => void
+
+        var r = this;
+>r : this
+>this : this
+    }
+
+    static bar() {
+>bar : () => void
+
+        var r2 = this;
+>r2 : typeof C
+>this : typeof C
+    }
+}
+
+/* struct D<T> {
+    x: T;
+    foo() {
+        var r = this;
+    }
+
+    static bar() {
+        var r2 = this;
+    }
+}
+
+struct E<T extends Date> {
+    x: T;
+    foo() {
+        var r = this;
+    }
+
+    static bar() {
+        var r2 = this;
+    }
+} */

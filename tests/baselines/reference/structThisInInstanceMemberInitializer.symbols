@@ -1,0 +1,17 @@
+=== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberVariableDeclarations/structThisInInstanceMemberInitializer.ts ===
+// doc 4.1
+// In an initializer expression for an instance member variable, this is of the struct instance type.
+// ok
+
+struct C {
+>C : Symbol(C, Decl(structThisInInstanceMemberInitializer.ts, 0, 0))
+
+    x = this;
+>x : Symbol(x, Decl(structThisInInstanceMemberInitializer.ts, 4, 10))
+>this : Symbol(C, Decl(structThisInInstanceMemberInitializer.ts, 0, 0))
+}
+
+/* struct D<T> {
+    x = this;
+    y: T;
+}*/

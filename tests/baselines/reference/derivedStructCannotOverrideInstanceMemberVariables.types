@@ -1,0 +1,63 @@
+=== tests/cases/conformance/structs/members/inheritanceAndOverriding/derivedStructCannotOverrideInstanceMemberVariables.ts ===
+// doc 2.3
+// only public function members can be overridden.
+
+struct Base {
+>Base : Base
+
+    private x: { foo: string };
+>x : { foo: string; }
+>foo : string
+}
+
+struct Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    private x: { foo: string; bar: string; }; // error
+>x : { foo: string; bar: string; }
+>foo : string
+>bar : string
+}
+
+struct Base1 {
+>Base1 : Base1
+
+	public foo: any;
+>foo : any
+}
+
+struct Derived1 extends Base1 {
+>Derived1 : Derived1
+>Base1 : Base1
+
+	public foo: string; // error}
+>foo : string
+}
+
+struct Base2 {
+>Base2 : Base2
+
+	static y: { foo: string };
+>y : { foo: string; }
+>foo : string
+}
+
+struct Derived2 extends Base2 {
+>Derived2 : Derived2
+>Base2 : Base2
+
+	static y: { foo: string; bar: string; }; // ok
+>y : { foo: string; bar: string; }
+>foo : string
+>bar : string
+}
+
+struct Derived3 extends Base2 {
+>Derived3 : Derived3
+>Base2 : Base2
+
+	static y: { foo: any }; // ok
+>y : { foo: any; }
+>foo : any
+}

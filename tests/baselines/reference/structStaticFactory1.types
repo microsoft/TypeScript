@@ -1,0 +1,43 @@
+=== tests/cases/conformance/structs/structPropertyMemberDeclarations/structMemberFunctionDeclarations/structStaticFactory1.ts ===
+// doc 4.2
+// In a static member function, this represents the constructor function object on which
+// the static member function was invoked. Thus, a call to ‘new this()’ may actually invoke
+// a derived struct constructor.
+// ok
+struct Base {
+>Base : Base
+
+    foo() { return 1; }
+>foo : () => number
+>1 : number
+
+    static create() {
+>create : () => Base
+
+        return new this();
+>new this() : Base
+>this : typeof Base
+    }
+}
+
+struct Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    foo() { return 2; }
+>foo : () => number
+>2 : number
+}
+var d = Derived.create(); // new B()
+>d : Base
+>Derived.create() : Base
+>Derived.create : () => Base
+>Derived : typeof Derived
+>create : () => Base
+
+d.foo(); // 2
+>d.foo() : number
+>d.foo : () => number
+>d : Base
+>foo : () => number
+

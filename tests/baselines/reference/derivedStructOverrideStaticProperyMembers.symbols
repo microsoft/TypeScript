@@ -1,0 +1,76 @@
+=== tests/cases/conformance/structs/members/inheritanceAndOverriding/derivedStructOverrideStaticProperyMembers.ts ===
+// doc 2.3
+// derived struct can override base struct's static property members
+
+var x: { foo: string; }
+>x : Symbol(x, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 3))
+>foo : Symbol(foo, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 8))
+
+var y: { foo: string; bar: string; }
+>y : Symbol(y, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 3))
+>foo : Symbol(foo, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 8))
+>bar : Symbol(bar, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 21))
+
+struct Base {
+>Base : Symbol(Base, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 36))
+
+    static r: typeof x;
+>r : Symbol(Base.r, Decl(derivedStructOverrideStaticProperyMembers.ts, 6, 13))
+>x : Symbol(x, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 3))
+
+    static s(a: typeof x) { return 1; }
+>s : Symbol(Base.s, Decl(derivedStructOverrideStaticProperyMembers.ts, 7, 23))
+>a : Symbol(a, Decl(derivedStructOverrideStaticProperyMembers.ts, 8, 13))
+>x : Symbol(x, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 3))
+
+    static u: (a: typeof x) => any;
+>u : Symbol(Base.u, Decl(derivedStructOverrideStaticProperyMembers.ts, 8, 39))
+>a : Symbol(a, Decl(derivedStructOverrideStaticProperyMembers.ts, 9, 15))
+>x : Symbol(x, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 3))
+
+    constructor(a: typeof x) { }
+>a : Symbol(a, Decl(derivedStructOverrideStaticProperyMembers.ts, 11, 16))
+>x : Symbol(x, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 3))
+}
+
+struct Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedStructOverrideStaticProperyMembers.ts, 12, 1))
+>Base : Symbol(Base, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 36))
+
+    static r: typeof y; // ok
+>r : Symbol(Derived.r, Decl(derivedStructOverrideStaticProperyMembers.ts, 14, 29))
+>y : Symbol(y, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 3))
+
+    static s(a: typeof y) { } // ok
+>s : Symbol(Derived.s, Decl(derivedStructOverrideStaticProperyMembers.ts, 15, 23))
+>a : Symbol(a, Decl(derivedStructOverrideStaticProperyMembers.ts, 16, 13))
+>y : Symbol(y, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 3))
+
+    static u: (a: typeof y) => void; // ok
+>u : Symbol(Derived.u, Decl(derivedStructOverrideStaticProperyMembers.ts, 16, 29))
+>a : Symbol(a, Decl(derivedStructOverrideStaticProperyMembers.ts, 17, 15))
+>y : Symbol(y, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 3))
+
+    constructor(a: typeof y) { super(x) }
+>a : Symbol(a, Decl(derivedStructOverrideStaticProperyMembers.ts, 19, 16))
+>y : Symbol(y, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 3))
+>super : Symbol(Base, Decl(derivedStructOverrideStaticProperyMembers.ts, 4, 36))
+>x : Symbol(x, Decl(derivedStructOverrideStaticProperyMembers.ts, 3, 3))
+}
+
+
+/* struct Base2 {
+    [i: string]: Object;
+    [i: number]: typeof x;
+}
+
+struct Derived2 extends Base2 {
+    [i: string]: typeof x;
+    [i: number]: typeof y;
+}
+
+var d2: Derived2;
+var r7 = d2[''];
+var r8 = d2[1]; */
+
+

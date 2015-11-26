@@ -1,0 +1,23 @@
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structStaticPropertyAndFunctionWithSameName.ts(7,12): error TS2300: Duplicate identifier 'f'.
+tests/cases/conformance/structs/structPropertyMemberDeclarations/structStaticPropertyAndFunctionWithSameName.ts(8,12): error TS2300: Duplicate identifier 'f'.
+
+
+==== tests/cases/conformance/structs/structPropertyMemberDeclarations/structStaticPropertyAndFunctionWithSameName.ts (2 errors) ====
+    // doc 4
+    // Static property member declarations declare properties in the constructor function type,
+    // and must specify names that are unique among all static property member declarations
+    // in the containing struct
+    
+    struct C {
+        static f: number;
+               ~
+!!! error TS2300: Duplicate identifier 'f'.
+        static f() {} // error
+               ~
+!!! error TS2300: Duplicate identifier 'f'.
+    }
+    
+    struct D {
+    	f: number;
+        static f: number;
+    }

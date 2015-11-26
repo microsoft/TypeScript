@@ -1,0 +1,63 @@
+=== tests/cases/conformance/structs/members/constructorFunctionTypes/structConstructorHasPrototypeProperty.ts ===
+// doc 2.5
+// Every struct automatically contains a static property member named ‘prototype’,
+// the type of which is the containing struct with type Any substituted for each type parameter.
+// ok
+
+module NonGeneric {
+>NonGeneric : Symbol(NonGeneric, Decl(structConstructorHasPrototypeProperty.ts, 0, 0))
+
+    struct C {
+>C : Symbol(C, Decl(structConstructorHasPrototypeProperty.ts, 5, 19))
+
+        foo: string;
+>foo : Symbol(foo, Decl(structConstructorHasPrototypeProperty.ts, 6, 14))
+    }
+
+    struct D extends C {
+>D : Symbol(D, Decl(structConstructorHasPrototypeProperty.ts, 8, 5))
+>C : Symbol(C, Decl(structConstructorHasPrototypeProperty.ts, 5, 19))
+
+        bar: string;
+>bar : Symbol(bar, Decl(structConstructorHasPrototypeProperty.ts, 10, 24))
+    }
+
+    var r = C.prototype;
+>r : Symbol(r, Decl(structConstructorHasPrototypeProperty.ts, 14, 7))
+>C.prototype : Symbol(C.prototype)
+>C : Symbol(C, Decl(structConstructorHasPrototypeProperty.ts, 5, 19))
+>prototype : Symbol(C.prototype)
+
+    r.foo; // any
+>r.foo : Symbol(C.foo, Decl(structConstructorHasPrototypeProperty.ts, 6, 14))
+>r : Symbol(r, Decl(structConstructorHasPrototypeProperty.ts, 14, 7))
+>foo : Symbol(C.foo, Decl(structConstructorHasPrototypeProperty.ts, 6, 14))
+
+    var r2 = D.prototype;
+>r2 : Symbol(r2, Decl(structConstructorHasPrototypeProperty.ts, 16, 7))
+>D.prototype : Symbol(D.prototype)
+>D : Symbol(D, Decl(structConstructorHasPrototypeProperty.ts, 8, 5))
+>prototype : Symbol(D.prototype)
+
+    r2.bar; // any
+>r2.bar : Symbol(D.bar, Decl(structConstructorHasPrototypeProperty.ts, 10, 24))
+>r2 : Symbol(r2, Decl(structConstructorHasPrototypeProperty.ts, 16, 7))
+>bar : Symbol(D.bar, Decl(structConstructorHasPrototypeProperty.ts, 10, 24))
+}
+
+/* module Generic {
+    struct C<T,U> {
+        foo: T;
+        bar: U;
+    }
+
+    struct D<T,U> extends C<T,U> {
+        baz: T;
+        bing: U;
+    }
+
+    var r = C.prototype; // C<any, any>
+    var ra = r.foo; // any
+    var r2 = D.prototype; // D<any, any>
+    var rb = r2.baz; // any
+} */

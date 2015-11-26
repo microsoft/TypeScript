@@ -1,0 +1,63 @@
+=== tests/cases/conformance/structs/members/structTypes/instancePropertiesInheritedIntoStructType.ts ===
+// doc 2.4
+// All base struct instance type property that are not overridden in the struct
+// ok
+
+module NonGeneric {
+>NonGeneric : typeof NonGeneric
+
+    struct C {
+>C : C
+
+        x: string;
+>x : string
+
+        fn() { return this; }
+>fn : () => this
+>this : this
+
+        constructor(public a: number, private b: number) { }
+>a : number
+>b : number
+    }
+
+    struct D extends C { e: string; }
+>D : D
+>C : C
+>e : string
+
+    var d = new D(1, 2);
+>d : D
+>new D(1, 2) : D
+>D : typeof D
+>1 : number
+>2 : number
+
+    var r = d.fn();
+>r : D
+>d.fn() : D
+>d.fn : () => D
+>d : D
+>fn : () => D
+
+    var r2 = r.x;
+>r2 : string
+>r.x : string
+>r : D
+>x : string
+
+}
+
+/* module Generic {
+    struct C<T, U> {
+        x: T;
+        fn() { return this; }
+        constructor(public a: T, private b: U) { }
+    }
+
+    struct D<T, U> extends C<T, U> { e: T; }
+
+    var d = new D(1, '');
+    var r = d.fn();
+    var r2 = r.x;
+} */

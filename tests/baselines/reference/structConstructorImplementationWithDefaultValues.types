@@ -1,0 +1,32 @@
+=== tests/cases/conformance/structs/constructorDeclarations/constructorParameters/structConstructorImplementationWithDefaultValues.ts ===
+// doc3.1
+
+struct C {
+>C : C
+
+    constructor(x);
+>x : any
+
+    constructor(x = 1) {
+>x : number
+>1 : number
+
+        var y = x;
+>y : number
+>x : number
+    }
+}
+
+/* struct D<T> {
+    constructor(x);
+    constructor(x:T = null) {
+        var y = x;
+    }
+}
+
+struct E<T extends Date> {
+    constructor(x);
+    constructor(x: T = null) {
+        var y = x;
+    }
+} */
