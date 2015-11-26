@@ -1005,6 +1005,9 @@ namespace Harness {
             if (options.inferredBaseUrl) {
                 options.inferredBaseUrl = ts.getNormalizedAbsolutePath(options.inferredBaseUrl, currentDirectory);
             }
+            if (options.rootDirs) {
+                options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
+            }
 
             const programFiles: TestFile[] = inputFiles.slice();
             // Files from built\local that are requested by test "@includeBuiltFiles" to be in the context.

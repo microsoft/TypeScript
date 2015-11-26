@@ -2296,7 +2296,6 @@
         "category": "Error",
         "code": 6064
     },
-
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
@@ -2469,6 +2468,18 @@
         "category": "Message",
         "code": 6109
     },
+    "Base url: '{0}'.": {
+        "category": "Message",
+        "code": 6110
+    },
+    "Option '{0}' should have array of strings as a value.": {
+        "category": "Error",
+        "code": 6111
+    },
+    "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
+        "category": "Message",
+        "code": 6112
+    },    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

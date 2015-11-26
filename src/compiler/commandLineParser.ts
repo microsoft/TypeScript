@@ -300,7 +300,8 @@ namespace ts {
             // use type = object to copy the value as-is
             name: "rootDirs",
             type: "object",
-            isTSConfigOnly: true
+            isTSConfigOnly: true,
+            isFilePath: true
         },
         {
             name: "traceModuleResolution",
@@ -595,7 +596,36 @@ namespace ts {
                         }
                     }
                     if (opt.isFilePath) {
-                        value = normalizePath(combinePaths(basePath, value));
+                        switch (typeof value) {
+                            case "string":
+                                value = normalizePath(combinePaths(basePath, value));
+                                break;
+                            case "object":
+                                // "object" options with 'isFilePath' = true expected to be string arrays
+                                let paths: string[] = [];
+                                let invalidOptionType = false;
+                                if (!isArray(value)) {
+                                    invalidOptionType = true;
+                                }
+                                else {
+                                    for (const element of <any[]>value) {
+                                        if (typeof element === "string") {
+                                            paths.push(normalizePath(combinePaths(basePath, element)));
+                                        }
+                                        else {
+                                            invalidOptionType = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (invalidOptionType) {
+                                    errors.push(createCompilerDiagnostic(Diagnostics.Option_0_should_have_array_of_strings_as_a_value, opt.name));
+                                }
+                                else {
+                                    value = paths;
+                                }
+                                break;
+                        }
                         if (value === "") {
                             value = ".";
                         }

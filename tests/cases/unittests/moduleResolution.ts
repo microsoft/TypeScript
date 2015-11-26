@@ -485,8 +485,8 @@ import b = require("./moduleB.ts");
                     ]
                 },
                 rootDirs: [
-                    ".",
-                    "./generated/"
+                    "/root",
+                    "/root/generated/"
                 ]
             };
             {

@@ -74,7 +74,10 @@ namespace ts {
         GreaterThan = 1
     }
 
-    export interface StringSet extends Map<any> { }
+    /* @internal */
+    export function isArray(obj: any): boolean {
+        return Array.isArray ? Array.isArray(obj) : typeof obj === "object" && obj instanceof Array;
+    }
 
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback

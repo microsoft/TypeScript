@@ -14,8 +14,8 @@
             ]
         },
         "rootDirs": [
-            ".",
-            "./generated"
+            "./src/",
+            "./src/generated"
         ]
     }
 }
