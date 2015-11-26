@@ -961,7 +961,7 @@ namespace ts {
             let prevEnclosingDeclaration = enclosingDeclaration;
             enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            let baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            let baseTypeNode = getClassOrStructExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
                 emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
             }
