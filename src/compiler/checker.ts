@@ -3013,8 +3013,8 @@ namespace ts {
                 return;
             }
             if (isInClassDecl && !(getTargetType(baseType).flags & (TypeFlags.Class | TypeFlags.Interface))) {
-	            error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
-	            return;
+error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
+return;
             }
             else if (!isInClassDecl && !(getTargetType(baseType).flags & TypeFlags.Struct)) {
                 error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_struct_type, typeToString(baseType));
@@ -3222,8 +3222,8 @@ namespace ts {
                     return true;
                 case SyntaxKind.ArrayType:
                     return isIndependentType((<ArrayTypeNode>node).elementType);
-	            case SyntaxKind.StructArrayType:
-		            return isIndependentType((<StructArrayTypeNode>node).elementType);
+case SyntaxKind.StructArrayType:
+return isIndependentType((<StructArrayTypeNode>node).elementType);
                 case SyntaxKind.TypeReference:
                     return isIndependentTypeReference(<TypeReferenceNode>node);
             }
@@ -4371,17 +4371,17 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
             return createTypeFromGenericGlobalType(globalIterableIteratorType, [elementType]);
         }
 
-	    function createStructArrayType(elementType: Type): Type {
-		    return createTypeFromGenericGlobalType(globalStructArrayType, [elementType]);
-	    }
+function createStructArrayType(elementType: Type): Type {
+return createTypeFromGenericGlobalType(globalStructArrayType, [elementType]);
+}
 
-	    function getTypeFromStructArrayTypeNode(node: StructArrayTypeNode): Type {
-		    let links = getNodeLinks(node);
-		    if (!links.resolvedType) {
-			    links.resolvedType = createStructArrayType(getTypeFromTypeNode(node.elementType));
-		    }
-		    return links.resolvedType;
-	    }
+function getTypeFromStructArrayTypeNode(node: StructArrayTypeNode): Type {
+let links = getNodeLinks(node);
+if (!links.resolvedType) {
+links.resolvedType = createStructArrayType(getTypeFromTypeNode(node.elementType));
+}
+return links.resolvedType;
+}
 
         function createArrayType(elementType: Type): Type {
             return createTypeFromGenericGlobalType(globalArrayType, [elementType]);
@@ -4635,8 +4635,8 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
-	            case SyntaxKind.StructArrayType:
-		            return getTypeFromStructArrayTypeNode(<StructArrayTypeNode>node);
+case SyntaxKind.StructArrayType:
+return getTypeFromStructArrayTypeNode(<StructArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
@@ -5137,25 +5137,25 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
                     if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                         // Report structural errors only if we haven't reported any errors yet
                         let reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
-	                    if (isBothStructType(source, target)) {
-		                    // for struct assignability, check its inheritance chain
-		                    let baseTypes = (<InterfaceType>apparentType).resolvedBaseTypes;
-                            while (baseTypes && baseTypes.length > 0) {
-	                            if (baseTypes.indexOf(<ObjectType>target) > -1) { // target is on source's inheritance chain
-		                            errorInfo = saveErrorInfo;
-		                            return Ternary.True;
-	                            }
-	                            else {
-		                            baseTypes = (<InterfaceType>baseTypes[0]).resolvedBaseTypes; // expand the inheritance chain
-	                            }
-                            }
-		                }
-		                else { // structural comparison
-		                    if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
-			                    errorInfo = saveErrorInfo;
-			                    return result;
-		                    }
-	                    }
+if (isBothStructType(source, target)) {
+// for struct assignability, check its inheritance chain
+let baseTypes = (<InterfaceType>apparentType).resolvedBaseTypes;
+while (baseTypes && baseTypes.length > 0) {
+if (baseTypes.indexOf(<ObjectType>target) > -1) { // target is on source's inheritance chain
+errorInfo = saveErrorInfo;
+return Ternary.True;
+}
+else {
+baseTypes = (<InterfaceType>baseTypes[0]).resolvedBaseTypes; // expand the inheritance chain
+}
+}
+}
+else { // structural comparison
+if (result = objectTypeRelatedTo(apparentType, <ObjectType>target, reportStructuralErrors)) {
+errorInfo = saveErrorInfo;
+return result;
+}
+}
                     }
                 }
 
@@ -6962,12 +6962,12 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
             }
 
             if (!baseClassOrStructType && (!classOrStructDeclaration || !getClassOrStructExtendsHeritageClauseElement(classOrStructDeclaration))) {
-	            if (isInClassDecl) {
-			            error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
-		            }
-	            else if (!isInClassDecl) {
-	                error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_struct);
-                }
+if (isInClassDecl) {
+error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
+}
+else if (!isInClassDecl) {
+error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_struct);
+}
                 return unknownType;
             }
 
@@ -7029,19 +7029,19 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
                                 container.kind === SyntaxKind.Constructor;
                         }
                     }
-	                else if (container && isStructLike(container.parent)) {
-		                if (container.flags & NodeFlags.Static) {
-			                return container.kind === SyntaxKind.MethodDeclaration ||
-				                container.kind === SyntaxKind.MethodSignature;
-		                }
-		                else {
-			                return container.kind === SyntaxKind.MethodDeclaration ||
-				                container.kind === SyntaxKind.MethodSignature ||
-				                container.kind === SyntaxKind.PropertyDeclaration ||
-				                container.kind === SyntaxKind.PropertySignature ||
-				                container.kind === SyntaxKind.Constructor;
-		                }
-	                }
+else if (container && isStructLike(container.parent)) {
+if (container.flags & NodeFlags.Static) {
+return container.kind === SyntaxKind.MethodDeclaration ||
+container.kind === SyntaxKind.MethodSignature;
+}
+else {
+return container.kind === SyntaxKind.MethodDeclaration ||
+container.kind === SyntaxKind.MethodSignature ||
+container.kind === SyntaxKind.PropertyDeclaration ||
+container.kind === SyntaxKind.PropertySignature ||
+container.kind === SyntaxKind.Constructor;
+}
+}
                 }
 
                 return false;
@@ -8218,8 +8218,8 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
          */
         function checkClassOrStructPropertyAccess(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, type: Type, prop: Symbol): boolean {
             let flags = getDeclarationFlagsFromSymbol(prop);
-	        let isInClassDecl = true;
-	        if (prop.parent.flags & SymbolFlags.Struct) isInClassDecl = false;
+        let isInClassDecl = true;
+        if (prop.parent.flags & SymbolFlags.Struct) isInClassDecl = false;
             let declaringClassOrStruct = <InterfaceType>getDeclaredTypeOfSymbol(prop.parent);
 
             if (left.kind === SyntaxKind.SuperKeyword) {
@@ -8237,12 +8237,12 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
                 if (getDeclarationKindFromSymbol(prop) !== SyntaxKind.MethodDeclaration) {
                     // `prop` refers to a *property* declared in the super class/struct
                     // rather than a *method*, so it does not satisfy the above criteria.
-					if (isInClassDecl) {
-						error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
-					}
-					else {
-						error(errorNode, Diagnostics.Only_public_methods_of_the_base_struct_are_accessible_via_the_super_keyword);
-					}
+if (isInClassDecl) {
+error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
+}
+else {
+error(errorNode, Diagnostics.Only_public_methods_of_the_base_struct_are_accessible_via_the_super_keyword);
+}
                     return false;
                 }
 
@@ -8270,12 +8270,12 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
             // Private property is accessible if declaring and enclosing class are the same
             if (flags & NodeFlags.Private) {
                 if (declaringClassOrStruct !== enclosingClassOrStruct) {
-	                if (isInClassDecl) {
-		                error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClassOrStruct));
-	                }
-	                else {
-		                error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_struct_1, symbolToString(prop), typeToString(declaringClassOrStruct));
-	                }
+                if (isInClassDecl) {
+error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(declaringClassOrStruct));
+                }
+                else {
+error(node, Diagnostics.Property_0_is_private_and_only_accessible_within_struct_1, symbolToString(prop), typeToString(declaringClassOrStruct));
+                }
                     return false;
                 }
                 return true;
@@ -8289,12 +8289,12 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
             }
             // A protected property is accessible in the declaring class and classes derived from it
             if (!enclosingClassOrStruct || !hasBaseType(enclosingClassOrStruct, declaringClassOrStruct)) {
-	            if (isInClassDecl) {
-		            error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClassOrStruct));
-	            }
-	            else {
-		            error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_struct_1_and_its_substructs, symbolToString(prop), typeToString(declaringClassOrStruct));
-	            }
+            if (isInClassDecl) {
+error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(declaringClassOrStruct));
+            }
+            else {
+error(node, Diagnostics.Property_0_is_protected_and_only_accessible_within_struct_1_and_its_substructs, symbolToString(prop), typeToString(declaringClassOrStruct));
+            }
                 return false;
             }
             // No further restrictions for static properties
@@ -8374,65 +8374,65 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
 	    //     parent.typeArguments = [TypeReference: T]  <-- IndexedAccess.object
 	    //     parent.arguments = [NumericLiteral: 2]     <-- IndexedAccess.index
 	    // return StructArray type. the rest will be handled in resolveNewExpression.
-	    function checkStructArrayInitialization(node: ElementAccessExpression): Type {
-		    var parentNode = <NewExpression>node.parent;
-		    var indexedAccessNode = node;
-		    var objectNode = indexedAccessNode.expression;
-		    var indexNode = indexedAccessNode.argumentExpression;
+function checkStructArrayInitialization(node: ElementAccessExpression): Type {
+let parentNode = <NewExpression>node.parent;
+let indexedAccessNode = node;
+let objectNode = indexedAccessNode.expression;
+let indexNode = indexedAccessNode.argumentExpression;
 
-		    // reassign func to be StructArray
-		    // no position info since we artificially add StructArray node
-		    var func = <Identifier>new (getNodeConstructor(SyntaxKind.Identifier))();
-		    func.text = "StructArray";
-		    func.parent = parentNode;
-		    parentNode.expression = func;
+// reassign func to be StructArray
+// no position info since we artificially add StructArray node
+let func = <Identifier>new (getNodeConstructor(SyntaxKind.Identifier))();
+func.text = "StructArray";
+func.parent = parentNode;
+parentNode.expression = func;
 
-		    // reassign typeArguments
-		    var typeArguments = <NodeArray<TypeNode>>[];
-		    typeArguments.pos = objectNode.pos;
-		    typeArguments.end = objectNode.end;
-		    parentNode.typeArguments = typeArguments;
+// reassign typeArguments
+let typeArguments = <NodeArray<TypeNode>>[];
+typeArguments.pos = objectNode.pos;
+typeArguments.end = objectNode.end;
+parentNode.typeArguments = typeArguments;
 
-		    // reassign structType (should be TypeReference)
-		    var structTypeReference = <TypeReferenceNode>new (getNodeConstructor(SyntaxKind.TypeReference))();
-		    structTypeReference.pos = typeArguments.pos;
-		    structTypeReference.end = typeArguments.end;
-		    structTypeReference.parent = parentNode;
-		    var structTypeName = <Identifier>objectNode;
-		    structTypeReference.typeName = structTypeName;
-		    structTypeName.parent = structTypeReference;
-		    typeArguments.push(structTypeReference);
+// reassign structType (should be TypeReference)
+let structTypeReference = <TypeReferenceNode>new (getNodeConstructor(SyntaxKind.TypeReference))();
+structTypeReference.pos = typeArguments.pos;
+structTypeReference.end = typeArguments.end;
+structTypeReference.parent = parentNode;
+let structTypeName = <Identifier>objectNode;
+structTypeReference.typeName = structTypeName;
+structTypeName.parent = structTypeReference;
+typeArguments.push(structTypeReference);
 
-		    // reassign arguments (store StructArray length)
-		    var arguments = <NodeArray<Expression>>[];
-		    arguments.pos = indexNode.pos;
-		    arguments.end = indexNode.end;
-		    parentNode.arguments = arguments;
-		    var structArrayLength = indexNode;
-		    structArrayLength.parent = parentNode;
-		    arguments.push(structArrayLength);
+// reassign arguments (store StructArray length)
+let arguments = <NodeArray<Expression>>[];
+arguments.pos = indexNode.pos;
+arguments.end = indexNode.end;
+parentNode.arguments = arguments;
+let structArrayLength = indexNode;
+structArrayLength.parent = parentNode;
+arguments.push(structArrayLength);
 
-		    node = null;
-		    return checkExpression(func);
-	    }
+node = undefined;
+return checkExpression(func);
+}
 
-	    // check struct array index access bound
-	    function checkStructArrayAccess(node: ElementAccessExpression) {
-		    var objectNode = node.expression;
-		    var indexNode = node.argumentExpression;
-		    var symbol = getResolvedSymbol(<Identifier>objectNode);
-		    var valueDeclaration = <VariableDeclaration>symbol.valueDeclaration;
-		    var newExpression: NewExpression;
-		    if (valueDeclaration && valueDeclaration.initializer) newExpression = <NewExpression>valueDeclaration.initializer;
-		    var arguments: NodeArray<Expression>;
-		    if (newExpression && newExpression.arguments) arguments = newExpression.arguments;
-		    var arrayLength: string;
-		    if (arguments) arrayLength = (<LiteralExpression>arguments[0]).text;
-		    var index = (<LiteralExpression>indexNode).text;
-		    if (+index >= +arrayLength) {
-			    error(node, Diagnostics.Struct_array_index_out_of_bound, symbolToString(symbol), arrayLength);
-			    }
-		    }
+// check struct array index access bound
+function checkStructArrayAccess(node: ElementAccessExpression) {
+let objectNode = node.expression;
+let indexNode = node.argumentExpression;
+let symbol = getResolvedSymbol(<Identifier>objectNode);
+let valueDeclaration = <VariableDeclaration>symbol.valueDeclaration;
+let newExpression: NewExpression;
+if (valueDeclaration && valueDeclaration.initializer) newExpression = <NewExpression>valueDeclaration.initializer;
+let arguments: NodeArray<Expression>;
+if (newExpression && newExpression.arguments) arguments = newExpression.arguments;
+let arrayLength: string;
+if (arguments) arrayLength = (<LiteralExpression>arguments[0]).text;
+let index = (<LiteralExpression>indexNode).text;
+if (+index >= +arrayLength) {
+error(node, Diagnostics.Struct_array_index_out_of_bound, symbolToString(symbol), arrayLength);
+}
+}
 
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Grammar checking
@@ -8460,16 +8460,16 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
             let objectType = getApparentType(originObjectType);
 
 	        // check if node's actual type is struct array
-	        if (objectType && objectType.symbol && getDeclarationKindFromSymbol(objectType.symbol) === SyntaxKind.StructDeclaration) {
-		        if (node.parent.kind === SyntaxKind.NewExpression) { // struct array declaration
+if (objectType && objectType.symbol && getDeclarationKindFromSymbol(objectType.symbol) === SyntaxKind.StructDeclaration) {
+if (node.parent.kind === SyntaxKind.NewExpression) { // struct array declaration
 			        // write("struct array declaration");
-			        return checkStructArrayInitialization(node);
-		        }
-		    }
-	        if (objectType && objectType.symbol && objectType.symbol.name === 'StructArray') {  // struct array access
+return checkStructArrayInitialization(node);
+}
+}
+if (objectType && objectType.symbol && objectType.symbol.flags & SymbolFlags.Struct) {  // struct array access
 		        // write("struct array access");
-		        checkStructArrayAccess(node);
-		    }
+checkStructArrayAccess(node);
+}
 
             let indexType = node.argumentExpression ? checkExpression(node.argumentExpression) : unknownType;
 
@@ -9497,13 +9497,13 @@ parentSymbol = (<StructDeclaration>declaration.parent).symbol;
                 if (superType !== unknownType) {
                     // In super call, the candidate signatures are the matching arity signatures of the base constructor function instantiated
                     // with the type arguments specified in the extends clause.
-	                let baseTypeNode: ExpressionWithTypeArguments;
-	                if (getContainingClass(node)) {
-		                baseTypeNode = getClassOrStructExtendsHeritageClauseElement(getContainingClass(node));
-	                }
-	                else {
-		                baseTypeNode = getClassOrStructExtendsHeritageClauseElement(getContainingStruct(node));
-	                }
+                let baseTypeNode: ExpressionWithTypeArguments;
+                if (getContainingClass(node)) {
+baseTypeNode = getClassOrStructExtendsHeritageClauseElement(getContainingClass(node));
+                }
+                else {
+baseTypeNode = getClassOrStructExtendsHeritageClauseElement(getContainingStruct(node));
+                }
                     let baseConstructors = getInstantiatedConstructorsForTypeArguments(superType, baseTypeNode.typeArguments);
                     return resolveCall(node, baseConstructors, candidatesOutArray);
                 }
@@ -11675,53 +11675,53 @@ return forEach((<StructLikeDeclaration>n).members, containsSuperCallAsComputedPr
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
         if (node.parent.kind === SyntaxKind.ClassDeclaration) {
-	        let containingClassDecl = <ClassDeclaration>node.parent;
-	        if (getClassOrStructExtendsHeritageClauseElement(containingClassDecl)) {
-		        let containingClassSymbol = getSymbolOfNode(containingClassDecl);
-		        let containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
-		        let baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
+let containingClassDecl = <ClassDeclaration>node.parent;
+if (getClassOrStructExtendsHeritageClauseElement(containingClassDecl)) {
+let containingClassSymbol = getSymbolOfNode(containingClassDecl);
+let containingClassInstanceType = <InterfaceType>getDeclaredTypeOfSymbol(containingClassSymbol);
+let baseConstructorType = getBaseConstructorTypeOfClass(containingClassInstanceType);
 
-		        if (containsSuperCall(node.body)) {
-			        if (baseConstructorType === nullType) {
-				        error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
-			        }
+if (containsSuperCall(node.body)) {
+if (baseConstructorType === nullType) {
+error(node, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
+}
 
-			        // The first statement in the body of a constructor (excluding prologue directives) must be a super call
-			        // if both of the following are true:
-			        // - The containing class is a derived class.
-			        // - The constructor declares parameter properties
-			        //   or the containing class declares instance member variables with initializers.
-			        let superCallShouldBeFirst =
-				        forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
-				        forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
+	        // The first statement in the body of a constructor (excluding prologue directives) must be a super call
+	        // if both of the following are true:
+	        // - The containing class is a derived class.
+	        // - The constructor declares parameter properties
+	        //   or the containing class declares instance member variables with initializers.
+let superCallShouldBeFirst =
+forEach((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
+forEach(node.parameters, p => p.flags & (NodeFlags.Public | NodeFlags.Private | NodeFlags.Protected));
 
-			        // Skip past any prologue directives to find the first statement
-			        // to ensure that it was a super call.
-			        if (superCallShouldBeFirst) {
-				        let statements = (<Block>node.body).statements;
-				        let superCallStatement: ExpressionStatement;
-				        for (let statement of statements) {
-					        if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
-						        superCallStatement = <ExpressionStatement>statement;
-						        break;
-					        }
-					        if (!isPrologueDirective(statement)) {
-						        break;
-					        }
-				        }
-				        if (!superCallStatement) {
-					        error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
-				        }
-				        else {
-					        // In such a required super call, it is a compile-time error for argument expressions to reference this.
-					        markThisReferencesAsErrors(superCallStatement.expression);
-				        }
-			        }
-		        }
-		        else if (baseConstructorType !== nullType) {
-			        error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
-		        }
-	        }
+	        // Skip past any prologue directives to find the first statement
+	        // to ensure that it was a super call.
+if (superCallShouldBeFirst) {
+let statements = (<Block>node.body).statements;
+let superCallStatement: ExpressionStatement;
+for (let statement of statements) {
+if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCallExpression((<ExpressionStatement>statement).expression)) {
+superCallStatement = <ExpressionStatement>statement;
+break;
+        }
+        if (!isPrologueDirective(statement)) {
+break;
+        }
+        }
+if (!superCallStatement) {
+error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
+}
+else {
+		        // In such a required super call, it is a compile-time error for argument expressions to reference this.
+markThisReferencesAsErrors(superCallStatement.expression);
+        }
+        }
+        }
+else if (baseConstructorType !== nullType) {
+error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
+}
+        }
         }
         else if (node.parent.kind === SyntaxKind.StructDeclaration) {
         let containingStructDecl = <StructDeclaration>node.parent;
@@ -11841,9 +11841,9 @@ error(node, Diagnostics.Constructors_for_derived_structs_must_contain_a_super_ca
                 }
             }
 	        // check if structArray declaration
-	        if (node.parent.kind === SyntaxKind.ArrayType && type.flags & TypeFlags.Struct) {
-		        Object.getPrototypeOf(node.parent).kind = SyntaxKind.StructArrayType;
-	        }
+if (node.parent.kind === SyntaxKind.ArrayType && type.flags & TypeFlags.Struct) {
+Object.getPrototypeOf(node.parent).kind = SyntaxKind.StructArrayType;
+}
         }
 
         function checkTypeQuery(node: TypeQueryNode) {
@@ -11863,9 +11863,9 @@ error(node, Diagnostics.Constructors_for_derived_structs_must_contain_a_super_ca
             checkSourceElement(node.elementType);
         }
 
-	    function checkStructArrayType(node: StructArrayTypeNode) {
-		    checkSourceElement(node.elementType);
-	    }
+function checkStructArrayType(node: StructArrayTypeNode) {
+checkSourceElement(node.elementType);
+}
 
         function checkTupleType(node: TupleTypeNode) {
             // Grammar checking
@@ -14860,8 +14860,8 @@ getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithStruct;
                     return checkTypeLiteral(<TypeLiteralNode>node);
                 case SyntaxKind.ArrayType:
                     return checkArrayType(<ArrayTypeNode>node);
-	            case SyntaxKind.StructArrayType:
-		            return checkStructArrayType(<StructArrayTypeNode>node);
+case SyntaxKind.StructArrayType:
+return checkStructArrayType(<StructArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return checkTupleType(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
@@ -15994,7 +15994,7 @@ getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithStruct;
 
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
-	        globalStructArrayType = <GenericType>getGlobalType("StructArray", /*arity*/ 1);
+globalStructArrayType = <GenericType>getGlobalType("StructArray", /*arity*/ 1);
             globalObjectType = getGlobalType("Object");
             globalFunctionType = getGlobalType("Function");
             globalStringType = getGlobalType("String");
@@ -16161,7 +16161,7 @@ getGlobalClassDecoratorType = memoize(() => getGlobalType("StructDecorator"));
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_element, text);
                         }
                         else if (modifier.kind === SyntaxKind.ProtectedKeyword && !isProtectedAllowedInStruct && (node.parent.kind === SyntaxKind.StructExpression || node.parent.kind === SyntaxKind.StructDeclaration)) {
-	                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_struct_element, text);
+return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_struct_element, text);
                         }
                         else if (flags & NodeFlags.Abstract) {
                             if (modifier.kind === SyntaxKind.PrivateKeyword) {
