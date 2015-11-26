@@ -9,9 +9,11 @@ export = a;
 import defaultBinding from "./es6ImportDefaultBindingInEs5_0";
 
 //// [es6ImportDefaultBindingInEs5_0.js]
+"use strict";
 var a = 10;
 module.exports = a;
 //// [es6ImportDefaultBindingInEs5_1.js]
+"use strict";
 
 
 //// [es6ImportDefaultBindingInEs5_0.d.ts]

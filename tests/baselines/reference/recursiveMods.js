@@ -25,6 +25,7 @@ export module Foo {
 
 
 //// [recursiveMods.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var C = (function () {

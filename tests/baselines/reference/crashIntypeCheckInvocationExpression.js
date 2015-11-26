@@ -14,6 +14,7 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 
 //// [crashIntypeCheckInvocationExpression.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var nake;
     function doCompile(fileset, moduleType) {
         return undefined;

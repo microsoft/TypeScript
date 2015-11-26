@@ -60,6 +60,7 @@ export var eVar3 = 10, eVar4, eVar5;
 
 //// [withExportDecl.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var simpleVar;
     var anotherVar;
     var varWithSimpleType;

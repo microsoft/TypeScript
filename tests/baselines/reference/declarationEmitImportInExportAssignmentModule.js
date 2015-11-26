@@ -11,6 +11,7 @@ module m {
 export = m;
 
 //// [declarationEmitImportInExportAssignmentModule.js]
+"use strict";
 var m;
 (function (m) {
     var c;

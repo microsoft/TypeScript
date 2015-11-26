@@ -23,15 +23,19 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleE.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleD.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleC.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleB.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var ClassB = (function () {
         function ClassB() {
         }
@@ -41,4 +45,5 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleA.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });

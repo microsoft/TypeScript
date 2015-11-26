@@ -15,6 +15,7 @@ m1.f();
         define(["require", "exports", "bar", "m2"], factory);
     }
 })(function (require, exports, b) {
+    "use strict";
     var m1 = require("m2");
     m1.f();
 });

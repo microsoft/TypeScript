@@ -16,8 +16,10 @@ use(x);
 use(foo);
 
 //// [existingModule.js]
+"use strict";
 exports.x = 1;
 //// [test.js]
+"use strict";
 var existingModule_1 = require('./existingModule');
 var missingModule_1 = require('./missingModule');
 const test = { x: existingModule_1.x, foo: missingModule_1.foo };

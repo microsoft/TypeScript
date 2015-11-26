@@ -33,6 +33,7 @@ var moduleName: string;
 var visModel = new moduleMap[moduleName].VisualizationModel();
 
 //// [extendingClassFromAliasAndUsageInIndexer_backbone.js]
+"use strict";
 var Model = (function () {
     function Model() {
     }
@@ -40,6 +41,7 @@ var Model = (function () {
 })();
 exports.Model = Model;
 //// [extendingClassFromAliasAndUsageInIndexer_moduleA.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -55,6 +57,7 @@ var VisualizationModel = (function (_super) {
 })(Backbone.Model);
 exports.VisualizationModel = VisualizationModel;
 //// [extendingClassFromAliasAndUsageInIndexer_moduleB.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -70,6 +73,7 @@ var VisualizationModel = (function (_super) {
 })(Backbone.Model);
 exports.VisualizationModel = VisualizationModel;
 //// [extendingClassFromAliasAndUsageInIndexer_main.js]
+"use strict";
 var moduleA = require("./extendingClassFromAliasAndUsageInIndexer_moduleA");
 var moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 var moduleATyped = moduleA;

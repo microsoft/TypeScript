@@ -11,6 +11,7 @@ import * as a from "a";
 
 //// [b.js]
 System.register([], function(exports_1) {
+    "use strict";
     return {
         setters:[],
         execute: function() {

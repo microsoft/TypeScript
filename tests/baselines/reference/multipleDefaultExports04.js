@@ -7,6 +7,7 @@ export default function f() {
 }
 
 //// [multipleDefaultExports04.js]
+"use strict";
 function f() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
