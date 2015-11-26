@@ -24,6 +24,7 @@ export {MyClass};
 
 
 //// [db.js]
+"use strict";
 var db = (function () {
     function db() {
     }
@@ -33,6 +34,7 @@ var db = (function () {
 })();
 exports.db = db;
 //// [service.js]
+"use strict";
 var db_1 = require('./db');
 function someDecorator(target) {
     return target;

@@ -9,6 +9,7 @@ function m1_f1() {
     return m1_instance1;
 }
 define("ref/m2", ["require", "exports"], function (require, exports) {
+    "use strict";
     exports.m2_a1 = 10;
     var m2_c1 = (function () {
         function m2_c1() {

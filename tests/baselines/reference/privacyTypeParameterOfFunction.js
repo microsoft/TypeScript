@@ -133,6 +133,7 @@ function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 }
 
 //// [privacyTypeParameterOfFunction.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }

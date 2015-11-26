@@ -7,6 +7,7 @@ export class MyClass {
 }
 
 //// [visibilityOfTypeParameters.js]
+"use strict";
 var MyClass = (function () {
     function MyClass() {
     }

@@ -15,6 +15,7 @@ if (!module.exports) module.exports = "";
 
 //// [moduleExports1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var TypeScript;
     (function (TypeScript) {
         var Strasse;

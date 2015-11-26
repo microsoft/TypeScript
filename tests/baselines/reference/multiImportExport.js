@@ -26,6 +26,7 @@ class Adder {
 export = Adder;
 
 //// [Adder.js]
+"use strict";
 var Adder = (function () {
     function Adder() {
     }
@@ -35,14 +36,17 @@ var Adder = (function () {
 })();
 module.exports = Adder;
 //// [Math.js]
+"use strict";
 var Adder = require('./Adder');
 var Math = {
     Adder: Adder
 };
 module.exports = Math;
 //// [Drawing.js]
+"use strict";
 exports.Math = require('./Math/Math');
 //// [consumer.js]
+"use strict";
 var Drawing = require('./Drawing');
 var addr = new Drawing.Math.Adder();
 

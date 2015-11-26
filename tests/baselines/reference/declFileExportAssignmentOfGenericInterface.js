@@ -14,9 +14,11 @@ x.a;
 
 //// [declFileExportAssignmentOfGenericInterface_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [declFileExportAssignmentOfGenericInterface_1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.x.a;
 });
 

@@ -15,6 +15,7 @@ export default class A
 
 
 //// [es5-commonjs.js]
+"use strict";
 var A = (function () {
     function A() {
     }

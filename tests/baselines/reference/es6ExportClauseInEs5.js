@@ -17,6 +17,7 @@ export { uninstantiated };
 export { x };
 
 //// [server.js]
+"use strict";
 var c = (function () {
     function c() {
     }

@@ -4,6 +4,7 @@ class D { }
 export = D;
 
 //// [exportAssignmentWithExports.js]
+"use strict";
 var C = (function () {
     function C() {
     }

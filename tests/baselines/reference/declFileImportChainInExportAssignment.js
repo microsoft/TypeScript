@@ -10,6 +10,7 @@ import b = a;
 export = b;
 
 //// [declFileImportChainInExportAssignment.js]
+"use strict";
 var m;
 (function (m) {
     var c;

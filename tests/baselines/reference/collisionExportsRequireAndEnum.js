@@ -62,6 +62,7 @@ module m4 {
 
 //// [collisionExportsRequireAndEnum_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     (function (require) {
         require[require["_thisVal1"] = 0] = "_thisVal1";
         require[require["_thisVal2"] = 1] = "_thisVal2";
