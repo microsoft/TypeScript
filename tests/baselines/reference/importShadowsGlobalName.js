@@ -12,6 +12,7 @@ export = Bar;
 
 //// [Foo.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Foo = (function () {
         function Foo() {
         }
@@ -26,6 +27,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", 'Foo'], function (require, exports, Error) {
+    "use strict";
     var Bar = (function (_super) {
         __extends(Bar, _super);
         function Bar() {

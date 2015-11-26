@@ -1874,7 +1874,7 @@ namespace ts {
         function parseTemplateExpression(): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
-            template.head = parseLiteralNode();
+            template.head = parseTemplateLiteralFragment();
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             const templateSpans = <NodeArray<TemplateSpan>>[];
@@ -1895,22 +1895,34 @@ namespace ts {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
-            let literal: LiteralExpression;
+            let literal: TemplateLiteralFragment;
 
             if (token === SyntaxKind.CloseBraceToken) {
                 reScanTemplateToken();
-                literal = parseLiteralNode();
+                literal = parseTemplateLiteralFragment();
             }
             else {
-                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <TemplateLiteralFragment>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
             return finishNode(span);
         }
 
+        function parseStringLiteralTypeNode(): StringLiteralTypeNode {
+            return <StringLiteralTypeNode>parseLiteralLikeNode(SyntaxKind.StringLiteralType, /*internName*/ true);
+        }
+
         function parseLiteralNode(internName?: boolean): LiteralExpression {
-            const node = <LiteralExpression>createNode(token);
+            return <LiteralExpression>parseLiteralLikeNode(token, internName);
+        }
+
+        function parseTemplateLiteralFragment(): TemplateLiteralFragment {
+            return <TemplateLiteralFragment>parseLiteralLikeNode(token, /*internName*/ false);
+        }
+
+        function parseLiteralLikeNode(kind: SyntaxKind, internName: boolean): LiteralLikeNode {
+            const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
 
@@ -2397,7 +2409,7 @@ namespace ts {
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.StringLiteral:
-                    return <StringLiteral>parseLiteralNode(/*internName*/ true);
+                    return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
                 case SyntaxKind.ThisKeyword:

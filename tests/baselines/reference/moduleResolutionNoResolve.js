@@ -9,5 +9,7 @@ export var c = '';
 
 
 //// [a.js]
+"use strict";
 //// [b.js]
+"use strict";
 exports.c = '';

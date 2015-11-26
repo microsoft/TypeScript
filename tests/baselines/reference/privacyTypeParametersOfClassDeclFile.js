@@ -155,6 +155,7 @@ module privateModule {
 
 
 //// [privacyTypeParametersOfClassDeclFile.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }

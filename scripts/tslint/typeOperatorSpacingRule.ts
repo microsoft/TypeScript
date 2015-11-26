@@ -13,10 +13,10 @@ export class Rule extends Lint.Rules.AbstractRule {
 class TypeOperatorSpacingWalker extends Lint.RuleWalker {
     public visitNode(node: ts.Node) {
         if (node.kind === ts.SyntaxKind.UnionType || node.kind === ts.SyntaxKind.IntersectionType) {
-            let types = (<ts.UnionOrIntersectionTypeNode>node).types;
+            const types = (<ts.UnionOrIntersectionTypeNode>node).types;
             let expectedStart = types[0].end + 2; // space, | or &
             for (let i = 1; i < types.length; i++) {
-                let currentType = types[i];
+                const currentType = types[i];
                 if (expectedStart !== currentType.pos || currentType.getLeadingTriviaWidth() !== 1) {
                     const failure = this.createFailure(currentType.pos, currentType.getWidth(), Rule.FAILURE_STRING);
                     this.addFailure(failure);

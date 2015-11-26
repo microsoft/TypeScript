@@ -36,6 +36,7 @@ export let h1: D = new D;
 
 //// [exportNonInitializedVariablesSystem.js]
 System.register([], function(exports_1) {
+    "use strict";
     var a, b, c, d, A, e, f, B, C, a1, b1, c1, d1, D, e1, f1, g1, h1;
     return {
         setters:[],

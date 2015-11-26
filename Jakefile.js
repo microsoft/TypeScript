@@ -106,6 +106,16 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
+var scriptSources = [
+    "tslint/booleanTriviaRule.ts",
+    "tslint/nextLineRule.ts",
+    "tslint/noNullRule.ts",
+    "tslint/preferConstRule.ts",
+    "tslint/typeOperatorSpacingRule.ts"
+].map(function (f) {
+    return path.join(scriptsDirectory, f);
+});
+
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -377,7 +387,6 @@ task("generate-diagnostics", [diagnosticInfoMapTs]);
 var distributeVersionOutputFolder = path.join(builtLocalDirectory, "distributeVersion");
 var distributeVersionJS = path.join(distributeVersionOutputFolder, "distributeVersion.js");
 var distributeVersionTS = path.join(scriptsDirectory, "distributeVersion.ts");
-
 var packageJson = "package.json";
 var builtPackageJSON = path.join(distributeVersionOutputFolder, "package.json");
 
@@ -946,6 +955,7 @@ function lintFileAsync(options, path, cb) {
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
+    .concat(scriptSources);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

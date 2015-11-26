@@ -357,7 +357,7 @@ namespace ts {
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.ThisType:
-                case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                     return writeTextOfNode(currentText, type);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
@@ -658,7 +658,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentText, getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(node);
                 write(");");
             }
             writer.writeLine();
@@ -715,14 +715,23 @@ namespace ts {
                 }
                 write(" from ");
             }
-            emitExternalModuleSpecifier(node.moduleSpecifier);
+            emitExternalModuleSpecifier(node);
             write(";");
             writer.writeLine();
         }
 
-        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
-            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit) {
-                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration) {
+            let moduleSpecifier: Node;
+            if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+                const node = parent as ImportEqualsDeclaration;
+                moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
+            }
+            else {
+                const node = parent as (ImportDeclaration | ExportDeclaration);
+                moduleSpecifier = node.moduleSpecifier;
+            }
+            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
+                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
                     write("\"");
                     write(moduleName);
@@ -765,7 +774,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                emitExternalModuleSpecifier(node.moduleSpecifier);
+                emitExternalModuleSpecifier(node);
             }
             write(";");
             writer.writeLine();

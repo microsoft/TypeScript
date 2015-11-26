@@ -205,6 +205,7 @@ namespace ts {
         IntersectionType,
         ParenthesizedType,
         ThisType,
+        StringLiteralType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -350,7 +351,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ThisType,
+        LastTypeNode = StringLiteralType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -790,10 +791,13 @@ namespace ts {
         type: TypeNode;
     }
 
-    // Note that a StringLiteral AST node is both an Expression and a TypeNode.  The latter is
-    // because string literals can appear in type annotations as well.
+    // @kind(SyntaxKind.StringLiteralType)
+    export interface StringLiteralTypeNode extends LiteralLikeNode, TypeNode {
+        _stringLiteralTypeBrand: any;
+    }
+
     // @kind(SyntaxKind.StringLiteral)
-    export interface StringLiteral extends LiteralExpression, TypeNode {
+    export interface StringLiteral extends LiteralExpression {
         _stringLiteralBrand: any;
     }
 
@@ -911,24 +915,32 @@ namespace ts {
         body: ConciseBody;
     }
 
+    export interface LiteralLikeNode extends Node {
+        text: string;
+        isUnterminated?: boolean;
+        hasExtendedUnicodeEscape?: boolean;
+    }
+
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
     // or any literal of a template, this means quotes have been removed and escapes have been converted to actual characters.
     // For a NumericLiteral, the stored value is the toString() representation of the number. For example 1, 1.00, and 1e0 are all stored as just "1".
     // @kind(SyntaxKind.NumericLiteral)
     // @kind(SyntaxKind.RegularExpressionLiteral)
     // @kind(SyntaxKind.NoSubstitutionTemplateLiteral)
+    export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
+        _literalExpressionBrand: any;
+    }
+
     // @kind(SyntaxKind.TemplateHead)
     // @kind(SyntaxKind.TemplateMiddle)
     // @kind(SyntaxKind.TemplateTail)
-    export interface LiteralExpression extends PrimaryExpression {
-        text: string;
-        isUnterminated?: boolean;
-        hasExtendedUnicodeEscape?: boolean;
+    export interface TemplateLiteralFragment extends LiteralLikeNode {
+        _templateLiteralFragmentBrand: any;
     }
 
     // @kind(SyntaxKind.TemplateExpression)
     export interface TemplateExpression extends PrimaryExpression {
-        head: LiteralExpression;
+        head: TemplateLiteralFragment;
         templateSpans: NodeArray<TemplateSpan>;
     }
 
@@ -937,7 +949,7 @@ namespace ts {
     // @kind(SyntaxKind.TemplateSpan)
     export interface TemplateSpan extends Node {
         expression: Expression;
-        literal: LiteralExpression;
+        literal: TemplateLiteralFragment;
     }
 
     // @kind(SyntaxKind.ParenthesizedExpression)
