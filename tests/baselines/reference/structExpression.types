@@ -1,0 +1,29 @@
+=== tests/cases/conformance/structs/structExpression.ts ===
+// struct expression are supported
+
+var x = struct C {
+>x : typeof C
+>struct C {} : typeof C
+>C : typeof C
+}
+
+var y = {
+>y : { foo: typeof C2; }
+>{    foo: struct C2 {    }} : { foo: typeof C2; }
+
+    foo: struct C2 {
+>foo : typeof C2
+>struct C2 {    } : typeof C2
+>C2 : typeof C2
+    }
+}
+
+module M {
+>M : typeof M
+
+    var z = struct C4 {
+>z : typeof C4
+>struct C4 {    } : typeof C4
+>C4 : typeof C4
+    }
+}

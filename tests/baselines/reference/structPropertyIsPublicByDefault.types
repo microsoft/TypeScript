@@ -1,0 +1,46 @@
+=== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyIsPublicByDefault.ts ===
+// doc 2.2
+// all ok
+
+struct C {
+>C : C
+
+    x: string;
+>x : string
+
+    foo() { }
+>foo : () => void
+
+    static a: string;
+>a : string
+
+    static foo() { }
+>foo : () => void
+}
+
+var c: C;
+>c : C
+>C : C
+
+c.x;
+>c.x : string
+>c : C
+>x : string
+
+c.foo();
+>c.foo() : void
+>c.foo : () => void
+>c : C
+>foo : () => void
+
+C.a;
+>C.a : string
+>C : typeof C
+>a : string
+
+C.foo();
+>C.foo() : void
+>C.foo : () => void
+>C : typeof C
+>foo : () => void
+

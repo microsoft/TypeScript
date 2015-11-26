@@ -1,0 +1,35 @@
+tests/cases/conformance/structs/structArrays/structArrayAssignment.ts(19,1): error TS2322: Type 'A' is not assignable to type 'C'.
+tests/cases/conformance/structs/structArrays/structArrayAssignment.ts(20,1): error TS2322: Type 'number' is not assignable to type 'C'.
+tests/cases/conformance/structs/structArrays/structArrayAssignment.ts(23,1): error TS2322: Type 'E' is not assignable to type 'C'.
+
+
+==== tests/cases/conformance/structs/structArrays/structArrayAssignment.ts (3 errors) ====
+    // doc 6
+    // If struct array members are assigned with values of incompatible type, type error will be issued.
+    
+    class A {}
+    var a: A;
+    var b = 1;
+    
+    struct C { }
+    var c = new C();
+    struct D extends C {}
+    var d = new D();
+    
+    struct E {}
+    var e: E;
+    
+    var structArr: C[];
+    structArr = new C[5];
+    
+    structArr[0] = a; // error
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'A' is not assignable to type 'C'.
+    structArr[1] = b; // error
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'C'.
+    structArr[2] = c; // ok
+    structArr[3] = d; // ok
+    structArr[4] = e; // error
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'E' is not assignable to type 'C'.

@@ -1156,6 +1156,27 @@ interface ArrayConstructor {
 
 declare var Array: ArrayConstructor;
 
+interface StructArray<T> {
+	/**
+	 * Gets or sets the length of the array. This is a number one higher than the highest element defined in an array.
+	 */
+	length: number;
+	/**
+	 * Returns a string representation of an array.
+	 */
+	toString(): string;
+	toLocaleString(): string;
+
+	[n: number]: T;
+}
+
+interface StructArrayConstructor {
+	new <T>(arrayLength: number): StructArray<T>;
+	<T>(arrayLength: number): StructArray<T>;
+}
+
+declare var StructArray: StructArrayConstructor;
+
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
     configurable?: boolean;

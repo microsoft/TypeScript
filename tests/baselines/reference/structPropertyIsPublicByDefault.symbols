@@ -1,0 +1,44 @@
+=== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyIsPublicByDefault.ts ===
+// doc 2.2
+// all ok
+
+struct C {
+>C : Symbol(C, Decl(structPropertyIsPublicByDefault.ts, 0, 0))
+
+    x: string;
+>x : Symbol(x, Decl(structPropertyIsPublicByDefault.ts, 3, 10))
+
+    foo() { }
+>foo : Symbol(foo, Decl(structPropertyIsPublicByDefault.ts, 4, 14))
+
+    static a: string;
+>a : Symbol(C.a, Decl(structPropertyIsPublicByDefault.ts, 5, 13))
+
+    static foo() { }
+>foo : Symbol(C.foo, Decl(structPropertyIsPublicByDefault.ts, 7, 21))
+}
+
+var c: C;
+>c : Symbol(c, Decl(structPropertyIsPublicByDefault.ts, 11, 3))
+>C : Symbol(C, Decl(structPropertyIsPublicByDefault.ts, 0, 0))
+
+c.x;
+>c.x : Symbol(C.x, Decl(structPropertyIsPublicByDefault.ts, 3, 10))
+>c : Symbol(c, Decl(structPropertyIsPublicByDefault.ts, 11, 3))
+>x : Symbol(C.x, Decl(structPropertyIsPublicByDefault.ts, 3, 10))
+
+c.foo();
+>c.foo : Symbol(C.foo, Decl(structPropertyIsPublicByDefault.ts, 4, 14))
+>c : Symbol(c, Decl(structPropertyIsPublicByDefault.ts, 11, 3))
+>foo : Symbol(C.foo, Decl(structPropertyIsPublicByDefault.ts, 4, 14))
+
+C.a;
+>C.a : Symbol(C.a, Decl(structPropertyIsPublicByDefault.ts, 5, 13))
+>C : Symbol(C, Decl(structPropertyIsPublicByDefault.ts, 0, 0))
+>a : Symbol(C.a, Decl(structPropertyIsPublicByDefault.ts, 5, 13))
+
+C.foo();
+>C.foo : Symbol(C.foo, Decl(structPropertyIsPublicByDefault.ts, 7, 21))
+>C : Symbol(C, Decl(structPropertyIsPublicByDefault.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(structPropertyIsPublicByDefault.ts, 7, 21))
+

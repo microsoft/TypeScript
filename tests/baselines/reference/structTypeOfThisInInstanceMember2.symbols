@@ -1,0 +1,104 @@
+=== tests/cases/conformance/structs/members/instanceAndStaticMembers/structTypeOfThisInInstanceMember2.ts ===
+struct C<T> {
+>C : Symbol(C, Decl(structTypeOfThisInInstanceMember2.ts, 0, 0))
+>T : Symbol(T, Decl(structTypeOfThisInInstanceMember2.ts, 0, 9))
+
+    x = this;
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>this : Symbol(C, Decl(structTypeOfThisInInstanceMember2.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+
+        return this;
+>this : Symbol(C, Decl(structTypeOfThisInInstanceMember2.ts, 0, 0))
+    }
+    constructor(x: T) {
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 5, 16))
+>T : Symbol(T, Decl(structTypeOfThisInInstanceMember2.ts, 0, 9))
+
+        var t = this;
+>t : Symbol(t, Decl(structTypeOfThisInInstanceMember2.ts, 6, 11))
+>this : Symbol(C, Decl(structTypeOfThisInInstanceMember2.ts, 0, 0))
+
+        t.x;
+>t.x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>t : Symbol(t, Decl(structTypeOfThisInInstanceMember2.ts, 6, 11))
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+
+        t.z;
+>t.z : Symbol(z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+>t : Symbol(t, Decl(structTypeOfThisInInstanceMember2.ts, 6, 11))
+>z : Symbol(z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+
+        var r = t.foo();
+>r : Symbol(r, Decl(structTypeOfThisInInstanceMember2.ts, 9, 11))
+>t.foo : Symbol(foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+>t : Symbol(t, Decl(structTypeOfThisInInstanceMember2.ts, 6, 11))
+>foo : Symbol(foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+    }
+    z: T;
+>z : Symbol(z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+>T : Symbol(T, Decl(structTypeOfThisInInstanceMember2.ts, 0, 9))
+}
+
+var c: C<string>;
+>c : Symbol(c, Decl(structTypeOfThisInInstanceMember2.ts, 14, 3))
+>C : Symbol(C, Decl(structTypeOfThisInInstanceMember2.ts, 0, 0))
+
+// all ok
+var r = c.x;
+>r : Symbol(r, Decl(structTypeOfThisInInstanceMember2.ts, 16, 3))
+>c.x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>c : Symbol(c, Decl(structTypeOfThisInInstanceMember2.ts, 14, 3))
+>x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+
+var ra = c.x.x.x;
+>ra : Symbol(ra, Decl(structTypeOfThisInInstanceMember2.ts, 17, 3))
+>c.x.x.x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>c.x.x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>c.x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>c : Symbol(c, Decl(structTypeOfThisInInstanceMember2.ts, 14, 3))
+>x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+
+var r3 = c.foo();
+>r3 : Symbol(r3, Decl(structTypeOfThisInInstanceMember2.ts, 18, 3))
+>c.foo : Symbol(C.foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+>c : Symbol(c, Decl(structTypeOfThisInInstanceMember2.ts, 14, 3))
+>foo : Symbol(C.foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+
+var r4 = c.z;
+>r4 : Symbol(r4, Decl(structTypeOfThisInInstanceMember2.ts, 19, 3))
+>c.z : Symbol(C.z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+>c : Symbol(c, Decl(structTypeOfThisInInstanceMember2.ts, 14, 3))
+>z : Symbol(C.z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+
+var rs = [r, r3];
+>rs : Symbol(rs, Decl(structTypeOfThisInInstanceMember2.ts, 20, 3))
+>r : Symbol(r, Decl(structTypeOfThisInInstanceMember2.ts, 16, 3))
+>r3 : Symbol(r3, Decl(structTypeOfThisInInstanceMember2.ts, 18, 3))
+
+rs.forEach(x => {
+>rs.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>rs : Symbol(rs, Decl(structTypeOfThisInInstanceMember2.ts, 20, 3))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 22, 11))
+
+    x.foo;
+>x.foo : Symbol(C.foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 22, 11))
+>foo : Symbol(C.foo, Decl(structTypeOfThisInInstanceMember2.ts, 1, 13))
+
+    x.x;
+>x.x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 22, 11))
+>x : Symbol(C.x, Decl(structTypeOfThisInInstanceMember2.ts, 0, 13))
+
+    x.z;
+>x.z : Symbol(C.z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+>x : Symbol(x, Decl(structTypeOfThisInInstanceMember2.ts, 22, 11))
+>z : Symbol(C.z, Decl(structTypeOfThisInInstanceMember2.ts, 10, 5))
+
+});

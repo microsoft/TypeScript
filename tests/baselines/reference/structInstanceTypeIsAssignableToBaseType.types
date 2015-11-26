@@ -1,0 +1,45 @@
+=== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structInstanceTypeIsAssignableToBaseType.ts ===
+// doc 1.1
+// Because struct uses nominal typing, the instance type of the declared struct doesn’t need to be
+// assignable to the base type reference. However, member variables override is not allowed.
+// ok
+
+struct C {
+>C : C
+
+	foo: string;
+>foo : string
+
+	thing(): string {
+>thing : () => string
+
+		return "1";
+>"1" : string
+	}
+}
+
+struct D extends C {
+>D : D
+>C : C
+
+	thing(): number {
+>thing : () => number
+
+		return 1;  // ok
+>1 : number
+	}
+}
+
+var c: C;
+>c : C
+>C : C
+
+var d: D;
+>d : D
+>D : D
+
+c = d;
+>c = d : D
+>c : C
+>d : D
+

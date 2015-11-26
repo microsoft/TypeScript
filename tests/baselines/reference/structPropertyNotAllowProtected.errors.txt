@@ -1,0 +1,25 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyNotAllowProtected.ts(5,5): error TS20011: 'protected' modifier cannot appear on a struct element.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyNotAllowProtected.ts(6,5): error TS20011: 'protected' modifier cannot appear on a struct element.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyNotAllowProtected.ts(8,5): error TS20011: 'protected' modifier cannot appear on a struct element.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyNotAllowProtected.ts(9,5): error TS20011: 'protected' modifier cannot appear on a struct element.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyNotAllowProtected.ts (4 errors) ====
+    // doc 2.2
+    // no protected property members in struct.
+    
+    struct C {
+        protected x: string; // error
+        ~~~~~~~~~
+!!! error TS20011: 'protected' modifier cannot appear on a struct element.
+        protected foo() { } // error
+        ~~~~~~~~~
+!!! error TS20011: 'protected' modifier cannot appear on a struct element.
+    
+        protected static a: string; // error
+        ~~~~~~~~~
+!!! error TS20011: 'protected' modifier cannot appear on a struct element.
+        protected static foo() { } // error
+        ~~~~~~~~~
+!!! error TS20011: 'protected' modifier cannot appear on a struct element.
+    }

@@ -43,7 +43,7 @@ class TypeWriterWalker {
 
         // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
         // let type = this.checker.getTypeAtLocation(node);
-        let type = node.parent && ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
+        let type = node.parent && ts.isExpressionWithTypeArgumentsInClassOrStructExtendsClause(node.parent) && this.checker.getTypeAtLocation(node.parent) || this.checker.getTypeAtLocation(node);
 
         ts.Debug.assert(type !== undefined, "type doesn't exist");
         let symbol = this.checker.getSymbolAtLocation(node);

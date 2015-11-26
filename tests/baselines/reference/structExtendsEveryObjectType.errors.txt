@@ -1,0 +1,43 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(4,18): error TS2304: Cannot find name 'I'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(6,19): error TS2507: Type '{ foo: any; }' is not a constructor function type.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(6,26): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(6,32): error TS1005: ',' expected.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(8,19): error TS2507: Type '{ foo: string; }' is not a constructor function type.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(11,19): error TS2507: Type 'typeof M' is not a constructor function type.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(14,19): error TS2507: Type '() => void' is not a constructor function type.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts(16,19): error TS2507: Type 'undefined[]' is not a constructor function type.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsEveryObjectType.ts (8 errors) ====
+    interface I {
+        foo: string;
+    }
+    struct C extends I { } // error, cannot find I
+                     ~
+!!! error TS2304: Cannot find name 'I'.
+    
+    struct C2 extends { foo: string; } { } // error
+                      ~~~~~~~~~~~~~~~~
+!!! error TS2507: Type '{ foo: any; }' is not a constructor function type.
+                             ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+                                   ~
+!!! error TS1005: ',' expected.
+    var x: { foo: string; }
+    struct C3 extends x { } // error
+                      ~
+!!! error TS2507: Type '{ foo: string; }' is not a constructor function type.
+    
+    module M { export var x = 1; }
+    struct C4 extends M { } // error
+                      ~
+!!! error TS2507: Type 'typeof M' is not a constructor function type.
+    
+    function foo() { }
+    struct C5 extends foo { } // error
+                      ~~~
+!!! error TS2507: Type '() => void' is not a constructor function type.
+    
+    struct C6 extends []{ } // error
+                      ~~
+!!! error TS2507: Type 'undefined[]' is not a constructor function type.

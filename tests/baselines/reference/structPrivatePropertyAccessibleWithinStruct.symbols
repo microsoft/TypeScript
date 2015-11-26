@@ -1,0 +1,62 @@
+=== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivatePropertyAccessibleWithinStruct.ts ===
+// doc 2.2
+// private property members can be accessed only within the struct body that contains their declaration
+// no errors
+
+struct C {
+>C : Symbol(C, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 0, 0))
+
+    private x: string;
+>x : Symbol(x, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 4, 10))
+
+    private foo() { return this.foo; }
+>foo : Symbol(foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 5, 22))
+>this.foo : Symbol(foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 5, 22))
+>this : Symbol(C, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 0, 0))
+>foo : Symbol(foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 5, 22))
+
+    private static x: string;
+>x : Symbol(C.x, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 6, 38))
+
+    private static foo() { return this.foo; }
+>foo : Symbol(C.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 8, 29))
+>this.foo : Symbol(C.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 8, 29))
+>this : Symbol(C, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 8, 29))
+
+    private static bar() { this.foo(); }
+>bar : Symbol(C.bar, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 9, 45))
+>this.foo : Symbol(C.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 8, 29))
+>this : Symbol(C, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 8, 29))
+}
+
+// added level of function nesting
+struct C2 {
+>C2 : Symbol(C2, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 11, 1))
+
+    private x: string;
+>x : Symbol(x, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 14, 11))
+
+    private foo() { () => this.foo; }
+>foo : Symbol(foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 15, 22))
+>this.foo : Symbol(foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 15, 22))
+>this : Symbol(C2, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 11, 1))
+>foo : Symbol(foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 15, 22))
+
+    private static x: string;
+>x : Symbol(C2.x, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 16, 37))
+
+    private static foo() { () => this.foo; }
+>foo : Symbol(C2.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 18, 29))
+>this.foo : Symbol(C2.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 18, 29))
+>this : Symbol(C2, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 11, 1))
+>foo : Symbol(C2.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 18, 29))
+
+    private static bar() { () => this.foo(); }
+>bar : Symbol(C2.bar, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 19, 44))
+>this.foo : Symbol(C2.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 18, 29))
+>this : Symbol(C2, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 11, 1))
+>foo : Symbol(C2.foo, Decl(structPrivatePropertyAccessibleWithinStruct.ts, 18, 29))
+}
+

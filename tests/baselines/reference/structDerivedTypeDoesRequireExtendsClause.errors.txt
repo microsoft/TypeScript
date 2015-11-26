@@ -1,0 +1,24 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structDerivedTypeDoesRequireExtendsClause.ts(17,1): error TS2322: Type 'Derived' is not assignable to type 'Base'.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structDerivedTypeDoesRequireExtendsClause.ts (1 errors) ====
+    struct Base {
+        foo: string;
+    }
+    
+    struct Derived {
+        foo: string;
+        bar: number;
+    }
+    
+    struct Derived2 extends Base {
+        bar: string;
+    }
+    
+    var b: Base;
+    var d1: Derived;
+    var d2: Derived2;
+    b = d1; // error, not structural typing
+    ~
+!!! error TS2322: Type 'Derived' is not assignable to type 'Base'.
+    b = d2; // ok

@@ -1,0 +1,73 @@
+=== tests/cases/conformance/structs/members/instanceAndStaticMembers/structTypeOfThisInStaticMembers.ts ===
+// Within static member functions and static member accessors, the type of this is
+// the constructor function type.
+
+struct C {
+>C : C
+
+    constructor(x: number) { }
+>x : number
+
+    static foo: number;
+>foo : number
+
+    static bar() {
+>bar : () => typeof C
+
+        // type of this is the constructor function type
+        var t = this;
+>t : typeof C
+>this : typeof C
+
+        return this;
+>this : typeof C
+    }
+}
+
+var t = C.bar();
+>t : typeof C
+>C.bar() : typeof C
+>C.bar : () => typeof C
+>C : typeof C
+>bar : () => typeof C
+
+// all ok
+var r2 = t.foo + 1;
+>r2 : number
+>t.foo + 1 : number
+>t.foo : number
+>t : typeof C
+>foo : number
+>1 : number
+
+var r3 = t.bar();
+>r3 : typeof C
+>t.bar() : typeof C
+>t.bar : () => typeof C
+>t : typeof C
+>bar : () => typeof C
+
+var r4 = new t(1);
+>r4 : C
+>new t(1) : C
+>t : typeof C
+>1 : number
+
+/* struct C2<T> {
+    static test: number;
+    constructor(x: string) { }
+    static foo: string;
+    static bar() {
+        // type of this is the constructor function type
+        var t = this;
+        return this;
+    }
+}
+
+var t2 = C2.bar();
+// all ok
+var r5 = t2.foo + 1;
+var r6 = t2.bar();
+var r7 = new t2(''); */
+
+

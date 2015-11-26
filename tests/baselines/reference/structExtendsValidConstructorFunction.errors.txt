@@ -1,0 +1,11 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsValidConstructorFunction.ts(5,18): error TS2507: Type '() => void' is not a constructor function type.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendsValidConstructorFunction.ts (1 errors) ====
+    function foo() { }
+    
+    var x = new foo(); // can be used as a constructor function
+    
+    struct C extends foo { } // error, cannot extend it though
+                     ~~~
+!!! error TS2507: Type '() => void' is not a constructor function type.

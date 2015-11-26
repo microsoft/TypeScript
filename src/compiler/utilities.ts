@@ -335,6 +335,8 @@ namespace ts {
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
+            case SyntaxKind.StructDeclaration:
+            case SyntaxKind.StructExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.EnumDeclaration:
@@ -457,7 +459,7 @@ namespace ts {
                 // Specialized signatures can have string literals as their parameters' type names
                 return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+                return !isExpressionWithTypeArgumentsInClassOrStructExtendsClause(node);
 
             // Identifiers and qualified names may be type nodes, depending on their context. Climb
             // above them to find the lowest container
@@ -490,7 +492,7 @@ namespace ts {
                 }
                 switch (parent.kind) {
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                        return !isExpressionWithTypeArgumentsInClassOrStructExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
@@ -573,6 +575,8 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
+            case SyntaxKind.StructDeclaration:
+case SyntaxKind.StructExpression:
                     // These are not allowed inside a generator now, but eventually they may be allowed
                     // as local types. Regardless, any yield statements contained within them should be
                     // skipped in this traversal.
@@ -620,6 +624,10 @@ namespace ts {
     export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
     }
+
+export function isStructLike(node: Node): node is StructLikeDeclaration {
+return node && (node.kind === SyntaxKind.StructDeclaration || node.kind === SyntaxKind.StructExpression);
+}
 
     export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
         if (node) {
@@ -674,6 +682,15 @@ namespace ts {
         }
     }
 
+    export function getContainingStruct(node: Node): StructLikeDeclaration {
+        while (true) {
+            node = node.parent;
+            if (!node || isStructLike(node)) {
+                return <StructLikeDeclaration>node;
+            }
+        }
+    }
+
     export function getContainingClass(node: Node): ClassLikeDeclaration {
         while (true) {
             node = node.parent;
@@ -695,7 +712,7 @@ namespace ts {
                     // then the computed property is not a 'this' container.
                     // A computed property name in a class needs to be a this container
                     // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
+                    if (isClassLike(node.parent.parent) || isStructLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -707,12 +724,12 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                    if (node.parent.kind === SyntaxKind.Parameter && (isClassElement(node.parent.parent) || isStructElement(node.parent.parent))) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
                         node = node.parent.parent;
                     }
-                    else if (isClassElement(node.parent)) {
+                    else if (isClassElement(node.parent) || isStructElement(node.parent)) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
                         node = node.parent;
@@ -753,7 +770,7 @@ namespace ts {
                     // then the computed property is not a 'super' container.
                     // A computed property name in a class needs to be a super container
                     // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
+                    if (isClassLike(node.parent.parent) || isStructLike(node.parent.parent)) {
                         return node;
                     }
                     // If this is a computed property, then the parent should not
@@ -765,12 +782,12 @@ namespace ts {
                     break;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
-                    if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
+                    if (node.parent.kind === SyntaxKind.Parameter && (isClassElement(node.parent.parent) || isStructElement(node.parent.parent))) {
                         // If the decorator's parent is a Parameter, we resolve the this container from
                         // the grandparent class declaration.
                         node = node.parent.parent;
                     }
-                    else if (isClassElement(node.parent)) {
+                    else if (isClassElement(node.parent) || isStructElement(node.parent.parent)) {
                         // If the decorator's parent is a class element, we resolve the 'this' container
                         // from the parent class declaration.
                         node = node.parent;
@@ -822,22 +839,23 @@ namespace ts {
     export function nodeCanBeDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
+case SyntaxKind.StructDeclaration:
                 // classes are valid targets
                 return true;
 
             case SyntaxKind.PropertyDeclaration:
                 // property declarations are valid if their parent is a class declaration.
-                return node.parent.kind === SyntaxKind.ClassDeclaration;
+                return node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.StructDeclaration;
 
             case SyntaxKind.Parameter:
                 // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
-                return (<FunctionLikeDeclaration>node.parent).body && node.parent.parent.kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>node.parent).body && (node.parent.parent.kind === SyntaxKind.ClassDeclaration || node.parent.parent.kind === SyntaxKind.StructDeclaration);
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 // if this method has a body and its parent is a class declaration, this is a valid target.
-                return (<FunctionLikeDeclaration>node).body && node.parent.kind === SyntaxKind.ClassDeclaration;
+                return (<FunctionLikeDeclaration>node).body && (node.parent.kind === SyntaxKind.ClassDeclaration || node.parent.kind === SyntaxKind.StructDeclaration);
         }
 
         return false;
@@ -846,6 +864,7 @@ namespace ts {
     export function nodeIsDecorated(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
+case SyntaxKind.StructDeclaration:
                 if (node.decorators) {
                     return true;
                 }
@@ -883,7 +902,8 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
                 return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
-
+case SyntaxKind.StructDeclaration:
+return forEach((<StructDeclaration>node).members, nodeOrChildIsDecorated);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
                 return forEach((<FunctionLikeDeclaration>node).parameters, nodeIsDecorated);
@@ -923,6 +943,7 @@ namespace ts {
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ClassExpression:
+case SyntaxKind.StructExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
@@ -996,7 +1017,7 @@ namespace ts {
                     case SyntaxKind.JsxSpreadAttribute:
                         return true;
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                        return (<ExpressionWithTypeArguments>parent).expression === node && isExpressionWithTypeArgumentsInClassOrStructExtendsClause(parent);
                     default:
                         if (isExpression(parent)) {
                             return true;
@@ -1168,6 +1189,8 @@ namespace ts {
             case SyntaxKind.BindingElement:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
+case SyntaxKind.StructDeclaration:
+case SyntaxKind.StructExpression:
             case SyntaxKind.Constructor:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.EnumMember:
@@ -1223,6 +1246,18 @@ namespace ts {
                 return false;
         }
     }
+
+export function isStructElement(n: Node): boolean {
+    switch (n.kind) {
+        case SyntaxKind.Constructor:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+            return true;
+        default:
+            return false;
+    }
+}
 
     export function isClassElement(n: Node): boolean {
         switch (n.kind) {
@@ -1311,17 +1346,12 @@ namespace ts {
             node.kind === SyntaxKind.ExportAssignment && (<ExportAssignment>node).expression.kind === SyntaxKind.Identifier;
     }
 
-    export function getStructExtendsHeritageClauseElement(node: StructLikeDeclaration) {
-        let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
-        return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
-    }
-
     export function getStructImplementsHeritageClauseElements(node: StructLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ImplementsKeyword);
         return heritageClause ? heritageClause.types : undefined;
     }
 
-    export function getClassExtendsHeritageClauseElement(node: ClassLikeDeclaration) {
+    export function getClassOrStructExtendsHeritageClauseElement(node: ClassLikeDeclaration | StructLikeDeclaration) {
         let heritageClause = getHeritageClause(node.heritageClauses, SyntaxKind.ExtendsKeyword);
         return heritageClause && heritageClause.types.length > 0 ? heritageClause.types[0] : undefined;
     }
@@ -1795,7 +1825,7 @@ namespace ts {
         return getLineAndCharacterOfPosition(currentSourceFile, pos).line;
     }
 
-    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration {
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration | StructLikeDeclaration): ConstructorDeclaration {
         return forEach(node.members, member => {
             if (member.kind === SyntaxKind.Constructor && nodeIsPresent((<ConstructorDeclaration>member).body)) {
                 return <ConstructorDeclaration>member;
@@ -2026,6 +2056,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ClassExpression:
+case SyntaxKind.StructExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.Identifier:
                 case SyntaxKind.RegularExpressionLiteral:
@@ -2049,10 +2080,10 @@ namespace ts {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+    export function isExpressionWithTypeArgumentsInClassOrStructExtendsClause(node: Node): boolean {
         return node.kind === SyntaxKind.ExpressionWithTypeArguments &&
             (<HeritageClause>node.parent).token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent);
+            (isClassLike(node.parent.parent) || isStructLike(node.parent.parent));
     }
 
     // Returns false if this heritage clause element's expression contains something unsupported
@@ -2418,7 +2449,7 @@ namespace ts {
     export function getTypeParameterOwner(d: Declaration): Declaration {
         if (d && d.kind === SyntaxKind.TypeParameter) {
             for (let current: Node = d; current; current = current.parent) {
-                if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
+                if (isFunctionLike(current) || isClassLike(current) || isStructLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
                     return <Declaration>current;
                 }
             }

@@ -4950,7 +4950,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDeclarationName(node);
                 }
 
-                let baseTypeNode = getClassExtendsHeritageClauseElement(node);
+                let baseTypeNode = getClassOrStructExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write(" extends ");
                     emit(baseTypeNode.expression);
@@ -5035,7 +5035,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 write("(function (");
-                let baseTypeNode = getClassExtendsHeritageClauseElement(node);
+                let baseTypeNode = getClassOrStructExtendsHeritageClauseElement(node);
                 if (baseTypeNode) {
                     write("_super");
                 }

@@ -1,0 +1,33 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyAsPrivate.ts(14,1): error TS20018: Property 'x' is private and only accessible within struct 'C'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyAsPrivate.ts(15,1): error TS20018: Property 'foo' is private and only accessible within struct 'C'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyAsPrivate.ts(17,1): error TS20018: Property 'a' is private and only accessible within struct 'C'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyAsPrivate.ts(18,1): error TS20018: Property 'foo' is private and only accessible within struct 'C'.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPropertyAsPrivate.ts (4 errors) ====
+    // doc 2.2
+    // private property members can be accessed only within the struct body that contains their declaration
+    
+    struct C {
+        private x: string;
+        private foo() { }
+    
+        private static a: string;
+        private static foo() { }
+    }
+    
+    var c: C;
+    // all errors
+    c.x;
+    ~~~
+!!! error TS20018: Property 'x' is private and only accessible within struct 'C'.
+    c.foo();
+    ~~~~~
+!!! error TS20018: Property 'foo' is private and only accessible within struct 'C'.
+    
+    C.a;
+    ~~~
+!!! error TS20018: Property 'a' is private and only accessible within struct 'C'.
+    C.foo();
+    ~~~~~
+!!! error TS20018: Property 'foo' is private and only accessible within struct 'C'.

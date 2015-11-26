@@ -1,0 +1,20 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowStaticMemberGetters.ts(5,22): error TS20025: Unexpected token. A constructor, method, or property was expected.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowStaticMemberGetters.ts (1 errors) ====
+    // doc 2.2
+    // Due to Typed Objects being nonextensible and non-configurable, accessors are not allowed.
+    
+    struct C {
+    	static _bar: number;
+    	                    
+    
+    
+    	static get bar() { // error, getters are not allowed in struct
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    		return C._bar;
+    ~~~~~~~~~~~~~~~~
+    	}
+    ~~
+!!! error TS20025: Unexpected token. A constructor, method, or property was expected.
+    }

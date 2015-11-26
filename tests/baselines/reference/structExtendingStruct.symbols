@@ -1,0 +1,65 @@
+=== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingStruct.ts ===
+struct C {
+>C : Symbol(C, Decl(structExtendingStruct.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(foo, Decl(structExtendingStruct.ts, 0, 10))
+
+    thing() { }
+>thing : Symbol(thing, Decl(structExtendingStruct.ts, 1, 16))
+
+    static other() { }
+>other : Symbol(C.other, Decl(structExtendingStruct.ts, 2, 15))
+}
+
+struct D extends C {
+>D : Symbol(D, Decl(structExtendingStruct.ts, 4, 1))
+>C : Symbol(C, Decl(structExtendingStruct.ts, 0, 0))
+
+    bar: string;
+>bar : Symbol(bar, Decl(structExtendingStruct.ts, 6, 20))
+}
+
+var d: D;
+>d : Symbol(d, Decl(structExtendingStruct.ts, 10, 3))
+>D : Symbol(D, Decl(structExtendingStruct.ts, 4, 1))
+
+var r = d.foo;
+>r : Symbol(r, Decl(structExtendingStruct.ts, 11, 3))
+>d.foo : Symbol(C.foo, Decl(structExtendingStruct.ts, 0, 10))
+>d : Symbol(d, Decl(structExtendingStruct.ts, 10, 3))
+>foo : Symbol(C.foo, Decl(structExtendingStruct.ts, 0, 10))
+
+var r2 = d.bar;
+>r2 : Symbol(r2, Decl(structExtendingStruct.ts, 12, 3))
+>d.bar : Symbol(D.bar, Decl(structExtendingStruct.ts, 6, 20))
+>d : Symbol(d, Decl(structExtendingStruct.ts, 10, 3))
+>bar : Symbol(D.bar, Decl(structExtendingStruct.ts, 6, 20))
+
+var r3 = d.thing();
+>r3 : Symbol(r3, Decl(structExtendingStruct.ts, 13, 3))
+>d.thing : Symbol(C.thing, Decl(structExtendingStruct.ts, 1, 16))
+>d : Symbol(d, Decl(structExtendingStruct.ts, 10, 3))
+>thing : Symbol(C.thing, Decl(structExtendingStruct.ts, 1, 16))
+
+var r4 = D.other();
+>r4 : Symbol(r4, Decl(structExtendingStruct.ts, 14, 3))
+>D.other : Symbol(C.other, Decl(structExtendingStruct.ts, 2, 15))
+>D : Symbol(D, Decl(structExtendingStruct.ts, 4, 1))
+>other : Symbol(C.other, Decl(structExtendingStruct.ts, 2, 15))
+
+/* struct C2<T> {
+    foo: T;
+    thing(x: T) { }
+    static other<T>(x: T) { }
+}
+
+struct D2<T> extends C2<T> {
+    bar: string;
+}
+
+var d2: D2<string>;
+var r5 = d2.foo;
+var r6 = d2.bar;
+var r7 = d2.thing('');
+var r8 = D2.other(1); */

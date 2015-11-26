@@ -1,0 +1,43 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,5): error TS2304: Cannot find name 'set'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,5): error TS20025: Unexpected token. A constructor, method, or property was expected.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,9): error TS1005: ';' expected.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,9): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,13): error TS2304: Cannot find name 'new_foo'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,20): error TS1005: ',' expected.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,22): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(7,30): error TS1005: ';' expected.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(8,21): error TS2304: Cannot find name 'new_foo'.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts(10,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structNotAllowInstanceMemberSetters.ts (10 errors) ====
+    // doc 2.2
+    // Due to Typed Objects being nonextensible and non-configurable, accessors are not allowed.
+    
+    struct C {
+        private _foo: string;
+    
+        set foo(new_foo: string) { // error, setters are not allowed in struct
+        ~~~
+!!! error TS2304: Cannot find name 'set'.
+        ~~~
+!!! error TS20025: Unexpected token. A constructor, method, or property was expected.
+            ~~~
+!!! error TS1005: ';' expected.
+            ~~~
+!!! error TS2304: Cannot find name 'foo'.
+                ~~~~~~~
+!!! error TS2304: Cannot find name 'new_foo'.
+                       ~
+!!! error TS1005: ',' expected.
+                         ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+                                 ~
+!!! error TS1005: ';' expected.
+            this._foo = new_foo;
+                        ~~~~~~~
+!!! error TS2304: Cannot find name 'new_foo'.
+        }
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.

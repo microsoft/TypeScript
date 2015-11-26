@@ -1,0 +1,25 @@
+=== tests/cases/conformance/structs/structExpression.ts ===
+// struct expression are supported
+
+var x = struct C {
+>x : Symbol(x, Decl(structExpression.ts, 2, 3))
+>C : Symbol(C, Decl(structExpression.ts, 2, 7))
+}
+
+var y = {
+>y : Symbol(y, Decl(structExpression.ts, 5, 3))
+
+    foo: struct C2 {
+>foo : Symbol(foo, Decl(structExpression.ts, 5, 9))
+>C2 : Symbol(C2, Decl(structExpression.ts, 6, 8))
+    }
+}
+
+module M {
+>M : Symbol(M, Decl(structExpression.ts, 8, 1))
+
+    var z = struct C4 {
+>z : Symbol(z, Decl(structExpression.ts, 11, 7))
+>C4 : Symbol(C4, Decl(structExpression.ts, 11, 11))
+    }
+}

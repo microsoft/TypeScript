@@ -1,0 +1,36 @@
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateInstanceMemberAccessibility.ts(10,15): error TS20017: Only public methods of the base struct are accessible via the 'super' keyword.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateInstanceMemberAccessibility.ts(13,22): error TS20017: Only public methods of the base struct are accessible via the 'super' keyword.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateInstanceMemberAccessibility.ts(15,15): error TS1003: Identifier expected.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateInstanceMemberAccessibility.ts(15,21): error TS20017: Only public methods of the base struct are accessible via the 'super' keyword.
+tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateInstanceMemberAccessibility.ts(17,12): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/structs/members/accessibilityAndAccessor/structPrivateInstanceMemberAccessibility.ts (5 errors) ====
+    // doc 2.2
+    // private property members can be accessed only within the struct body that contains their declaration
+    
+    struct Base {
+        private foo: string;
+    }
+    
+    struct Derived extends Base {
+    	// error,  Only public methods of the base class are accessible via the 'super' keyword
+        x = super.foo;
+                  ~~~
+!!! error TS20017: Only public methods of the base struct are accessible via the 'super' keyword.
+    
+        y() {
+            return super.foo; // error
+                         ~~~
+!!! error TS20017: Only public methods of the base struct are accessible via the 'super' keyword.
+        }
+        z: typeof super.foo; // error
+                  ~~~~~
+!!! error TS1003: Identifier expected.
+                        ~~~
+!!! error TS20017: Only public methods of the base struct are accessible via the 'super' keyword.
+    
+        a: this.foo; // error
+               ~
+!!! error TS1005: ';' expected.
+    }

@@ -1,0 +1,44 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(3,18): error TS2304: Cannot find name 'number'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(4,19): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(5,19): error TS2304: Cannot find name 'boolean'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(6,19): error TS2304: Cannot find name 'Void'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(7,20): error TS1109: Expression expected.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(8,19): error TS2304: Cannot find name 'Null'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(10,19): error TS2507: Type 'undefined' is not a constructor function type.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(11,19): error TS2304: Cannot find name 'Undefined'.
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts(14,19): error TS2507: Type 'typeof E' is not a constructor function type.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/structExtendingPrimitive.ts (9 errors) ====
+    // structes cannot extend primitives
+    
+    struct C extends number { }
+                     ~~~~~~
+!!! error TS2304: Cannot find name 'number'.
+    struct C2 extends string { }
+                      ~~~~~~
+!!! error TS2304: Cannot find name 'string'.
+    struct C3 extends boolean { }
+                      ~~~~~~~
+!!! error TS2304: Cannot find name 'boolean'.
+    struct C4 extends Void  { }
+                      ~~~~
+!!! error TS2304: Cannot find name 'Void'.
+    struct C4a extends void {}
+                       ~~~~
+!!! error TS1109: Expression expected.
+    struct C5 extends Null { }
+                      ~~~~
+!!! error TS2304: Cannot find name 'Null'.
+    struct C5a extends null { }
+    struct C6 extends undefined { }
+                      ~~~~~~~~~
+!!! error TS2507: Type 'undefined' is not a constructor function type.
+    struct C7 extends Undefined { }
+                      ~~~~~~~~~
+!!! error TS2304: Cannot find name 'Undefined'.
+    
+    enum E { A }
+    struct C8 extends E { }
+                      ~
+!!! error TS2507: Type 'typeof E' is not a constructor function type.

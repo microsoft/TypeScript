@@ -124,6 +124,7 @@ namespace ts {
         NewKeyword,
         NullKeyword,
         ReturnKeyword,
+        StructKeyword,
         SuperKeyword,
         SwitchKeyword,
         ThisKeyword,
@@ -204,6 +205,7 @@ namespace ts {
         TypeQuery,
         TypeLiteral,
         ArrayType,
+        StructArrayType,
         TupleType,
         UnionType,
         IntersectionType,
@@ -258,7 +260,6 @@ namespace ts {
         ContinueStatement,
         BreakStatement,
         ReturnStatement,
-        StructKeyword,
         WithStatement,
         SwitchStatement,
         LabeledStatement,
@@ -553,7 +554,7 @@ namespace ts {
     }
 
     // SyntaxKind.Property
-    export interface PropertyDeclaration extends Declaration, ClassElement {
+    export interface PropertyDeclaration extends Declaration, ClassElement, StructElement {
         name: DeclarationName;              // Declared property name
         questionToken?: Node;               // Present on optional property
         type?: TypeNode;                    // Optional type annotation
@@ -632,11 +633,11 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, StructElement, ObjectLiteralElement {
         body?: Block;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement, StructElement {
         body?: Block;
     }
 
@@ -685,6 +686,9 @@ namespace ts {
 
     export interface ArrayTypeNode extends TypeNode {
         elementType: TypeNode;
+    }
+
+    export interface StructArrayTypeNode extends ArrayTypeNode {
     }
 
     export interface TupleTypeNode extends TypeNode {
@@ -1053,7 +1057,7 @@ namespace ts {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
-        members: NodeArray<ClassElement>;
+        members: NodeArray<StructElement>;
     }
 
     export interface StructDeclaration extends StructLikeDeclaration, Statement {
@@ -1062,8 +1066,7 @@ namespace ts {
     export interface StructExpression extends StructLikeDeclaration, PrimaryExpression {
     }
 
-    export interface StructElement extends Declaration {
-        _structElementBrand: any;
+    export interface StructElement extends ClassElement {
     }
 
     export interface InterfaceDeclaration extends Declaration, Statement {
@@ -1656,7 +1659,7 @@ namespace ts {
         Property                = 0x00000004,  // Property or enum member
         EnumMember              = 0x00000008,  // Enum member
         Function                = 0x00000010,  // Function
-        Struct                  = 0x40000000,  // Struct
+        Struct                  = 0x80000000,  // Struct
         Class                   = 0x00000020,  // Class
         Interface               = 0x00000040,  // Interface
         ConstEnum               = 0x00000080,  // Const enum
@@ -1742,7 +1745,7 @@ namespace ts {
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
 
-        members?: SymbolTable;                  // Class, interface or literal instance members
+        members?: SymbolTable;                  // Class, struct, interface or literal instance members
         exports?: SymbolTable;                  // Module exports
         /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
@@ -1755,7 +1758,7 @@ namespace ts {
     export interface SymbolLinks {
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
-        declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        declaredType?: Type;                // Type of class, struct, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
@@ -1795,6 +1798,7 @@ namespace ts {
         EnumValuesComputed          = 0x00002000,
         BlockScopedBindingInLoop    = 0x00004000,
         LexicalModuleMergesWithClass= 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LexicalModuleMergesWithStruct= 0x00010000,  // Instantiated lexical module declaration is merged with a previous struct declaration.
     }
 
     /* @internal */
@@ -1856,7 +1860,7 @@ namespace ts {
         U16                     = 0x10000000,
         I32                     = 0x20000000,
         U32                     = 0x40000000,
-        Float                   = 0x80000000,
+        Float                   = 0x40000000,
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | I8 | U8 | I16 | U16 | I32 | U32 | Float | ESSymbol | Void | Undefined | Null,
@@ -1864,7 +1868,7 @@ namespace ts {
         Primitive = String | Number | I8 | U8 | I16 | U16 | I32 | U32 | Float | Boolean | ESSymbol | Void | Undefined | Null | StringLiteral | Enum,
         StringLike = String | StringLiteral,
         NumberLike = Number | Enum | I8 | U8 | I16 | U16 | I32 | U32 | Float,
-        ObjectType = Class | Interface | Reference | Tuple | Anonymous,
+        ObjectType = Struct | Class | Interface | Reference | Tuple | Anonymous,
 
         PrimitiveType = I8 | U8 | I16 | U16 | I32 | U32 | Float,
         DoublePrecisionFloat = Number,

@@ -1,0 +1,13 @@
+tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/InterfaceNotExtendingStruct.ts(5,21): error TS2312: An interface may only extend a class or another interface.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structHeritageSpecification/InterfaceNotExtendingStruct.ts (1 errors) ====
+    struct S {
+    	bar: string;
+    }
+    
+    interface I extends S {
+                        ~
+!!! error TS2312: An interface may only extend a class or another interface.
+    }
+    

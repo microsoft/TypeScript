@@ -1,0 +1,25 @@
+tests/cases/conformance/structs/structDeclarations/structAndVariableWithSameName.ts(1,8): error TS2300: Duplicate identifier 'C'.
+tests/cases/conformance/structs/structDeclarations/structAndVariableWithSameName.ts(2,5): error TS2300: Duplicate identifier 'C'.
+tests/cases/conformance/structs/structDeclarations/structAndVariableWithSameName.ts(5,12): error TS2300: Duplicate identifier 'D'.
+tests/cases/conformance/structs/structDeclarations/structAndVariableWithSameName.ts(9,9): error TS2300: Duplicate identifier 'D'.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structAndVariableWithSameName.ts (4 errors) ====
+    struct C { foo: string; } // error
+           ~
+!!! error TS2300: Duplicate identifier 'C'.
+    var C = ''; // error
+        ~
+!!! error TS2300: Duplicate identifier 'C'.
+    
+    module M {
+        struct D { // error
+               ~
+!!! error TS2300: Duplicate identifier 'D'.
+            bar: string;
+        }
+    
+        var D = 1; // error
+            ~
+!!! error TS2300: Duplicate identifier 'D'.
+    }

@@ -1,0 +1,28 @@
+tests/cases/conformance/structs/structDeclarations/structBody/structBodyWithStatements.ts(2,5): error TS20025: Unexpected token. A constructor, method, or property was expected.
+tests/cases/conformance/structs/structDeclarations/structBody/structBodyWithStatements.ts(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/structs/structDeclarations/structBody/structBodyWithStatements.ts(6,5): error TS20025: Unexpected token. A constructor, method, or property was expected.
+tests/cases/conformance/structs/structDeclarations/structBody/structBodyWithStatements.ts(7,1): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/conformance/structs/structDeclarations/structBody/structBodyWithStatements.ts (4 errors) ====
+    struct C {
+        var x = 1; // error, variable statement
+        ~~~
+!!! error TS20025: Unexpected token. A constructor, method, or property was expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    struct C2 {
+        function foo() {} // error, function declaration
+        ~~~~~~~~
+!!! error TS20025: Unexpected token. A constructor, method, or property was expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    var x = 1;
+    var y = 2;
+    struct C3 {
+        x: number = y + 1; // ok, not a statement (need var in the statement production).
+    }
