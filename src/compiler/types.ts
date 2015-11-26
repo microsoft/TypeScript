@@ -2381,6 +2381,7 @@ namespace ts {
         paths?: PathSubstitutions;
         rootDirs?: RootPaths;
         traceModuleResolution?: boolean;
+        allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
         /* @internal */ stripInternal?: boolean;
 
