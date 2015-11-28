@@ -586,6 +586,7 @@ namespace ts {
         name: PropertyName;                 // Declared property name
         questionToken?: Node;               // Present on optional property
         type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
 
     // @kind(SyntaxKind.PropertyDeclaration)

@@ -783,9 +783,13 @@
         "category": "Error",
         "code": 1245
     },
-    "An object type property cannot have an initializer.": {
+    "An interface property cannot have an initializer.": {
         "category": "Error",
         "code": 1246
+    },
+    "An object type literal property cannot have an initializer.": {
+        "category": "Error",
+        "code": 1247
     },
 
     "'with' statements are not allowed in an async function block.": {

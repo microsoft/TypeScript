@@ -2249,10 +2249,9 @@ namespace ts {
                 property.type = parseTypeAnnotation();
 
                 // Although object type properties cannot not have initializers, we attempt to parse an initializer
-                // so we can report that an object type property cannot have an initializer.
-                if (token === SyntaxKind.EqualsToken && lookAhead(() => parseNonParameterInitializer()) !== undefined) {
-                    parseErrorAtCurrentToken(Diagnostics.An_object_type_property_cannot_have_an_initializer);
-                }
+                // so we can report in the checker that an interface property or object type literal property cannot
+                // have an initializer.
+                property.initializer = parseNonParameterInitializer();
 
                 parseTypeMemberSemicolon();
                 return finishNode(property);
