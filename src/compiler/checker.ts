@@ -15735,16 +15735,6 @@ namespace ts {
                 }
             }
 
-            // Report an error if an interface property has an initializer
-            if (node.members) {
-                const members = <NodeArray<PropertySignature>>node.members;
-                for (const element of members) {
-                    if (element.initializer) {
-                        return grammarErrorOnFirstToken(element.initializer, Diagnostics.An_interface_property_cannot_have_an_initializer);
-                    }
-                }
-            }
-
             return false;
         }
 
@@ -16095,18 +16085,6 @@ namespace ts {
                 }
             }
 
-            if (node.type) {
-                const typeLiteralNode = <TypeLiteralNode>node.type;
-                if (typeLiteralNode.members) {
-                    for (const element of typeLiteralNode.members) {
-                        const propertySignature = <PropertySignature>element;
-                        if (propertySignature.initializer) {
-                            return grammarErrorOnNode(propertySignature.initializer, Diagnostics.An_object_type_literal_property_cannot_have_an_initializer);
-                        }
-                    }
-                }
-            }
-
             const checkLetConstNames = languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
@@ -16249,10 +16227,16 @@ namespace ts {
                 if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_an_interface_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
                 }
+                if (node.initializer) {
+                    return grammarErrorOnNode(node.initializer, Diagnostics.An_interface_property_cannot_have_an_initializer);
+                }
             }
             else if (node.parent.kind === SyntaxKind.TypeLiteral) {
                 if (checkGrammarForNonSymbolComputedProperty(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_directly_refer_to_a_built_in_symbol)) {
                     return true;
+                }
+                if (node.initializer) {
+                    return grammarErrorOnNode(node.initializer, Diagnostics.An_object_type_literal_property_cannot_have_an_initializer);
                 }
             }
 
