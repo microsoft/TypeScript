@@ -9882,14 +9882,14 @@ namespace ts {
             }
 
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
-            
+
             if (returnType && !hasExplicitReturn) {
                 // minimal check: function has syntactic return type annotation and no explicit return statements in the body 
                 // this function does not conform to the specification.
                 // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present 
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
-            else if (compilerOptions.noImplicitReturns){
+            else if (compilerOptions.noImplicitReturns) {
                 // errors in this branch should only be reported if CompilerOptions.noImplicitReturns flag is set
                 if (!returnType) {
                     // If return type annotation is omitted check if function has any explicit return statements.
@@ -9898,7 +9898,7 @@ namespace ts {
                     const inferredReturnType = hasExplicitReturn
                         ? getReturnTypeOfSignature(getSignatureFromDeclaration(func))
                         : voidType;
-                    
+
                     if (inferredReturnType === voidType || isTypeAny(inferredReturnType)) {
                         return;
                     }
