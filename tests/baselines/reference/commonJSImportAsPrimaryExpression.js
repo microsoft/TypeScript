@@ -14,6 +14,7 @@ if(foo.C1.s1){
 
 
 //// [foo_0.js]
+"use strict";
 var C1 = (function () {
     function C1() {
         this.m1 = 42;
@@ -23,6 +24,7 @@ var C1 = (function () {
 })();
 exports.C1 = C1;
 //// [foo_1.js]
+"use strict";
 var foo = require("./foo_0");
 if (foo.C1.s1) {
 }

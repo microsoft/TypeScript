@@ -42,6 +42,7 @@ import { aaaa as bbbb } from "./es6ImportNamedImportInEs5_0";
 
 
 //// [es6ImportNamedImportInEs5_0.js]
+"use strict";
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;
@@ -51,6 +52,7 @@ exports.z1 = 10;
 exports.z2 = 10;
 exports.aaaa = 10;
 //// [es6ImportNamedImportInEs5_1.js]
+"use strict";
 var es6ImportNamedImportInEs5_0_1 = require("./es6ImportNamedImportInEs5_0");
 var xxxx = es6ImportNamedImportInEs5_0_1.a;
 var es6ImportNamedImportInEs5_0_2 = require("./es6ImportNamedImportInEs5_0");

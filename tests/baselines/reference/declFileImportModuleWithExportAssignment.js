@@ -27,9 +27,11 @@ a.test1(null, null, null);
 
 
 //// [declFileImportModuleWithExportAssignment_0.js]
+"use strict";
 var m2;
 module.exports = m2;
 //// [declFileImportModuleWithExportAssignment_1.js]
+"use strict";
 /**This is on import declaration*/
 var a1 = require("./declFileImportModuleWithExportAssignment_0");
 exports.a = a1;

@@ -1,6 +1,6 @@
 ===================================================================
 JsFile: out.js
-mapUrl: out.js.map
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsidGVzdHMvY2FzZXMvY29tcGlsZXIvYS50cyIsInRlc3RzL2Nhc2VzL2NvbXBpbGVyL2IudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQ0ZmLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJcbnZhciBhID0gMDtcbmNvbnNvbGUubG9nKGEpO1xuIiwidmFyIGIgPSAwO1xuY29uc29sZS5sb2coYik7Il19
 sourceRoot: 
 sources: tests/cases/compiler/a.ts,tests/cases/compiler/b.ts
 sourcesContent: ["\nvar a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]

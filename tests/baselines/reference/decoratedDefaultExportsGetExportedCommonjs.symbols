@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/moduleExportsCommonjs/decoratedDefaultExportsGetExportedCommonjs.ts ===
+
+var decorator: ClassDecorator;
+>decorator : Symbol(decorator, Decl(decoratedDefaultExportsGetExportedCommonjs.ts, 1, 3))
+>ClassDecorator : Symbol(ClassDecorator, Decl(lib.d.ts, --, --))
+
+@decorator
+>decorator : Symbol(decorator, Decl(decoratedDefaultExportsGetExportedCommonjs.ts, 1, 3))
+
+export default class Foo {}
+>Foo : Symbol(Foo, Decl(decoratedDefaultExportsGetExportedCommonjs.ts, 1, 30))
+

@@ -10,6 +10,7 @@ export import b = a.b;
 export var x: b.c = new b.c();
 
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.js]
+"use strict";
 var a;
 (function (a) {
     var b;

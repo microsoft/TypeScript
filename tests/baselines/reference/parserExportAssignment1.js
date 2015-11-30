@@ -2,3 +2,4 @@
 export = foo
 
 //// [parserExportAssignment1.js]
+"use strict";

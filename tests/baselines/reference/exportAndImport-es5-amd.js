@@ -14,6 +14,7 @@ export default function f2() {
 
 //// [m1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function f1() {
     }
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -21,6 +22,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [m2.js]
 define(["require", "exports", "./m1"], function (require, exports, m1_1) {
+    "use strict";
     function f2() {
         m1_1.default();
     }

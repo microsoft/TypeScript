@@ -1,4 +1,4 @@
-//// [tsxElementResolution8.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -35,7 +35,7 @@ var Obj3: Obj3;
 <Obj3 />; // Error
 
 
-//// [tsxElementResolution8.jsx]
+//// [file.jsx]
 // Error
 var Div = 3;
 <Div />;

@@ -13,6 +13,7 @@ import x = a;
 export = x;
 
 //// [es6ImportNamedImportInIndirectExportAssignment_0.js]
+"use strict";
 var a;
 (function (a) {
     var c = (function () {
@@ -23,6 +24,7 @@ var a;
     a.c = c;
 })(a = exports.a || (exports.a = {}));
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]
+"use strict";
 var es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
 var x = es6ImportNamedImportInIndirectExportAssignment_0_1.a;
 module.exports = x;
