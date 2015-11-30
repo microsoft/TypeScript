@@ -9876,7 +9876,7 @@ namespace ts {
             }
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return of throw
+            // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
             if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !(func.flags & NodeFlags.HasImplicitReturn)) {
                 return;
             }
@@ -9890,7 +9890,6 @@ namespace ts {
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
             else if (compilerOptions.noImplicitReturns) {
-                // errors in this branch should only be reported if CompilerOptions.noImplicitReturns flag is set
                 if (!returnType) {
                     // If return type annotation is omitted check if function has any explicit return statements.
                     // If it does not have any - its inferred return type is void - don't do any checks. 
