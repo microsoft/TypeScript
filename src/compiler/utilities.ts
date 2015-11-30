@@ -466,9 +466,6 @@ namespace ts {
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
-            case SyntaxKind.StringLiteral:
-                // Specialized signatures can have string literals as their parameters' type names
-                return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 
@@ -1892,7 +1889,7 @@ namespace ts {
      * Resolves a local path to a path which is absolute to the base of the emit
      */
     export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
-        const dir = host.getCurrentDirectory();
+        const dir = toPath(host.getCommonSourceDirectory(), host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
         const relativePath = getRelativePathToDirectoryOrUrl(dir, fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
         return removeFileExtension(relativePath);
     }
@@ -2395,6 +2392,55 @@ namespace ts {
         }
 
         return output;
+    }
+
+    /**
+     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
+     * as the fallback implementation does not check for circular references by default.
+     */
+    export const stringify: (value: any) => string = JSON && JSON.stringify
+        ? JSON.stringify
+        : stringifyFallback;
+
+    /**
+     * Serialize an object graph into a JSON string.
+     */
+    function stringifyFallback(value: any): string {
+        // JSON.stringify returns `undefined` here, instead of the string "undefined".
+        return value === undefined ? undefined : stringifyValue(value);
+    }
+
+    function stringifyValue(value: any): string {
+        return typeof value === "string" ? `"${escapeString(value)}"`
+             : typeof value === "number" ? isFinite(value) ? String(value) : "null"
+             : typeof value === "boolean" ? value ? "true" : "false"
+             : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
+             : /*fallback*/ "null";
+    }
+
+    function cycleCheck(cb: (value: any) => string, value: any) {
+        Debug.assert(!value.hasOwnProperty("__cycle"), "Converting circular structure to JSON");
+        value.__cycle = true;
+        const result = cb(value);
+        delete value.__cycle;
+        return result;
+    }
+
+    function stringifyArray(value: any) {
+        return `[${reduceLeft(value, stringifyElement, "")}]`;
+    }
+
+    function stringifyElement(memo: string, value: any) {
+        return (memo ? memo + "," : memo) + stringifyValue(value);
+    }
+
+    function stringifyObject(value: any) {
+        return `{${reduceProperties(value, stringifyProperty, "")}}`;
+    }
+
+    function stringifyProperty(memo: string, value: any, key: string) {
+        return value === undefined || typeof value === "function" || key === "__cycle" ? memo
+             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
     }
 
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
