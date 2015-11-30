@@ -9858,7 +9858,7 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        /* 
+        /*
          *TypeScript Specification 1.0 (6.3) - July 2014
          * An explicitly typed function whose return type isn't the Void or the Any type
          * must have at least one return statement somewhere in its body.
@@ -9893,7 +9893,7 @@ namespace ts {
             }
             else {
                 // This function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present 
+                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
         }
@@ -11914,6 +11914,14 @@ namespace ts {
                 return unknownType;
             }
 
+            // If the constructor, resolved locally, is an alias symbol we should mark it as referenced.
+            const promiseName = getEntityNameFromTypeNode(node.type);
+            const promiseNameOrNamespaceRoot = getFirstIdentifier(promiseName);
+            const promiseAliasSymbol = resolveName(node, promiseNameOrNamespaceRoot.text, SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            if (promiseAliasSymbol) {
+                markAliasSymbolAsReferenced(promiseAliasSymbol);
+            }
+
             // Validate the promise constructor type.
             const promiseConstructorType = getTypeOfSymbol(promiseConstructor);
             if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
@@ -11921,12 +11929,10 @@ namespace ts {
             }
 
             // Verify there is no local declaration that could collide with the promise constructor.
-            const promiseName = getEntityNameFromTypeNode(node.type);
-            const root = getFirstIdentifier(promiseName);
-            const rootSymbol = getSymbol(node.locals, root.text, SymbolFlags.Value);
+            const rootSymbol = getSymbol(node.locals, promiseNameOrNamespaceRoot.text, SymbolFlags.Value);
             if (rootSymbol) {
                 error(rootSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                    root.text,
+                    promiseNameOrNamespaceRoot.text,
                     getFullyQualifiedName(promiseConstructor));
                 return unknownType;
             }
@@ -12119,8 +12125,8 @@ namespace ts {
                 const symbol = getSymbolOfNode(node);
                 const localSymbol = node.localSymbol || symbol;
 
-                // Since the javascript won't do semantic analysis like typescript, 
-                // if the javascript file comes before the typescript file and both contain same name functions, 
+                // Since the javascript won't do semantic analysis like typescript,
+                // if the javascript file comes before the typescript file and both contain same name functions,
                 // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
                 const firstDeclaration = forEach(localSymbol.declarations,
                     // Get first non javascript function declaration
