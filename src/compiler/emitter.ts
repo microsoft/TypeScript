@@ -8221,7 +8221,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
             sourceFiles: SourceFile[], isBundledEmit: boolean) {
             // Make sure not to write js File and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath)) {
+            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
                 emitJavaScript(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
             }
             else {
