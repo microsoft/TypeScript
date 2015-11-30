@@ -4902,7 +4902,7 @@ namespace ts {
 
                 if (!decorators) {
                     decorators = <NodeArray<Decorator>>[];
-                    decorators.pos = scanner.getStartPos();
+                    decorators.pos = decoratorStart;
                 }
 
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);

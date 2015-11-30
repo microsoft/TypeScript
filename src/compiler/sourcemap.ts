@@ -251,7 +251,8 @@ namespace ts {
         }
 
         function emitStart(range: TextRange) {
-            emitPos(range.pos !== -1 ? skipTrivia(currentSourceFile.text, range.pos) : -1);
+            const rangeHasDecorators = !!(range as Node).decorators;
+            emitPos(range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1);
         }
 
         function emitEnd(range: TextRange) {
