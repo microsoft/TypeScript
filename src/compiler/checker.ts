@@ -1113,7 +1113,7 @@ namespace ts {
                         };
                     }
                 }
-                else if (lookupTable && exportNode && id !== "default" && hasProperty(target, id) && target[id] !== source[id]) {
+                else if (lookupTable && exportNode && id !== "default" && hasProperty(target, id) && resolveSymbol(target[id]) !== resolveSymbol(source[id])) {
                     lookupTable[id].exportsWithDuplicate.push(exportNode);
                 }
             }

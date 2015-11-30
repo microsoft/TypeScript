@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/moduleSameValueDuplicateExportedBindings.ts] ////
+//// [tests/cases/compiler/moduleSameValueDuplicateExportedBindings1.ts] ////
 
 //// [a.ts]
 export * from "./b";
