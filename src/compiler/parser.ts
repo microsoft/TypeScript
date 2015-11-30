@@ -5428,11 +5428,13 @@ namespace ts {
             // reference comment.
             while (true) {
                 const kind = triviaScanner.scan();
-                if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
-                    continue;
-                }
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
-                    break;
+                    if (isTrivia(kind)) {
+                        continue;
+                    }
+                    else {
+                        break;
+                    }
                 }
 
                 const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
