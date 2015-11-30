@@ -36,6 +36,7 @@ let e: string = foo2.staticMember; // should error, is global Foo
 
 
 //// [b.js]
+"use strict";
 /// <reference path="ref.d.ts"/>
 var y = require("a");
 var foo = y.foo;

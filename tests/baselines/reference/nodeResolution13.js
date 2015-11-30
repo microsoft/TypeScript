@@ -20,6 +20,7 @@ new bar.Bar();
 
 
 //// [start.js]
+"use strict";
 var foo = require("foo");
 var bar = require("bar");
 new foo.Foo();

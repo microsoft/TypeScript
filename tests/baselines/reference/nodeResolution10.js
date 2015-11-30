@@ -34,6 +34,7 @@ let e: string = foo2.staticMember; // should error
 
 
 //// [b.js]
+"use strict";
 var y = require("a");
 var foo = y.foo;
 var bigFoo = y.dummy;

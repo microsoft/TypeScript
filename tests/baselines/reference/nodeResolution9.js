@@ -16,3 +16,4 @@ import y = require("a");
 import z = require("internal"); // should error
 
 //// [b.js]
+"use strict";

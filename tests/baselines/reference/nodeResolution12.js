@@ -15,6 +15,7 @@ new foofoo.Foo_Internal();
 
 
 //// [start.js]
+"use strict";
 var foo = require("foo");
 var foofoo = require("foo/foo");
 new foo.Foo();
