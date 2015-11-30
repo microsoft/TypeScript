@@ -46,6 +46,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = compilerOptions.target || ScriptTarget.ES3;
         const modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
+        const allowSyntheticDefaultImports = typeof compilerOptions.allowSyntheticDefaultImports !== "undefined" ? compilerOptions.allowSyntheticDefaultImports : modulekind === ModuleKind.System;
 
         const emitResolver = createResolver();
 
@@ -768,8 +769,11 @@ namespace ts {
             const moduleSymbol = resolveExternalModuleName(node, (<ImportDeclaration>node.parent).moduleSpecifier);
             if (moduleSymbol) {
                 const exportDefaultSymbol = resolveSymbol(moduleSymbol.exports["default"]);
-                if (!exportDefaultSymbol) {
+                if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
                     error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
+                }
+                else if (!exportDefaultSymbol && allowSyntheticDefaultImports) {
+                    return resolveSymbol(moduleSymbol.exports["export="]) || resolveSymbol(moduleSymbol);
                 }
                 return exportDefaultSymbol;
             }
@@ -11435,7 +11439,9 @@ namespace ts {
                         seen = c === node;
                     }
                 });
-                if (subsequentNode) {
+                // We may be here because of some extra junk between overloads that could not be parsed into a valid node.
+                // In this case the subsequent node is not really consecutive (.pos !== node.end), and we must ignore it here.
+                if (subsequentNode && subsequentNode.pos === node.end) {
                     if (subsequentNode.kind === node.kind) {
                         const errorNode: Node = (<FunctionLikeDeclaration>subsequentNode).name || subsequentNode;
                         // TODO(jfreeman): These are methods, so handle computed name case

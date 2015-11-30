@@ -11,6 +11,7 @@ export default class Foo {}
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
     class Foo {
     }
     exports.default = Foo;

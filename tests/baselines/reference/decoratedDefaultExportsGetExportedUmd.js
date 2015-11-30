@@ -21,6 +21,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
     var decorator;
     let Foo = class {
     };
