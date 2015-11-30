@@ -532,7 +532,7 @@ namespace ts {
                             }
 
                             // Because of module/namespace merging, a module's exports are in scope,
-                            // yet we never want to treat an export specifier as putting a member in scope. 
+                            // yet we never want to treat an export specifier as putting a member in scope.
                             // Therefore, if the name we find is purely an export specifier, it is not actually considered in scope.
                             // Two things to note about this:
                             //     1. We have to check this without calling getSymbol. The problem with calling getSymbol
@@ -11398,7 +11398,7 @@ namespace ts {
                             // we can get here in two cases
                             // 1. mixed static and instance class members
                             // 2. something with the same name was defined before the set of overloads that prevents them from merging
-                            // here we'll report error only for the first case since for second we should already report error in binder 
+                            // here we'll report error only for the first case since for second we should already report error in binder
                             if (reportError) {
                                 const diagnostic = node.flags & NodeFlags.Static ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
                                 error(errorNode, diagnostic);
@@ -12065,8 +12065,8 @@ namespace ts {
                 const symbol = getSymbolOfNode(node);
                 const localSymbol = node.localSymbol || symbol;
 
-                // Since the javascript won't do semantic analysis like typescript, 
-                // if the javascript file comes before the typescript file and both contain same name functions, 
+                // Since the javascript won't do semantic analysis like typescript,
+                // if the javascript file comes before the typescript file and both contain same name functions,
                 // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
                 const firstDeclaration = forEach(localSymbol.declarations,
                     // Get first non javascript function declaration
@@ -14321,6 +14321,7 @@ namespace ts {
                 emitExtends = false;
                 emitDecorate = false;
                 emitParam = false;
+                emitAwaiter = false;
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
