@@ -661,19 +661,17 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            // For JavaScript files, we don't want to report the normal typescript semantic errors.
-            // Instead, we just report errors for using TypeScript-only constructs from within a
-            // JavaScript file.
-            if (isSourceFileJavaScript(sourceFile)) {
-                return getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken);
-            }
-
             return runWithCancellationToken(() => {
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                const checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                // For JavaScript files, we don't want to report the normal typescript semantic errors.
+                // Instead, we just report errors for using TypeScript-only constructs from within a
+                // JavaScript file.
+                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ?
+                    getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken) :
+                    typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
