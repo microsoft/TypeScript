@@ -35,6 +35,7 @@ export let h1: D = new D;
 
 
 //// [exportNonInitializedVariablesCommonJS.js]
+"use strict";
 var ;
 let;
 var ;

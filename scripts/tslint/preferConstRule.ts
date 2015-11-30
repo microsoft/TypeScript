@@ -85,12 +85,12 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     visitBinaryExpression(node: ts.BinaryExpression) {
         if (isAssignmentOperator(node.operatorToken.kind)) {
-            this.visitLHSExpressions(node.left);
+            this.visitLeftHandSideExpression(node.left);
         }
         super.visitBinaryExpression(node);
     }
 
-    private visitLHSExpressions(node: ts.Expression) {
+    private visitLeftHandSideExpression(node: ts.Expression) {
         while (node.kind === ts.SyntaxKind.ParenthesizedExpression) {
             node = (node as ts.ParenthesizedExpression).expression;
         }
@@ -106,18 +106,20 @@ class PreferConstWalker extends Lint.RuleWalker {
         if (node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
             const pattern = node as ts.ObjectLiteralExpression;
             for (const element of pattern.properties) {
-                if (element.name.kind === ts.SyntaxKind.Identifier) {
-                    this.markAssignment(element.name as ts.Identifier);
+                const kind = element.kind;
+
+                if (kind === ts.SyntaxKind.ShorthandPropertyAssignment) {
+                    this.markAssignment((element as ts.ShorthandPropertyAssignment).name);
                 }
-                else if (isBindingPattern(element.name)) {
-                    this.visitBindingPatternIdentifiers(element.name as ts.BindingPattern);
+                else if (kind === ts.SyntaxKind.PropertyAssignment) {
+                    this.visitLeftHandSideExpression((element as ts.PropertyAssignment).initializer);
                 }
             }
         }
         else if (node.kind === ts.SyntaxKind.ArrayLiteralExpression) {
             const pattern = node as ts.ArrayLiteralExpression;
             for (const element of pattern.elements) {
-                this.visitLHSExpressions(element);
+                this.visitLeftHandSideExpression(element);
             }
         }
     }
@@ -145,7 +147,7 @@ class PreferConstWalker extends Lint.RuleWalker {
 
     private visitAnyUnaryExpression(node: ts.PrefixUnaryExpression | ts.PostfixUnaryExpression) {
         if (node.operator === ts.SyntaxKind.PlusPlusToken || node.operator === ts.SyntaxKind.MinusMinusToken) {
-            this.visitLHSExpressions(node.operand);
+            this.visitLeftHandSideExpression(node.operand);
         }
     }
 
@@ -211,12 +213,12 @@ class PreferConstWalker extends Lint.RuleWalker {
         }
     }
 
-    private collectNameIdentifiers(value: ts.VariableDeclaration, node: ts.Identifier | ts.BindingPattern, table: ts.Map<DeclarationUsages>) {
+    private collectNameIdentifiers(declaration: ts.VariableDeclaration, node: ts.Identifier | ts.BindingPattern, table: ts.Map<DeclarationUsages>) {
         if (node.kind === ts.SyntaxKind.Identifier) {
-            table[(node as ts.Identifier).text] = {declaration: value, usages: 0};
+            table[(node as ts.Identifier).text] = { declaration, usages: 0 };
         }
         else {
-            this.collectBindingPatternIdentifiers(value, node as ts.BindingPattern, table);
+            this.collectBindingPatternIdentifiers(declaration, node as ts.BindingPattern, table);
         }
     }
 

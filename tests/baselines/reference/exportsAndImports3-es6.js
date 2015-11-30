@@ -35,6 +35,7 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 
 //// [t1.js]
+"use strict";
 exports.v = 1;
 exports.v1 = exports.v;
 function f() { }
@@ -58,6 +59,7 @@ exports.M1 = M;
 exports.a = M.x;
 exports.a1 = exports.a;
 //// [t2.js]
+"use strict";
 var t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;
@@ -66,6 +68,7 @@ exports.E = t1_1.E1;
 exports.M = t1_1.M1;
 exports.a = t1_1.a1;
 //// [t3.js]
+"use strict";
 var t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;

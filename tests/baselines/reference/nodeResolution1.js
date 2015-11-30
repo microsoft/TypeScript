@@ -8,5 +8,7 @@ export var x = 1;
 import y = require("./a");
 
 //// [a.js]
+"use strict";
 exports.x = 1;
 //// [b.js]
+"use strict";

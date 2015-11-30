@@ -1,4 +1,4 @@
-=== tests/cases/compiler/constEnumMergingWithValues4.ts ===
+=== tests/cases/compiler/m1.ts ===
 
 module foo {
 >foo : typeof foo

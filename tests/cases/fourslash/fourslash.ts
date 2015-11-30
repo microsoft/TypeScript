@@ -52,7 +52,13 @@ declare module ts {
         None = 0,
         Block = 1,
         Smart = 2,
-    }    
+    }  
+
+    interface OutputFile {
+        name: string;
+        writeByteOrderMark: boolean;
+        text: string;
+    }  
 }
 
 declare namespace FourSlashInterface {
@@ -133,7 +139,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
-        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: IndentStyle): void;
+        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
         textAtCaretIs(text: string): void;
         /**
          * Compiles the current file and evaluates 'expr' in a context containing
@@ -144,6 +150,7 @@ declare namespace FourSlashInterface {
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
+        verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;

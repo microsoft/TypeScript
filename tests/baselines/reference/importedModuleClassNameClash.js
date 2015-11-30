@@ -8,6 +8,7 @@ class foo { }
 
 //// [importedModuleClassNameClash.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var foo = (function () {
         function foo() {
         }

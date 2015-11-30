@@ -112,6 +112,7 @@ module TopLevelModule2 {
 
 //// [typeResolution.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var TopLevelModule1;
     (function (TopLevelModule1) {
         var SubModule1;

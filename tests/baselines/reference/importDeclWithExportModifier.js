@@ -9,5 +9,6 @@ var b: a;
 
 //// [importDeclWithExportModifier.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var b;
 });

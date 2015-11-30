@@ -1,6 +1,9 @@
-EmitSkipped: false
+EmitSkipped: true
+Diagnostics:
+  Exported variable 'foo' has or is using private name 'C'.
 FileName : tests/cases/fourslash/inputFile.js
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C = (function () {
         function C() {
         }

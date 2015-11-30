@@ -1,4 +1,4 @@
-=== tests/cases/compiler/isolatedModulesSourceMap.ts ===
+=== tests/cases/compiler/file1.ts ===
 
 export var x = 1;
 >x : number
