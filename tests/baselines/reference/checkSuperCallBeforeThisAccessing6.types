@@ -12,9 +12,9 @@ class Super extends Base {
 
     constructor() {
         (() => this);  // No Error
->(() => this) : () => Super
->() => this : () => Super
->this : Super
+>(() => this) : () => this
+>() => this : () => this
+>this : this
 
         super();
 >super() : void

@@ -7240,7 +7240,6 @@ namespace ts {
             let container = getThisContainer(node, /* includeArrowFunctions */ true);
             let needToCaptureLexicalThis = false;
 
-
             if (container.kind === SyntaxKind.Constructor) {
                 // Keep track of whether we have seen "super" before encounter "this" so that
                 // we can report appropriate error later in checkConstructorDeclaration
@@ -7251,7 +7250,7 @@ namespace ts {
                 //          (()=>this);  // No Error
                 //          super();
                 //      }
-                let nodeLinks = getNodeLinks(container);
+                const nodeLinks = getNodeLinks(container);
                 nodeLinks.flags |= NodeCheckFlags.HasSeenThisCall;
             }
 
@@ -10199,10 +10198,10 @@ namespace ts {
 
             const signature = getResolvedSignature(node);
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                let containgFunction = getContainingFunction(node.expression);
+                const containgFunction = getContainingFunction(node.expression);
 
                 if (containgFunction && containgFunction.kind === SyntaxKind.Constructor) {
-                    let nodeLinks = getNodeLinks(containgFunction);
+                    const nodeLinks = getNodeLinks(containgFunction);
                     if (!(nodeLinks.flags & NodeCheckFlags.HasSeenThisCall)) {
                         nodeLinks.flags |= NodeCheckFlags.HasSeenSuperBeforeThis;
                     }
@@ -11835,7 +11834,7 @@ namespace ts {
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
                     }
-                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)){
+                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)) {
                         // In ES6, super inside constructor of class-declaration has to precede "this" accessing
                         error(superCallStatement, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
                     }
