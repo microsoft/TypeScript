@@ -4254,7 +4254,7 @@ namespace ts {
 
                     if (declaration) {
                         if (isFunctionLikeKind(declaration.kind)) {
-                            let signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
+                            const signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
                             if (declaration.kind === SyntaxKind.ConstructSignature) {
                                 displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                 displayParts.push(spacePart());
