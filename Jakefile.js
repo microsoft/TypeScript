@@ -40,6 +40,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -59,6 +60,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -475,7 +477,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
                 fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
 
-                // Node package definition file to be distributed without the package. Created by replacing 
+                // Node package definition file to be distributed without the package. Created by replacing
                 // 'ts' namespace with '"typescript"' as a module.
                 var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
@@ -884,7 +886,7 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
 });
 
 function getLinterOptions() {
@@ -947,7 +949,7 @@ function lintWatchFile(filename) {
         if (event !== "change") {
             return;
         }
-     
+
         if (!lintSemaphores[filename]) {
             lintSemaphores[filename] = true;
             lintFileAsync(getLinterOptions(), filename, function(err, result) {

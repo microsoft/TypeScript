@@ -2411,6 +2411,55 @@ namespace ts {
         return output;
     }
 
+    /**
+     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
+     * as the fallback implementation does not check for circular references by default.
+     */
+    export const stringify: (value: any) => string = JSON && JSON.stringify
+        ? JSON.stringify
+        : stringifyFallback;
+
+    /**
+     * Serialize an object graph into a JSON string.
+     */
+    function stringifyFallback(value: any): string {
+        // JSON.stringify returns `undefined` here, instead of the string "undefined".
+        return value === undefined ? undefined : stringifyValue(value);
+    }
+
+    function stringifyValue(value: any): string {
+        return typeof value === "string" ? `"${escapeString(value)}"`
+             : typeof value === "number" ? isFinite(value) ? String(value) : "null"
+             : typeof value === "boolean" ? value ? "true" : "false"
+             : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
+             : /*fallback*/ "null";
+    }
+
+    function cycleCheck(cb: (value: any) => string, value: any) {
+        Debug.assert(!value.hasOwnProperty("__cycle"), "Converting circular structure to JSON");
+        value.__cycle = true;
+        const result = cb(value);
+        delete value.__cycle;
+        return result;
+    }
+
+    function stringifyArray(value: any) {
+        return `[${reduceLeft(value, stringifyElement, "")}]`;
+    }
+
+    function stringifyElement(memo: string, value: any) {
+        return (memo ? memo + "," : memo) + stringifyValue(value);
+    }
+
+    function stringifyObject(value: any) {
+        return `{${reduceProperties(value, stringifyProperty, "")}}`;
+    }
+
+    function stringifyProperty(memo: string, value: any, key: string) {
+        return value === undefined || typeof value === "function" || key === "__cycle" ? memo
+             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
+    }
+
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
     /**
