@@ -18,6 +18,7 @@ export var z: c.b.I;
 
 //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var c;
     (function (c) {
         c.x.foo();

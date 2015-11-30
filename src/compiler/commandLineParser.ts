@@ -281,9 +281,14 @@ namespace ts {
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
         {
+            name: "allowSyntheticDefaultImports",
+            type: "boolean",
+            description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
+        },
+        {
             name: "allowJs",
             type: "boolean",
-            description: Diagnostics.Allow_javascript_files_to_be_compiled,
+            description: Diagnostics.Allow_javascript_files_to_be_compiled
         }
     ];
 

@@ -395,7 +395,7 @@ namespace ts {
             getTypeChecker,
             getClassifiableNames,
             getDiagnosticsProducingTypeChecker,
-            getCommonSourceDirectory: () => commonSourceDirectory,
+            getCommonSourceDirectory,
             emit,
             getCurrentDirectory: () => currentDirectory,
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
@@ -410,6 +410,25 @@ namespace ts {
         programTime += new Date().getTime() - start;
 
         return program;
+
+        function getCommonSourceDirectory() {
+            if (typeof commonSourceDirectory === "undefined") {
+                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
+                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
+                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
+                }
+                else {
+                    commonSourceDirectory = computeCommonSourceDirectory(files);
+                }
+                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
+                    // Make sure directory path ends with directory separator so this string can directly
+                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
+                    // start with / making it rooted path
+                    commonSourceDirectory += directorySeparator;
+                }
+            }
+            return commonSourceDirectory;
+        }
 
         function getClassifiableNames() {
             if (!classifiableNames) {
@@ -1234,24 +1253,12 @@ namespace ts {
                 options.sourceRoot || // there is --sourceRoot specified
                 options.mapRoot) { // there is --mapRoot specified
 
-                if (options.rootDir && checkSourceFilesBelongToPath(files, options.rootDir)) {
-                    // If a rootDir is specified and is valid use it as the commonSourceDirectory
-                    commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
-                }
-                else {
-                    // Compute the commonSourceDirectory from the input files
-                    commonSourceDirectory = computeCommonSourceDirectory(files);
-                    // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
-                    if (options.outDir && commonSourceDirectory === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
-                    }
-                }
+                // Precalculate and cache the common source directory
+                const dir = getCommonSourceDirectory();
 
-                if (commonSourceDirectory && commonSourceDirectory[commonSourceDirectory.length - 1] !== directorySeparator) {
-                    // Make sure directory path ends with directory separator so this string can directly
-                    // used to replace with "" to get the relative path of the source file and the relative path doesn't
-                    // start with / making it rooted path
-                    commonSourceDirectory += directorySeparator;
+                // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
+                if (options.outDir && dir === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
                 }
             }
 

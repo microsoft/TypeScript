@@ -1622,7 +1622,7 @@
     },
     "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
-        "code":2517
+        "code": 2517
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -2068,6 +2068,14 @@
         "category": "Error",
         "code": 5056
     },
+    "Cannot find a tsconfig.json file at the specified directory: '{0}'": {
+        "category": "Error",
+        "code": 5057
+    },
+    "The specified path does not exist: '{0}'": {
+        "category": "Error",
+        "code": 5058
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2108,6 +2116,10 @@
     "Do not emit outputs.": {
         "category": "Message",
         "code": 6010
+    },
+    "Allow default imports from modules with no default export. This does not affect code emit, just typechecking.": {
+        "category": "Message",
+        "code": 6011
     },
   "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
     "category": "Message",

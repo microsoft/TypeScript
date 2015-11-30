@@ -6,6 +6,7 @@ export default class {
 
 
 //// [es5ExportDefaultClassDeclaration2.js]
+"use strict";
 var default_1 = (function () {
     function default_1() {
     }

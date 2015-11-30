@@ -11,6 +11,7 @@ function foo() {
 
 //// [a.js]
 define("tests/cases/compiler/a", ["require", "exports"], function (require, exports) {
+    "use strict";
     var c = (function () {
         function c() {
         }

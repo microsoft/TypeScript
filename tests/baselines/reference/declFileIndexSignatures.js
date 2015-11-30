@@ -36,6 +36,7 @@ interface IGlobalIndexSignatureWithTypeParameter<T> {
 }
 
 //// [declFileIndexSignatures_0.js]
+"use strict";
 //// [declFileIndexSignatures_1.js]
 
 

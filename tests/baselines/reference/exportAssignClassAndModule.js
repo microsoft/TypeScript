@@ -19,6 +19,7 @@ var zz: Foo;
 zz.x;
 
 //// [exportAssignClassAndModule_0.js]
+"use strict";
 var Foo = (function () {
     function Foo() {
     }
@@ -26,6 +27,7 @@ var Foo = (function () {
 })();
 module.exports = Foo;
 //// [exportAssignClassAndModule_1.js]
+"use strict";
 var z;
 var zz;
 zz.x;

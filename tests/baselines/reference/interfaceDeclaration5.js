@@ -5,6 +5,7 @@ export class C1 { }
 
 //// [interfaceDeclaration5.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C1 = (function () {
         function C1() {
         }

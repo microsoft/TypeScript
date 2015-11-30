@@ -23,6 +23,7 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 
 //// [aliasOnMergedModuleInterface_0.js]
 //// [aliasOnMergedModuleInterface_1.js]
+"use strict";
 var z;
 z.bar("hello"); // This should be ok
 var x = foo.bar("hello"); // foo.A should be ok but foo.bar should be error

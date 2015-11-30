@@ -16,6 +16,7 @@ interface I {
 
 
 //// [overloadModifiersMustAgree.js]
+"use strict";
 var baz = (function () {
     function baz() {
     }

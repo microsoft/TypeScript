@@ -17,6 +17,7 @@ export function w(): e.w { // Should be OK
 
 //// [w1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Widget1 = (function () {
         function Widget1() {
             this.name = 'one';
@@ -27,10 +28,12 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [exporter.js]
 define(["require", "exports", './w1'], function (require, exports, w) {
+    "use strict";
     exports.w = w;
 });
 //// [consumer.js]
 define(["require", "exports", './exporter'], function (require, exports, e) {
+    "use strict";
     function w() {
         return new e.w();
     }

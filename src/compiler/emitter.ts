@@ -1276,7 +1276,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function isBinaryOrOctalIntegerLiteral(node: LiteralExpression, text: string): boolean {
+            function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string): boolean {
                 if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
                     switch (text.charCodeAt(1)) {
                         case CharacterCodes.b:
@@ -1290,7 +1290,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return false;
             }
 
-            function emitLiteral(node: LiteralExpression) {
+            function emitLiteral(node: LiteralExpression | TemplateLiteralFragment) {
                 const text = getLiteralText(node);
 
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
@@ -1305,7 +1305,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getLiteralText(node: LiteralExpression) {
+            function getLiteralText(node: LiteralExpression | TemplateLiteralFragment) {
                 // Any template literal or string literal with an extended escape
                 // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
@@ -1364,7 +1364,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`"${text}"`);
             }
 
-            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression | TemplateLiteralFragment) => void) {
                 write("[");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     literalEmitter(<LiteralExpression>node.template);
@@ -5571,22 +5571,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDecoratorsOfClass(node);
                 }
 
+                if (!(node.flags & NodeFlags.Export)) {
+                    return;
+                }
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
-                if (!isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Export)) {
+                if (node.flags & NodeFlags.Default) {
+                    // if this is a top level default export of decorated class, write the export after the declaration.
+                    writeLine();
+                    if (thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
+                        write("export default ");
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                    else if (modulekind === ModuleKind.System) {
+                        write(`${exportFunctionForFile}("default", `);
+                        emitDeclarationName(node);
+                        write(");");
+                    }
+                    else if (modulekind !== ModuleKind.ES6) {
+                        write(`exports.default = `);
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                }
+                else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
                     emitDeclarationName(node);
                     emitEnd(node);
-                    write(";");
-                }
-                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
-                    // if this is a top level default export of decorated class, write the export after the declaration.
-                    writeLine();
-                    write("export default ");
-                    emitDeclarationName(node);
                     write(";");
                 }
             }
@@ -5954,7 +5969,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitSerializedTypeNode(node: TypeNode) {
                 if (node) {
-
                     switch (node.kind) {
                         case SyntaxKind.VoidKeyword:
                             write("void 0");
@@ -5980,7 +5994,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.StringLiteralType:
                             write("String");
                             return;
 
@@ -6796,7 +6810,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
+            function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, emitRelativePathAsModuleName: boolean): string {
+                if (emitRelativePathAsModuleName) {
+                    const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
+                    if (name) {
+                        return `"${name}"`;
+                    }
+                }
                 const moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
                     return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName);
@@ -7356,7 +7376,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; ++i) {
-                    let text = getExternalModuleNameText(externalImports[i]);
+                    const text = getExternalModuleNameText(externalImports[i], emitRelativePathAsModuleName);
                     if (hasProperty(groupIndices, text)) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[text];
@@ -7372,18 +7392,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
-                    if (emitRelativePathAsModuleName) {
-                        const name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
-                        if (name) {
-                            text = `"${name}"`;
-                        }
-                    }
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
@@ -7420,14 +7434,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 for (const importNode of externalImports) {
                     // Find the name of the external module
-                    let externalModuleName = getExternalModuleNameText(importNode);
-
-                    if (emitRelativePathAsModuleName) {
-                        const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
-                        if (name) {
-                            externalModuleName = `"${name}"`;
-                        }
-                    }
+                    const externalModuleName = getExternalModuleNameText(importNode, emitRelativePathAsModuleName);
 
                     // Find the name of the module alias, if there is one
                     const importAliasName = getLocalNameForExternalImport(importNode);
@@ -7493,7 +7500,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeModuleName(node, emitRelativePathAsModuleName);
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7505,7 +7512,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCommonJSModule(node: SourceFile) {
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false, /*ensureUseStrict*/ true);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
@@ -7534,7 +7541,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 })(`);
                 emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7676,19 +7683,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
+            function isUseStrictPrologue(node: ExpressionStatement): boolean {
+                return !!(node.expression as StringLiteral).text.match(/use strict/);
+            }
+
+            function ensureUseStrictPrologue(startWithNewLine: boolean, writeUseStrict: boolean) {
+                if (writeUseStrict) {
+                    if (startWithNewLine) {
+                        writeLine();
+                    }
+                    write("\"use strict\";");
+                }
+            }
+
+            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean, ensureUseStrict?: boolean): number {
+                let foundUseStrict = false;
                 for (let i = 0; i < statements.length; ++i) {
                     if (isPrologueDirective(statements[i])) {
+                        if (isUseStrictPrologue(statements[i] as ExpressionStatement)) {
+                            foundUseStrict = true;
+                        }
                         if (startWithNewLine || i > 0) {
                             writeLine();
                         }
                         emit(statements[i]);
                     }
                     else {
+                        ensureUseStrictPrologue(startWithNewLine || i > 0, !foundUseStrict && ensureUseStrict);
                         // return index of the first non prologue directive
                         return i;
                     }
                 }
+                ensureUseStrictPrologue(startWithNewLine, !foundUseStrict && ensureUseStrict);
                 return statements.length;
             }
 
