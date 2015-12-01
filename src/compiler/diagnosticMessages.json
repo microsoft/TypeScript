@@ -852,7 +852,7 @@
         "category": "Error",
         "code": 2312
     },
-    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
+    "Type parameter '{0}' has a circular constraint.": {
         "category": "Error",
         "code": 2313
     },

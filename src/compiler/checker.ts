@@ -4068,6 +4068,23 @@ namespace ts {
                 : undefined;
         }
 
+        function getConstraintDeclaration(type: TypeParameter) {
+            return (<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint;
+        }
+
+        function hasConstraintReferenceTo(type: Type, target: TypeParameter): boolean {
+            let checked: Type[];
+            while (type && type.flags & TypeFlags.TypeParameter && !contains(checked, type)) {
+                if (type === target) {
+                    return true;
+                }
+                (checked || (checked = [])).push(type);
+                let constraintDeclaration = getConstraintDeclaration(<TypeParameter>type);
+                type = constraintDeclaration && getTypeFromTypeNode(constraintDeclaration);
+            }
+            return false;
+        }
+
         function getConstraintOfTypeParameter(type: TypeParameter): Type {
             if (!type.constraint) {
                 if (type.target) {
@@ -4075,7 +4092,13 @@ namespace ts {
                     type.constraint = targetConstraint ? instantiateType(targetConstraint, type.mapper) : noConstraintType;
                 }
                 else {
-                    type.constraint = getTypeFromTypeNode((<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint);
+                    let constraintDeclaration = getConstraintDeclaration(type);
+                    let constraint = getTypeFromTypeNode(constraintDeclaration);
+                    if (hasConstraintReferenceTo(constraint, type)) {
+                        error(constraintDeclaration, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(type));
+                        constraint = unknownType;
+                    }
+                    type.constraint = constraint;
                 }
             }
             return type.constraint === noConstraintType ? undefined : type.constraint;
@@ -4130,55 +4153,6 @@ namespace ts {
             return type;
         }
 
-        function isTypeParameterReferenceIllegalInConstraint(typeReferenceNode: TypeReferenceNode | ExpressionWithTypeArguments, typeParameterSymbol: Symbol): boolean {
-            const links = getNodeLinks(typeReferenceNode);
-            if (links.isIllegalTypeReferenceInConstraint !== undefined) {
-                return links.isIllegalTypeReferenceInConstraint;
-            }
-
-            // bubble up to the declaration
-            let currentNode: Node = typeReferenceNode;
-            // forEach === exists
-            while (!forEach(typeParameterSymbol.declarations, d => d.parent === currentNode.parent)) {
-                currentNode = currentNode.parent;
-            }
-            // if last step was made from the type parameter this means that path has started somewhere in constraint which is illegal
-            links.isIllegalTypeReferenceInConstraint = currentNode.kind === SyntaxKind.TypeParameter;
-            return links.isIllegalTypeReferenceInConstraint;
-        }
-
-        function checkTypeParameterHasIllegalReferencesInConstraint(typeParameter: TypeParameterDeclaration): void {
-            let typeParameterSymbol: Symbol;
-            function check(n: Node): void {
-                if (n.kind === SyntaxKind.TypeReference && (<TypeReferenceNode>n).typeName.kind === SyntaxKind.Identifier) {
-                    const links = getNodeLinks(n);
-                    if (links.isIllegalTypeReferenceInConstraint === undefined) {
-                        const symbol = resolveName(typeParameter, (<Identifier>(<TypeReferenceNode>n).typeName).text, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-                        if (symbol && (symbol.flags & SymbolFlags.TypeParameter)) {
-                            // TypeScript 1.0 spec (April 2014): 3.4.1
-                            // Type parameters declared in a particular type parameter list
-                            // may not be referenced in constraints in that type parameter list
-
-                            // symbol.declaration.parent === typeParameter.parent
-                            // -> typeParameter and symbol.declaration originate from the same type parameter list
-                            // -> illegal for all declarations in symbol
-                            // forEach === exists
-                            links.isIllegalTypeReferenceInConstraint = forEach(symbol.declarations, d => d.parent === typeParameter.parent);
-                        }
-                    }
-                    if (links.isIllegalTypeReferenceInConstraint) {
-                        error(typeParameter, Diagnostics.Constraint_of_a_type_parameter_cannot_reference_any_type_parameter_from_the_same_type_parameter_list);
-                    }
-                }
-                forEachChild(n, check);
-            }
-
-            if (typeParameter.constraint) {
-                typeParameterSymbol = getSymbolOfNode(typeParameter);
-                check(typeParameter.constraint);
-            }
-        }
-
         // Get type from reference to class or interface
         function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
@@ -4225,13 +4199,6 @@ namespace ts {
 
         // Get type from reference to named type that cannot be generic (enum or type parameter)
         function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments, symbol: Symbol): Type {
-            if (symbol.flags & SymbolFlags.TypeParameter && isTypeParameterReferenceIllegalInConstraint(node, symbol)) {
-                // TypeScript 1.0 spec (April 2014): 3.4.1
-                // Type parameters declared in a particular type parameter list
-                // may not be referenced in constraints in that type parameter list
-                // Implementation: such type references are resolved to 'unknown' type that usually denotes error
-                return unknownType;
-            }
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
@@ -4678,19 +4645,21 @@ namespace ts {
             };
         }
 
-        function createInferenceMapper(context: InferenceContext): TypeMapper {
-            const mapper: TypeMapper = t => {
-                for (let i = 0; i < context.typeParameters.length; i++) {
-                    if (t === context.typeParameters[i]) {
-                        context.inferences[i].isFixed = true;
-                        return getInferredType(context, i);
+        function getInferenceMapper(context: InferenceContext): TypeMapper {
+            if (!context.mapper) {
+                const mapper: TypeMapper = t => {
+                    for (let i = 0; i < context.typeParameters.length; i++) {
+                        if (t === context.typeParameters[i]) {
+                            context.inferences[i].isFixed = true;
+                            return getInferredType(context, i);
+                        }
                     }
-                }
-                return t;
-            };
-
-            mapper.context = context;
-            return mapper;
+                    return t;
+                };
+                mapper.context = context;
+                context.mapper = mapper;
+            }
+            return context.mapper;
         }
 
         function identityMapper(type: Type): Type {
@@ -5071,9 +5040,6 @@ namespace ts {
                     }
                     return objectTypeRelatedTo(source, source, target, /*reportErrors*/ false);
                 }
-                if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
-                    return typeParameterIdenticalTo(<TypeParameter>source, <TypeParameter>target);
-                }
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
                     if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
@@ -5204,27 +5170,16 @@ namespace ts {
                 return result;
             }
 
-            function typeParameterIdenticalTo(source: TypeParameter, target: TypeParameter): Ternary {
-                // covers case when both type parameters does not have constraint (both equal to noConstraintType)
-                if (source.constraint === target.constraint) {
-                    return Ternary.True;
-                }
-                if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
-                    return Ternary.False;
-                }
-                return isIdenticalTo(source.constraint, target.constraint);
-            }
-
             // Determine if two object types are related by structure. First, check if the result is already available in the global cache.
             // Second, check if we have already started a comparison of the given two types in which case we assume the result to be true.
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(apparentSource: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
-                const id = relation !== identityRelation || apparentSource.id < target.id ? apparentSource.id + "," + target.id : target.id + "," + apparentSource.id;
+                const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 const related = relation[id];
                 if (related !== undefined) {
                     if (elaborateErrors && related === RelationComparisonResult.Failed) {
@@ -5254,28 +5209,28 @@ namespace ts {
                     maybeStack = [];
                     expandingFlags = 0;
                 }
-                sourceStack[depth] = apparentSource;
+                sourceStack[depth] = source;
                 targetStack[depth] = target;
                 maybeStack[depth] = {};
                 maybeStack[depth][id] = RelationComparisonResult.Succeeded;
                 depth++;
                 const saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(apparentSource, sourceStack, depth)) expandingFlags |= 1;
+                if (!(expandingFlags & 1) && isDeeplyNestedGeneric(source, sourceStack, depth)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedGeneric(target, targetStack, depth)) expandingFlags |= 2;
                 let result: Ternary;
                 if (expandingFlags === 3) {
                     result = Ternary.Maybe;
                 }
                 else {
-                    result = propertiesRelatedTo(apparentSource, target, reportErrors);
+                    result = propertiesRelatedTo(source, target, reportErrors);
                     if (result) {
-                        result &= signaturesRelatedTo(apparentSource, target, SignatureKind.Call, reportErrors);
+                        result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportErrors);
                         if (result) {
-                            result &= signaturesRelatedTo(apparentSource, target, SignatureKind.Construct, reportErrors);
+                            result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportErrors);
                             if (result) {
-                                result &= stringIndexTypesRelatedTo(apparentSource, originalSource, target, reportErrors);
+                                result &= stringIndexTypesRelatedTo(source, originalSource, target, reportErrors);
                                 if (result) {
-                                    result &= numberIndexTypesRelatedTo(apparentSource, originalSource, target, reportErrors);
+                                    result &= numberIndexTypesRelatedTo(source, originalSource, target, reportErrors);
                                 }
                             }
                         }
@@ -5763,26 +5718,19 @@ namespace ts {
             if (!(isMatchingSignature(source, target, partialMatch))) {
                 return Ternary.False;
             }
-            let result = Ternary.True;
-            if (source.typeParameters && target.typeParameters) {
-                if (source.typeParameters.length !== target.typeParameters.length) {
-                    return Ternary.False;
-                }
-                for (let i = 0, len = source.typeParameters.length; i < len; ++i) {
-                    const related = compareTypes(source.typeParameters[i], target.typeParameters[i]);
-                    if (!related) {
-                        return Ternary.False;
-                    }
-                    result &= related;
-                }
-            }
-            else if (source.typeParameters || target.typeParameters) {
+            // Check that the two signatures have the same number of type parameters. We might consider
+            // also checking that any type parameter constraints match, but that would require instantiating
+            // the constraints with a common set of type arguments to get relatable entities in places where
+            // type parameters occur in the constraints. The complexity of doing that doesn't seem worthwhile,
+            // particularly as we're comparing erased versions of the signatures below.
+            if ((source.typeParameters ? source.typeParameters.length : 0) !== (target.typeParameters ? target.typeParameters.length : 0)) {
                 return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
             source = getErasedSignature(source);
             target = getErasedSignature(target);
+            let result = Ternary.True;
             const targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
                 const s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
@@ -6315,11 +6263,18 @@ namespace ts {
                     inferredType = emptyObjectType;
                     inferenceSucceeded = true;
                 }
+                context.inferredTypes[index] = inferredType;
 
                 // Only do the constraint check if inference succeeded (to prevent cascading errors)
                 if (inferenceSucceeded) {
                     const constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
-                    inferredType = constraint && !isTypeAssignableTo(inferredType, constraint) ? constraint : inferredType;
+                    if (constraint) {
+                        const instantiatedConstraint = instantiateType(constraint, getInferenceMapper(context));
+                        if (!isTypeAssignableTo(inferredType, instantiatedConstraint)) {
+                            inferredType = instantiateType(constraint, createTypeEraser(context.typeParameters));
+                            context.inferredTypes[index] = inferredType;
+                        }
+                    }
                 }
                 else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
                     // If inference failed, it is necessary to record the index of the failed type parameter (the one we are on).
@@ -6327,7 +6282,6 @@ namespace ts {
                     // So if this failure is on preceding type parameter, this type parameter is the new failure index.
                     context.failedTypeParameterIndex = index;
                 }
-                context.inferredTypes[index] = inferredType;
             }
             return inferredType;
         }
@@ -6336,7 +6290,6 @@ namespace ts {
             for (let i = 0; i < context.inferredTypes.length; i++) {
                 getInferredType(context, i);
             }
-
             return context.inferredTypes;
         }
 
@@ -8683,7 +8636,7 @@ namespace ts {
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
             const typeParameters = signature.typeParameters;
-            const inferenceMapper = createInferenceMapper(context);
+            const inferenceMapper = getInferenceMapper(context);
 
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (let i = 0; i < typeParameters.length; i++) {
@@ -8749,14 +8702,11 @@ namespace ts {
             getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArguments: TypeNode[], typeArgumentResultTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: TypeNode[], typeArgumentTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
             const typeParameters = signature.typeParameters;
             let typeArgumentsAreAssignable = true;
+            let mapper: TypeMapper;
             for (let i = 0; i < typeParameters.length; i++) {
-                const typeArgNode = typeArguments[i];
-                const typeArgument = getTypeFromTypeNode(typeArgNode);
-                // Do not push on this array! It has a preallocated length
-                typeArgumentResultTypes[i] = typeArgument;
                 if (typeArgumentsAreAssignable /* so far */) {
                     const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                     if (constraint) {
@@ -8766,17 +8716,15 @@ namespace ts {
                             errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
                             typeArgumentHeadMessage = headMessage;
                         }
-
                         typeArgumentsAreAssignable = checkTypeAssignableTo(
-                            typeArgument,
-                            constraint,
-                            reportErrors ? typeArgNode : undefined,
+                            typeArgumentTypes[i],
+                            instantiateType(constraint, mapper || (mapper = createTypeMapper(typeParameters, typeArgumentTypes))),
+                            reportErrors ? typeArgumentNodes[i] : undefined,
                             typeArgumentHeadMessage,
                             errorInfo);
                     }
                 }
             }
-
             return typeArgumentsAreAssignable;
         }
 
@@ -9232,7 +9180,8 @@ namespace ts {
             }
             else if (candidateForTypeArgumentError) {
                 if (!isTaggedTemplate && !isDecorator && typeArguments) {
-                    checkTypeArguments(candidateForTypeArgumentError, (<CallExpression>node).typeArguments, [], /*reportErrors*/ true, headMessage);
+                    const typeArguments = (<CallExpression>node).typeArguments;
+                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, headMessage);
                 }
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
@@ -9299,7 +9248,7 @@ namespace ts {
                         if (candidate.typeParameters) {
                             let typeArgumentTypes: Type[];
                             if (typeArguments) {
-                                typeArgumentTypes = new Array<Type>(candidate.typeParameters.length);
+                                typeArgumentTypes = map(typeArguments, getTypeFromTypeNode);
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
                             else {
@@ -10823,11 +10772,10 @@ namespace ts {
             }
 
             checkSourceElement(node.constraint);
+            getConstraintOfTypeParameter(getDeclaredTypeOfTypeParameter(getSymbolOfNode(node)));
             if (produceDiagnostics) {
-                checkTypeParameterHasIllegalReferencesInConstraint(node);
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_parameter_name_cannot_be_0);
             }
-            // TODO: Check multiple declarations are identical
         }
 
         function checkParameter(node: ParameterDeclaration) {
@@ -11238,13 +11186,19 @@ namespace ts {
             checkDecorators(node);
         }
 
-        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArguments: TypeNode[]): boolean {
+        function checkTypeArgumentConstraints(typeParameters: TypeParameter[], typeArgumentNodes: TypeNode[]): boolean {
+            let typeArguments: Type[];
+            let mapper: TypeMapper;
             let result = true;
             for (let i = 0; i < typeParameters.length; i++) {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
-                    const typeArgument = typeArguments[i];
-                    result = result && checkTypeAssignableTo(getTypeFromTypeNode(typeArgument), constraint, typeArgument, Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    if (!typeArguments) {
+                        typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
+                        mapper = createTypeMapper(typeParameters, typeArguments);
+                    }
+                    result = result && checkTypeAssignableTo(typeArguments[i], instantiateType(constraint, mapper),
+                        typeArgumentNodes[i], Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
             return result;
