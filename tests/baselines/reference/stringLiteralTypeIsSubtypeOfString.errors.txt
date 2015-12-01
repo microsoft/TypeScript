@@ -5,15 +5,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLite
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(38,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(77,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(90,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(94,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(95,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(96,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(98,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(99,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts(100,32): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts (13 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLiteralTypeIsSubtypeOfString.ts (7 errors) ====
     // string literal types are subtypes of string, any
     
     // ok
@@ -122,21 +116,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/stringLite
     function f14(x: any) { }
     
     function f15<T, U extends T>(x: 'a');
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     function f15<T, U extends T>(x: U);
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     function f15<T, U extends T>(x: any) { }
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     
     function f16<T extends String, U extends T>(x: 'a');
-                                   ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     function f16<T extends String, U extends T>(x: U);
-                                   ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     function f16<T extends String, U extends T>(x: any) { }
-                                   ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
