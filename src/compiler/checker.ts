@@ -6756,7 +6756,6 @@ namespace ts {
 
                 if (node.parserContextFlags & ParserContextFlags.Await) {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
-                    getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
                 }
             }
 
@@ -6933,6 +6932,11 @@ namespace ts {
                 }
 
                 getNodeLinks(node).flags |= nodeCheckFlag;
+
+                // Due to how we emit async functions, we need to specialize the emit for an async method that contains a `super` reference.
+                if (container.kind === SyntaxKind.MethodDeclaration && container.flags & NodeFlags.Async) {
+                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                }
 
                 if (needToCaptureLexicalThis) {
                     // call expressions are allowed only in constructors so they should always capture correct 'this'
@@ -9858,7 +9862,7 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        /* 
+        /*
          *TypeScript Specification 1.0 (6.3) - July 2014
          * An explicitly typed function whose return type isn't the Void or the Any type
          * must have at least one return statement somewhere in its body.
@@ -9884,15 +9888,15 @@ namespace ts {
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
 
             if (returnType && !hasExplicitReturn) {
-                // minimal check: function has syntactic return type annotation and no explicit return statements in the body 
+                // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present 
+                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
             else if (compilerOptions.noImplicitReturns) {
                 if (!returnType) {
                     // If return type annotation is omitted check if function has any explicit return statements.
-                    // If it does not have any - its inferred return type is void - don't do any checks. 
+                    // If it does not have any - its inferred return type is void - don't do any checks.
                     // Otherwise get inferred return type from function body and report error only if it is not void / anytype
                     const inferredReturnType = hasExplicitReturn
                         ? getReturnTypeOfSignature(getSignatureFromDeclaration(func))

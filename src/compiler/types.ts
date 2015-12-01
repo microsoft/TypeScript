@@ -2022,7 +2022,7 @@ namespace ts {
         SuperInstance               = 0x00000100,  // Instance 'super' reference
         SuperStatic                 = 0x00000200,  // Static 'super' reference
         ContextChecked              = 0x00000400,  // Contextual types have been assigned
-        LexicalArguments            = 0x00000800,
+        AsyncMethodWithSuper        = 0x00000800,
         CaptureArguments            = 0x00001000,  // Lexical 'arguments' used in body (for async functions)
 
         // Values for enum members have been computed, and any errors have been reported for them.

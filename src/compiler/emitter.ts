@@ -321,7 +321,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
         const awaiterHelper = `
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
     return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
+        generator = generator.apply(thisArg, _arguments);
         function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
         function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
         function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }
@@ -1496,11 +1496,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExpressionIdentifier(node: Identifier) {
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalArguments) {
-                    write("_arguments");
-                    return;
-                }
-
                 const container = resolver.getReferencedExportContainer(node);
                 if (container) {
                     if (container.kind === SyntaxKind.SourceFile) {
@@ -2287,23 +2282,72 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(")");
             }
 
+            function isSuperPropertyAccess(node: Expression): node is PropertyAccessExpression {
+                return node.kind === SyntaxKind.PropertyAccessExpression
+                    && (<PropertyAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+            }
+
+            function isSuperElementAccess(node: Expression): node is ElementAccessExpression {
+                return node.kind === SyntaxKind.ElementAccessExpression
+                    && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+            }
+
+            function isInAsyncMethodWithSuperInES6(node: CallExpression) {
+                if (languageVersion === ScriptTarget.ES6) {
+                    const container = getSuperContainer(node, /*includeFunctions*/ false);
+                    if (container && resolver.getNodeCheckFlags(container) & NodeCheckFlags.AsyncMethodWithSuper) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            function emitSuperAccessInAsyncMethod(node: Expression) {
+                write("_super(");
+                emit(node);
+                write(")");
+            }
+
             function emitCallExpression(node: CallExpression) {
                 if (languageVersion < ScriptTarget.ES6 && hasSpreadElement(node.arguments)) {
                     emitCallWithSpread(node);
                     return;
                 }
+
+                const expression = node.expression;
                 let superCall = false;
-                if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    emitSuper(node.expression);
+                let isAsyncMethodWithSuper = false;
+                if (expression.kind === SyntaxKind.SuperKeyword) {
+                    emitSuper(expression);
                     superCall = true;
                 }
                 else {
-                    emit(node.expression);
-                    superCall = node.expression.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.expression).expression.kind === SyntaxKind.SuperKeyword;
+                    if (isSuperPropertyAccess(expression)) {
+                        superCall = true;
+                        if (isInAsyncMethodWithSuperInES6(node)) {
+                            isAsyncMethodWithSuper = true;
+                            const name = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                            name.text = expression.name.text;
+                            emitSuperAccessInAsyncMethod(name);
+                        }
+                    }
+                    else if (isSuperElementAccess(expression)) {
+                        superCall = true;
+                        if (isInAsyncMethodWithSuperInES6(node)) {
+                            isAsyncMethodWithSuper = true;
+                            emitSuperAccessInAsyncMethod(expression.argumentExpression);
+                        }
+                    }
+
+                    if (!isAsyncMethodWithSuper) {
+                        emit(expression);
+                    }
                 }
-                if (superCall && languageVersion < ScriptTarget.ES6) {
+
+                if (superCall && (languageVersion < ScriptTarget.ES6 || isAsyncMethodWithSuper)) {
                     write(".call(");
-                    emitThis(node.expression);
+                    emitThis(expression);
                     if (node.arguments.length) {
                         write(", ");
                         emitCommaList(node.arguments);
@@ -2980,7 +3024,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         // this is top level converted loop so we need to create an alias for 'this' here
-                        // NOTE: 
+                        // NOTE:
                         // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
                         // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
                         write(`var ${convertedLoopState.thisName} = this;`);
@@ -4452,6 +4496,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     write(" {");
                     increaseIndent();
                     writeLine();
+
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
+                        write("const _super = name => super[name];");
+                        writeLine();
+                    }
+
                     write("return");
                 }
 
@@ -4472,12 +4522,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 // Emit the call to __awaiter.
-                if (hasLexicalArguments) {
-                    write(", function* (_arguments)");
-                }
-                else {
-                    write(", function* ()");
-                }
+                write(", function* ()");
 
                 // Emit the signature and body for the inner generator function.
                 emitFunctionBody(node);

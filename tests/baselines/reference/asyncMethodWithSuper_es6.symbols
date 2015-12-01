@@ -1,0 +1,26 @@
+=== tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts ===
+class A {
+>A : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+
+    x() {
+>x : Symbol(x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(asyncMethodWithSuper_es6.ts, 3, 1))
+>A : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+
+    async y() {
+>y : Symbol(y, Decl(asyncMethodWithSuper_es6.ts, 5, 19))
+
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuper_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es6.ts, 0, 9))
+    }
+}

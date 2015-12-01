@@ -33,7 +33,7 @@ let x1 = () => { use("Test"); }
 //// [reachabilityChecks7.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
     return new Promise(function (resolve, reject) {
-        generator = generator.call(thisArg, _arguments);
+        generator = generator.apply(thisArg, _arguments);
         function cast(value) { return value instanceof Promise && value.constructor === Promise ? value : new Promise(function (resolve) { resolve(value); }); }
         function onfulfill(value) { try { step("next", value); } catch (e) { reject(e); } }
         function onreject(value) { try { step("throw", value); } catch (e) { reject(e); } }

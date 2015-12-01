@@ -1,0 +1,29 @@
+=== tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts ===
+class A {
+>A : A
+
+    x() {
+>x : () => void
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    async y() {
+>y : () => Promise<void>
+
+        super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : string
+    }
+}
