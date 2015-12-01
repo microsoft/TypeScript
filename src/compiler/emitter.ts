@@ -4526,8 +4526,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitSignatureParameters(node);
                 }
 
+                // Even though generators are a ES6 only feature, the functionality is wiedely supported
+                // in current browsers and latest node, therefore showing some tolerance
                 const isAsync = isAsyncFunctionLike(node);
-                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                if (isAsync && (languageVersion === ScriptTarget.ES6 || languageVersion === ScriptTarget.ES2015 || languageVersion === ScriptTarget.ES5)) {
                     emitAsyncFunctionBodyForES6(node);
                 }
                 else {
