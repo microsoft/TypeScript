@@ -208,9 +208,9 @@ namespace ts {
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
-            const _os = require('os');
-            const _https = require('https');
-            const _url = require('url');
+            const _os = require("os");
+            const _https = require("https");
+            const _url = require("url");
             const _tty = require("tty");
 
             // average async stat takes about 30 microseconds
@@ -399,24 +399,24 @@ namespace ts {
             }
 
             function httpsPost(destUrl: string, data: string, contentType: string, callback?: (err: any, data: string) => void) {
-                var parsedUrl = _url.parse(destUrl);
-                var opts = {
+                const parsedUrl = _url.parse(destUrl);
+                const opts = {
                     host: parsedUrl.host,
                     path: parsedUrl.path,
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': contentType,
-                        'Content-Length': data.length
+                        "Content-Type": contentType,
+                        "Content-Length": data.length
                     }
                 };
-                var req = _https.request(opts, (response: any) => {
-                    var body = '';
-                    response.on('data', (data: string) => {
+                const req = _https.request(opts, (response: any) => {
+                    let body = "";
+                    response.on("data", (data: string) => {
                         body = body + data;
                     });
-                    response.on('end', () => callback && callback(undefined, body));
+                    response.on("end", () => callback && callback(undefined, body));
                 });
-                req.on('error', (err: any) => callback && callback(err, undefined));
+                req.on("error", (err: any) => callback && callback(err, undefined));
                 req.write(data);
             }
             
@@ -426,12 +426,12 @@ namespace ts {
 
             function https(url: string, callback: (err: any, data: string) => void) {
                 _https.get(url, (res: any) => {
-                    var body = '';
-                    res.on('data', (data: string) => {
+                    let body = "";
+                    res.on("data", (data: string) => {
                         body = body + data;
                     });
-                    res.on('end', () => callback(undefined, body));
-                }).on('error', (err: any) => callback(err, undefined));
+                    res.on("end", () => callback(undefined, body));
+                }).on("error", (err: any) => callback(err, undefined));
             }
 
             return {
