@@ -2126,6 +2126,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return;
                 }
 
+                if (languageVersion === ScriptTarget.ES6 &&
+                    node.expression.kind === SyntaxKind.SuperKeyword &&
+                    isInAsyncMethodWithSuperInES6(node)) {
+                    const name = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
+                    name.text = node.name.text;
+                    emitSuperAccessInAsyncMethod(node.expression, name);
+                    return;
+                }
+
                 emit(node.expression);
                 const indentedBeforeDot = indentIfOnDifferentLines(node, node.expression, node.dotToken);
 
@@ -2207,6 +2216,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (tryEmitConstantValue(node)) {
                     return;
                 }
+
+                if (languageVersion === ScriptTarget.ES6 &&
+                    node.expression.kind === SyntaxKind.SuperKeyword &&
+                    isInAsyncMethodWithSuperInES6(node)) {
+                    emitSuperAccessInAsyncMethod(node.expression, node.argumentExpression);
+                    return;
+                }
+
                 emit(node.expression);
                 write("[");
                 emit(node.argumentExpression);
@@ -2292,10 +2309,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
             }
 
-            function isInAsyncMethodWithSuperInES6(node: CallExpression) {
+            function isInAsyncMethodWithSuperInES6(node: Node) {
                 if (languageVersion === ScriptTarget.ES6) {
                     const container = getSuperContainer(node, /*includeFunctions*/ false);
-                    if (container && resolver.getNodeCheckFlags(container) & NodeCheckFlags.AsyncMethodWithSuper) {
+                    if (container && resolver.getNodeCheckFlags(container) & (NodeCheckFlags.AsyncMethodWithSuper | NodeCheckFlags.AsyncMethodWithSuperBinding)) {
                         return true;
                     }
                 }
@@ -2303,10 +2320,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return false;
             }
 
-            function emitSuperAccessInAsyncMethod(node: Expression) {
+            function emitSuperAccessInAsyncMethod(superNode: Node, argumentExpression: Expression) {
+                const container = getSuperContainer(superNode, /*includeFunctions*/ false);
+                const isSuperBinding = resolver.getNodeCheckFlags(container) & NodeCheckFlags.AsyncMethodWithSuperBinding;
                 write("_super(");
-                emit(node);
-                write(")");
+                emit(argumentExpression);
+                write(isSuperBinding ? ").value" : ")");
             }
 
             function emitCallExpression(node: CallExpression) {
@@ -2323,26 +2342,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     superCall = true;
                 }
                 else {
-                    if (isSuperPropertyAccess(expression)) {
-                        superCall = true;
-                        if (isInAsyncMethodWithSuperInES6(node)) {
-                            isAsyncMethodWithSuper = true;
-                            const name = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                            name.text = expression.name.text;
-                            emitSuperAccessInAsyncMethod(name);
-                        }
-                    }
-                    else if (isSuperElementAccess(expression)) {
-                        superCall = true;
-                        if (isInAsyncMethodWithSuperInES6(node)) {
-                            isAsyncMethodWithSuper = true;
-                            emitSuperAccessInAsyncMethod(expression.argumentExpression);
-                        }
-                    }
-
-                    if (!isAsyncMethodWithSuper) {
-                        emit(expression);
-                    }
+                    superCall = isSuperPropertyAccess(expression) || isSuperElementAccess(expression);
+                    isAsyncMethodWithSuper = superCall && isInAsyncMethodWithSuperInES6(node);
+                    emit(expression);
                 }
 
                 if (superCall && (languageVersion < ScriptTarget.ES6 || isAsyncMethodWithSuper)) {
@@ -4497,8 +4499,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     increaseIndent();
                     writeLine();
 
-                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
-                        write("const _super = name => super[name];");
+                    if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
+                        writeLines(`
+const _super = (function (geti, seti) {
+    const cache = Object.create(null);
+    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+})(name => super[name], (name, value) => super[name] = value);`);
+                        writeLine();
+                    }
+                    else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
+                        write(`const _super = name => super[name];`);
                         writeLine();
                     }
 

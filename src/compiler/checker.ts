@@ -6902,6 +6902,16 @@ namespace ts {
             return false;
         }
 
+        function isSuperPropertyAccess(node: Node) {
+            return node.kind === SyntaxKind.PropertyAccessExpression
+                && (<PropertyAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+        }
+
+        function isSuperElementAccess(node: Node) {
+            return node.kind === SyntaxKind.ElementAccessExpression
+                && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword;
+        }
+
         function checkSuperExpression(node: Node): Type {
             const isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
             const classDeclaration = getContainingClass(node);
@@ -6935,7 +6945,12 @@ namespace ts {
 
                 // Due to how we emit async functions, we need to specialize the emit for an async method that contains a `super` reference.
                 if (container.kind === SyntaxKind.MethodDeclaration && container.flags & NodeFlags.Async) {
-                    getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                    if ((isSuperPropertyAccess(node.parent) || isSuperElementAccess(node.parent)) && isAssignmentTarget(node.parent)) {
+                        getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
+                    }
+                    else {
+                        getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuper;
+                    }
                 }
 
                 if (needToCaptureLexicalThis) {
