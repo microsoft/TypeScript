@@ -2978,7 +2978,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         // this is top level converted loop so we need to create an alias for 'this' here
-                        // NOTE: 
+                        // NOTE:
                         // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
                         // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
                         write(`var ${convertedLoopState.thisName} = this;`);
@@ -4526,10 +4526,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitSignatureParameters(node);
                 }
 
-                // Even though generators are a ES6 only feature, the functionality is wiedely supported
-                // in current browsers and latest node, therefore showing some tolerance
                 const isAsync = isAsyncFunctionLike(node);
-                if (isAsync && (languageVersion === ScriptTarget.ES6 || languageVersion === ScriptTarget.ES2015 || languageVersion === ScriptTarget.ES5)) {
+                if (isAsync) {
                     emitAsyncFunctionBodyForES6(node);
                 }
                 else {
