@@ -98,6 +98,7 @@ class GlobalConstructorWithParameterInitializer {
 }
 
 //// [declFileConstructors_0.js]
+"use strict";
 var SimpleConstructor = (function () {
     /** This comment should appear for foo*/
     function SimpleConstructor() {

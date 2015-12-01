@@ -1,12 +1,12 @@
 ===================================================================
-JsFile: tsxEmit3.jsx
-mapUrl: tsxEmit3.jsx.map
+JsFile: file.jsx
+mapUrl: file.jsx.map
 sourceRoot: 
-sources: tsxEmit3.tsx
+sources: file.tsx
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/jsx/tsxEmit3.jsx
-sourceFile:tsxEmit3.tsx
+emittedFile:tests/cases/conformance/jsx/file.jsx
+sourceFile:file.tsx
 -------------------------------------------------------------------
 >>>var M;
 1 >
@@ -60,13 +60,13 @@ sourceFile:tsxEmit3.tsx
 2 >    ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >	
-1->Emitted(3, 5) Source(8, 2) + SourceIndex(0) name (M)
+1->Emitted(3, 5) Source(8, 2) + SourceIndex(0)
 ---
 >>>        function Foo() {
 1->^^^^^^^^
 2 >        ^^->
 1->export class Foo { 
-1->Emitted(4, 9) Source(8, 21) + SourceIndex(0) name (M.Foo)
+1->Emitted(4, 9) Source(8, 21) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
@@ -74,16 +74,16 @@ sourceFile:tsxEmit3.tsx
 3 >         ^^^^^^^^^^^->
 1->constructor() { 
 2 >        }
-1->Emitted(5, 9) Source(8, 37) + SourceIndex(0) name (M.Foo.constructor)
-2 >Emitted(5, 10) Source(8, 38) + SourceIndex(0) name (M.Foo.constructor)
+1->Emitted(5, 9) Source(8, 37) + SourceIndex(0)
+2 >Emitted(5, 10) Source(8, 38) + SourceIndex(0)
 ---
 >>>        return Foo;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^
 1-> 
 2 >        }
-1->Emitted(6, 9) Source(8, 39) + SourceIndex(0) name (M.Foo)
-2 >Emitted(6, 19) Source(8, 40) + SourceIndex(0) name (M.Foo)
+1->Emitted(6, 9) Source(8, 39) + SourceIndex(0)
+2 >Emitted(6, 19) Source(8, 40) + SourceIndex(0)
 ---
 >>>    })();
 1 >^^^^
@@ -95,10 +95,10 @@ sourceFile:tsxEmit3.tsx
 2 >    }
 3 >     
 4 >     export class Foo { constructor() { } }
-1 >Emitted(7, 5) Source(8, 39) + SourceIndex(0) name (M.Foo)
-2 >Emitted(7, 6) Source(8, 40) + SourceIndex(0) name (M.Foo)
-3 >Emitted(7, 6) Source(8, 2) + SourceIndex(0) name (M)
-4 >Emitted(7, 10) Source(8, 40) + SourceIndex(0) name (M)
+1 >Emitted(7, 5) Source(8, 39) + SourceIndex(0)
+2 >Emitted(7, 6) Source(8, 40) + SourceIndex(0)
+3 >Emitted(7, 6) Source(8, 2) + SourceIndex(0)
+4 >Emitted(7, 10) Source(8, 40) + SourceIndex(0)
 ---
 >>>    M.Foo = Foo;
 1->^^^^
@@ -109,10 +109,10 @@ sourceFile:tsxEmit3.tsx
 2 >    Foo
 3 >          { constructor() { } }
 4 >               
-1->Emitted(8, 5) Source(8, 15) + SourceIndex(0) name (M)
-2 >Emitted(8, 10) Source(8, 18) + SourceIndex(0) name (M)
-3 >Emitted(8, 16) Source(8, 40) + SourceIndex(0) name (M)
-4 >Emitted(8, 17) Source(8, 40) + SourceIndex(0) name (M)
+1->Emitted(8, 5) Source(8, 15) + SourceIndex(0)
+2 >Emitted(8, 10) Source(8, 18) + SourceIndex(0)
+3 >Emitted(8, 16) Source(8, 40) + SourceIndex(0)
+4 >Emitted(8, 17) Source(8, 40) + SourceIndex(0)
 ---
 >>>    var S;
 1 >^^^^
@@ -130,10 +130,10 @@ sourceFile:tsxEmit3.tsx
   >         		// Emit Foo
   >         		// Foo, <Foo />;
   >         	}
-1 >Emitted(9, 5) Source(9, 2) + SourceIndex(0) name (M)
-2 >Emitted(9, 9) Source(9, 16) + SourceIndex(0) name (M)
-3 >Emitted(9, 10) Source(9, 17) + SourceIndex(0) name (M)
-4 >Emitted(9, 11) Source(14, 3) + SourceIndex(0) name (M)
+1 >Emitted(9, 5) Source(9, 2) + SourceIndex(0)
+2 >Emitted(9, 9) Source(9, 16) + SourceIndex(0)
+3 >Emitted(9, 10) Source(9, 17) + SourceIndex(0)
+4 >Emitted(9, 11) Source(14, 3) + SourceIndex(0)
 ---
 >>>    (function (S) {
 1->^^^^
@@ -147,24 +147,24 @@ sourceFile:tsxEmit3.tsx
 3 >               S
 4 >                 
 5 >                  {
-1->Emitted(10, 5) Source(9, 2) + SourceIndex(0) name (M)
-2 >Emitted(10, 16) Source(9, 16) + SourceIndex(0) name (M)
-3 >Emitted(10, 17) Source(9, 17) + SourceIndex(0) name (M)
-4 >Emitted(10, 19) Source(9, 18) + SourceIndex(0) name (M)
-5 >Emitted(10, 20) Source(9, 19) + SourceIndex(0) name (M)
+1->Emitted(10, 5) Source(9, 2) + SourceIndex(0)
+2 >Emitted(10, 16) Source(9, 16) + SourceIndex(0)
+3 >Emitted(10, 17) Source(9, 17) + SourceIndex(0)
+4 >Emitted(10, 19) Source(9, 18) + SourceIndex(0)
+5 >Emitted(10, 20) Source(9, 19) + SourceIndex(0)
 ---
 >>>        var Bar = (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >		
-1->Emitted(11, 9) Source(10, 3) + SourceIndex(0) name (M.S)
+1->Emitted(11, 9) Source(10, 3) + SourceIndex(0)
 ---
 >>>            function Bar() {
 1->^^^^^^^^^^^^
 2 >            ^^->
 1->
-1->Emitted(12, 13) Source(10, 3) + SourceIndex(0) name (M.S.Bar)
+1->Emitted(12, 13) Source(10, 3) + SourceIndex(0)
 ---
 >>>            }
 1->^^^^^^^^^^^^
@@ -172,16 +172,16 @@ sourceFile:tsxEmit3.tsx
 3 >             ^^^^^^^^^^^->
 1->export class Bar { 
 2 >            }
-1->Emitted(13, 13) Source(10, 22) + SourceIndex(0) name (M.S.Bar.constructor)
-2 >Emitted(13, 14) Source(10, 23) + SourceIndex(0) name (M.S.Bar.constructor)
+1->Emitted(13, 13) Source(10, 22) + SourceIndex(0)
+2 >Emitted(13, 14) Source(10, 23) + SourceIndex(0)
 ---
 >>>            return Bar;
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^
 1->
 2 >            }
-1->Emitted(14, 13) Source(10, 22) + SourceIndex(0) name (M.S.Bar)
-2 >Emitted(14, 23) Source(10, 23) + SourceIndex(0) name (M.S.Bar)
+1->Emitted(14, 13) Source(10, 22) + SourceIndex(0)
+2 >Emitted(14, 23) Source(10, 23) + SourceIndex(0)
 ---
 >>>        })();
 1 >^^^^^^^^
@@ -193,10 +193,10 @@ sourceFile:tsxEmit3.tsx
 2 >        }
 3 >         
 4 >         export class Bar { }
-1 >Emitted(15, 9) Source(10, 22) + SourceIndex(0) name (M.S.Bar)
-2 >Emitted(15, 10) Source(10, 23) + SourceIndex(0) name (M.S.Bar)
-3 >Emitted(15, 10) Source(10, 3) + SourceIndex(0) name (M.S)
-4 >Emitted(15, 14) Source(10, 23) + SourceIndex(0) name (M.S)
+1 >Emitted(15, 9) Source(10, 22) + SourceIndex(0)
+2 >Emitted(15, 10) Source(10, 23) + SourceIndex(0)
+3 >Emitted(15, 10) Source(10, 3) + SourceIndex(0)
+4 >Emitted(15, 14) Source(10, 23) + SourceIndex(0)
 ---
 >>>        S.Bar = Bar;
 1->^^^^^^^^
@@ -208,10 +208,10 @@ sourceFile:tsxEmit3.tsx
 2 >        Bar
 3 >              { }
 4 >                   
-1->Emitted(16, 9) Source(10, 16) + SourceIndex(0) name (M.S)
-2 >Emitted(16, 14) Source(10, 19) + SourceIndex(0) name (M.S)
-3 >Emitted(16, 20) Source(10, 23) + SourceIndex(0) name (M.S)
-4 >Emitted(16, 21) Source(10, 23) + SourceIndex(0) name (M.S)
+1->Emitted(16, 9) Source(10, 16) + SourceIndex(0)
+2 >Emitted(16, 14) Source(10, 19) + SourceIndex(0)
+3 >Emitted(16, 20) Source(10, 23) + SourceIndex(0)
+4 >Emitted(16, 21) Source(10, 23) + SourceIndex(0)
 ---
 >>>    })(S = M.S || (M.S = {}));
 1->^^^^
@@ -241,15 +241,15 @@ sourceFile:tsxEmit3.tsx
   >                      		// Emit Foo
   >                      		// Foo, <Foo />;
   >                      	}
-1->Emitted(17, 5) Source(14, 2) + SourceIndex(0) name (M.S)
-2 >Emitted(17, 6) Source(14, 3) + SourceIndex(0) name (M.S)
-3 >Emitted(17, 8) Source(9, 16) + SourceIndex(0) name (M)
-4 >Emitted(17, 9) Source(9, 17) + SourceIndex(0) name (M)
-5 >Emitted(17, 12) Source(9, 16) + SourceIndex(0) name (M)
-6 >Emitted(17, 15) Source(9, 17) + SourceIndex(0) name (M)
-7 >Emitted(17, 20) Source(9, 16) + SourceIndex(0) name (M)
-8 >Emitted(17, 23) Source(9, 17) + SourceIndex(0) name (M)
-9 >Emitted(17, 31) Source(14, 3) + SourceIndex(0) name (M)
+1->Emitted(17, 5) Source(14, 2) + SourceIndex(0)
+2 >Emitted(17, 6) Source(14, 3) + SourceIndex(0)
+3 >Emitted(17, 8) Source(9, 16) + SourceIndex(0)
+4 >Emitted(17, 9) Source(9, 17) + SourceIndex(0)
+5 >Emitted(17, 12) Source(9, 16) + SourceIndex(0)
+6 >Emitted(17, 15) Source(9, 17) + SourceIndex(0)
+7 >Emitted(17, 20) Source(9, 16) + SourceIndex(0)
+8 >Emitted(17, 23) Source(9, 17) + SourceIndex(0)
+9 >Emitted(17, 31) Source(14, 3) + SourceIndex(0)
 ---
 >>>})(M || (M = {}));
 1 >
@@ -275,8 +275,8 @@ sourceFile:tsxEmit3.tsx
   >          		// Foo, <Foo />;
   >          	}
   >          }
-1 >Emitted(18, 1) Source(15, 1) + SourceIndex(0) name (M)
-2 >Emitted(18, 2) Source(15, 2) + SourceIndex(0) name (M)
+1 >Emitted(18, 1) Source(15, 1) + SourceIndex(0)
+2 >Emitted(18, 2) Source(15, 2) + SourceIndex(0)
 3 >Emitted(18, 4) Source(7, 8) + SourceIndex(0)
 4 >Emitted(18, 5) Source(7, 9) + SourceIndex(0)
 5 >Emitted(18, 10) Source(7, 8) + SourceIndex(0)
@@ -337,8 +337,8 @@ sourceFile:tsxEmit3.tsx
 1->
   >	
 2 >    // Emit M.Foo
-1->Emitted(21, 5) Source(18, 2) + SourceIndex(0) name (M)
-2 >Emitted(21, 18) Source(18, 15) + SourceIndex(0) name (M)
+1->Emitted(21, 5) Source(18, 2) + SourceIndex(0)
+2 >Emitted(21, 18) Source(18, 15) + SourceIndex(0)
 ---
 >>>    M.Foo, <M.Foo />;
 1->^^^^
@@ -356,13 +356,13 @@ sourceFile:tsxEmit3.tsx
 5 >            Foo
 6 >                  />
 7 >                    ;
-1->Emitted(22, 5) Source(19, 2) + SourceIndex(0) name (M)
-2 >Emitted(22, 10) Source(19, 5) + SourceIndex(0) name (M)
-3 >Emitted(22, 12) Source(19, 7) + SourceIndex(0) name (M)
-4 >Emitted(22, 13) Source(19, 8) + SourceIndex(0) name (M)
-5 >Emitted(22, 18) Source(19, 11) + SourceIndex(0) name (M)
-6 >Emitted(22, 21) Source(19, 14) + SourceIndex(0) name (M)
-7 >Emitted(22, 22) Source(19, 15) + SourceIndex(0) name (M)
+1->Emitted(22, 5) Source(19, 2) + SourceIndex(0)
+2 >Emitted(22, 10) Source(19, 5) + SourceIndex(0)
+3 >Emitted(22, 12) Source(19, 7) + SourceIndex(0)
+4 >Emitted(22, 13) Source(19, 8) + SourceIndex(0)
+5 >Emitted(22, 18) Source(19, 11) + SourceIndex(0)
+6 >Emitted(22, 21) Source(19, 14) + SourceIndex(0)
+7 >Emitted(22, 22) Source(19, 15) + SourceIndex(0)
 ---
 >>>    var S;
 1 >^^^^
@@ -382,10 +382,10 @@ sourceFile:tsxEmit3.tsx
   >         		// Emit S.Bar
   >         		Bar, <Bar />;
   >         	}
-1 >Emitted(23, 5) Source(21, 2) + SourceIndex(0) name (M)
-2 >Emitted(23, 9) Source(21, 16) + SourceIndex(0) name (M)
-3 >Emitted(23, 10) Source(21, 17) + SourceIndex(0) name (M)
-4 >Emitted(23, 11) Source(27, 3) + SourceIndex(0) name (M)
+1 >Emitted(23, 5) Source(21, 2) + SourceIndex(0)
+2 >Emitted(23, 9) Source(21, 16) + SourceIndex(0)
+3 >Emitted(23, 10) Source(21, 17) + SourceIndex(0)
+4 >Emitted(23, 11) Source(27, 3) + SourceIndex(0)
 ---
 >>>    (function (S) {
 1->^^^^
@@ -399,11 +399,11 @@ sourceFile:tsxEmit3.tsx
 3 >               S
 4 >                 
 5 >                  {
-1->Emitted(24, 5) Source(21, 2) + SourceIndex(0) name (M)
-2 >Emitted(24, 16) Source(21, 16) + SourceIndex(0) name (M)
-3 >Emitted(24, 17) Source(21, 17) + SourceIndex(0) name (M)
-4 >Emitted(24, 19) Source(21, 18) + SourceIndex(0) name (M)
-5 >Emitted(24, 20) Source(21, 19) + SourceIndex(0) name (M)
+1->Emitted(24, 5) Source(21, 2) + SourceIndex(0)
+2 >Emitted(24, 16) Source(21, 16) + SourceIndex(0)
+3 >Emitted(24, 17) Source(21, 17) + SourceIndex(0)
+4 >Emitted(24, 19) Source(21, 18) + SourceIndex(0)
+5 >Emitted(24, 20) Source(21, 19) + SourceIndex(0)
 ---
 >>>        // Emit M.Foo
 1->^^^^^^^^
@@ -412,8 +412,8 @@ sourceFile:tsxEmit3.tsx
 1->
   >		
 2 >        // Emit M.Foo
-1->Emitted(25, 9) Source(22, 3) + SourceIndex(0) name (M.S)
-2 >Emitted(25, 22) Source(22, 16) + SourceIndex(0) name (M.S)
+1->Emitted(25, 9) Source(22, 3) + SourceIndex(0)
+2 >Emitted(25, 22) Source(22, 16) + SourceIndex(0)
 ---
 >>>        M.Foo, <M.Foo />;
 1->^^^^^^^^
@@ -431,13 +431,13 @@ sourceFile:tsxEmit3.tsx
 5 >                Foo
 6 >                      />
 7 >                        ;
-1->Emitted(26, 9) Source(23, 3) + SourceIndex(0) name (M.S)
-2 >Emitted(26, 14) Source(23, 6) + SourceIndex(0) name (M.S)
-3 >Emitted(26, 16) Source(23, 8) + SourceIndex(0) name (M.S)
-4 >Emitted(26, 17) Source(23, 9) + SourceIndex(0) name (M.S)
-5 >Emitted(26, 22) Source(23, 12) + SourceIndex(0) name (M.S)
-6 >Emitted(26, 25) Source(23, 15) + SourceIndex(0) name (M.S)
-7 >Emitted(26, 26) Source(23, 16) + SourceIndex(0) name (M.S)
+1->Emitted(26, 9) Source(23, 3) + SourceIndex(0)
+2 >Emitted(26, 14) Source(23, 6) + SourceIndex(0)
+3 >Emitted(26, 16) Source(23, 8) + SourceIndex(0)
+4 >Emitted(26, 17) Source(23, 9) + SourceIndex(0)
+5 >Emitted(26, 22) Source(23, 12) + SourceIndex(0)
+6 >Emitted(26, 25) Source(23, 15) + SourceIndex(0)
+7 >Emitted(26, 26) Source(23, 16) + SourceIndex(0)
 ---
 >>>        // Emit S.Bar
 1 >^^^^^^^^
@@ -447,8 +447,8 @@ sourceFile:tsxEmit3.tsx
   >
   >		
 2 >        // Emit S.Bar
-1 >Emitted(27, 9) Source(25, 3) + SourceIndex(0) name (M.S)
-2 >Emitted(27, 22) Source(25, 16) + SourceIndex(0) name (M.S)
+1 >Emitted(27, 9) Source(25, 3) + SourceIndex(0)
+2 >Emitted(27, 22) Source(25, 16) + SourceIndex(0)
 ---
 >>>        S.Bar, <S.Bar />;
 1->^^^^^^^^
@@ -467,13 +467,13 @@ sourceFile:tsxEmit3.tsx
 5 >                Bar
 6 >                      />
 7 >                        ;
-1->Emitted(28, 9) Source(26, 3) + SourceIndex(0) name (M.S)
-2 >Emitted(28, 14) Source(26, 6) + SourceIndex(0) name (M.S)
-3 >Emitted(28, 16) Source(26, 8) + SourceIndex(0) name (M.S)
-4 >Emitted(28, 17) Source(26, 9) + SourceIndex(0) name (M.S)
-5 >Emitted(28, 22) Source(26, 12) + SourceIndex(0) name (M.S)
-6 >Emitted(28, 25) Source(26, 15) + SourceIndex(0) name (M.S)
-7 >Emitted(28, 26) Source(26, 16) + SourceIndex(0) name (M.S)
+1->Emitted(28, 9) Source(26, 3) + SourceIndex(0)
+2 >Emitted(28, 14) Source(26, 6) + SourceIndex(0)
+3 >Emitted(28, 16) Source(26, 8) + SourceIndex(0)
+4 >Emitted(28, 17) Source(26, 9) + SourceIndex(0)
+5 >Emitted(28, 22) Source(26, 12) + SourceIndex(0)
+6 >Emitted(28, 25) Source(26, 15) + SourceIndex(0)
+7 >Emitted(28, 26) Source(26, 16) + SourceIndex(0)
 ---
 >>>    })(S = M.S || (M.S = {}));
 1->^^^^
@@ -501,15 +501,15 @@ sourceFile:tsxEmit3.tsx
   >                      		// Emit S.Bar
   >                      		Bar, <Bar />;
   >                      	}
-1->Emitted(29, 5) Source(27, 2) + SourceIndex(0) name (M.S)
-2 >Emitted(29, 6) Source(27, 3) + SourceIndex(0) name (M.S)
-3 >Emitted(29, 8) Source(21, 16) + SourceIndex(0) name (M)
-4 >Emitted(29, 9) Source(21, 17) + SourceIndex(0) name (M)
-5 >Emitted(29, 12) Source(21, 16) + SourceIndex(0) name (M)
-6 >Emitted(29, 15) Source(21, 17) + SourceIndex(0) name (M)
-7 >Emitted(29, 20) Source(21, 16) + SourceIndex(0) name (M)
-8 >Emitted(29, 23) Source(21, 17) + SourceIndex(0) name (M)
-9 >Emitted(29, 31) Source(27, 3) + SourceIndex(0) name (M)
+1->Emitted(29, 5) Source(27, 2) + SourceIndex(0)
+2 >Emitted(29, 6) Source(27, 3) + SourceIndex(0)
+3 >Emitted(29, 8) Source(21, 16) + SourceIndex(0)
+4 >Emitted(29, 9) Source(21, 17) + SourceIndex(0)
+5 >Emitted(29, 12) Source(21, 16) + SourceIndex(0)
+6 >Emitted(29, 15) Source(21, 17) + SourceIndex(0)
+7 >Emitted(29, 20) Source(21, 16) + SourceIndex(0)
+8 >Emitted(29, 23) Source(21, 17) + SourceIndex(0)
+9 >Emitted(29, 31) Source(27, 3) + SourceIndex(0)
 ---
 >>>})(M || (M = {}));
 1 >
@@ -540,8 +540,8 @@ sourceFile:tsxEmit3.tsx
   >          	}
   >          
   >          }
-1 >Emitted(30, 1) Source(29, 1) + SourceIndex(0) name (M)
-2 >Emitted(30, 2) Source(29, 2) + SourceIndex(0) name (M)
+1 >Emitted(30, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(30, 2) Source(29, 2) + SourceIndex(0)
 3 >Emitted(30, 4) Source(17, 8) + SourceIndex(0)
 4 >Emitted(30, 5) Source(17, 9) + SourceIndex(0)
 5 >Emitted(30, 10) Source(17, 8) + SourceIndex(0)
@@ -593,8 +593,8 @@ sourceFile:tsxEmit3.tsx
 1->
   >	
 2 >    // Emit M.S.Bar
-1->Emitted(33, 5) Source(32, 2) + SourceIndex(0) name (M)
-2 >Emitted(33, 20) Source(32, 17) + SourceIndex(0) name (M)
+1->Emitted(33, 5) Source(32, 2) + SourceIndex(0)
+2 >Emitted(33, 20) Source(32, 17) + SourceIndex(0)
 ---
 >>>    M.S.Bar, <M.S.Bar />;
 1->^^^^
@@ -620,17 +620,17 @@ sourceFile:tsxEmit3.tsx
 9 >                  Bar
 10>                      />
 11>                        ;
-1->Emitted(34, 5) Source(33, 2) + SourceIndex(0) name (M)
-2 >Emitted(34, 8) Source(33, 3) + SourceIndex(0) name (M)
-3 >Emitted(34, 9) Source(33, 4) + SourceIndex(0) name (M)
-4 >Emitted(34, 12) Source(33, 7) + SourceIndex(0) name (M)
-5 >Emitted(34, 14) Source(33, 9) + SourceIndex(0) name (M)
-6 >Emitted(34, 15) Source(33, 10) + SourceIndex(0) name (M)
-7 >Emitted(34, 18) Source(33, 11) + SourceIndex(0) name (M)
-8 >Emitted(34, 19) Source(33, 12) + SourceIndex(0) name (M)
-9 >Emitted(34, 22) Source(33, 15) + SourceIndex(0) name (M)
-10>Emitted(34, 25) Source(33, 18) + SourceIndex(0) name (M)
-11>Emitted(34, 26) Source(33, 19) + SourceIndex(0) name (M)
+1->Emitted(34, 5) Source(33, 2) + SourceIndex(0)
+2 >Emitted(34, 8) Source(33, 3) + SourceIndex(0)
+3 >Emitted(34, 9) Source(33, 4) + SourceIndex(0)
+4 >Emitted(34, 12) Source(33, 7) + SourceIndex(0)
+5 >Emitted(34, 14) Source(33, 9) + SourceIndex(0)
+6 >Emitted(34, 15) Source(33, 10) + SourceIndex(0)
+7 >Emitted(34, 18) Source(33, 11) + SourceIndex(0)
+8 >Emitted(34, 19) Source(33, 12) + SourceIndex(0)
+9 >Emitted(34, 22) Source(33, 15) + SourceIndex(0)
+10>Emitted(34, 25) Source(33, 18) + SourceIndex(0)
+11>Emitted(34, 26) Source(33, 19) + SourceIndex(0)
 ---
 >>>})(M || (M = {}));
 1 >
@@ -651,8 +651,8 @@ sourceFile:tsxEmit3.tsx
   >          	// Emit M.S.Bar
   >          	S.Bar, <S.Bar />;
   >          }
-1 >Emitted(35, 1) Source(34, 1) + SourceIndex(0) name (M)
-2 >Emitted(35, 2) Source(34, 2) + SourceIndex(0) name (M)
+1 >Emitted(35, 1) Source(34, 1) + SourceIndex(0)
+2 >Emitted(35, 2) Source(34, 2) + SourceIndex(0)
 3 >Emitted(35, 4) Source(31, 8) + SourceIndex(0)
 4 >Emitted(35, 5) Source(31, 9) + SourceIndex(0)
 5 >Emitted(35, 10) Source(31, 8) + SourceIndex(0)
@@ -712,12 +712,12 @@ sourceFile:tsxEmit3.tsx
 4 >          = 
 5 >            100
 6 >               ;
-1 >Emitted(38, 5) Source(37, 2) + SourceIndex(0) name (M)
-2 >Emitted(38, 9) Source(37, 6) + SourceIndex(0) name (M)
-3 >Emitted(38, 10) Source(37, 7) + SourceIndex(0) name (M)
-4 >Emitted(38, 13) Source(37, 10) + SourceIndex(0) name (M)
-5 >Emitted(38, 16) Source(37, 13) + SourceIndex(0) name (M)
-6 >Emitted(38, 17) Source(37, 14) + SourceIndex(0) name (M)
+1 >Emitted(38, 5) Source(37, 2) + SourceIndex(0)
+2 >Emitted(38, 9) Source(37, 6) + SourceIndex(0)
+3 >Emitted(38, 10) Source(37, 7) + SourceIndex(0)
+4 >Emitted(38, 13) Source(37, 10) + SourceIndex(0)
+5 >Emitted(38, 16) Source(37, 13) + SourceIndex(0)
+6 >Emitted(38, 17) Source(37, 14) + SourceIndex(0)
 ---
 >>>    // Emit M_1.Foo
 1->^^^^
@@ -726,8 +726,8 @@ sourceFile:tsxEmit3.tsx
 1->
   >	
 2 >    // Emit M_1.Foo
-1->Emitted(39, 5) Source(38, 2) + SourceIndex(0) name (M)
-2 >Emitted(39, 20) Source(38, 17) + SourceIndex(0) name (M)
+1->Emitted(39, 5) Source(38, 2) + SourceIndex(0)
+2 >Emitted(39, 20) Source(38, 17) + SourceIndex(0)
 ---
 >>>    M_1.Foo, <M_1.Foo />;
 1->^^^^
@@ -745,13 +745,13 @@ sourceFile:tsxEmit3.tsx
 5 >              Foo
 6 >                      />
 7 >                        ;
-1->Emitted(40, 5) Source(39, 2) + SourceIndex(0) name (M)
-2 >Emitted(40, 12) Source(39, 5) + SourceIndex(0) name (M)
-3 >Emitted(40, 14) Source(39, 7) + SourceIndex(0) name (M)
-4 >Emitted(40, 15) Source(39, 8) + SourceIndex(0) name (M)
-5 >Emitted(40, 22) Source(39, 11) + SourceIndex(0) name (M)
-6 >Emitted(40, 25) Source(39, 14) + SourceIndex(0) name (M)
-7 >Emitted(40, 26) Source(39, 15) + SourceIndex(0) name (M)
+1->Emitted(40, 5) Source(39, 2) + SourceIndex(0)
+2 >Emitted(40, 12) Source(39, 5) + SourceIndex(0)
+3 >Emitted(40, 14) Source(39, 7) + SourceIndex(0)
+4 >Emitted(40, 15) Source(39, 8) + SourceIndex(0)
+5 >Emitted(40, 22) Source(39, 11) + SourceIndex(0)
+6 >Emitted(40, 25) Source(39, 14) + SourceIndex(0)
+7 >Emitted(40, 26) Source(39, 15) + SourceIndex(0)
 ---
 >>>})(M || (M = {}));
 1 >
@@ -761,7 +761,7 @@ sourceFile:tsxEmit3.tsx
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
@@ -774,12 +774,12 @@ sourceFile:tsxEmit3.tsx
   >          	// Emit M_1.Foo
   >          	Foo, <Foo />;
   >          }
-1 >Emitted(41, 1) Source(40, 1) + SourceIndex(0) name (M)
-2 >Emitted(41, 2) Source(40, 2) + SourceIndex(0) name (M)
+1 >Emitted(41, 1) Source(40, 1) + SourceIndex(0)
+2 >Emitted(41, 2) Source(40, 2) + SourceIndex(0)
 3 >Emitted(41, 4) Source(36, 8) + SourceIndex(0)
 4 >Emitted(41, 5) Source(36, 9) + SourceIndex(0)
 5 >Emitted(41, 10) Source(36, 8) + SourceIndex(0)
 6 >Emitted(41, 11) Source(36, 9) + SourceIndex(0)
 7 >Emitted(41, 19) Source(40, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=tsxEmit3.jsx.map
+>>>//# sourceMappingURL=file.jsx.map

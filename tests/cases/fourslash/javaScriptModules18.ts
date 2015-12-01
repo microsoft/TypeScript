@@ -2,7 +2,7 @@
 
 // CommonJS modules should not pollute the global namespace
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: myMod.js
 //// var x = require('fs');
 

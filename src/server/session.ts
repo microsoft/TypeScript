@@ -532,9 +532,13 @@ namespace ts.server {
             };
         }
 
-        private openClientFile(fileName: string) {
+        /**
+         * @param fileName is the name of the file to be opened
+         * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
+         */
+        private openClientFile(fileName: string, fileContent?: string) {
             const file = ts.normalizePath(fileName);
-            this.projectService.openClientFile(file);
+            this.projectService.openClientFile(file, fileContent);
         }
 
         private getQuickInfo(line: number, offset: number, fileName: string): protocol.QuickInfoResponseBody {
@@ -897,7 +901,7 @@ namespace ts.server {
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
-            const { configFileName, fileNames } = this.getProjectInfo(fileName, true);
+            const { configFileName, fileNames } = this.getProjectInfo(fileName, /*needFileNameList*/ true);
             // No need to analyze lib.d.ts
             let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
 
@@ -968,7 +972,7 @@ namespace ts.server {
             },
             [CommandNames.Open]: (request: protocol.Request) => {
                 const openArgs = <protocol.OpenRequestArgs>request.arguments;
-                this.openClientFile(openArgs.file);
+                this.openClientFile(openArgs.file, openArgs.fileContent);
                 return {responseRequired: false};
             },
             [CommandNames.Quickinfo]: (request: protocol.Request) => {

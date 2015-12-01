@@ -22,6 +22,7 @@ class Bug {
 
 
 //// [interfaceContextualType.js]
+"use strict";
 var Bug = (function () {
     function Bug() {
     }

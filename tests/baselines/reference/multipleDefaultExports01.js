@@ -19,6 +19,7 @@ import Entity from "./m1"
 Entity();
 
 //// [m1.js]
+"use strict";
 var foo = (function () {
     function foo() {
     }
@@ -34,5 +35,6 @@ var x = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = x;
 //// [m2.js]
+"use strict";
 var m1_1 = require("./m1");
 m1_1.default();

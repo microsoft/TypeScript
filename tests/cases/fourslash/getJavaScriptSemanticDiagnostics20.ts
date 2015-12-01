@@ -1,9 +1,10 @@
 /// <reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: a.js
 //// var v = <string>undefined;
 
+verify.getSyntacticDiagnostics(`[]`);
 verify.getSemanticDiagnostics(`[
   {
     "message": "'type assertion expressions' can only be used in a .ts file.",
