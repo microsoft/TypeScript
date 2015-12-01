@@ -1128,7 +1128,7 @@ namespace ts {
             function visit(symbol: Symbol): SymbolTable {
                 if (symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol)) {
                     visitedSymbols.push(symbol);
-                    const symbols: SymbolTable = cloneSymbolTable(symbol.exports);
+                    const symbols = cloneSymbolTable(symbol.exports);
                     // All export * declarations are collected in an __export symbol by the binder
                     const exportStars = symbol.exports["__export"];
                     if (exportStars) {
@@ -1146,8 +1146,8 @@ namespace ts {
                         }
                         for (const id in lookupTable) {
                             const { exportsWithDuplicate } = lookupTable[id];
-                            // Its not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
-                            if (id === "export=" || !exportsWithDuplicate.length || id in symbols) {
+                            // It's not an error if the file with multiple export *'s with duplicate names exports a member with that name itself
+                            if (id === "export=" || !exportsWithDuplicate.length || hasProperty(symbols, id)) {
                                 continue;
                             }
                             for (const node of exportsWithDuplicate) {
@@ -14138,7 +14138,7 @@ namespace ts {
                     if (id === "__export") {
                         continue;
                     }
-                    const {declarations, flags} = exports[id];
+                    const { declarations, flags } = exports[id];
                     // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
                     if (!(flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) && declarations.length > 1) {
                         const exportedDeclarations: Declaration[] = filter(declarations, isNotOverload);
