@@ -926,12 +926,16 @@ var lintTargets = compilerSources
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
+    var failed = 0;
     for (var i in lintTargets) {
         var result = lintFile(lintOptions, lintTargets[i]);
         if (result.failureCount > 0) {
             console.log(result.output);
-            fail('Linter errors.', result.failureCount);
+            failed += result.failureCount;
         }
+    }
+    if (failed > 0) {
+        fail('Linter errors.', failed);
     }
 });
 
