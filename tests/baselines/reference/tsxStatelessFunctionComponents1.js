@@ -1,4 +1,4 @@
-//// [tsxStatelessFunctionComponents1.tsx]
+//// [file.tsx]
 
 function Greet(x: {name: string}) {
 	return <div>Hello, {x}</div>;
@@ -22,7 +22,7 @@ let e = <Meet name={42} />;
 let f = <Meet naaaaaaame='no' />;
 
 
-//// [tsxStatelessFunctionComponents1.jsx]
+//// [file.jsx]
 function Greet(x) {
     return <div>Hello, {x}</div>;
 }

@@ -1,11 +1,11 @@
-tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
-tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(20,16): error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
-tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(26,42): error TS2339: Property 'subtr' does not exist on type 'string'.
-tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(28,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
-tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx(36,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
+tests/cases/conformance/jsx/file.tsx(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/jsx/file.tsx(20,16): error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(26,42): error TS2339: Property 'subtr' does not exist on type 'string'.
+tests/cases/conformance/jsx/file.tsx(28,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
+tests/cases/conformance/jsx/file.tsx(36,26): error TS2339: Property 'propertyNotOnHtmlDivElement' does not exist on type 'HTMLDivElement'.
 
 
-==== tests/cases/conformance/jsx/tsxStatelessFunctionComponents2.tsx (5 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     
     import React = require('react');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

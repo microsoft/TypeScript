@@ -1,4 +1,4 @@
-//// [tsxStatelessFunctionComponents2.tsx]
+//// [file.tsx]
 
 import React = require('react');
 
@@ -38,7 +38,8 @@ let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 
 
 
-//// [tsxStatelessFunctionComponents2.jsx]
+//// [file.jsx]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
