@@ -5292,10 +5292,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitDecoratorsOfConstructor(node: ClassLikeDeclaration) {
                 const decorators = node.decorators;
                 const constructor = getFirstConstructorWithBody(node);
-                const hasDecoratedParameters = constructor && forEach(constructor.parameters, nodeIsDecorated);
+                const firstParameterDecorator = constructor && forEach(constructor.parameters, parameter => parameter.decorators);
 
                 // skip decoration of the constructor if neither it nor its parameters are decorated
-                if (!decorators && !hasDecoratedParameters) {
+                if (!decorators && !firstParameterDecorator) {
                     return;
                 }
 
@@ -5311,28 +5311,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 //
 
                 writeLine();
-                emitStart(node);
+                emitStart(node.decorators || firstParameterDecorator);
                 emitDeclarationName(node);
                 write(" = __decorate([");
                 increaseIndent();
                 writeLine();
 
                 const decoratorCount = decorators ? decorators.length : 0;
-                let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, decorator => {
-                    emitStart(decorator);
-                    emit(decorator.expression);
-                    emitEnd(decorator);
-                });
-
-                argumentsWritten += emitDecoratorsOfParameters(constructor, /*leadingComma*/ argumentsWritten > 0);
+                let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true,
+                    decorator => emit(decorator.expression));
+                if (firstParameterDecorator) {
+                    argumentsWritten += emitDecoratorsOfParameters(constructor, /*leadingComma*/ argumentsWritten > 0);
+                }
                 emitSerializedTypeMetadata(node, /*leadingComma*/ argumentsWritten >= 0);
 
                 decreaseIndent();
                 writeLine();
                 write("], ");
                 emitDeclarationName(node);
-                write(");");
-                emitEnd(node);
+                write(")");
+                emitEnd(node.decorators || firstParameterDecorator);
+                write(";");
                 writeLine();
             }
 
@@ -5345,11 +5344,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     // skip members that cannot be decorated (such as the constructor)
                     if (!nodeCanBeDecorated(member)) {
-                        continue;
-                    }
-
-                    // skip a member if it or any of its parameters are not decorated
-                    if (!nodeOrChildIsDecorated(member)) {
                         continue;
                     }
 
@@ -5378,6 +5372,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (member.kind === SyntaxKind.MethodDeclaration) {
                             functionLikeMember = <MethodDeclaration>member;
                         }
+                    }
+                    const firstParameterDecorator = functionLikeMember && forEach(functionLikeMember.parameters, parameter => parameter.decorators);
+
+                    // skip a member if it or any of its parameters are not decorated
+                    if (!decorators && !firstParameterDecorator) {
+                        continue;
                     }
 
                     // Emit the call to __decorate. Given the following:
@@ -5412,29 +5412,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     //
 
                     writeLine();
-                    emitStart(member);
+                    emitStart(decorators || firstParameterDecorator);
                     write("__decorate([");
                     increaseIndent();
                     writeLine();
 
                     const decoratorCount = decorators ? decorators.length : 0;
-                    let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true, decorator => {
-                        emitStart(decorator);
-                        emit(decorator.expression);
-                        emitEnd(decorator);
-                    });
+                    let argumentsWritten = emitList(decorators, 0, decoratorCount, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ false, /*noTrailingNewLine*/ true,
+                        decorator => emit(decorator.expression));
 
-                    argumentsWritten += emitDecoratorsOfParameters(functionLikeMember, argumentsWritten > 0);
+                    if (firstParameterDecorator) {
+                        argumentsWritten += emitDecoratorsOfParameters(functionLikeMember, argumentsWritten > 0);
+                    }
                     emitSerializedTypeMetadata(member, argumentsWritten > 0);
 
                     decreaseIndent();
                     writeLine();
                     write("], ");
-                    emitStart(member.name);
                     emitClassMemberPrefix(node, member);
                     write(", ");
                     emitExpressionForPropertyName(member.name);
-                    emitEnd(member.name);
 
                     if (languageVersion > ScriptTarget.ES3) {
                         if (member.kind !== SyntaxKind.PropertyDeclaration) {
@@ -5449,8 +5446,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
 
-                    write(");");
-                    emitEnd(member);
+                    write(")");
+                    emitEnd(decorators || firstParameterDecorator);
+                    write(";");
                     writeLine();
                 }
             }
@@ -5463,11 +5461,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (nodeIsDecorated(parameter)) {
                             const decorators = parameter.decorators;
                             argumentsWritten += emitList(decorators, 0, decorators.length, /*multiLine*/ true, /*trailingComma*/ false, /*leadingComma*/ leadingComma, /*noTrailingNewLine*/ true, decorator => {
-                                emitStart(decorator);
                                 write(`__param(${parameterIndex}, `);
                                 emit(decorator.expression);
                                 write(")");
-                                emitEnd(decorator);
                             });
                             leadingComma = true;
                         }

@@ -9871,30 +9871,38 @@ namespace ts {
             }
 
             // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
-            if (returnType && (returnType === voidType || isTypeAny(returnType))) {
-                return;
-            }
-
-            // if return type is not specified then we'll do the check only if 'noImplicitReturns' option is set
-            if (!returnType && !compilerOptions.noImplicitReturns) {
+            if (returnType === voidType || isTypeAny(returnType)) {
                 return;
             }
 
             // If all we have is a function signature, or an arrow function with an expression body, then there is nothing to check.
-            // also if HasImplicitReturnValue flags is not set this means that all codepaths in function body end with return of throw
+            // also if HasImplicitReturn flag is not set this means that all codepaths in function body end with return or throw
             if (nodeIsMissing(func.body) || func.body.kind !== SyntaxKind.Block || !(func.flags & NodeFlags.HasImplicitReturn)) {
                 return;
             }
 
-            if (!returnType || func.flags & NodeFlags.HasExplicitReturn) {
-                if (compilerOptions.noImplicitReturns) {
-                    error(func.type || func, Diagnostics.Not_all_code_paths_return_a_value);
-                }
-            }
-            else {
-                // This function does not conform to the specification.
+            const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
+
+            if (returnType && !hasExplicitReturn) {
+                // minimal check: function has syntactic return type annotation and no explicit return statements in the body 
+                // this function does not conform to the specification.
                 // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present 
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
+            }
+            else if (compilerOptions.noImplicitReturns) {
+                if (!returnType) {
+                    // If return type annotation is omitted check if function has any explicit return statements.
+                    // If it does not have any - its inferred return type is void - don't do any checks. 
+                    // Otherwise get inferred return type from function body and report error only if it is not void / anytype
+                    const inferredReturnType = hasExplicitReturn
+                        ? getReturnTypeOfSignature(getSignatureFromDeclaration(func))
+                        : voidType;
+
+                    if (inferredReturnType === voidType || isTypeAny(inferredReturnType)) {
+                        return;
+                    }
+                }
+                error(func.type || func, Diagnostics.Not_all_code_paths_return_a_value);
             }
         }
 
@@ -12119,8 +12127,8 @@ namespace ts {
                 const symbol = getSymbolOfNode(node);
                 const localSymbol = node.localSymbol || symbol;
 
-                // Since the javascript won't do semantic analysis like typescript, 
-                // if the javascript file comes before the typescript file and both contain same name functions, 
+                // Since the javascript won't do semantic analysis like typescript,
+                // if the javascript file comes before the typescript file and both contain same name functions,
                 // checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
                 const firstDeclaration = forEach(localSymbol.declarations,
                     // Get first non javascript function declaration
@@ -14370,6 +14378,7 @@ namespace ts {
                 emitExtends = false;
                 emitDecorate = false;
                 emitParam = false;
+                emitAwaiter = false;
                 potentialThisCollisions.length = 0;
 
                 forEach(node.statements, checkSourceElement);
