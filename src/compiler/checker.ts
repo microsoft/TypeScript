@@ -16236,7 +16236,7 @@ namespace ts {
                     return true;
                 }
                 if (node.initializer) {
-                    return grammarErrorOnNode(node.initializer, Diagnostics.An_object_type_literal_property_cannot_have_an_initializer);
+                    return grammarErrorOnNode(node.initializer, Diagnostics.A_type_literal_property_cannot_have_an_initializer);
                 }
             }
 

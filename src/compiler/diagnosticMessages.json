@@ -787,7 +787,7 @@
         "category": "Error",
         "code": 1246
     },
-    "An object type literal property cannot have an initializer.": {
+    "A type literal property cannot have an initializer.": {
         "category": "Error",
         "code": 1247
     },
