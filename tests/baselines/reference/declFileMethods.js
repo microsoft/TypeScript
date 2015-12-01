@@ -191,6 +191,7 @@ interface I2 {
 
 
 //// [declFileMethods_0.js]
+"use strict";
 var c1 = (function () {
     function c1() {
     }

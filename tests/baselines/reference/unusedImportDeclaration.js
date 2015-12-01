@@ -16,6 +16,7 @@ foo("IN " + thingy.me + "!");
 
 
 //// [unusedImportDeclaration_testerB.js]
+"use strict";
 var TesterB = (function () {
     function TesterB() {
     }
@@ -23,6 +24,7 @@ var TesterB = (function () {
 })();
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
+"use strict";
 var thingy = {
     me: "A"
 };

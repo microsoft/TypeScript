@@ -1,12 +1,9 @@
 /// <reference path="checker.ts"/>
+/// <reference path="sourcemap.ts" />
 /// <reference path="declarationEmitter.ts"/>
 
 /* @internal */
 namespace ts {
-    export function isExternalModuleOrDeclarationFile(sourceFile: SourceFile) {
-        return isExternalModule(sourceFile) || isDeclarationFile(sourceFile);
-    }
-
     export function getResolvedExternalModuleName(host: EmitHost, file: SourceFile): string {
         return file.moduleName || getExternalModuleNameFromPath(host, file.fileName);
     }
@@ -337,47 +334,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 };`;
 
         const compilerOptions = host.getCompilerOptions();
-        const languageVersion = compilerOptions.target || ScriptTarget.ES3;
-        const modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
+        const languageVersion = getEmitScriptTarget(compilerOptions);
+        const modulekind = getEmitModuleKind(compilerOptions);
         const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
-        let diagnostics: Diagnostic[] = [];
+        const emitterDiagnostics = createDiagnosticCollection();
+        let emitSkipped = false;
         const newLine = host.getNewLine();
-        const jsxDesugaring = host.getCompilerOptions().jsx !== JsxEmit.Preserve;
-        const shouldEmitJsx = (s: SourceFile) => (s.languageVariant === LanguageVariant.JSX && !jsxDesugaring);
-        const outFile = compilerOptions.outFile || compilerOptions.out;
 
         const emitJavaScript = createFileEmitter();
-
-        if (targetSourceFile === undefined) {
-            if (outFile) {
-                emitFile(outFile);
-            }
-            else {
-                forEach(host.getSourceFiles(), sourceFile => {
-                    if (shouldEmitToOwnFile(sourceFile, compilerOptions)) {
-                        const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, shouldEmitJsx(sourceFile) ? ".jsx" : ".js");
-                        emitFile(jsFilePath, sourceFile);
-                    }
-                });
-            }
-        }
-        else {
-            // targetSourceFile is specified (e.g calling emitter from language service or calling getSemanticDiagnostic from language service)
-            if (shouldEmitToOwnFile(targetSourceFile, compilerOptions)) {
-                const jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, shouldEmitJsx(targetSourceFile) ? ".jsx" : ".js");
-                emitFile(jsFilePath, targetSourceFile);
-            }
-            else if (!isDeclarationFile(targetSourceFile) && outFile) {
-                emitFile(outFile);
-            }
-        }
-
-        // Sort and make the unique list of diagnostics
-        diagnostics = sortAndDeduplicateDiagnostics(diagnostics);
+        forEachExpectedEmitFile(host, emitFile, targetSourceFile);
 
         return {
-            emitSkipped: false,
-            diagnostics,
+            emitSkipped,
+            diagnostics: emitterDiagnostics.getDiagnostics(),
             sourceMaps: sourceMapDataList
         };
 
@@ -428,18 +397,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * var loop = function(x) { <code where 'arguments' is replaced witg 'arguments_1'> }
              * var arguments_1 = arguments
              * for (var x;;) loop(x);
-             * otherwise semantics of the code will be different since 'arguments' inside converted loop body 
+             * otherwise semantics of the code will be different since 'arguments' inside converted loop body
              * will refer to function that holds converted loop.
              * This value is set on demand.
              */
             argumentsName?: string;
 
             /*
+             * alias for 'this' from the calling code stack frame in case if this was used inside the converted loop
+             */
+            thisName?: string;
+
+            /*
              * list of non-block scoped variable declarations that appear inside converted loop
-             * such variable declarations should be moved outside the loop body 
+             * such variable declarations should be moved outside the loop body
              * for (let x;;) {
              *     var y = 1;
-             *     ... 
+             *     ...
              * }
              * should be converted to
              * var loop = function(x) {
@@ -486,9 +460,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function createFileEmitter(): (jsFilePath: string, root?: SourceFile) => void {
-            const writer: EmitTextWriter = createTextWriter(newLine);
+        function createFileEmitter(): (jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) => void {
+            const writer = createTextWriter(newLine);
             const { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
+
+            const sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
+            const { setSourceFile, emitStart, emitEnd, emitPos } = sourceMap;
 
             let currentSourceFile: SourceFile;
             let currentText: string;
@@ -524,35 +501,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let exportEquals: ExportAssignment;
             let hasExportStars: boolean;
 
-            /** Write emitted output to disk */
-            let writeEmittedFiles = writeJavaScriptFile;
-
             let detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
-
-            let writeComment = writeCommentRange;
-
-            /** Emit a node */
-            let emit = emitNodeWithCommentsAndWithoutSourcemap;
-
-            /** Called just before starting emit of a node */
-            let emitStart = function (node: Node) { };
-
-            /** Called once the emit of the node is done */
-            let emitEnd = function (node: Node) { };
-
-            /** Emit the text for the given token that comes after startPos
-              * This by default writes the text provided with the given tokenKind
-              * but if optional emitFn callback is provided the text is emitted using the callback instead of default text
-              * @param tokenKind the kind of the token to search and emit
-              * @param startPos the position in the source to start searching for the token
-              * @param emitFn if given will be invoked to emit the text instead of actual token emit */
-            let emitToken = emitTokenText;
 
             /** Sourcemap data that will get encoded */
             let sourceMapData: SourceMapData;
 
-            /** The root file passed to the emit function (if present) */
-            let root: SourceFile;
+            /** Is the file being emitted into its own file */
+            let isOwnFileEmit: boolean;
 
             /** If removeComments is true, no leading-comments needed to be emitted **/
             const emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
@@ -575,34 +530,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             return doEmit;
 
-            function doEmit(jsFilePath: string, rootFile?: SourceFile) {
+            function doEmit(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+                sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
                 generatedNameSet = {};
                 nodeToGeneratedName = [];
-                root = rootFile;
+                isOwnFileEmit = !isBundledEmit;
 
-                if (compilerOptions.sourceMap || compilerOptions.inlineSourceMap) {
-                    initializeEmitterWithSourceMaps(jsFilePath, root);
+                // Emit helpers from all the files
+                if (isBundledEmit && modulekind) {
+                    forEach(sourceFiles, emitEmitHelpers);
                 }
 
-                if (root) {
-                    // Do not call emit directly. It does not set the currentSourceFile.
-                    emitSourceFile(root);
-                }
-                else {
-                    if (modulekind) {
-                        forEach(host.getSourceFiles(), emitEmitHelpers);
-                    }
-                    forEach(host.getSourceFiles(), sourceFile => {
-                        if ((!isExternalModuleOrDeclarationFile(sourceFile)) || (modulekind && isExternalModule(sourceFile))) {
-                            emitSourceFile(sourceFile);
-                        }
-                    });
-                }
+                // Do not call emit directly. It does not set the currentSourceFile.
+                forEach(sourceFiles, emitSourceFile);
 
                 writeLine();
-                writeEmittedFiles(writer.getText(), jsFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM);
+
+                const sourceMappingURL = sourceMap.getSourceMappingURL();
+                if (sourceMappingURL) {
+                    write(`//# sourceMappingURL=${sourceMappingURL}`);
+                }
+
+                writeEmittedFiles(writer.getText(), jsFilePath, sourceMapFilePath, /*writeByteOrderMark*/ compilerOptions.emitBOM);
 
                 // reset the state
+                sourceMap.reset();
                 writer.reset();
                 currentSourceFile = undefined;
                 currentText = undefined;
@@ -628,7 +580,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 isEs6Module = false;
                 renamedDependencies = undefined;
                 isCurrentFileExternalModule = false;
-                root = undefined;
             }
 
             function emitSourceFile(sourceFile: SourceFile): void {
@@ -642,7 +593,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 currentFileIdentifiers = sourceFile.identifiers;
                 isCurrentFileExternalModule = isExternalModule(sourceFile);
 
-                emit(sourceFile);
+                setSourceFile(sourceFile);
+                emitNodeWithCommentsAndWithoutSourcemap(sourceFile);
             }
 
             function isUniqueName(name: string): boolean {
@@ -739,320 +691,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return nodeToGeneratedName[id] || (nodeToGeneratedName[id] = unescapeIdentifier(generateNameForNode(node)));
             }
 
-            function initializeEmitterWithSourceMaps(jsFilePath: string, root?: SourceFile) {
-                let sourceMapDir: string; // The directory in which sourcemap will be
-
-                // Current source map file and its index in the sources list
-                let sourceMapSourceIndex = -1;
-
-                // Last recorded and encoded spans
-                let lastRecordedSourceMapSpan: SourceMapSpan;
-                let lastEncodedSourceMapSpan: SourceMapSpan = {
-                    emittedLine: 1,
-                    emittedColumn: 1,
-                    sourceLine: 1,
-                    sourceColumn: 1,
-                    sourceIndex: 0
-                };
-
-                // Encoding for sourcemap span
-                function encodeLastRecordedSourceMapSpan() {
-                    if (!lastRecordedSourceMapSpan || lastRecordedSourceMapSpan === lastEncodedSourceMapSpan) {
-                        return;
-                    }
-
-                    let prevEncodedEmittedColumn = lastEncodedSourceMapSpan.emittedColumn;
-                    // Line/Comma delimiters
-                    if (lastEncodedSourceMapSpan.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
-                        // Emit comma to separate the entry
-                        if (sourceMapData.sourceMapMappings) {
-                            sourceMapData.sourceMapMappings += ",";
-                        }
-                    }
-                    else {
-                        // Emit line delimiters
-                        for (let encodedLine = lastEncodedSourceMapSpan.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
-                            sourceMapData.sourceMapMappings += ";";
-                        }
-                        prevEncodedEmittedColumn = 1;
-                    }
-
-                    // 1. Relative Column 0 based
-                    sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.emittedColumn - prevEncodedEmittedColumn);
-
-                    // 2. Relative sourceIndex
-                    sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceIndex - lastEncodedSourceMapSpan.sourceIndex);
-
-                    // 3. Relative sourceLine 0 based
-                    sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceLine - lastEncodedSourceMapSpan.sourceLine);
-
-                    // 4. Relative sourceColumn 0 based
-                    sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan.sourceColumn);
-
-                    lastEncodedSourceMapSpan = lastRecordedSourceMapSpan;
-                    sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
-
-                    function base64VLQFormatEncode(inValue: number) {
-                        function base64FormatEncode(inValue: number) {
-                            if (inValue < 64) {
-                                return "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(inValue);
-                            }
-                            throw TypeError(inValue + ": not a 64 based value");
-                        }
-
-                        // Add a new least significant bit that has the sign of the value.
-                        // if negative number the least significant bit that gets added to the number has value 1
-                        // else least significant bit value that gets added is 0
-                        // eg. -1 changes to binary : 01 [1] => 3
-                        //     +1 changes to binary : 01 [0] => 2
-                        if (inValue < 0) {
-                            inValue = ((-inValue) << 1) + 1;
-                        }
-                        else {
-                            inValue = inValue << 1;
-                        }
-
-                        // Encode 5 bits at a time starting from least significant bits
-                        let encodedStr = "";
-                        do {
-                            let currentDigit = inValue & 31; // 11111
-                            inValue = inValue >> 5;
-                            if (inValue > 0) {
-                                // There are still more digits to decode, set the msb (6th bit)
-                                currentDigit = currentDigit | 32;
-                            }
-                            encodedStr = encodedStr + base64FormatEncode(currentDigit);
-                        } while (inValue > 0);
-
-                        return encodedStr;
-                    }
+            /** Write emitted output to disk */
+            function writeEmittedFiles(emitOutput: string, jsFilePath: string, sourceMapFilePath: string, writeByteOrderMark: boolean) {
+                if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
+                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(), /*writeByteOrderMark*/ false);
                 }
 
-                function recordSourceMapSpan(pos: number) {
-                    const sourceLinePos = computeLineAndCharacterOfPosition(currentLineMap, pos);
-
-                    // Convert the location to be one-based.
-                    sourceLinePos.line++;
-                    sourceLinePos.character++;
-
-                    const emittedLine = writer.getLine();
-                    const emittedColumn = writer.getColumn();
-
-                    // If this location wasn't recorded or the location in source is going backwards, record the span
-                    if (!lastRecordedSourceMapSpan ||
-                        lastRecordedSourceMapSpan.emittedLine !== emittedLine ||
-                        lastRecordedSourceMapSpan.emittedColumn !== emittedColumn ||
-                        (lastRecordedSourceMapSpan.sourceIndex === sourceMapSourceIndex &&
-                            (lastRecordedSourceMapSpan.sourceLine > sourceLinePos.line ||
-                                (lastRecordedSourceMapSpan.sourceLine === sourceLinePos.line && lastRecordedSourceMapSpan.sourceColumn > sourceLinePos.character)))) {
-                        // Encode the last recordedSpan before assigning new
-                        encodeLastRecordedSourceMapSpan();
-
-                        // New span
-                        lastRecordedSourceMapSpan = {
-                            emittedLine: emittedLine,
-                            emittedColumn: emittedColumn,
-                            sourceLine: sourceLinePos.line,
-                            sourceColumn: sourceLinePos.character,
-                            sourceIndex: sourceMapSourceIndex
-                        };
-                    }
-                    else {
-                        // Take the new pos instead since there is no change in emittedLine and column since last location
-                        lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
-                        lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
-                        lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
-                    }
+                if (sourceMapDataList) {
+                    sourceMapDataList.push(sourceMap.getSourceMapData());
                 }
 
-                function recordEmitNodeStartSpan(node: Node) {
-                    // Get the token pos after skipping to the token (ignoring the leading trivia)
-                    recordSourceMapSpan(skipTrivia(currentText, node.pos));
-                }
-
-                function recordEmitNodeEndSpan(node: Node) {
-                    recordSourceMapSpan(node.end);
-                }
-
-                function writeTextWithSpanRecord(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
-                    const tokenStartPos = ts.skipTrivia(currentText, startPos);
-                    recordSourceMapSpan(tokenStartPos);
-                    const tokenEndPos = emitTokenText(tokenKind, tokenStartPos, emitFn);
-                    recordSourceMapSpan(tokenEndPos);
-                    return tokenEndPos;
-                }
-
-                function recordNewSourceFileStart(node: SourceFile) {
-                    // Add the file to tsFilePaths
-                    // If sourceroot option: Use the relative path corresponding to the common directory path
-                    // otherwise source locations relative to map file location
-                    const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
-
-                    sourceMapData.sourceMapSources.push(getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                        node.fileName,
-                        host.getCurrentDirectory(),
-                        host.getCanonicalFileName,
-                        /*isAbsolutePathAnUrl*/ true));
-                    sourceMapSourceIndex = sourceMapData.sourceMapSources.length - 1;
-
-                    // The one that can be used from program to get the actual source file
-                    sourceMapData.inputSourceFileNames.push(node.fileName);
-
-                    if (compilerOptions.inlineSources) {
-                        if (!sourceMapData.sourceMapSourcesContent) {
-                            sourceMapData.sourceMapSourcesContent = [];
-                        }
-                        sourceMapData.sourceMapSourcesContent.push(node.text);
-                    }
-                }
-
-                function writeCommentRangeWithMap(currentText: string, currentLineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
-                    recordSourceMapSpan(comment.pos);
-                    writeCommentRange(currentText, currentLineMap, writer, comment, newLine);
-                    recordSourceMapSpan(comment.end);
-                }
-
-                function serializeSourceMapContents(version: number, file: string, sourceRoot: string, sources: string[], names: string[], mappings: string, sourcesContent?: string[]) {
-                    if (typeof JSON !== "undefined") {
-                        const map: any = {
-                            version,
-                            file,
-                            sourceRoot,
-                            sources,
-                            names,
-                            mappings
-                        };
-
-                        if (sourcesContent !== undefined) {
-                            map.sourcesContent = sourcesContent;
-                        }
-
-                        return JSON.stringify(map);
-                    }
-
-                    return "{\"version\":" + version + ",\"file\":\"" + escapeString(file) + "\",\"sourceRoot\":\"" + escapeString(sourceRoot) + "\",\"sources\":[" + serializeStringArray(sources) + "],\"names\":[" + serializeStringArray(names) + "],\"mappings\":\"" + escapeString(mappings) + "\" " + (sourcesContent !== undefined ? ",\"sourcesContent\":[" + serializeStringArray(sourcesContent) + "]" : "") + "}";
-
-                    function serializeStringArray(list: string[]): string {
-                        let output = "";
-                        for (let i = 0, n = list.length; i < n; i++) {
-                            if (i) {
-                                output += ",";
-                            }
-                            output += "\"" + escapeString(list[i]) + "\"";
-                        }
-                        return output;
-                    }
-                }
-
-                function writeJavaScriptAndSourceMapFile(emitOutput: string, jsFilePath: string, writeByteOrderMark: boolean) {
-                    encodeLastRecordedSourceMapSpan();
-
-                    const sourceMapText = serializeSourceMapContents(
-                        3,
-                        sourceMapData.sourceMapFile,
-                        sourceMapData.sourceMapSourceRoot,
-                        sourceMapData.sourceMapSources,
-                        sourceMapData.sourceMapNames,
-                        sourceMapData.sourceMapMappings,
-                        sourceMapData.sourceMapSourcesContent);
-
-                    sourceMapDataList.push(sourceMapData);
-
-                    let sourceMapUrl: string;
-                    if (compilerOptions.inlineSourceMap) {
-                        // Encode the sourceMap into the sourceMap url
-                        const base64SourceMapText = convertToBase64(sourceMapText);
-                        sourceMapUrl = `//# sourceMappingURL=data:application/json;base64,${base64SourceMapText}`;
-                    }
-                    else {
-                        // Write source map file
-                        writeFile(host, diagnostics, sourceMapData.sourceMapFilePath, sourceMapText, /*writeByteOrderMark*/ false);
-                        sourceMapUrl = `//# sourceMappingURL=${sourceMapData.jsSourceMappingURL}`;
-                    }
-
-                    // Write sourcemap url to the js file and write the js file
-                    writeJavaScriptFile(emitOutput + sourceMapUrl, jsFilePath, writeByteOrderMark);
-                }
-
-                // Initialize source map data
-                const sourceMapJsFile = getBaseFileName(normalizeSlashes(jsFilePath));
-                sourceMapData = {
-                    sourceMapFilePath: jsFilePath + ".map",
-                    jsSourceMappingURL: sourceMapJsFile + ".map",
-                    sourceMapFile: sourceMapJsFile,
-                    sourceMapSourceRoot: compilerOptions.sourceRoot || "",
-                    sourceMapSources: [],
-                    inputSourceFileNames: [],
-                    sourceMapNames: [],
-                    sourceMapMappings: "",
-                    sourceMapSourcesContent: undefined,
-                    sourceMapDecodedMappings: []
-                };
-
-                // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
-                // relative paths of the sources list in the sourcemap
-                sourceMapData.sourceMapSourceRoot = ts.normalizeSlashes(sourceMapData.sourceMapSourceRoot);
-                if (sourceMapData.sourceMapSourceRoot.length && sourceMapData.sourceMapSourceRoot.charCodeAt(sourceMapData.sourceMapSourceRoot.length - 1) !== CharacterCodes.slash) {
-                    sourceMapData.sourceMapSourceRoot += directorySeparator;
-                }
-
-                if (compilerOptions.mapRoot) {
-                    sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                    if (root) { // emitting single module file
-                        // For modules or multiple emit files the mapRoot will have directory structure like the sources
-                        // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                        sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(root, host, sourceMapDir));
-                    }
-
-                    if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
-                        // The relative paths are relative to the common directory
-                        sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
-                        sourceMapData.jsSourceMappingURL = getRelativePathToDirectoryOrUrl(
-                            getDirectoryPath(normalizePath(jsFilePath)), // get the relative sourceMapDir path based on jsFilePath
-                            combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL), // this is where user expects to see sourceMap
-                            host.getCurrentDirectory(),
-                            host.getCanonicalFileName,
-                            /*isAbsolutePathAnUrl*/ true);
-                    }
-                    else {
-                        sourceMapData.jsSourceMappingURL = combinePaths(sourceMapDir, sourceMapData.jsSourceMappingURL);
-                    }
-                }
-                else {
-                    sourceMapDir = getDirectoryPath(normalizePath(jsFilePath));
-                }
-
-                function emitNodeWithSourceMap(node: Node) {
-                    if (node) {
-                        if (nodeIsSynthesized(node)) {
-                            return emitNodeWithoutSourceMap(node);
-                        }
-                        if (node.kind !== SyntaxKind.SourceFile) {
-                            recordEmitNodeStartSpan(node);
-                            emitNodeWithoutSourceMap(node);
-                            recordEmitNodeEndSpan(node);
-                        }
-                        else {
-                            recordNewSourceFileStart(<SourceFile>node);
-                            emitNodeWithoutSourceMap(node);
-                        }
-                    }
-                }
-
-                function emitNodeWithCommentsAndWithSourcemap(node: Node) {
-                    emitNodeConsideringCommentsOption(node, emitNodeWithSourceMap);
-                }
-
-                writeEmittedFiles = writeJavaScriptAndSourceMapFile;
-                emit = emitNodeWithCommentsAndWithSourcemap;
-                emitStart = recordEmitNodeStartSpan;
-                emitEnd = recordEmitNodeEndSpan;
-                emitToken = writeTextWithSpanRecord;
-                writeComment = writeCommentRangeWithMap;
-            }
-
-            function writeJavaScriptFile(emitOutput: string, jsFilePath: string, writeByteOrderMark: boolean) {
-                writeFile(host, diagnostics, jsFilePath, emitOutput, writeByteOrderMark);
+                writeFile(host, emitterDiagnostics, jsFilePath, emitOutput, writeByteOrderMark);
             }
 
             // Create a temporary variable with a unique unused name.
@@ -1090,7 +739,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitTokenText(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
+            /** Emit the text for the given token that comes after startPos
+              * This by default writes the text provided with the given tokenKind
+              * but if optional emitFn callback is provided the text is emitted using the callback instead of default text
+              * @param tokenKind the kind of the token to search and emit
+              * @param startPos the position in the source to start searching for the token
+              * @param emitFn if given will be invoked to emit the text instead of actual token emit */
+            function emitToken(tokenKind: SyntaxKind, startPos: number, emitFn?: () => void) {
+                const tokenStartPos = skipTrivia(currentText, startPos);
+                emitPos(tokenStartPos);
+
                 const tokenString = tokenToString(tokenKind);
                 if (emitFn) {
                     emitFn();
@@ -1098,7 +756,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write(tokenString);
                 }
-                return startPos + tokenString.length;
+
+                const tokenEndPos = tokenStartPos + tokenString.length;
+                emitPos(tokenEndPos);
+                return tokenEndPos;
             }
 
             function emitOptional(prefix: string, node: Node) {
@@ -1222,7 +883,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function isBinaryOrOctalIntegerLiteral(node: LiteralExpression, text: string): boolean {
+            function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string): boolean {
                 if (node.kind === SyntaxKind.NumericLiteral && text.length > 1) {
                     switch (text.charCodeAt(1)) {
                         case CharacterCodes.b:
@@ -1236,7 +897,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return false;
             }
 
-            function emitLiteral(node: LiteralExpression) {
+            function emitLiteral(node: LiteralExpression | TemplateLiteralFragment) {
                 const text = getLiteralText(node);
 
                 if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap) && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
@@ -1251,7 +912,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getLiteralText(node: LiteralExpression) {
+            function getLiteralText(node: LiteralExpression | TemplateLiteralFragment) {
                 // Any template literal or string literal with an extended escape
                 // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
                 if (languageVersion < ScriptTarget.ES6 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
@@ -1310,7 +971,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write(`"${text}"`);
             }
 
-            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression) => void) {
+            function emitDownlevelTaggedTemplateArray(node: TaggedTemplateExpression, literalEmitter: (literal: LiteralExpression | TemplateLiteralFragment) => void) {
                 write("[");
                 if (node.template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) {
                     literalEmitter(<LiteralExpression>node.template);
@@ -1942,6 +1603,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitThis(node: Node) {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalThis) {
                     write("_this");
+                }
+                else if (convertedLoopState) {
+                    write(convertedLoopState.thisName || (convertedLoopState.thisName = makeUniqueName("this")));
                 }
                 else {
                     write("this");
@@ -3139,7 +2803,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 if (convertedLoopState && (getCombinedNodeFlags(decl) & NodeFlags.BlockScoped) === 0) {
-                    // we are inside a converted loop - this can only happen in downlevel scenarios 
+                    // we are inside a converted loop - this can only happen in downlevel scenarios
                     // record names for all variable declarations
                     for (const varDecl of decl.declarations) {
                         hoistVariableDeclarationFromLoop(convertedLoopState, varDecl);
@@ -3271,6 +2935,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         convertedLoopState.argumentsName = convertedOuterLoopState.argumentsName;
                     }
 
+                    if (convertedOuterLoopState.thisName) {
+                        // outer loop has already used 'this' so we've already have some name to alias it
+                        // use the same name in all nested loops
+                        convertedLoopState.thisName = convertedOuterLoopState.thisName;
+                    }
+
                     if (convertedOuterLoopState.hoistedLocalVariables) {
                         // we've already collected some non-block scoped variable declarations in enclosing loop
                         // use the same storage in nested loop
@@ -3297,6 +2967,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         // this is top level converted loop and we need to create an alias for 'arguments' object
                         write(`var ${convertedLoopState.argumentsName} = arguments;`);
+                        writeLine();
+                    }
+                }
+                if (convertedLoopState.thisName) {
+                    // if alias for this is set
+                    if (convertedOuterLoopState) {
+                        // pass it to outer converted loop
+                        convertedOuterLoopState.thisName = convertedLoopState.thisName;
+                    }
+                    else {
+                        // this is top level converted loop so we need to create an alias for 'this' here
+                        // NOTE: 
+                        // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
+                        // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
+                        write(`var ${convertedLoopState.thisName} = this;`);
                         writeLine();
                     }
                 }
@@ -3464,7 +3149,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`case "${labelMarker}": `);
                         // if there are no outer converted loop or outer label in question is located inside outer converted loop
                         // then emit labeled break\continue
-                        // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do  
+                        // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
                         if (!outerLoop || (outerLoop.labels && outerLoop.labels[labelText])) {
                             if (isBreak) {
                                 write("break ");
@@ -5480,22 +5165,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitDecoratorsOfClass(node);
                 }
 
+                if (!(node.flags & NodeFlags.Export)) {
+                    return;
+                }
                 // If this is an exported class, but not on the top level (i.e. on an internal
                 // module), export it
-                if (!isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Export)) {
+                if (node.flags & NodeFlags.Default) {
+                    // if this is a top level default export of decorated class, write the export after the declaration.
+                    writeLine();
+                    if (thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
+                        write("export default ");
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                    else if (modulekind === ModuleKind.System) {
+                        write(`${exportFunctionForFile}("default", `);
+                        emitDeclarationName(node);
+                        write(");");
+                    }
+                    else if (modulekind !== ModuleKind.ES6) {
+                        write(`exports.default = `);
+                        emitDeclarationName(node);
+                        write(";");
+                    }
+                }
+                else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {
                     writeLine();
                     emitStart(node);
                     emitModuleMemberName(node);
                     write(" = ");
                     emitDeclarationName(node);
                     emitEnd(node);
-                    write(";");
-                }
-                else if (isES6ExportedDeclaration(node) && (node.flags & NodeFlags.Default) && thisNodeIsDecorated) {
-                    // if this is a top level default export of decorated class, write the export after the declaration.
-                    writeLine();
-                    write("export default ");
-                    emitDeclarationName(node);
                     write(";");
                 }
             }
@@ -5861,7 +5561,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitSerializedTypeNode(node: TypeNode) {
                 if (node) {
-
                     switch (node.kind) {
                         case SyntaxKind.VoidKeyword:
                             write("void 0");
@@ -5887,7 +5586,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             return;
 
                         case SyntaxKind.StringKeyword:
-                        case SyntaxKind.StringLiteral:
+                        case SyntaxKind.StringLiteralType:
                             write("String");
                             return;
 
@@ -5908,6 +5607,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         case SyntaxKind.UnionType:
                         case SyntaxKind.IntersectionType:
                         case SyntaxKind.AnyKeyword:
+                        case SyntaxKind.ThisType:
                             break;
 
                         default:
@@ -5926,9 +5626,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 // Clone the type name and parent it to a location outside of the current declaration.
-                const typeName = cloneEntityName(node.typeName);
-                typeName.parent = location;
-
+                const typeName = cloneEntityName(node.typeName, location);
                 const result = resolver.getTypeReferenceSerializationKind(typeName);
                 switch (result) {
                     case TypeReferenceSerializationKind.Unknown:
@@ -6700,7 +6398,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration): string {
+            function getExternalModuleNameText(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, emitRelativePathAsModuleName: boolean): string {
+                if (emitRelativePathAsModuleName) {
+                    const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
+                    if (name) {
+                        return `"${name}"`;
+                    }
+                }
                 const moduleName = getExternalModuleName(importNode);
                 if (moduleName.kind === SyntaxKind.StringLiteral) {
                     return tryRenameExternalModule(<LiteralExpression>moduleName) || getLiteralText(<LiteralExpression>moduleName);
@@ -7260,7 +6964,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const dependencyGroups: DependencyGroup[] = [];
 
                 for (let i = 0; i < externalImports.length; ++i) {
-                    let text = getExternalModuleNameText(externalImports[i]);
+                    const text = getExternalModuleNameText(externalImports[i], emitRelativePathAsModuleName);
                     if (hasProperty(groupIndices, text)) {
                         // deduplicate/group entries in dependency list by the dependency name
                         const groupIndex = groupIndices[text];
@@ -7276,18 +6980,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(", ");
                     }
 
-                    if (emitRelativePathAsModuleName) {
-                        const name = getExternalModuleNameFromDeclaration(host, resolver, externalImports[i]);
-                        if (name) {
-                            text = `"${name}"`;
-                        }
-                    }
                     write(text);
                 }
                 write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
                 emitSystemModuleBody(node, dependencyGroups, startIndex);
@@ -7324,14 +7022,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 for (const importNode of externalImports) {
                     // Find the name of the external module
-                    let externalModuleName = getExternalModuleNameText(importNode);
-
-                    if (emitRelativePathAsModuleName) {
-                        const name = getExternalModuleNameFromDeclaration(host, resolver, importNode);
-                        if (name) {
-                            externalModuleName = `"${name}"`;
-                        }
-                    }
+                    const externalModuleName = getExternalModuleNameText(importNode, emitRelativePathAsModuleName);
 
                     // Find the name of the module alias, if there is one
                     const importAliasName = getLocalNameForExternalImport(importNode);
@@ -7397,7 +7088,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeModuleName(node, emitRelativePathAsModuleName);
                 emitAMDDependencies(node, /*includeNonAmdDependencies*/ true, emitRelativePathAsModuleName);
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7409,7 +7100,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitCommonJSModule(node: SourceFile) {
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false, /*ensureUseStrict*/ true);
                 emitEmitHelpers(node);
                 collectExternalModuleInfo(node);
                 emitExportStarHelper();
@@ -7438,7 +7129,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 })(`);
                 emitAMDFactoryHeader(dependencyNames);
                 increaseIndent();
-                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true);
+                const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
                 emitExportStarHelper();
                 emitCaptureThisForNodeIfNecessary(node);
                 emitLinesStartingAt(node.statements, startIndex);
@@ -7580,19 +7271,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean): number {
+            function isUseStrictPrologue(node: ExpressionStatement): boolean {
+                return !!(node.expression as StringLiteral).text.match(/use strict/);
+            }
+
+            function ensureUseStrictPrologue(startWithNewLine: boolean, writeUseStrict: boolean) {
+                if (writeUseStrict) {
+                    if (startWithNewLine) {
+                        writeLine();
+                    }
+                    write("\"use strict\";");
+                }
+            }
+
+            function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean, ensureUseStrict?: boolean): number {
+                let foundUseStrict = false;
                 for (let i = 0; i < statements.length; ++i) {
                     if (isPrologueDirective(statements[i])) {
+                        if (isUseStrictPrologue(statements[i] as ExpressionStatement)) {
+                            foundUseStrict = true;
+                        }
                         if (startWithNewLine || i > 0) {
                             writeLine();
                         }
                         emit(statements[i]);
                     }
                     else {
+                        ensureUseStrictPrologue(startWithNewLine || i > 0, !foundUseStrict && ensureUseStrict);
                         // return index of the first non prologue directive
                         return i;
                     }
                 }
+                ensureUseStrictPrologue(startWithNewLine, !foundUseStrict && ensureUseStrict);
                 return statements.length;
             }
 
@@ -7644,7 +7354,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitDetachedCommentsAndUpdateCommentsInfo(node);
 
                 if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                    if (root || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
+                    if (isOwnFileEmit || (!isExternalModule(node) && compilerOptions.isolatedModules)) {
                         const emitModule = moduleEmitDelegates[modulekind] || moduleEmitDelegates[ModuleKind.CommonJS];
                         emitModule(node);
                     }
@@ -7666,6 +7376,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitLeadingComments(node.endOfFileToken);
+            }
+
+            function emit(node: Node): void {
+                emitNodeConsideringCommentsOption(node, emitNodeWithSourceMap);
             }
 
             function emitNodeWithCommentsAndWithoutSourcemap(node: Node): void {
@@ -7693,6 +7407,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (emitComments) {
                         emitTrailingComments(node);
                     }
+                }
+            }
+
+            function emitNodeWithSourceMap(node: Node): void {
+                if (node) {
+                    emitStart(node);
+                    emitNodeWithoutSourceMap(node);
+                    emitEnd(node);
                 }
             }
 
@@ -8088,6 +7810,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
+            function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, comment: CommentRange, newLine: string) {
+                emitPos(comment.pos);
+                writeCommentRange(text, lineMap, writer, comment, newLine);
+                emitPos(comment.end);
+            }
+
             function emitShebang() {
                 const shebang = getShebang(currentText);
                 if (shebang) {
@@ -8096,11 +7824,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
-        function emitFile(jsFilePath: string, sourceFile?: SourceFile) {
-            emitJavaScript(jsFilePath, sourceFile);
+        function emitFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
+            sourceFiles: SourceFile[], isBundledEmit: boolean) {
+            // Make sure not to write js File and source map file if any of them cannot be written
+            if (!host.isEmitBlocked(jsFilePath)) {
+                emitJavaScript(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
+            }
+            else {
+                emitSkipped = true;
+            }
 
-            if (compilerOptions.declaration) {
-                writeDeclarationFile(jsFilePath, sourceFile, host, resolver, diagnostics);
+            if (declarationFilePath) {
+                emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
             }
         }
     }

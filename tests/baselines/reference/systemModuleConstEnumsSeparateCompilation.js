@@ -14,6 +14,7 @@ module M {
 
 //// [systemModuleConstEnumsSeparateCompilation.js]
 System.register([], function(exports_1) {
+    "use strict";
     var TopLevelConstEnum, M;
     function foo() {
         use(TopLevelConstEnum.X);

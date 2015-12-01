@@ -93,6 +93,7 @@ module m4 {
 
 //// [collisionExportsRequireAndModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var require;
     (function (require) {
         var C = (function () {

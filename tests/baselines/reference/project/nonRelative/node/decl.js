@@ -1,3 +1,4 @@
+"use strict";
 function call() {
     return "success";
 }

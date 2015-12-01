@@ -280,7 +280,7 @@ namespace ts {
         }
 
         if (commandLine.options.version) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Version_0, ts.version), /* compilerHost */ undefined);
+            printVersion();
             return sys.exit(ExitStatus.Success);
         }
 
@@ -295,15 +295,30 @@ namespace ts {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--project"), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
-            configFileName = normalizePath(combinePaths(commandLine.options.project, "tsconfig.json"));
             if (commandLine.fileNames.length !== 0) {
                 reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line), /* compilerHost */ undefined);
                 return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
+
+            const fileOrDirectory = normalizePath(commandLine.options.project);
+            if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
+                configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
+                if (!sys.fileExists(configFileName)) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+            }
+            else {
+                configFileName = fileOrDirectory;
+                if (!sys.fileExists(configFileName)) {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project), /* compilerHost */ undefined);
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+            }
         }
         else if (commandLine.fileNames.length === 0 && isJSONSupported()) {
             const searchPath = normalizePath(sys.getCurrentDirectory());
-            configFileName = findConfigFile(searchPath);
+            configFileName = findConfigFile(searchPath, sys.fileExists);
         }
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
@@ -360,7 +375,7 @@ namespace ts {
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
                 return;
             }
-            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName));
+            const configParseResult = parseJsonConfigFileContent(configObject, sys, getDirectoryPath(configFileName), commandLine.options);
             if (configParseResult.errors.length > 0) {
                 reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
                 sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -376,7 +391,7 @@ namespace ts {
                 if (configFileName) {
                     const configParseResult = parseConfigFile();
                     rootFileNames = configParseResult.fileNames;
-                    compilerOptions = extend(commandLine.options, configParseResult.options);
+                    compilerOptions = configParseResult.options;
                 }
                 else {
                     rootFileNames = commandLine.fileNames;
@@ -469,7 +484,7 @@ namespace ts {
         }
 
         function watchedDirectoryChanged(fileName: string) {
-            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, commandLine.options)) {
                 return;
             }
 

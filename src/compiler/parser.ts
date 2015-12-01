@@ -544,6 +544,11 @@ namespace ts {
             return result;
         }
 
+        function getLanguageVariant(fileName: string) {
+            // .tsx and .jsx files are treated as jsx language variant.
+            return fileExtensionIs(fileName, ".tsx") || fileExtensionIs(fileName, ".jsx") ?  LanguageVariant.JSX  : LanguageVariant.Standard;
+        }
+
         function initializeState(fileName: string, _sourceText: string, languageVersion: ScriptTarget, isJavaScriptFile: boolean, _syntaxCursor: IncrementalParser.SyntaxCursor) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
@@ -564,7 +569,7 @@ namespace ts {
             scanner.setText(sourceText);
             scanner.setOnError(scanError);
             scanner.setScriptTarget(languageVersion);
-            scanner.setLanguageVariant(allowsJsxExpressions(fileName) ? LanguageVariant.JSX : LanguageVariant.Standard);
+            scanner.setLanguageVariant(getLanguageVariant(fileName));
         }
 
         function clearState() {
@@ -682,7 +687,7 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.flags = fileExtensionIs(sourceFile.fileName, ".d.ts") ? NodeFlags.DeclarationFile : 0;
-            sourceFile.languageVariant = allowsJsxExpressions(sourceFile.fileName) ? LanguageVariant.JSX : LanguageVariant.Standard;
+            sourceFile.languageVariant = getLanguageVariant(sourceFile.fileName);
 
             return sourceFile;
         }
@@ -1869,7 +1874,7 @@ namespace ts {
         function parseTemplateExpression(): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
-            template.head = parseLiteralNode();
+            template.head = parseTemplateLiteralFragment();
             Debug.assert(template.head.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
 
             const templateSpans = <NodeArray<TemplateSpan>>[];
@@ -1890,22 +1895,34 @@ namespace ts {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
-            let literal: LiteralExpression;
+            let literal: TemplateLiteralFragment;
 
             if (token === SyntaxKind.CloseBraceToken) {
                 reScanTemplateToken();
-                literal = parseLiteralNode();
+                literal = parseTemplateLiteralFragment();
             }
             else {
-                literal = <LiteralExpression>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                literal = <TemplateLiteralFragment>parseExpectedToken(SyntaxKind.TemplateTail, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
             }
 
             span.literal = literal;
             return finishNode(span);
         }
 
+        function parseStringLiteralTypeNode(): StringLiteralTypeNode {
+            return <StringLiteralTypeNode>parseLiteralLikeNode(SyntaxKind.StringLiteralType, /*internName*/ true);
+        }
+
         function parseLiteralNode(internName?: boolean): LiteralExpression {
-            const node = <LiteralExpression>createNode(token);
+            return <LiteralExpression>parseLiteralLikeNode(token, internName);
+        }
+
+        function parseTemplateLiteralFragment(): TemplateLiteralFragment {
+            return <TemplateLiteralFragment>parseLiteralLikeNode(token, /*internName*/ false);
+        }
+
+        function parseLiteralLikeNode(kind: SyntaxKind, internName: boolean): LiteralLikeNode {
+            const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
             node.text = internName ? internIdentifier(text) : text;
 
@@ -1953,6 +1970,12 @@ namespace ts {
             if (!scanner.hasPrecedingLineBreak() && token === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
+            return finishNode(node);
+        }
+
+        function parseThisTypeNode(): TypeNode {
+            const node = <TypeNode>createNode(SyntaxKind.ThisType);
+            nextToken();
             return finishNode(node);
         }
 
@@ -2386,10 +2409,11 @@ namespace ts {
                     const node = tryParse(parseKeywordAndNoDot);
                     return node || parseTypeReferenceOrTypePredicate();
                 case SyntaxKind.StringLiteral:
-                    return <StringLiteral>parseLiteralNode(/*internName*/ true);
+                    return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
-                case SyntaxKind.ThisKeyword:
                     return parseTokenNode<TypeNode>();
+                case SyntaxKind.ThisKeyword:
+                    return parseThisTypeNode();
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
@@ -5404,11 +5428,13 @@ namespace ts {
             // reference comment.
             while (true) {
                 const kind = triviaScanner.scan();
-                if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
-                    continue;
-                }
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
-                    break;
+                    if (isTrivia(kind)) {
+                        continue;
+                    }
+                    else {
+                        break;
+                    }
                 }
 
                 const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };
