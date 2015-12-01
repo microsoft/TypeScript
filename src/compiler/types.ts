@@ -439,12 +439,16 @@ namespace ts {
 
     export const enum JsxFlags {
         None = 0,
+        /** An element from a named property of the JSX.IntrinsicElements interface */
         IntrinsicNamedElement = 1 << 0,
+        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 1 << 1,
-        ClassElement = 1 << 2,
-        UnknownElement = 1 << 3,
+        /** An element backed by a class, class-like, or function value */
+        ValueElement = 1 << 2,
+        /** Element resolution failed */
+        UnknownElement = 1 << 4,
 
-        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement
+        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
 
 
