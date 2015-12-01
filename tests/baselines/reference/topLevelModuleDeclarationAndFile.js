@@ -18,6 +18,7 @@ var z2 = foo.y() + 10; // Should resolve
 
 //// [foo_1.js]
 //// [foo_2.js]
+"use strict";
 /// <reference path="foo_1.ts"/>
 var foo = require("vs/foo_0");
 var z1 = foo.x + 10; // Should error, as declaration should win

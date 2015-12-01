@@ -16,6 +16,7 @@ export function foo2(): exports.I {
 
 //// [collisionExportsRequireAndUninstantiatedModule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function foo() {
         return null;
     }

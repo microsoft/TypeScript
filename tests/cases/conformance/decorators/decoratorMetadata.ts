@@ -14,4 +14,8 @@ declare var decorator: any;
 class MyComponent {
     constructor(public Service: Service) {
     }
+
+    @decorator
+    method(x: this) {
+    }
 }

@@ -1,4 +1,5 @@
-//// [isolatedModulesSpecifiedModule.ts]
+//// [file1.ts]
 export var x;
 
-//// [isolatedModulesSpecifiedModule.js]
+//// [file1.js]
+"use strict";

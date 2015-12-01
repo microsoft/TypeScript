@@ -29,6 +29,7 @@ class Test {
 
 //// [index.js]
 define(["require", "exports", "foo"], function (require, exports, foo) {
+    "use strict";
     var Test = (function () {
         function Test() {
             this.bar = new foo.Foo();

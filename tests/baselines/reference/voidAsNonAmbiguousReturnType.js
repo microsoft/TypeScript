@@ -14,9 +14,11 @@ function main() {
 
 
 //// [voidAsNonAmbiguousReturnType_0.js]
+"use strict";
 function mkdirSync(path, mode) { }
 exports.mkdirSync = mkdirSync;
 //// [voidAsNonAmbiguousReturnType_1.js]
+"use strict";
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
 var fs = require("./voidAsNonAmbiguousReturnType_0");
 function main() {

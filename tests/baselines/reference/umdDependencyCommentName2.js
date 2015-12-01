@@ -19,6 +19,7 @@ m1.f();
         define(["require", "exports", "bar", "goo", "foo", "m2"], factory);
     }
 })(function (require, exports, b, c) {
+    "use strict";
     var m1 = require("m2");
     m1.f();
 });

@@ -1,2 +1,2 @@
 //// [sourceMapValidationExportAssignmentCommonjs.js.map]
-{"version":3,"file":"sourceMapValidationExportAssignmentCommonjs.js","sourceRoot":"","sources":["sourceMapValidationExportAssignmentCommonjs.ts"],"names":["a","a.constructor"],"mappings":"AAAA;IAAAA;IAEAC,CAACA;IAADD,QAACA;AAADA,CAACA,AAFD,IAEC;AACD,iBAAS,CAAC,CAAC"}
+{"version":3,"file":"sourceMapValidationExportAssignmentCommonjs.js","sourceRoot":"","sources":["sourceMapValidationExportAssignmentCommonjs.ts"],"names":[],"mappings":";AAAA;IAAA;IAEA,CAAC;IAAD,QAAC;AAAD,CAAC,AAFD,IAEC;AACD,iBAAS,CAAC,CAAC"}

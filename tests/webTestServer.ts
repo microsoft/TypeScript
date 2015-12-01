@@ -192,7 +192,6 @@ function getRequestOperation(req: http.ServerRequest, filename: string) {
         }
         return RequestType.Unknown
     }
-    return RequestType.Unknown
 }
 
 function handleRequestOperation(req: http.ServerRequest, res: http.ServerResponse, operation: RequestType, reqPath: string) {
@@ -264,17 +263,20 @@ http.createServer(function (req: http.ServerRequest, res: http.ServerResponse) {
 
 var browserPath: string;
 if ((browser && browser === 'chrome')) {
-    const platform = os.platform();
-    let defaultChromePath: string;
-    switch(platform) {
-        case "win32": 
+    let defaultChromePath = "";
+    switch (os.platform()) {
+        case "win32":
+        case "win64":
             defaultChromePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
             break;
-        case "linux": 
-            defaultChromePath = "/opt/google/chrome/chrome";
+        case "darwin":
+            defaultChromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+            break;
+        case "linux":
+            defaultChromePath = "/opt/google/chrome/chrome"
             break;
         default:
-            console.log(`Default Chrome location for platform ${platform} is unknown`);
+            console.log(`default Chrome location is unknown for platform '${os.platform()}'`);
             break;
     }
     if (fs.existsSync(defaultChromePath)) {

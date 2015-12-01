@@ -14,6 +14,7 @@ export module TopLevelModule2 {
 
 //// [systemModuleNonTopLevelModuleMembers.js]
 System.register([], function(exports_1) {
+    "use strict";
     var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
     function TopLevelFunction() { }
     exports_1("TopLevelFunction", TopLevelFunction);

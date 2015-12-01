@@ -51,15 +51,15 @@ namespace ts {
 
         function getWScriptSystem(): System {
 
-            let fso = new ActiveXObject("Scripting.FileSystemObject");
+            const fso = new ActiveXObject("Scripting.FileSystemObject");
 
-            let fileStream = new ActiveXObject("ADODB.Stream");
+            const fileStream = new ActiveXObject("ADODB.Stream");
             fileStream.Type = 2 /*text*/;
 
-            let binaryStream = new ActiveXObject("ADODB.Stream");
+            const binaryStream = new ActiveXObject("ADODB.Stream");
             binaryStream.Type = 1 /*binary*/;
 
-            let args: string[] = [];
+            const args: string[] = [];
             for (let i = 0; i < WScript.Arguments.length; i++) {
                 args[i] = WScript.Arguments.Item(i);
             }
@@ -78,7 +78,7 @@ namespace ts {
                         // Load file and read the first two bytes into a string with no interpretation
                         fileStream.Charset = "x-ansi";
                         fileStream.LoadFromFile(fileName);
-                        let bom = fileStream.ReadText(2) || "";
+                        const bom = fileStream.ReadText(2) || "";
                         // Position must be at 0 before encoding can be changed
                         fileStream.Position = 0;
                         // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
@@ -124,7 +124,7 @@ namespace ts {
             }
 
             function getNames(collection: any): string[] {
-                let result: string[] = [];
+                const result: string[] = [];
                 for (let e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
                     result.push(e.item().Name);
                 }
@@ -132,22 +132,22 @@ namespace ts {
             }
 
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                let result: string[] = [];
+                const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
-                    let folder = fso.GetFolder(path || ".");
-                    let files = getNames(folder.files);
-                    for (let current of files) {
-                        let name = combinePaths(path, current);
+                    const folder = fso.GetFolder(path || ".");
+                    const files = getNames(folder.files);
+                    for (const current of files) {
+                        const name = combinePaths(path, current);
                         if ((!extension || fileExtensionIs(name, extension)) && !contains(exclude, getCanonicalPath(name))) {
                             result.push(name);
                         }
                     }
-                    let subfolders = getNames(folder.subfolders);
-                    for (let current of subfolders) {
-                        let name = combinePaths(path, current);
+                    const subfolders = getNames(folder.subfolders);
+                    for (const current of subfolders) {
+                        const name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
                             visitDirectory(name);
                         }
@@ -198,6 +198,7 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
+            const _tty = require("tty");
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -211,7 +212,7 @@ namespace ts {
                 }
 
                 function poll(checkedIndex: number) {
-                    let watchedFile = watchedFiles[checkedIndex];
+                    const watchedFile = watchedFiles[checkedIndex];
                     if (!watchedFile) {
                         return;
                     }
@@ -251,7 +252,7 @@ namespace ts {
                 }
 
                 function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
-                    let file: WatchedFile = {
+                    const file: WatchedFile = {
                         fileName,
                         callback,
                         mtime: getModifiedTime(fileName)
@@ -290,7 +291,7 @@ namespace ts {
             // changes for large reference sets? If so, do we want
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
-            let watchedFileSet = createWatchedFileSet();
+            const watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): Boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
@@ -304,14 +305,14 @@ namespace ts {
                 if (!_fs.existsSync(fileName)) {
                     return undefined;
                 }
-                let buffer = _fs.readFileSync(fileName);
+                const buffer = _fs.readFileSync(fileName);
                 let len = buffer.length;
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
                     // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
                     // flip all byte pairs and treat as little endian.
                     len &= ~1;
                     for (let i = 0; i < len; i += 2) {
-                        let temp = buffer[i];
+                        const temp = buffer[i];
                         buffer[i] = buffer[i + 1];
                         buffer[i + 1] = temp;
                     }
@@ -335,7 +336,17 @@ namespace ts {
                     data = "\uFEFF" + data;
                 }
 
-                _fs.writeFileSync(fileName, data, "utf8");
+                let fd: number;
+
+                try {
+                    fd = _fs.openSync(fileName, "w");
+                    _fs.writeSync(fd, data, undefined, "utf8");
+                }
+                finally {
+                    if (fd !== undefined) {
+                        _fs.closeSync(fd);
+                    }
+                }
             }
 
             function getCanonicalPath(path: string): string {
@@ -343,17 +354,17 @@ namespace ts {
             }
 
             function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                let result: string[] = [];
+                const result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
                 visitDirectory(path);
                 return result;
                 function visitDirectory(path: string) {
-                    let files = _fs.readdirSync(path || ".").sort();
-                    let directories: string[] = [];
-                    for (let current of files) {
-                        let name = combinePaths(path, current);
+                    const files = _fs.readdirSync(path || ".").sort();
+                    const directories: string[] = [];
+                    for (const current of files) {
+                        const name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
-                            let stat = _fs.statSync(name);
+                            const stat = _fs.statSync(name);
                             if (stat.isFile()) {
                                 if (!extension || fileExtensionIs(name, extension)) {
                                     result.push(name);
@@ -364,7 +375,7 @@ namespace ts {
                             }
                         }
                     }
-                    for (let current of directories) {
+                    for (const current of directories) {
                         visitDirectory(current);
                     }
                 }
@@ -375,15 +386,7 @@ namespace ts {
                 newLine: _os.EOL,
                 useCaseSensitiveFileNames: useCaseSensitiveFileNames,
                 write(s: string): void {
-                    const buffer = new Buffer(s, "utf8");
-                    let offset = 0;
-                    let toWrite: number = buffer.length;
-                    let written = 0;
-                    // 1 is a standard descriptor for stdout
-                    while ((written = _fs.writeSync(1, buffer, offset, toWrite)) < toWrite) {
-                        offset += written;
-                        toWrite -= written;
-                    }
+                    process.stdout.write(s);
                 },
                 readFile,
                 writeFile,
@@ -397,7 +400,7 @@ namespace ts {
                         return _fs.watch(fileName, (eventName: string, relativeFileName: string) => callback(fileName));
                     }
 
-                    let watchedFile = watchedFileSet.addFile(fileName, callback);
+                    const watchedFile = watchedFileSet.addFile(fileName, callback);
                     return {
                         close: () => watchedFileSet.removeFile(watchedFile)
                     };
@@ -407,7 +410,7 @@ namespace ts {
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     return _fs.watch(
                         path,
-                        { persisten: true, recursive: !!recursive },
+                        { persistent: true, recursive: !!recursive },
                         (eventName: string, relativeFileName: string) => {
                             // In watchDirectory we only care about adding and removing files (when event name is
                             // "rename"); changes made within files are handled by corresponding fileWatchers (when

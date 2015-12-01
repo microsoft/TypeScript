@@ -51,6 +51,7 @@ export var publicUse_im_public_mi_public = new im_public_mi_public.c_private();
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require2.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require3.js]
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require.js]
+"use strict";
 // Public elements
 var c_public = (function () {
     function c_public() {
@@ -59,6 +60,7 @@ var c_public = (function () {
 })();
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require1.js]
+"use strict";
 var c_public = (function () {
     function c_public() {
     }
@@ -66,6 +68,7 @@ var c_public = (function () {
 })();
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
+"use strict";
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require2.ts'/>
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts'/>
 // Privacy errors - importing private elements

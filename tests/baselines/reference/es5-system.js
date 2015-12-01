@@ -16,6 +16,7 @@ export default class A
 
 //// [es5-system.js]
 System.register([], function(exports_1) {
+    "use strict";
     var A;
     return {
         setters:[],

@@ -19,7 +19,7 @@ sourceFile:tests/cases/compiler/a.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(2, 5) Source(2, 1) + SourceIndex(0) name (A)
+1->Emitted(2, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -27,16 +27,16 @@ sourceFile:tests/cases/compiler/a.ts
 3 >     ^^^^^^^^^->
 1->class A { 
 2 >    }
-1->Emitted(3, 5) Source(2, 11) + SourceIndex(0) name (A.constructor)
-2 >Emitted(3, 6) Source(2, 12) + SourceIndex(0) name (A.constructor)
+1->Emitted(3, 5) Source(2, 11) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 12) + SourceIndex(0)
 ---
 >>>    return A;
 1->^^^^
 2 >    ^^^^^^^^
 1->
 2 >    }
-1->Emitted(4, 5) Source(2, 11) + SourceIndex(0) name (A)
-2 >Emitted(4, 13) Source(2, 12) + SourceIndex(0) name (A)
+1->Emitted(4, 5) Source(2, 11) + SourceIndex(0)
+2 >Emitted(4, 13) Source(2, 12) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -48,8 +48,8 @@ sourceFile:tests/cases/compiler/a.ts
 2 >}
 3 > 
 4 > class A { }
-1 >Emitted(5, 1) Source(2, 11) + SourceIndex(0) name (A)
-2 >Emitted(5, 2) Source(2, 12) + SourceIndex(0) name (A)
+1 >Emitted(5, 1) Source(2, 11) + SourceIndex(0)
+2 >Emitted(5, 2) Source(2, 12) + SourceIndex(0)
 3 >Emitted(5, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(5, 6) Source(2, 12) + SourceIndex(0)
 ---
@@ -67,7 +67,7 @@ sourceFile:tests/cases/compiler/b.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(7, 5) Source(1, 1) + SourceIndex(1) name (B)
+1->Emitted(7, 5) Source(1, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
@@ -75,16 +75,16 @@ sourceFile:tests/cases/compiler/b.ts
 3 >     ^^^^^^^^^->
 1->class B { 
 2 >    }
-1->Emitted(8, 5) Source(1, 11) + SourceIndex(1) name (B.constructor)
-2 >Emitted(8, 6) Source(1, 12) + SourceIndex(1) name (B.constructor)
+1->Emitted(8, 5) Source(1, 11) + SourceIndex(1)
+2 >Emitted(8, 6) Source(1, 12) + SourceIndex(1)
 ---
 >>>    return B;
 1->^^^^
 2 >    ^^^^^^^^
 1->
 2 >    }
-1->Emitted(9, 5) Source(1, 11) + SourceIndex(1) name (B)
-2 >Emitted(9, 13) Source(1, 12) + SourceIndex(1) name (B)
+1->Emitted(9, 5) Source(1, 11) + SourceIndex(1)
+2 >Emitted(9, 13) Source(1, 12) + SourceIndex(1)
 ---
 >>>})();
 1 >
@@ -96,8 +96,8 @@ sourceFile:tests/cases/compiler/b.ts
 2 >}
 3 > 
 4 > class B { }
-1 >Emitted(10, 1) Source(1, 11) + SourceIndex(1) name (B)
-2 >Emitted(10, 2) Source(1, 12) + SourceIndex(1) name (B)
+1 >Emitted(10, 1) Source(1, 11) + SourceIndex(1)
+2 >Emitted(10, 2) Source(1, 12) + SourceIndex(1)
 3 >Emitted(10, 2) Source(1, 1) + SourceIndex(1)
 4 >Emitted(10, 6) Source(1, 12) + SourceIndex(1)
 ---

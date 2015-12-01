@@ -8,6 +8,7 @@
     }
 
 //// [parserClass2.js]
+"use strict";
 var LoggerAdapter = (function () {
     function LoggerAdapter(logger) {
         this.logger = logger;
