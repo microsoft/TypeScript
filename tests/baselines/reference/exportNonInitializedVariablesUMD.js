@@ -43,6 +43,7 @@ export let h1: D = new D;
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
     var ;
     let;
     var ;

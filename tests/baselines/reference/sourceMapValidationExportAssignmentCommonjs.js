@@ -5,6 +5,7 @@ class a {
 export = a;
 
 //// [sourceMapValidationExportAssignmentCommonjs.js]
+"use strict";
 var a = (function () {
     function a() {
     }

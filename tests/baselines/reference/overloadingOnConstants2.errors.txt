@@ -1,6 +1,6 @@
 tests/cases/compiler/overloadingOnConstants2.ts(8,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/compiler/overloadingOnConstants2.ts(9,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2345: Argument of type 'string' is not assignable to parameter of type '"bye"'.
+tests/cases/compiler/overloadingOnConstants2.ts(15,13): error TS2345: Argument of type '"um"' is not assignable to parameter of type '"bye"'.
 tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 
 
@@ -25,7 +25,7 @@ tests/cases/compiler/overloadingOnConstants2.ts(19,10): error TS2382: Specialize
     var b: E = foo("bye", []); // E 
     var c = foo("um", []); // error
                 ~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type '"bye"'.
+!!! error TS2345: Argument of type '"um"' is not assignable to parameter of type '"bye"'.
     
     
     //function bar(x: "hi", items: string[]): D;

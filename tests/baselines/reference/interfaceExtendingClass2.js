@@ -1,4 +1,5 @@
 //// [interfaceExtendingClass2.ts]
+
 class Foo {
     x: string;
     y() { }

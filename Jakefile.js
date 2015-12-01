@@ -40,6 +40,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -59,6 +60,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -96,7 +98,7 @@ var servicesSources = [
     return path.join(servicesDirectory, f);
 }));
 
-var serverSources = [
+var serverCoreSources = [
     "node.d.ts",
     "editorServices.ts",
     "protocol.d.ts",
@@ -104,7 +106,19 @@ var serverSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
-}).concat(servicesSources);
+});
+
+var scriptSources = [
+    "tslint/booleanTriviaRule.ts",
+    "tslint/nextLineRule.ts",
+    "tslint/noNullRule.ts",
+    "tslint/preferConstRule.ts",
+    "tslint/typeOperatorSpacingRule.ts"
+].map(function (f) {
+    return path.join(scriptsDirectory, f);
+});
+
+var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
     "editorServices.ts",
@@ -145,7 +159,8 @@ var harnessSources = harnessCoreSources.concat([
     "transpile.ts",
     "reuseProgramStructure.ts",
     "cachingInServerLSHost.ts",
-    "moduleResolution.ts"
+    "moduleResolution.ts",
+    "tsconfigParsing.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -164,7 +179,7 @@ var librarySourceMap = [
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
         { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
         { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["core.d.ts", "es6.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] },
+        { target: "lib.es6.d.ts", sources: ["es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -225,7 +240,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOutFile, generateDeclarations, outDir, preserveConstEnums, keepComments, noResolve, stripInternal, callback) {
     file(outFile, prereqs, function() {
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--module commonjs --noImplicitAny --noEmitOnError";
+        var options = "--noImplicitAny --noEmitOnError --pretty";
 
         // Keep comments when specifically requested
         // or when in debug mode.
@@ -247,6 +262,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, noOu
 
         if (!noOutFile) {
             options += " --out " + outFile;
+        }
+        else {
+            options += " --module commonjs"
         }
 
         if(noResolve) {
@@ -320,6 +338,8 @@ var processDiagnosticMessagesJs = path.join(scriptsDirectory, "processDiagnostic
 var processDiagnosticMessagesTs = path.join(scriptsDirectory, "processDiagnosticMessages.ts");
 var diagnosticMessagesJson = path.join(compilerDirectory, "diagnosticMessages.json");
 var diagnosticInfoMapTs = path.join(compilerDirectory, "diagnosticInformationMap.generated.ts");
+var generatedDiagnosticMessagesJSON = path.join(compilerDirectory, "diagnosticMessages.generated.json");
+var builtGeneratedDiagnosticMessagesJSON = path.join(builtLocalDirectory, "diagnosticMessages.generated.json");
 
 file(processDiagnosticMessagesTs);
 
@@ -348,9 +368,14 @@ file(diagnosticInfoMapTs, [processDiagnosticMessagesJs, diagnosticMessagesJson],
     ex.run();
 }, {async: true});
 
+file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], function() {
+    if (fs.existsSync(builtLocalDirectory)) {
+        jake.cpR(generatedDiagnosticMessagesJSON, builtGeneratedDiagnosticMessagesJSON);
+    }
+});
+
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
-
 
 // Publish nightly
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
@@ -444,13 +469,15 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 // Stanalone/web definition file using global 'ts' namespace
                 jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, {silent: true});
                 var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
+                definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+                fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
                 // Official node package definition file, pointed to by 'typings' in package.json
                 // Created by appending 'export = ts;' at the end of the standalone file to turn it into an external module
                 var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
                 fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
 
-                // Node package definition file to be distributed without the package. Created by replacing 
+                // Node package definition file to be distributed without the package. Created by replacing
                 // 'ts' namespace with '"typescript"' as a module.
                 var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
@@ -476,7 +503,7 @@ task("lssl", [lsslFile]);
 
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
-task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile]);
+task("local", ["generate-diagnostics", "lib", tscFile, servicesFile, nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -846,6 +873,7 @@ var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",
     "noNullRule",
+    "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule"
 ]);
@@ -858,7 +886,7 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
 });
 
 function getLinterOptions() {
@@ -890,7 +918,10 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var lintTargets = compilerSources.concat(harnessCoreSources);
+var lintTargets = compilerSources
+    .concat(harnessCoreSources)
+    .concat(serverCoreSources)
+    .concat(scriptSources);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
@@ -918,7 +949,7 @@ function lintWatchFile(filename) {
         if (event !== "change") {
             return;
         }
-     
+
         if (!lintSemaphores[filename]) {
             lintSemaphores[filename] = true;
             lintFileAsync(getLinterOptions(), filename, function(err, result) {

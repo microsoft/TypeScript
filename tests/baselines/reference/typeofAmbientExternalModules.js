@@ -19,6 +19,7 @@ var y2: typeof exp = exp;
 y2 = ext;
 
 //// [typeofAmbientExternalModules_0.js]
+"use strict";
 var C = (function () {
     function C() {
     }
@@ -26,6 +27,7 @@ var C = (function () {
 })();
 exports.C = C;
 //// [typeofAmbientExternalModules_1.js]
+"use strict";
 var D = (function () {
     function D() {
     }
@@ -33,6 +35,7 @@ var D = (function () {
 })();
 module.exports = D;
 //// [typeofAmbientExternalModules_2.js]
+"use strict";
 ///<reference path='typeofAmbientExternalModules_0.ts'/>
 ///<reference path='typeofAmbientExternalModules_1.ts'/>
 var ext = require('./typeofAmbientExternalModules_0');

@@ -357,6 +357,7 @@ export module m3 {
 }
 
 //// [privacyImport.js]
+"use strict";
 var m1;
 (function (m1) {
     var m1_M1_public;

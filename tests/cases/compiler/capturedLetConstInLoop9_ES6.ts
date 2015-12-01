@@ -75,10 +75,8 @@ function foo() {
             if (b === 2) {
                 break l0;
             }
-            
-            return 100;
-            
             () => b
+            return 100;
         }
 
         

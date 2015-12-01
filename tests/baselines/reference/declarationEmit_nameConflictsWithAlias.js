@@ -7,6 +7,7 @@ export module M {
 }
 
 //// [declarationEmit_nameConflictsWithAlias.js]
+"use strict";
 var M;
 (function (M) {
 })(M = exports.M || (exports.M = {}));

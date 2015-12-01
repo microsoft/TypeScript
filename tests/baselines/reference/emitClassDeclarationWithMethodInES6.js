@@ -2,18 +2,18 @@
 class D {
     _bar: string;
     foo() { }
-    ["computedName"]() { }
-    ["computedName"](a: string) { }
-    ["computedName"](a: string): number { return 1; }
+    ["computedName1"]() { }
+    ["computedName2"](a: string) { }
+    ["computedName3"](a: string): number { return 1; }
     bar(): string {
         return this._bar;
     } 
     baz(a: any, x: string): string {
         return "HELLO";
     }
-    static ["computedname"]() { }
-    static ["computedname"](a: string) { }
-    static ["computedname"](a: string): boolean { return true; }
+    static ["computedname4"]() { }
+    static ["computedname5"](a: string) { }
+    static ["computedname6"](a: string): boolean { return true; }
     static staticMethod() {
         var x = 1 + 2;
         return x
@@ -25,18 +25,18 @@ class D {
 //// [emitClassDeclarationWithMethodInES6.js]
 class D {
     foo() { }
-    ["computedName"]() { }
-    ["computedName"](a) { }
-    ["computedName"](a) { return 1; }
+    ["computedName1"]() { }
+    ["computedName2"](a) { }
+    ["computedName3"](a) { return 1; }
     bar() {
         return this._bar;
     }
     baz(a, x) {
         return "HELLO";
     }
-    static ["computedname"]() { }
-    static ["computedname"](a) { }
-    static ["computedname"](a) { return true; }
+    static ["computedname4"]() { }
+    static ["computedname5"](a) { }
+    static ["computedname6"](a) { return true; }
     static staticMethod() {
         var x = 1 + 2;
         return x;

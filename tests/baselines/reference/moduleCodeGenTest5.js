@@ -22,6 +22,7 @@ var v = E2.B;
 
 
 //// [moduleCodeGenTest5.js]
+"use strict";
 exports.x = 0;
 var y = 0;
 function f1() { }

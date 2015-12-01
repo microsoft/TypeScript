@@ -1,3 +1,6 @@
+// @allowUnusedLabels: true
+// @allowUnreachableCode: true
+
 // All errors
 
 // naked break not allowed

@@ -12,6 +12,7 @@ var r: string = s.foo;
 
 
 //// [importUsedInExtendsList1_require.js]
+"use strict";
 var Super = (function () {
     function Super() {
     }
@@ -19,6 +20,7 @@ var Super = (function () {
 })();
 exports.Super = Super;
 //// [importUsedInExtendsList1_1.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

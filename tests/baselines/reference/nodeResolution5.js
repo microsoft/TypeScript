@@ -11,3 +11,4 @@ import y = require("a");
 
 
 //// [b.js]
+"use strict";

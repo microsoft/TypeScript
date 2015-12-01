@@ -15,6 +15,7 @@ var r: string = m.foo;
 
 //// [exportAssignmentOfGenericType1_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var T = (function () {
         function T() {
         }
@@ -29,6 +30,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (require, exports, q) {
+    "use strict";
     var M = (function (_super) {
         __extends(M, _super);
         function M() {

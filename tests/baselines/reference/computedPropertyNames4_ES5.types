@@ -9,8 +9,8 @@ var a: any;
 >a : any
 
 var v = {
->v : {}
->{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : {}
+>v : { [0]: number; [""]: number; }
+>{    [s]: 0,    [n]: n,    [s + s]: 1,    [s + n]: 2,    [+s]: s,    [""]: 0,    [0]: 0,    [a]: 1,    [<any>true]: 0,    [`hello bye`]: 0,    [`hello ${a} bye`]: 0} : { [0]: number; [""]: number; }
 
     [s]: 0,
 >s : string

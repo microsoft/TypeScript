@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // all legal
 
 interface I {

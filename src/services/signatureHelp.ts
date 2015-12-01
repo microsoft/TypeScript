@@ -204,7 +204,7 @@ namespace ts.SignatureHelp {
         if (!candidates.length) {
             // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
             // file, then see if we can figure out anything better.
-            if (isJavaScript(sourceFile.fileName)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 return createJavaScriptSignatureHelpItems(argumentInfo);
             }
 

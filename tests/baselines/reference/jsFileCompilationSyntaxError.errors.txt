@@ -1,0 +1,14 @@
+error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
+tests/cases/compiler/a.js(3,6): error TS1223: 'type' tag already specified.
+
+
+!!! error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
+==== tests/cases/compiler/a.js (1 errors) ====
+    /**
+      * @type {number}
+      * @type {string}
+         ~~~~
+!!! error TS1223: 'type' tag already specified.
+      */
+    var v;
+    

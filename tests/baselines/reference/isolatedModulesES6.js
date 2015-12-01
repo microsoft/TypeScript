@@ -1,5 +1,5 @@
-//// [isolatedModulesES6.ts]
+//// [file1.ts]
 export var x;
 
-//// [isolatedModulesES6.js]
+//// [file1.js]
 export var x;

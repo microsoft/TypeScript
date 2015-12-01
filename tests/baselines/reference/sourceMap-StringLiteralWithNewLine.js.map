@@ -1,2 +1,2 @@
 //// [sourceMap-StringLiteralWithNewLine.js.map]
-{"version":3,"file":"sourceMap-StringLiteralWithNewLine.js","sourceRoot":"","sources":["sourceMap-StringLiteralWithNewLine.ts"],"names":["Foo"],"mappings":"AAQA,IAAO,GAAG,CAKT;AALD,WAAO,GAAG,EAAC,CAAC;IACRA,IAAIA,CAACA,GAAGA,OAAOA,CAACA;IAChBA,IAAIA,CAACA,GAAGA;wBACYA,CAACA;IACrBA,IAAIA,CAACA,GAAGA,MAAMA,CAACA,QAAQA,CAACA;AAC5BA,CAACA,EALM,GAAG,KAAH,GAAG,QAKT"}
+{"version":3,"file":"sourceMap-StringLiteralWithNewLine.js","sourceRoot":"","sources":["sourceMap-StringLiteralWithNewLine.ts"],"names":[],"mappings":"AAQA,IAAO,GAAG,CAKT;AALD,WAAO,GAAG,EAAC,CAAC;IACR,IAAI,CAAC,GAAG,OAAO,CAAC;IAChB,IAAI,CAAC,GAAG;wBACY,CAAC;IACrB,IAAI,CAAC,GAAG,MAAM,CAAC,QAAQ,CAAC;AAC5B,CAAC,EALM,GAAG,KAAH,GAAG,QAKT"}

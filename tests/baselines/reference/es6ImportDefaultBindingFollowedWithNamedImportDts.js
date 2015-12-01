@@ -25,6 +25,7 @@ export var x6 = new m();
 
 
 //// [server.js]
+"use strict";
 var a = (function () {
     function a() {
     }
@@ -62,6 +63,7 @@ var x11 = (function () {
 })();
 exports.x11 = x11;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.x1 = new server_1.a();
 var server_2 = require("./server");

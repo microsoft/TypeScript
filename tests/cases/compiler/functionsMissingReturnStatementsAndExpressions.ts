@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // @target: es5
 
 function f1(): string {

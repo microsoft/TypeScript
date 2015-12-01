@@ -21,18 +21,18 @@ class C {
     static get ["computedname"]() {
         return "";
     }
-    get ["computedname"]() {
+    get ["computedname1"]() {
         return "";
     }
-    get ["computedname"]() {
+    get ["computedname2"]() {
         return "";
     }
 
-    set ["computedname"](x: any) {
->x : Symbol(x, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 18, 25))
+    set ["computedname3"](x: any) {
+>x : Symbol(x, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 18, 26))
     }
-    set ["computedname"](y: string) {
->y : Symbol(y, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 20, 25))
+    set ["computedname4"](y: string) {
+>y : Symbol(y, Decl(emitClassDeclarationWithGetterSetterInES6.ts, 20, 26))
     }
 
     set foo(a: string) { }

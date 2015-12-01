@@ -1,5 +1,5 @@
-/// <reference path="../../node_modules/tslint/typings/typescriptServices.d.ts" />
-/// <reference path="../../node_modules/tslint/lib/tslint.d.ts" />
+import * as Lint from "tslint/lib/lint";
+import * as ts from "typescript";
 
 
 export class Rule extends Lint.Rules.AbstractRule {

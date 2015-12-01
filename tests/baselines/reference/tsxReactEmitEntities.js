@@ -1,4 +1,4 @@
-//// [tsxReactEmitEntities.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -10,5 +10,5 @@ declare var React: any;
 <div>Dot goes here: &middot; &notAnEntity; </div>;
 
 
-//// [tsxReactEmitEntities.js]
+//// [file.js]
 React.createElement("div", null, "Dot goes here: · &notAnEntity; ");

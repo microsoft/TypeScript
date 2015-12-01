@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxReactEmitEntities.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 

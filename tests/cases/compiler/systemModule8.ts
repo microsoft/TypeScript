@@ -1,3 +1,4 @@
+// @allowUnreachableCode: true
 // @module: system
 
 export var x;

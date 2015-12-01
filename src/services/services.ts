@@ -132,49 +132,49 @@ namespace ts {
     let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
     let emptyArray: any[] = [];
-    
+
     const jsDocTagNames = [
-        "augments", 
-        "author", 
-        "argument", 
-        "borrows", 
-        "class", 
-        "constant", 
-        "constructor", 
-        "constructs", 
-        "default", 
-        "deprecated", 
-        "description", 
-        "event", 
-        "example", 
-        "extends", 
-        "field", 
-        "fileOverview", 
-        "function", 
-        "ignore", 
-        "inner", 
-        "lends", 
-        "link", 
-        "memberOf", 
-        "name", 
-        "namespace", 
-        "param", 
-        "private", 
-        "property", 
-        "public", 
-        "requires", 
-        "returns", 
-        "see", 
-        "since", 
-        "static", 
-        "throws", 
-        "type", 
+        "augments",
+        "author",
+        "argument",
+        "borrows",
+        "class",
+        "constant",
+        "constructor",
+        "constructs",
+        "default",
+        "deprecated",
+        "description",
+        "event",
+        "example",
+        "extends",
+        "field",
+        "fileOverview",
+        "function",
+        "ignore",
+        "inner",
+        "lends",
+        "link",
+        "memberOf",
+        "name",
+        "namespace",
+        "param",
+        "private",
+        "property",
+        "public",
+        "requires",
+        "returns",
+        "see",
+        "since",
+        "static",
+        "throws",
+        "type",
         "version"
     ];
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        let node = <NodeObject> new (getNodeConstructor(kind))(pos, end);
+        let node = new NodeObject(kind, pos, end);
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -187,6 +187,14 @@ namespace ts {
         public flags: NodeFlags;
         public parent: Node;
         private _children: Node[];
+
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            this.kind = kind;
+            this.pos = pos;
+            this.end = end;
+            this.flags = NodeFlags.None;
+            this.parent = undefined;
+        }
 
         public getSourceFile(): SourceFile {
             return getSourceFileOfNode(this);
@@ -773,6 +781,7 @@ namespace ts {
     class SourceFileObject extends NodeObject implements SourceFile {
         public _declarationBrand: any;
         public fileName: string;
+        public path: Path;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: number[];
@@ -792,6 +801,7 @@ namespace ts {
         public isDefaultLib: boolean;
         public hasNoDefaultLib: boolean;
         public externalModuleIndicator: Node; // The first node that causes this file to be an external module
+        public commonJsModuleIndicator: Node; // The first node that causes this file to be a CommonJS module
         public nodeCount: number;
         public identifierCount: number;
         public symbolCount: number;
@@ -803,6 +813,10 @@ namespace ts {
         public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
+
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            super(kind, pos, end)
+        }
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
             return updateSourceFile(this, newText, textChangeRange);
@@ -1017,7 +1031,7 @@ namespace ts {
 
         /*
          * LS host can optionally implement this method if it wants to be completely in charge of module name resolution.
-         * if implementation is omitted then language service will use built-in module resolution logic and get answers to 
+         * if implementation is omitted then language service will use built-in module resolution logic and get answers to
          * host specific questions using 'getScriptSnapshot'.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
@@ -1602,6 +1616,9 @@ namespace ts {
         public static typeAliasName = "type alias name";
         public static parameterName = "parameter name";
         public static docCommentTagName = "doc comment tag name";
+        public static jsxOpenTagName = "jsx open tag name";
+        public static jsxCloseTagName = "jsx close tag name";
+        public static jsxSelfClosingTagName = "jsx self closing tag name";
     }
 
     export const enum ClassificationType {
@@ -1623,6 +1640,9 @@ namespace ts {
         typeAliasName = 16,
         parameterName = 17,
         docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
     }
 
     /// Language Service
@@ -1699,15 +1719,17 @@ namespace ts {
     class HostCache {
         private fileNameToEntry: FileMap<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
+        private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
-            this.fileNameToEntry = createFileMap<HostFileInformation>(getCanonicalFileName);
+            this.currentDirectory = host.getCurrentDirectory();
+            this.fileNameToEntry = createFileMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             let rootFileNames = host.getScriptFileNames();
             for (let fileName of rootFileNames) {
-                this.createEntry(fileName);
+                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
 
             // store the compilation settings
@@ -1718,7 +1740,7 @@ namespace ts {
             return this._compilationSettings;
         }
 
-        private createEntry(fileName: string) {
+        private createEntry(fileName: string, path: Path) {
             let entry: HostFileInformation;
             let scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
@@ -1729,30 +1751,31 @@ namespace ts {
                 };
             }
 
-            this.fileNameToEntry.set(fileName, entry);
+            this.fileNameToEntry.set(path, entry);
             return entry;
         }
 
-        private getEntry(fileName: string): HostFileInformation {
-            return this.fileNameToEntry.get(fileName);
+        private getEntry(path: Path): HostFileInformation {
+            return this.fileNameToEntry.get(path);
         }
 
-        private contains(fileName: string): boolean {
-            return this.fileNameToEntry.contains(fileName);
+        private contains(path: Path): boolean {
+            return this.fileNameToEntry.contains(path);
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
-            if (this.contains(fileName)) {
-                return this.getEntry(fileName);
+            let path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName)
+            if (this.contains(path)) {
+                return this.getEntry(path);
             }
 
-            return this.createEntry(fileName);
+            return this.createEntry(fileName, path);
         }
 
         public getRootFileNames(): string[] {
             let fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue(value => {
+            this.fileNameToEntry.forEachValue((path, value) => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1761,13 +1784,13 @@ namespace ts {
             return fileNames;
         }
 
-        public getVersion(fileName: string): string {
-            let file = this.getEntry(fileName);
+        public getVersion(path: Path): string {
+            let file = this.getEntry(path);
             return file && file.version;
         }
 
-        public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            let file = this.getEntry(fileName);
+        public getScriptSnapshot(path: Path): IScriptSnapshot {
+            let file = this.getEntry(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1842,7 +1865,7 @@ namespace ts {
      * - allowNonTsExtensions = true
      * - noLib = true
      * - noResolve = true
-     */    
+     */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
         let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
@@ -1882,7 +1905,7 @@ namespace ts {
                     sourceMapText = text;
                 }
                 else {
-                    Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                    Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
                     outputText = text;
                 }
             },
@@ -1997,21 +2020,21 @@ namespace ts {
     }
 
 
-    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean): DocumentRegistry {
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
         let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
-            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx;
+            return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx + +"|" + settings.allowJs;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
             let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
-                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>(getCanonicalFileName);
+                buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
             }
             return bucket;
         }
@@ -2020,14 +2043,13 @@ namespace ts {
             let bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
                 let entries = lookUp(buckets, name);
                 let sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
-                for (let i in entries) {
-                    let entry = entries.get(i);
+                entries.forEachValue((key, entry) => {
                     sourceFiles.push({
-                        name: i,
+                        name: key,
                         refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
-                }
+                });
                 sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
                     bucket: name,
@@ -2053,7 +2075,8 @@ namespace ts {
             acquiring: boolean): SourceFile {
 
             let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            let entry = bucket.get(fileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            let entry = bucket.get(path);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
@@ -2065,7 +2088,7 @@ namespace ts {
                     languageServiceRefCount: 0,
                     owners: []
                 };
-                bucket.set(fileName, entry);
+                bucket.set(path, entry);
             }
             else {
                 // We have an entry for this file.  However, it may be for a different version of
@@ -2093,12 +2116,14 @@ namespace ts {
             let bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket !== undefined);
 
-            let entry = bucket.get(fileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
+
+            let entry = bucket.get(path);
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.remove(fileName);
+                bucket.remove(path);
             }
         }
 
@@ -2110,7 +2135,7 @@ namespace ts {
         };
     }
 
-    export function preProcessFile(sourceText: string, readImportFiles = true): PreProcessedFileInfo {
+    export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         let referencedFiles: FileReference[] = [];
         let importedFiles: FileReference[] = [];
         let ambientExternalModules: string[];
@@ -2148,9 +2173,225 @@ namespace ts {
             });
         }
 
-        function processImport(): void {
+        /**
+         * Returns true if at least one token was consumed from the stream
+         */
+        function tryConsumeDeclare(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.DeclareKeyword) {
+                // declare module "mod"
+                token = scanner.scan();
+                if (token === SyntaxKind.ModuleKeyword) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.StringLiteral) {
+                        recordAmbientExternalModule();
+                    }
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /**
+         * Returns true if at least one token was consumed from the stream
+         */
+        function tryConsumeImport(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.ImportKeyword) {
+                token = scanner.scan();
+                if (token === SyntaxKind.StringLiteral) {
+                    // import "mod";
+                    recordModuleName();
+                    return true;
+                }
+                else {
+                    if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.FromKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.StringLiteral) {
+                                // import d from "mod";
+                                recordModuleName();
+                                return true;
+                            }
+                        }
+                        else if (token === SyntaxKind.EqualsToken) {
+                            if (tryConsumeRequireCall(/* skipCurrentToken */ true)) {
+                                return true;
+                            }
+                        }
+                        else if (token === SyntaxKind.CommaToken) {
+                            // consume comma and keep going
+                            token = scanner.scan();
+                        }
+                        else {
+                            // unknown syntax
+                            return true;
+                        }
+                    }
+
+                    if (token === SyntaxKind.OpenBraceToken) {
+                        token = scanner.scan();
+                        // consume "{ a as B, c, d as D}" clauses
+                        // make sure that it stops on EOF
+                        while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
+                            token = scanner.scan();
+                        }
+
+                        if (token === SyntaxKind.CloseBraceToken) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.FromKeyword) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.StringLiteral) {
+                                    // import {a as A} from "mod";
+                                    // import d, {a, b as B} from "mod"
+                                    recordModuleName();
+                                }
+                            }
+                        }
+                    }
+                    else if (token === SyntaxKind.AsteriskToken) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.AsKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                                token = scanner.scan();
+                                if (token === SyntaxKind.FromKeyword) {
+                                    token = scanner.scan();
+                                    if (token === SyntaxKind.StringLiteral) {
+                                        // import * as NS from "mod"
+                                        // import d, * as NS from "mod"
+                                        recordModuleName();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        function tryConsumeExport(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.ExportKeyword) {
+                token = scanner.scan();
+                if (token === SyntaxKind.OpenBraceToken) {
+                    token = scanner.scan();
+                    // consume "{ a as B, c, d as D}" clauses
+                    // make sure it stops on EOF
+                    while (token !== SyntaxKind.CloseBraceToken && token !== SyntaxKind.EndOfFileToken) {
+                        token = scanner.scan();
+                    }
+
+                    if (token === SyntaxKind.CloseBraceToken) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.FromKeyword) {
+                            token = scanner.scan();
+                            if (token === SyntaxKind.StringLiteral) {
+                                // export {a as A} from "mod";
+                                // export {a, b as B} from "mod"
+                                recordModuleName();
+                            }
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.AsteriskToken) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.FromKeyword) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.StringLiteral) {
+                            // export * from "mod"
+                            recordModuleName();
+                        }
+                    }
+                }
+                else if (token === SyntaxKind.ImportKeyword) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.Identifier || isKeyword(token)) {
+                        token = scanner.scan();
+                        if (token === SyntaxKind.EqualsToken) {
+                            if (tryConsumeRequireCall(/* skipCurrentToken */ true)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        function tryConsumeRequireCall(skipCurrentToken: boolean): boolean {
+            let token = skipCurrentToken ? scanner.scan() : scanner.getToken();
+            if (token === SyntaxKind.RequireKeyword) {
+                token = scanner.scan();
+                if (token === SyntaxKind.OpenParenToken) {
+                    token = scanner.scan();
+                    if (token === SyntaxKind.StringLiteral) {
+                        //  require("mod");
+                        recordModuleName();
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function tryConsumeDefine(): boolean {
+            let token = scanner.getToken();
+            if (token === SyntaxKind.Identifier && scanner.getTokenValue() === "define") {
+                token = scanner.scan();
+                if (token !== SyntaxKind.OpenParenToken) {
+                    return true;
+                }
+
+                token = scanner.scan();
+                if (token === SyntaxKind.StringLiteral) {
+                    // looks like define ("modname", ... - skip string literal and comma
+                    token = scanner.scan();
+                    if (token === SyntaxKind.CommaToken) {
+                        token = scanner.scan();
+                    }
+                    else {
+                        // unexpected token
+                        return true;
+                    }
+                }
+
+                // should be start of dependency list
+                if (token !== SyntaxKind.OpenBracketToken)  {
+                    return true;
+                }
+
+                // skip open bracket
+                token = scanner.scan();
+                let i = 0;
+                // scan until ']' or EOF
+                while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {
+                    // record string literals as module names
+                    if (token === SyntaxKind.StringLiteral) {
+                        recordModuleName();
+                        i++;
+                    }
+
+                    token = scanner.scan();
+                }
+                return true;
+
+            }
+            return false;
+        }
+
+        function processImports(): void {
             scanner.setText(sourceText);
-            let token = scanner.scan();
+            scanner.scan();
             // Look for:
             //    import "mod";
             //    import d from "mod"
@@ -2162,157 +2403,30 @@ namespace ts {
             //    export * from "mod"
             //    export {a as b} from "mod"
             //    export import i = require("mod")
+            //    (for JavaScript files) require("mod")
 
-            while (token !== SyntaxKind.EndOfFileToken) {
-                if (token === SyntaxKind.DeclareKeyword) {
-                    // declare module "mod"
-                    token = scanner.scan();
-                    if (token === SyntaxKind.ModuleKeyword) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.StringLiteral) {
-                            recordAmbientExternalModule();
-                            continue;
-                        }
-                    }
+            while (true) {
+                if (scanner.getToken() === SyntaxKind.EndOfFileToken) {
+                    break;
                 }
-                else if (token === SyntaxKind.ImportKeyword) {
-                    token = scanner.scan();
-                    if (token === SyntaxKind.StringLiteral) {
-                        // import "mod";
-                        recordModuleName();
-                        continue;
-                    }
-                    else {
-                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.FromKeyword) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.StringLiteral) {
-                                    // import d from "mod";
-                                    recordModuleName();
-                                    continue
-                                }
-                            }
-                            else if (token === SyntaxKind.EqualsToken) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.RequireKeyword) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.OpenParenToken) {
-                                        token = scanner.scan();
-                                        if (token === SyntaxKind.StringLiteral) {
-                                            //  import i = require("mod");
-                                            recordModuleName();
-                                            continue;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (token === SyntaxKind.CommaToken) {
-                                // consume comma and keep going
-                                token = scanner.scan();
-                            }
-                            else {
-                                // unknown syntax
-                                continue;
-                            }
-                        }
 
-                        if (token === SyntaxKind.OpenBraceToken) {
-                            token = scanner.scan();
-                            // consume "{ a as B, c, d as D}" clauses
-                            while (token !== SyntaxKind.CloseBraceToken) {
-                                token = scanner.scan();
-                            }
-
-                            if (token === SyntaxKind.CloseBraceToken) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.FromKeyword) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.StringLiteral) {
-                                        // import {a as A} from "mod";
-                                        // import d, {a, b as B} from "mod"
-                                        recordModuleName();
-                                    }
-                                }
-                            }
-                        }
-                        else if (token === SyntaxKind.AsteriskToken) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.AsKeyword) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.FromKeyword) {
-                                        token = scanner.scan();
-                                        if (token === SyntaxKind.StringLiteral) {
-                                            // import * as NS from "mod"
-                                            // import d, * as NS from "mod"
-                                            recordModuleName();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                // check if at least one of alternative have moved scanner forward
+                if (tryConsumeDeclare() ||
+                    tryConsumeImport() ||
+                    tryConsumeExport() ||
+                    (detectJavaScriptImports && (tryConsumeRequireCall(/* skipCurrentToken */ false) || tryConsumeDefine()))) {
+                    continue;
                 }
-                else if (token === SyntaxKind.ExportKeyword) {
-                    token = scanner.scan();
-                    if (token === SyntaxKind.OpenBraceToken) {
-                        token = scanner.scan();
-                        // consume "{ a as B, c, d as D}" clauses
-                        while (token !== SyntaxKind.CloseBraceToken) {
-                            token = scanner.scan();
-                        }
-
-                        if (token === SyntaxKind.CloseBraceToken) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.FromKeyword) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.StringLiteral) {
-                                    // export {a as A} from "mod";
-                                    // export {a, b as B} from "mod"
-                                    recordModuleName();
-                                }
-                            }
-                        }
-                    }
-                    else if (token === SyntaxKind.AsteriskToken) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.FromKeyword) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.StringLiteral) {
-                                // export * from "mod"
-                                recordModuleName();
-                            }
-                        }
-                    }
-                    else if (token === SyntaxKind.ImportKeyword) {
-                        token = scanner.scan();
-                        if (token === SyntaxKind.Identifier || isKeyword(token)) {
-                            token = scanner.scan();
-                            if (token === SyntaxKind.EqualsToken) {
-                                token = scanner.scan();
-                                if (token === SyntaxKind.RequireKeyword) {
-                                    token = scanner.scan();
-                                    if (token === SyntaxKind.OpenParenToken) {
-                                        token = scanner.scan();
-                                        if (token === SyntaxKind.StringLiteral) {
-                                            //  export import i = require("mod");
-                                            recordModuleName();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                else {
+                    scanner.scan();
                 }
-                token = scanner.scan();
             }
+
             scanner.setText(undefined);
         }
 
         if (readImportFiles) {
-            processImport();
+            processImports();
         }
         processTripleSlashDirectives();
         return { referencedFiles, importedFiles, isLibFile: isNoDefaultLib, ambientExternalModules };
@@ -2560,7 +2674,9 @@ namespace ts {
         }
     }
 
-    export function createLanguageService(host: LanguageServiceHost, documentRegistry: DocumentRegistry = createDocumentRegistry()): LanguageService {
+    export function createLanguageService(host: LanguageServiceHost,
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+
         let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
@@ -2569,6 +2685,7 @@ namespace ts {
         let useCaseSensitivefileNames = false;
         let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
+        let currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
@@ -2583,8 +2700,7 @@ namespace ts {
         let getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
-            fileName = normalizeSlashes(fileName);
-            let sourceFile = program.getSourceFile(getCanonicalFileName(fileName));
+            let sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
@@ -2634,7 +2750,8 @@ namespace ts {
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
                  oldSettings.noResolve !== newSettings.noResolve ||
-                 oldSettings.jsx !== newSettings.jsx);
+                 oldSettings.jsx !== newSettings.jsx || 
+                 oldSettings.allowJs !== newSettings.allowJs);
 
             // Now create a new compiler
             let compilerHost: CompilerHost = {
@@ -2645,11 +2762,11 @@ namespace ts {
                 getNewLine: () => getNewLineOrDefaultFromHost(host),
                 getDefaultLibFileName: (options) => host.getDefaultLibFileName(options),
                 writeFile: (fileName, data, writeByteOrderMark) => { },
-                getCurrentDirectory: () => host.getCurrentDirectory(),
-                fileExists: (fileName): boolean => { 
+                getCurrentDirectory: () => currentDirectory,
+                fileExists: (fileName): boolean => {
                     // stub missing host functionality
                     Debug.assert(!host.resolveModuleNames);
-                    return hostCache.getOrCreateEntry(fileName) !== undefined; 
+                    return hostCache.getOrCreateEntry(fileName) !== undefined;
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
@@ -2669,9 +2786,8 @@ namespace ts {
             if (program) {
                 let oldSourceFiles = program.getSourceFiles();
                 for (let oldSourceFile of oldSourceFiles) {
-                    let fileName = oldSourceFile.fileName;
-                    if (!newProgram.getSourceFile(fileName) || changesInCompilationSettingsAffectSyntax) {
-                        documentRegistry.releaseDocument(fileName, oldSettings);
+                    if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
+                        documentRegistry.releaseDocument(oldSourceFile.fileName, oldSettings);
                     }
                 }
             }
@@ -2736,7 +2852,11 @@ namespace ts {
             }
 
             function sourceFileUpToDate(sourceFile: SourceFile): boolean {
-                return sourceFile && sourceFile.version === hostCache.getVersion(sourceFile.fileName);
+                if (!sourceFile) {
+                    return false;
+                }
+                let path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
+                return sourceFile.version === hostCache.getVersion(path);
             }
 
             function programUpToDate(): boolean {
@@ -2796,13 +2916,6 @@ namespace ts {
 
             let targetSourceFile = getValidSourceFile(fileName);
 
-            // For JavaScript files, we don't want to report the normal typescript semantic errors.
-            // Instead, we just report errors for using TypeScript-only constructs from within a
-            // JavaScript file.
-            if (isJavaScript(fileName)) {
-                return getJavaScriptSemanticDiagnostics(targetSourceFile);
-            }
-
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
@@ -2814,163 +2927,6 @@ namespace ts {
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
             let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
-        }
-
-        function getJavaScriptSemanticDiagnostics(sourceFile: SourceFile): Diagnostic[] {
-            let diagnostics: Diagnostic[] = [];
-            walk(sourceFile);
-
-            return diagnostics;
-
-            function walk(node: Node): boolean {
-                if (!node) {
-                    return false;
-                }
-
-                switch (node.kind) {
-                    case SyntaxKind.ImportEqualsDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.ExportAssignment:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.ClassDeclaration:
-                        let classDeclaration = <ClassDeclaration>node;
-                        if (checkModifiers(classDeclaration.modifiers) ||
-                            checkTypeParameters(classDeclaration.typeParameters)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.HeritageClause:
-                        let heritageClause = <HeritageClause>node;
-                        if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.InterfaceDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.interface_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.ModuleDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.module_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.TypeAliasDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.type_aliases_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.FunctionDeclaration:
-                        let functionDeclaration = <FunctionLikeDeclaration>node;
-                        if (checkModifiers(functionDeclaration.modifiers) ||
-                            checkTypeParameters(functionDeclaration.typeParameters) ||
-                            checkTypeAnnotation(functionDeclaration.type)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.VariableStatement:
-                        let variableStatement = <VariableStatement>node;
-                        if (checkModifiers(variableStatement.modifiers)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.VariableDeclaration:
-                        let variableDeclaration = <VariableDeclaration>node;
-                        if (checkTypeAnnotation(variableDeclaration.type)) {
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.CallExpression:
-                    case SyntaxKind.NewExpression:
-                        let expression = <CallExpression>node;
-                        if (expression.typeArguments && expression.typeArguments.length > 0) {
-                            let start = expression.typeArguments.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, expression.typeArguments.end - start,
-                                Diagnostics.type_arguments_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.Parameter:
-                        let parameter = <ParameterDeclaration>node;
-                        if (parameter.modifiers) {
-                            let start = parameter.modifiers.pos;
-                            diagnostics.push(createFileDiagnostic(sourceFile, start, parameter.modifiers.end - start,
-                                Diagnostics.parameter_modifiers_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        if (parameter.questionToken) {
-                            diagnostics.push(createDiagnosticForNode(parameter.questionToken, Diagnostics._0_can_only_be_used_in_a_ts_file, '?'));
-                            return true;
-                        }
-                        if (parameter.type) {
-                            diagnostics.push(createDiagnosticForNode(parameter.type, Diagnostics.types_can_only_be_used_in_a_ts_file));
-                            return true;
-                        }
-                        break;
-                    case SyntaxKind.PropertyDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.EnumDeclaration:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.TypeAssertionExpression:
-                        let typeAssertionExpression = <TypeAssertion>node;
-                        diagnostics.push(createDiagnosticForNode(typeAssertionExpression.type, Diagnostics.type_assertion_expressions_can_only_be_used_in_a_ts_file));
-                        return true;
-                    case SyntaxKind.Decorator:
-                        diagnostics.push(createDiagnosticForNode(node, Diagnostics.decorators_can_only_be_used_in_a_ts_file));
-                        return true;
-                }
-
-                return forEachChild(node, walk);
-            }
-
-            function checkTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): boolean {
-                if (typeParameters) {
-                    let start = typeParameters.pos;
-                    diagnostics.push(createFileDiagnostic(sourceFile, start, typeParameters.end - start, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
-                    return true;
-                }
-                return false;
-            }
-
-            function checkTypeAnnotation(type: TypeNode): boolean {
-                if (type) {
-                    diagnostics.push(createDiagnosticForNode(type, Diagnostics.types_can_only_be_used_in_a_ts_file));
-                    return true;
-                }
-
-                return false;
-            }
-
-            function checkModifiers(modifiers: ModifiersArray): boolean {
-                if (modifiers) {
-                    for (let modifier of modifiers) {
-                        switch (modifier.kind) {
-                            case SyntaxKind.PublicKeyword:
-                            case SyntaxKind.PrivateKeyword:
-                            case SyntaxKind.ProtectedKeyword:
-                            case SyntaxKind.DeclareKeyword:
-                                diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
-                                return true;
-
-                            // These are all legal modifiers.
-                            case SyntaxKind.StaticKeyword:
-                            case SyntaxKind.ExportKeyword:
-                            case SyntaxKind.ConstKeyword:
-                            case SyntaxKind.DefaultKeyword:
-                            case SyntaxKind.AbstractKeyword:
-                        }
-                    }
-                }
-
-                return false;
-            }
         }
 
         function getCompilerOptionsDiagnostics() {
@@ -3038,7 +2994,7 @@ namespace ts {
             let typeChecker = program.getTypeChecker();
             let syntacticStart = new Date().getTime();
             let sourceFile = getValidSourceFile(fileName);
-            let isJavaScriptFile = isJavaScript(fileName);
+            let isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
             let isJsDocTagName = false;
 
@@ -3052,7 +3008,7 @@ namespace ts {
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
-                // The current position is next to the '@' sign, when no tag name being provided yet. 
+                // The current position is next to the '@' sign, when no tag name being provided yet.
                 // Provide a full list of tag names
                 if (hasDocComment(sourceFile, position) && sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
                     isJsDocTagName = true;
@@ -3085,7 +3041,7 @@ namespace ts {
                 }
 
                 if (!insideJsDocTagExpression) {
-                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal 
+                    // Proceed if the current position is in jsDoc tag expression; otherwise it is a normal
                     // comment or the plain text part of a jsDoc comment, so no completion should be available
                     log("Returning an empty list because completion was inside a regular comment or plain text part of a JsDoc comment.");
                     return undefined;
@@ -3420,6 +3376,7 @@ namespace ts {
 
             function isInStringOrRegularExpressionOrTemplateLiteral(contextToken: Node): boolean {
                 if (contextToken.kind === SyntaxKind.StringLiteral
+                    || contextToken.kind === SyntaxKind.StringLiteralType
                     || contextToken.kind === SyntaxKind.RegularExpressionLiteral
                     || isTemplateLiteralKind(contextToken.kind)) {
                     let start = contextToken.getStart();
@@ -3606,8 +3563,8 @@ namespace ts {
 
                         case SyntaxKind.CloseBraceToken:
                             if (parent &&
-                                parent.kind === SyntaxKind.JsxExpression && 
-                                parent.parent && 
+                                parent.kind === SyntaxKind.JsxExpression &&
+                                parent.parent &&
                                 (parent.parent.kind === SyntaxKind.JsxAttribute)) {
                                 return <JsxOpeningLikeElement>parent.parent.parent;
                             }
@@ -3656,7 +3613,7 @@ namespace ts {
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
                             containingNodeKind === SyntaxKind.ArrayBindingPattern ||                    // var [x, y|
                             containingNodeKind === SyntaxKind.TypeAliasDeclaration;                     // type Map, K, |
-                                                                                                          
+
                     case SyntaxKind.DotToken:
                         return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [.|
 
@@ -3810,7 +3767,10 @@ namespace ts {
                     let existingName: string;
 
                     if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
-                        existingName = (<BindingElement>m).propertyName.text;
+                        // include only identifiers in completion list
+                        if ((<BindingElement>m).propertyName.kind === SyntaxKind.Identifier) {
+                            existingName = (<Identifier>(<BindingElement>m).propertyName).text
+                        }
                     }
                     else {
                         // TODO(jfreeman): Account for computed property name
@@ -3859,22 +3819,25 @@ namespace ts {
 
             let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
 
-            let entries: CompletionEntry[];
             if (isJsDocTagName) {
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
             }
 
-            if (isRightOfDot && isJavaScript(fileName)) {
-                entries = getCompletionEntriesFromSymbols(symbols);
-                addRange(entries, getJavaScriptCompletionEntries());
+            let sourceFile = getValidSourceFile(fileName);
+
+            let entries: CompletionEntry[] = [];
+
+            if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
+                const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
+                addRange(entries, getJavaScriptCompletionEntries(sourceFile, uniqueNames));
             }
             else {
                 if (!symbols || symbols.length === 0) {
                     return undefined;
                 }
 
-                entries = getCompletionEntriesFromSymbols(symbols);
+                getCompletionEntriesFromSymbols(symbols, entries);
             }
 
             // Add keywords if this is not a member completion list
@@ -3884,26 +3847,23 @@ namespace ts {
 
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
-            function getJavaScriptCompletionEntries(): CompletionEntry[] {
+            function getJavaScriptCompletionEntries(sourceFile: SourceFile, uniqueNames: Map<string>): CompletionEntry[] {
                 let entries: CompletionEntry[] = [];
-                let allNames: Map<string> = {};
                 let target = program.getCompilerOptions().target;
 
-                for (let sourceFile of program.getSourceFiles()) {
-                    let nameTable = getNameTable(sourceFile);
-                    for (let name in nameTable) {
-                        if (!allNames[name]) {
-                            allNames[name] = name;
-                            let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
-                            if (displayName) {
-                                let entry = {
-                                    name: displayName,
-                                    kind: ScriptElementKind.warning,
-                                    kindModifiers: "",
-                                    sortText: "1"
-                                };
-                                entries.push(entry);
-                            }
+                let nameTable = getNameTable(sourceFile);
+                for (let name in nameTable) {
+                    if (!uniqueNames[name]) {
+                        uniqueNames[name] = name;
+                        let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
+                        if (displayName) {
+                            let entry = {
+                                name: displayName,
+                                kind: ScriptElementKind.warning,
+                                kindModifiers: "",
+                                sortText: "1"
+                            };
+                            entries.push(entry);
                         }
                     }
                 }
@@ -3947,26 +3907,24 @@ namespace ts {
                 };
             }
 
-            function getCompletionEntriesFromSymbols(symbols: Symbol[]): CompletionEntry[] {
+            function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<string> {
                 let start = new Date().getTime();
-                let entries: CompletionEntry[] = [];
-
+                let uniqueNames: Map<string> = {};
                 if (symbols) {
-                    let nameToSymbol: Map<Symbol> = {};
                     for (let symbol of symbols) {
                         let entry = createCompletionEntry(symbol, location);
                         if (entry) {
                             let id = escapeIdentifier(entry.name);
-                            if (!lookUp(nameToSymbol, id)) {
+                            if (!lookUp(uniqueNames, id)) {
                                 entries.push(entry);
-                                nameToSymbol[id] = symbol;
+                                uniqueNames[id] = id;
                             }
                         }
                     }
                 }
 
                 log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (new Date().getTime() - start));
-                return entries;
+                return uniqueNames;
             }
         }
 
@@ -4294,28 +4252,31 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let container = getContainingFunction(location);
-                    if (container) {
-                        let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                        let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
-                        if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
-                            displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                    let declaration = <Node>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
+                    Debug.assert(declaration !== undefined);
+                    declaration = declaration.parent;
+
+                    if (declaration) {
+                        if (isFunctionLikeKind(declaration.kind)) {
+                            const signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
+                            if (declaration.kind === SyntaxKind.ConstructSignature) {
+                                displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                displayParts.push(spacePart());
+                            }
+                            else if (declaration.kind !== SyntaxKind.CallSignature && (<SignatureDeclaration>declaration).name) {
+                                addFullSymbolName(declaration.symbol);
+                            }
+                            addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                        }
+                        else {
+                            // Type alias type parameter
+                            // For example
+                            //      type list<T> = T[];  // Both T will go through same code path
+                            displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                             displayParts.push(spacePart());
+                            addFullSymbolName(declaration.symbol);
+                            writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                         }
-                        else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
-                            addFullSymbolName(signatureDeclaration.symbol);
-                        }
-                        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
-                    }
-                    else {
-                        // Type  aliash type parameter
-                        // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
-                        let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                        displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
-                        displayParts.push(spacePart());
-                        addFullSymbolName(declaration.symbol);
-                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
                 }
             }
@@ -4488,6 +4449,7 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.QualifiedName:
                     case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.ThisType:
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
                         let type = typeChecker.getTypeAtLocation(node);
@@ -4759,6 +4721,7 @@ namespace ts {
             function getSemanticDocumentHighlights(node: Node): DocumentHighlights[] {
                 if (node.kind === SyntaxKind.Identifier ||
                     node.kind === SyntaxKind.ThisKeyword ||
+                    node.kind === SyntaxKind.ThisType ||
                     node.kind === SyntaxKind.SuperKeyword ||
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
@@ -4890,7 +4853,7 @@ namespace ts {
                                 }
                                 break;
                             default:
-                                if (isModifier(node.kind) && node.parent &&
+                                if (isModifierKind(node.kind) && node.parent &&
                                     (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
                                     return getModifierOccurrences(node.kind, node.parent);
                                 }
@@ -4933,7 +4896,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 /**
@@ -4980,7 +4943,7 @@ namespace ts {
                         else if (!isFunctionLike(node)) {
                             forEachChild(node, aggregate);
                         }
-                    };
+                    }
                 }
 
                 function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
@@ -5454,7 +5417,7 @@ namespace ts {
                 }
             }
 
-            if (node.kind === SyntaxKind.ThisKeyword) {
+            if (node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.ThisType) {
                 return getReferencesForThisKeyword(node, sourceFiles);
             }
 
@@ -5936,7 +5899,7 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
 
                         let node = getTouchingWord(sourceFile, position);
-                        if (!node || node.kind !== SyntaxKind.ThisKeyword) {
+                        if (!node || (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.ThisType)) {
                             return;
                         }
 
@@ -6289,8 +6252,6 @@ namespace ts {
             }
 
             return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-
-            Debug.fail("Unknown declaration type");
         }
 
         function isTypeReference(node: Node): boolean {
@@ -6300,7 +6261,8 @@ namespace ts {
 
             return node.parent.kind === SyntaxKind.TypeReference ||
                 (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-                node.kind === SyntaxKind.ThisKeyword && !isExpression(node);
+                (node.kind === SyntaxKind.ThisKeyword && !isExpression(node)) ||
+                node.kind === SyntaxKind.ThisType;
         }
 
         function isNamespaceReference(node: Node): boolean {
@@ -6415,11 +6377,13 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                 case SyntaxKind.Identifier:
                     break;
 
@@ -6467,7 +6431,7 @@ namespace ts {
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
             let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return NavigationBar.getNavigationBarItems(sourceFile);
+            return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
         }
 
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
@@ -6605,6 +6569,9 @@ namespace ts {
                 case ClassificationType.typeAliasName: return ClassificationTypeNames.typeAliasName;
                 case ClassificationType.parameterName: return ClassificationTypeNames.parameterName;
                 case ClassificationType.docCommentTagName: return ClassificationTypeNames.docCommentTagName;
+                case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
+                case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
+                case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
             }
         }
 
@@ -6872,7 +6839,7 @@ namespace ts {
                 else if (tokenKind === SyntaxKind.NumericLiteral) {
                     return ClassificationType.numericLiteral;
                 }
-                else if (tokenKind === SyntaxKind.StringLiteral) {
+                else if (tokenKind === SyntaxKind.StringLiteral || tokenKind === SyntaxKind.StringLiteralType) {
                     return ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
@@ -6917,6 +6884,23 @@ namespace ts {
                                 }
                                 return;
 
+                            case SyntaxKind.JsxOpeningElement:
+                                if ((<JsxOpeningElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxOpenTagName;
+                                }
+                                return;
+
+                            case SyntaxKind.JsxClosingElement:
+                                if ((<JsxClosingElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxCloseTagName;
+                                }
+                                return;
+
+                            case SyntaxKind.JsxSelfClosingElement:
+                                if ((<JsxSelfClosingElement>token.parent).tagName === token) {
+                                    return ClassificationType.jsxSelfClosingTagName;
+                                }
+                                return;
                         }
                     }
 
@@ -7774,7 +7758,7 @@ namespace ts {
                 addResult(start, end, classFromKind(token));
 
                 if (end >= text.length) {
-                    if (token === SyntaxKind.StringLiteral) {
+                    if (token === SyntaxKind.StringLiteral || token === SyntaxKind.StringLiteralType) {
                         // Check to see if we finished up on a multiline string literal.
                         let tokenText = scanner.getTokenText();
                         if (scanner.isUnterminated()) {
@@ -7924,6 +7908,7 @@ namespace ts {
                 case SyntaxKind.NumericLiteral:
                     return ClassificationType.numericLiteral;
                 case SyntaxKind.StringLiteral:
+                case SyntaxKind.StringLiteralType:
                     return ClassificationType.stringLiteral;
                 case SyntaxKind.RegularExpressionLiteral:
                     return ClassificationType.regularExpressionLiteral;
@@ -7968,18 +7953,8 @@ namespace ts {
 
     function initializeServices() {
         objectAllocator = {
-            getNodeConstructor: kind => {
-                function Node(pos: number, end: number) {
-                    this.pos = pos;
-                    this.end = end;
-                    this.flags = NodeFlags.None;
-                    this.parent = undefined;
-                }
-                let proto = kind === SyntaxKind.SourceFile ? new SourceFileObject() : new NodeObject();
-                proto.kind = kind;
-                Node.prototype = proto;
-                return <any>Node;
-            },
+            getNodeConstructor: () => NodeObject,
+            getSourceFileConstructor: () => SourceFileObject,
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,

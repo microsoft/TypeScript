@@ -1,4 +1,5 @@
 //// [downlevelLetConst18.ts]
+
 'use strict'
 
 for (let x; ;) {
@@ -6,7 +7,7 @@ for (let x; ;) {
 }
 
 for (let x; ;) {
-    function foo() { x };
+    function foo1() { x };
 }
 
 for (let x; ;) {
@@ -40,7 +41,7 @@ for (var x = void 0;;) {
     _loop_1(x);
 }
 var _loop_2 = function(x) {
-    function foo() { x; }
+    function foo1() { x; }
     ;
 };
 for (var x = void 0;;) {
