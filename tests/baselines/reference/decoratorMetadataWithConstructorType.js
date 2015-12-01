@@ -18,6 +18,7 @@ export class B {
 
 
 //// [decoratorMetadataWithConstructorType.js]
+"use strict";
 var A = (function () {
     function A() {
         console.log('new A');

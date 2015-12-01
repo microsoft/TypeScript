@@ -2,7 +2,7 @@
 
 // Assignments to 'exports.p' define a property 'p' even if they're not at top-level
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: myMod.js
 //// if (true) {
 ////     exports.b = true;

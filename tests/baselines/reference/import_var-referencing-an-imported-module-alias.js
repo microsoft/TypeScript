@@ -12,6 +12,7 @@ var v = new hostVar.Host();
 
 //// [host.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Host = (function () {
         function Host() {
         }
@@ -21,6 +22,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [consumer.js]
 define(["require", "exports", "host"], function (require, exports, host) {
+    "use strict";
     var hostVar = host;
     var v = new hostVar.Host();
 });

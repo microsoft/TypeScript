@@ -1,0 +1,92 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts ===
+
+type T = "" | "foo";
+>T : "" | "foo"
+
+let x: T = "";
+>x : "" | "foo"
+>T : "" | "foo"
+>"" : ""
+
+let y: T = "foo";
+>y : "" | "foo"
+>T : "" | "foo"
+>"foo" : "foo"
+
+if (x === "") {
+>x === "" : boolean
+>x : "" | "foo"
+>"" : string
+
+    let a = x;
+>a : "" | "foo"
+>x : "" | "foo"
+}
+
+if (x !== "") {
+>x !== "" : boolean
+>x : "" | "foo"
+>"" : string
+
+    let b = x;
+>b : "" | "foo"
+>x : "" | "foo"
+}
+
+if (x == "") {
+>x == "" : boolean
+>x : "" | "foo"
+>"" : string
+
+    let c = x;
+>c : "" | "foo"
+>x : "" | "foo"
+}
+
+if (x != "") {
+>x != "" : boolean
+>x : "" | "foo"
+>"" : string
+
+    let d = x;
+>d : "" | "foo"
+>x : "" | "foo"
+}
+
+if (x) {
+>x : "" | "foo"
+
+    let e = x;
+>e : "" | "foo"
+>x : "" | "foo"
+}
+
+if (!x) {
+>!x : boolean
+>x : "" | "foo"
+
+    let f = x;
+>f : "" | "foo"
+>x : "" | "foo"
+}
+
+if (!!x) {
+>!!x : boolean
+>!x : boolean
+>x : "" | "foo"
+
+    let g = x;
+>g : "" | "foo"
+>x : "" | "foo"
+}
+
+if (!!!x) {
+>!!!x : boolean
+>!!x : boolean
+>!x : boolean
+>x : "" | "foo"
+
+    let h = x;
+>h : "" | "foo"
+>x : "" | "foo"
+}

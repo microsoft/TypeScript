@@ -346,6 +346,7 @@ export var tests: TestRunner = (function () {
 })();
 
 //// [duplicateLocalVariable1.js]
+"use strict";
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";

@@ -172,7 +172,6 @@ namespace Harness.SourceMapRecoder {
                     return { error: errorDecodeOfEncodedMapping, sourceMapSpan: decodeOfEncodedMapping };
                 }
                 // 5. Check if there is name:
-                decodeOfEncodedMapping.nameIndex = -1;
                 if (!isSourceMappingSegmentEnd()) {
                     prevNameIndex += base64VLQFormatDecode();
                     decodeOfEncodedMapping.nameIndex = prevNameIndex;
@@ -190,7 +189,7 @@ namespace Harness.SourceMapRecoder {
                 return { error: errorDecodeOfEncodedMapping, sourceMapSpan: decodeOfEncodedMapping };
             }
 
-            createErrorIfCondition(true, "No encoded entry found");
+            createErrorIfCondition(/*condition*/ true, "No encoded entry found");
         }
 
         export function hasCompletedDecoding() {
@@ -249,7 +248,7 @@ namespace Harness.SourceMapRecoder {
                 mapString += " name (" + sourceMapNames[mapEntry.nameIndex] + ")";
             }
             else {
-                if (mapEntry.nameIndex !== -1 || getAbsentNameIndex) {
+                if ((mapEntry.nameIndex && mapEntry.nameIndex !== -1) || getAbsentNameIndex) {
                     mapString += " nameIndex (" + mapEntry.nameIndex + ")";
                 }
             }

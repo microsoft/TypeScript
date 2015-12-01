@@ -21,7 +21,7 @@ sourceFile:es5-souremap-amd.ts
 1->class A
   >{
   >    
-1->Emitted(2, 5) Source(4, 5) + SourceIndex(0) name (A)
+1->Emitted(2, 5) Source(4, 5) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -32,8 +32,8 @@ sourceFile:es5-souremap-amd.ts
   >
   >    
 2 >    }
-1->Emitted(3, 5) Source(7, 5) + SourceIndex(0) name (A.constructor)
-2 >Emitted(3, 6) Source(7, 6) + SourceIndex(0) name (A.constructor)
+1->Emitted(3, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(3, 6) Source(7, 6) + SourceIndex(0)
 ---
 >>>    A.prototype.B = function () {
 1->^^^^
@@ -44,9 +44,9 @@ sourceFile:es5-souremap-amd.ts
   >    public 
 2 >    B
 3 >                 
-1->Emitted(4, 5) Source(9, 12) + SourceIndex(0) name (A)
-2 >Emitted(4, 18) Source(9, 13) + SourceIndex(0) name (A)
-3 >Emitted(4, 21) Source(9, 5) + SourceIndex(0) name (A)
+1->Emitted(4, 5) Source(9, 12) + SourceIndex(0)
+2 >Emitted(4, 18) Source(9, 13) + SourceIndex(0)
+3 >Emitted(4, 21) Source(9, 5) + SourceIndex(0)
 ---
 >>>        return 42;
 1 >^^^^^^^^
@@ -61,11 +61,11 @@ sourceFile:es5-souremap-amd.ts
 3 >               
 4 >               42
 5 >                 ;
-1 >Emitted(5, 9) Source(11, 9) + SourceIndex(0) name (A.B)
-2 >Emitted(5, 15) Source(11, 15) + SourceIndex(0) name (A.B)
-3 >Emitted(5, 16) Source(11, 16) + SourceIndex(0) name (A.B)
-4 >Emitted(5, 18) Source(11, 18) + SourceIndex(0) name (A.B)
-5 >Emitted(5, 19) Source(11, 19) + SourceIndex(0) name (A.B)
+1 >Emitted(5, 9) Source(11, 9) + SourceIndex(0)
+2 >Emitted(5, 15) Source(11, 15) + SourceIndex(0)
+3 >Emitted(5, 16) Source(11, 16) + SourceIndex(0)
+4 >Emitted(5, 18) Source(11, 18) + SourceIndex(0)
+5 >Emitted(5, 19) Source(11, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -74,8 +74,8 @@ sourceFile:es5-souremap-amd.ts
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(12, 5) + SourceIndex(0) name (A.B)
-2 >Emitted(6, 6) Source(12, 6) + SourceIndex(0) name (A.B)
+1 >Emitted(6, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(12, 6) + SourceIndex(0)
 ---
 >>>    return A;
 1->^^^^
@@ -83,8 +83,8 @@ sourceFile:es5-souremap-amd.ts
 1->
   >
 2 >    }
-1->Emitted(7, 5) Source(13, 1) + SourceIndex(0) name (A)
-2 >Emitted(7, 13) Source(13, 2) + SourceIndex(0) name (A)
+1->Emitted(7, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(7, 13) Source(13, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -107,8 +107,8 @@ sourceFile:es5-souremap-amd.ts
   >         return 42;
   >     }
   > }
-1 >Emitted(8, 1) Source(13, 1) + SourceIndex(0) name (A)
-2 >Emitted(8, 2) Source(13, 2) + SourceIndex(0) name (A)
+1 >Emitted(8, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(8, 2) Source(13, 2) + SourceIndex(0)
 3 >Emitted(8, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(8, 6) Source(13, 2) + SourceIndex(0)
 ---

@@ -7,6 +7,7 @@ export default class C {
 }
 
 //// [multipleDefaultExports03.js]
+"use strict";
 var C = (function () {
     function C() {
     }

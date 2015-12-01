@@ -20,6 +20,7 @@ export module ImportingModule {
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var elaborate;
     (function (elaborate) {
         var nested;
@@ -43,6 +44,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var ImportingModule;
     (function (ImportingModule) {
         var UsesReferredType = (function () {

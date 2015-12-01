@@ -26,6 +26,7 @@ export class Test {
 
 //// [interfaceImplementation6.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C1 = (function () {
         function C1() {
         }

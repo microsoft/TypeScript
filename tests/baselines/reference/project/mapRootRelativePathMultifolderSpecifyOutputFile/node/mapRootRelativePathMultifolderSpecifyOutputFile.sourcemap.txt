@@ -40,7 +40,7 @@ sourceFile:../projects/outputdir_multifolder/ref/m1.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (m1_c1)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -50,16 +50,16 @@ sourceFile:../projects/outputdir_multifolder/ref/m1.ts
   >    public m1_c1_p1: number;
   >
 2 >    }
-1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
-2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (m1_c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>    return m1_c1;
 1->^^^^
 2 >    ^^^^^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0) name (m1_c1)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -73,8 +73,8 @@ sourceFile:../projects/outputdir_multifolder/ref/m1.ts
 4 > class m1_c1 {
   >     public m1_c1_p1: number;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (m1_c1)
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
 ---
@@ -125,11 +125,11 @@ sourceFile:../projects/outputdir_multifolder/ref/m1.ts
 3 >           
 4 >           m1_instance1
 5 >                       ;
-1->Emitted(9, 5) Source(8, 5) + SourceIndex(0) name (m1_f1)
-2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0) name (m1_f1)
-3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0) name (m1_f1)
-4 >Emitted(9, 24) Source(8, 24) + SourceIndex(0) name (m1_f1)
-5 >Emitted(9, 25) Source(8, 25) + SourceIndex(0) name (m1_f1)
+1->Emitted(9, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0)
+4 >Emitted(9, 24) Source(8, 24) + SourceIndex(0)
+5 >Emitted(9, 25) Source(8, 25) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -138,8 +138,8 @@ sourceFile:../projects/outputdir_multifolder/ref/m1.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0) name (m1_f1)
-2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0) name (m1_f1)
+1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:bin/test.js
@@ -177,7 +177,7 @@ sourceFile:../projects/outputdir_multifolder_ref/m2.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(13, 5) Source(2, 1) + SourceIndex(1) name (m2_c1)
+1->Emitted(13, 5) Source(2, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
@@ -187,16 +187,16 @@ sourceFile:../projects/outputdir_multifolder_ref/m2.ts
   >    public m2_c1_p1: number;
   >
 2 >    }
-1->Emitted(14, 5) Source(4, 1) + SourceIndex(1) name (m2_c1.constructor)
-2 >Emitted(14, 6) Source(4, 2) + SourceIndex(1) name (m2_c1.constructor)
+1->Emitted(14, 5) Source(4, 1) + SourceIndex(1)
+2 >Emitted(14, 6) Source(4, 2) + SourceIndex(1)
 ---
 >>>    return m2_c1;
 1->^^^^
 2 >    ^^^^^^^^^^^^
 1->
 2 >    }
-1->Emitted(15, 5) Source(4, 1) + SourceIndex(1) name (m2_c1)
-2 >Emitted(15, 17) Source(4, 2) + SourceIndex(1) name (m2_c1)
+1->Emitted(15, 5) Source(4, 1) + SourceIndex(1)
+2 >Emitted(15, 17) Source(4, 2) + SourceIndex(1)
 ---
 >>>})();
 1 >
@@ -210,8 +210,8 @@ sourceFile:../projects/outputdir_multifolder_ref/m2.ts
 4 > class m2_c1 {
   >     public m2_c1_p1: number;
   > }
-1 >Emitted(16, 1) Source(4, 1) + SourceIndex(1) name (m2_c1)
-2 >Emitted(16, 2) Source(4, 2) + SourceIndex(1) name (m2_c1)
+1 >Emitted(16, 1) Source(4, 1) + SourceIndex(1)
+2 >Emitted(16, 2) Source(4, 2) + SourceIndex(1)
 3 >Emitted(16, 2) Source(2, 1) + SourceIndex(1)
 4 >Emitted(16, 6) Source(4, 2) + SourceIndex(1)
 ---
@@ -262,11 +262,11 @@ sourceFile:../projects/outputdir_multifolder_ref/m2.ts
 3 >           
 4 >           m2_instance1
 5 >                       ;
-1->Emitted(19, 5) Source(8, 5) + SourceIndex(1) name (m2_f1)
-2 >Emitted(19, 11) Source(8, 11) + SourceIndex(1) name (m2_f1)
-3 >Emitted(19, 12) Source(8, 12) + SourceIndex(1) name (m2_f1)
-4 >Emitted(19, 24) Source(8, 24) + SourceIndex(1) name (m2_f1)
-5 >Emitted(19, 25) Source(8, 25) + SourceIndex(1) name (m2_f1)
+1->Emitted(19, 5) Source(8, 5) + SourceIndex(1)
+2 >Emitted(19, 11) Source(8, 11) + SourceIndex(1)
+3 >Emitted(19, 12) Source(8, 12) + SourceIndex(1)
+4 >Emitted(19, 24) Source(8, 24) + SourceIndex(1)
+5 >Emitted(19, 25) Source(8, 25) + SourceIndex(1)
 ---
 >>>}
 1 >
@@ -275,8 +275,8 @@ sourceFile:../projects/outputdir_multifolder_ref/m2.ts
 1 >
   >
 2 >}
-1 >Emitted(20, 1) Source(9, 1) + SourceIndex(1) name (m2_f1)
-2 >Emitted(20, 2) Source(9, 2) + SourceIndex(1) name (m2_f1)
+1 >Emitted(20, 1) Source(9, 1) + SourceIndex(1)
+2 >Emitted(20, 2) Source(9, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:bin/test.js
@@ -333,7 +333,7 @@ sourceFile:../projects/outputdir_multifolder/test.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(25, 5) Source(4, 1) + SourceIndex(2) name (c1)
+1->Emitted(25, 5) Source(4, 1) + SourceIndex(2)
 ---
 >>>    }
 1->^^^^
@@ -343,16 +343,16 @@ sourceFile:../projects/outputdir_multifolder/test.ts
   >    public p1: number;
   >
 2 >    }
-1->Emitted(26, 5) Source(6, 1) + SourceIndex(2) name (c1.constructor)
-2 >Emitted(26, 6) Source(6, 2) + SourceIndex(2) name (c1.constructor)
+1->Emitted(26, 5) Source(6, 1) + SourceIndex(2)
+2 >Emitted(26, 6) Source(6, 2) + SourceIndex(2)
 ---
 >>>    return c1;
 1->^^^^
 2 >    ^^^^^^^^^
 1->
 2 >    }
-1->Emitted(27, 5) Source(6, 1) + SourceIndex(2) name (c1)
-2 >Emitted(27, 14) Source(6, 2) + SourceIndex(2) name (c1)
+1->Emitted(27, 5) Source(6, 1) + SourceIndex(2)
+2 >Emitted(27, 14) Source(6, 2) + SourceIndex(2)
 ---
 >>>})();
 1 >
@@ -366,8 +366,8 @@ sourceFile:../projects/outputdir_multifolder/test.ts
 4 > class c1 {
   >     public p1: number;
   > }
-1 >Emitted(28, 1) Source(6, 1) + SourceIndex(2) name (c1)
-2 >Emitted(28, 2) Source(6, 2) + SourceIndex(2) name (c1)
+1 >Emitted(28, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(28, 2) Source(6, 2) + SourceIndex(2)
 3 >Emitted(28, 2) Source(4, 1) + SourceIndex(2)
 4 >Emitted(28, 6) Source(6, 2) + SourceIndex(2)
 ---
@@ -418,11 +418,11 @@ sourceFile:../projects/outputdir_multifolder/test.ts
 3 >           
 4 >           instance1
 5 >                    ;
-1->Emitted(31, 5) Source(10, 5) + SourceIndex(2) name (f1)
-2 >Emitted(31, 11) Source(10, 11) + SourceIndex(2) name (f1)
-3 >Emitted(31, 12) Source(10, 12) + SourceIndex(2) name (f1)
-4 >Emitted(31, 21) Source(10, 21) + SourceIndex(2) name (f1)
-5 >Emitted(31, 22) Source(10, 22) + SourceIndex(2) name (f1)
+1->Emitted(31, 5) Source(10, 5) + SourceIndex(2)
+2 >Emitted(31, 11) Source(10, 11) + SourceIndex(2)
+3 >Emitted(31, 12) Source(10, 12) + SourceIndex(2)
+4 >Emitted(31, 21) Source(10, 21) + SourceIndex(2)
+5 >Emitted(31, 22) Source(10, 22) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -431,7 +431,7 @@ sourceFile:../projects/outputdir_multifolder/test.ts
 1 >
   >
 2 >}
-1 >Emitted(32, 1) Source(11, 1) + SourceIndex(2) name (f1)
-2 >Emitted(32, 2) Source(11, 2) + SourceIndex(2) name (f1)
+1 >Emitted(32, 1) Source(11, 1) + SourceIndex(2)
+2 >Emitted(32, 2) Source(11, 2) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=../../../mapFiles/test.js.map

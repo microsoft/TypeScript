@@ -12,8 +12,10 @@ var v = A.V;
 
 //// [m1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [m2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var v = 100 /* V */;
 });

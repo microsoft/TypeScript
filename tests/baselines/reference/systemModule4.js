@@ -5,6 +5,7 @@ export var y;
 
 //// [systemModule4.js]
 System.register([], function(exports_1) {
+    "use strict";
     var x, y;
     return {
         setters:[],

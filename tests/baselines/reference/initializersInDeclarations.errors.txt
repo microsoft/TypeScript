@@ -1,13 +1,13 @@
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(5,9): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(6,16): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(7,16): error TS1183: An implementation cannot be declared in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(12,15): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(13,15): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(16,2): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/externalModules/initializersInDeclarations.ts(18,16): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(5,9): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(6,16): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(7,16): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(12,15): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(13,15): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(16,2): error TS1036: Statements are not allowed in ambient contexts.
+tests/cases/conformance/externalModules/file1.d.ts(18,16): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== tests/cases/conformance/externalModules/initializersInDeclarations.ts (7 errors) ====
+==== tests/cases/conformance/externalModules/file1.d.ts (7 errors) ====
     
     // Errors: Initializers & statements in declaration file
     

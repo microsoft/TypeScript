@@ -1,0 +1,8 @@
+=== tests/cases/compiler/computedPropertiesInDestructuring2.ts ===
+let foo2 = () => "bar";
+>foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring2.ts, 0, 3))
+
+let {[foo2()]: bar3} = {};
+>foo2 : Symbol(foo2, Decl(computedPropertiesInDestructuring2.ts, 0, 3))
+>bar3 : Symbol(bar3, Decl(computedPropertiesInDestructuring2.ts, 1, 5))
+

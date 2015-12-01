@@ -14,6 +14,7 @@ export module c {
 export var d = new c.b.c();
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.js]
+"use strict";
 var a;
 (function (a) {
     var b;

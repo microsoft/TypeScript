@@ -2,7 +2,7 @@
 
 // Invocations of 'require' stop top-level variables from becoming global
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 
 // @Filename: mod1.js
 //// var x = require('fs');

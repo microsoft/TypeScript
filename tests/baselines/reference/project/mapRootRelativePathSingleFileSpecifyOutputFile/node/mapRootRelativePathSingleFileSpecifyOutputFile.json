@@ -6,9 +6,9 @@
     ],
     "out": "bin/test.js",
     "sourceMap": true,
-    "mapRoot": "../mapFiles",
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "../mapFiles",
     "resolvedInputFiles": [
         "lib.d.ts",
         "test.ts"

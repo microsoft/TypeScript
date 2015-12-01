@@ -15,10 +15,12 @@ connect();
 
 //// [exportEqualCallable_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var server;
     return server;
 });
 //// [exportEqualCallable_1.js]
 define(["require", "exports", 'exportEqualCallable_0'], function (require, exports, connect) {
+    "use strict";
     connect();
 });

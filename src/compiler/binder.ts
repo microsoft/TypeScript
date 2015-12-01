@@ -139,6 +139,8 @@ namespace ts {
                 file.classifiableNames = classifiableNames;
             }
 
+            file = undefined;
+            options = undefined;
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
@@ -175,9 +177,14 @@ namespace ts {
                 symbol.members = {};
             }
 
-            if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
-                symbol.valueDeclaration = node;
-            }
+            if (symbolFlags & SymbolFlags.Value) {
+                const valueDeclaration = symbol.valueDeclaration;
+                if (!valueDeclaration ||
+                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    // other kinds of value declarations take precedence over modules
+                    symbol.valueDeclaration = node;
+                }
+        }
         }
 
         // Should not be called on a declaration with a computed property name,
@@ -189,6 +196,11 @@ namespace ts {
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = (<ComputedPropertyName>node.name).expression;
+                    // treat computed property names where expression is string/numeric literal as just string/numeric literal
+                    if (isStringOrNumericLiteral(nameExpression.kind)) {
+                        return (<LiteralExpression>nameExpression).text;
+                    }
+
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);
                 }
@@ -210,8 +222,21 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
-                    // Binary expression case is for JS module 'module.exports = expr'
-                    return "export=";
+                    switch (getSpecialPropertyAssignmentKind(node)) {
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                            // module.exports = ...
+                            return "export=";
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            // exports.x = ... or this.y = ...
+                            return ((node as BinaryExpression).left as PropertyAccessExpression).name.text;
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                            // className.prototype.methodName = ...
+                            return (((node as BinaryExpression).left as PropertyAccessExpression).expression as PropertyAccessExpression).name.text;
+                    }
+                    Debug.fail("Unknown binary declaration kind");
+                    break;
+
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
@@ -445,7 +470,7 @@ namespace ts {
 
         /**
          * Returns true if node and its subnodes were successfully traversed.
-         * Returning false means that node was not examined and caller needs to dive into the node himself. 
+         * Returning false means that node was not examined and caller needs to dive into the node himself.
          */
         function bindReachableStatement(node: Node): void {
             if (checkUnreachable(node)) {
@@ -555,7 +580,7 @@ namespace ts {
         }
 
         function bindIfStatement(n: IfStatement): void {
-            // denotes reachability state when entering 'thenStatement' part of the if statement: 
+            // denotes reachability state when entering 'thenStatement' part of the if statement:
             // i.e. if condition is false then thenStatement is unreachable
             const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
             // denotes reachability state when entering 'elseStatement':
@@ -1154,11 +1179,25 @@ namespace ts {
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     if (isInJavaScriptFile(node)) {
-                        if (isExportsPropertyAssignment(node)) {
-                            bindExportsPropertyAssignment(<BinaryExpression>node);
-                        }
-                        else if (isModuleExportsAssignment(node)) {
-                            bindModuleExportsAssignment(<BinaryExpression>node);
+                        const specialKind = getSpecialPropertyAssignmentKind(node);
+                        switch (specialKind) {
+                            case SpecialPropertyAssignmentKind.ExportsProperty:
+                                bindExportsPropertyAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.ModuleExports:
+                                bindModuleExportsAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.PrototypeProperty:
+                                bindPrototypePropertyAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.ThisProperty:
+                                bindThisPropertyAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.None:
+                                // Nothing to do
+                                break;
+                            default:
+                                Debug.fail("Unknown special property assignment kind");
                         }
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
@@ -1174,7 +1213,7 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
-                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                     seenThisKeyword = true;
                     return;
 
@@ -1325,6 +1364,45 @@ namespace ts {
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
             bindExportAssignment(node);
+        }
+
+        function bindThisPropertyAssignment(node: BinaryExpression) {
+            if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
+                container.symbol.members = container.symbol.members || {};
+                declareClassMember(node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            }
+        }
+
+        function bindPrototypePropertyAssignment(node: BinaryExpression) {
+            // We saw a node of the form 'x.prototype.y = z'.
+            // This does two things: turns 'x' into a constructor function, and
+            // adds a member 'y' to the result of that constructor function
+            // Get 'x', the class
+            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
+
+            // Look up the function in the local scope, since prototype assignments should immediately
+            // follow the function declaration
+            const funcSymbol = container.locals[classId.text];
+            if (!funcSymbol) {
+                return;
+            }
+
+            // The function is now a constructor rather than a normal function
+            if (!funcSymbol.inferredConstructor) {
+                // Have the binder set up all the related class symbols for us
+                declareSymbol(container.locals, funcSymbol, funcSymbol.valueDeclaration, SymbolFlags.Class, SymbolFlags.None);
+                // funcSymbol.members = funcSymbol.members || {};
+                funcSymbol.members["__constructor"] = funcSymbol;
+                funcSymbol.inferredConstructor = true;
+            }
+
+            // Get the exports of the class so we can add the method to it
+            const funcExports = declareSymbol(funcSymbol.exports, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.ObjectLiteral | SymbolFlags.Property, SymbolFlags.None);
+
+            // Declare the method
+            declareSymbol(funcExports.members, funcExports, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.None);
+            // and on the members of the function so it appears in 'prototype'
+            declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {
@@ -1523,7 +1601,7 @@ namespace ts {
 
                         // unreachable code is reported if
                         // - user has explicitly asked about it AND
-                        // - statement is in not ambient context (statements in ambient context is already an error 
+                        // - statement is in not ambient context (statements in ambient context is already an error
                         //   so we should not report extras) AND
                         //   - node is not variable statement OR
                         //   - node is block scoped variable statement OR
