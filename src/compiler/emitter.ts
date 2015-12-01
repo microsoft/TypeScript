@@ -2190,7 +2190,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node.right);
             }
 
-            function emitEntityNameAsExpression(node: EntityName, useFallback: boolean) {
+            function emitEntityNameAsExpression(node: EntityName | Expression, useFallback: boolean) {
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
                         if (useFallback) {
@@ -2204,6 +2204,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     case SyntaxKind.QualifiedName:
                         emitQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                        break;
+
+                    default:
+                        emitNodeWithoutSourceMap(node);
                         break;
                 }
             }
@@ -2978,7 +2982,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     }
                     else {
                         // this is top level converted loop so we need to create an alias for 'this' here
-                        // NOTE: 
+                        // NOTE:
                         // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
                         // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
                         write(`var ${convertedLoopState.thisName} = this;`);
@@ -4455,18 +4459,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 write(" __awaiter(this");
                 if (hasLexicalArguments) {
-                    write(", arguments");
+                    write(", arguments, ");
                 }
                 else {
-                    write(", void 0");
+                    write(", void 0, ");
                 }
 
                 if (promiseConstructor) {
-                    write(", ");
-                    emitNodeWithoutSourceMap(promiseConstructor);
+                    emitEntityNameAsExpression(promiseConstructor, /*useFallback*/ false);
                 }
                 else {
-                    write(", Promise");
+                    write("Promise");
                 }
 
                 // Emit the call to __awaiter.
@@ -5729,7 +5732,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             /** Serializes the return type of function. Used by the __metadata decorator for a method. */
-            function emitSerializedReturnTypeOfNode(node: Node): string | string[] {
+            function emitSerializedReturnTypeOfNode(node: Node) {
                 if (node && isFunctionLike(node) && (<FunctionLikeDeclaration>node).type) {
                     emitSerializedTypeNode((<FunctionLikeDeclaration>node).type);
                     return;

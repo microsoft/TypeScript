@@ -9895,7 +9895,7 @@ namespace ts {
             return aggregatedTypes;
         }
 
-        /* 
+        /*
          *TypeScript Specification 1.0 (6.3) - July 2014
          * An explicitly typed function whose return type isn't the Void or the Any type
          * must have at least one return statement somewhere in its body.
@@ -9921,15 +9921,15 @@ namespace ts {
             const hasExplicitReturn = func.flags & NodeFlags.HasExplicitReturn;
 
             if (returnType && !hasExplicitReturn) {
-                // minimal check: function has syntactic return type annotation and no explicit return statements in the body 
+                // minimal check: function has syntactic return type annotation and no explicit return statements in the body
                 // this function does not conform to the specification.
-                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present 
+                // NOTE: having returnType !== undefined is a precondition for entering this branch so func.type will always be present
                 error(func.type, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
             }
             else if (compilerOptions.noImplicitReturns) {
                 if (!returnType) {
                     // If return type annotation is omitted check if function has any explicit return statements.
-                    // If it does not have any - its inferred return type is void - don't do any checks. 
+                    // If it does not have any - its inferred return type is void - don't do any checks.
                     // Otherwise get inferred return type from function body and report error only if it is not void / anytype
                     const inferredReturnType = hasExplicitReturn
                         ? getReturnTypeOfSignature(getSignatureFromDeclaration(func))
@@ -11959,6 +11959,9 @@ namespace ts {
                 return unknownType;
             }
 
+            // If the Promise constructor, resolved locally, is an alias symbol we should mark it as referenced.
+            checkReturnTypeAnnotationAsExpression(node);
+
             // Validate the promise constructor type.
             const promiseConstructorType = getTypeOfSymbol(promiseConstructor);
             if (!checkTypeAssignableTo(promiseConstructorType, globalPromiseConstructorLikeType, node, Diagnostics.Type_0_is_not_a_valid_async_function_return_type)) {
@@ -11967,11 +11970,11 @@ namespace ts {
 
             // Verify there is no local declaration that could collide with the promise constructor.
             const promiseName = getEntityNameFromTypeNode(node.type);
-            const root = getFirstIdentifier(promiseName);
-            const rootSymbol = getSymbol(node.locals, root.text, SymbolFlags.Value);
+            const promiseNameOrNamespaceRoot = getFirstIdentifier(promiseName);
+            const rootSymbol = getSymbol(node.locals, promiseNameOrNamespaceRoot.text, SymbolFlags.Value);
             if (rootSymbol) {
                 error(rootSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                    root.text,
+                    promiseNameOrNamespaceRoot.text,
                     getFullyQualifiedName(promiseConstructor));
                 return unknownType;
             }
@@ -12055,24 +12058,12 @@ namespace ts {
           * Checks the type annotation of an accessor declaration or property declaration as
           * an expression if it is a type reference to a type with a value declaration.
           */
-        function checkTypeAnnotationAsExpression(node: AccessorDeclaration | PropertyDeclaration | ParameterDeclaration | MethodDeclaration) {
-            switch (node.kind) {
-                case SyntaxKind.PropertyDeclaration:
-                    checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
-                    break;
-                case SyntaxKind.Parameter:
-                    checkTypeNodeAsExpression((<ParameterDeclaration>node).type);
-                    break;
-                case SyntaxKind.MethodDeclaration:
-                    checkTypeNodeAsExpression((<MethodDeclaration>node).type);
-                    break;
-                case SyntaxKind.GetAccessor:
-                    checkTypeNodeAsExpression((<AccessorDeclaration>node).type);
-                    break;
-                case SyntaxKind.SetAccessor:
-                    checkTypeNodeAsExpression(getSetAccessorTypeAnnotationNode(<AccessorDeclaration>node));
-                    break;
-            }
+        function checkTypeAnnotationAsExpression(node: VariableLikeDeclaration) {
+            checkTypeNodeAsExpression((<PropertyDeclaration>node).type);
+        }
+
+        function checkReturnTypeAnnotationAsExpression(node: FunctionLikeDeclaration) {
+            checkTypeNodeAsExpression(node.type);
         }
 
         /** Checks the type annotation of the parameters of a function/method or the constructor of a class as expressions */
@@ -12110,11 +12101,12 @@ namespace ts {
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
-                    // fall-through
-
-                    case SyntaxKind.SetAccessor:
                     case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        checkParameterTypeAnnotationsAsExpressions(<FunctionLikeDeclaration>node);
+                        checkReturnTypeAnnotationAsExpression(<FunctionLikeDeclaration>node);
+                        break;
+
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.Parameter:
                         checkTypeAnnotationAsExpression(<PropertyDeclaration | ParameterDeclaration>node);
