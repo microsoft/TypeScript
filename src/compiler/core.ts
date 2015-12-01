@@ -74,11 +74,6 @@ namespace ts {
         GreaterThan = 1
     }
 
-    /* @internal */
-    export function isArray(obj: any): boolean {
-        return Array.isArray ? Array.isArray(obj) : typeof obj === "object" && obj instanceof Array;
-    }
-
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
