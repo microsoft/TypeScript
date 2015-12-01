@@ -55,11 +55,11 @@ sourceFile:tests/cases/compiler/a.ts
 3 >        = 
 4 >          1
 5 >           ;
-1 >Emitted(3, 5) Source(2, 16) + SourceIndex(0) name (M)
-2 >Emitted(3, 8) Source(2, 17) + SourceIndex(0) name (M)
-3 >Emitted(3, 11) Source(2, 20) + SourceIndex(0) name (M)
-4 >Emitted(3, 12) Source(2, 21) + SourceIndex(0) name (M)
-5 >Emitted(3, 13) Source(2, 22) + SourceIndex(0) name (M)
+1 >Emitted(3, 5) Source(2, 16) + SourceIndex(0)
+2 >Emitted(3, 8) Source(2, 17) + SourceIndex(0)
+3 >Emitted(3, 11) Source(2, 20) + SourceIndex(0)
+4 >Emitted(3, 12) Source(2, 21) + SourceIndex(0)
+5 >Emitted(3, 13) Source(2, 22) + SourceIndex(0)
 ---
 >>>})(M || (M = {}));
 1->
@@ -79,8 +79,8 @@ sourceFile:tests/cases/compiler/a.ts
 7 >           {
   >              export var X = 1;
   >          }
-1->Emitted(4, 1) Source(3, 1) + SourceIndex(0) name (M)
-2 >Emitted(4, 2) Source(3, 2) + SourceIndex(0) name (M)
+1->Emitted(4, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(4, 2) Source(3, 2) + SourceIndex(0)
 3 >Emitted(4, 4) Source(1, 8) + SourceIndex(0)
 4 >Emitted(4, 5) Source(1, 9) + SourceIndex(0)
 5 >Emitted(4, 10) Source(1, 8) + SourceIndex(0)
@@ -132,13 +132,13 @@ sourceFile:tests/cases/compiler/b.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^->
 1->
   >    
-1->Emitted(7, 5) Source(2, 5) + SourceIndex(1) name (m1)
+1->Emitted(7, 5) Source(2, 5) + SourceIndex(1)
 ---
 >>>        function c1() {
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(8, 9) Source(2, 5) + SourceIndex(1) name (m1.c1)
+1->Emitted(8, 9) Source(2, 5) + SourceIndex(1)
 ---
 >>>        }
 1->^^^^^^^^
@@ -147,16 +147,16 @@ sourceFile:tests/cases/compiler/b.ts
 1->export class c1 {
   >    
 2 >        }
-1->Emitted(9, 9) Source(3, 5) + SourceIndex(1) name (m1.c1.constructor)
-2 >Emitted(9, 10) Source(3, 6) + SourceIndex(1) name (m1.c1.constructor)
+1->Emitted(9, 9) Source(3, 5) + SourceIndex(1)
+2 >Emitted(9, 10) Source(3, 6) + SourceIndex(1)
 ---
 >>>        return c1;
 1->^^^^^^^^
 2 >        ^^^^^^^^^
 1->
 2 >        }
-1->Emitted(10, 9) Source(3, 5) + SourceIndex(1) name (m1.c1)
-2 >Emitted(10, 18) Source(3, 6) + SourceIndex(1) name (m1.c1)
+1->Emitted(10, 9) Source(3, 5) + SourceIndex(1)
+2 >Emitted(10, 18) Source(3, 6) + SourceIndex(1)
 ---
 >>>    })();
 1 >^^^^
@@ -169,10 +169,10 @@ sourceFile:tests/cases/compiler/b.ts
 3 >     
 4 >     export class c1 {
   >         }
-1 >Emitted(11, 5) Source(3, 5) + SourceIndex(1) name (m1.c1)
-2 >Emitted(11, 6) Source(3, 6) + SourceIndex(1) name (m1.c1)
-3 >Emitted(11, 6) Source(2, 5) + SourceIndex(1) name (m1)
-4 >Emitted(11, 10) Source(3, 6) + SourceIndex(1) name (m1)
+1 >Emitted(11, 5) Source(3, 5) + SourceIndex(1)
+2 >Emitted(11, 6) Source(3, 6) + SourceIndex(1)
+3 >Emitted(11, 6) Source(2, 5) + SourceIndex(1)
+4 >Emitted(11, 10) Source(3, 6) + SourceIndex(1)
 ---
 >>>    m1.c1 = c1;
 1->^^^^
@@ -185,10 +185,10 @@ sourceFile:tests/cases/compiler/b.ts
 3 >          {
   >             }
 4 >              
-1->Emitted(12, 5) Source(2, 18) + SourceIndex(1) name (m1)
-2 >Emitted(12, 10) Source(2, 20) + SourceIndex(1) name (m1)
-3 >Emitted(12, 15) Source(3, 6) + SourceIndex(1) name (m1)
-4 >Emitted(12, 16) Source(3, 6) + SourceIndex(1) name (m1)
+1->Emitted(12, 5) Source(2, 18) + SourceIndex(1)
+2 >Emitted(12, 10) Source(2, 20) + SourceIndex(1)
+3 >Emitted(12, 15) Source(3, 6) + SourceIndex(1)
+4 >Emitted(12, 16) Source(3, 6) + SourceIndex(1)
 ---
 >>>})(m1 || (m1 = {}));
 1->
@@ -210,8 +210,8 @@ sourceFile:tests/cases/compiler/b.ts
   >                export class c1 {
   >                }
   >            }
-1->Emitted(13, 1) Source(4, 1) + SourceIndex(1) name (m1)
-2 >Emitted(13, 2) Source(4, 2) + SourceIndex(1) name (m1)
+1->Emitted(13, 1) Source(4, 1) + SourceIndex(1)
+2 >Emitted(13, 2) Source(4, 2) + SourceIndex(1)
 3 >Emitted(13, 4) Source(1, 8) + SourceIndex(1)
 4 >Emitted(13, 6) Source(1, 10) + SourceIndex(1)
 5 >Emitted(13, 11) Source(1, 8) + SourceIndex(1)

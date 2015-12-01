@@ -465,7 +465,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             const { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
             const sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
-            const { setSourceFile, emitStart, emitEnd, emitPos, pushScope, popScope } = sourceMap;
+            const { setSourceFile, emitStart, emitEnd, emitPos } = sourceMap;
 
             let currentSourceFile: SourceFile;
             let currentText: string;
@@ -2700,7 +2700,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 emitToken(SyntaxKind.OpenBraceToken, node.pos);
                 increaseIndent();
-                pushScope(node.parent);
                 if (node.kind === SyntaxKind.ModuleBlock) {
                     Debug.assert(node.parent.kind === SyntaxKind.ModuleDeclaration);
                     emitCaptureThisForNodeIfNecessary(node.parent);
@@ -2712,7 +2711,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.statements.end);
-                popScope();
             }
 
             function emitEmbeddedStatement(node: Node) {
@@ -4578,8 +4576,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitDownLevelExpressionFunctionBody(node: FunctionLikeDeclaration, body: Expression) {
                 write(" {");
-                pushScope(node);
-
                 increaseIndent();
                 const outPos = writer.getTextPos();
                 emitDetachedCommentsAndUpdateCommentsInfo(node.body);
@@ -4618,14 +4614,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitStart(node.body);
                 write("}");
                 emitEnd(node.body);
-
-                popScope();
             }
 
             function emitBlockFunctionBody(node: FunctionLikeDeclaration, body: Block) {
                 write(" {");
-                pushScope(node);
-
                 const initialTextPos = writer.getTextPos();
 
                 increaseIndent();
@@ -4659,7 +4651,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitToken(SyntaxKind.CloseBraceToken, body.statements.end);
-                popScope();
             }
 
             function findInitialSuperCall(ctor: ConstructorDeclaration): ExpressionStatement {
@@ -4945,7 +4936,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 let startIndex = 0;
 
                 write(" {");
-                pushScope(node, "constructor");
                 increaseIndent();
                 if (ctor) {
                     // Emit all the directive prologues (like "use strict").  These have to come before
@@ -4995,7 +4985,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 decreaseIndent();
                 emitToken(SyntaxKind.CloseBraceToken, ctor ? (<Block>ctor.body).statements.end : node.members.end);
-                popScope();
                 emitEnd(<Node>ctor || node);
                 if (ctor) {
                     emitTrailingComments(ctor);
@@ -5132,14 +5121,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 write(" {");
                 increaseIndent();
-                pushScope(node);
                 writeLine();
                 emitConstructor(node, baseTypeNode);
                 emitMemberFunctionsForES6AndHigher(node);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
-                popScope();
 
                 // TODO(rbuckton): Need to go back to `let _a = class C {}` approach, removing the defineProperty call for now.
 
@@ -5241,7 +5228,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 tempParameters = undefined;
                 computedPropertyNamesToGeneratedNames = undefined;
                 increaseIndent();
-                pushScope(node);
                 if (baseTypeNode) {
                     writeLine();
                     emitStart(baseTypeNode);
@@ -5274,7 +5260,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
-                popScope();
                 emitStart(node);
                 write(")(");
                 if (baseTypeNode) {
@@ -5831,12 +5816,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emitEnd(node.name);
                 write(") {");
                 increaseIndent();
-                pushScope(node);
                 emitLines(node.members);
                 decreaseIndent();
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
-                popScope();
                 write(")(");
                 emitModuleMemberName(node);
                 write(" || (");
@@ -5960,7 +5943,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write("{");
                     increaseIndent();
-                    pushScope(node);
                     emitCaptureThisForNodeIfNecessary(node);
                     writeLine();
                     emit(node.body);
@@ -5968,7 +5950,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node).body;
                     emitToken(SyntaxKind.CloseBraceToken, moduleBlock.statements.end);
-                    popScope();
                 }
                 write(")(");
                 // write moduleDecl = containingModule.m only if it is not exported es6 module member

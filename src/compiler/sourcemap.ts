@@ -8,8 +8,6 @@ namespace ts {
         emitPos(pos: number): void;
         emitStart(range: TextRange): void;
         emitEnd(range: TextRange): void;
-        pushScope(scopeDeclaration: Node, scopeName?: string): void;
-        popScope(): void;
         getText(): string;
         getSourceMappingURL(): string;
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
@@ -27,8 +25,6 @@ namespace ts {
                 emitStart(range: TextRange): void { },
                 emitEnd(range: TextRange): void { },
                 emitPos(pos: number): void { },
-                pushScope(scopeDeclaration: Node, scopeName?: string): void { },
-                popScope(): void { },
                 getText(): string { return undefined; },
                 getSourceMappingURL(): string { return undefined; },
                 initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
@@ -47,10 +43,6 @@ namespace ts {
         // Current source map file and its index in the sources list
         let sourceMapSourceIndex: number;
 
-        // Names and its index map
-        let sourceMapNameIndexMap: Map<number>;
-        let sourceMapNameIndices: number[];
-
         // Last recorded and encoded spans
         let lastRecordedSourceMapSpan: SourceMapSpan;
         let lastEncodedSourceMapSpan: SourceMapSpan;
@@ -65,8 +57,6 @@ namespace ts {
             emitPos,
             emitStart,
             emitEnd,
-            pushScope,
-            popScope,
             getText,
             getSourceMappingURL,
             initialize,
@@ -82,10 +72,6 @@ namespace ts {
 
             // Current source map file and its index in the sources list
             sourceMapSourceIndex = -1;
-
-            // Names and its index map
-            sourceMapNameIndexMap = {};
-            sourceMapNameIndices = [];
 
             // Last recorded and encoded spans
             lastRecordedSourceMapSpan = undefined;
@@ -151,16 +137,10 @@ namespace ts {
             currentSourceFile = undefined;
             sourceMapDir = undefined;
             sourceMapSourceIndex = undefined;
-            sourceMapNameIndexMap = undefined;
-            sourceMapNameIndices = undefined;
             lastRecordedSourceMapSpan = undefined;
             lastEncodedSourceMapSpan = undefined;
             lastEncodedNameIndex = undefined;
             sourceMapData = undefined;
-        }
-
-        function getSourceMapNameIndex() {
-            return sourceMapNameIndices.length ? lastOrUndefined(sourceMapNameIndices) : -1;
         }
 
         // Encoding for sourcemap span
@@ -238,7 +218,6 @@ namespace ts {
                     emittedColumn: emittedColumn,
                     sourceLine: sourceLinePos.line,
                     sourceColumn: sourceLinePos.character,
-                    nameIndex: getSourceMapNameIndex(),
                     sourceIndex: sourceMapSourceIndex
                 };
             }
@@ -285,70 +264,6 @@ namespace ts {
                     sourceMapData.sourceMapSourcesContent.push(sourceFile.text);
                 }
             }
-        }
-
-        function recordScopeNameIndex(scopeNameIndex: number) {
-            sourceMapNameIndices.push(scopeNameIndex);
-        }
-
-        function recordScopeNameStart(scopeDeclaration: Node, scopeName: string) {
-            let scopeNameIndex = -1;
-            if (scopeName) {
-                const parentIndex = getSourceMapNameIndex();
-                if (parentIndex !== -1) {
-                    // Child scopes are always shown with a dot (even if they have no name),
-                    // unless it is a computed property. Then it is shown with brackets,
-                    // but the brackets are included in the name.
-                    const name = (<Declaration>scopeDeclaration).name;
-                    if (!name || name.kind !== SyntaxKind.ComputedPropertyName) {
-                        scopeName = "." + scopeName;
-                    }
-                    scopeName = sourceMapData.sourceMapNames[parentIndex] + scopeName;
-                }
-
-                scopeNameIndex = getProperty(sourceMapNameIndexMap, scopeName);
-                if (scopeNameIndex === undefined) {
-                    scopeNameIndex = sourceMapData.sourceMapNames.length;
-                    sourceMapData.sourceMapNames.push(scopeName);
-                    sourceMapNameIndexMap[scopeName] = scopeNameIndex;
-                }
-            }
-            recordScopeNameIndex(scopeNameIndex);
-        }
-
-        function pushScope(scopeDeclaration: Node, scopeName?: string) {
-            if (scopeName) {
-                // The scope was already given a name use it
-                recordScopeNameStart(scopeDeclaration, scopeName);
-            }
-            else if (scopeDeclaration.kind === SyntaxKind.FunctionDeclaration ||
-                scopeDeclaration.kind === SyntaxKind.FunctionExpression ||
-                scopeDeclaration.kind === SyntaxKind.MethodDeclaration ||
-                scopeDeclaration.kind === SyntaxKind.MethodSignature ||
-                scopeDeclaration.kind === SyntaxKind.GetAccessor ||
-                scopeDeclaration.kind === SyntaxKind.SetAccessor ||
-                scopeDeclaration.kind === SyntaxKind.ModuleDeclaration ||
-                scopeDeclaration.kind === SyntaxKind.ClassDeclaration ||
-                scopeDeclaration.kind === SyntaxKind.EnumDeclaration) {
-                // Declaration and has associated name use it
-                if ((<Declaration>scopeDeclaration).name) {
-                    const name = (<Declaration>scopeDeclaration).name;
-                    // For computed property names, the text will include the brackets
-                    scopeName = name.kind === SyntaxKind.ComputedPropertyName
-                        ? getTextOfNode(name)
-                        : (<Identifier>(<Declaration>scopeDeclaration).name).text;
-                }
-
-                recordScopeNameStart(scopeDeclaration, scopeName);
-            }
-            else {
-                // Block just use the name from upper level scope
-                recordScopeNameIndex(getSourceMapNameIndex());
-            }
-        }
-
-        function popScope() {
-            sourceMapNameIndices.pop();
         }
 
         function getText() {
