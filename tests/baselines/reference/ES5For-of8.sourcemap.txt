@@ -34,15 +34,15 @@ sourceFile:ES5For-of8.ts
 7 >                0
 8 >                  }
 9 >                   ;
-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (foo)
-2 >Emitted(2, 11) Source(2, 11) + SourceIndex(0) name (foo)
-3 >Emitted(2, 12) Source(2, 12) + SourceIndex(0) name (foo)
-4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0) name (foo)
-5 >Emitted(2, 15) Source(2, 15) + SourceIndex(0) name (foo)
-6 >Emitted(2, 17) Source(2, 17) + SourceIndex(0) name (foo)
-7 >Emitted(2, 18) Source(2, 18) + SourceIndex(0) name (foo)
-8 >Emitted(2, 20) Source(2, 20) + SourceIndex(0) name (foo)
-9 >Emitted(2, 21) Source(2, 21) + SourceIndex(0) name (foo)
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
+3 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
+6 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+7 >Emitted(2, 18) Source(2, 18) + SourceIndex(0)
+8 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+9 >Emitted(2, 21) Source(2, 21) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -51,8 +51,8 @@ sourceFile:ES5For-of8.ts
 1 >
   >
 2 >}
-1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0) name (foo)
-2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0) name (foo)
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
 ---
 >>>for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {
 1->

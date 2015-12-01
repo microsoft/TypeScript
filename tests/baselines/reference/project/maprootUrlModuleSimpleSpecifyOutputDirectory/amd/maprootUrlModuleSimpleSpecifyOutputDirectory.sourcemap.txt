@@ -39,7 +39,7 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/m1.ts
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(5, 9) Source(2, 1) + SourceIndex(0) name (m1_c1)
+1->Emitted(5, 9) Source(2, 1) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
@@ -49,16 +49,16 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/m1.ts
   >    public m1_c1_p1: number;
   >
 2 >        }
-1->Emitted(6, 9) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
-2 >Emitted(6, 10) Source(4, 2) + SourceIndex(0) name (m1_c1.constructor)
+1->Emitted(6, 9) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 10) Source(4, 2) + SourceIndex(0)
 ---
 >>>        return m1_c1;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
 1->
 2 >        }
-1->Emitted(7, 9) Source(4, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(7, 21) Source(4, 2) + SourceIndex(0) name (m1_c1)
+1->Emitted(7, 9) Source(4, 1) + SourceIndex(0)
+2 >Emitted(7, 21) Source(4, 2) + SourceIndex(0)
 ---
 >>>    })();
 1 >^^^^
@@ -72,8 +72,8 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/m1.ts
 4 >     export class m1_c1 {
   >         public m1_c1_p1: number;
   >     }
-1 >Emitted(8, 5) Source(4, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(8, 6) Source(4, 2) + SourceIndex(0) name (m1_c1)
+1 >Emitted(8, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(8, 6) Source(4, 2) + SourceIndex(0)
 3 >Emitted(8, 6) Source(2, 1) + SourceIndex(0)
 4 >Emitted(8, 10) Source(4, 2) + SourceIndex(0)
 ---
@@ -138,11 +138,11 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/m1.ts
 3 >               
 4 >               m1_instance1
 5 >                                   ;
-1->Emitted(12, 9) Source(8, 5) + SourceIndex(0) name (m1_f1)
-2 >Emitted(12, 15) Source(8, 11) + SourceIndex(0) name (m1_f1)
-3 >Emitted(12, 16) Source(8, 12) + SourceIndex(0) name (m1_f1)
-4 >Emitted(12, 36) Source(8, 24) + SourceIndex(0) name (m1_f1)
-5 >Emitted(12, 37) Source(8, 25) + SourceIndex(0) name (m1_f1)
+1->Emitted(12, 9) Source(8, 5) + SourceIndex(0)
+2 >Emitted(12, 15) Source(8, 11) + SourceIndex(0)
+3 >Emitted(12, 16) Source(8, 12) + SourceIndex(0)
+4 >Emitted(12, 36) Source(8, 24) + SourceIndex(0)
+5 >Emitted(12, 37) Source(8, 25) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -151,8 +151,8 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/m1.ts
 1 >
   >
 2 >    }
-1 >Emitted(13, 5) Source(9, 1) + SourceIndex(0) name (m1_f1)
-2 >Emitted(13, 6) Source(9, 2) + SourceIndex(0) name (m1_f1)
+1 >Emitted(13, 5) Source(9, 1) + SourceIndex(0)
+2 >Emitted(13, 6) Source(9, 2) + SourceIndex(0)
 ---
 >>>    exports.m1_f1 = m1_f1;
 1->^^^^
@@ -213,7 +213,7 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/test.ts
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(5, 9) Source(3, 1) + SourceIndex(0) name (c1)
+1->Emitted(5, 9) Source(3, 1) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
@@ -223,16 +223,16 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/test.ts
   >    public p1: number;
   >
 2 >        }
-1->Emitted(6, 9) Source(5, 1) + SourceIndex(0) name (c1.constructor)
-2 >Emitted(6, 10) Source(5, 2) + SourceIndex(0) name (c1.constructor)
+1->Emitted(6, 9) Source(5, 1) + SourceIndex(0)
+2 >Emitted(6, 10) Source(5, 2) + SourceIndex(0)
 ---
 >>>        return c1;
 1->^^^^^^^^
 2 >        ^^^^^^^^^
 1->
 2 >        }
-1->Emitted(7, 9) Source(5, 1) + SourceIndex(0) name (c1)
-2 >Emitted(7, 18) Source(5, 2) + SourceIndex(0) name (c1)
+1->Emitted(7, 9) Source(5, 1) + SourceIndex(0)
+2 >Emitted(7, 18) Source(5, 2) + SourceIndex(0)
 ---
 >>>    })();
 1 >^^^^
@@ -246,8 +246,8 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/test.ts
 4 >     export class c1 {
   >         public p1: number;
   >     }
-1 >Emitted(8, 5) Source(5, 1) + SourceIndex(0) name (c1)
-2 >Emitted(8, 6) Source(5, 2) + SourceIndex(0) name (c1)
+1 >Emitted(8, 5) Source(5, 1) + SourceIndex(0)
+2 >Emitted(8, 6) Source(5, 2) + SourceIndex(0)
 3 >Emitted(8, 6) Source(3, 1) + SourceIndex(0)
 4 >Emitted(8, 10) Source(5, 2) + SourceIndex(0)
 ---
@@ -312,11 +312,11 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/test.ts
 3 >               
 4 >               instance1
 5 >                                ;
-1->Emitted(12, 9) Source(9, 5) + SourceIndex(0) name (f1)
-2 >Emitted(12, 15) Source(9, 11) + SourceIndex(0) name (f1)
-3 >Emitted(12, 16) Source(9, 12) + SourceIndex(0) name (f1)
-4 >Emitted(12, 33) Source(9, 21) + SourceIndex(0) name (f1)
-5 >Emitted(12, 34) Source(9, 22) + SourceIndex(0) name (f1)
+1->Emitted(12, 9) Source(9, 5) + SourceIndex(0)
+2 >Emitted(12, 15) Source(9, 11) + SourceIndex(0)
+3 >Emitted(12, 16) Source(9, 12) + SourceIndex(0)
+4 >Emitted(12, 33) Source(9, 21) + SourceIndex(0)
+5 >Emitted(12, 34) Source(9, 22) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -325,8 +325,8 @@ sourceFile:file:///tests/cases/projects/outputdir_module_simple/test.ts
 1 >
   >
 2 >    }
-1 >Emitted(13, 5) Source(10, 1) + SourceIndex(0) name (f1)
-2 >Emitted(13, 6) Source(10, 2) + SourceIndex(0) name (f1)
+1 >Emitted(13, 5) Source(10, 1) + SourceIndex(0)
+2 >Emitted(13, 6) Source(10, 2) + SourceIndex(0)
 ---
 >>>    exports.f1 = f1;
 1->^^^^
