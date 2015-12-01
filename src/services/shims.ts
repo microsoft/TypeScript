@@ -72,7 +72,7 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string): string;
+        readDirectory(rootDir: string, extension: string, exclude?: string, depth?: number): string;
     }
 
     ///
@@ -224,8 +224,8 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
-        resolveTypeDefinitions(fileNamesJson: string, cachePath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
-        updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, typingsConfigPath: string): string 
+        resolveTypeDefinitions(fileNamesJson: string, cachePath: string, typingsConfigPath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
+        updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, autoTypingsConfigPath: string): string 
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -413,19 +413,23 @@ namespace ts {
         constructor(private shimHost: CoreServicesShimHost) {
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
+        public readDirectory(rootDir: string, extension: string, exclude: string[], depth?: number): string[] {
             // Wrap the API changes for 1.5 release. This try/catch
             // should be removed once TypeScript 1.5 has shipped.
             // Also consider removing the optional designation for
             // the exclude param at this time.
             var encoded: string;
             try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude), depth);
             }
             catch (e) {
                 encoded = this.shimHost.readDirectory(rootDir, extension);
             }
             return JSON.parse(encoded);
+        }
+
+        public directoryExists(fileName: string): boolean {
+            return this.shimHost.directoryExists(fileName);
         }
         
         public fileExists(fileName: string): boolean {
@@ -1025,20 +1029,20 @@ namespace ts {
                 });
         }
 
-        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string {
+        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, typingsConfigPath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string {
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
                 let safeList: string[] = JSON.parse(safeListJson);
-                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, compilerOptions, safeList, noDevDependencies);
+                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, typingsConfigPath, compilerOptions, safeList, noDevDependencies);
             });
         }
 
-        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, typingsConfigPath: string): string {
+        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, autoTypingsConfigPath: string): string {
             return this.forwardJSONCall("updateTypingsConfig()", () => {
                 let cachedTypingsPaths: string[] = JSON.parse(cachedTypingsPathsJson);
-                let newTypings: string[] = JSON.parse(newTypingsJson);
-                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypings, cachePath, typingsConfigPath);
+                let newTypingNames: string[] = JSON.parse(newTypingsJson);
+                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypingNames, cachePath, autoTypingsConfigPath);
             });
         }
     }
