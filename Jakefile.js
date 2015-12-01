@@ -113,7 +113,8 @@ var scriptSources = [
     "tslint/nextLineRule.ts",
     "tslint/noNullRule.ts",
     "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts"
+    "tslint/typeOperatorSpacingRule.ts",
+    "tslint/noInOperatorRule.ts"
 ].map(function (f) {
     return path.join(scriptsDirectory, f);
 });
@@ -875,7 +876,8 @@ var tslintRules = ([
     "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
-    "typeOperatorSpacingRule"
+    "typeOperatorSpacingRule",
+    "noInOperatorRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
