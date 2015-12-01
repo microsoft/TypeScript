@@ -32,6 +32,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 var task_1 = require("./task");
 class Test {
     example() {
-        return __awaiter(this, void 0, Task, function* () { return; });
+        return __awaiter(this, void 0, task_1.Task, function* () { return; });
     }
 }
