@@ -12,3 +12,21 @@ let x = async function() {
 async function f2(): Promise<void> {
     
 }
+
+async function f3(x) {
+    if (x) return 10;
+}
+
+async function f4(): Promise<number> {
+    
+}
+
+function voidFunc(): void {
+}
+
+function calltoVoidFunc(x) {
+    if (x) return voidFunc();
+}
+
+declare function use(s: string): void;
+let x1 = () => { use("Test"); }
