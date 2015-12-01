@@ -1,11 +1,10 @@
-//// [tests/cases/conformance/es6/moduleExportsUmd/defaultExportsGetExportedUmd.ts] ////
+//// [tests/cases/conformance/es6/moduleExportsUmd/anonymousDefaultExportsUmd.ts] ////
 
 //// [a.ts]
-export default class Foo {}
+export default class {}
 
 //// [b.ts]
-export default function foo() {}
-
+export default function() {}
 
 //// [a.js]
 (function (factory) {
@@ -17,9 +16,9 @@ export default function foo() {}
     }
 })(function (require, exports) {
     "use strict";
-    class Foo {
+    class default_1 {
     }
-    exports.default = Foo;
+    exports.default = default_1;
 });
 //// [b.js]
 (function (factory) {
@@ -31,6 +30,6 @@ export default function foo() {}
     }
 })(function (require, exports) {
     "use strict";
-    function foo() { }
-    exports.default = foo;
+    function default_1() { }
+    exports.default = default_1;
 });

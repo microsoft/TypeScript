@@ -4273,7 +4273,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 if (node.kind === SyntaxKind.FunctionDeclaration) {
                     // Emit name if one is present, or emit generated name in down-level case (for export default case)
-                    return !!node.name || languageVersion < ScriptTarget.ES6;
+                    return !!node.name || modulekind !== ModuleKind.ES6;
                 }
             }
 
@@ -5108,7 +5108,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // emit name if
                 // - node has a name
                 // - this is default export with static initializers
-                if ((node.name || (node.flags & NodeFlags.Default && staticProperties.length > 0)) && !thisNodeIsDecorated) {
+                if ((node.name || (node.flags & NodeFlags.Default && (staticProperties.length > 0 || modulekind !== ModuleKind.ES6))) && !thisNodeIsDecorated) {
                     write(" ");
                     emitDeclarationName(node);
                 }
