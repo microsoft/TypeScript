@@ -123,8 +123,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, undefined, anyType, undefined, 0, false, false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, undefined, unknownType, undefined, 0, false, false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, undefined, anyType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, undefined, unknownType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const globals: SymbolTable = {};
 
@@ -2661,7 +2661,7 @@ namespace ts {
                     }
                     else {
                         // Declaration for className.prototype in inferred JS class
-                        let type = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, undefined, undefined);
+                        const type = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, undefined, undefined);
                         return links.type = type;
                     }
                 }
@@ -3930,9 +3930,9 @@ namespace ts {
                     default:
                         if (declaration.symbol.inferredConstructor) {
                             kind = SignatureKind.Construct;
-                            let members = createSymbolTable(emptyArray);
+                            const members = createSymbolTable(emptyArray);
                             // Collect methods declared with className.protoype.methodName = ...
-                            let proto = declaration.symbol.exports["prototype"];
+                            const proto = declaration.symbol.exports["prototype"];
                             if (proto) {
                                 mergeSymbolTable(members, proto.members);
                             }
@@ -3954,7 +3954,7 @@ namespace ts {
 
         function getSignaturesOfSymbol(symbol: Symbol): Signature[] {
             if (!symbol) return emptyArray;
-            const result: Signature[] = [];
+            let result: Signature[] = [];
             for (let i = 0, len = symbol.declarations.length; i < len; i++) {
                 const node = symbol.declarations[i];
                 switch (node.kind) {
@@ -6841,7 +6841,14 @@ namespace ts {
             let container: Node;
             if (symbol.flags & SymbolFlags.Class) {
                 // get parent of class declaration
-                container = getClassLikeDeclarationOfSymbol(symbol).parent;
+                const classDeclaration = getClassLikeDeclarationOfSymbol(symbol);
+                if (classDeclaration) {
+                    container = classDeclaration.parent;
+                }
+                else {
+                    // JS-inferred class; do nothing
+                    return;
+                }
             }
             else {
                 // nesting structure:

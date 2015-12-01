@@ -1178,8 +1178,8 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
-                    if (isJavaScriptFile) {
-                        let specialKind = getSpecialPropertyAssignmentKind(node);
+                    if (isInJavaScriptFile(node)) {
+                        const specialKind = getSpecialPropertyAssignmentKind(node);
                         switch (specialKind) {
                             case SpecialPropertyAssignmentKind.ExportsProperty:
                                 bindExportsPropertyAssignment(<BinaryExpression>node);
@@ -1378,11 +1378,11 @@ namespace ts {
             // This does two things: turns 'x' into a constructor function, and
             // adds a member 'y' to the result of that constructor function
             // Get 'x', the class
-            let classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
+            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
 
             // Look up the function in the local scope, since prototype assignments should immediately
             // follow the function declaration
-            let funcSymbol = container.locals[classId.text];
+            const funcSymbol = container.locals[classId.text];
             if (!funcSymbol) {
                 return;
             }
@@ -1397,7 +1397,7 @@ namespace ts {
             }
 
             // Get the exports of the class so we can add the method to it
-            let funcExports = declareSymbol(funcSymbol.exports, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.ObjectLiteral | SymbolFlags.Property, SymbolFlags.None);
+            const funcExports = declareSymbol(funcSymbol.exports, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.ObjectLiteral | SymbolFlags.Property, SymbolFlags.None);
 
             // Declare the method
             declareSymbol(funcExports.members, funcExports, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.None);

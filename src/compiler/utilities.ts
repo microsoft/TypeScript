@@ -1090,7 +1090,7 @@ namespace ts {
         }
         else if (lhs.expression.kind === SyntaxKind.PropertyAccessExpression) {
             // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
-            let innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
+            const innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
             if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier && innerPropertyAccess.name.text === "prototype") {
                 return SpecialPropertyAssignmentKind.PrototypeProperty;
             }
