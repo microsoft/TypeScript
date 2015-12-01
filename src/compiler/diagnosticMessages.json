@@ -1724,6 +1724,10 @@
         "category": "Error",
         "code": 2657
     },
+    "'{0}' cannot be used as a static member identifier.": {
+        "category":"Error",
+        "code": 2658
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

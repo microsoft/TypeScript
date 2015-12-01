@@ -1,20 +1,20 @@
 interface A {
-    name();
+    beep();
 }
 class B {
-    public name() { }
+    public beep() { }
 }
 class C {
-    public static name() { }
+    public static beep() { }
 }
 
 var a: A = new B();
-a = new C(); // error name is missing
-a = B; // error name is missing
+a = new C(); // error beep is missing
+a = B; // error beep is missing
 a = C;
 
 var b: B = new C(); // error name is missing
-b = B; // error name is missing
+b = B; // error beep is missing
 b = C;
 b = a;
 

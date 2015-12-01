@@ -208,6 +208,13 @@ namespace ts {
             }
         };
 
+        const reservedStaticPropertyNames: { [key: string]: string } = {
+            length: "length",
+            arguments: "arguments",
+            caller: "caller",
+            name: "name"
+        };
+
         const JsxNames = {
             JSX: "JSX",
             IntrinsicElements: "IntrinsicElements",
@@ -15422,6 +15429,9 @@ namespace ts {
                         break;
 
                     case SyntaxKind.StaticKeyword:
+                        if (node.kind === SyntaxKind.Identifier && reservedStaticPropertyNames[node.symbol.name]) {
+                            return grammarErrorOnNode(node, Diagnostics._0_cannot_be_used_as_a_static_member_identifier, node.symbol.name);
+                        }
                         if (flags & NodeFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
                         }
