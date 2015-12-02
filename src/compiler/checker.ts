@@ -15973,7 +15973,7 @@ namespace ts {
                             : Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
                         return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
                     }
-                    const firstDeclaration = variableList.declarations[0]
+                    const firstDeclaration = variableList.declarations[0];
 
                     // firstDeclaration can be undefined if there is variable declaration in for-of or for-in
                     // See http://www.ecma-international.org/ecma-262/6.0/#sec-for-in-and-for-of-statements for details
