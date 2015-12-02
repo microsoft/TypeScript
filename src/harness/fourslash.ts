@@ -318,7 +318,7 @@ namespace FourSlash {
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
-                PlaceOpenBraceOnNewLineForControlBlocks: false
+                PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
 
             this.testData.files.forEach(file => {

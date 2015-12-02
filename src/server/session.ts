@@ -56,7 +56,7 @@ namespace ts.server {
         if (a.file < b.file) {
             return -1;
         }
-        else if (a.file == b.file) {
+        else if (a.file === b.file) {
             const n = compareNumber(a.start.line, b.start.line);
             if (n === 0) {
                 return compareNumber(a.start.offset, b.start.offset);
@@ -166,12 +166,13 @@ namespace ts.server {
 
         // Keeps track of any .d.ts files used which correspond to known versions from DefinitelyTyped
         export function countDts(file: string) {
-            for (const i in properties) {
-                if (properties[i] == file) {
+            for (const p in properties) {
+                if (properties[p] === file) {
                     return;
                 }
             }
-            properties["dtf" + ++dtsCount] = file;
+            dtsCount++;
+            properties["dtf" + dtsCount] = file;
         }
 
         function registerSettings(svc: ProjectService) {
@@ -193,7 +194,7 @@ namespace ts.server {
                     const setting = settingNames[i];
                     let value: any = src[settingNames[i]];
                     // actual value of out or outFile is PII, don't record it, just record the flag was used
-                    if ((setting == "out" || setting == "outFile") && value != undefined && value != "") {
+                    if ((setting === "out" || setting === "outFile") && value !== undefined && value !== "") {
                         value = 1;
                     }
                     properties["project." + settingNames[i]] = value;
@@ -247,32 +248,6 @@ namespace ts.server {
     }
     type DtsHistory = DtsHistoryRecord[];
 
-    function dtsHash(s: string) {
-        // This is a whitespace-ignoring hash function so we can still correctly detect
-        // .d.ts files that have been auto-formatted or line-ending-normalized
-        let h = 0;
-        for (let i = 0, n = s.length; i < n; i++) {
-            const c = s.charCodeAt(i);
-            switch (c) {
-                // Characters we'll ignore
-                case 0x00: // Null
-                case 0x09: // Tab
-                case 0x0A: // LF
-                case 0x0D: // CR
-                case 0x20: // Space
-                case 0xFEFF: // BOM bytes
-                    break;
-                default:
-                    const high = h & 0xFF000000;
-                    h = (h << 8) & 0x7FFFFFFF;
-                    h = h ^ (high >> 24);
-                    h = h ^ c;
-                    break;
-            }
-        }
-        return h.toString(36);
-    }
-
     export class Session {
         protected projectService: ProjectService;
         private pendingOperation = false;
@@ -296,7 +271,7 @@ namespace ts.server {
         }
 
         private handleEvent(eventName: string, project: Project, fileName: string) {
-            if (eventName == "context") {
+            if (eventName === "context") {
                 this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
                 this.updateErrorCheck([{ fileName, project }], this.changeSeq,
                     (n) => n === this.changeSeq, 100);
@@ -386,7 +361,7 @@ namespace ts.server {
             }
         }
 
-        static matchFileByHash(file: string, index: DtsHistory, host: System): { fileName: string; path: string; commitsBehind: number; } {
+        static matchFileName(file: string, index: DtsHistory): { fileName: string; path: string; commitsBehind: number; } {
             // See if a file with this name is in the index
             const lastSlash = Math.max(file.lastIndexOf("/"), file.lastIndexOf("\\"), -1);
             const filenameOnly = file.substr(lastSlash + 1);
@@ -394,14 +369,6 @@ namespace ts.server {
                 if (index[i].n === filenameOnly) {
                     // Just check for a filename match, ignore commit history
                     return { fileName: filenameOnly, path: index[i].p, commitsBehind: -1 };
-
-                    // Alternatively, we could check against the .d.ts history and report how many commits behind it is
-                    /*const crc = dtsHash(host.readFile(file, "utf-8"));
-                    for (let j = 0; j < index[i].h.length; j++) {
-                        if (crc === index[i].h[j]) {
-                            return { fileName: filenameOnly, path: index[i].p, commitsBehind: j };
-                        }
-                    }*/
                 }
             }
             return undefined;
@@ -413,7 +380,7 @@ namespace ts.server {
 
             const doUpToDateCheck = () => {
                 try {
-                    const info = Session.matchFileByHash(file, this.dtsVersionHistory, this.host);
+                    const info = Session.matchFileName(file, this.dtsVersionHistory);
                     if (info) {
                         Metrics.countDts(info.fileName);
 
@@ -464,7 +431,7 @@ namespace ts.server {
                                 this.dtsVersionHistory = [];
                             }
                             else {
-                                if (data && data != "null") { // server returns null string if we already have the latest index
+                                if (data && data !== "null") { // server returns null string if we already have the latest index
                                     this.host.writeFile(filename, data);
                                     this.dtsVersionHistory = JSON.parse(data);
                                     doUpToDateCheck();
@@ -715,7 +682,7 @@ namespace ts.server {
                 let curFileAccum: protocol.SpanGroup;
                 if (accum.length > 0) {
                     curFileAccum = accum[accum.length - 1];
-                    if (curFileAccum.file != cur.file) {
+                    if (curFileAccum.file !== cur.file) {
                         curFileAccum = undefined;
                     }
                 }
@@ -858,7 +825,7 @@ namespace ts.server {
             // getFormattingEditsAfterKeytroke either empty or pertaining
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
-            if ((key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
+            if ((key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
                 const scriptInfo = compilerService.host.getScriptInfo(file);
                 if (scriptInfo) {
                     const lineInfo = scriptInfo.getLineInfo(line);
@@ -880,10 +847,10 @@ namespace ts.server {
                             let hasIndent = 0;
                             let i: number, len: number;
                             for (i = 0, len = lineText.length; i < len; i++) {
-                                if (lineText.charAt(i) == " ") {
+                                if (lineText.charAt(i) === " ") {
                                     hasIndent++;
                                 }
-                                else if (lineText.charAt(i) == "\t") {
+                                else if (lineText.charAt(i) === "\t") {
                                     hasIndent += editorOptions.TabSize;
                                 }
                                 else {
@@ -1111,7 +1078,7 @@ namespace ts.server {
                     start: start,
                     end: end,
                 };
-                if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                     bakedItem.kindModifiers = navItem.kindModifiers;
                 }
                 if (navItem.matchKind !== "none") {
@@ -1162,7 +1129,7 @@ namespace ts.server {
             const normalizedFileName = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(normalizedFileName);
             for (const fileNameInProject of fileNamesInProject) {
-                if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
+                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName))
                     highPriorityFiles.push(fileNameInProject);
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
@@ -1186,7 +1153,7 @@ namespace ts.server {
                 });
                 // Project level error analysis runs on background files too, therefore
                 // doesn't require the file to be opened
-                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n === this.changeSeq, delay, 200, /*requireOpen*/ false);
             }
         }
 

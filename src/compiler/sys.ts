@@ -412,7 +412,7 @@ namespace ts {
                 const req = _https.request(opts, (response: any) => {
                     let body = "";
                     response.on("data", (data: string) => {
-                        body = body + data;
+                        body += data;
                     });
                     response.on("end", () => callback && callback(undefined, body));
                 });
