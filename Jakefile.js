@@ -113,7 +113,8 @@ var scriptSources = [
     "tslint/nextLineRule.ts",
     "tslint/noNullRule.ts",
     "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts"
+    "tslint/typeOperatorSpacingRule.ts",
+    "tslint/noInOperatorRule.ts"
 ].map(function (f) {
     return path.join(scriptsDirectory, f);
 });
@@ -875,7 +876,8 @@ var tslintRules = ([
     "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
-    "typeOperatorSpacingRule"
+    "typeOperatorSpacingRule",
+    "noInOperatorRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -926,12 +928,16 @@ var lintTargets = compilerSources
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
+    var failed = 0;
     for (var i in lintTargets) {
         var result = lintFile(lintOptions, lintTargets[i]);
         if (result.failureCount > 0) {
             console.log(result.output);
-            fail('Linter errors.', result.failureCount);
+            failed += result.failureCount;
         }
+    }
+    if (failed > 0) {
+        fail('Linter errors.', failed);
     }
 });
 

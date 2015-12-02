@@ -142,7 +142,7 @@ class CompilerBaselineRunner extends RunnerBase {
 
             it("Correct JS output for " + fileName, () => {
                 if (hasNonDtsFiles && this.emit) {
-                    if (result.files.length === 0 && result.errors.length === 0) {
+                    if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
                         throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
                     }
 
