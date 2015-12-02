@@ -5,8 +5,6 @@
 //// type GenericMethod<AA> = { method<BB>(): A/*3*/A & B/*4*/B }
 //// type Nesting<TT> = { method<UU>(): new <WW>() => T/*5*/T & U/*6*/U & W/*7*/W };
 
-type Nesting<TT> = { method<UU>(): new <WW>() => TT & UU & WW }
-
 goTo.marker('1');
 verify.quickInfoIs('(type parameter) AA in type Call<AA>');
 goTo.marker('2');
