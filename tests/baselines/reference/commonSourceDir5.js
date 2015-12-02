@@ -16,17 +16,17 @@ export var pi = Math.PI;
 export var y = x * i;
 
 //// [concat.js]
-define("B:/baz", ["require", "exports", "A:/bar", "A:/foo"], function (require, exports, bar_1, foo_1) {
+define("b:/baz", ["require", "exports", "a:/bar", "a:/foo"], function (require, exports, bar_1, foo_1) {
     "use strict";
     exports.pi = Math.PI;
     exports.y = bar_1.x * foo_1.i;
 });
-define("A:/foo", ["require", "exports", "B:/baz"], function (require, exports, baz_1) {
+define("a:/foo", ["require", "exports", "b:/baz"], function (require, exports, baz_1) {
     "use strict";
     exports.i = Math.sqrt(-1);
     exports.z = baz_1.pi * baz_1.pi;
 });
-define("A:/bar", ["require", "exports", "A:/foo"], function (require, exports, foo_2) {
+define("a:/bar", ["require", "exports", "a:/foo"], function (require, exports, foo_2) {
     "use strict";
     exports.x = foo_2.z + foo_2.z;
 });

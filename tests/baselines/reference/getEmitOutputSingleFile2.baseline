@@ -23,7 +23,7 @@ declare class Foo {
     x: string;
     y: number;
 }
-declare module "inputFile3" {
+declare module "inputfile3" {
     export var foo: number;
     export var bar: string;
 }
