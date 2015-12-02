@@ -95,13 +95,21 @@ namespace ts {
 
     const binder = createBinder();
 
-    export function bindSourceFile(file: SourceFile, options: CompilerOptions, nameResolver: (location: Node, name: string) => string) {
+    type DynamicNameResolver = (name: ComputedPropertyName) => string;
+
+    const enum BinderMode {
+        BindEverythingExceptContainersOfComputedNames,
+        BindOnlyContainersOfComputedNames,
+        BindEverything
+    }
+
+    export function bindSourceFile(file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver) {
         const start = new Date().getTime();
         binder(file, options, nameResolver);
         bindTime += new Date().getTime() - start;
     }
 
-    function createBinder(): (file: SourceFile, options: CompilerOptions, nameResolver: (location: Node, name: string) => string) => void {
+    function createBinder(): (file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver) => void {
         let file: SourceFile;
         let options: CompilerOptions;
         let parent: Node;
@@ -110,9 +118,9 @@ namespace ts {
         let lastContainer: Node;
         let seenThisKeyword: boolean;
 
-        let nameResolver: (location: Node, name: string) => string;
-        let bindClassesAndObjectLiterals: boolean;
-        let bindEverything: boolean;
+        let nameResolver: DynamicNameResolver;
+        let isFirstPass: boolean;
+        let mode: BinderMode;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -130,7 +138,7 @@ namespace ts {
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
         let classifiableNames: Map<string>;
 
-        function bindSourceFile(_file: SourceFile, _options: CompilerOptions, _nameResolver: (location: Node, name: string) => string) {
+        function bindSourceFile(_file: SourceFile, _options: CompilerOptions, _nameResolver: DynamicNameResolver) {
             nameResolver = _nameResolver;
             file = _file;
             options = _options;
@@ -138,23 +146,16 @@ namespace ts {
             classifiableNames = {};
             Symbol = objectAllocator.getSymbolConstructor();
 
-            if (_nameResolver) {
-                bindClassesAndObjectLiterals = true;
-                bindEverything = false;
-            }
-            else {
-                bindClassesAndObjectLiterals = false;
-                bindEverything = true;
-            }
+            isFirstPass = nameResolver === undefined;
+            mode = isFirstPass 
+                ? BinderMode.BindEverythingExceptContainersOfComputedNames
+                : BinderMode.BindOnlyContainersOfComputedNames;
 
-            const isBound = file.locals !== undefined;
-            if (!isBound || _nameResolver) {
+            if (file.locals === undefined || !isFirstPass) {
                 bind(file);
 
-                if (!isBound) {
-                    file.symbolCount = symbolCount;
-                    file.classifiableNames = classifiableNames;
-                }
+                file.symbolCount = symbolCount;
+                file.classifiableNames = classifiableNames;
             }
 
             nameResolver = undefined;
@@ -221,7 +222,7 @@ namespace ts {
                     }
 
                     if (nameExpression.kind === SyntaxKind.Identifier && nameResolver) {
-                        return nameResolver(nameExpression, (<Identifier>nameExpression).text);
+                        return nameResolver(<ComputedPropertyName>node.name);
                     }
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);
@@ -408,7 +409,7 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
 
-                if (containerFlags & ContainerFlags.HasLocals && !nameResolver) {
+                if (containerFlags & ContainerFlags.HasLocals && isFirstPass) {
                     container.locals = {};
                 }
 
@@ -417,7 +418,9 @@ namespace ts {
 
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
-                blockScopeContainer.locals = undefined;
+                if (isFirstPass) {
+                    blockScopeContainer.locals = undefined;
+                }
             }
 
             let savedReachabilityState: Reachability;
@@ -1129,15 +1132,36 @@ namespace ts {
             //
             // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
-            const recurse = bindWorker(node);
+            const isContainerOfComputedNames = 
+                node.kind === SyntaxKind.ClassDeclaration ||
+                node.kind === SyntaxKind.ClassExpression ||
+                node.kind === SyntaxKind.InterfaceDeclaration ||
+                node.kind === SyntaxKind.ObjectLiteralExpression ||
+                node.kind === SyntaxKind.TypeLiteral ||
+                node.kind === SyntaxKind.Parameter;
 
+            const bindNode = 
+                mode === BinderMode.BindEverything ||
+                ((mode === BinderMode.BindOnlyContainersOfComputedNames) === isContainerOfComputedNames);
+
+            if (bindNode) {
+                bindWorker(node);
+            }
+
+            const savedMode = mode;
+            if (mode === BinderMode.BindOnlyContainersOfComputedNames && isContainerOfComputedNames) {
+                mode = BinderMode.BindEverything;
+            }
             // Then we recurse into the children of the node to bind them as well.  For certain
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
-            if (recurse) {
+            if (mode === BinderMode.BindEverything || 
+                (mode === BinderMode.BindEverythingExceptContainersOfComputedNames && !isContainerOfComputedNames)) {
                 bindChildren(node);
             }
+
+            mode = savedMode;
 
             inStrictMode = savedInStrictMode;
         }
@@ -1183,15 +1207,11 @@ namespace ts {
             return nodeText === "\"use strict\"" || nodeText === "'use strict'";
         }
 
-        function bindWorker(node: Node): boolean {
-            if (!bindEverything) {
-                return false;
-            }
+        function bindWorker(node: Node): void {
             switch (node.kind) {
                 /* Strict mode checks */
                 case SyntaxKind.Identifier:
-                    checkStrictModeIdentifier(<Identifier>node);
-                    return true;
+                    return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     if (isInJavaScriptFile(node)) {
                         if (isExportsPropertyAssignment(node)) {
@@ -1201,190 +1221,104 @@ namespace ts {
                             bindModuleExportsAssignment(<BinaryExpression>node);
                         }
                     }
-                    checkStrictModeBinaryExpression(<BinaryExpression>node);
-                    return true;
+                    return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
-                    checkStrictModeCatchClause(<CatchClause>node);
-                    return true;
+                    return checkStrictModeCatchClause(<CatchClause>node);
                 case SyntaxKind.DeleteExpression:
-                    checkStrictModeDeleteExpression(<DeleteExpression>node);
-                    return true;
+                    return checkStrictModeDeleteExpression(<DeleteExpression>node);
                 case SyntaxKind.NumericLiteral:
-                    checkStrictModeNumericLiteral(<LiteralExpression>node);
-                    return true;
+                    return checkStrictModeNumericLiteral(<LiteralExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
-                    checkStrictModePostfixUnaryExpression(<PostfixUnaryExpression>node);
-                    return true;
+                    return checkStrictModePostfixUnaryExpression(<PostfixUnaryExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
-                    checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
-                    return true;
+                    return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
-                    checkStrictModeWithStatement(<WithStatement>node);
-                    return true;
+                    return checkStrictModeWithStatement(<WithStatement>node);
                 case SyntaxKind.ThisType:
                     seenThisKeyword = true;
-                    return true;
+                    break;
 
                 case SyntaxKind.TypeParameter:
-                    declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
-                    return true;
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
-                    // TODO:
-                    bindParameter(<ParameterDeclaration>node);
-                    return true;
+                    return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.BindingElement:
-                    bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
-                    return true;
+                    return bindVariableDeclarationOrBindingElement(<VariableDeclaration | BindingElement>node);
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
-                    return true;
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property | ((<PropertyDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
-                    return true;
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.EnumMember:
-                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
-                    return true;
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
-                    declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Signature, SymbolFlags.None);
-                    return true;
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Signature, SymbolFlags.None);
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     // If this is an ObjectLiteralExpression method, then it sits in the same space
                     // as other properties in the object literal.  So we use SymbolFlags.PropertyExcludes
                     // so that it will conflict with any other object literal members with the same
                     // name.
-                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.Method | ((<MethodDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
                         isObjectLiteralMethod(node) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
-                    return true;
                 case SyntaxKind.FunctionDeclaration:
                     checkStrictModeFunctionName(<FunctionDeclaration>node);
-                    declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
-                    return true;
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Function, SymbolFlags.FunctionExcludes);
                 case SyntaxKind.Constructor:
-                    declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
-                    return true;
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
                 case SyntaxKind.GetAccessor:
-                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
-                    return true;
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
                 case SyntaxKind.SetAccessor:
-                    bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
-                    return true;
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
-                    bindFunctionOrConstructorType(<SignatureDeclaration>node);
-                    return true;
+                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
-                    {
-                        if (!bindClassesAndObjectLiterals) {
-                            return false;
-                        }
-                        const savedBindEverything = bindEverything;
-                        bindEverything = true;
-                        
-                        bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
-
-                        bindEverything = savedBindEverything;
-                        return true;
-                    }
+                    return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
                 case SyntaxKind.ObjectLiteralExpression:
-                    {
-                        if (!bindClassesAndObjectLiterals) {
-                            return false;
-                        }
-                        const savedBindEverything = bindEverything;
-                        bindEverything = true;
-
-                        bindObjectLiteralExpression(<ObjectLiteralExpression>node);
-
-                        bindEverything = savedBindEverything;
-                        return true;
-                    }
+                    return bindObjectLiteralExpression(<ObjectLiteralExpression>node);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     checkStrictModeFunctionName(<FunctionExpression>node);
                     const bindingName = (<FunctionExpression>node).name ? (<FunctionExpression>node).name.text : "__function";
-                    bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
-                    return true;
+                    return bindAnonymousDeclaration(<FunctionExpression>node, SymbolFlags.Function, bindingName);
 
                 case SyntaxKind.CallExpression:
                     if (isInJavaScriptFile(node)) {
                         bindCallExpression(<CallExpression>node);
                     }
-                    return true;
+                    break;
 
                 // Members of classes, interfaces, and modules
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ClassDeclaration:
-                    {
-                        if (!bindClassesAndObjectLiterals) {
-                            return false;
-                        }
-                        const savedBindEverything = bindEverything;
-                        bindEverything = true;
-
-                        bindClassLikeDeclaration(<ClassLikeDeclaration>node);
-
-                        bindEverything = savedBindEverything;
-                        return true;
-                    }
+                    return bindClassLikeDeclaration(<ClassLikeDeclaration>node);
                 case SyntaxKind.InterfaceDeclaration:
-                    {
-                        if (!bindClassesAndObjectLiterals) {
-                            return false;
-                        }
-                        const savedBindEverything = bindEverything;
-                        bindEverything = true;
-
-                        bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
-
-                        bindEverything = savedBindEverything;
-                        return true;
-                    }
+                    return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.TypeAliasDeclaration:
-                    bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
-                    return true;
+                    return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                 case SyntaxKind.EnumDeclaration:
-                    {
-                        if (!bindClassesAndObjectLiterals) {
-                            return false;
-                        }
-                        const savedBindEverything = bindEverything;
-                        bindEverything = true;
-
-                        bindEnumDeclaration(<EnumDeclaration>node);
-
-                        bindEverything = savedBindEverything;
-                        return true;
-                    }
+                    return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
-                    bindModuleDeclaration(<ModuleDeclaration>node);
-                    return true;
+                    return bindModuleDeclaration(<ModuleDeclaration>node);
                 // Imports and exports
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
-                    declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-                    return true;
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                 case SyntaxKind.ImportClause:
-                    bindImportClause(<ImportClause>node);
-                    return true;
+                    return bindImportClause(<ImportClause>node);
                 case SyntaxKind.ExportDeclaration:
-                    bindExportDeclaration(<ExportDeclaration>node);
-                    return true;
+                    return bindExportDeclaration(<ExportDeclaration>node);
                 case SyntaxKind.ExportAssignment:
-                    bindExportAssignment(<ExportAssignment>node);
-                    return true;
+                    return bindExportAssignment(<ExportAssignment>node);
                 case SyntaxKind.SourceFile:
-                    bindSourceFileIfExternalModule();
-                    return true;
-                default:
-                    return true;
+                    return bindSourceFileIfExternalModule();
             }
         }
 

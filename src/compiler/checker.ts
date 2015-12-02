@@ -15228,8 +15228,11 @@ namespace ts {
                 return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
-        function resolveComputedPropertyName(location: Node, name: string): string {
-            const s = resolveName(location, name, SymbolFlags.Value, /* nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        function resolveComputedPropertyName(name: ComputedPropertyName): string {
+            if (name.expression.kind !== SyntaxKind.Identifier) {
+                return undefined;
+            }
+            const s = resolveName(name.expression, (<Identifier>name.expression).text, SymbolFlags.Value, /* nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             return s && s.name;
         }
 
