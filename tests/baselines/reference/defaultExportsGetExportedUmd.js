@@ -1,8 +1,13 @@
-//// [defaultExportsGetExportedUmd.ts]
+//// [tests/cases/conformance/es6/moduleExportsUmd/defaultExportsGetExportedUmd.ts] ////
+
+//// [a.ts]
 export default class Foo {}
 
+//// [b.ts]
+export default function foo() {}
 
-//// [defaultExportsGetExportedUmd.js]
+
+//// [a.js]
 (function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
@@ -15,4 +20,17 @@ export default class Foo {}
     class Foo {
     }
     exports.default = Foo;
+});
+//// [b.js]
+(function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === 'function' && define.amd) {
+        define(["require", "exports"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    function foo() { }
+    exports.default = foo;
 });
