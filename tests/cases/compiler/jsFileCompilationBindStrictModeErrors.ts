@@ -15,7 +15,7 @@ try {
 }
 function arguments() { // error
 }
-var x = 009;
+
 with (a) {
     b = 10;
 }
@@ -23,9 +23,10 @@ with (a) {
 // @filename: b.js
 // this is not in strict mode but class definitions are always in strict mode
 class c {
-    let() { // error
-    }
     a(eval) { //error
+    }
+    method() {
+        var let = 10; // error
     }
 }
 
@@ -33,3 +34,7 @@ class c {
 export var let = 10; // external modules are automatically in strict mode
 var eval = function () {
 };
+
+//@filename: d.js
+"use strict";
+var x = 009; // error
