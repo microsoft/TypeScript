@@ -15,7 +15,7 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -124,12 +124,17 @@ namespace ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+            function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {
                 let result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
+                visitDirectory(path, depth);
                 return result;
-                function visitDirectory(path: string) {
+
+                function visitDirectory(path: string, depth?: number) {
+                    if (depth <= 0) {
+                        return;
+                    }
+
                     let folder = fso.GetFolder(path || ".");
                     let files = getNames(folder.files);
                     for (let current of files) {
@@ -142,7 +147,7 @@ namespace ts {
                     for (let current of subfolders) {
                         let name = combinePaths(path, current);
                         if (!contains(exclude, getCanonicalPath(name))) {
-                            visitDirectory(name);
+                            depth === undefined ? visitDirectory(path) : visitDirectory(path, depth - 1);
                         }
                     }
                 }
@@ -238,12 +243,17 @@ namespace ts {
                 return useCaseSensitiveFileNames ? path.toLowerCase() : path;
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
+            function readDirectory(path: string, extension?: string, exclude?: string[], depth?: number): string[] {
                 let result: string[] = [];
                 exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
+                visitDirectory(path, depth);
                 return result;
-                function visitDirectory(path: string) {
+
+                function visitDirectory(path: string, depth?: number) {
+                    if (depth <= 0) {
+                        return;
+                    }
+
                     let files = _fs.readdirSync(path || ".").sort();
                     let directories: string[] = [];
                     for (let current of files) {
@@ -261,7 +271,7 @@ namespace ts {
                         }
                     }
                     for (let current of directories) {
-                        visitDirectory(current);
+                        depth === undefined ? visitDirectory(current) : visitDirectory(current, depth - 1);
                     }
                 }
             }

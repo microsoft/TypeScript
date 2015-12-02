@@ -818,6 +818,20 @@ task("update-sublime", ["local", serverFile], function() {
     jake.cpR(path.join(builtLocalDirectory, "lib.es6.d.ts"), "../TypeScript-Sublime-Plugin/tsserver/");
 });
 
+desc("Updates the vscode's tsserver");
+task("update-vscode", ["local", serverFile], function() {
+    var libPath = "../vscode/extensions/typescript/server/typescript/lib";
+    jake.cpR(serverFile, libPath);
+    jake.cpR(serverFile + ".map", libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.d.ts"), libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.es6.d.ts"), libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.core.d.ts"), libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.core.es6.d.ts"), libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.dom.d.ts"), libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.scriptHost.d.ts"), libPath);
+    jake.cpR(path.join(builtLocalDirectory, "lib.webworker.d.ts"), libPath);
+});
+
 var tslintRuleDir = "scripts/tslint";
 var tslintRules = ([
     "nextLineRule",

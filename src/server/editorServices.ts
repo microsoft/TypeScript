@@ -16,6 +16,7 @@ namespace ts.server {
     }
 
     var lineCollectionCapacity = 4;
+    var cachePath = ts.combinePaths(process.env.HOME, ".typingCache");
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -922,20 +923,19 @@ namespace ts.server {
         }
 
         acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypingPaths, newTypings } = this.resolveTypingsForJs(path);
-            this.downloadTypingFilesForJs(cachedTypingPaths, newTypings, project);
+            let { cachedTypingPaths, newTypingNames } = this.resolveTypingsForJs(path, project);
+            this.downloadTypingFilesForJs(cachedTypingPaths, newTypingNames, project);
         }
 
-        resolveTypingsForJs(fileName: string): { cachedTypingPaths: string[], newTypings: string[] } {
+        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[] } {
             this.log("Files for JS typing:" + fileName);
-            let cachePath = "C:/Users/lizhe/.typingCache";
-            return ts.JsTyping.discoverTypings(sys, [fileName], cachePath);
+            return ts.JsTyping.discoverTypings(sys, project.getFileNames(), cachePath);
         }
 
         downloadTypingFilesForJs(cachedTypingPaths: string[], newTypings: string[], project: Project) {
             let tsd = require("tsd");
-            let tsdJsonPath = 'C:/Users/lizhe/.typingCache/tsd.json';
-            let typingPath = 'C:/Users/lizhe/.typingCache/typings';
+            let tsdJsonPath = ts.combinePaths(cachePath, 'tsd.json');
+            let typingPath = ts.combinePaths(cachePath, 'typings');
             let api = tsd.getAPI(tsdJsonPath);
             let cachedInstalledPaths: Map<string>;
 
@@ -954,8 +954,16 @@ namespace ts.server {
                 for(let newTyping of newTypings) {
                     query.addNamePattern(newTyping);
                 }
+                
+                let promise: PromiseLike<void>;
+                if (!sys.fileExists(tsdJsonPath)) {
+                    promise = api.initConfig(/*overwrite*/true).then((paths: string[]) => api.readConfig());
+                }
+                else {
+                    promise = api.readConfig();
+                }
 
-                api.readConfig()
+                promise
                     .then(() => api.select(query, options))
                     .then((selection: any) => api.install(selection, options))
                     .then((installResult: any) => {
