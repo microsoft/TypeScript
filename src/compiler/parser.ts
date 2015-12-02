@@ -2259,6 +2259,14 @@ namespace ts {
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
+
+                if (token === SyntaxKind.EqualsToken) {
+                    // Although type literal properties cannot not have initializers, we attempt
+                    // to parse an initializer so we can report in the checker that an interface
+                    // property or type literal property cannot have an initializer.
+                    property.initializer = parseNonParameterInitializer();
+                }
+
                 parseTypeMemberSemicolon();
                 return finishNode(property);
             }
