@@ -3,7 +3,7 @@ import * as ts from "typescript";
 
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING = "Don't use '++' or '--' operators outside for for loops or statements - prefer '+= 1' and '-= 1'.";
+    public static FAILURE_STRING = "Don't use '++' or '--' operators outside for loops or statements - prefer '+= 1' and '-= 1'.";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         return this.applyWithWalker(new IncrementDecrementWalker(sourceFile, this.getOptions()));
