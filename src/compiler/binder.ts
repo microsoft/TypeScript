@@ -1167,7 +1167,9 @@ namespace ts {
                 node.kind === SyntaxKind.TypeLiteral ||
                 isFunctionLikeKind(node.kind);
 
-            if (bindTargets === BindTargets.All || ((bindTargets === BindTargets.OnlyContainersOfComputedNames) === canContainComputedNames)) {
+            // invoke bindWorker only during the first pass or if bindTargets is all meaning 
+            // that this is second pass and we dive into something that was not examined during the first pass  
+            if (isFirstPass || bindTargets === BindTargets.All) {
                 bindWorker(node);
             }
 
@@ -1179,7 +1181,10 @@ namespace ts {
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
-            if (bindTargets !== BindTargets.AllExceptContainersOfDynamicNames || !canContainComputedNames) {
+            
+            // on the first pass do not recurse into node that can contain computed names
+            // on the second pass recurse into every node
+            if (!canContainComputedNames || !isFirstPass) {
                 bindChildren(node);
             }
 
