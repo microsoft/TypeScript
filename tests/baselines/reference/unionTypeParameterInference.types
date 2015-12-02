@@ -1,0 +1,34 @@
+=== tests/cases/compiler/unionTypeParameterInference.ts ===
+interface Foo<T> { prop: T; }
+>Foo : Foo<T>
+>T : T
+>prop : T
+>T : T
+
+declare function lift<U>(value: U | Foo<U>): Foo<U>;
+>lift : <U>(value: U | Foo<U>) => Foo<U>
+>U : U
+>value : U | Foo<U>
+>U : U
+>Foo : Foo<T>
+>U : U
+>Foo : Foo<T>
+>U : U
+
+function unlift<U>(value: U | Foo<U>): U {
+>unlift : <U>(value: U | Foo<U>) => U
+>U : U
+>value : U | Foo<U>
+>U : U
+>Foo : Foo<T>
+>U : U
+>U : U
+
+    return lift(value).prop; // error TS2322: Type '{}' is not assignable to type 'U'.
+>lift(value).prop : U
+>lift(value) : Foo<U>
+>lift : <U>(value: U | Foo<U>) => Foo<U>
+>value : U | Foo<U>
+>prop : U
+}
+
