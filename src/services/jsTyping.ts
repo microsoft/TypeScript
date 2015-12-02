@@ -266,7 +266,7 @@ namespace ts.JsTyping {
      * @param cachedTypingsPaths The list of resolved cached d.ts paths
      * @param newTypings The list of new typings that the host attempted to acquire using TSD
      * @param cachePath The path to the local tsd.json cache
-     * @param projectRootPath The path to the project's typings.json
+     * @param projectRootPath The project root path used for autoTypings.json
      */
     export function updateTypingsConfig(
         host: HostType, cachedTypingsPaths: string[], newTypingNames: string[], cachePath: string, projectRootPath: string): void {
