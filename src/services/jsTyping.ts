@@ -30,9 +30,6 @@ namespace ts.JsTyping {
 //  https://github.com/Microsoft/TypeScript/wiki/AutoTypings
 `;
 
-    var autoTypingsDisabled = `The autoTypingsEnabled property is disabled for this project, no typings are being auto-referenced.
-`;
-    
     // a typing name to typing file path mapping
     var inferredTypings: Map<string> = {};
 
@@ -40,7 +37,7 @@ namespace ts.JsTyping {
         if (_host.fileExists(jsonPath)) {
             try {
                 // Strip out single-line comments
-                let contents = _host.readFile(jsonPath).replace(/\/\/(.*)(\r*)(\n*)|/g, "");
+                let contents = _host.readFile(jsonPath).replace(/^\/\/(.*)$/gm, "");
                 return JSON.parse(contents);
             }
             catch (e) { }
@@ -52,7 +49,7 @@ namespace ts.JsTyping {
      * @param cachePath is the path to the cache location, which contains a tsd.json file and a typings folder
      */
     export function discoverTypings(
-        host: HostType, fileNames: string[], cachePath: string, projectRootPath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
+        host: HostType, fileNames: string[], cachePath: string, projectRootPath: string, compilerOptions?: CompilerOptions, includeList?: string[], safeList?: string[], noDevDependencies?: boolean)
         : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
         _host = host;
 
@@ -82,6 +79,11 @@ namespace ts.JsTyping {
             if (autoTypingsJsonDict.hasOwnProperty("include")) {
                 mergeTypings(autoTypingsJsonDict["include"]);
             }
+        }
+
+        // Merge host specific include typings list
+        if (includeList) {
+            mergeTypings(includeList);
         }
 
         for (let fileName of fileNames) {
@@ -198,7 +200,7 @@ namespace ts.JsTyping {
         let exactlyMatched: string[] = []
         let notExactlyMatched: string[] = []
         for (let fileName of fileNames) {
-            let baseName = ts.getBaseFileName(fileName);
+            let baseName = ts.getBaseFileName(ts.normalizePath(fileName));
             let baseNameWithoutExtension = baseName.substring(0, baseName.lastIndexOf("."));
             (safeList.indexOf(baseNameWithoutExtension) >= 0) ? exactlyMatched.push(baseNameWithoutExtension) : notExactlyMatched.push(baseNameWithoutExtension);
         }
@@ -318,7 +320,6 @@ namespace ts.JsTyping {
             }
 
             if (autoTypingsJsonDict.hasOwnProperty("autoTypingsEnabled") && autoTypingsJsonDict["autoTypingsEnabled"] === false) {
-                newAutoTypingsJsonString += autoTypingsDisabled;
                 autoTypingsEnabled = false;
             }
         }
