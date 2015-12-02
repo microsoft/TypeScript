@@ -6270,9 +6270,8 @@ namespace ts {
                     const constraint = getConstraintOfTypeParameter(context.typeParameters[index]);
                     if (constraint) {
                         const instantiatedConstraint = instantiateType(constraint, getInferenceMapper(context));
-                        if (!isTypeAssignableTo(inferredType, instantiatedConstraint)) {
-                            inferredType = instantiateType(constraint, createTypeEraser(context.typeParameters));
-                            context.inferredTypes[index] = inferredType;
+                        if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                            context.inferredTypes[index] = inferredType = instantiatedConstraint;
                         }
                     }
                 }
@@ -8716,9 +8715,13 @@ namespace ts {
                             errorInfo = chainDiagnosticMessages(errorInfo, typeArgumentHeadMessage);
                             typeArgumentHeadMessage = headMessage;
                         }
+                        if (!mapper) {
+                            mapper = createTypeMapper(typeParameters, typeArgumentTypes);
+                        }
+                        const typeArgument = typeArgumentTypes[i];
                         typeArgumentsAreAssignable = checkTypeAssignableTo(
-                            typeArgumentTypes[i],
-                            instantiateType(constraint, mapper || (mapper = createTypeMapper(typeParameters, typeArgumentTypes))),
+                            typeArgument,
+                            getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
                             reportErrors ? typeArgumentNodes[i] : undefined,
                             typeArgumentHeadMessage,
                             errorInfo);
@@ -11197,8 +11200,12 @@ namespace ts {
                         typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
-                    result = result && checkTypeAssignableTo(typeArguments[i], instantiateType(constraint, mapper),
-                        typeArgumentNodes[i], Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
+                    const typeArgument = typeArguments[i];
+                    result = result && checkTypeAssignableTo(
+                        typeArgument,
+                        getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
+                        typeArgumentNodes[i],
+                        Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
             return result;
