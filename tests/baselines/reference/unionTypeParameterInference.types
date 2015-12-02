@@ -1,4 +1,6 @@
 === tests/cases/compiler/unionTypeParameterInference.ts ===
+// Regression test for #5861
+
 interface Foo<T> { prop: T; }
 >Foo : Foo<T>
 >T : T
@@ -24,7 +26,7 @@ function unlift<U>(value: U | Foo<U>): U {
 >U : U
 >U : U
 
-    return lift(value).prop; // error TS2322: Type '{}' is not assignable to type 'U'.
+    return lift(value).prop;
 >lift(value).prop : U
 >lift(value) : Foo<U>
 >lift : <U>(value: U | Foo<U>) => Foo<U>
