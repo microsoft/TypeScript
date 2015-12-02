@@ -21,7 +21,6 @@ tests/cases/compiler/intTypeCheck.ts(114,17): error TS2350: Only a void function
 tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not assignable to type 'i2'.
   Type 'Base' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
-  Type 'Boolean' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(120,22): error TS2304: Cannot find name 'i2'.
 tests/cases/compiler/intTypeCheck.ts(121,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -34,7 +33,6 @@ tests/cases/compiler/intTypeCheck.ts(129,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is not assignable to type 'i3'.
   Type '() => void' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
-  Type 'Boolean' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2304: Cannot find name 'i3'.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -68,7 +66,6 @@ tests/cases/compiler/intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not as
 tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
   Type 'void' is not assignable to type 'number'.
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
-  Type 'Boolean' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(176,22): error TS2304: Cannot find name 'i6'.
 tests/cases/compiler/intTypeCheck.ts(177,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -81,7 +78,6 @@ tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Neither type 'Base' 
 tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
   Type '() => void' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
-  Type 'Boolean' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2304: Cannot find name 'i7'.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
@@ -253,7 +249,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj20: i2 = new <i2> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i2'.
-!!! error TS2322:   Type 'Boolean' provides no match for the signature '(): any'
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -288,7 +283,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj31: i3 = new <i3> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i3'.
-!!! error TS2322:   Type 'Boolean' provides no match for the signature 'new (): any'
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -387,7 +381,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj64: i6 = new <i6> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i6'.
-!!! error TS2322:   Type 'Boolean' provides no match for the signature '(): any'
                         ~
 !!! error TS1109: Expression expected.
                          ~~
@@ -422,7 +415,6 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj75: i7 = new <i7> anyVar;
         ~~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'i7'.
-!!! error TS2322:   Type 'Boolean' provides no match for the signature 'new (): any'
                         ~
 !!! error TS1109: Expression expected.
                          ~~

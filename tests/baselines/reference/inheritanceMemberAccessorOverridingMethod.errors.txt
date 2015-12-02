@@ -1,7 +1,6 @@
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(7,7): error TS2415: Class 'b' incorrectly extends base class 'a'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '() => string'.
-      Type 'String' provides no match for the signature '(): string'
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(8,9): error TS2423: Class 'a' defines instance member function 'x', but extended class 'b' defines it as instance member accessor.
 tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -19,7 +18,6 @@ tests/cases/compiler/inheritanceMemberAccessorOverridingMethod.ts(11,9): error T
 !!! error TS2415: Class 'b' incorrectly extends base class 'a'.
 !!! error TS2415:   Types of property 'x' are incompatible.
 !!! error TS2415:     Type 'string' is not assignable to type '() => string'.
-!!! error TS2415:       Type 'String' provides no match for the signature '(): string'
         get x() {
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

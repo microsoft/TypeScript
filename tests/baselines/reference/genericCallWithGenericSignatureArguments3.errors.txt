@@ -3,7 +3,6 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
     Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts(33,11): error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate '(n: Object) => number' is not a valid type argument because it is not a supertype of candidate 'number'.
-    Type 'Number' provides no match for the signature '(n: Object): number'
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments3.ts (2 errors) ====
@@ -47,4 +46,3 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
               ~~~~
 !!! error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
 !!! error TS2453:   Type argument candidate '(n: Object) => number' is not a valid type argument because it is not a supertype of candidate 'number'.
-!!! error TS2453:     Type 'Number' provides no match for the signature '(n: Object): number'

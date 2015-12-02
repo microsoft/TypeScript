@@ -376,6 +376,14 @@ namespace ts {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
+        /** Is this type one of the apparent types created from the primitive types. */
+        function isPrimitiveApparentType(type: Type): boolean {
+            return type === globalStringType ||
+                type === globalNumberType ||
+                type === globalBooleanType ||
+                type === globalESSymbolType;
+        }
+
         function getSymbol(symbols: SymbolTable, name: string, meaning: SymbolFlags): Symbol {
             if (meaning && hasProperty(symbols, name)) {
                 const symbol = symbols[name];
@@ -5441,7 +5449,6 @@ namespace ts {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
                         // Only elaborate errors from the first failure
                         let shouldElaborateErrors = reportErrors;
-                        const checkedAbstractAssignability = false;
                         for (const s of sourceSignatures) {
                             if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
                                 const related = signatureRelatedTo(s, t, shouldElaborateErrors);
@@ -5453,7 +5460,7 @@ namespace ts {
                                 shouldElaborateErrors = false;
                             }
                         }
-                        if (shouldElaborateErrors) {
+                        if (shouldElaborateErrors && !isPrimitiveApparentType(source)) {
                             reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
                                 typeToString(source),
                                 signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
