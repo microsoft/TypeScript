@@ -99,7 +99,7 @@ namespace ts {
 
     const enum BindTargets {
         All,
-        OnlyContainersOfDynamicNames,
+        OnlyContainersOfComputedNames,
         AllExceptContainersOfDynamicNames
     }
 
@@ -121,6 +121,8 @@ namespace ts {
         let nameResolver: DynamicNameResolver;
         let bindTargets: BindTargets;
         let isFirstPass: boolean;
+
+        let hasDynamicNames: boolean;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -149,7 +151,7 @@ namespace ts {
             isFirstPass = nameResolver === undefined;
             bindTargets = isFirstPass
                 ? BindTargets.AllExceptContainersOfDynamicNames
-                : BindTargets.OnlyContainersOfDynamicNames;
+                : BindTargets.OnlyContainersOfComputedNames;
 
             if (file.locals === undefined || !isFirstPass) {
                 bind(file);
@@ -1134,31 +1136,31 @@ namespace ts {
             //
             // However, not all symbols will end up in any of these tables.  'Anonymous' symbols
             // (like TypeLiterals for example) will not be put in any table.
-            const isContainerOfComputedNames = 
+            const canContainComputedNames = 
                 node.kind === SyntaxKind.ClassDeclaration ||
                 node.kind === SyntaxKind.ClassExpression ||
                 node.kind === SyntaxKind.InterfaceDeclaration ||
                 node.kind === SyntaxKind.ObjectLiteralExpression ||
                 node.kind === SyntaxKind.TypeLiteral ||
-                node.kind === SyntaxKind.Parameter;
+                isFunctionLikeKind(node.kind);
 
-            if (bindTargets === BindTargets.All || ((bindTargets === BindTargets.OnlyContainersOfDynamicNames) === isContainerOfComputedNames)) {
+            if (bindTargets === BindTargets.All || ((bindTargets === BindTargets.OnlyContainersOfComputedNames) === canContainComputedNames)) {
                 bindWorker(node);
             }
 
-            const savedMode = bindTargets;
-            if (bindTargets === BindTargets.OnlyContainersOfDynamicNames && isContainerOfComputedNames) {
+            const savedBindTargets = bindTargets;
+            if (bindTargets === BindTargets.OnlyContainersOfComputedNames && canContainComputedNames) {
                 bindTargets = BindTargets.All;
             }
             // Then we recurse into the children of the node to bind them as well.  For certain
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
-            if (bindTargets !== BindTargets.AllExceptContainersOfDynamicNames || !isContainerOfComputedNames) {
+            if (bindTargets !== BindTargets.AllExceptContainersOfDynamicNames || !canContainComputedNames) {
                 bindChildren(node);
             }
 
-            bindTargets = savedMode;
+            bindTargets = savedBindTargets;
 
             inStrictMode = savedInStrictMode;
         }
