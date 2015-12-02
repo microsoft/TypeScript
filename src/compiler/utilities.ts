@@ -1891,7 +1891,7 @@ namespace ts {
     export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
         const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
         const dir = toPath(host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
-        const filePath = toPath(fileName, host.getCurrentDirectory(), getCanonicalFileName);
+        const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
         const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return removeFileExtension(relativePath);
     }
