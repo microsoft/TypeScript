@@ -95,7 +95,7 @@ namespace ts {
 
     const binder = createBinder();
 
-    type DynamicNameResolver = (name: ComputedPropertyName) => string;
+    type DynamicNameResolver = (name: ComputedPropertyName) => Expression;
 
     const enum BindTargets {
         All,
@@ -122,7 +122,7 @@ namespace ts {
         let bindTargets: BindTargets;
         let isFirstPass: boolean;
 
-        let hasDynamicNames: boolean;
+        let hasNonLocalDynamicNames: boolean;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -141,6 +141,7 @@ namespace ts {
         let classifiableNames: Map<string>;
 
         function bindSourceFile(_file: SourceFile, _options: CompilerOptions, _nameResolver: DynamicNameResolver) {
+            hasNonLocalDynamicNames = false;
             nameResolver = _nameResolver;
             file = _file;
             options = _options;
@@ -153,8 +154,29 @@ namespace ts {
                 ? BindTargets.AllExceptContainersOfDynamicNames
                 : BindTargets.OnlyContainersOfComputedNames;
 
-            if (file.locals === undefined || !isFirstPass) {
+            // 
+            // file.locals === undefined - fresh file - should be bound on both pass 1 and pass 2
+            // file.locals !== undefined && file.hasNonLocalDynamicNames - should be bound on both pass 1 and pass 2
+            
+            let shouldBind: boolean;
+            if (isFirstPass) {
+                shouldBind = file.locals === undefined || file.hasNonLocalDynamicNames; 
+            }
+            else {
+                shouldBind = file.hasNonLocalDynamicNames === undefined;
+            }
+            
+            if (shouldBind) {
+                if (isFirstPass) {
+                    // wipe out the marker so this file can be accepted for the second pass
+                    file.hasNonLocalDynamicNames = undefined;
+                }
+
                 bind(file);
+
+                if (!isFirstPass) {
+                    file.hasNonLocalDynamicNames = hasNonLocalDynamicNames;
+                }
 
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
@@ -224,7 +246,8 @@ namespace ts {
                     }
 
                     if (nameExpression.kind === SyntaxKind.Identifier && nameResolver) {
-                        return nameResolver(<ComputedPropertyName>node.name);
+                        const expr = nameResolver(<ComputedPropertyName>node.name);
+                        Debug.assert(false);
                     }
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);

@@ -15257,12 +15257,12 @@ namespace ts {
                 return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
-        function resolveComputedPropertyName(name: ComputedPropertyName): string {
+        function resolveComputedPropertyName(name: ComputedPropertyName): Expression {
             if (name.expression.kind !== SyntaxKind.Identifier) {
                 return undefined;
             }
             const s = resolveName(name.expression, (<Identifier>name.expression).text, SymbolFlags.Value, /* nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-            return s && s.name;
+            return undefined;
         }
 
         function initializeTypeChecker() {
