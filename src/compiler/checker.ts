@@ -5460,6 +5460,8 @@ namespace ts {
                                 shouldElaborateErrors = false;
                             }
                         }
+                        // don't elaborate the primitive apparent types (like Number) 
+                        // because the actual primitives will have already been reported.
                         if (shouldElaborateErrors && !isPrimitiveApparentType(source)) {
                             reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
                                 typeToString(source),
