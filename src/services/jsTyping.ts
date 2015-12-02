@@ -66,10 +66,11 @@ namespace ts.JsTyping {
         let exclude: string[] = [];
         let autoTypingsJsonPath = ts.combinePaths(ts.normalizePath(projectRootPath), "autoTypings.json");
         let autoTypingsJsonDict = tryParseJson(autoTypingsJsonPath);
+        let isAutoTypingsEnabled = true;
         if (autoTypingsJsonDict) {
             filesToWatch.push(autoTypingsJsonPath);
             if (autoTypingsJsonDict.hasOwnProperty("autoTypingsEnabled") && autoTypingsJsonDict["autoTypingsEnabled"] === false) {
-                return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: filesToWatch };
+                isAutoTypingsEnabled = false;
             }
 
             if (autoTypingsJsonDict.hasOwnProperty("exclude")) {
@@ -81,34 +82,36 @@ namespace ts.JsTyping {
             }
         }
 
-        // Merge host specific include typings list
-        if (includeList) {
-            mergeTypings(includeList);
-        }
+        if (isAutoTypingsEnabled) {
+            // Merge host specific include typings list
+            if (includeList) {
+                mergeTypings(includeList);
+            }
 
-        for (let fileName of fileNames) {
-            if (ts.getBaseFileName(fileName) !== "lib.d.ts") {
-                let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
-                if (searchDirs.indexOf(dir) < 0) {
-                    searchDirs.push(dir);
+            for (let fileName of fileNames) {
+                if (ts.getBaseFileName(fileName) !== "lib.d.ts") {
+                    let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
+                    if (searchDirs.indexOf(dir) < 0) {
+                        searchDirs.push(dir);
+                    }
                 }
             }
-        }
 
-        for (let searchDir of searchDirs) {
-            let packageJsonPath = ts.combinePaths(searchDir, "package.json");
-            getTypingNamesFromJson(packageJsonPath, filesToWatch);
+            for (let searchDir of searchDirs) {
+                let packageJsonPath = ts.combinePaths(searchDir, "package.json");
+                getTypingNamesFromJson(packageJsonPath, filesToWatch);
 
-            let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
-            getTypingNamesFromJson(bowerJsonPath, filesToWatch);
+                let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
+                getTypingNamesFromJson(bowerJsonPath, filesToWatch);
 
-            let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
-            getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
-        }
+                let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
+                getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
+            }
         
-        // Todo: use a real safe list
-        getTypingNamesFromSourceFileNames(fileNames, ["react", "jquery"]);
-        getTypingNamesFromCompilerOptions(compilerOptions);
+            // Todo: use a real safe list
+            getTypingNamesFromSourceFileNames(fileNames, ["react", "jquery"]);
+            getTypingNamesFromCompilerOptions(compilerOptions);
+        }
 
         let normalizedCachePath = ts.normalizePath(cachePath);
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
