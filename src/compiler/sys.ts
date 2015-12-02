@@ -60,7 +60,7 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
-    }
+    };
 
     export var sys: System = (function () {
 
@@ -209,6 +209,7 @@ namespace ts {
                 }
             };
         }
+
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -469,10 +470,11 @@ namespace ts {
                 }
             };
         }
+
         function getChakraSystem(): System {
 
             return {
-                newLine: '\r\n',
+                newLine: "\r\n",
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: false,
                 write(message: string) {
@@ -516,6 +518,7 @@ namespace ts {
                 }
             };
         }
+
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
