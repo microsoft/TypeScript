@@ -68,37 +68,34 @@ namespace ts.JsTyping {
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
         let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
         if (tsdJsonCacheInfo) {
-            try {
-                let cacheTsdJsonDict = tsdJsonCacheInfo.value;
-                // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped. 
-                // Therefore if they don't come with d.ts files, we should not retry downloading these packages.
-                if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
-                    for (let notFoundTypingName of cacheTsdJsonDict["notFound"]) {
-                        if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
-                            delete inferredTypings[notFoundTypingName];
-                        }
-                    }
-                }
-
-                // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
-                // of this object has a key of the relative file path, and a value that contains the corresponding
-                // commit hash.
-                if (cacheTsdJsonDict.hasOwnProperty("installed")) {
-                    for (let cachedTypingPath of Object.keys(cacheTsdJsonDict.installed)) {
-                        // Assuming the cachedTypingPath has the format of "[package name]/[file name]"
-                        // Todo: sometimes the package names may not match exactly. For example, in package.json angular
-                        // is written as "angular", however the resolved typing is "angularjs/..", therefore it would never
-                        // match cached version
-                        let cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf('/'));
-                        // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
-                        // d.ts file that coming with the package. That one should take higher priority.
-                        if (inferredTypings.hasOwnProperty(cachedTypingName) && !inferredTypings[cachedTypingName]) {
-                            inferredTypings[cachedTypingName] = ts.combinePaths(typingsPath, cachedTypingPath);
-                        }
+            let cacheTsdJsonDict = tsdJsonCacheInfo.value;
+            // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped. 
+            // Therefore if they don't come with d.ts files, we should not retry downloading these packages.
+            if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
+                for (let notFoundTypingName of cacheTsdJsonDict["notFound"]) {
+                    if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
+                        delete inferredTypings[notFoundTypingName];
                     }
                 }
             }
-            catch (e) { }
+
+            // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
+            // of this object has a key of the relative file path, and a value that contains the corresponding
+            // commit hash.
+            if (cacheTsdJsonDict.hasOwnProperty("installed")) {
+                for (let cachedTypingPath of Object.keys(cacheTsdJsonDict.installed)) {
+                    // Assuming the cachedTypingPath has the format of "[package name]/[file name]"
+                    // Todo: sometimes the package names may not match exactly. For example, in package.json angular
+                    // is written as "angular", however the resolved typing is "angularjs/..", therefore it would never
+                    // match cached version
+                    let cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf('/'));
+                    // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
+                    // d.ts file that coming with the package. That one should take higher priority.
+                    if (inferredTypings.hasOwnProperty(cachedTypingName) && !inferredTypings[cachedTypingName]) {
+                        inferredTypings[cachedTypingName] = ts.combinePaths(typingsPath, cachedTypingPath);
+                    }
+                }
+            }
         }
 
         let newTypingNames: string[] = [];
