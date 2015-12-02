@@ -97,10 +97,10 @@ namespace ts {
 
     type DynamicNameResolver = (name: ComputedPropertyName) => string;
 
-    const enum BinderMode {
-        BindEverythingExceptContainersOfComputedNames,
-        BindOnlyContainersOfComputedNames,
-        BindEverything
+    const enum BindTargets {
+        All,
+        OnlyContainersOfDynamicNames,
+        AllExceptContainersOfDynamicNames
     }
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver) {
@@ -119,8 +119,8 @@ namespace ts {
         let seenThisKeyword: boolean;
 
         let nameResolver: DynamicNameResolver;
+        let bindTargets: BindTargets;
         let isFirstPass: boolean;
-        let mode: BinderMode;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -147,9 +147,9 @@ namespace ts {
             Symbol = objectAllocator.getSymbolConstructor();
 
             isFirstPass = nameResolver === undefined;
-            mode = isFirstPass 
-                ? BinderMode.BindEverythingExceptContainersOfComputedNames
-                : BinderMode.BindOnlyContainersOfComputedNames;
+            bindTargets = isFirstPass
+                ? BindTargets.AllExceptContainersOfDynamicNames
+                : BindTargets.OnlyContainersOfDynamicNames;
 
             if (file.locals === undefined || !isFirstPass) {
                 bind(file);
@@ -409,8 +409,10 @@ namespace ts {
             if (containerFlags & ContainerFlags.IsContainer) {
                 container = blockScopeContainer = node;
 
-                if (containerFlags & ContainerFlags.HasLocals && isFirstPass) {
-                    container.locals = {};
+                if (containerFlags & ContainerFlags.HasLocals) {
+                    if (isFirstPass || container.locals === undefined) {
+                        container.locals = {};
+                    }
                 }
 
                 addToContainerChain(container);
@@ -1140,28 +1142,23 @@ namespace ts {
                 node.kind === SyntaxKind.TypeLiteral ||
                 node.kind === SyntaxKind.Parameter;
 
-            const bindNode = 
-                mode === BinderMode.BindEverything ||
-                ((mode === BinderMode.BindOnlyContainersOfComputedNames) === isContainerOfComputedNames);
-
-            if (bindNode) {
+            if (bindTargets === BindTargets.All || ((bindTargets === BindTargets.OnlyContainersOfDynamicNames) === isContainerOfComputedNames)) {
                 bindWorker(node);
             }
 
-            const savedMode = mode;
-            if (mode === BinderMode.BindOnlyContainersOfComputedNames && isContainerOfComputedNames) {
-                mode = BinderMode.BindEverything;
+            const savedMode = bindTargets;
+            if (bindTargets === BindTargets.OnlyContainersOfDynamicNames && isContainerOfComputedNames) {
+                bindTargets = BindTargets.All;
             }
             // Then we recurse into the children of the node to bind them as well.  For certain
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
             // the current 'container' node when it changes.  This helps us know which symbol table
             // a local should go into for example.
-            if (mode === BinderMode.BindEverything || 
-                (mode === BinderMode.BindEverythingExceptContainersOfComputedNames && !isContainerOfComputedNames)) {
+            if (bindTargets !== BindTargets.AllExceptContainersOfDynamicNames || !isContainerOfComputedNames) {
                 bindChildren(node);
             }
 
-            mode = savedMode;
+            bindTargets = savedMode;
 
             inStrictMode = savedInStrictMode;
         }
