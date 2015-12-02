@@ -432,7 +432,7 @@ declare namespace ts.server.protocol {
         newLineCharacter?: string;
 
         /** Whether tabs should be converted to spaces. Default value is true. */
-        convertTabsToSpaces?: boolean;        
+        convertTabsToSpaces?: boolean;
 
         /** Whether we send anonymous usage metrics. */
         sendMetrics?: boolean;

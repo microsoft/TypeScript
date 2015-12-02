@@ -419,7 +419,7 @@ namespace ts {
                 req.on("error", (err: any) => callback && callback(err, undefined));
                 req.write(data);
             }
-            
+
             function getFileWriteTime(path: string): number {
                 return Math.floor(Date.parse(_fs.statSync(path).mtime) / 1000);
             }

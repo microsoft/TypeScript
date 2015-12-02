@@ -681,8 +681,8 @@ declare namespace NodeJS {
     }
 }
 
-declare module NodeJS {
-    module net {
+declare namespace NodeJS {
+    namespace net {
         import stream = NodeJS.stream;
 
         export interface Socket extends stream.Duplex {
@@ -748,8 +748,8 @@ declare module NodeJS {
     }
 }
 
-declare module NodeJS {
-    module http {
+declare namespace NodeJS {
+    namespace http {
         import events = NodeJS.events;
         import net = NodeJS.net;
         import stream = NodeJS.stream;
@@ -906,7 +906,7 @@ declare module NodeJS {
              * - Agent object: explicitly use the passed in Agent.
              * - false: opts out of connection pooling with an Agent, defaults request to Connection: close.
              */
-            agent?: Agent|boolean;
+            agent?: Agent | boolean;
         }
 
         export var STATUS_CODES: {
