@@ -1,0 +1,70 @@
+tests/cases/compiler/a.js(3,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
+tests/cases/compiler/a.js(5,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/a.js(8,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+tests/cases/compiler/a.js(10,10): error TS1100: Invalid use of 'eval' in strict mode.
+tests/cases/compiler/a.js(12,10): error TS1100: Invalid use of 'arguments' in strict mode.
+tests/cases/compiler/a.js(14,9): error TS1121: Octal literals are not allowed in strict mode.
+tests/cases/compiler/a.js(14,11): error TS1005: ',' expected.
+tests/cases/compiler/a.js(15,1): error TS1101: 'with' statements are not allowed in strict mode.
+tests/cases/compiler/b.js(5,7): error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+tests/cases/compiler/c.js(1,12): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+tests/cases/compiler/c.js(2,5): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+
+
+==== tests/cases/compiler/a.js (9 errors) ====
+    "use strict";
+    var a = {
+        a: "hello", // error
+        ~
+!!! error TS2300: Duplicate identifier 'a'.
+        b: 10,
+        a: 10 // error
+        ~
+!!! error TS1117: An object literal cannot have multiple properties with the same name in strict mode.
+        ~
+!!! error TS2300: Duplicate identifier 'a'.
+    };
+    var let = 10; // error
+    delete a; // error
+           ~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+    try {
+    } catch (eval) { // error
+             ~~~~
+!!! error TS1100: Invalid use of 'eval' in strict mode.
+    }
+    function arguments() { // error
+             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    var x = 009;
+            ~~
+!!! error TS1121: Octal literals are not allowed in strict mode.
+              ~
+!!! error TS1005: ',' expected.
+    with (a) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+        b = 10;
+    }
+    
+==== tests/cases/compiler/b.js (1 errors) ====
+    // this is not in strict mode but class definitions are always in strict mode
+    class c {
+        let() { // error
+        }
+        a(eval) { //error
+          ~~~~
+!!! error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+        }
+    }
+    
+==== tests/cases/compiler/c.js (2 errors) ====
+    export var let = 10; // external modules are automatically in strict mode
+               ~~~
+!!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
+    var eval = function () {
+        ~~~~
+!!! error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
+    };
