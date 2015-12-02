@@ -477,9 +477,7 @@ namespace ts {
                 newLine: "\r\n",
                 args: ChakraHost.args,
                 useCaseSensitiveFileNames: false,
-                write(message: string) {
-                    ChakraHost.echo(message);
-                },
+                write: ChakraHost.echo,
                 readFile(path: string, encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost
                     return ChakraHost.readFile(path);
@@ -492,30 +490,14 @@ namespace ts {
 
                     ChakraHost.writeFile(path, data);
                 },
-                resolvePath(path: string) {
-                    return ChakraHost.resolvePath(path);
-                },
-                fileExists(path: string) {
-                    return ChakraHost.fileExists(path);
-                },
-                directoryExists(path: string) {
-                    return ChakraHost.directoryExists(path);
-                },
-                createDirectory(path: string) {
-                    ChakraHost.createDirectory(path);
-                },
-                getExecutingFilePath() {
-                    return ChakraHost.executingFile;
-                },
-                getCurrentDirectory() {
-                    return ChakraHost.currentDirectory;
-                },
-                readDirectory(path: string, extension?: string, exclude?: string[]) {
-                    return ChakraHost.readDirectory(path, extension, exclude);
-                },
-                exit(exitCode?: number) {
-                    ChakraHost.quit(exitCode);
-                }
+                resolvePath: ChakraHost.resolvePath,
+                fileExists: ChakraHost.fileExists,
+                directoryExists: ChakraHost.directoryExists,
+                createDirectory: ChakraHost.createDirectory,
+                getExecutingFilePath: () => ChakraHost.executingFile,
+                getCurrentDirectory: () => ChakraHost.currentDirectory,
+                readDirectory: ChakraHost.readDirectory,
+                exit: ChakraHost.quit,
             };
         }
 
