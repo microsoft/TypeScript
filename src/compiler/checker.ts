@@ -15228,10 +15228,22 @@ namespace ts {
                 return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
         }
 
+        function resolveComputedPropertyName(location: Node, name: string): string {
+            const s = resolveName(location, name, SymbolFlags.Value, /* nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            return s && s.name;
+        }
+
         function initializeTypeChecker() {
             // Bind all source files and propagate errors
+            
+            // do the initial binding
             forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file, compilerOptions);
+                bindSourceFile(file, compilerOptions, /*nameResolver*/ undefined);
+            });
+
+            // finalize deferred bindings
+            forEach(host.getSourceFiles(), file => {
+                bindSourceFile(file, compilerOptions, /*nameResolver*/ resolveComputedPropertyName);
             });
 
             // Initialize global symbol table
