@@ -224,8 +224,8 @@ namespace ts {
         getPreProcessedFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
-        resolveTypeDefinitions(fileNamesJson: string, cachePath: string, typingsConfigPath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
-        updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, autoTypingsConfigPath: string): string 
+        resolveTypeDefinitions(fileNamesJson: string, cachePath: string, projectRootPath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
+        updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, projectRootPath: string): string 
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -428,8 +428,8 @@ namespace ts {
             return JSON.parse(encoded);
         }
 
-        public directoryExists(fileName: string): boolean {
-            return this.shimHost.directoryExists(fileName);
+        public directoryExists(path: string): boolean {
+            return this.shimHost.directoryExists(path);
         }
         
         public fileExists(fileName: string): boolean {
@@ -1029,20 +1029,20 @@ namespace ts {
                 });
         }
 
-        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, typingsConfigPath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string {
+        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, projectRootPath: string, compilerOptionsJson?: string, safeListJson?: string, noDevDependencies?: boolean): string {
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
                 let safeList: string[] = JSON.parse(safeListJson);
-                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, typingsConfigPath, compilerOptions, safeList, noDevDependencies);
+                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, projectRootPath, compilerOptions, safeList, noDevDependencies);
             });
         }
 
-        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, autoTypingsConfigPath: string): string {
+        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, projectRootPath: string): string {
             return this.forwardJSONCall("updateTypingsConfig()", () => {
                 let cachedTypingsPaths: string[] = JSON.parse(cachedTypingsPathsJson);
                 let newTypingNames: string[] = JSON.parse(newTypingsJson);
-                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypingNames, cachePath, autoTypingsConfigPath);
+                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypingNames, cachePath, projectRootPath);
             });
         }
     }

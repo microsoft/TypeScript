@@ -927,9 +927,9 @@ namespace ts.server {
             this.downloadTypingFilesForJs(cachedTypingPaths, newTypingNames, project);
         }
 
-        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[] } {
+        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
             this.log("Files for JS typing:" + fileName);
-            // TODO: replace 2nd cachePath for typingsConfigPath
+            // TODO: replace 2nd cachePath for projectRootPath
             return ts.JsTyping.discoverTypings(sys, project.getFileNames(), cachePath, cachePath);
         }
 
