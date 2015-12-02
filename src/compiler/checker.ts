@@ -22,6 +22,8 @@ namespace ts {
     }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
+        const UNRESOLVED_EXPR = <StringLiteral>{};
+
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
         // computing something, and we will leave our internals in an inconsistent state.  Callers
@@ -2497,7 +2499,7 @@ namespace ts {
             if (declaration.kind === SyntaxKind.Parameter) {
                 const func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
-                if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
+                if (func.kind === SyntaxKind.SetAccessor && !declarationHasUnresolvableName(func)) {
                     const getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
                         return getReturnTypeOfSignature(getSignatureFromDeclaration(getter));
@@ -3902,7 +3904,7 @@ namespace ts {
                 else {
                     // TypeScript 1.0 spec (April 2014):
                     // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-                    if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
+                    if (declaration.kind === SyntaxKind.GetAccessor && !declarationHasUnresolvableName(declaration)) {
                         const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
                         returnType = getAnnotatedAccessorType(setter);
                     }
@@ -7229,7 +7231,7 @@ namespace ts {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             const type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
-                if (!hasDynamicName(element)) {
+                if (!declarationHasUnresolvableName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
@@ -7647,7 +7649,7 @@ namespace ts {
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
                         }
-                        if (hasDynamicName(memberDecl)) {
+                        if (declarationHasUnresolvableName(memberDecl)) {
                             patternWithComputedProperties = true;
                         }
                     }
@@ -7683,7 +7685,7 @@ namespace ts {
                     checkAccessorDeclaration(<AccessorDeclaration>memberDecl);
                 }
 
-                if (!hasDynamicName(memberDecl)) {
+                if (!declarationHasUnresolvableName(memberDecl)) {
                     propertiesTable[member.name] = member;
                 }
                 propertiesArray.push(member);
@@ -8478,6 +8480,11 @@ namespace ts {
                     return value.toString();
                 }
             }
+            const expr = resolveComputedPropertyNameCore(indexArgumentExpression); 
+            if (expr) {
+                return expr.text; 
+            }
+            
             if (checkThatExpressionIsProperSymbolReference(indexArgumentExpression, indexArgumentType, /*reportError*/ false)) {
                 const rightHandSideName = (<Identifier>(<PropertyAccessExpression>indexArgumentExpression).name).text;
                 return getPropertyNameForKnownSymbolName(rightHandSideName);
@@ -11252,7 +11259,7 @@ namespace ts {
                     }
                 }
 
-                if (!hasDynamicName(node)) {
+                if (!declarationHasUnresolvableName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
@@ -12149,7 +12156,7 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            if (!hasDynamicName(node)) {
+            if (!declarationHasUnresolvableName(node)) {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -13136,7 +13143,7 @@ namespace ts {
                         // Only process instance properties with computed names here.
                         // Static properties cannot be in conflict with indexers,
                         // and properties with literal names were already checked.
-                        if (!(member.flags & NodeFlags.Static) && hasDynamicName(member)) {
+                        if (!(member.flags & NodeFlags.Static) && declarationHasUnresolvableName(member)) {
                             const propType = getTypeOfSymbol(member.symbol);
                             checkIndexConstraintForProperty(member.symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
                             checkIndexConstraintForProperty(member.symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
@@ -15249,20 +15256,56 @@ namespace ts {
         }
 
         function getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile {
-                const specifier = getExternalModuleName(declaration);
-                const moduleSymbol = getSymbolAtLocation(specifier);
-                if (!moduleSymbol) {
-                    return undefined;
-                }
-                return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
-        }
-
-        function resolveComputedPropertyName(name: ComputedPropertyName): Expression {
-            if (name.expression.kind !== SyntaxKind.Identifier) {
+            const specifier = getExternalModuleName(declaration);
+            const moduleSymbol = getSymbolAtLocation(specifier);
+            if (!moduleSymbol) {
                 return undefined;
             }
-            const s = resolveName(name.expression, (<Identifier>name.expression).text, SymbolFlags.Value, /* nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
-            return undefined;
+            return getDeclarationOfKind(moduleSymbol, SyntaxKind.SourceFile) as SourceFile;
+        }
+
+        function resolveComputedPropertyName(name: ComputedPropertyName, loc?: Node): Expression {
+            return resolveComputedPropertyNameCore(name.expression, loc);
+        }
+
+        function resolveComputedPropertyNameCore(expr: Expression, loc?: Node): StringLiteral {
+            if (!expr || expr.kind !== SyntaxKind.Identifier) {
+                return undefined;
+            }
+            const links = getNodeLinks(expr);
+            if (links.resolvedComputedName === undefined) { 
+                let resolvedName = resolveName(loc || expr, (<Identifier>expr).text, SymbolFlags.Value, /* nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+                if (!resolvedName) {
+                    links.resolvedComputedName = UNRESOLVED_EXPR;
+                }
+                else {
+                    if (resolvedName.flags & SymbolFlags.Alias) {
+                        resolvedName = resolveAlias(resolvedName);
+                    }
+                    if (resolvedName.flags & SymbolFlags.BlockScopedVariable && 
+                        isConst(resolvedName.valueDeclaration) && 
+                        (<VariableLikeDeclaration>resolvedName.valueDeclaration).initializer && 
+                        (<VariableLikeDeclaration>resolvedName.valueDeclaration).initializer.kind === SyntaxKind.StringLiteral) {
+                        links.resolvedComputedName = <StringLiteral>(<VariableLikeDeclaration>resolvedName.valueDeclaration).initializer;
+                    }
+                    else {
+                        links.resolvedComputedName = UNRESOLVED_EXPR;
+                    }
+                }
+            }
+            return links.resolvedComputedName === UNRESOLVED_EXPR ? undefined : links.resolvedComputedName;
+        }
+
+        function declarationHasUnresolvableName(decl: Declaration): boolean {
+            if (!decl.name) {
+                return false;
+            }
+            if (!isDynamicName(decl.name)) {
+                return false;
+            }
+
+            const resolvedExpr = resolveComputedPropertyName(<ComputedPropertyName>decl.name, decl);
+            return resolvedExpr === undefined;
         }
 
         function initializeTypeChecker() {
@@ -15270,12 +15313,12 @@ namespace ts {
             
             // do the initial binding
             forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file, compilerOptions, /*nameResolver*/ undefined);
+                bindSourceFile(file, compilerOptions, /*nameResolver*/ undefined, /*nameChecker*/ hasDynamicName);
             });
 
             // finalize deferred bindings
             forEach(host.getSourceFiles(), file => {
-                bindSourceFile(file, compilerOptions, /*nameResolver*/ resolveComputedPropertyName);
+                bindSourceFile(file, compilerOptions, resolveComputedPropertyName, declarationHasUnresolvableName);
             });
 
             // Initialize global symbol table

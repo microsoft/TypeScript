@@ -96,6 +96,7 @@ namespace ts {
     const binder = createBinder();
 
     type DynamicNameResolver = (name: ComputedPropertyName) => Expression;
+    type DeclarationNameChecker = (decl: Declaration) => boolean;
 
     const enum BindTargets {
         All,
@@ -103,13 +104,13 @@ namespace ts {
         AllExceptContainersOfDynamicNames
     }
 
-    export function bindSourceFile(file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver) {
+    export function bindSourceFile(file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver, nameChecker: DeclarationNameChecker) {
         const start = new Date().getTime();
-        binder(file, options, nameResolver);
+        binder(file, options, nameResolver, nameChecker);
         bindTime += new Date().getTime() - start;
     }
 
-    function createBinder(): (file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver) => void {
+    function createBinder(): (file: SourceFile, options: CompilerOptions, nameResolver: DynamicNameResolver, declarationHasUnresolvableName: DeclarationNameChecker) => void {
         let file: SourceFile;
         let options: CompilerOptions;
         let parent: Node;
@@ -119,6 +120,7 @@ namespace ts {
         let seenThisKeyword: boolean;
 
         let nameResolver: DynamicNameResolver;
+        let declarationHasUnresolvableName: DeclarationNameChecker;
         let bindTargets: BindTargets;
         let isFirstPass: boolean;
 
@@ -140,9 +142,10 @@ namespace ts {
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
         let classifiableNames: Map<string>;
 
-        function bindSourceFile(_file: SourceFile, _options: CompilerOptions, _nameResolver: DynamicNameResolver) {
+        function bindSourceFile(_file: SourceFile, _options: CompilerOptions, _nameResolver: DynamicNameResolver, _declarationHasUnresolvableName: DeclarationNameChecker) {
             hasNonLocalDynamicNames = false;
             nameResolver = _nameResolver;
+            declarationHasUnresolvableName = _declarationHasUnresolvableName;
             file = _file;
             options = _options;
             inStrictMode = !!file.externalModuleIndicator;
@@ -183,6 +186,7 @@ namespace ts {
             }
 
             nameResolver = undefined;
+            declarationHasUnresolvableName = undefined;
             file = undefined;
             options = undefined;
             parent = undefined;
@@ -247,7 +251,13 @@ namespace ts {
 
                     if (nameExpression.kind === SyntaxKind.Identifier && nameResolver) {
                         const expr = nameResolver(<ComputedPropertyName>node.name);
-                        Debug.assert(false);
+                        Debug.assert(expr !== undefined);
+                        if (!hasNonLocalDynamicNames && getSourceFileOfNode(expr) !== file) {
+                            hasNonLocalDynamicNames = true;
+                        }
+                        // TODO: verify that this is either string or symbol
+                        Debug.assert(expr.kind === SyntaxKind.StringLiteral);
+                        return (<LiteralExpression>expr).text;
                     }
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);
@@ -291,7 +301,6 @@ namespace ts {
          * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
          */
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags): Symbol {
-            Debug.assert(!hasDynamicName(node));
 
             const isDefaultExport = node.flags & NodeFlags.Default;
             // The exported symbol for an export default function/class node is always named "default"
@@ -1516,7 +1525,7 @@ namespace ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            return hasDynamicName(node)
+            return declarationHasUnresolvableName(node)
                 ? bindAnonymousDeclaration(node, symbolFlags, "__computed")
                 : declareSymbolAndAddToSymbolTable(node, symbolFlags, symbolExcludes);
         }
