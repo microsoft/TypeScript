@@ -15973,18 +15973,27 @@ namespace ts {
                             : Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
                         return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
                     }
-                    const firstDeclaration = variableList.declarations[0];
-                    if (firstDeclaration.initializer) {
-                        const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
-                            ? Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer
-                            : Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
-                        return grammarErrorOnNode(firstDeclaration.name, diagnostic);
-                    }
-                    if (firstDeclaration.type) {
-                        const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
-                            ? Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation
-                            : Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
-                        return grammarErrorOnNode(firstDeclaration, diagnostic);
+                    const firstDeclaration = variableList.declarations[0]
+
+                    // firstDeclaration can be undefined if there is variable declaration in for-of or for-in
+                    // See http://www.ecma-international.org/ecma-262/6.0/#sec-for-in-and-for-of-statements for details
+                    // For example:
+                    //      var let = 10;
+                    //      for (let of [1,2,3]) {} // this is invalid ES6 syntax
+                    //      for (let in [1,2,3]) {} // this is invalid ES6 syntax
+                    if (firstDeclaration) {
+                        if (firstDeclaration.initializer) {
+                            const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                                ? Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer
+                                : Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
+                            return grammarErrorOnNode(firstDeclaration.name, diagnostic);
+                        }
+                        if (firstDeclaration.type) {
+                            const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                                ? Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation
+                                : Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
+                            return grammarErrorOnNode(firstDeclaration, diagnostic);
+                        }
                     }
                 }
             }
@@ -16172,7 +16181,7 @@ namespace ts {
                 }
             }
 
-            const checkLetConstNames = languageVersion >= ScriptTarget.ES6 && (isLet(node) || isConst(node));
+            const checkLetConstNames = (isLet(node) || isConst(node));
 
             // 1. LexicalDeclaration : LetOrConst BindingList ;
             // It is a Syntax Error if the BoundNames of BindingList contains "let".
@@ -16186,7 +16195,7 @@ namespace ts {
 
         function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {
             if (name.kind === SyntaxKind.Identifier) {
-                if ((<Identifier>name).text === "let") {
+                if ((<Identifier>name).originalKeywordKind === SyntaxKind.LetKeyword) {
                     return grammarErrorOnNode(name, Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations);
                 }
             }
