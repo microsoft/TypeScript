@@ -1,2 +1,2 @@
 //// [fooResult.js.map]
-{"version":3,"file":"fooResult.js","sourceRoot":"","sources":["../testFiles/app.ts","../testFiles/app2.ts"],"names":["c","c.constructor","d","d.constructor"],"mappings":"AAAA,gFAAgF;AAChF,wIAAwI;AACxI;IAAAA;IACAC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC;ACHD;IAAAE;IACAC,CAACA;IAADD,QAACA;AAADA,CAACA,AADD,IACC"}
+{"version":3,"file":"fooResult.js","sourceRoot":"","sources":["../testFiles/app.ts","../testFiles/app2.ts"],"names":[],"mappings":"AAAA,gFAAgF;AAChF,wIAAwI;AACxI;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC;ACHD;IAAA;IACA,CAAC;IAAD,QAAC;AAAD,CAAC,AADD,IACC"}

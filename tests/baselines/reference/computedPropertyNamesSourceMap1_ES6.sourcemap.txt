@@ -25,10 +25,10 @@ sourceFile:computedPropertyNamesSourceMap1_ES6.ts
 2 >    [
 3 >     "hello"
 4 >            ]
-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (C)
-2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0) name (C)
-3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0) name (C)
-4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0) name (C)
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
 ---
 >>>        debugger;
 1->^^^^^^^^
@@ -38,9 +38,9 @@ sourceFile:computedPropertyNamesSourceMap1_ES6.ts
   >        
 2 >        debugger
 3 >                ;
-1->Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (C["hello"])
-2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0) name (C["hello"])
-3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0) name (C["hello"])
+1->Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -48,8 +48,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES6.ts
 1 >
   >    
 2 >    }
-1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (C["hello"])
-2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0) name (C["hello"])
+1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -58,8 +58,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES6.ts
 1 >
   >
 2 >}
-1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0) name (C)
-2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0) name (C)
+1 >Emitted(5, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(5, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=computedPropertyNamesSourceMap1_ES6.js.map1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
