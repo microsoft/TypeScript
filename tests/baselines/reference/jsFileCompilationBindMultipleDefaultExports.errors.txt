@@ -1,0 +1,18 @@
+tests/cases/compiler/a.js(1,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/compiler/a.js(3,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/compiler/a.js(3,1): error TS8003: 'export=' can only be used in a .ts file.
+tests/cases/compiler/a.js(3,16): error TS1109: Expression expected.
+
+
+==== tests/cases/compiler/a.js (4 errors) ====
+    export default class a {
+                         ~
+!!! error TS2528: A module cannot have multiple default exports.
+    }
+    export default var a = 10;
+    ~~~~~~~~~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    ~~~~~~~~~~~~~~
+!!! error TS8003: 'export=' can only be used in a .ts file.
+                   ~~~
+!!! error TS1109: Expression expected.
