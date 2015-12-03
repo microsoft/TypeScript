@@ -27,6 +27,7 @@ var x1: number = m;
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {};
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
 "use strict";
