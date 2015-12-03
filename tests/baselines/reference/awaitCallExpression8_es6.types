@@ -46,7 +46,8 @@ async function func(): Promise<void> {
 >(await po).fn(a, a, a) : void
 >(await po).fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
 >(await po) : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
->po : any
+>await po : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
+>po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
 >a : boolean
 >a : boolean

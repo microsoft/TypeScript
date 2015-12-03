@@ -1,0 +1,10 @@
+error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
+error TS5055: Cannot write file 'SameNameDTsNotSpecifiedWithAllowJs/a.js' because it would overwrite input file.
+
+
+!!! error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
+!!! error TS5055: Cannot write file 'SameNameDTsNotSpecifiedWithAllowJs/a.js' because it would overwrite input file.
+==== SameNameDTsNotSpecifiedWithAllowJs/a.d.ts (0 errors) ====
+    declare var a: number;
+==== SameNameDTsNotSpecifiedWithAllowJs/a.js (0 errors) ====
+    var test1 = 10; // Shouldnt get compiled

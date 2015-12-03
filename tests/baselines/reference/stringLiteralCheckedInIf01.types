@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf01.ts ===
+
+type S = "a" | "b";
+>S : "a" | "b"
+
+type T = S[] | S;
+>T : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+>S : "a" | "b"
+
+function f(foo: T) {
+>f : (foo: ("a" | "b")[] | "a" | "b") => ("a" | "b")[] | "a" | "b"
+>foo : ("a" | "b")[] | "a" | "b"
+>T : ("a" | "b")[] | "a" | "b"
+
+    if (foo === "a") {
+>foo === "a" : boolean
+>foo : ("a" | "b")[] | "a" | "b"
+>"a" : string
+
+        return foo;
+>foo : ("a" | "b")[] | "a" | "b"
+    }
+    else if (foo === "b") {
+>foo === "b" : boolean
+>foo : ("a" | "b")[] | "a" | "b"
+>"b" : string
+
+        return foo;
+>foo : ("a" | "b")[] | "a" | "b"
+    }
+    else { 
+        return (foo as S[])[0];
+>(foo as S[])[0] : "a" | "b"
+>(foo as S[]) : ("a" | "b")[]
+>foo as S[] : ("a" | "b")[]
+>foo : ("a" | "b")[] | "a" | "b"
+>S : "a" | "b"
+>0 : number
+    }
+}

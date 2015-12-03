@@ -10,7 +10,7 @@ class Foo {
         this.x = 5;
 >this.x = 5 : number
 >this.x : number
->this : Foo
+>this : this
 >x : number
 >5 : number
     }

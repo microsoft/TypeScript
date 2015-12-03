@@ -1,10 +1,12 @@
 tests/cases/compiler/fuzzy.ts(13,18): error TS2420: Class 'C' incorrectly implements interface 'I'.
   Property 'alsoWorks' is missing in type 'C'.
-tests/cases/compiler/fuzzy.ts(21,20): error TS2322: Type '{ anything: number; oneI: C; }' is not assignable to type 'R'.
+tests/cases/compiler/fuzzy.ts(21,20): error TS2322: Type '{ anything: number; oneI: this; }' is not assignable to type 'R'.
   Types of property 'oneI' are incompatible.
-    Type 'C' is not assignable to type 'I'.
-tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Neither type '{ oneI: C; }' nor type 'R' is assignable to the other.
-  Property 'anything' is missing in type '{ oneI: C; }'.
+    Type 'this' is not assignable to type 'I'.
+      Type 'C' is not assignable to type 'I'.
+        Property 'alsoWorks' is missing in type 'C'.
+tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Neither type '{ oneI: this; }' nor type 'R' is assignable to the other.
+  Property 'anything' is missing in type '{ oneI: this; }'.
 
 
 ==== tests/cases/compiler/fuzzy.ts (3 errors) ====
@@ -33,16 +35,18 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Neither type '{ oneI: C; }' 
             doesntWork():R {
                 return { anything:1, oneI:this };
                        ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ anything: number; oneI: C; }' is not assignable to type 'R'.
+!!! error TS2322: Type '{ anything: number; oneI: this; }' is not assignable to type 'R'.
 !!! error TS2322:   Types of property 'oneI' are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'I'.
+!!! error TS2322:     Type 'this' is not assignable to type 'I'.
+!!! error TS2322:       Type 'C' is not assignable to type 'I'.
+!!! error TS2322:         Property 'alsoWorks' is missing in type 'C'.
             }
     
             worksToo():R {
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Neither type '{ oneI: C; }' nor type 'R' is assignable to the other.
-!!! error TS2352:   Property 'anything' is missing in type '{ oneI: C; }'.
+!!! error TS2352: Neither type '{ oneI: this; }' nor type 'R' is assignable to the other.
+!!! error TS2352:   Property 'anything' is missing in type '{ oneI: this; }'.
             }
         }
     }

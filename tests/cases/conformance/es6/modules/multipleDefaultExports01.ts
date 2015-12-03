@@ -14,6 +14,6 @@ var x = 10;
 export default x;
 
 // @filename: m2.ts
-import Entity from "m1"
+import Entity from "./m1"
 
 Entity();

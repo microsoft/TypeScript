@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
-[![npm version](https://badge.fury.io/js/typescript.svg)](http://badge.fury.io/js/typescript)
-[![Downloads](http://img.shields.io/npm/dm/TypeScript.svg)](https://npmjs.org/package/typescript)
+[![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
+[![Downloads](https://img.shields.io/npm/dm/TypeScript.svg)](https://www.npmjs.com/package/typescript)
 
 # TypeScript
 
@@ -30,7 +30,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 * Engage with other TypeScript users and developers on [StackOverflow](http://stackoverflow.com/questions/tagged/typescript). 
 * Join the [#typescript](http://twitter.com/#!/search/realtime/%23typescript) discussion on Twitter.
 * [Contribute bug fixes](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md).
-* Read the language specification ([docx](http://go.microsoft.com/fwlink/?LinkId=267121), [pdf](http://go.microsoft.com/fwlink/?LinkId=267238)).
+* Read the language specification ([docx](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.docx?raw=true), [pdf](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.pdf?raw=true), [md](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)).
 
 
 ## Documentation

@@ -6,7 +6,7 @@ export module m {
 }
 
 //// [chainedImportAlias_file1.ts]
-import x = require('chainedImportAlias_file0');
+import x = require('./chainedImportAlias_file0');
 import y = x;
 y.m.foo();
 
@@ -18,6 +18,6 @@ var m;
     m.foo = foo;
 })(m = exports.m || (exports.m = {}));
 //// [chainedImportAlias_file1.js]
-var x = require('chainedImportAlias_file0');
+var x = require('./chainedImportAlias_file0');
 var y = x;
 y.m.foo();

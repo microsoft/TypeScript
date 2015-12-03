@@ -1,9 +1,9 @@
 === tests/cases/compiler/declarationEmit_nameConflicts_0.ts ===
-import im = require('declarationEmit_nameConflicts_1');
+import im = require('./declarationEmit_nameConflicts_1');
 >im : Symbol(im, Decl(declarationEmit_nameConflicts_0.ts, 0, 0))
 
 export module M {
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 
     export function f() { }
 >f : Symbol(f, Decl(declarationEmit_nameConflicts_0.ts, 1, 17))
@@ -23,12 +23,12 @@ export module M {
 
     export import a = M.f;
 >a : Symbol(a, Decl(declarationEmit_nameConflicts_0.ts, 7, 5))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >f : Symbol(f, Decl(declarationEmit_nameConflicts_0.ts, 1, 17))
 
     export import b = M.C;
 >b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 9, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >C : Symbol(C, Decl(declarationEmit_nameConflicts_0.ts, 2, 27))
 
     export import c = N;
@@ -41,7 +41,7 @@ export module M {
 }
 
 export module M.P {
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >P : Symbol(P, Decl(declarationEmit_nameConflicts_0.ts, 15, 16))
 
     export function f() { }
@@ -61,45 +61,45 @@ export module M.P {
     }
     export import im = M.P.f;
 >im : Symbol(im, Decl(declarationEmit_nameConflicts_0.ts, 21, 5))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >P : Symbol(P, Decl(declarationEmit_nameConflicts_0.ts, 15, 16))
 >f : Symbol(f, Decl(declarationEmit_nameConflicts_0.ts, 15, 19))
 
     export var a = M.a; // emitted incorrectly as typeof f
 >a : Symbol(a, Decl(declarationEmit_nameConflicts_0.ts, 23, 14))
 >M.a : Symbol(a, Decl(declarationEmit_nameConflicts_0.ts, 7, 5))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >a : Symbol(a, Decl(declarationEmit_nameConflicts_0.ts, 7, 5))
 
     export var b = M.b; // ok
 >b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 24, 14))
 >M.b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 9, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 9, 26))
 
     export var c = M.c; // ok
 >c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 25, 14))
 >M.c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
 
     export var g = M.c.g; // ok
 >g : Symbol(g, Decl(declarationEmit_nameConflicts_0.ts, 26, 14))
 >M.c.g : Symbol(c.g, Decl(declarationEmit_nameConflicts_0.ts, 4, 21))
 >M.c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
 >g : Symbol(c.g, Decl(declarationEmit_nameConflicts_0.ts, 4, 21))
 
     export var d = M.d; // emitted incorrectly as typeof im
 >d : Symbol(d, Decl(declarationEmit_nameConflicts_0.ts, 27, 14))
 >M.d : Symbol(d, Decl(declarationEmit_nameConflicts_0.ts, 11, 24))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >d : Symbol(d, Decl(declarationEmit_nameConflicts_0.ts, 11, 24))
 }
 
 export module M.Q {
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >Q : Symbol(Q, Decl(declarationEmit_nameConflicts_0.ts, 30, 16))
 
     export function f() { }
@@ -120,14 +120,14 @@ export module M.Q {
     export interface b extends M.b { } // ok
 >b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 36, 5))
 >M.b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 9, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >b : Symbol(b, Decl(declarationEmit_nameConflicts_0.ts, 9, 26))
 
     export interface I extends M.c.I { } // ok
 >I : Symbol(I, Decl(declarationEmit_nameConflicts_0.ts, 37, 38))
 >M.c.I : Symbol(M.c.I, Decl(declarationEmit_nameConflicts_0.ts, 5, 32))
 >M.c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
 >I : Symbol(M.c.I, Decl(declarationEmit_nameConflicts_0.ts, 5, 32))
 
@@ -138,7 +138,7 @@ export module M.Q {
 >I : Symbol(I, Decl(declarationEmit_nameConflicts_0.ts, 39, 21))
 >M.c.I : Symbol(M.c.I, Decl(declarationEmit_nameConflicts_0.ts, 5, 32))
 >M.c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
->M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 55), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
+>M : Symbol(M, Decl(declarationEmit_nameConflicts_0.ts, 0, 57), Decl(declarationEmit_nameConflicts_0.ts, 13, 1), Decl(declarationEmit_nameConflicts_0.ts, 28, 1))
 >c : Symbol(c, Decl(declarationEmit_nameConflicts_0.ts, 10, 26))
 >I : Symbol(M.c.I, Decl(declarationEmit_nameConflicts_0.ts, 5, 32))
     }

@@ -1,4 +1,4 @@
-﻿// @comments: false
+﻿// @removeComments: true
 var x = 10;
 
 /*! Single Line comment */

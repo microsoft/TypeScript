@@ -681,8 +681,8 @@ namespace ts.formatting {
                 let tokenStart = sourceFile.getLineAndCharacterOfPosition(currentTokenInfo.token.pos);
                 if (isTokenInRange) {
                     let rangeHasError = rangeContainsError(currentTokenInfo.token);
-                    // save prevStartLine since processRange will overwrite this value with current ones
-                    let prevStartLine = previousRangeStartLine;
+                    // save previousRange since processRange will overwrite this value with current one
+                    let savePreviousRange = previousRange;
                     lineAdded = processRange(currentTokenInfo.token, tokenStart, parent, childContextNode, dynamicIndentation);
                     if (rangeHasError) {
                         // do not indent comments\token if token range overlaps with some error
@@ -693,7 +693,9 @@ namespace ts.formatting {
                             indentToken = lineAdded;
                         }
                         else {
-                            indentToken = lastTriviaWasNewLine && tokenStart.line !== prevStartLine;
+                            // indent token only if end line of previous range does not match start line of the token
+                            const prevEndLine = savePreviousRange && sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
+                            indentToken = lastTriviaWasNewLine &&  tokenStart.line !== prevEndLine;
                         }
                     }
                 }
@@ -919,8 +921,8 @@ namespace ts.formatting {
                 let lineStartPosition = getStartPositionOfLine(line, sourceFile);
                 let lineEndPosition = getEndLinePosition(line, sourceFile);
 
-                // do not trim whitespaces in comments
-                if (range && isComment(range.kind) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
+                // do not trim whitespaces in comments or template expression
+                if (range && (isComment(range.kind) || isStringOrRegularExpressionOrTemplateLiteral(range.kind)) && range.pos <= lineEndPosition && range.end > lineEndPosition) {
                     continue;
                 }
 

@@ -7,7 +7,7 @@ declare module bar {
 >alpha : alpha
 }
 
-import f = require('reuseInnerModuleMember_0');
+import f = require('./reuseInnerModuleMember_0');
 >f : typeof f
 
 module bar {

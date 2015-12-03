@@ -1,67 +1,67 @@
-=== tests/cases/conformance/jsx/tsxElementResolution9.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : Symbol(JSX, Decl(tsxElementResolution9.tsx, 0, 0))
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(tsxElementResolution9.tsx, 0, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
 
 	interface IntrinsicElements { }
->IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxElementResolution9.tsx, 1, 22))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
 }
 
 interface Obj1 {
->Obj1 : Symbol(Obj1, Decl(tsxElementResolution9.tsx, 3, 1), Decl(tsxElementResolution9.tsx, 9, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1), Decl(file.tsx, 9, 3))
 
 	new(n: string): { x: number };
->n : Symbol(n, Decl(tsxElementResolution9.tsx, 6, 5))
->x : Symbol(x, Decl(tsxElementResolution9.tsx, 6, 18))
+>n : Symbol(n, Decl(file.tsx, 6, 5))
+>x : Symbol(x, Decl(file.tsx, 6, 18))
 
 	new(n: number): { y: string };
->n : Symbol(n, Decl(tsxElementResolution9.tsx, 7, 5))
->y : Symbol(y, Decl(tsxElementResolution9.tsx, 7, 18))
+>n : Symbol(n, Decl(file.tsx, 7, 5))
+>y : Symbol(y, Decl(file.tsx, 7, 18))
 }
 var Obj1: Obj1;
->Obj1 : Symbol(Obj1, Decl(tsxElementResolution9.tsx, 3, 1), Decl(tsxElementResolution9.tsx, 9, 3))
->Obj1 : Symbol(Obj1, Decl(tsxElementResolution9.tsx, 3, 1), Decl(tsxElementResolution9.tsx, 9, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1), Decl(file.tsx, 9, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1), Decl(file.tsx, 9, 3))
 
 <Obj1 />; // Error, return type is not an object type
->Obj1 : Symbol(Obj1, Decl(tsxElementResolution9.tsx, 3, 1), Decl(tsxElementResolution9.tsx, 9, 3))
+>Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1), Decl(file.tsx, 9, 3))
 
 interface Obj2 {
->Obj2 : Symbol(Obj2, Decl(tsxElementResolution9.tsx, 10, 9), Decl(tsxElementResolution9.tsx, 16, 3))
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 10, 9), Decl(file.tsx, 16, 3))
 
 	(n: string): { x: number };
->n : Symbol(n, Decl(tsxElementResolution9.tsx, 13, 2))
->x : Symbol(x, Decl(tsxElementResolution9.tsx, 13, 15))
+>n : Symbol(n, Decl(file.tsx, 13, 2))
+>x : Symbol(x, Decl(file.tsx, 13, 15))
 
 	(n: number): { y: string };
->n : Symbol(n, Decl(tsxElementResolution9.tsx, 14, 2))
->y : Symbol(y, Decl(tsxElementResolution9.tsx, 14, 15))
+>n : Symbol(n, Decl(file.tsx, 14, 2))
+>y : Symbol(y, Decl(file.tsx, 14, 15))
 }
 var Obj2: Obj2;
->Obj2 : Symbol(Obj2, Decl(tsxElementResolution9.tsx, 10, 9), Decl(tsxElementResolution9.tsx, 16, 3))
->Obj2 : Symbol(Obj2, Decl(tsxElementResolution9.tsx, 10, 9), Decl(tsxElementResolution9.tsx, 16, 3))
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 10, 9), Decl(file.tsx, 16, 3))
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 10, 9), Decl(file.tsx, 16, 3))
 
 <Obj2 />; // Error, return type is not an object type
->Obj2 : Symbol(Obj2, Decl(tsxElementResolution9.tsx, 10, 9), Decl(tsxElementResolution9.tsx, 16, 3))
+>Obj2 : Symbol(Obj2, Decl(file.tsx, 10, 9), Decl(file.tsx, 16, 3))
 
 interface Obj3 {
->Obj3 : Symbol(Obj3, Decl(tsxElementResolution9.tsx, 17, 9), Decl(tsxElementResolution9.tsx, 23, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 17, 9), Decl(file.tsx, 23, 3))
 
 	(n: string): { x: number };
->n : Symbol(n, Decl(tsxElementResolution9.tsx, 20, 2))
->x : Symbol(x, Decl(tsxElementResolution9.tsx, 20, 15))
+>n : Symbol(n, Decl(file.tsx, 20, 2))
+>x : Symbol(x, Decl(file.tsx, 20, 15))
 
 	(n: number): { x: number; y: string };
->n : Symbol(n, Decl(tsxElementResolution9.tsx, 21, 2))
->x : Symbol(x, Decl(tsxElementResolution9.tsx, 21, 15))
->y : Symbol(y, Decl(tsxElementResolution9.tsx, 21, 26))
+>n : Symbol(n, Decl(file.tsx, 21, 2))
+>x : Symbol(x, Decl(file.tsx, 21, 15))
+>y : Symbol(y, Decl(file.tsx, 21, 26))
 }
 var Obj3: Obj3;
->Obj3 : Symbol(Obj3, Decl(tsxElementResolution9.tsx, 17, 9), Decl(tsxElementResolution9.tsx, 23, 3))
->Obj3 : Symbol(Obj3, Decl(tsxElementResolution9.tsx, 17, 9), Decl(tsxElementResolution9.tsx, 23, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 17, 9), Decl(file.tsx, 23, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 17, 9), Decl(file.tsx, 23, 3))
 
 <Obj3 x={42} />; // OK
->Obj3 : Symbol(Obj3, Decl(tsxElementResolution9.tsx, 17, 9), Decl(tsxElementResolution9.tsx, 23, 3))
+>Obj3 : Symbol(Obj3, Decl(file.tsx, 17, 9), Decl(file.tsx, 23, 3))
 >x : Symbol(unknown)
 

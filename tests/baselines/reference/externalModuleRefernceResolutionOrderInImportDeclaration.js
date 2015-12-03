@@ -11,7 +11,7 @@ declare module "externalModuleRefernceResolutionOrderInImportDeclaration_file1" 
 
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts]
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
-import file1 = require('externalModuleRefernceResolutionOrderInImportDeclaration_file1');
+import file1 = require('./externalModuleRefernceResolutionOrderInImportDeclaration_file1');
 file1.foo();
 file1.bar();
 
@@ -24,6 +24,6 @@ exports.foo = foo;
 ;
 //// [externalModuleRefernceResolutionOrderInImportDeclaration_file3.js]
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
-var file1 = require('externalModuleRefernceResolutionOrderInImportDeclaration_file1');
+var file1 = require('./externalModuleRefernceResolutionOrderInImportDeclaration_file1');
 file1.foo();
 file1.bar();

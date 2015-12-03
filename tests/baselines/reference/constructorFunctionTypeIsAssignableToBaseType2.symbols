@@ -9,11 +9,11 @@ class Base {
 
         bar: Object;
 >bar : Symbol(bar, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 3, 17))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
     constructor(x: Object) {
 >x : Symbol(x, Decl(constructorFunctionTypeIsAssignableToBaseType2.ts, 6, 16))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }
 

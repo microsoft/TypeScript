@@ -49,5 +49,5 @@ c[Symbol.iterator]("hello");
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->"hello" : string
+>"hello" : "hello"
 

@@ -6,14 +6,14 @@ export class Model {
 }
 
 //// [aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts]
-import Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
+import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 export class VisualizationModel extends Backbone.Model {
     // interesting stuff here
 }
 
 //// [aliasUsageInTypeArgumentOfExtendsClause_main.ts]
-import Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
-import moduleA = require("aliasUsageInTypeArgumentOfExtendsClause_moduleA");
+import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
+import moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 }
@@ -37,7 +37,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Backbone = require("aliasUsageInTypeArgumentOfExtendsClause_backbone");
+var Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
@@ -52,7 +52,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var moduleA = require("aliasUsageInTypeArgumentOfExtendsClause_moduleA");
+var moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
 var C = (function () {
     function C() {
     }

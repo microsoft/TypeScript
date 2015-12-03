@@ -9,7 +9,7 @@ export = C;
 
 
 //// [externalModuleExportingGenericClass_file1.ts]
-import a = require('externalModuleExportingGenericClass_file0');
+import a = require('./externalModuleExportingGenericClass_file0');
 var v: a; // this should report error
 var v2: any = (new a()).foo;
 var v3: number = (new a<number>()).foo;
@@ -23,7 +23,7 @@ var C = (function () {
 })();
 module.exports = C;
 //// [externalModuleExportingGenericClass_file1.js]
-var a = require('externalModuleExportingGenericClass_file0');
+var a = require('./externalModuleExportingGenericClass_file0');
 var v; // this should report error
 var v2 = (new a()).foo;
 var v3 = (new a()).foo;

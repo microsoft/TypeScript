@@ -27,9 +27,9 @@ export class c1 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_0.ts, 11, 33))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_0.ts, 11, 43))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
 
     public fooWithOverloads(a: string): string;
@@ -73,9 +73,9 @@ export class c1 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_0.ts, 31, 41))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_0.ts, 31, 51))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : Symbol(privateFooWithOverloads, Decl(declFileMethods_0.ts, 33, 5), Decl(declFileMethods_0.ts, 34, 55), Decl(declFileMethods_0.ts, 35, 55))
@@ -118,9 +118,9 @@ export class c1 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_0.ts, 50, 39))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_0.ts, 50, 49))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : Symbol(c1.staticFooWithOverloads, Decl(declFileMethods_0.ts, 52, 5), Decl(declFileMethods_0.ts, 53, 53), Decl(declFileMethods_0.ts, 54, 53))
@@ -163,9 +163,9 @@ export class c1 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_0.ts, 69, 54))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_0.ts, 69, 64))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : Symbol(c1.privateStaticFooWithOverloads, Decl(declFileMethods_0.ts, 71, 5), Decl(declFileMethods_0.ts, 72, 68), Decl(declFileMethods_0.ts, 73, 68))
@@ -242,9 +242,9 @@ class c2 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_1.ts, 10, 33))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_1.ts, 10, 43))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
 
     public fooWithOverloads(a: string): string;
@@ -288,9 +288,9 @@ class c2 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_1.ts, 30, 41))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_1.ts, 30, 51))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : Symbol(privateFooWithOverloads, Decl(declFileMethods_1.ts, 32, 5), Decl(declFileMethods_1.ts, 33, 55), Decl(declFileMethods_1.ts, 34, 55))
@@ -333,9 +333,9 @@ class c2 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_1.ts, 49, 39))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_1.ts, 49, 49))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : Symbol(c2.staticFooWithOverloads, Decl(declFileMethods_1.ts, 51, 5), Decl(declFileMethods_1.ts, 52, 53), Decl(declFileMethods_1.ts, 53, 53))
@@ -378,9 +378,9 @@ class c2 {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileMethods_1.ts, 68, 54))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileMethods_1.ts, 68, 64))
->join : Symbol(Array.join, Decl(lib.d.ts, 1035, 31))
+>join : Symbol(Array.join, Decl(lib.d.ts, --, --))
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : Symbol(c2.privateStaticFooWithOverloads, Decl(declFileMethods_1.ts, 70, 5), Decl(declFileMethods_1.ts, 71, 68), Decl(declFileMethods_1.ts, 72, 68))

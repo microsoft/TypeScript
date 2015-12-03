@@ -6,6 +6,6 @@ export var x: number;
 export declare var y: number;
 
 // @Filename: foo_1.ts
-import foo = require("vs/foo_0");
-import fum = require("vs/fum");
+import foo = require("./vs/foo_0");
+import fum = require("./vs/fum");
 var z = foo.x + fum.y;
