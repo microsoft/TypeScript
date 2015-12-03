@@ -1959,11 +1959,7 @@ namespace ts {
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
             const typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
-                nextToken();
-                const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
-                node.parameterName = <Identifier>typeName;
-                node.type = parseType();
-                return finishNode(node);
+                return parseTypePredicate(typeName as Identifier);
             }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
             node.typeName = typeName;
@@ -1973,8 +1969,16 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseThisTypeNode(): TypeNode {
-            const node = <TypeNode>createNode(SyntaxKind.ThisType);
+        function parseTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
+            nextToken();
+            const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
+            node.parameterName = lhs;
+            node.type = parseType();
+            return finishNode(node);
+        }
+
+        function parseThisTypeNode(): ThisTypeNode {
+            const node = createNode(SyntaxKind.ThisType) as ThisTypeNode;
             nextToken();
             return finishNode(node);
         }
@@ -2420,8 +2424,15 @@ namespace ts {
                     return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
-                case SyntaxKind.ThisKeyword:
-                    return parseThisTypeNode();
+                case SyntaxKind.ThisKeyword: {
+                    const thisKeyword = parseThisTypeNode();
+                    if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                        return parseTypePredicate(thisKeyword);
+                    }
+                    else {
+                        return thisKeyword;
+                    }
+                }
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:

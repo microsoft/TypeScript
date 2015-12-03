@@ -692,6 +692,10 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
+        return predicate.kind === TypePredicateKind.Identifier;
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;

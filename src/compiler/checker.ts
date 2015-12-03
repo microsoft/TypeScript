@@ -2058,7 +2058,12 @@ namespace ts {
 
                 let returnType: Type;
                 if (signature.typePredicate) {
-                    writer.writeParameter(signature.typePredicate.parameterName);
+                    if (signature.typePredicate.kind === TypePredicateKind.Identifier) {
+                        writer.writeParameter((signature.typePredicate as IdentifierTypePredicate).parameterName);
+                    }
+                    else {
+                        writeKeyword(writer, SyntaxKind.ThisKeyword);
+                    }
                     writeSpace(writer);
                     writeKeyword(writer, SyntaxKind.IsKeyword);
                     writeSpace(writer);
@@ -3356,7 +3361,7 @@ namespace ts {
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
-            resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
+            resolvedReturnType: Type, typePredicate: IdentifierTypePredicate | ThisTypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
@@ -3884,19 +3889,29 @@ namespace ts {
                 }
 
                 let returnType: Type;
-                let typePredicate: TypePredicate;
+                let typePredicate: IdentifierTypePredicate | ThisTypePredicate;
                 if (classType) {
                     returnType = classType;
                 }
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);
                     if (declaration.type.kind === SyntaxKind.TypePredicate) {
-                        const typePredicateNode = <TypePredicateNode>declaration.type;
-                        typePredicate = {
-                            parameterName: typePredicateNode.parameterName ? typePredicateNode.parameterName.text : undefined,
-                            parameterIndex: typePredicateNode.parameterName ? getTypePredicateParameterIndex(declaration.parameters, typePredicateNode.parameterName) : undefined,
-                            type: getTypeFromTypeNode(typePredicateNode.type)
-                        };
+                        const typePredicateNode = declaration.type as TypePredicateNode;
+                        if (typePredicateNode.parameterName.kind === SyntaxKind.Identifier) {
+                            const parameterName = typePredicateNode.parameterName as Identifier;
+                            typePredicate = {
+                                kind: TypePredicateKind.Identifier,
+                                parameterName: parameterName ? parameterName.text : undefined,
+                                parameterIndex: parameterName ? getTypePredicateParameterIndex(declaration.parameters, parameterName) : undefined,
+                                type: getTypeFromTypeNode(typePredicateNode.type)
+                            };
+                        }
+                        else {
+                            typePredicate = {
+                                kind: TypePredicateKind.This,
+                                type: getTypeFromTypeNode(typePredicateNode.type)
+                            } as ThisTypePredicate;
+                        }
                     }
                 }
                 else {
@@ -4716,19 +4731,33 @@ namespace ts {
             return result;
         }
 
+        function cloneTypePredicate(predicate: TypePredicate, mapper: TypeMapper): ThisTypePredicate | IdentifierTypePredicate {
+            if (predicate.kind === TypePredicateKind.Identifier) {
+                const identifierPredicate = predicate as IdentifierTypePredicate;
+                return {
+                    kind: TypePredicateKind.Identifier,
+                    parameterName: identifierPredicate.parameterName,
+                    parameterIndex: identifierPredicate.parameterIndex,
+                    type: instantiateType(predicate.type, mapper)
+                } as IdentifierTypePredicate;
+            }
+            else {
+                return {
+                    kind: TypePredicateKind.This,
+                    type: instantiateType(predicate.type, mapper)
+                } as ThisTypePredicate;
+            }
+        }
+
         function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
             let freshTypeParameters: TypeParameter[];
-            let freshTypePredicate: TypePredicate;
+            let freshTypePredicate: ThisTypePredicate | IdentifierTypePredicate;
             if (signature.typeParameters && !eraseTypeParameters) {
                 freshTypeParameters = instantiateList(signature.typeParameters, mapper, instantiateTypeParameter);
                 mapper = combineTypeMappers(createTypeMapper(signature.typeParameters, freshTypeParameters), mapper);
             }
             if (signature.typePredicate) {
-                freshTypePredicate = {
-                    parameterName: signature.typePredicate.parameterName,
-                    parameterIndex: signature.typePredicate.parameterIndex,
-                    type: instantiateType(signature.typePredicate.type, mapper)
-                };
+                freshTypePredicate = cloneTypePredicate(signature.typePredicate, mapper);
             }
             const result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
@@ -5548,33 +5577,55 @@ namespace ts {
                 }
 
                 if (source.typePredicate && target.typePredicate) {
-                    const hasDifferentParameterIndex = source.typePredicate.parameterIndex !== target.typePredicate.parameterIndex;
-                    let hasDifferentTypes: boolean;
-                    if (hasDifferentParameterIndex ||
-                        (hasDifferentTypes = !isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type))) {
-
+                    if (source.typePredicate.kind !== target.typePredicate.kind) {
                         if (reportErrors) {
-                            const sourceParamText = source.typePredicate.parameterName;
-                            const targetParamText = target.typePredicate.parameterName;
-                            const sourceTypeText = typeToString(source.typePredicate.type);
-                            const targetTypeText = typeToString(target.typePredicate.type);
-
-                            if (hasDifferentParameterIndex) {
-                                reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1,
-                                    sourceParamText,
-                                    targetParamText);
-                            }
-                            else if (hasDifferentTypes) {
+                            reportError(Diagnostics.A_this_based_type_guard_is_not_assignable_to_a_parameter_based_type_guard);
+                        }
+                        return Ternary.False;
+                    }
+                    if (source.typePredicate.kind === TypePredicateKind.This) {
+                        if (!isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type)) {
+                            if (reportErrors) {
+                                const sourceTypeText = typeToString(source.typePredicate.type);
+                                const targetTypeText = typeToString(target.typePredicate.type);
                                 reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
                                     sourceTypeText,
                                     targetTypeText);
                             }
-
-                            reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1,
-                                `${sourceParamText} is ${sourceTypeText}`,
-                                `${targetParamText} is ${targetTypeText}`);
+                            return Ternary.False;
                         }
-                        return Ternary.False;
+                    }
+                    else {
+                        const sourcePredicate = source.typePredicate as IdentifierTypePredicate;
+                        const targetPredicate = target.typePredicate as IdentifierTypePredicate;
+                        const hasDifferentParameterIndex = sourcePredicate.parameterIndex !== targetPredicate.parameterIndex;
+                        let hasDifferentTypes: boolean;
+                        if (hasDifferentParameterIndex ||
+                            (hasDifferentTypes = !isTypeIdenticalTo(sourcePredicate.type, targetPredicate.type))) {
+
+                            if (reportErrors) {
+                                const sourceParamText = sourcePredicate.parameterName;
+                                const targetParamText = targetPredicate.parameterName;
+                                const sourceTypeText = typeToString(sourcePredicate.type);
+                                const targetTypeText = typeToString(targetPredicate.type);
+
+                                if (hasDifferentParameterIndex) {
+                                    reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1,
+                                        sourceParamText,
+                                        targetParamText);
+                                }
+                                else if (hasDifferentTypes) {
+                                    reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
+                                        sourceTypeText,
+                                        targetTypeText);
+                                }
+
+                                reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1,
+                                    `${sourceParamText} is ${sourceTypeText}`,
+                                    `${targetParamText} is ${targetTypeText}`);
+                            }
+                            return Ternary.False;
+                        }
                     }
                 }
                 else if (!source.typePredicate && target.typePredicate) {
@@ -6235,11 +6286,15 @@ namespace ts {
             function inferFromSignature(source: Signature, target: Signature) {
                 forEachMatchingParameterType(source, target, inferFromTypes);
                 if (source.typePredicate && target.typePredicate) {
-                    if (target.typePredicate.parameterIndex === source.typePredicate.parameterIndex) {
-                        // Return types from type predicates are treated as booleans. In order to infer types
-                        // from type predicates we would need to infer using the type within the type predicate
-                        // (i.e. 'Foo' from 'x is Foo').
-                        inferFromTypes(source.typePredicate.type, target.typePredicate.type);
+                    if (target.typePredicate.kind === source.typePredicate.kind) {
+                        if ((target.typePredicate.kind === TypePredicateKind.Identifier
+                            && (target.typePredicate as IdentifierTypePredicate).parameterIndex === (source.typePredicate as IdentifierTypePredicate).parameterIndex)
+                            || target.typePredicate.kind === TypePredicateKind.This) {
+                            // Return types from type predicates are treated as booleans. In order to infer types
+                            // from type predicates we would need to infer using the type within the type predicate
+                            // (i.e. 'Foo' from 'x is Foo').
+                            inferFromTypes(source.typePredicate.type, target.typePredicate.type);
+                        }
                     }
                 }
                 else {
@@ -6654,20 +6709,20 @@ namespace ts {
                 }
 
                 if (targetType) {
-                    if (!assumeTrue) {
-                        if (type.flags & TypeFlags.Union) {
-                            return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, targetType)));
-                        }
-                        return type;
-                    }
-
-                    return getNarrowedType(type, targetType);
+                    return getNarrowedType(type, targetType, assumeTrue);
                 }
 
                 return type;
             }
 
-            function getNarrowedType(originalType: Type, narrowedTypeCandidate: Type) {
+            function getNarrowedType(originalType: Type, narrowedTypeCandidate: Type, assumeTrue: boolean) {
+                if (!assumeTrue) {
+                    if (originalType.flags & TypeFlags.Union) {
+                        return getUnionType(filter((<UnionType>originalType).types, t => !isTypeSubtypeOf(t, narrowedTypeCandidate)));
+                    }
+                    return originalType;
+                }
+
                 // If the current type is a union type, remove all constituents that aren't assignable to target. If that produces
                 // 0 candidates, fall back to the assignability check
                 if (originalType.flags & TypeFlags.Union) {
@@ -6691,19 +6746,35 @@ namespace ts {
                 }
                 const signature = getResolvedSignature(expr);
 
-                if (signature.typePredicate &&
-                    expr.arguments[signature.typePredicate.parameterIndex] &&
-                    getSymbolAtLocation(expr.arguments[signature.typePredicate.parameterIndex]) === symbol) {
-
-                    if (!assumeTrue) {
-                        if (type.flags & TypeFlags.Union) {
-                            return getUnionType(filter((<UnionType>type).types, t => !isTypeSubtypeOf(t, signature.typePredicate.type)));
-                        }
-                        return type;
+                if (!signature.typePredicate) {
+                    return type;
+                }
+                const predicate = signature.typePredicate;
+                if (isIdentifierTypePredicate(predicate)) {
+                    if (expr.arguments[predicate.parameterIndex] &&
+                        getSymbolAtLocation(expr.arguments[predicate.parameterIndex]) === symbol) {
+                        return getNarrowedType(type, predicate.type, assumeTrue);
                     }
-                    return getNarrowedType(type, signature.typePredicate.type);
+                }
+                else {
+                    const expression = skipParenthesizedNodes(expr.expression);
+
+                    if (expression.kind === SyntaxKind.ElementAccessExpression || expression.kind === SyntaxKind.PropertyAccessExpression) {
+                        const accessExpression = expression as ElementAccessExpression | PropertyAccessExpression;
+                        const possibleIdentifier = skipParenthesizedNodes(accessExpression.expression);
+                        if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtLocation(possibleIdentifier) === symbol) {
+                            return getNarrowedType(type, predicate.type, assumeTrue);
+                        }
+                    }
                 }
                 return type;
+
+                function skipParenthesizedNodes(expression: Expression): Expression {
+                    while (expression.kind === SyntaxKind.ParenthesizedExpression) {
+                        expression = (expression as ParenthesizedExpression).expression;
+                    }
+                    return expression;
+                }
             }
 
             // Narrow the given type based on the given expression having the assumed boolean value. The returned type
@@ -10962,51 +11033,57 @@ namespace ts {
                     const typePredicate = getSignatureFromDeclaration(node).typePredicate;
                     const typePredicateNode = <TypePredicateNode>node.type;
                     if (isInLegalTypePredicatePosition(typePredicateNode)) {
-                        if (typePredicate.parameterIndex >= 0) {
-                            if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
-                                error(typePredicateNode.parameterName,
-                                    Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
+                        if (isIdentifierTypePredicate(typePredicate)) {
+                            if (typePredicate.parameterIndex >= 0) {
+                                if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
+                                    error(typePredicateNode.parameterName,
+                                        Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
+                                }
+                                else {
+                                    checkTypeAssignableTo(typePredicate.type,
+                                        getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
+                                        typePredicateNode.type);
+                                }
                             }
-                            else {
-                                checkTypeAssignableTo(typePredicate.type,
-                                    getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
-                                    typePredicateNode.type);
+                            else if (typePredicateNode.parameterName) {
+                                let hasReportedError = false;
+                                for (var param of node.parameters) {
+                                    if (hasReportedError) {
+                                        break;
+                                    }
+                                    if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
+                                        param.name.kind === SyntaxKind.ArrayBindingPattern) {
+
+                                        (function checkBindingPattern(pattern: BindingPattern) {
+                                            for (const element of pattern.elements) {
+                                                if (element.name.kind === SyntaxKind.Identifier &&
+                                                    (<Identifier>element.name).text === typePredicate.parameterName) {
+
+                                                    error(typePredicateNode.parameterName,
+                                                        Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                                                        typePredicate.parameterName);
+                                                    hasReportedError = true;
+                                                    break;
+                                                }
+                                                else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
+                                                    element.name.kind === SyntaxKind.ObjectBindingPattern) {
+
+                                                    checkBindingPattern(<BindingPattern>element.name);
+                                                }
+                                            }
+                                        })(<BindingPattern>param.name);
+                                    }
+                                }
+                                if (!hasReportedError) {
+                                    error(typePredicateNode.parameterName,
+                                        Diagnostics.Cannot_find_parameter_0,
+                                        typePredicate.parameterName);
+                                }
                             }
                         }
-                        else if (typePredicateNode.parameterName) {
-                            let hasReportedError = false;
-                            for (var param of node.parameters) {
-                                if (hasReportedError) {
-                                    break;
-                                }
-                                if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
-                                    param.name.kind === SyntaxKind.ArrayBindingPattern) {
-
-                                    (function checkBindingPattern(pattern: BindingPattern) {
-                                        for (const element of pattern.elements) {
-                                            if (element.name.kind === SyntaxKind.Identifier &&
-                                                (<Identifier>element.name).text === typePredicate.parameterName) {
-
-                                                error(typePredicateNode.parameterName,
-                                                    Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                                    typePredicate.parameterName);
-                                                hasReportedError = true;
-                                                break;
-                                            }
-                                            else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
-                                                element.name.kind === SyntaxKind.ObjectBindingPattern) {
-
-                                                checkBindingPattern(<BindingPattern>element.name);
-                                            }
-                                        }
-                                    })(<BindingPattern>param.name);
-                                }
-                            }
-                            if (!hasReportedError) {
-                                error(typePredicateNode.parameterName,
-                                    Diagnostics.Cannot_find_parameter_0,
-                                    typePredicate.parameterName);
-                            }
+                        else {
+                            // Reuse this type diagnostics on the this type node to determine if a this type predicate is valid
+                            getTypeFromThisTypeNode(typePredicateNode.parameterName as ThisTypeNode);
                         }
                     }
                     else {

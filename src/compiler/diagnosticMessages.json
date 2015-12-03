@@ -1632,6 +1632,10 @@
         "category": "Error",
         "code": 2517
     },
+    "A this based type guard is not assignable to a parameter based type guard": {
+        "category": "Error",
+        "code": 2518
+    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520

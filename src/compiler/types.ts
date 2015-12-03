@@ -733,9 +733,13 @@ namespace ts {
     // @kind(SyntaxKind.StringKeyword)
     // @kind(SyntaxKind.SymbolKeyword)
     // @kind(SyntaxKind.VoidKeyword)
-    // @kind(SyntaxKind.ThisType)
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
+    }
+
+    // @kind(SyntaxKind.ThisType)
+    export interface ThisTypeNode extends TypeNode {
+        _thisTypeNodeBrand: any;
     }
 
     export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
@@ -756,7 +760,7 @@ namespace ts {
 
     // @kind(SyntaxKind.TypePredicate)
     export interface TypePredicateNode extends TypeNode {
-        parameterName: Identifier;
+        parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
 
@@ -1820,10 +1824,26 @@ namespace ts {
         CannotBeNamed
     }
 
+    /* @internal */
+    export const enum TypePredicateKind {
+        This,
+        Identifier
+    }
+
     export interface TypePredicate {
+        kind: TypePredicateKind;
+        type: Type;
+    }
+
+    // @kind (TypePredicateKind.This)
+    export interface ThisTypePredicate extends TypePredicate {
+        _thisTypePredicateBrand: any;
+    }
+
+    // @kind (TypePredicateKind.Identifier)
+    export interface IdentifierTypePredicate extends TypePredicate {
         parameterName: string;
         parameterIndex: number;
-        type: Type;
     }
 
     /* @internal */
@@ -2237,7 +2257,7 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
-        typePredicate?: TypePredicate;      // Type predicate
+        typePredicate?: ThisTypePredicate | IdentifierTypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
