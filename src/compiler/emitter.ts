@@ -5190,6 +5190,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`exports.default = `);
                         emitDeclarationName(node);
                         write(";");
+                        writeLine();
+                        emitEs6ExportDefaultCompat(node);
                     }
                 }
                 else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {

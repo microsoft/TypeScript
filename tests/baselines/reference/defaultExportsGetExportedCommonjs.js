@@ -12,6 +12,7 @@ export default function foo() {}
 class Foo {
 }
 exports.default = Foo;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 function foo() { }
