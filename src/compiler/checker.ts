@@ -15967,33 +15967,38 @@ namespace ts {
             if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
                 const variableList = <VariableDeclarationList>forInOrOfStatement.initializer;
                 if (!checkGrammarVariableDeclarationList(variableList)) {
-                    if (variableList.declarations.length > 1) {
-                        const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
-                            ? Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement
-                            : Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
-                        return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
-                    }
-                    const firstDeclaration = variableList.declarations[0];
+                    const declarations = variableList.declarations;
 
-                    // firstDeclaration can be undefined if there is variable declaration in for-of or for-in
+                    // declarations.length can be zero if there is an error in variable declaration in for-of or for-in
                     // See http://www.ecma-international.org/ecma-262/6.0/#sec-for-in-and-for-of-statements for details
                     // For example:
                     //      var let = 10;
                     //      for (let of [1,2,3]) {} // this is invalid ES6 syntax
                     //      for (let in [1,2,3]) {} // this is invalid ES6 syntax
-                    if (firstDeclaration) {
-                        if (firstDeclaration.initializer) {
-                            const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
-                                ? Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer
-                                : Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
-                            return grammarErrorOnNode(firstDeclaration.name, diagnostic);
-                        }
-                        if (firstDeclaration.type) {
-                            const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
-                                ? Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation
-                                : Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
-                            return grammarErrorOnNode(firstDeclaration, diagnostic);
-                        }
+                    // We will then want to skip on grammar checking on variableList declaration
+                    if (!declarations.length) {
+                        return false;
+                    }
+
+                    if (declarations.length > 1) {
+                        const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                            ? Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_in_statement
+                            : Diagnostics.Only_a_single_variable_declaration_is_allowed_in_a_for_of_statement;
+                        return grammarErrorOnFirstToken(variableList.declarations[1], diagnostic);
+                    }
+                    const firstDeclaration = declarations[0];
+
+                    if (firstDeclaration.initializer) {
+                        const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                            ? Diagnostics.The_variable_declaration_of_a_for_in_statement_cannot_have_an_initializer
+                            : Diagnostics.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer;
+                        return grammarErrorOnNode(firstDeclaration.name, diagnostic);
+                    }
+                    if (firstDeclaration.type) {
+                        const diagnostic = forInOrOfStatement.kind === SyntaxKind.ForInStatement
+                            ? Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_use_a_type_annotation
+                            : Diagnostics.The_left_hand_side_of_a_for_of_statement_cannot_use_a_type_annotation;
+                        return grammarErrorOnNode(firstDeclaration, diagnostic);
                     }
                 }
             }
