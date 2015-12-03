@@ -2938,8 +2938,8 @@ namespace ts {
             return type.resolvedBaseConstructorType;
         }
 
-        function hasClassBaseType(type: InterfaceType): boolean {
-            return !!forEach(getBaseTypes(type), t => !!(t.symbol.flags & SymbolFlags.Class));
+        function hasClassOrInterfaceBaseType(type: InterfaceType): boolean {
+            return !!forEach(getBaseTypes(type), t => !!(t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)));
         }
 
         function getBaseTypes(type: InterfaceType): ObjectType[] {
@@ -3375,11 +3375,14 @@ namespace ts {
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
-            if (!hasClassBaseType(classType)) {
+            if (!hasClassOrInterfaceBaseType(classType)) {
                 return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
+            if(baseSignatures.length === 0) {
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
+            }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
             const typeArgCount = typeArguments ? typeArguments.length : 0;
@@ -3597,7 +3600,8 @@ namespace ts {
             return <ResolvedType>type;
         }
 
-        // Return properties of an object type or an empty array for other types
+
+        /** Return properties of an object type or an empty array for other types */
         function getPropertiesOfObjectType(type: Type): Symbol[] {
             if (type.flags & TypeFlags.ObjectType) {
                 return resolveStructuredTypeMembers(<ObjectType>type).properties;
@@ -3605,8 +3609,8 @@ namespace ts {
             return emptyArray;
         }
 
-        // If the given type is an object type and that type has a property by the given name,
-        // return the symbol for that property.Otherwise return undefined.
+        /** If the given type is an object type and that type has a property by the given name,
+         * return the symbol for that property. Otherwise return undefined. */
         function getPropertyOfObjectType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.ObjectType) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
