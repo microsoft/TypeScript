@@ -134,6 +134,7 @@ if (mimic.isFollower()) {
     mimic.isFollower = a.isFollower;
 }
 
+
 //// [typeGuardFunctionOfFormThis.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -279,3 +280,58 @@ if (mimic.isFollower()) {
     mimic.follow();
     mimic.isFollower = a.isFollower;
 }
+
+
+//// [typeGuardFunctionOfFormThis.d.ts]
+declare class RoyalGuard {
+    isLeader(): this is LeadGuard;
+    isFollower(): this is FollowerGuard;
+}
+declare class LeadGuard extends RoyalGuard {
+    lead(): void;
+}
+declare class FollowerGuard extends RoyalGuard {
+    follow(): void;
+}
+declare let a: RoyalGuard;
+interface GuardInterface extends RoyalGuard {
+}
+declare let b: GuardInterface;
+declare var holder2: {
+    a: RoyalGuard;
+};
+declare class ArrowGuard {
+    isElite: () => this is ArrowElite;
+    isMedic: () => this is ArrowMedic;
+}
+declare class ArrowElite extends ArrowGuard {
+    defend(): void;
+}
+declare class ArrowMedic extends ArrowGuard {
+    heal(): void;
+}
+declare let guard: ArrowGuard;
+interface Supplies {
+    spoiled: boolean;
+}
+interface Sundries {
+    broken: boolean;
+}
+interface Crate<T> {
+    contents: T;
+    volume: number;
+    isSupplies(): this is Crate<Supplies>;
+    isSundries(): this is Crate<Sundries>;
+}
+declare let crate: Crate<{}>;
+declare class MimicGuard {
+    isLeader(): this is MimicLeader;
+    isFollower(): this is MimicFollower;
+}
+declare class MimicLeader extends MimicGuard {
+    lead(): void;
+}
+declare class MimicFollower extends MimicGuard {
+    follow(): void;
+}
+declare let mimic: MimicGuard;

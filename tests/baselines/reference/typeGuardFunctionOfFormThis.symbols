@@ -369,3 +369,4 @@ if (mimic.isFollower()) {
 >a : Symbol(a, Decl(typeGuardFunctionOfFormThis.ts, 17, 3))
 >isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
 }
+

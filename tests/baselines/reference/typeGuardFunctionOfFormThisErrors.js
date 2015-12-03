@@ -50,6 +50,15 @@ else {
     holder;
 }
 
+let detached = a.isFollower;
+
+if (detached()) {
+    a.follow();
+}
+else {
+    a.lead();
+}
+
 //// [typeGuardFunctionOfFormThisErrors.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -111,3 +120,33 @@ else {
     c;
     holder;
 }
+var detached = a.isFollower;
+if (detached()) {
+    a.follow();
+}
+else {
+    a.lead();
+}
+
+
+//// [typeGuardFunctionOfFormThisErrors.d.ts]
+declare class RoyalGuard {
+    isLeader(): this is LeadGuard;
+    isFollower(): this is FollowerGuard;
+}
+declare class LeadGuard extends RoyalGuard {
+    lead(): void;
+}
+declare class FollowerGuard extends RoyalGuard {
+    follow(): void;
+}
+interface GuardInterface extends RoyalGuard {
+}
+declare let a: RoyalGuard;
+declare let b: GuardInterface;
+declare function invalidGuard(c: any): this is number;
+declare let c: number | number[];
+declare let holder: {
+    invalidGuard: (c: any) => this is number;
+};
+declare let detached: () => this is FollowerGuard;

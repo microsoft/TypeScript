@@ -4732,12 +4732,11 @@ namespace ts {
         }
 
         function cloneTypePredicate(predicate: TypePredicate, mapper: TypeMapper): ThisTypePredicate | IdentifierTypePredicate {
-            if (predicate.kind === TypePredicateKind.Identifier) {
-                const identifierPredicate = predicate as IdentifierTypePredicate;
+            if (isIdentifierTypePredicate(predicate)) {
                 return {
                     kind: TypePredicateKind.Identifier,
-                    parameterName: identifierPredicate.parameterName,
-                    parameterIndex: identifierPredicate.parameterIndex,
+                    parameterName: predicate.parameterName,
+                    parameterIndex: predicate.parameterIndex,
                     type: instantiateType(predicate.type, mapper)
                 } as IdentifierTypePredicate;
             }
@@ -4751,18 +4750,14 @@ namespace ts {
 
         function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
             let freshTypeParameters: TypeParameter[];
-            let freshTypePredicate: ThisTypePredicate | IdentifierTypePredicate;
             if (signature.typeParameters && !eraseTypeParameters) {
                 freshTypeParameters = instantiateList(signature.typeParameters, mapper, instantiateTypeParameter);
                 mapper = combineTypeMappers(createTypeMapper(signature.typeParameters, freshTypeParameters), mapper);
             }
-            if (signature.typePredicate) {
-                freshTypePredicate = cloneTypePredicate(signature.typePredicate, mapper);
-            }
             const result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 instantiateType(signature.resolvedReturnType, mapper),
-                freshTypePredicate,
+                signature.typePredicate && cloneTypePredicate(signature.typePredicate, mapper),
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
             result.target = signature;
             result.mapper = mapper;
@@ -6752,7 +6747,7 @@ namespace ts {
                 const predicate = signature.typePredicate;
                 if (isIdentifierTypePredicate(predicate)) {
                     if (expr.arguments[predicate.parameterIndex] &&
-                        getSymbolAtLocation(expr.arguments[predicate.parameterIndex]) === symbol) {
+                        getSymbolAtTypePredicatePosition(expr.arguments[predicate.parameterIndex]) === symbol) {
                         return getNarrowedType(type, predicate.type, assumeTrue);
                     }
                 }
@@ -6762,18 +6757,28 @@ namespace ts {
                     if (expression.kind === SyntaxKind.ElementAccessExpression || expression.kind === SyntaxKind.PropertyAccessExpression) {
                         const accessExpression = expression as ElementAccessExpression | PropertyAccessExpression;
                         const possibleIdentifier = skipParenthesizedNodes(accessExpression.expression);
-                        if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtLocation(possibleIdentifier) === symbol) {
+                        if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtTypePredicatePosition(possibleIdentifier) === symbol) {
                             return getNarrowedType(type, predicate.type, assumeTrue);
                         }
                     }
                 }
                 return type;
+            }
 
-                function skipParenthesizedNodes(expression: Expression): Expression {
-                    while (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                        expression = (expression as ParenthesizedExpression).expression;
-                    }
-                    return expression;
+            function skipParenthesizedNodes(expression: Expression): Expression {
+                while (expression.kind === SyntaxKind.ParenthesizedExpression) {
+                    expression = (expression as ParenthesizedExpression).expression;
+                }
+                return expression;
+            }
+
+            function getSymbolAtTypePredicatePosition(expr: Expression): Symbol {
+                expr = skipParenthesizedNodes(expr);
+                switch (expr.kind) {
+                    case SyntaxKind.Identifier:
+                    case SyntaxKind.PropertyAccessExpression:
+                    case SyntaxKind.QualifiedName:
+                        return getSymbolOfEntityNameOrPropertyAccessExpression(expr as Node as (EntityName | PropertyAccessExpression));
                 }
             }
 

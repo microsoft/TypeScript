@@ -1,3 +1,4 @@
+// @declaration: true
 class RoyalGuard {
     isLeader(): this is LeadGuard {
         return this instanceof LeadGuard;
@@ -47,4 +48,13 @@ if (holder.invalidGuard(c)) {
 else {
     c;
     holder;
+}
+
+let detached = a.isFollower;
+
+if (detached()) {
+    a.follow();
+}
+else {
+    a.lead();
 }

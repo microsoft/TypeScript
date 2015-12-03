@@ -425,3 +425,4 @@ if (mimic.isFollower()) {
 >a : RoyalGuard
 >isFollower : () => this is FollowerGuard
 }
+
