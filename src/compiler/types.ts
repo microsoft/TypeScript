@@ -1824,7 +1824,6 @@ namespace ts {
         CannotBeNamed
     }
 
-    /* @internal */
     export const enum TypePredicateKind {
         This,
         Identifier
