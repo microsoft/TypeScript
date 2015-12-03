@@ -463,7 +463,6 @@ namespace ts.formatting {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.JsxOpeningElement:
@@ -512,6 +511,8 @@ namespace ts.formatting {
                         ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
+                case SyntaxKind.ConditionalExpression:
+                    return (parent as ConditionalExpression).whenFalse !== child;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
