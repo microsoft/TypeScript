@@ -5573,8 +5573,8 @@ namespace ts {
                 }
 
                 if (source.typePredicate && target.typePredicate) {
-                    const sourcePredicate = source.typePredicate as IdentifierTypePredicate;
-                    const targetPredicate = target.typePredicate as IdentifierTypePredicate;
+                    const sourcePredicate = source.typePredicate;
+                    const targetPredicate = target.typePredicate;
                     if (source.typePredicate.kind !== target.typePredicate.kind) {
                         if (reportErrors) {
                             reportError(Diagnostics.A_this_based_type_guard_is_not_assignable_to_a_parameter_based_type_guard);
