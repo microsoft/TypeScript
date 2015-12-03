@@ -60,7 +60,7 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
-        
+
         getModuleResolutionsForFile?(fileName: string): string;
     }
 
@@ -73,6 +73,9 @@ namespace ts {
          *  when enumerating the directory.
          */
         readDirectory(rootDir: string, extension: string, exclude?: string): string;
+        readDirectoryNames?(rootDir: string): string;
+        readFileNames?(rootDir: string): string;
+        useCaseSensitiveFileNames?: boolean;
     }
 
     ///
@@ -272,12 +275,12 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
-        
+
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
-        
+
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
-            // 'in' does not have this effect. 
+            // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
                     let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
@@ -407,7 +410,18 @@ namespace ts {
 
     export class CoreServicesShimHostAdapter implements ParseConfigHost {
 
+        public useCaseSensitiveFileNames: boolean;
+
         constructor(private shimHost: CoreServicesShimHost) {
+            if (typeof shimHost.useCaseSensitiveFileNames === "boolean") {
+                this.useCaseSensitiveFileNames = shimHost.useCaseSensitiveFileNames;
+            }
+            else if (sys) {
+                this.useCaseSensitiveFileNames = sys.useCaseSensitiveFileNames;
+            }
+            else {
+                this.useCaseSensitiveFileNames = true;
+            }
         }
 
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
@@ -424,11 +438,41 @@ namespace ts {
             }
             return JSON.parse(encoded);
         }
-        
+
+        public readDirectoryNames(path: string): string[] {
+            if (this.shimHost.readDirectory) {
+                const encoded = this.shimHost.readDirectoryNames(path);
+                return JSON.parse(encoded);
+            }
+
+            if (sys) {
+                path = normalizePath(path);
+                path = ensureTrailingDirectorySeparator(path);
+                return sys.readDirectoryNames(path);
+            }
+
+            return [];
+        }
+
+        public readFileNames(path: string): string[] {
+            if (this.shimHost.readFileNames) {
+                const encoded = this.shimHost.readFileNames(path);
+                return JSON.parse(encoded);
+            }
+
+            if (sys) {
+                path = normalizePath(path);
+                path = ensureTrailingDirectorySeparator(path);
+                return sys.readFileNames(path);
+            }
+
+            return [];
+        }
+
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
         }
-        
+
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
         }
@@ -940,7 +984,7 @@ namespace ts {
         private forwardJSONCall(actionDescription: string, action: () => any): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
-        
+
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
@@ -949,14 +993,14 @@ namespace ts {
                     resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName: undefined,
                     failedLookupLocations: result.failedLookupLocations
                 };
-            }); 
+            });
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
-                    // for now treat files as JavaScript 
+                    // for now treat files as JavaScript
                     var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
                     var convertResult = {
                         referencedFiles: <IFileReference[]>[],

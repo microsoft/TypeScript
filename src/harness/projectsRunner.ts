@@ -210,7 +210,14 @@ class ProjectRunner extends RunnerBase {
                 }
 
                 const configObject = result.config;
-                const configParseResult = ts.parseJsonConfigFileContent(configObject, { readDirectory }, ts.getDirectoryPath(configFileName), compilerOptions);
+                const configParseHost: ts.ParseConfigHost = {
+                    useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
+                    fileExists,
+                    readDirectory,
+                    readDirectoryNames,
+                    readFileNames
+                };
+                const configParseResult = ts.parseJsonConfigFileContent(configObject, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
                 if (configParseResult.errors.length > 0) {
                     return {
                         moduleKind,
@@ -237,7 +244,7 @@ class ProjectRunner extends RunnerBase {
                     mapRoot: testCase.resolveMapRoot && testCase.mapRoot ? Harness.IO.resolvePath(testCase.mapRoot) : testCase.mapRoot,
                     sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot ? Harness.IO.resolvePath(testCase.sourceRoot) : testCase.sourceRoot,
                     module: moduleKind,
-                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future 
+                    moduleResolution: ts.ModuleResolutionKind.Classic, // currently all tests use classic module resolution kind, this will change in the future
                 };
                 // Set the values specified using json
                 const optionNameMap: ts.Map<ts.CommandLineOption> = {};
@@ -276,6 +283,14 @@ class ProjectRunner extends RunnerBase {
                         getCurrentDirectory(), Harness.Compiler.getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                 }
                 return result;
+            }
+
+            function readDirectoryNames(path: string) {
+                return Harness.IO.readDirectoryNames(getFileNameInTheProjectTest(path));
+            }
+
+            function readFileNames(path: string) {
+                return Harness.IO.readFileNames(getFileNameInTheProjectTest(path));
             }
 
             function fileExists(fileName: string): boolean {

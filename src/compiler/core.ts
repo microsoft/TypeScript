@@ -25,6 +25,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
+            reduce,
             clear
         };
 
@@ -32,6 +33,10 @@ namespace ts {
             for (const key in files) {
                 f(<Path>key, files[key]);
             }
+        }
+
+        function reduce<U>(callback: (memo: U, value: T, key: Path) => U, initial: U) {
+            return reduceProperties(files, callback, initial);
         }
 
         // path should already be well-formed so it does not need to be normalized
@@ -490,6 +495,24 @@ namespace ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
+    export function compareStrings(a: string, b: string, ignoreCase?: boolean): Comparison {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        if (ignoreCase) {
+            if (String.prototype.localeCompare) {
+                const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
+                return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
+            }
+
+            a = a.toUpperCase();
+            b = b.toUpperCase();
+            if (a === b) return Comparison.EqualTo;
+        }
+
+        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
+    }
+
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
@@ -756,6 +779,49 @@ namespace ts {
         return path1 + directorySeparator + path2;
     }
 
+    /**
+     * Removes a trailing directory separator from a path.
+     * @param path The path.
+     */
+    export function removeTrailingDirectorySeparator(path: string) {
+        if (path.charAt(path.length - 1) === directorySeparator) {
+            return path.substr(0, path.length - 1);
+        }
+
+        return path;
+    }
+
+    /**
+     * Adds a trailing directory separator to a path, if it does not already have one.
+     * @param path The path.
+     */
+    export function ensureTrailingDirectorySeparator(path: string) {
+        if (path.charAt(path.length - 1) !== directorySeparator) {
+            return path + directorySeparator;
+        }
+
+        return path;
+    }
+
+    export function comparePaths(a: string, b: string, currentDirectory: string, ignoreCase?: boolean) {
+        if (a === b) return Comparison.EqualTo;
+        if (a === undefined) return Comparison.LessThan;
+        if (b === undefined) return Comparison.GreaterThan;
+        a = removeTrailingDirectorySeparator(a);
+        b = removeTrailingDirectorySeparator(b);
+        const aComponents = getNormalizedPathComponents(a, currentDirectory);
+        const bComponents = getNormalizedPathComponents(b, currentDirectory);
+        const sharedLength = Math.min(aComponents.length, bComponents.length);
+        for (let i = 0; i < sharedLength; ++i) {
+            const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            if (result !== Comparison.EqualTo) {
+                return result;
+            }
+        }
+
+        return compareValues(aComponents.length, bComponents.length);
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         const pathLen = path.length;
         const extLen = extension.length;
@@ -792,6 +858,10 @@ namespace ts {
             }
         }
         return path;
+    }
+
+    export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
+        return <T>(removeFileExtension(path) + newExtension);
     }
 
     const backslashOrDoubleQuote = /[\"\\]/g;

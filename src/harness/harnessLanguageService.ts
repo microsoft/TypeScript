@@ -259,6 +259,12 @@ namespace Harness.LanguageService {
         readDirectory(rootDir: string, extension: string): string {
             throw new Error("NYI");
         }
+        readDirectoryNames(path: string): string {
+            throw new Error("Not implemented.");
+        }
+        readFileNames(path: string): string {
+            throw new Error("Not implemented.");
+        }
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
@@ -572,6 +578,14 @@ namespace Harness.LanguageService {
             throw new Error("Not implemented Yet.");
         }
 
+        readDirectoryNames(path: string): string[] {
+            throw new Error("Not implemented.");
+        }
+
+        readFileNames(path: string): string[] {
+            throw new Error("Not implemented.");
+        }
+
         watchFile(fileName: string, callback: (fileName: string) => void): ts.FileWatcher {
             return { close() { } };
         }
@@ -644,4 +658,3 @@ namespace Harness.LanguageService {
         getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { throw new Error("getPreProcessedFileInfo is not available using the server interface."); }
     }
 }
- 

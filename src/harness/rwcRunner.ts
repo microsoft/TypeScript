@@ -76,7 +76,14 @@ namespace RWC {
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
                         const parsedTsconfigFileContents = ts.parseConfigFileTextToJson(tsconfigFile.path, tsconfigFileContents.content);
-                        const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, Harness.IO, ts.getDirectoryPath(tsconfigFile.path));
+                        const configParseHost: ts.ParseConfigHost = {
+                            useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
+                            fileExists: Harness.IO.fileExists,
+                            readDirectory: Harness.IO.readDirectory,
+                            readDirectoryNames: Harness.IO.readDirectoryNames,
+                            readFileNames: Harness.IO.readFileNames,
+                        };
+                        const configParseResult = ts.parseJsonConfigFileContent(parsedTsconfigFileContents.config, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
                         opts.options = ts.extend(opts.options, configParseResult.options);
                     }

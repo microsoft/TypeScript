@@ -17,6 +17,8 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readFileNames(path: string): string[];
+        readDirectoryNames(path: string): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -155,6 +157,16 @@ namespace ts {
                 }
             }
 
+            function readFileNames(path: string): string[] {
+                const folder = fso.GetFolder(path || ".");
+                return getNames(folder.files);
+            }
+
+            function readDirectoryNames(path: string): string[] {
+                const folder = fso.GetFolder(path || ".");
+                return getNames(folder.directories);
+            }
+
             return {
                 args,
                 newLine: "\r\n",
@@ -185,6 +197,8 @@ namespace ts {
                     return new ActiveXObject("WScript.Shell").CurrentDirectory;
                 },
                 readDirectory,
+                readFileNames,
+                readDirectoryNames,
                 exit(exitCode?: number): void {
                     try {
                         WScript.Quit(exitCode);
@@ -281,7 +295,7 @@ namespace ts {
             // REVIEW: for now this implementation uses polling.
             // The advantage of polling is that it works reliably
             // on all os and with network mounted files.
-            // For 90 referenced files, the average time to detect 
+            // For 90 referenced files, the average time to detect
             // changes is 2*msInterval (by default 5 seconds).
             // The overhead of this is .04 percent (1/2500) with
             // average pause of < 1 millisecond (and max
@@ -381,6 +395,30 @@ namespace ts {
                 }
             }
 
+            function readFileNames(path: string): string[] {
+                const entries = _fs.readdirSync(path || ".");
+                const files: string[] = [];
+                for (const entry of entries) {
+                    const stat = _fs.statSync(combinePaths(path, entry));
+                    if (stat.isFile()) {
+                        files.push(entry);
+                    }
+                }
+                return files.sort();
+            }
+
+            function readDirectoryNames(path: string): string[] {
+                const entries = _fs.readdirSync(path || ".");
+                const directories: string[] = [];
+                for (const entry of entries) {
+                    const stat = _fs.statSync(combinePaths(path, entry));
+                    if (stat.isDirectory()) {
+                        directories.push(entry);
+                    }
+                }
+                return directories.sort();
+            }
+
             return {
                 args: process.argv.slice(2),
                 newLine: _os.EOL,
@@ -406,7 +444,7 @@ namespace ts {
                     };
                 },
                 watchDirectory: (path, callback, recursive) => {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
+                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     return _fs.watch(
                         path,
@@ -426,7 +464,7 @@ namespace ts {
                     return _path.resolve(path);
                 },
                 fileExists(path: string): boolean {
-                    return _fs.existsSync(path);
+                    return _fs.existsSync(path) && _fs.statSync(path).isFile();
                 },
                 directoryExists(path: string) {
                     return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
@@ -443,6 +481,8 @@ namespace ts {
                     return process.cwd();
                 },
                 readDirectory,
+                readFileNames,
+                readDirectoryNames,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();

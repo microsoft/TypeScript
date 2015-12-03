@@ -1,7 +1,7 @@
 
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -282,7 +282,7 @@ namespace Utils {
                         break;
 
                     case "parserContextFlags":
-                        // Clear the flag that are produced by aggregating child values..  That is ephemeral 
+                        // Clear the flag that are produced by aggregating child values..  That is ephemeral
                         // data we don't care about in the dump.  We only care what the parser set directly
                         // on the ast.
                         let value = n.parserContextFlags & ts.ParserContextFlags.ParserGeneratedFlags;
@@ -356,7 +356,7 @@ namespace Utils {
         assert.equal(node1.kind, node2.kind, "node1.kind !== node2.kind");
         assert.equal(node1.flags, node2.flags, "node1.flags !== node2.flags");
 
-        // call this on both nodes to ensure all propagated flags have been set (and thus can be 
+        // call this on both nodes to ensure all propagated flags have been set (and thus can be
         // compared).
         assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
         assert.equal(node1.parserContextFlags, node2.parserContextFlags, "node1.parserContextFlags !== node2.parserContextFlags");
@@ -436,6 +436,8 @@ namespace Harness {
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectoryNames(path: string): string[];
+        readFileNames(path: string): string[];
     }
     export var IO: IO;
 
@@ -474,6 +476,8 @@ namespace Harness {
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const readDirectoryNames: typeof IO.readDirectoryNames = path => ts.sys.readDirectoryNames(path);
+            export const readFileNames: typeof IO.readFileNames = path => ts.sys.readFileNames(path);
 
             export function createDirectory(path: string) {
                 if (directoryExists(path)) {
@@ -544,6 +548,8 @@ namespace Harness {
             export const log: typeof IO.log = s => console.log(s);
 
             export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
+            export const readDirectoryNames: typeof IO.readDirectoryNames = path => ts.sys.readDirectoryNames(path);
+            export const readFileNames: typeof IO.readFileNames = path => ts.sys.readFileNames(path);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -752,6 +758,14 @@ namespace Harness {
             export function readDirectory(path: string, extension?: string, exclude?: string[]) {
                 return listFiles(path).filter(f => !extension || ts.fileExtensionIs(f, extension));
             }
+
+            export function readDirectoryNames(path: string): string[] {
+                return [];
+            }
+
+            export function readFileNames(path: string) {
+                return readDirectory(path);
+            }
         }
     }
 
@@ -777,7 +791,7 @@ namespace Harness {
         (emittedFile: string, emittedLine: number, emittedColumn: number, sourceFile: string, sourceLine: number, sourceColumn: number, sourceName: string): void;
     }
 
-    // Settings 
+    // Settings
     export let userSpecifiedRoot = "";
     export let lightMode = false;
 
@@ -816,7 +830,7 @@ namespace Harness {
             fileName: string,
             sourceText: string,
             languageVersion: ts.ScriptTarget) {
-            // We'll only assert invariants outside of light mode. 
+            // We'll only assert invariants outside of light mode.
             const shouldAssertInvariants = !Harness.lightMode;
 
             // Only set the parent nodes if we're asserting invariants.  We don't need them otherwise.
@@ -911,7 +925,7 @@ namespace Harness {
             libFiles?: string;
         }
 
-        // Additional options not already in ts.optionDeclarations 
+        // Additional options not already in ts.optionDeclarations
         const harnessOptionDeclarations: ts.CommandLineOption[] = [
             { name: "allowNonTsExtensions", type: "boolean" },
             { name: "useCaseSensitiveFileNames", type: "boolean" },
@@ -1149,7 +1163,7 @@ namespace Harness {
                 errLines.forEach(e => outputLines.push(e));
 
                 // do not count errors from lib.d.ts here, they are computed separately as numLibraryDiagnostics
-                // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers) 
+                // if lib.d.ts is explicitly included in input files and there are some errors in it (i.e. because of duplicate identifiers)
                 // then they will be added twice thus triggering 'total errors' assertion with condition
                 // 'totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length
 

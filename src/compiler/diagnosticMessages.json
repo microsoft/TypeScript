@@ -2020,6 +2020,10 @@
         "category": "Error",
         "code": 5009
     },
+    "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5011
+    },
     "Cannot read file '{0}': {1}": {
         "category": "Error",
         "code": 5012
