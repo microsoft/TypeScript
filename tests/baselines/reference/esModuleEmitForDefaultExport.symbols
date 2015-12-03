@@ -1,0 +1,22 @@
+=== tests/cases/compiler/a.ts ===
+
+class C { }
+>C : Symbol(C, Decl(a.ts, 0, 0))
+
+export default C;
+>C : Symbol(C, Decl(a.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+var x = 0;
+>x : Symbol(x, Decl(b.ts, 0, 3))
+
+export default x;
+>x : Symbol(x, Decl(b.ts, 0, 3))
+
+=== tests/cases/compiler/c.ts ===
+function f() { }
+>f : Symbol(f, Decl(c.ts, 0, 0))
+
+export default f;
+>f : Symbol(f, Decl(c.ts, 0, 0))
+
