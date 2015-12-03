@@ -1323,7 +1323,7 @@ x = "hello";            // Ok
 x = 42;                 // Ok  
 x = test;               // Error, boolean not assignable  
 x = test ? 5 : "five";  // Ok  
-x = test ? 0 : false;   // Error, number | boolean not asssignable
+x = test ? 0 : false;   // Error, number | boolean not assignable
 ```
 
 it is possible to assign 'x' a value of type `string`, `number`, or the union type `string | number`, but not any other type. To access a value in 'x', a type guard can be used to first narrow the type of 'x' to either `string` or `number`:
