@@ -38,7 +38,7 @@ The library sources are in: [src/lib](https://github.com/Microsoft/TypeScript/tr
 
 To build the library files, run
 ```Shell
-jake lib
+jake LKG
 ```
 
 #### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
