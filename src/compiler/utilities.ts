@@ -1616,7 +1616,7 @@ namespace ts {
         return node.kind === SyntaxKind.QualifiedName;
     }
 
-    export function nodeIsSynthesized(node: Node): boolean {
+    export function nodeIsSynthesized(node: Node | TextRange): boolean {
         return node.pos === -1;
     }
 

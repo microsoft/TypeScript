@@ -7,7 +7,7 @@ namespace ts {
         setSourceFile(sourceFile: SourceFile): void;
         emitPos(pos: number): void;
         emitStart(range: TextRange): void;
-        emitEnd(range: TextRange): void;
+        emitEnd(range: TextRange, stopOverridingSpan?: boolean): void;
         getText(): string;
         getSourceMappingURL(): string;
         initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
@@ -23,7 +23,7 @@ namespace ts {
                 getSourceMapData(): SourceMapData { return undefined; },
                 setSourceFile(sourceFile: SourceFile): void { },
                 emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange): void { },
+                emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
                 emitPos(pos: number): void { },
                 getText(): string { return undefined; },
                 getSourceMappingURL(): string { return undefined; },
@@ -39,6 +39,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         let currentSourceFile: SourceFile;
         let sourceMapDir: string; // The directory in which sourcemap will be
+        let stopOverridingSpan = false;
 
         // Current source map file and its index in the sources list
         let sourceMapSourceIndex: number;
@@ -220,8 +221,10 @@ namespace ts {
                     sourceColumn: sourceLinePos.character,
                     sourceIndex: sourceMapSourceIndex
                 };
+
+                stopOverridingSpan = false;
             }
-            else {
+            else if (!stopOverridingSpan) {
                 // Take the new pos instead since there is no change in emittedLine and column since last location
                 lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
                 lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
@@ -234,8 +237,9 @@ namespace ts {
             emitPos(range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1);
         }
 
-        function emitEnd(range: TextRange) {
+        function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
             emitPos(range.end);
+            stopOverridingSpan = stopOverridingEnd;
         }
 
         function setSourceFile(sourceFile: SourceFile) {

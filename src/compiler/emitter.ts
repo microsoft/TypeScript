@@ -464,8 +464,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             const writer = createTextWriter(newLine);
             const { write, writeTextOfNode, writeLine, increaseIndent, decreaseIndent } = writer;
 
-            const sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
-            const { setSourceFile, emitStart, emitEnd, emitPos } = sourceMap;
+            let sourceMap = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? createSourceMapWriter(host, writer) : getNullSourceMapWriter();
+            let { setSourceFile, emitStart, emitEnd, emitPos } = sourceMap;
 
             let currentSourceFile: SourceFile;
             let currentText: string;
@@ -511,6 +511,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             /** If removeComments is true, no leading-comments needed to be emitted **/
             const emitLeadingCommentsOfPosition = compilerOptions.removeComments ? function (pos: number) { } : emitLeadingCommentsOfPositionWorker;
+
+            const setSourceMapWriterEmit = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? changeSourceMapEmit : function (writer: SourceMapWriter) { };
 
             const moduleEmitDelegates: Map<(node: SourceFile, emitRelativePathAsModuleName?: boolean) => void> = {
                 [ModuleKind.ES6]: emitES6Module,
@@ -2573,7 +2575,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             leftHandSideExpression.argumentExpression.kind !== SyntaxKind.StringLiteral) {
                             const tempArgumentExpression = createAndRecordTempVariable(TempFlags._i);
                             (<ElementAccessExpression>synthesizedLHS).argumentExpression = tempArgumentExpression;
-                            emitAssignment(tempArgumentExpression, leftHandSideExpression.argumentExpression, /*shouldEmitCommaBeforeAssignment*/ true);
+                            emitAssignment(tempArgumentExpression, leftHandSideExpression.argumentExpression, /*shouldEmitCommaBeforeAssignment*/ true, leftHandSideExpression.expression);
                         }
                         else {
                             (<ElementAccessExpression>synthesizedLHS).argumentExpression = leftHandSideExpression.argumentExpression;
@@ -3728,7 +3730,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * @param value an expression as a right-hand-side operand of the assignment
              * @param shouldEmitCommaBeforeAssignment a boolean indicating whether to prefix an assignment with comma
              */
-            function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean) {
+            function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean, nodeForSourceMap: TextRange) {
                 if (shouldEmitCommaBeforeAssignment) {
                     write(", ");
                 }
@@ -3744,15 +3746,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const isVariableDeclarationOrBindingElement =
                     name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
 
-                if (isVariableDeclarationOrBindingElement) {
-                    emitModuleMemberName(<Declaration>name.parent);
-                }
-                else {
-                    emit(name);
-                }
+                emitStart(nodeForSourceMap);
+                withTemporaryNoSourceMap(() => {
+                    if (isVariableDeclarationOrBindingElement) {
+                        emitModuleMemberName(<Declaration>name.parent);
+                    }
+                    else {
+                        emit(name);
+                    }
 
-                write(" = ");
-                emit(value);
+                    write(" = ");
+                    emit(value);
+                });
+                emitEnd(nodeForSourceMap, /*stopOverridingSpan*/true);
 
                 if (exportChanged) {
                     write(")");
@@ -3770,7 +3776,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (!canDefineTempVariablesInPlace) {
                     recordTempDeclaration(identifier);
                 }
-                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment);
+                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment, expression);
                 return identifier;
             }
 
@@ -3929,7 +3935,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value);
                     }
                     else {
-                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                        // TODO
+                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, { pos: -1, end: -1 });
                         emitCount++;
                     }
                 }
@@ -3999,7 +4006,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0);
+                        let nodeForSourceMap: Node;
+                        // If binding element is part of binding pattern with single element, use binding pattern
+                        if (target.kind === SyntaxKind.BindingElement && (<BindingPattern>target.parent).elements.length === 1) {
+                            nodeForSourceMap = (target.parent.parent.kind === SyntaxKind.VariableDeclaration || target.parent.parent.kind === SyntaxKind.Parameter) ?
+                                target.parent.parent : // Set sourcemap as whole variable declaration
+                                target.parent; // Only binding Pattern
+                        }
+                        else {
+                            nodeForSourceMap = target; // Binding Element
+                        }
+                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, nodeForSourceMap);
                         emitCount++;
                     }
                 }
@@ -7432,6 +7449,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node) {
                     emitJavaScriptWorker(node);
                 }
+            }
+
+            function changeSourceMapEmit(writer: SourceMapWriter) {
+                sourceMap = writer;
+                emitStart = writer.emitStart;
+                emitEnd = writer.emitEnd;
+                emitPos = writer.emitPos;
+                setSourceFile = writer.setSourceFile;
+            }
+
+            function withTemporaryNoSourceMap(callback: () => void) {
+                const prevSourceMap = sourceMap;
+                setSourceMapWriterEmit(getNullSourceMapWriter());
+                callback();
+                setSourceMapWriterEmit(prevSourceMap);
             }
 
             function isSpecializedCommentHandling(node: Node): boolean {
