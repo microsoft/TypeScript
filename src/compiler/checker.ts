@@ -51,6 +51,7 @@ namespace ts {
         const emitResolver = createResolver();
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
         const checker: TypeChecker = {
@@ -526,6 +527,12 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
+                        if ((<SourceFile>location).package) {
+                            if (hasProperty((<SourceFile>location).package.symbols, name)) {
+                                result = (<SourceFile>location).package.symbols[name];
+                                break loop;
+                            }
+                        }
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
                     case SyntaxKind.ModuleDeclaration:
                         const moduleExports = getSymbolOfNode(location).exports;
@@ -1050,7 +1057,8 @@ namespace ts {
 
             const isRelative = isExternalModuleNameRelative(moduleName);
             if (!isRelative) {
-                const symbol = getSymbol(globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                const file = getSourceFileOfNode(location);
+                const symbol = getSymbol(file.package ? file.package.symbols : globals, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
                 if (symbol) {
                     return symbol;
                 }
@@ -1061,6 +1069,12 @@ namespace ts {
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     return sourceFile.symbol;
+                }
+                else if (sourceFile.package && !isRelative) {
+                    const symbol = getSymbol(sourceFile.package.symbols, "\"" + moduleName + "\"", SymbolFlags.ValueModule);
+                    if (symbol) {
+                        return symbol;
+                    }
                 }
                 error(moduleReferenceLiteral, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
                 return;
@@ -1258,6 +1272,11 @@ namespace ts {
                 }
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
+                        if ((<SourceFile>location).package) {
+                            if (result = callback((<SourceFile>location).package.symbols)) {
+                                return result;
+                            }
+                        }
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                             break;
                         }
@@ -14511,6 +14530,9 @@ namespace ts {
 
                     switch (location.kind) {
                         case SyntaxKind.SourceFile:
+                            if ((<SourceFile>location).package) {
+                                copySymbols((<SourceFile>location).package.symbols, meaning);
+                            }
                             if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                                 break;
                             }
@@ -15189,6 +15211,10 @@ namespace ts {
             return hasProperty(globals, name);
         }
 
+        function hasPackageInternalName(file: SourceFile, name: string): boolean {
+            return file.package && hasProperty(file.package.symbols, name);
+        }
+
         function getReferencedValueSymbol(reference: Identifier): Symbol {
             return getNodeLinks(reference).resolvedSymbol ||
                 resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
@@ -15223,6 +15249,7 @@ namespace ts {
                 isNestedRedeclaration,
                 isValueAliasDeclaration,
                 hasGlobalName,
+                hasPackageInternalName,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
                 isTopLevelValueImportEqualsWithEntityName,
@@ -15258,10 +15285,25 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             });
 
-            // Initialize global symbol table
+            const packages: Map<PackageDescriptor> = {};
+
+            // Initialize package/global symbol table(s)
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalOrCommonJsModule(file)) {
-                    mergeSymbolTable(globals, file.locals);
+                    if (file.package) {
+                        // Dedupe/merge packages
+                        const id = file.package.packagePath;
+                        if (!packages[id]) {
+                            packages[id] = file.package;
+                        }
+                        else {
+                            file.package = packages[id];
+                        }
+                        mergeSymbolTable(file.package.symbols, file.locals);
+                    }
+                    else {
+                        mergeSymbolTable(globals, file.locals);
+                    }
                 }
             });
 
@@ -15316,6 +15358,11 @@ namespace ts {
             }
 
             anyArrayType = createArrayType(anyType);
+
+            // Once all packages are merged and global scope is setup, merge global scope into each package
+            forEachValue(packages, package => {
+                mergeSymbolTable(package.symbols, globals);
+            });
         }
 
         function createInstantiatedPromiseLikeType(): ObjectType {

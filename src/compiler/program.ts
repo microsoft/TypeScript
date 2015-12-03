@@ -53,16 +53,14 @@ namespace ts {
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+            const resolvedFileName = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            resolvedFileName = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host);
-            return resolvedFileName
-                ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
-                : { resolvedModule: undefined, failedLookupLocations };
+            const res = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host, /*mustBePackage*/false);
+            return { resolvedModule: res, failedLookupLocations };
         }
         else {
             return loadModuleFromNodeModules(moduleName, containingDirectory, host);
@@ -84,7 +82,7 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost, mustBePackage: boolean): ResolvedModule {
         const packageJsonPath = combinePaths(candidate, "package.json");
         if (host.fileExists(packageJsonPath)) {
 
@@ -102,7 +100,7 @@ namespace ts {
             if (jsonContent.typings) {
                 const result = loadNodeModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
                 if (result) {
-                    return result;
+                    return { resolvedFileName: result, packageRoot: packageJsonPath };
                 }
             }
         }
@@ -111,7 +109,10 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
+        const result = loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
+        if (result) {
+            return { resolvedFileName: result, packageRoot: mustBePackage ? result : undefined };
+        }
     }
 
     function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -122,15 +123,15 @@ namespace ts {
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
-                // Load only typescript files irrespective of allowJs option if loading from node modules
-                let result = loadNodeModuleFromFile(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
+                const result = loadNodeModuleFromFile(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
+
                 if (result) {
-                    return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
+                    return { resolvedModule: { resolvedFileName: result, packageRoot: result }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
-                if (result) {
-                    return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
+                const res = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, host, /*mustBePackage*/ true);
+                if (res) {
+                    return { resolvedModule: res, failedLookupLocations };
                 }
             }
 
@@ -501,7 +502,7 @@ namespace ts {
                             const resolutionChanged = oldResolution
                                 ? !newResolution ||
                                   oldResolution.resolvedFileName !== newResolution.resolvedFileName ||
-                                  !!oldResolution.isExternalLibraryImport !== !!newResolution.isExternalLibraryImport
+                                  !!oldResolution.packageRoot !== !!newResolution.packageRoot
                                 : newResolution;
 
                             if (resolutionChanged) {
@@ -951,7 +952,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd, refFile && refFile.package)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -961,13 +962,13 @@ namespace ts {
                 }
             }
             else {
-                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
+                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd, refFile && refFile.package);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd, refFile && refFile.package))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -996,7 +997,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number, package?: PackageDescriptor): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1004,7 +1005,12 @@ namespace ts {
                 if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
-
+                const newLocation = package && package.packagePath;
+                const oldLocation = file && file.package && file.package.packagePath;
+                // Error if we've already encounted this file but via a different package
+                if (newLocation !== oldLocation) {
+                    fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, Diagnostics.File_0_was_referenced_by_a_package_1_but_is_already_included_by_package_2, fileName, newLocation, oldLocation));
+                }
                 return file;
             }
 
@@ -1018,10 +1024,10 @@ namespace ts {
                     fileProcessingDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, hostErrorMessage));
                 }
             });
-
             filesByName.set(path, file);
             if (file) {
                 file.path = path;
+                file.package = package;
 
                 if (host.useCaseSensitiveFileNames()) {
                     // for case-sensitive file systems check if we've already seen some file with similar filename ignoring case
@@ -1058,6 +1064,9 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, basePath: string) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
+                if (file.package && !fileExtensionIs(referencedFileName, ".d.ts")) {
+                    fileProcessingDiagnostics.add(createFileDiagnostic(file, ref.pos, ref.end - ref.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_script_file_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
+                }
                 processSourceFile(referencedFileName, /*isDefaultLib*/ false, file, ref.pos, ref.end);
             });
         }
@@ -1076,18 +1085,9 @@ namespace ts {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
-
-                        if (importedFile && resolution.isExternalLibraryImport) {
-                            if (!isExternalModule(importedFile)) {
-                                const start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
-                            }
-                            else if (importedFile.referencedFiles.length) {
-                                const firstRef = importedFile.referencedFiles[0];
-                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
-                        }
+                        const filePath = toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName);
+                        const package = resolution.packageRoot ? {packagePath: moduleFilePathToIdentifyingPath(filePath, currentDirectory, getCanonicalFileName), symbols: {} as SymbolTable} : file.package;
+                        findSourceFile(resolution.resolvedFileName, filePath, /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end, package);
                     }
                 }
             }

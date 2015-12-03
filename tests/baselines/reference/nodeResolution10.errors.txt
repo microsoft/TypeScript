@@ -1,0 +1,43 @@
+tests/cases/compiler/b.ts(9,16): error TS2339: Property 'otherMember' does not exist on type 'Foo'.
+tests/cases/compiler/b.ts(13,22): error TS2339: Property 'staticMember' does not exist on type 'Foo'.
+tests/cases/compiler/node_modules/a/index.d.ts(4,39): error TS2339: Property 'otherMember' does not exist on type 'Foo'.
+
+
+==== tests/cases/compiler/b.ts (2 errors) ====
+    import y = require("a");
+    
+    interface Foo {
+    	otherMember: number;
+    }
+    
+    let foo: number = y.foo;
+    let bigFoo = y.dummy;
+    let n = bigFoo.otherMember; // should error
+                   ~~~~~~~~~~~
+!!! error TS2339: Property 'otherMember' does not exist on type 'Foo'.
+    
+    let foo2: Foo;
+    let t: number = foo2.otherMember;
+    let e: string = foo2.staticMember; // should error
+                         ~~~~~~~~~~~~
+!!! error TS2339: Property 'staticMember' does not exist on type 'Foo'.
+    
+==== tests/cases/compiler/node_modules/a/ref.d.ts (0 errors) ====
+    
+    interface Foo {
+    	staticMember: string;
+    }
+    
+    declare module "internal" {
+    	export var foo: number;
+    }
+    
+==== tests/cases/compiler/node_modules/a/index.d.ts (1 errors) ====
+    /// <reference path="ref.d.ts"/>
+    export var dummy: Foo;
+    export var dummyMember: typeof dummy.staticMember;
+    export var dummyMember2: typeof dummy.otherMember; // should error
+                                          ~~~~~~~~~~~
+!!! error TS2339: Property 'otherMember' does not exist on type 'Foo'.
+    export * from "internal";
+    

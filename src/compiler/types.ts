@@ -1511,6 +1511,10 @@ namespace ts {
         isBracketed: boolean;
     }
 
+    export interface PackageDescriptor extends Scope {
+        packagePath: string; // This should be either the path to a named .d.ts, an index.d.ts, a package.json, or a directory which uniqely identifies the package
+    }
+
     export interface AmdDependency {
         path: string;
         name: string;
@@ -1530,6 +1534,9 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         languageVariant: LanguageVariant;
+
+        /* @internal */
+        package?: PackageDescriptor;
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
@@ -1573,6 +1580,10 @@ namespace ts {
         // Content of this fiels should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModule>;
         /* @internal */ imports: LiteralExpression[];
+    }
+
+    export interface Scope {
+        symbols: SymbolTable;           // Locals associated with node (initialized by binding)
     }
 
     export interface ScriptReferenceHost {
@@ -1866,6 +1877,7 @@ namespace ts {
     /* @internal */
     export interface EmitResolver {
         hasGlobalName(name: string): boolean;
+        hasPackageInternalName(node: SourceFile, name: string): boolean;
         getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration;
         getReferencedImportDeclaration(node: Identifier): Declaration;
         getReferencedNestedRedeclaration(node: Identifier): Declaration;
@@ -2616,9 +2628,8 @@ namespace ts {
          * Denotes if 'resolvedFileName' is isExternalLibraryImport and thus should be proper external module:
          * - be a .d.ts file
          * - use top level imports\exports
-         * - don't use tripleslash references
          */
-        isExternalLibraryImport?: boolean;
+        packageRoot?: string;
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

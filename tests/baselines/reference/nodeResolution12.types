@@ -1,0 +1,33 @@
+=== tests/cases/compiler/start.ts ===
+import foo = require("foo");
+>foo : typeof foo
+
+import foofoo = require("foo/foo");
+>foofoo : typeof foofoo
+
+new foo.Foo();
+>new foo.Foo() : foo.Foo
+>foo.Foo : typeof foo.Foo
+>foo : typeof foo
+>Foo : typeof foo.Foo
+
+new foofoo.Foo_Internal();
+>new foofoo.Foo_Internal() : foofoo.Foo_Internal
+>foofoo.Foo_Internal : typeof foofoo.Foo_Internal
+>foofoo : typeof foofoo
+>Foo_Internal : typeof foofoo.Foo_Internal
+
+=== tests/cases/compiler/node_modules/foo/index.d.ts ===
+import internal = require("./foo");
+>internal : typeof internal
+
+export class Foo extends internal.Foo_Internal {}
+>Foo : Foo
+>internal.Foo_Internal : internal.Foo_Internal
+>internal : typeof internal
+>Foo_Internal : typeof internal.Foo_Internal
+
+=== tests/cases/compiler/node_modules/foo/foo.d.ts ===
+export class Foo_Internal {}
+>Foo_Internal : Foo_Internal
+

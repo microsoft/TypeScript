@@ -68,6 +68,12 @@ namespace ts {
         return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
+    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+        return !isRootedDiskPath(absoluteOrRelativePath)
+            ? absoluteOrRelativePath
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
+    }
+
     export const enum Comparison {
         LessThan    = -1,
         EqualTo     = 0,
@@ -649,6 +655,21 @@ namespace ts {
         if (pathComponents && pathComponents.length) {
             return pathComponents[0] + pathComponents.slice(1).join(directorySeparator);
         }
+    }
+
+    /**
+     * Given a path to a file within a module, returns a path uniqely identifying that module
+     */
+    export function moduleFilePathToIdentifyingPath(path: Path, currentDirectory: string, getCanonicalFileName: (filename: string) => string): string {
+        const components = normalizedPathComponents(normalizeSlashes(path), getRootLength(path));
+        let part: string;
+        let lastPart: string;
+        while (lastPart = part, part = components.pop()) {
+            if (part === "node_modules") {
+                return convertToRelativePath(getNormalizedPathFromPathComponents([...components, lastPart]), currentDirectory, getCanonicalFileName);
+            }
+        }
+        return convertToRelativePath(path, currentDirectory, getCanonicalFileName);
     }
 
     function getNormalizedPathComponentsOfUrl(url: string) {

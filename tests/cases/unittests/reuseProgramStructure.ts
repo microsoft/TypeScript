@@ -162,15 +162,15 @@ module ts {
 
     function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule>): void {
         let file = program.getSourceFile(fileName);
-        assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
+        assert.notEqual(file, undefined, `cannot find file ${fileName}`);
         if (expectedContent === undefined) {
-            assert.isTrue(file.resolvedModules === undefined, "expected resolvedModules to be undefined");
+            assert.equal(file.resolvedModules, undefined, "expected resolvedModules to be undefined");
         }
         else {
             assert.isTrue(file.resolvedModules !== undefined, "expected resolvedModuled to be set");
             let actualCacheSize = getSizeOfMap(file.resolvedModules);
             let expectedSize = getSizeOfMap(expectedContent);
-            assert.isTrue(actualCacheSize === expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
+            assert.equal(actualCacheSize, expectedSize, `expected actual size: ${actualCacheSize} to be equal to ${expectedSize}`);
 
             for (let id in expectedContent) {
                 if (hasProperty(expectedContent, id)) {
@@ -178,12 +178,12 @@ module ts {
                     if (expectedContent[id]) {
                         const expected = expectedContent[id];
                         const actual = file.resolvedModules[id];
-                        assert.isTrue(actual !== undefined);
-                        assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                        assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'shouldBeProperExternalModule': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+                        assert.notEqual(actual, undefined);
+                        assert.equal(expected.resolvedFileName, actual.resolvedFileName);
+                        assert.equal(expected.packageRoot, actual.packageRoot);
                     }
                     else {
-                        assert.isTrue(file.resolvedModules[id] === undefined);
+                        assert.equal(file.resolvedModules[id], undefined);
                     }
                 }
             }

@@ -1720,7 +1720,7 @@
         "category": "Error",
         "code": 2653
     },
-    "Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.": {
+    "Exported external package typings file cannot contain script file tripleslash references. Please contact the package author to update the package definition.": {
         "category": "Error",
         "code": 2654
     },
@@ -2289,7 +2289,10 @@
         "category": "Error",
         "code": 6063
     },
-
+    "File '{0}' was referenced by a package '{1}' but is already included by package '{2}'.": {
+        "category": "Error",
+        "code": 6064
+    },
     "Enables experimental support for ES7 decorators.": {
         "category": "Message",
         "code": 6065
