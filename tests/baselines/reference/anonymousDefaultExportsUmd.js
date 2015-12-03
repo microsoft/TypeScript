@@ -19,6 +19,7 @@ export default function() {}
     class default_1 {
     }
     exports.default = default_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 (function (factory) {
@@ -31,5 +32,6 @@ export default function() {}
 })(function (require, exports) {
     "use strict";
     function default_1() { }
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = default_1;
 });

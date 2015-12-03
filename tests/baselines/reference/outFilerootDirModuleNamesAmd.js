@@ -14,6 +14,7 @@ export default function foo() { new Foo(); }
 define("b", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     function foo() { new a_1.default(); }
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = foo;
 });
 define("a", ["require", "exports", "b"], function (require, exports, b_1) {
@@ -21,5 +22,6 @@ define("a", ["require", "exports", "b"], function (require, exports, b_1) {
     class Foo {
     }
     exports.default = Foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
     b_1.default();
 });

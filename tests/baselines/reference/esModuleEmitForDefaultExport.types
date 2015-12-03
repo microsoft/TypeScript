@@ -1,0 +1,23 @@
+=== tests/cases/compiler/a.ts ===
+
+class C { }
+>C : C
+
+export default C;
+>C : C
+
+=== tests/cases/compiler/b.ts ===
+var x = 0;
+>x : number
+>0 : number
+
+export default x;
+>x : number
+
+=== tests/cases/compiler/c.ts ===
+function f() { }
+>f : () => void
+
+export default f;
+>f : () => void
+

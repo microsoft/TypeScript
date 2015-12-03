@@ -3628,13 +3628,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // only allow export default at a source file level
                     if (modulekind === ModuleKind.CommonJS || modulekind === ModuleKind.AMD || modulekind === ModuleKind.UMD) {
                         if (!isEs6Module) {
-                            if (languageVersion === ScriptTarget.ES5) {
-                                // default value of configurable, enumerable, writable are `false`.
-                                write("Object.defineProperty(exports, \"__esModule\", { value: true });");
+                            if (languageVersion === ScriptTarget.ES3) {
+                                write("exports.__esModule = true;");
                                 writeLine();
                             }
-                            else if (languageVersion === ScriptTarget.ES3) {
-                                write("exports.__esModule = true;");
+                            else {
+                                // default value of configurable, enumerable, writable are `false`.
+                                write("Object.defineProperty(exports, \"__esModule\", { value: true });");
                                 writeLine();
                             }
                         }
@@ -5190,6 +5190,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         write(`exports.default = `);
                         emitDeclarationName(node);
                         write(";");
+                        writeLine();
+                        emitEs6ExportDefaultCompat(node);
                     }
                 }
                 else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {

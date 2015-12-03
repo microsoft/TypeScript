@@ -29,6 +29,7 @@ define(["require", "exports"], function (require, exports) {
         decorator
     ], Foo);
     exports.default = Foo;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 //// [b.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -46,4 +47,5 @@ define(["require", "exports"], function (require, exports) {
         decorator
     ], default_1);
     exports.default = default_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
