@@ -2057,9 +2057,10 @@ namespace ts {
                 writeSpace(writer);
 
                 let returnType: Type;
-                if (signature.typePredicate) {
-                    if (signature.typePredicate.kind === TypePredicateKind.Identifier) {
-                        writer.writeParameter((signature.typePredicate as IdentifierTypePredicate).parameterName);
+                const predicate = signature.typePredicate;
+                if (predicate) {
+                    if (isIdentifierTypePredicate(predicate)) {
+                        writer.writeParameter(predicate.parameterName);
                     }
                     else {
                         writeKeyword(writer, SyntaxKind.ThisKeyword);
@@ -2067,7 +2068,7 @@ namespace ts {
                     writeSpace(writer);
                     writeKeyword(writer, SyntaxKind.IsKeyword);
                     writeSpace(writer);
-                    returnType = signature.typePredicate.type;
+                    returnType = predicate.type;
                 }
                 else {
                     returnType = getReturnTypeOfSignature(signature);
@@ -5572,17 +5573,19 @@ namespace ts {
                 }
 
                 if (source.typePredicate && target.typePredicate) {
+                    const sourcePredicate = source.typePredicate as IdentifierTypePredicate;
+                    const targetPredicate = target.typePredicate as IdentifierTypePredicate;
                     if (source.typePredicate.kind !== target.typePredicate.kind) {
                         if (reportErrors) {
                             reportError(Diagnostics.A_this_based_type_guard_is_not_assignable_to_a_parameter_based_type_guard);
                         }
                         return Ternary.False;
                     }
-                    if (source.typePredicate.kind === TypePredicateKind.This) {
-                        if (!isTypeIdenticalTo(source.typePredicate.type, target.typePredicate.type)) {
+                    if (!(isIdentifierTypePredicate(sourcePredicate) && isIdentifierTypePredicate(targetPredicate))) {
+                        if (!isTypeIdenticalTo(sourcePredicate.type, targetPredicate.type)) {
                             if (reportErrors) {
-                                const sourceTypeText = typeToString(source.typePredicate.type);
-                                const targetTypeText = typeToString(target.typePredicate.type);
+                                const sourceTypeText = typeToString(sourcePredicate.type);
+                                const targetTypeText = typeToString(targetPredicate.type);
                                 reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
                                     sourceTypeText,
                                     targetTypeText);
@@ -5591,8 +5594,6 @@ namespace ts {
                         }
                     }
                     else {
-                        const sourcePredicate = source.typePredicate as IdentifierTypePredicate;
-                        const targetPredicate = target.typePredicate as IdentifierTypePredicate;
                         const hasDifferentParameterIndex = sourcePredicate.parameterIndex !== targetPredicate.parameterIndex;
                         let hasDifferentTypes: boolean;
                         if (hasDifferentParameterIndex ||
