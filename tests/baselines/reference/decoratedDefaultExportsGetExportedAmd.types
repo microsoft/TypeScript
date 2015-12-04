@@ -1,5 +1,4 @@
-=== tests/cases/conformance/es6/moduleExportsAmd/decoratedDefaultExportsGetExportedAmd.ts ===
-
+=== tests/cases/conformance/es6/moduleExportsAmd/a.ts ===
 var decorator: ClassDecorator;
 >decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
 >ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
@@ -9,4 +8,14 @@ var decorator: ClassDecorator;
 
 export default class Foo {}
 >Foo : Foo
+
+=== tests/cases/conformance/es6/moduleExportsAmd/b.ts ===
+var decorator: ClassDecorator;
+>decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+
+@decorator
+>decorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+
+export default class {}
 

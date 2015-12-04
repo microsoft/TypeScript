@@ -13,7 +13,7 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>    function __() { this.constructor = d; }
 >>>    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 >>>};
->>>define("tests/cases/compiler/ref/a", ["require", "exports"], function (require, exports) {
+>>>define("ref/a", ["require", "exports"], function (require, exports) {
 >>>    "use strict";
 >>>    var A = (function () {
 1 >^^^^
@@ -79,7 +79,7 @@ emittedFile:all.js
 sourceFile:tests/cases/compiler/b.ts
 -------------------------------------------------------------------
 >>>});
->>>define("tests/cases/compiler/b", ["require", "exports", "tests/cases/compiler/ref/a"], function (require, exports, a_1) {
+>>>define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
 >>>    "use strict";
 >>>    var B = (function (_super) {
 1 >^^^^
