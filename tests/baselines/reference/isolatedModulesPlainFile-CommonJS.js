@@ -5,4 +5,5 @@ run(1);
 
 
 //// [isolatedModulesPlainFile-CommonJS.js]
+"use strict";
 run(1);

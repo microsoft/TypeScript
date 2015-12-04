@@ -13,5 +13,6 @@ run(1);
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
     run(1);
 });

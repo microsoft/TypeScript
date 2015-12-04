@@ -12,6 +12,7 @@ export class A
 }
 
 //// [es6ModuleWithModuleGenTargetCommonjs.js]
+"use strict";
 class A {
     constructor() {
     }

@@ -31,6 +31,7 @@ Entity.x;
 Entity.y;
 
 //// [m1.js]
+"use strict";
 function Decl() {
     return 0;
 }
@@ -42,6 +43,7 @@ var Decl;
     Decl.y = 20;
 })(Decl = exports.Decl || (exports.Decl = {}));
 //// [m2.js]
+"use strict";
 var m1_1 = require("m1");
 m1_1.default();
 var x;

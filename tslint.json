@@ -40,6 +40,7 @@
         "no-null": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
-        "prefer-const": true
+        "prefer-const": true,
+        "no-in-operator": true
   }
 }

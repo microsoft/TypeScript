@@ -37,7 +37,7 @@ sourceFile:app.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(4, 5) Source(3, 1) + SourceIndex(0) name (c)
+1->Emitted(4, 5) Source(3, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -46,16 +46,16 @@ sourceFile:app.ts
 1->class c {
   >
 2 >    }
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (c.constructor)
-2 >Emitted(5, 6) Source(4, 2) + SourceIndex(0) name (c.constructor)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>    return c;
 1->^^^^
 2 >    ^^^^^^^^
 1->
 2 >    }
-1->Emitted(6, 5) Source(4, 1) + SourceIndex(0) name (c)
-2 >Emitted(6, 13) Source(4, 2) + SourceIndex(0) name (c)
+1->Emitted(6, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 13) Source(4, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -68,8 +68,8 @@ sourceFile:app.ts
 3 > 
 4 > class c {
   > }
-1 >Emitted(7, 1) Source(4, 1) + SourceIndex(0) name (c)
-2 >Emitted(7, 2) Source(4, 2) + SourceIndex(0) name (c)
+1 >Emitted(7, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(7, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(7, 2) Source(3, 1) + SourceIndex(0)
 4 >Emitted(7, 6) Source(4, 2) + SourceIndex(0)
 ---
@@ -93,7 +93,7 @@ sourceFile:app2.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (d)
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -102,16 +102,16 @@ sourceFile:app2.ts
 1->class d {
   >
 2 >    }
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (d.constructor)
-2 >Emitted(3, 6) Source(2, 2) + SourceIndex(0) name (d.constructor)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 2) + SourceIndex(0)
 ---
 >>>    return d;
 1->^^^^
 2 >    ^^^^^^^^
 1->
 2 >    }
-1->Emitted(4, 5) Source(2, 1) + SourceIndex(0) name (d)
-2 >Emitted(4, 13) Source(2, 2) + SourceIndex(0) name (d)
+1->Emitted(4, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 13) Source(2, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -124,8 +124,8 @@ sourceFile:app2.ts
 3 > 
 4 > class d {
   > }
-1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0) name (d)
-2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0) name (d)
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0)
 3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(5, 6) Source(2, 2) + SourceIndex(0)
 ---

@@ -1,6 +1,8 @@
+tests/cases/compiler/strictModeReservedWord.ts(1,5): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
 tests/cases/compiler/strictModeReservedWord.ts(5,9): error TS1212: Identifier expected. 'public' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(6,9): error TS1212: Identifier expected. 'static' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(7,9): error TS1212: Identifier expected. 'let' is a reserved word in strict mode
+tests/cases/compiler/strictModeReservedWord.ts(7,9): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
 tests/cases/compiler/strictModeReservedWord.ts(8,9): error TS1212: Identifier expected. 'package' is a reserved word in strict mode
 tests/cases/compiler/strictModeReservedWord.ts(8,9): error TS2300: Duplicate identifier 'package'.
 tests/cases/compiler/strictModeReservedWord.ts(9,14): error TS1212: Identifier expected. 'package' is a reserved word in strict mode
@@ -41,8 +43,10 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS1212: Identifier e
 tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invoke an expression whose type lacks a call signature.
 
 
-==== tests/cases/compiler/strictModeReservedWord.ts (41 errors) ====
+==== tests/cases/compiler/strictModeReservedWord.ts (43 errors) ====
     let let = 10;
+        ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
     
     function foo() {
         "use strict"
@@ -55,6 +59,8 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
         let let = "blah";
             ~~~
 !!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode
+            ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
         var package = "hello"
             ~~~~~~~
 !!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode

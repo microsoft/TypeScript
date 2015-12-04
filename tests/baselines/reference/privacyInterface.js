@@ -265,6 +265,7 @@ export interface glo_C6_public extends  glo_i_private, glo_i_public {
 }
 
 //// [privacyInterface.js]
+"use strict";
 var m1;
 (function (m1) {
     var C1_public = (function () {

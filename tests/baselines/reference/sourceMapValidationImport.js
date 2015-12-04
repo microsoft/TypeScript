@@ -9,6 +9,7 @@ var x = new a();
 var y = new b();
 
 //// [sourceMapValidationImport.js]
+"use strict";
 var m;
 (function (m) {
     var c = (function () {

@@ -15,6 +15,7 @@ var y = new foo({a: "test", b: 42}); // Should be OK
 var z: number = y.test.b;
 
 //// [foo_0.js]
+"use strict";
 var Foo = (function () {
     function Foo(x) {
     }
@@ -22,6 +23,7 @@ var Foo = (function () {
 })();
 module.exports = Foo;
 //// [foo_1.js]
+"use strict";
 var foo = require("./foo_0");
 var x = new foo(true); // Should error
 var y = new foo({ a: "test", b: 42 }); // Should be OK

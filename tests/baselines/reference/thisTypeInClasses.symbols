@@ -93,7 +93,6 @@ class C5 {
 >f1 : Symbol(f1, Decl(thisTypeInClasses.ts, 34, 11))
 >x : Symbol(x, Decl(thisTypeInClasses.ts, 34, 18))
 >this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
->this : Symbol(C5, Decl(thisTypeInClasses.ts, 30, 1))
 
         let f2 = (x: this) => this;
 >f2 : Symbol(f2, Decl(thisTypeInClasses.ts, 35, 11))

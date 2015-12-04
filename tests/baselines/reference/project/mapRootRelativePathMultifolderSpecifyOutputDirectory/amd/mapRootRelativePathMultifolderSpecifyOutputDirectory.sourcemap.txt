@@ -40,7 +40,7 @@ sourceFile:../../../projects/outputdir_multifolder/ref/m1.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (m1_c1)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -50,16 +50,16 @@ sourceFile:../../../projects/outputdir_multifolder/ref/m1.ts
   >    public m1_c1_p1: number;
   >
 2 >    }
-1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m1_c1.constructor)
-2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (m1_c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>    return m1_c1;
 1->^^^^
 2 >    ^^^^^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0) name (m1_c1)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -73,8 +73,8 @@ sourceFile:../../../projects/outputdir_multifolder/ref/m1.ts
 4 > class m1_c1 {
   >     public m1_c1_p1: number;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m1_c1)
-2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (m1_c1)
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
 ---
@@ -125,11 +125,11 @@ sourceFile:../../../projects/outputdir_multifolder/ref/m1.ts
 3 >           
 4 >           m1_instance1
 5 >                       ;
-1->Emitted(9, 5) Source(8, 5) + SourceIndex(0) name (m1_f1)
-2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0) name (m1_f1)
-3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0) name (m1_f1)
-4 >Emitted(9, 24) Source(8, 24) + SourceIndex(0) name (m1_f1)
-5 >Emitted(9, 25) Source(8, 25) + SourceIndex(0) name (m1_f1)
+1->Emitted(9, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0)
+4 >Emitted(9, 24) Source(8, 24) + SourceIndex(0)
+5 >Emitted(9, 25) Source(8, 25) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -138,8 +138,8 @@ sourceFile:../../../projects/outputdir_multifolder/ref/m1.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0) name (m1_f1)
-2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0) name (m1_f1)
+1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=../../../../../../mapFiles/outputdir_multifolder/ref/m1.js.map===================================================================
 JsFile: m2.js
@@ -183,7 +183,7 @@ sourceFile:../../projects/outputdir_multifolder_ref/m2.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (m2_c1)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -193,16 +193,16 @@ sourceFile:../../projects/outputdir_multifolder_ref/m2.ts
   >    public m2_c1_p1: number;
   >
 2 >    }
-1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (m2_c1.constructor)
-2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (m2_c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>    return m2_c1;
 1->^^^^
 2 >    ^^^^^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (m2_c1)
-2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0) name (m2_c1)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -216,8 +216,8 @@ sourceFile:../../projects/outputdir_multifolder_ref/m2.ts
 4 > class m2_c1 {
   >     public m2_c1_p1: number;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (m2_c1)
-2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (m2_c1)
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
 ---
@@ -268,11 +268,11 @@ sourceFile:../../projects/outputdir_multifolder_ref/m2.ts
 3 >           
 4 >           m2_instance1
 5 >                       ;
-1->Emitted(9, 5) Source(8, 5) + SourceIndex(0) name (m2_f1)
-2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0) name (m2_f1)
-3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0) name (m2_f1)
-4 >Emitted(9, 24) Source(8, 24) + SourceIndex(0) name (m2_f1)
-5 >Emitted(9, 25) Source(8, 25) + SourceIndex(0) name (m2_f1)
+1->Emitted(9, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0)
+4 >Emitted(9, 24) Source(8, 24) + SourceIndex(0)
+5 >Emitted(9, 25) Source(8, 25) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -281,8 +281,8 @@ sourceFile:../../projects/outputdir_multifolder_ref/m2.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0) name (m2_f1)
-2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0) name (m2_f1)
+1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=../../../../../mapFiles/outputdir_multifolder_ref/m2.js.map===================================================================
 JsFile: test.js
@@ -345,7 +345,7 @@ sourceFile:../../projects/outputdir_multifolder/test.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (c1)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -355,16 +355,16 @@ sourceFile:../../projects/outputdir_multifolder/test.ts
   >    public p1: number;
   >
 2 >    }
-1->Emitted(6, 5) Source(6, 1) + SourceIndex(0) name (c1.constructor)
-2 >Emitted(6, 6) Source(6, 2) + SourceIndex(0) name (c1.constructor)
+1->Emitted(6, 5) Source(6, 1) + SourceIndex(0)
+2 >Emitted(6, 6) Source(6, 2) + SourceIndex(0)
 ---
 >>>    return c1;
 1->^^^^
 2 >    ^^^^^^^^^
 1->
 2 >    }
-1->Emitted(7, 5) Source(6, 1) + SourceIndex(0) name (c1)
-2 >Emitted(7, 14) Source(6, 2) + SourceIndex(0) name (c1)
+1->Emitted(7, 5) Source(6, 1) + SourceIndex(0)
+2 >Emitted(7, 14) Source(6, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -378,8 +378,8 @@ sourceFile:../../projects/outputdir_multifolder/test.ts
 4 > class c1 {
   >     public p1: number;
   > }
-1 >Emitted(8, 1) Source(6, 1) + SourceIndex(0) name (c1)
-2 >Emitted(8, 2) Source(6, 2) + SourceIndex(0) name (c1)
+1 >Emitted(8, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(8, 2) Source(6, 2) + SourceIndex(0)
 3 >Emitted(8, 2) Source(4, 1) + SourceIndex(0)
 4 >Emitted(8, 6) Source(6, 2) + SourceIndex(0)
 ---
@@ -430,11 +430,11 @@ sourceFile:../../projects/outputdir_multifolder/test.ts
 3 >           
 4 >           instance1
 5 >                    ;
-1->Emitted(11, 5) Source(10, 5) + SourceIndex(0) name (f1)
-2 >Emitted(11, 11) Source(10, 11) + SourceIndex(0) name (f1)
-3 >Emitted(11, 12) Source(10, 12) + SourceIndex(0) name (f1)
-4 >Emitted(11, 21) Source(10, 21) + SourceIndex(0) name (f1)
-5 >Emitted(11, 22) Source(10, 22) + SourceIndex(0) name (f1)
+1->Emitted(11, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(11, 11) Source(10, 11) + SourceIndex(0)
+3 >Emitted(11, 12) Source(10, 12) + SourceIndex(0)
+4 >Emitted(11, 21) Source(10, 21) + SourceIndex(0)
+5 >Emitted(11, 22) Source(10, 22) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -443,7 +443,7 @@ sourceFile:../../projects/outputdir_multifolder/test.ts
 1 >
   >
 2 >}
-1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0) name (f1)
-2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0) name (f1)
+1 >Emitted(12, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=../../../../../mapFiles/outputdir_multifolder/test.js.map

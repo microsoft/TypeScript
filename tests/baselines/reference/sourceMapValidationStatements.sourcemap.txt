@@ -25,10 +25,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >    var 
 3 >        y
 4 >         ;
-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0) name (f)
-2 >Emitted(2, 9) Source(2, 9) + SourceIndex(0) name (f)
-3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0) name (f)
-4 >Emitted(2, 11) Source(2, 11) + SourceIndex(0) name (f)
+1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+4 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
 ---
 >>>    var x = 0;
 1->^^^^
@@ -45,12 +45,12 @@ sourceFile:sourceMapValidationStatements.ts
 4 >          = 
 5 >            0
 6 >             ;
-1->Emitted(3, 5) Source(3, 5) + SourceIndex(0) name (f)
-2 >Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (f)
-3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0) name (f)
-4 >Emitted(3, 13) Source(3, 13) + SourceIndex(0) name (f)
-5 >Emitted(3, 14) Source(3, 14) + SourceIndex(0) name (f)
-6 >Emitted(3, 15) Source(3, 15) + SourceIndex(0) name (f)
+1->Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+2 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+3 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+4 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+5 >Emitted(3, 14) Source(3, 14) + SourceIndex(0)
+6 >Emitted(3, 15) Source(3, 15) + SourceIndex(0)
 ---
 >>>    for (var i = 0; i < 10; i++) {
 1->^^^^
@@ -90,24 +90,24 @@ sourceFile:sourceMapValidationStatements.ts
 16>                             ++
 17>                               ) 
 18>                                 {
-1->Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (f)
-2 >Emitted(4, 8) Source(4, 8) + SourceIndex(0) name (f)
-3 >Emitted(4, 9) Source(4, 9) + SourceIndex(0) name (f)
-4 >Emitted(4, 10) Source(4, 10) + SourceIndex(0) name (f)
-5 >Emitted(4, 13) Source(4, 13) + SourceIndex(0) name (f)
-6 >Emitted(4, 14) Source(4, 14) + SourceIndex(0) name (f)
-7 >Emitted(4, 15) Source(4, 15) + SourceIndex(0) name (f)
-8 >Emitted(4, 18) Source(4, 18) + SourceIndex(0) name (f)
-9 >Emitted(4, 19) Source(4, 19) + SourceIndex(0) name (f)
-10>Emitted(4, 21) Source(4, 21) + SourceIndex(0) name (f)
-11>Emitted(4, 22) Source(4, 22) + SourceIndex(0) name (f)
-12>Emitted(4, 25) Source(4, 25) + SourceIndex(0) name (f)
-13>Emitted(4, 27) Source(4, 27) + SourceIndex(0) name (f)
-14>Emitted(4, 29) Source(4, 29) + SourceIndex(0) name (f)
-15>Emitted(4, 30) Source(4, 30) + SourceIndex(0) name (f)
-16>Emitted(4, 32) Source(4, 32) + SourceIndex(0) name (f)
-17>Emitted(4, 34) Source(4, 34) + SourceIndex(0) name (f)
-18>Emitted(4, 35) Source(4, 35) + SourceIndex(0) name (f)
+1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 8) Source(4, 8) + SourceIndex(0)
+3 >Emitted(4, 9) Source(4, 9) + SourceIndex(0)
+4 >Emitted(4, 10) Source(4, 10) + SourceIndex(0)
+5 >Emitted(4, 13) Source(4, 13) + SourceIndex(0)
+6 >Emitted(4, 14) Source(4, 14) + SourceIndex(0)
+7 >Emitted(4, 15) Source(4, 15) + SourceIndex(0)
+8 >Emitted(4, 18) Source(4, 18) + SourceIndex(0)
+9 >Emitted(4, 19) Source(4, 19) + SourceIndex(0)
+10>Emitted(4, 21) Source(4, 21) + SourceIndex(0)
+11>Emitted(4, 22) Source(4, 22) + SourceIndex(0)
+12>Emitted(4, 25) Source(4, 25) + SourceIndex(0)
+13>Emitted(4, 27) Source(4, 27) + SourceIndex(0)
+14>Emitted(4, 29) Source(4, 29) + SourceIndex(0)
+15>Emitted(4, 30) Source(4, 30) + SourceIndex(0)
+16>Emitted(4, 32) Source(4, 32) + SourceIndex(0)
+17>Emitted(4, 34) Source(4, 34) + SourceIndex(0)
+18>Emitted(4, 35) Source(4, 35) + SourceIndex(0)
 ---
 >>>        x += i;
 1 >^^^^^^^^
@@ -122,11 +122,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          += 
 4 >             i
 5 >              ;
-1 >Emitted(5, 9) Source(5, 9) + SourceIndex(0) name (f)
-2 >Emitted(5, 10) Source(5, 10) + SourceIndex(0) name (f)
-3 >Emitted(5, 14) Source(5, 14) + SourceIndex(0) name (f)
-4 >Emitted(5, 15) Source(5, 15) + SourceIndex(0) name (f)
-5 >Emitted(5, 16) Source(5, 16) + SourceIndex(0) name (f)
+1 >Emitted(5, 9) Source(5, 9) + SourceIndex(0)
+2 >Emitted(5, 10) Source(5, 10) + SourceIndex(0)
+3 >Emitted(5, 14) Source(5, 14) + SourceIndex(0)
+4 >Emitted(5, 15) Source(5, 15) + SourceIndex(0)
+5 >Emitted(5, 16) Source(5, 16) + SourceIndex(0)
 ---
 >>>        x *= 0;
 1->^^^^^^^^
@@ -140,11 +140,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          *= 
 4 >             0
 5 >              ;
-1->Emitted(6, 9) Source(6, 9) + SourceIndex(0) name (f)
-2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0) name (f)
-3 >Emitted(6, 14) Source(6, 14) + SourceIndex(0) name (f)
-4 >Emitted(6, 15) Source(6, 15) + SourceIndex(0) name (f)
-5 >Emitted(6, 16) Source(6, 16) + SourceIndex(0) name (f)
+1->Emitted(6, 9) Source(6, 9) + SourceIndex(0)
+2 >Emitted(6, 10) Source(6, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(6, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(6, 15) + SourceIndex(0)
+5 >Emitted(6, 16) Source(6, 16) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -153,8 +153,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(7, 5) Source(7, 5) + SourceIndex(0) name (f)
-2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0) name (f)
+1 >Emitted(7, 5) Source(7, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
 ---
 >>>    if (x > 17) {
 1->^^^^
@@ -178,16 +178,16 @@ sourceFile:sourceMapValidationStatements.ts
 8 >              )
 9 >                
 10>                {
-1->Emitted(8, 5) Source(8, 5) + SourceIndex(0) name (f)
-2 >Emitted(8, 7) Source(8, 7) + SourceIndex(0) name (f)
-3 >Emitted(8, 8) Source(8, 8) + SourceIndex(0) name (f)
-4 >Emitted(8, 9) Source(8, 9) + SourceIndex(0) name (f)
-5 >Emitted(8, 10) Source(8, 10) + SourceIndex(0) name (f)
-6 >Emitted(8, 13) Source(8, 13) + SourceIndex(0) name (f)
-7 >Emitted(8, 15) Source(8, 15) + SourceIndex(0) name (f)
-8 >Emitted(8, 16) Source(8, 16) + SourceIndex(0) name (f)
-9 >Emitted(8, 17) Source(8, 17) + SourceIndex(0) name (f)
-10>Emitted(8, 18) Source(8, 18) + SourceIndex(0) name (f)
+1->Emitted(8, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(8, 7) Source(8, 7) + SourceIndex(0)
+3 >Emitted(8, 8) Source(8, 8) + SourceIndex(0)
+4 >Emitted(8, 9) Source(8, 9) + SourceIndex(0)
+5 >Emitted(8, 10) Source(8, 10) + SourceIndex(0)
+6 >Emitted(8, 13) Source(8, 13) + SourceIndex(0)
+7 >Emitted(8, 15) Source(8, 15) + SourceIndex(0)
+8 >Emitted(8, 16) Source(8, 16) + SourceIndex(0)
+9 >Emitted(8, 17) Source(8, 17) + SourceIndex(0)
+10>Emitted(8, 18) Source(8, 18) + SourceIndex(0)
 ---
 >>>        x /= 9;
 1 >^^^^^^^^
@@ -201,11 +201,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          /= 
 4 >             9
 5 >              ;
-1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0) name (f)
-2 >Emitted(9, 10) Source(9, 10) + SourceIndex(0) name (f)
-3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0) name (f)
-4 >Emitted(9, 15) Source(9, 15) + SourceIndex(0) name (f)
-5 >Emitted(9, 16) Source(9, 16) + SourceIndex(0) name (f)
+1 >Emitted(9, 9) Source(9, 9) + SourceIndex(0)
+2 >Emitted(9, 10) Source(9, 10) + SourceIndex(0)
+3 >Emitted(9, 14) Source(9, 14) + SourceIndex(0)
+4 >Emitted(9, 15) Source(9, 15) + SourceIndex(0)
+5 >Emitted(9, 16) Source(9, 16) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -214,8 +214,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0) name (f)
-2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0) name (f)
+1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
 ---
 >>>    else {
 1->^^^^
@@ -227,10 +227,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >    else
 3 >         
 4 >         {
-1->Emitted(11, 5) Source(10, 7) + SourceIndex(0) name (f)
-2 >Emitted(11, 9) Source(10, 11) + SourceIndex(0) name (f)
-3 >Emitted(11, 10) Source(10, 12) + SourceIndex(0) name (f)
-4 >Emitted(11, 11) Source(10, 13) + SourceIndex(0) name (f)
+1->Emitted(11, 5) Source(10, 7) + SourceIndex(0)
+2 >Emitted(11, 9) Source(10, 11) + SourceIndex(0)
+3 >Emitted(11, 10) Source(10, 12) + SourceIndex(0)
+4 >Emitted(11, 11) Source(10, 13) + SourceIndex(0)
 ---
 >>>        x += 10;
 1->^^^^^^^^
@@ -244,11 +244,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          += 
 4 >             10
 5 >               ;
-1->Emitted(12, 9) Source(11, 9) + SourceIndex(0) name (f)
-2 >Emitted(12, 10) Source(11, 10) + SourceIndex(0) name (f)
-3 >Emitted(12, 14) Source(11, 14) + SourceIndex(0) name (f)
-4 >Emitted(12, 16) Source(11, 16) + SourceIndex(0) name (f)
-5 >Emitted(12, 17) Source(11, 17) + SourceIndex(0) name (f)
+1->Emitted(12, 9) Source(11, 9) + SourceIndex(0)
+2 >Emitted(12, 10) Source(11, 10) + SourceIndex(0)
+3 >Emitted(12, 14) Source(11, 14) + SourceIndex(0)
+4 >Emitted(12, 16) Source(11, 16) + SourceIndex(0)
+5 >Emitted(12, 17) Source(11, 17) + SourceIndex(0)
 ---
 >>>        x++;
 1 >^^^^^^^^
@@ -260,10 +260,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >        x
 3 >         ++
 4 >           ;
-1 >Emitted(13, 9) Source(12, 9) + SourceIndex(0) name (f)
-2 >Emitted(13, 10) Source(12, 10) + SourceIndex(0) name (f)
-3 >Emitted(13, 12) Source(12, 12) + SourceIndex(0) name (f)
-4 >Emitted(13, 13) Source(12, 13) + SourceIndex(0) name (f)
+1 >Emitted(13, 9) Source(12, 9) + SourceIndex(0)
+2 >Emitted(13, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(13, 12) Source(12, 12) + SourceIndex(0)
+4 >Emitted(13, 13) Source(12, 13) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -272,8 +272,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(14, 5) Source(13, 5) + SourceIndex(0) name (f)
-2 >Emitted(14, 6) Source(13, 6) + SourceIndex(0) name (f)
+1 >Emitted(14, 5) Source(13, 5) + SourceIndex(0)
+2 >Emitted(14, 6) Source(13, 6) + SourceIndex(0)
 ---
 >>>    var a = [
 1->^^^^
@@ -285,10 +285,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >    var 
 3 >        a
 4 >          = 
-1->Emitted(15, 5) Source(14, 5) + SourceIndex(0) name (f)
-2 >Emitted(15, 9) Source(14, 9) + SourceIndex(0) name (f)
-3 >Emitted(15, 10) Source(14, 10) + SourceIndex(0) name (f)
-4 >Emitted(15, 13) Source(14, 13) + SourceIndex(0) name (f)
+1->Emitted(15, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(15, 9) Source(14, 9) + SourceIndex(0)
+3 >Emitted(15, 10) Source(14, 10) + SourceIndex(0)
+4 >Emitted(15, 13) Source(14, 13) + SourceIndex(0)
 ---
 >>>        1,
 1 >^^^^^^^^
@@ -297,8 +297,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >[
   >        
 2 >        1
-1 >Emitted(16, 9) Source(15, 9) + SourceIndex(0) name (f)
-2 >Emitted(16, 10) Source(15, 10) + SourceIndex(0) name (f)
+1 >Emitted(16, 9) Source(15, 9) + SourceIndex(0)
+2 >Emitted(16, 10) Source(15, 10) + SourceIndex(0)
 ---
 >>>        2,
 1->^^^^^^^^
@@ -307,8 +307,8 @@ sourceFile:sourceMapValidationStatements.ts
 1->,
   >        
 2 >        2
-1->Emitted(17, 9) Source(16, 9) + SourceIndex(0) name (f)
-2 >Emitted(17, 10) Source(16, 10) + SourceIndex(0) name (f)
+1->Emitted(17, 9) Source(16, 9) + SourceIndex(0)
+2 >Emitted(17, 10) Source(16, 10) + SourceIndex(0)
 ---
 >>>        3
 1->^^^^^^^^
@@ -316,8 +316,8 @@ sourceFile:sourceMapValidationStatements.ts
 1->,
   >        
 2 >        3
-1->Emitted(18, 9) Source(17, 9) + SourceIndex(0) name (f)
-2 >Emitted(18, 10) Source(17, 10) + SourceIndex(0) name (f)
+1->Emitted(18, 9) Source(17, 9) + SourceIndex(0)
+2 >Emitted(18, 10) Source(17, 10) + SourceIndex(0)
 ---
 >>>    ];
 1 >^^^^^
@@ -326,8 +326,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    ]
 2 >     ;
-1 >Emitted(19, 6) Source(18, 6) + SourceIndex(0) name (f)
-2 >Emitted(19, 7) Source(18, 7) + SourceIndex(0) name (f)
+1 >Emitted(19, 6) Source(18, 6) + SourceIndex(0)
+2 >Emitted(19, 7) Source(18, 7) + SourceIndex(0)
 ---
 >>>    var obj = {
 1->^^^^
@@ -339,10 +339,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >    var 
 3 >        obj
 4 >            = 
-1->Emitted(20, 5) Source(19, 5) + SourceIndex(0) name (f)
-2 >Emitted(20, 9) Source(19, 9) + SourceIndex(0) name (f)
-3 >Emitted(20, 12) Source(19, 12) + SourceIndex(0) name (f)
-4 >Emitted(20, 15) Source(19, 15) + SourceIndex(0) name (f)
+1->Emitted(20, 5) Source(19, 5) + SourceIndex(0)
+2 >Emitted(20, 9) Source(19, 9) + SourceIndex(0)
+3 >Emitted(20, 12) Source(19, 12) + SourceIndex(0)
+4 >Emitted(20, 15) Source(19, 15) + SourceIndex(0)
 ---
 >>>        z: 1,
 1 >^^^^^^^^
@@ -355,10 +355,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >        z
 3 >         : 
 4 >           1
-1 >Emitted(21, 9) Source(20, 9) + SourceIndex(0) name (f)
-2 >Emitted(21, 10) Source(20, 10) + SourceIndex(0) name (f)
-3 >Emitted(21, 12) Source(20, 12) + SourceIndex(0) name (f)
-4 >Emitted(21, 13) Source(20, 13) + SourceIndex(0) name (f)
+1 >Emitted(21, 9) Source(20, 9) + SourceIndex(0)
+2 >Emitted(21, 10) Source(20, 10) + SourceIndex(0)
+3 >Emitted(21, 12) Source(20, 12) + SourceIndex(0)
+4 >Emitted(21, 13) Source(20, 13) + SourceIndex(0)
 ---
 >>>        q: "hello"
 1->^^^^^^^^
@@ -370,10 +370,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >        q
 3 >         : 
 4 >           "hello"
-1->Emitted(22, 9) Source(21, 9) + SourceIndex(0) name (f)
-2 >Emitted(22, 10) Source(21, 10) + SourceIndex(0) name (f)
-3 >Emitted(22, 12) Source(21, 12) + SourceIndex(0) name (f)
-4 >Emitted(22, 19) Source(21, 19) + SourceIndex(0) name (f)
+1->Emitted(22, 9) Source(21, 9) + SourceIndex(0)
+2 >Emitted(22, 10) Source(21, 10) + SourceIndex(0)
+3 >Emitted(22, 12) Source(21, 12) + SourceIndex(0)
+4 >Emitted(22, 19) Source(21, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^^
@@ -382,8 +382,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    }
 2 >     ;
-1 >Emitted(23, 6) Source(22, 6) + SourceIndex(0) name (f)
-2 >Emitted(23, 7) Source(22, 7) + SourceIndex(0) name (f)
+1 >Emitted(23, 6) Source(22, 6) + SourceIndex(0)
+2 >Emitted(23, 7) Source(22, 7) + SourceIndex(0)
 ---
 >>>    for (var j in a) {
 1->^^^^
@@ -411,18 +411,18 @@ sourceFile:sourceMapValidationStatements.ts
 10>                   )
 11>                     
 12>                     {
-1->Emitted(24, 5) Source(23, 5) + SourceIndex(0) name (f)
-2 >Emitted(24, 8) Source(23, 8) + SourceIndex(0) name (f)
-3 >Emitted(24, 9) Source(23, 9) + SourceIndex(0) name (f)
-4 >Emitted(24, 10) Source(23, 10) + SourceIndex(0) name (f)
-5 >Emitted(24, 13) Source(23, 13) + SourceIndex(0) name (f)
-6 >Emitted(24, 14) Source(23, 14) + SourceIndex(0) name (f)
-7 >Emitted(24, 15) Source(23, 15) + SourceIndex(0) name (f)
-8 >Emitted(24, 19) Source(23, 19) + SourceIndex(0) name (f)
-9 >Emitted(24, 20) Source(23, 20) + SourceIndex(0) name (f)
-10>Emitted(24, 21) Source(23, 21) + SourceIndex(0) name (f)
-11>Emitted(24, 22) Source(23, 22) + SourceIndex(0) name (f)
-12>Emitted(24, 23) Source(23, 23) + SourceIndex(0) name (f)
+1->Emitted(24, 5) Source(23, 5) + SourceIndex(0)
+2 >Emitted(24, 8) Source(23, 8) + SourceIndex(0)
+3 >Emitted(24, 9) Source(23, 9) + SourceIndex(0)
+4 >Emitted(24, 10) Source(23, 10) + SourceIndex(0)
+5 >Emitted(24, 13) Source(23, 13) + SourceIndex(0)
+6 >Emitted(24, 14) Source(23, 14) + SourceIndex(0)
+7 >Emitted(24, 15) Source(23, 15) + SourceIndex(0)
+8 >Emitted(24, 19) Source(23, 19) + SourceIndex(0)
+9 >Emitted(24, 20) Source(23, 20) + SourceIndex(0)
+10>Emitted(24, 21) Source(23, 21) + SourceIndex(0)
+11>Emitted(24, 22) Source(23, 22) + SourceIndex(0)
+12>Emitted(24, 23) Source(23, 23) + SourceIndex(0)
 ---
 >>>        obj.z = a[j];
 1 >^^^^^^^^
@@ -446,16 +446,16 @@ sourceFile:sourceMapValidationStatements.ts
 8 >                  j
 9 >                   ]
 10>                    ;
-1 >Emitted(25, 9) Source(24, 9) + SourceIndex(0) name (f)
-2 >Emitted(25, 12) Source(24, 12) + SourceIndex(0) name (f)
-3 >Emitted(25, 13) Source(24, 13) + SourceIndex(0) name (f)
-4 >Emitted(25, 14) Source(24, 14) + SourceIndex(0) name (f)
-5 >Emitted(25, 17) Source(24, 17) + SourceIndex(0) name (f)
-6 >Emitted(25, 18) Source(24, 18) + SourceIndex(0) name (f)
-7 >Emitted(25, 19) Source(24, 19) + SourceIndex(0) name (f)
-8 >Emitted(25, 20) Source(24, 20) + SourceIndex(0) name (f)
-9 >Emitted(25, 21) Source(24, 21) + SourceIndex(0) name (f)
-10>Emitted(25, 22) Source(24, 22) + SourceIndex(0) name (f)
+1 >Emitted(25, 9) Source(24, 9) + SourceIndex(0)
+2 >Emitted(25, 12) Source(24, 12) + SourceIndex(0)
+3 >Emitted(25, 13) Source(24, 13) + SourceIndex(0)
+4 >Emitted(25, 14) Source(24, 14) + SourceIndex(0)
+5 >Emitted(25, 17) Source(24, 17) + SourceIndex(0)
+6 >Emitted(25, 18) Source(24, 18) + SourceIndex(0)
+7 >Emitted(25, 19) Source(24, 19) + SourceIndex(0)
+8 >Emitted(25, 20) Source(24, 20) + SourceIndex(0)
+9 >Emitted(25, 21) Source(24, 21) + SourceIndex(0)
+10>Emitted(25, 22) Source(24, 22) + SourceIndex(0)
 ---
 >>>        var v = 10;
 1 >^^^^^^^^
@@ -471,12 +471,12 @@ sourceFile:sourceMapValidationStatements.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1 >Emitted(26, 9) Source(25, 9) + SourceIndex(0) name (f)
-2 >Emitted(26, 13) Source(25, 13) + SourceIndex(0) name (f)
-3 >Emitted(26, 14) Source(25, 14) + SourceIndex(0) name (f)
-4 >Emitted(26, 17) Source(25, 17) + SourceIndex(0) name (f)
-5 >Emitted(26, 19) Source(25, 19) + SourceIndex(0) name (f)
-6 >Emitted(26, 20) Source(25, 20) + SourceIndex(0) name (f)
+1 >Emitted(26, 9) Source(25, 9) + SourceIndex(0)
+2 >Emitted(26, 13) Source(25, 13) + SourceIndex(0)
+3 >Emitted(26, 14) Source(25, 14) + SourceIndex(0)
+4 >Emitted(26, 17) Source(25, 17) + SourceIndex(0)
+5 >Emitted(26, 19) Source(25, 19) + SourceIndex(0)
+6 >Emitted(26, 20) Source(25, 20) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -485,8 +485,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(27, 5) Source(26, 5) + SourceIndex(0) name (f)
-2 >Emitted(27, 6) Source(26, 6) + SourceIndex(0) name (f)
+1 >Emitted(27, 5) Source(26, 5) + SourceIndex(0)
+2 >Emitted(27, 6) Source(26, 6) + SourceIndex(0)
 ---
 >>>    try {
 1->^^^^
@@ -497,9 +497,9 @@ sourceFile:sourceMapValidationStatements.ts
   >    
 2 >    try 
 3 >        {
-1->Emitted(28, 5) Source(27, 5) + SourceIndex(0) name (f)
-2 >Emitted(28, 9) Source(27, 9) + SourceIndex(0) name (f)
-3 >Emitted(28, 10) Source(27, 10) + SourceIndex(0) name (f)
+1->Emitted(28, 5) Source(27, 5) + SourceIndex(0)
+2 >Emitted(28, 9) Source(27, 9) + SourceIndex(0)
+3 >Emitted(28, 10) Source(27, 10) + SourceIndex(0)
 ---
 >>>        obj.q = "ohhh";
 1->^^^^^^^^
@@ -517,13 +517,13 @@ sourceFile:sourceMapValidationStatements.ts
 5 >              = 
 6 >                "ohhh"
 7 >                      ;
-1->Emitted(29, 9) Source(28, 9) + SourceIndex(0) name (f)
-2 >Emitted(29, 12) Source(28, 12) + SourceIndex(0) name (f)
-3 >Emitted(29, 13) Source(28, 13) + SourceIndex(0) name (f)
-4 >Emitted(29, 14) Source(28, 14) + SourceIndex(0) name (f)
-5 >Emitted(29, 17) Source(28, 17) + SourceIndex(0) name (f)
-6 >Emitted(29, 23) Source(28, 23) + SourceIndex(0) name (f)
-7 >Emitted(29, 24) Source(28, 24) + SourceIndex(0) name (f)
+1->Emitted(29, 9) Source(28, 9) + SourceIndex(0)
+2 >Emitted(29, 12) Source(28, 12) + SourceIndex(0)
+3 >Emitted(29, 13) Source(28, 13) + SourceIndex(0)
+4 >Emitted(29, 14) Source(28, 14) + SourceIndex(0)
+5 >Emitted(29, 17) Source(28, 17) + SourceIndex(0)
+6 >Emitted(29, 23) Source(28, 23) + SourceIndex(0)
+7 >Emitted(29, 24) Source(28, 24) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -532,8 +532,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    } 
-1 >Emitted(30, 5) Source(29, 5) + SourceIndex(0) name (f)
-2 >Emitted(30, 6) Source(29, 7) + SourceIndex(0) name (f)
+1 >Emitted(30, 5) Source(29, 5) + SourceIndex(0)
+2 >Emitted(30, 6) Source(29, 7) + SourceIndex(0)
 ---
 >>>    catch (e) {
 1->^^^^
@@ -553,14 +553,14 @@ sourceFile:sourceMapValidationStatements.ts
 6 >            )
 7 >              
 8 >              {
-1->Emitted(31, 5) Source(29, 7) + SourceIndex(0) name (f)
-2 >Emitted(31, 10) Source(29, 12) + SourceIndex(0) name (f)
-3 >Emitted(31, 11) Source(29, 13) + SourceIndex(0) name (f)
-4 >Emitted(31, 12) Source(29, 14) + SourceIndex(0) name (f)
-5 >Emitted(31, 13) Source(29, 15) + SourceIndex(0) name (f)
-6 >Emitted(31, 14) Source(29, 16) + SourceIndex(0) name (f)
-7 >Emitted(31, 15) Source(29, 17) + SourceIndex(0) name (f)
-8 >Emitted(31, 16) Source(29, 18) + SourceIndex(0) name (f)
+1->Emitted(31, 5) Source(29, 7) + SourceIndex(0)
+2 >Emitted(31, 10) Source(29, 12) + SourceIndex(0)
+3 >Emitted(31, 11) Source(29, 13) + SourceIndex(0)
+4 >Emitted(31, 12) Source(29, 14) + SourceIndex(0)
+5 >Emitted(31, 13) Source(29, 15) + SourceIndex(0)
+6 >Emitted(31, 14) Source(29, 16) + SourceIndex(0)
+7 >Emitted(31, 15) Source(29, 17) + SourceIndex(0)
+8 >Emitted(31, 16) Source(29, 18) + SourceIndex(0)
 ---
 >>>        if (obj.z < 10) {
 1->^^^^^^^^
@@ -588,18 +588,18 @@ sourceFile:sourceMapValidationStatements.ts
 10>                      )
 11>                        
 12>                        {
-1->Emitted(32, 9) Source(30, 9) + SourceIndex(0) name (f)
-2 >Emitted(32, 11) Source(30, 11) + SourceIndex(0) name (f)
-3 >Emitted(32, 12) Source(30, 12) + SourceIndex(0) name (f)
-4 >Emitted(32, 13) Source(30, 13) + SourceIndex(0) name (f)
-5 >Emitted(32, 16) Source(30, 16) + SourceIndex(0) name (f)
-6 >Emitted(32, 17) Source(30, 17) + SourceIndex(0) name (f)
-7 >Emitted(32, 18) Source(30, 18) + SourceIndex(0) name (f)
-8 >Emitted(32, 21) Source(30, 21) + SourceIndex(0) name (f)
-9 >Emitted(32, 23) Source(30, 23) + SourceIndex(0) name (f)
-10>Emitted(32, 24) Source(30, 24) + SourceIndex(0) name (f)
-11>Emitted(32, 25) Source(30, 25) + SourceIndex(0) name (f)
-12>Emitted(32, 26) Source(30, 26) + SourceIndex(0) name (f)
+1->Emitted(32, 9) Source(30, 9) + SourceIndex(0)
+2 >Emitted(32, 11) Source(30, 11) + SourceIndex(0)
+3 >Emitted(32, 12) Source(30, 12) + SourceIndex(0)
+4 >Emitted(32, 13) Source(30, 13) + SourceIndex(0)
+5 >Emitted(32, 16) Source(30, 16) + SourceIndex(0)
+6 >Emitted(32, 17) Source(30, 17) + SourceIndex(0)
+7 >Emitted(32, 18) Source(30, 18) + SourceIndex(0)
+8 >Emitted(32, 21) Source(30, 21) + SourceIndex(0)
+9 >Emitted(32, 23) Source(30, 23) + SourceIndex(0)
+10>Emitted(32, 24) Source(30, 24) + SourceIndex(0)
+11>Emitted(32, 25) Source(30, 25) + SourceIndex(0)
+12>Emitted(32, 26) Source(30, 26) + SourceIndex(0)
 ---
 >>>            obj.z = 12;
 1 >^^^^^^^^^^^^
@@ -617,13 +617,13 @@ sourceFile:sourceMapValidationStatements.ts
 5 >                  = 
 6 >                    12
 7 >                      ;
-1 >Emitted(33, 13) Source(31, 13) + SourceIndex(0) name (f)
-2 >Emitted(33, 16) Source(31, 16) + SourceIndex(0) name (f)
-3 >Emitted(33, 17) Source(31, 17) + SourceIndex(0) name (f)
-4 >Emitted(33, 18) Source(31, 18) + SourceIndex(0) name (f)
-5 >Emitted(33, 21) Source(31, 21) + SourceIndex(0) name (f)
-6 >Emitted(33, 23) Source(31, 23) + SourceIndex(0) name (f)
-7 >Emitted(33, 24) Source(31, 24) + SourceIndex(0) name (f)
+1 >Emitted(33, 13) Source(31, 13) + SourceIndex(0)
+2 >Emitted(33, 16) Source(31, 16) + SourceIndex(0)
+3 >Emitted(33, 17) Source(31, 17) + SourceIndex(0)
+4 >Emitted(33, 18) Source(31, 18) + SourceIndex(0)
+5 >Emitted(33, 21) Source(31, 21) + SourceIndex(0)
+6 >Emitted(33, 23) Source(31, 23) + SourceIndex(0)
+7 >Emitted(33, 24) Source(31, 24) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -632,8 +632,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >        
 2 >        }
-1 >Emitted(34, 9) Source(32, 9) + SourceIndex(0) name (f)
-2 >Emitted(34, 10) Source(32, 10) + SourceIndex(0) name (f)
+1 >Emitted(34, 9) Source(32, 9) + SourceIndex(0)
+2 >Emitted(34, 10) Source(32, 10) + SourceIndex(0)
 ---
 >>>        else {
 1->^^^^^^^^
@@ -645,10 +645,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >        else
 3 >             
 4 >             {
-1->Emitted(35, 9) Source(32, 11) + SourceIndex(0) name (f)
-2 >Emitted(35, 13) Source(32, 15) + SourceIndex(0) name (f)
-3 >Emitted(35, 14) Source(32, 16) + SourceIndex(0) name (f)
-4 >Emitted(35, 15) Source(32, 17) + SourceIndex(0) name (f)
+1->Emitted(35, 9) Source(32, 11) + SourceIndex(0)
+2 >Emitted(35, 13) Source(32, 15) + SourceIndex(0)
+3 >Emitted(35, 14) Source(32, 16) + SourceIndex(0)
+4 >Emitted(35, 15) Source(32, 17) + SourceIndex(0)
 ---
 >>>            obj.q = "hmm";
 1->^^^^^^^^^^^^
@@ -666,13 +666,13 @@ sourceFile:sourceMapValidationStatements.ts
 5 >                  = 
 6 >                    "hmm"
 7 >                         ;
-1->Emitted(36, 13) Source(33, 13) + SourceIndex(0) name (f)
-2 >Emitted(36, 16) Source(33, 16) + SourceIndex(0) name (f)
-3 >Emitted(36, 17) Source(33, 17) + SourceIndex(0) name (f)
-4 >Emitted(36, 18) Source(33, 18) + SourceIndex(0) name (f)
-5 >Emitted(36, 21) Source(33, 21) + SourceIndex(0) name (f)
-6 >Emitted(36, 26) Source(33, 26) + SourceIndex(0) name (f)
-7 >Emitted(36, 27) Source(33, 27) + SourceIndex(0) name (f)
+1->Emitted(36, 13) Source(33, 13) + SourceIndex(0)
+2 >Emitted(36, 16) Source(33, 16) + SourceIndex(0)
+3 >Emitted(36, 17) Source(33, 17) + SourceIndex(0)
+4 >Emitted(36, 18) Source(33, 18) + SourceIndex(0)
+5 >Emitted(36, 21) Source(33, 21) + SourceIndex(0)
+6 >Emitted(36, 26) Source(33, 26) + SourceIndex(0)
+7 >Emitted(36, 27) Source(33, 27) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -680,8 +680,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >        
 2 >        }
-1 >Emitted(37, 9) Source(34, 9) + SourceIndex(0) name (f)
-2 >Emitted(37, 10) Source(34, 10) + SourceIndex(0) name (f)
+1 >Emitted(37, 9) Source(34, 9) + SourceIndex(0)
+2 >Emitted(37, 10) Source(34, 10) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -690,8 +690,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(38, 5) Source(35, 5) + SourceIndex(0) name (f)
-2 >Emitted(38, 6) Source(35, 6) + SourceIndex(0) name (f)
+1 >Emitted(38, 5) Source(35, 5) + SourceIndex(0)
+2 >Emitted(38, 6) Source(35, 6) + SourceIndex(0)
 ---
 >>>    try {
 1->^^^^
@@ -702,9 +702,9 @@ sourceFile:sourceMapValidationStatements.ts
   >    
 2 >    try 
 3 >        {
-1->Emitted(39, 5) Source(36, 5) + SourceIndex(0) name (f)
-2 >Emitted(39, 9) Source(36, 9) + SourceIndex(0) name (f)
-3 >Emitted(39, 10) Source(36, 10) + SourceIndex(0) name (f)
+1->Emitted(39, 5) Source(36, 5) + SourceIndex(0)
+2 >Emitted(39, 9) Source(36, 9) + SourceIndex(0)
+3 >Emitted(39, 10) Source(36, 10) + SourceIndex(0)
 ---
 >>>        throw new Error();
 1->^^^^^^^^
@@ -720,12 +720,12 @@ sourceFile:sourceMapValidationStatements.ts
 4 >                  Error
 5 >                       ()
 6 >                         ;
-1->Emitted(40, 9) Source(37, 9) + SourceIndex(0) name (f)
-2 >Emitted(40, 15) Source(37, 15) + SourceIndex(0) name (f)
-3 >Emitted(40, 19) Source(37, 19) + SourceIndex(0) name (f)
-4 >Emitted(40, 24) Source(37, 24) + SourceIndex(0) name (f)
-5 >Emitted(40, 26) Source(37, 26) + SourceIndex(0) name (f)
-6 >Emitted(40, 27) Source(37, 27) + SourceIndex(0) name (f)
+1->Emitted(40, 9) Source(37, 9) + SourceIndex(0)
+2 >Emitted(40, 15) Source(37, 15) + SourceIndex(0)
+3 >Emitted(40, 19) Source(37, 19) + SourceIndex(0)
+4 >Emitted(40, 24) Source(37, 24) + SourceIndex(0)
+5 >Emitted(40, 26) Source(37, 26) + SourceIndex(0)
+6 >Emitted(40, 27) Source(37, 27) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -734,8 +734,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    } 
-1 >Emitted(41, 5) Source(38, 5) + SourceIndex(0) name (f)
-2 >Emitted(41, 6) Source(38, 7) + SourceIndex(0) name (f)
+1 >Emitted(41, 5) Source(38, 5) + SourceIndex(0)
+2 >Emitted(41, 6) Source(38, 7) + SourceIndex(0)
 ---
 >>>    catch (e1) {
 1->^^^^
@@ -755,14 +755,14 @@ sourceFile:sourceMapValidationStatements.ts
 6 >             )
 7 >               
 8 >               {
-1->Emitted(42, 5) Source(38, 7) + SourceIndex(0) name (f)
-2 >Emitted(42, 10) Source(38, 12) + SourceIndex(0) name (f)
-3 >Emitted(42, 11) Source(38, 13) + SourceIndex(0) name (f)
-4 >Emitted(42, 12) Source(38, 14) + SourceIndex(0) name (f)
-5 >Emitted(42, 14) Source(38, 16) + SourceIndex(0) name (f)
-6 >Emitted(42, 15) Source(38, 17) + SourceIndex(0) name (f)
-7 >Emitted(42, 16) Source(38, 18) + SourceIndex(0) name (f)
-8 >Emitted(42, 17) Source(38, 19) + SourceIndex(0) name (f)
+1->Emitted(42, 5) Source(38, 7) + SourceIndex(0)
+2 >Emitted(42, 10) Source(38, 12) + SourceIndex(0)
+3 >Emitted(42, 11) Source(38, 13) + SourceIndex(0)
+4 >Emitted(42, 12) Source(38, 14) + SourceIndex(0)
+5 >Emitted(42, 14) Source(38, 16) + SourceIndex(0)
+6 >Emitted(42, 15) Source(38, 17) + SourceIndex(0)
+7 >Emitted(42, 16) Source(38, 18) + SourceIndex(0)
+8 >Emitted(42, 17) Source(38, 19) + SourceIndex(0)
 ---
 >>>        var b = e1;
 1->^^^^^^^^
@@ -778,12 +778,12 @@ sourceFile:sourceMapValidationStatements.ts
 4 >              = 
 5 >                e1
 6 >                  ;
-1->Emitted(43, 9) Source(39, 9) + SourceIndex(0) name (f)
-2 >Emitted(43, 13) Source(39, 13) + SourceIndex(0) name (f)
-3 >Emitted(43, 14) Source(39, 14) + SourceIndex(0) name (f)
-4 >Emitted(43, 17) Source(39, 17) + SourceIndex(0) name (f)
-5 >Emitted(43, 19) Source(39, 19) + SourceIndex(0) name (f)
-6 >Emitted(43, 20) Source(39, 20) + SourceIndex(0) name (f)
+1->Emitted(43, 9) Source(39, 9) + SourceIndex(0)
+2 >Emitted(43, 13) Source(39, 13) + SourceIndex(0)
+3 >Emitted(43, 14) Source(39, 14) + SourceIndex(0)
+4 >Emitted(43, 17) Source(39, 17) + SourceIndex(0)
+5 >Emitted(43, 19) Source(39, 19) + SourceIndex(0)
+6 >Emitted(43, 20) Source(39, 20) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -792,8 +792,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(44, 5) Source(40, 5) + SourceIndex(0) name (f)
-2 >Emitted(44, 6) Source(40, 6) + SourceIndex(0) name (f)
+1 >Emitted(44, 5) Source(40, 5) + SourceIndex(0)
+2 >Emitted(44, 6) Source(40, 6) + SourceIndex(0)
 ---
 >>>    finally {
 1->^^^^^^^^^^^^
@@ -801,8 +801,8 @@ sourceFile:sourceMapValidationStatements.ts
 3 >             ^^^->
 1-> finally 
 2 >            {
-1->Emitted(45, 13) Source(40, 15) + SourceIndex(0) name (f)
-2 >Emitted(45, 14) Source(40, 16) + SourceIndex(0) name (f)
+1->Emitted(45, 13) Source(40, 15) + SourceIndex(0)
+2 >Emitted(45, 14) Source(40, 16) + SourceIndex(0)
 ---
 >>>        y = 70;
 1->^^^^^^^^
@@ -816,11 +816,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          = 
 4 >            70
 5 >              ;
-1->Emitted(46, 9) Source(41, 9) + SourceIndex(0) name (f)
-2 >Emitted(46, 10) Source(41, 10) + SourceIndex(0) name (f)
-3 >Emitted(46, 13) Source(41, 13) + SourceIndex(0) name (f)
-4 >Emitted(46, 15) Source(41, 15) + SourceIndex(0) name (f)
-5 >Emitted(46, 16) Source(41, 16) + SourceIndex(0) name (f)
+1->Emitted(46, 9) Source(41, 9) + SourceIndex(0)
+2 >Emitted(46, 10) Source(41, 10) + SourceIndex(0)
+3 >Emitted(46, 13) Source(41, 13) + SourceIndex(0)
+4 >Emitted(46, 15) Source(41, 15) + SourceIndex(0)
+5 >Emitted(46, 16) Source(41, 16) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -829,8 +829,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(47, 5) Source(42, 5) + SourceIndex(0) name (f)
-2 >Emitted(47, 6) Source(42, 6) + SourceIndex(0) name (f)
+1 >Emitted(47, 5) Source(42, 5) + SourceIndex(0)
+2 >Emitted(47, 6) Source(42, 6) + SourceIndex(0)
 ---
 >>>    with (obj) {
 1->^^^^
@@ -844,11 +844,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          obj
 4 >             ) 
 5 >               {
-1->Emitted(48, 5) Source(43, 5) + SourceIndex(0) name (f)
-2 >Emitted(48, 11) Source(43, 11) + SourceIndex(0) name (f)
-3 >Emitted(48, 14) Source(43, 14) + SourceIndex(0) name (f)
-4 >Emitted(48, 16) Source(43, 16) + SourceIndex(0) name (f)
-5 >Emitted(48, 17) Source(43, 17) + SourceIndex(0) name (f)
+1->Emitted(48, 5) Source(43, 5) + SourceIndex(0)
+2 >Emitted(48, 11) Source(43, 11) + SourceIndex(0)
+3 >Emitted(48, 14) Source(43, 14) + SourceIndex(0)
+4 >Emitted(48, 16) Source(43, 16) + SourceIndex(0)
+5 >Emitted(48, 17) Source(43, 17) + SourceIndex(0)
 ---
 >>>        i = 2;
 1 >^^^^^^^^
@@ -863,11 +863,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          = 
 4 >            2
 5 >             ;
-1 >Emitted(49, 9) Source(44, 9) + SourceIndex(0) name (f)
-2 >Emitted(49, 10) Source(44, 10) + SourceIndex(0) name (f)
-3 >Emitted(49, 13) Source(44, 13) + SourceIndex(0) name (f)
-4 >Emitted(49, 14) Source(44, 14) + SourceIndex(0) name (f)
-5 >Emitted(49, 15) Source(44, 15) + SourceIndex(0) name (f)
+1 >Emitted(49, 9) Source(44, 9) + SourceIndex(0)
+2 >Emitted(49, 10) Source(44, 10) + SourceIndex(0)
+3 >Emitted(49, 13) Source(44, 13) + SourceIndex(0)
+4 >Emitted(49, 14) Source(44, 14) + SourceIndex(0)
+5 >Emitted(49, 15) Source(44, 15) + SourceIndex(0)
 ---
 >>>        z = 10;
 1->^^^^^^^^
@@ -881,11 +881,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >          = 
 4 >            10
 5 >              ;
-1->Emitted(50, 9) Source(45, 9) + SourceIndex(0) name (f)
-2 >Emitted(50, 10) Source(45, 10) + SourceIndex(0) name (f)
-3 >Emitted(50, 13) Source(45, 13) + SourceIndex(0) name (f)
-4 >Emitted(50, 15) Source(45, 15) + SourceIndex(0) name (f)
-5 >Emitted(50, 16) Source(45, 16) + SourceIndex(0) name (f)
+1->Emitted(50, 9) Source(45, 9) + SourceIndex(0)
+2 >Emitted(50, 10) Source(45, 10) + SourceIndex(0)
+3 >Emitted(50, 13) Source(45, 13) + SourceIndex(0)
+4 >Emitted(50, 15) Source(45, 15) + SourceIndex(0)
+5 >Emitted(50, 16) Source(45, 16) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -894,8 +894,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(51, 5) Source(46, 5) + SourceIndex(0) name (f)
-2 >Emitted(51, 6) Source(46, 6) + SourceIndex(0) name (f)
+1 >Emitted(51, 5) Source(46, 5) + SourceIndex(0)
+2 >Emitted(51, 6) Source(46, 6) + SourceIndex(0)
 ---
 >>>    switch (obj.z) {
 1->^^^^
@@ -919,16 +919,16 @@ sourceFile:sourceMapValidationStatements.ts
 8 >                 )
 9 >                   
 10>                   {
-1->Emitted(52, 5) Source(47, 5) + SourceIndex(0) name (f)
-2 >Emitted(52, 11) Source(47, 11) + SourceIndex(0) name (f)
-3 >Emitted(52, 12) Source(47, 12) + SourceIndex(0) name (f)
-4 >Emitted(52, 13) Source(47, 13) + SourceIndex(0) name (f)
-5 >Emitted(52, 16) Source(47, 16) + SourceIndex(0) name (f)
-6 >Emitted(52, 17) Source(47, 17) + SourceIndex(0) name (f)
-7 >Emitted(52, 18) Source(47, 18) + SourceIndex(0) name (f)
-8 >Emitted(52, 19) Source(47, 19) + SourceIndex(0) name (f)
-9 >Emitted(52, 20) Source(47, 20) + SourceIndex(0) name (f)
-10>Emitted(52, 21) Source(47, 21) + SourceIndex(0) name (f)
+1->Emitted(52, 5) Source(47, 5) + SourceIndex(0)
+2 >Emitted(52, 11) Source(47, 11) + SourceIndex(0)
+3 >Emitted(52, 12) Source(47, 12) + SourceIndex(0)
+4 >Emitted(52, 13) Source(47, 13) + SourceIndex(0)
+5 >Emitted(52, 16) Source(47, 16) + SourceIndex(0)
+6 >Emitted(52, 17) Source(47, 17) + SourceIndex(0)
+7 >Emitted(52, 18) Source(47, 18) + SourceIndex(0)
+8 >Emitted(52, 19) Source(47, 19) + SourceIndex(0)
+9 >Emitted(52, 20) Source(47, 20) + SourceIndex(0)
+10>Emitted(52, 21) Source(47, 21) + SourceIndex(0)
 ---
 >>>        case 0: {
 1 >^^^^^^^^
@@ -942,11 +942,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >             0
 4 >              : 
 5 >                {
-1 >Emitted(53, 9) Source(48, 9) + SourceIndex(0) name (f)
-2 >Emitted(53, 14) Source(48, 14) + SourceIndex(0) name (f)
-3 >Emitted(53, 15) Source(48, 15) + SourceIndex(0) name (f)
-4 >Emitted(53, 17) Source(48, 17) + SourceIndex(0) name (f)
-5 >Emitted(53, 18) Source(48, 18) + SourceIndex(0) name (f)
+1 >Emitted(53, 9) Source(48, 9) + SourceIndex(0)
+2 >Emitted(53, 14) Source(48, 14) + SourceIndex(0)
+3 >Emitted(53, 15) Source(48, 15) + SourceIndex(0)
+4 >Emitted(53, 17) Source(48, 17) + SourceIndex(0)
+5 >Emitted(53, 18) Source(48, 18) + SourceIndex(0)
 ---
 >>>            x++;
 1 >^^^^^^^^^^^^
@@ -959,10 +959,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >            x
 3 >             ++
 4 >               ;
-1 >Emitted(54, 13) Source(49, 13) + SourceIndex(0) name (f)
-2 >Emitted(54, 14) Source(49, 14) + SourceIndex(0) name (f)
-3 >Emitted(54, 16) Source(49, 16) + SourceIndex(0) name (f)
-4 >Emitted(54, 17) Source(49, 17) + SourceIndex(0) name (f)
+1 >Emitted(54, 13) Source(49, 13) + SourceIndex(0)
+2 >Emitted(54, 14) Source(49, 14) + SourceIndex(0)
+3 >Emitted(54, 16) Source(49, 16) + SourceIndex(0)
+4 >Emitted(54, 17) Source(49, 17) + SourceIndex(0)
 ---
 >>>            break;
 1->^^^^^^^^^^^^
@@ -972,9 +972,9 @@ sourceFile:sourceMapValidationStatements.ts
   >            
 2 >            break
 3 >                 ;
-1->Emitted(55, 13) Source(50, 13) + SourceIndex(0) name (f)
-2 >Emitted(55, 18) Source(50, 18) + SourceIndex(0) name (f)
-3 >Emitted(55, 19) Source(50, 19) + SourceIndex(0) name (f)
+1->Emitted(55, 13) Source(50, 13) + SourceIndex(0)
+2 >Emitted(55, 18) Source(50, 18) + SourceIndex(0)
+3 >Emitted(55, 19) Source(50, 19) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -984,8 +984,8 @@ sourceFile:sourceMapValidationStatements.ts
   >
   >        
 2 >        }
-1 >Emitted(56, 9) Source(52, 9) + SourceIndex(0) name (f)
-2 >Emitted(56, 10) Source(52, 10) + SourceIndex(0) name (f)
+1 >Emitted(56, 9) Source(52, 9) + SourceIndex(0)
+2 >Emitted(56, 10) Source(52, 10) + SourceIndex(0)
 ---
 >>>        case 1: {
 1->^^^^^^^^
@@ -999,11 +999,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >             1
 4 >              : 
 5 >                {
-1->Emitted(57, 9) Source(53, 9) + SourceIndex(0) name (f)
-2 >Emitted(57, 14) Source(53, 14) + SourceIndex(0) name (f)
-3 >Emitted(57, 15) Source(53, 15) + SourceIndex(0) name (f)
-4 >Emitted(57, 17) Source(53, 17) + SourceIndex(0) name (f)
-5 >Emitted(57, 18) Source(53, 18) + SourceIndex(0) name (f)
+1->Emitted(57, 9) Source(53, 9) + SourceIndex(0)
+2 >Emitted(57, 14) Source(53, 14) + SourceIndex(0)
+3 >Emitted(57, 15) Source(53, 15) + SourceIndex(0)
+4 >Emitted(57, 17) Source(53, 17) + SourceIndex(0)
+5 >Emitted(57, 18) Source(53, 18) + SourceIndex(0)
 ---
 >>>            x--;
 1 >^^^^^^^^^^^^
@@ -1016,10 +1016,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >            x
 3 >             --
 4 >               ;
-1 >Emitted(58, 13) Source(54, 13) + SourceIndex(0) name (f)
-2 >Emitted(58, 14) Source(54, 14) + SourceIndex(0) name (f)
-3 >Emitted(58, 16) Source(54, 16) + SourceIndex(0) name (f)
-4 >Emitted(58, 17) Source(54, 17) + SourceIndex(0) name (f)
+1 >Emitted(58, 13) Source(54, 13) + SourceIndex(0)
+2 >Emitted(58, 14) Source(54, 14) + SourceIndex(0)
+3 >Emitted(58, 16) Source(54, 16) + SourceIndex(0)
+4 >Emitted(58, 17) Source(54, 17) + SourceIndex(0)
 ---
 >>>            break;
 1->^^^^^^^^^^^^
@@ -1029,9 +1029,9 @@ sourceFile:sourceMapValidationStatements.ts
   >            
 2 >            break
 3 >                 ;
-1->Emitted(59, 13) Source(55, 13) + SourceIndex(0) name (f)
-2 >Emitted(59, 18) Source(55, 18) + SourceIndex(0) name (f)
-3 >Emitted(59, 19) Source(55, 19) + SourceIndex(0) name (f)
+1->Emitted(59, 13) Source(55, 13) + SourceIndex(0)
+2 >Emitted(59, 18) Source(55, 18) + SourceIndex(0)
+3 >Emitted(59, 19) Source(55, 19) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -1041,8 +1041,8 @@ sourceFile:sourceMapValidationStatements.ts
   >
   >        
 2 >        }
-1 >Emitted(60, 9) Source(57, 9) + SourceIndex(0) name (f)
-2 >Emitted(60, 10) Source(57, 10) + SourceIndex(0) name (f)
+1 >Emitted(60, 9) Source(57, 9) + SourceIndex(0)
+2 >Emitted(60, 10) Source(57, 10) + SourceIndex(0)
 ---
 >>>        default: {
 1->^^^^^^^^
@@ -1053,9 +1053,9 @@ sourceFile:sourceMapValidationStatements.ts
   >        
 2 >        default: 
 3 >                 {
-1->Emitted(61, 9) Source(58, 9) + SourceIndex(0) name (f)
-2 >Emitted(61, 18) Source(58, 18) + SourceIndex(0) name (f)
-3 >Emitted(61, 19) Source(58, 19) + SourceIndex(0) name (f)
+1->Emitted(61, 9) Source(58, 9) + SourceIndex(0)
+2 >Emitted(61, 18) Source(58, 18) + SourceIndex(0)
+3 >Emitted(61, 19) Source(58, 19) + SourceIndex(0)
 ---
 >>>            x *= 2;
 1->^^^^^^^^^^^^
@@ -1070,11 +1070,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >              *= 
 4 >                 2
 5 >                  ;
-1->Emitted(62, 13) Source(59, 13) + SourceIndex(0) name (f)
-2 >Emitted(62, 14) Source(59, 14) + SourceIndex(0) name (f)
-3 >Emitted(62, 18) Source(59, 18) + SourceIndex(0) name (f)
-4 >Emitted(62, 19) Source(59, 19) + SourceIndex(0) name (f)
-5 >Emitted(62, 20) Source(59, 20) + SourceIndex(0) name (f)
+1->Emitted(62, 13) Source(59, 13) + SourceIndex(0)
+2 >Emitted(62, 14) Source(59, 14) + SourceIndex(0)
+3 >Emitted(62, 18) Source(59, 18) + SourceIndex(0)
+4 >Emitted(62, 19) Source(59, 19) + SourceIndex(0)
+5 >Emitted(62, 20) Source(59, 20) + SourceIndex(0)
 ---
 >>>            x = 50;
 1->^^^^^^^^^^^^
@@ -1088,11 +1088,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >              = 
 4 >                50
 5 >                  ;
-1->Emitted(63, 13) Source(60, 13) + SourceIndex(0) name (f)
-2 >Emitted(63, 14) Source(60, 14) + SourceIndex(0) name (f)
-3 >Emitted(63, 17) Source(60, 17) + SourceIndex(0) name (f)
-4 >Emitted(63, 19) Source(60, 19) + SourceIndex(0) name (f)
-5 >Emitted(63, 20) Source(60, 20) + SourceIndex(0) name (f)
+1->Emitted(63, 13) Source(60, 13) + SourceIndex(0)
+2 >Emitted(63, 14) Source(60, 14) + SourceIndex(0)
+3 >Emitted(63, 17) Source(60, 17) + SourceIndex(0)
+4 >Emitted(63, 19) Source(60, 19) + SourceIndex(0)
+5 >Emitted(63, 20) Source(60, 20) + SourceIndex(0)
 ---
 >>>            break;
 1 >^^^^^^^^^^^^
@@ -1102,9 +1102,9 @@ sourceFile:sourceMapValidationStatements.ts
   >            
 2 >            break
 3 >                 ;
-1 >Emitted(64, 13) Source(61, 13) + SourceIndex(0) name (f)
-2 >Emitted(64, 18) Source(61, 18) + SourceIndex(0) name (f)
-3 >Emitted(64, 19) Source(61, 19) + SourceIndex(0) name (f)
+1 >Emitted(64, 13) Source(61, 13) + SourceIndex(0)
+2 >Emitted(64, 18) Source(61, 18) + SourceIndex(0)
+3 >Emitted(64, 19) Source(61, 19) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -1113,8 +1113,8 @@ sourceFile:sourceMapValidationStatements.ts
   >
   >        
 2 >        }
-1 >Emitted(65, 9) Source(63, 9) + SourceIndex(0) name (f)
-2 >Emitted(65, 10) Source(63, 10) + SourceIndex(0) name (f)
+1 >Emitted(65, 9) Source(63, 9) + SourceIndex(0)
+2 >Emitted(65, 10) Source(63, 10) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -1123,8 +1123,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(66, 5) Source(64, 5) + SourceIndex(0) name (f)
-2 >Emitted(66, 6) Source(64, 6) + SourceIndex(0) name (f)
+1 >Emitted(66, 5) Source(64, 5) + SourceIndex(0)
+2 >Emitted(66, 6) Source(64, 6) + SourceIndex(0)
 ---
 >>>    while (x < 10) {
 1->^^^^
@@ -1142,13 +1142,13 @@ sourceFile:sourceMapValidationStatements.ts
 5 >               10
 6 >                 ) 
 7 >                   {
-1->Emitted(67, 5) Source(65, 5) + SourceIndex(0) name (f)
-2 >Emitted(67, 12) Source(65, 12) + SourceIndex(0) name (f)
-3 >Emitted(67, 13) Source(65, 13) + SourceIndex(0) name (f)
-4 >Emitted(67, 16) Source(65, 16) + SourceIndex(0) name (f)
-5 >Emitted(67, 18) Source(65, 18) + SourceIndex(0) name (f)
-6 >Emitted(67, 20) Source(65, 20) + SourceIndex(0) name (f)
-7 >Emitted(67, 21) Source(65, 21) + SourceIndex(0) name (f)
+1->Emitted(67, 5) Source(65, 5) + SourceIndex(0)
+2 >Emitted(67, 12) Source(65, 12) + SourceIndex(0)
+3 >Emitted(67, 13) Source(65, 13) + SourceIndex(0)
+4 >Emitted(67, 16) Source(65, 16) + SourceIndex(0)
+5 >Emitted(67, 18) Source(65, 18) + SourceIndex(0)
+6 >Emitted(67, 20) Source(65, 20) + SourceIndex(0)
+7 >Emitted(67, 21) Source(65, 21) + SourceIndex(0)
 ---
 >>>        x++;
 1 >^^^^^^^^
@@ -1160,10 +1160,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >        x
 3 >         ++
 4 >           ;
-1 >Emitted(68, 9) Source(66, 9) + SourceIndex(0) name (f)
-2 >Emitted(68, 10) Source(66, 10) + SourceIndex(0) name (f)
-3 >Emitted(68, 12) Source(66, 12) + SourceIndex(0) name (f)
-4 >Emitted(68, 13) Source(66, 13) + SourceIndex(0) name (f)
+1 >Emitted(68, 9) Source(66, 9) + SourceIndex(0)
+2 >Emitted(68, 10) Source(66, 10) + SourceIndex(0)
+3 >Emitted(68, 12) Source(66, 12) + SourceIndex(0)
+4 >Emitted(68, 13) Source(66, 13) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -1172,8 +1172,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >    
 2 >    }
-1 >Emitted(69, 5) Source(67, 5) + SourceIndex(0) name (f)
-2 >Emitted(69, 6) Source(67, 6) + SourceIndex(0) name (f)
+1 >Emitted(69, 5) Source(67, 5) + SourceIndex(0)
+2 >Emitted(69, 6) Source(67, 6) + SourceIndex(0)
 ---
 >>>    do {
 1->^^^^
@@ -1184,9 +1184,9 @@ sourceFile:sourceMapValidationStatements.ts
   >    
 2 >    do 
 3 >       {
-1->Emitted(70, 5) Source(68, 5) + SourceIndex(0) name (f)
-2 >Emitted(70, 8) Source(68, 8) + SourceIndex(0) name (f)
-3 >Emitted(70, 9) Source(68, 9) + SourceIndex(0) name (f)
+1->Emitted(70, 5) Source(68, 5) + SourceIndex(0)
+2 >Emitted(70, 8) Source(68, 8) + SourceIndex(0)
+3 >Emitted(70, 9) Source(68, 9) + SourceIndex(0)
 ---
 >>>        x--;
 1->^^^^^^^^
@@ -1199,10 +1199,10 @@ sourceFile:sourceMapValidationStatements.ts
 2 >        x
 3 >         --
 4 >           ;
-1->Emitted(71, 9) Source(69, 9) + SourceIndex(0) name (f)
-2 >Emitted(71, 10) Source(69, 10) + SourceIndex(0) name (f)
-3 >Emitted(71, 12) Source(69, 12) + SourceIndex(0) name (f)
-4 >Emitted(71, 13) Source(69, 13) + SourceIndex(0) name (f)
+1->Emitted(71, 9) Source(69, 9) + SourceIndex(0)
+2 >Emitted(71, 10) Source(69, 10) + SourceIndex(0)
+3 >Emitted(71, 12) Source(69, 12) + SourceIndex(0)
+4 >Emitted(71, 13) Source(69, 13) + SourceIndex(0)
 ---
 >>>    } while (x > 4);
 1->^^^^
@@ -1220,13 +1220,13 @@ sourceFile:sourceMapValidationStatements.ts
 5 >               > 
 6 >                 4
 7 >                  )
-1->Emitted(72, 5) Source(70, 5) + SourceIndex(0) name (f)
-2 >Emitted(72, 6) Source(70, 6) + SourceIndex(0) name (f)
-3 >Emitted(72, 14) Source(70, 14) + SourceIndex(0) name (f)
-4 >Emitted(72, 15) Source(70, 15) + SourceIndex(0) name (f)
-5 >Emitted(72, 18) Source(70, 18) + SourceIndex(0) name (f)
-6 >Emitted(72, 19) Source(70, 19) + SourceIndex(0) name (f)
-7 >Emitted(72, 21) Source(70, 20) + SourceIndex(0) name (f)
+1->Emitted(72, 5) Source(70, 5) + SourceIndex(0)
+2 >Emitted(72, 6) Source(70, 6) + SourceIndex(0)
+3 >Emitted(72, 14) Source(70, 14) + SourceIndex(0)
+4 >Emitted(72, 15) Source(70, 15) + SourceIndex(0)
+5 >Emitted(72, 18) Source(70, 18) + SourceIndex(0)
+6 >Emitted(72, 19) Source(70, 19) + SourceIndex(0)
+7 >Emitted(72, 21) Source(70, 20) + SourceIndex(0)
 ---
 >>>    x = y;
 1 >^^^^
@@ -1241,11 +1241,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >      = 
 4 >        y
 5 >         ;
-1 >Emitted(73, 5) Source(71, 5) + SourceIndex(0) name (f)
-2 >Emitted(73, 6) Source(71, 6) + SourceIndex(0) name (f)
-3 >Emitted(73, 9) Source(71, 9) + SourceIndex(0) name (f)
-4 >Emitted(73, 10) Source(71, 10) + SourceIndex(0) name (f)
-5 >Emitted(73, 11) Source(71, 11) + SourceIndex(0) name (f)
+1 >Emitted(73, 5) Source(71, 5) + SourceIndex(0)
+2 >Emitted(73, 6) Source(71, 6) + SourceIndex(0)
+3 >Emitted(73, 9) Source(71, 9) + SourceIndex(0)
+4 >Emitted(73, 10) Source(71, 10) + SourceIndex(0)
+5 >Emitted(73, 11) Source(71, 11) + SourceIndex(0)
 ---
 >>>    var z = (x == 1) ? x + 1 : x - 1;
 1->^^^^
@@ -1285,24 +1285,24 @@ sourceFile:sourceMapValidationStatements.ts
 16>                                 - 
 17>                                   1
 18>                                    ;
-1->Emitted(74, 5) Source(72, 5) + SourceIndex(0) name (f)
-2 >Emitted(74, 9) Source(72, 9) + SourceIndex(0) name (f)
-3 >Emitted(74, 10) Source(72, 10) + SourceIndex(0) name (f)
-4 >Emitted(74, 13) Source(72, 13) + SourceIndex(0) name (f)
-5 >Emitted(74, 14) Source(72, 14) + SourceIndex(0) name (f)
-6 >Emitted(74, 15) Source(72, 15) + SourceIndex(0) name (f)
-7 >Emitted(74, 19) Source(72, 19) + SourceIndex(0) name (f)
-8 >Emitted(74, 20) Source(72, 20) + SourceIndex(0) name (f)
-9 >Emitted(74, 21) Source(72, 21) + SourceIndex(0) name (f)
-10>Emitted(74, 24) Source(72, 24) + SourceIndex(0) name (f)
-11>Emitted(74, 25) Source(72, 25) + SourceIndex(0) name (f)
-12>Emitted(74, 28) Source(72, 28) + SourceIndex(0) name (f)
-13>Emitted(74, 29) Source(72, 29) + SourceIndex(0) name (f)
-14>Emitted(74, 32) Source(72, 32) + SourceIndex(0) name (f)
-15>Emitted(74, 33) Source(72, 33) + SourceIndex(0) name (f)
-16>Emitted(74, 36) Source(72, 36) + SourceIndex(0) name (f)
-17>Emitted(74, 37) Source(72, 37) + SourceIndex(0) name (f)
-18>Emitted(74, 38) Source(72, 38) + SourceIndex(0) name (f)
+1->Emitted(74, 5) Source(72, 5) + SourceIndex(0)
+2 >Emitted(74, 9) Source(72, 9) + SourceIndex(0)
+3 >Emitted(74, 10) Source(72, 10) + SourceIndex(0)
+4 >Emitted(74, 13) Source(72, 13) + SourceIndex(0)
+5 >Emitted(74, 14) Source(72, 14) + SourceIndex(0)
+6 >Emitted(74, 15) Source(72, 15) + SourceIndex(0)
+7 >Emitted(74, 19) Source(72, 19) + SourceIndex(0)
+8 >Emitted(74, 20) Source(72, 20) + SourceIndex(0)
+9 >Emitted(74, 21) Source(72, 21) + SourceIndex(0)
+10>Emitted(74, 24) Source(72, 24) + SourceIndex(0)
+11>Emitted(74, 25) Source(72, 25) + SourceIndex(0)
+12>Emitted(74, 28) Source(72, 28) + SourceIndex(0)
+13>Emitted(74, 29) Source(72, 29) + SourceIndex(0)
+14>Emitted(74, 32) Source(72, 32) + SourceIndex(0)
+15>Emitted(74, 33) Source(72, 33) + SourceIndex(0)
+16>Emitted(74, 36) Source(72, 36) + SourceIndex(0)
+17>Emitted(74, 37) Source(72, 37) + SourceIndex(0)
+18>Emitted(74, 38) Source(72, 38) + SourceIndex(0)
 ---
 >>>    (x == 1) ? x + 1 : x - 1;
 1 >^^^^
@@ -1336,21 +1336,21 @@ sourceFile:sourceMapValidationStatements.ts
 13>                         - 
 14>                           1
 15>                            ;
-1 >Emitted(75, 5) Source(73, 5) + SourceIndex(0) name (f)
-2 >Emitted(75, 6) Source(73, 6) + SourceIndex(0) name (f)
-3 >Emitted(75, 7) Source(73, 7) + SourceIndex(0) name (f)
-4 >Emitted(75, 11) Source(73, 11) + SourceIndex(0) name (f)
-5 >Emitted(75, 12) Source(73, 12) + SourceIndex(0) name (f)
-6 >Emitted(75, 13) Source(73, 13) + SourceIndex(0) name (f)
-7 >Emitted(75, 16) Source(73, 16) + SourceIndex(0) name (f)
-8 >Emitted(75, 17) Source(73, 17) + SourceIndex(0) name (f)
-9 >Emitted(75, 20) Source(73, 20) + SourceIndex(0) name (f)
-10>Emitted(75, 21) Source(73, 21) + SourceIndex(0) name (f)
-11>Emitted(75, 24) Source(73, 24) + SourceIndex(0) name (f)
-12>Emitted(75, 25) Source(73, 25) + SourceIndex(0) name (f)
-13>Emitted(75, 28) Source(73, 28) + SourceIndex(0) name (f)
-14>Emitted(75, 29) Source(73, 29) + SourceIndex(0) name (f)
-15>Emitted(75, 30) Source(73, 30) + SourceIndex(0) name (f)
+1 >Emitted(75, 5) Source(73, 5) + SourceIndex(0)
+2 >Emitted(75, 6) Source(73, 6) + SourceIndex(0)
+3 >Emitted(75, 7) Source(73, 7) + SourceIndex(0)
+4 >Emitted(75, 11) Source(73, 11) + SourceIndex(0)
+5 >Emitted(75, 12) Source(73, 12) + SourceIndex(0)
+6 >Emitted(75, 13) Source(73, 13) + SourceIndex(0)
+7 >Emitted(75, 16) Source(73, 16) + SourceIndex(0)
+8 >Emitted(75, 17) Source(73, 17) + SourceIndex(0)
+9 >Emitted(75, 20) Source(73, 20) + SourceIndex(0)
+10>Emitted(75, 21) Source(73, 21) + SourceIndex(0)
+11>Emitted(75, 24) Source(73, 24) + SourceIndex(0)
+12>Emitted(75, 25) Source(73, 25) + SourceIndex(0)
+13>Emitted(75, 28) Source(73, 28) + SourceIndex(0)
+14>Emitted(75, 29) Source(73, 29) + SourceIndex(0)
+15>Emitted(75, 30) Source(73, 30) + SourceIndex(0)
 ---
 >>>    x === 1;
 1 >^^^^
@@ -1365,11 +1365,11 @@ sourceFile:sourceMapValidationStatements.ts
 3 >      === 
 4 >          1
 5 >           ;
-1 >Emitted(76, 5) Source(74, 5) + SourceIndex(0) name (f)
-2 >Emitted(76, 6) Source(74, 6) + SourceIndex(0) name (f)
-3 >Emitted(76, 11) Source(74, 11) + SourceIndex(0) name (f)
-4 >Emitted(76, 12) Source(74, 12) + SourceIndex(0) name (f)
-5 >Emitted(76, 13) Source(74, 13) + SourceIndex(0) name (f)
+1 >Emitted(76, 5) Source(74, 5) + SourceIndex(0)
+2 >Emitted(76, 6) Source(74, 6) + SourceIndex(0)
+3 >Emitted(76, 11) Source(74, 11) + SourceIndex(0)
+4 >Emitted(76, 12) Source(74, 12) + SourceIndex(0)
+5 >Emitted(76, 13) Source(74, 13) + SourceIndex(0)
 ---
 >>>    x = z = 40;
 1->^^^^
@@ -1387,13 +1387,13 @@ sourceFile:sourceMapValidationStatements.ts
 5 >          = 
 6 >            40
 7 >              ;
-1->Emitted(77, 5) Source(75, 5) + SourceIndex(0) name (f)
-2 >Emitted(77, 6) Source(75, 6) + SourceIndex(0) name (f)
-3 >Emitted(77, 9) Source(75, 9) + SourceIndex(0) name (f)
-4 >Emitted(77, 10) Source(75, 10) + SourceIndex(0) name (f)
-5 >Emitted(77, 13) Source(75, 13) + SourceIndex(0) name (f)
-6 >Emitted(77, 15) Source(75, 15) + SourceIndex(0) name (f)
-7 >Emitted(77, 16) Source(75, 16) + SourceIndex(0) name (f)
+1->Emitted(77, 5) Source(75, 5) + SourceIndex(0)
+2 >Emitted(77, 6) Source(75, 6) + SourceIndex(0)
+3 >Emitted(77, 9) Source(75, 9) + SourceIndex(0)
+4 >Emitted(77, 10) Source(75, 10) + SourceIndex(0)
+5 >Emitted(77, 13) Source(75, 13) + SourceIndex(0)
+6 >Emitted(77, 15) Source(75, 15) + SourceIndex(0)
+7 >Emitted(77, 16) Source(75, 16) + SourceIndex(0)
 ---
 >>>    eval("y");
 1 >^^^^
@@ -1409,12 +1409,12 @@ sourceFile:sourceMapValidationStatements.ts
 4 >         "y"
 5 >            )
 6 >             ;
-1 >Emitted(78, 5) Source(76, 5) + SourceIndex(0) name (f)
-2 >Emitted(78, 9) Source(76, 9) + SourceIndex(0) name (f)
-3 >Emitted(78, 10) Source(76, 10) + SourceIndex(0) name (f)
-4 >Emitted(78, 13) Source(76, 13) + SourceIndex(0) name (f)
-5 >Emitted(78, 14) Source(76, 14) + SourceIndex(0) name (f)
-6 >Emitted(78, 15) Source(76, 15) + SourceIndex(0) name (f)
+1 >Emitted(78, 5) Source(76, 5) + SourceIndex(0)
+2 >Emitted(78, 9) Source(76, 9) + SourceIndex(0)
+3 >Emitted(78, 10) Source(76, 10) + SourceIndex(0)
+4 >Emitted(78, 13) Source(76, 13) + SourceIndex(0)
+5 >Emitted(78, 14) Source(76, 14) + SourceIndex(0)
+6 >Emitted(78, 15) Source(76, 15) + SourceIndex(0)
 ---
 >>>    return;
 1 >^^^^
@@ -1424,9 +1424,9 @@ sourceFile:sourceMapValidationStatements.ts
   >    
 2 >    return
 3 >          ;
-1 >Emitted(79, 5) Source(77, 5) + SourceIndex(0) name (f)
-2 >Emitted(79, 11) Source(77, 11) + SourceIndex(0) name (f)
-3 >Emitted(79, 12) Source(77, 12) + SourceIndex(0) name (f)
+1 >Emitted(79, 5) Source(77, 5) + SourceIndex(0)
+2 >Emitted(79, 11) Source(77, 11) + SourceIndex(0)
+3 >Emitted(79, 12) Source(77, 12) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -1435,8 +1435,8 @@ sourceFile:sourceMapValidationStatements.ts
 1 >
   >
 2 >}
-1 >Emitted(80, 1) Source(78, 1) + SourceIndex(0) name (f)
-2 >Emitted(80, 2) Source(78, 2) + SourceIndex(0) name (f)
+1 >Emitted(80, 1) Source(78, 1) + SourceIndex(0)
+2 >Emitted(80, 2) Source(78, 2) + SourceIndex(0)
 ---
 >>>var b = function () {
 1->

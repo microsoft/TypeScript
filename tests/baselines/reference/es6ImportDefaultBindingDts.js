@@ -12,6 +12,7 @@ import defaultBinding2 from "./server"; // elide this import since defaultBindin
 
 
 //// [server.js]
+"use strict";
 var c = (function () {
     function c() {
     }
@@ -20,6 +21,7 @@ var c = (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = c;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.x = new server_1.default();
 
