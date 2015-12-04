@@ -420,7 +420,7 @@ file(builtPackageJSON, [distributeVersionOutputFolder], function() {
 
 desc("Run version distribution script")
 task("distribute-version", [distributeVersionJS, builtPackageJSON], function() {
-    var cmd = host + " " + distributeVersionJS;
+    var cmd = host + " " + distributeVersionJS + " --release";
     console.log(cmd);
     exec(cmd);
 }, {async: true});
@@ -533,8 +533,7 @@ task("lssl", [lsslFile]);
 // Local target to build the compiler and services
 desc("Builds the full compiler and services");
 task("local", ["generate-diagnostics", "lib", tscFile, servicesFile,
-                nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON,
-                builtPackageJSON, "distribute-version"]);
+                nodeDefinitionsFile, serverFile, builtGeneratedDiagnosticMessagesJSON]);
 
 // Local target to build only tsc.js
 desc("Builds only the compiler");
@@ -588,7 +587,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local"].concat(libraryTargets), function() {
+task("LKG", ["clean", "release", "local", builtPackageJSON, "distribute-version"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);
