@@ -16,15 +16,6 @@ goTo.marker('1');
 edit.insert('.');
 
 // Check members of the function
-verify.completionListContains('prototype', undefined, undefined, 'property');
 verify.completionListContains('foo', undefined, undefined, 'warning');
 verify.completionListContains('bar', undefined, undefined, 'warning');
 verify.completionListContains('qua', undefined, undefined, 'warning');
-
-// Check members of function.prototype
-edit.insert('prototype.');
-verify.completionListContains('foo', undefined, undefined, 'method');
-verify.completionListContains('bar', undefined, undefined, 'method');
-verify.completionListContains('qua', undefined, undefined, 'warning');
-verify.completionListContains('prototype', undefined, undefined, 'warning');
-

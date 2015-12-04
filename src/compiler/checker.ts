@@ -123,8 +123,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, undefined, anyType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, undefined, unknownType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const globals: SymbolTable = {};
 
@@ -3374,13 +3374,12 @@ namespace ts {
             resolveObjectTypeMembers(type, source, typeParameters, typeArguments);
         }
 
-        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[], kind: SignatureKind,
+        function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
             resolvedReturnType: Type, typePredicate: TypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
-            sig.kind = kind;
             sig.resolvedReturnType = resolvedReturnType;
             sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
@@ -3390,13 +3389,13 @@ namespace ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.kind, sig.resolvedReturnType, sig.typePredicate,
+            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.typePredicate,
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             if (!hasClassBaseType(classType)) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, SignatureKind.Construct, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -3932,33 +3931,7 @@ namespace ts {
                     }
                 }
 
-                let kind: SignatureKind;
-                switch (declaration.kind) {
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.ConstructSignature:
-                    case SyntaxKind.ConstructorType:
-                        kind = SignatureKind.Construct;
-                        break;
-                    default:
-                        if (declaration.symbol.inferredConstructor) {
-                            kind = SignatureKind.Construct;
-                            const members = createSymbolTable(emptyArray);
-                            // Collect methods declared with className.protoype.methodName = ...
-                            const proto = declaration.symbol.exports["prototype"];
-                            if (proto) {
-                                mergeSymbolTable(members, proto.members);
-                            }
-                            // Collect properties defined in the constructor by this.propName = ...
-                            mergeSymbolTable(members, declaration.symbol.members);
-                            returnType = createAnonymousType(declaration.symbol, members, emptyArray, emptyArray, undefined, undefined);
-                        }
-                        else {
-                            kind = SignatureKind.Call;
-                        }
-                        break;
-                }
-
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, kind, returnType, typePredicate,
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate,
                     minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
@@ -3966,7 +3939,7 @@ namespace ts {
 
         function getSignaturesOfSymbol(symbol: Symbol): Signature[] {
             if (!symbol) return emptyArray;
-            let result: Signature[] = [];
+            const result: Signature[] = [];
             for (let i = 0, len = symbol.declarations.length; i < len; i++) {
                 const node = symbol.declarations[i];
                 switch (node.kind) {
@@ -3993,12 +3966,6 @@ namespace ts {
                             }
                         }
                         result.push(getSignatureFromDeclaration(<SignatureDeclaration>node));
-                        break;
-
-                    case SyntaxKind.PropertyAccessExpression:
-                        // Inferred class method
-                        result = getSignaturesOfType(checkExpressionCached((<BinaryExpression>node.parent).right), SignatureKind.Call);
-                        break;
                 }
             }
             return result;
@@ -4081,7 +4048,7 @@ namespace ts {
             // object type literal or interface (using the new keyword). Each way of declaring a constructor
             // will result in a different declaration kind.
             if (!signature.isolatedSignatureType) {
-                const isConstructor = signature.kind === SignatureKind.Construct;
+                const isConstructor = signature.declaration.kind === SyntaxKind.Constructor || signature.declaration.kind === SyntaxKind.ConstructSignature;
                 const type = <ResolvedType>createObjectType(TypeFlags.Anonymous | TypeFlags.FromSignature);
                 type.members = emptySymbols;
                 type.properties = emptyArray;
@@ -4784,7 +4751,6 @@ namespace ts {
             }
             const result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
-                signature.kind,
                 instantiateType(signature.resolvedReturnType, mapper),
                 freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
@@ -6838,14 +6804,7 @@ namespace ts {
             let container: Node;
             if (symbol.flags & SymbolFlags.Class) {
                 // get parent of class declaration
-                const classDeclaration = getClassLikeDeclarationOfSymbol(symbol);
-                if (classDeclaration) {
-                    container = classDeclaration.parent;
-                }
-                else {
-                    // JS-inferred class; do nothing
-                    return;
-                }
+                container = getClassLikeDeclarationOfSymbol(symbol).parent;
             }
             else {
                 // nesting structure:
@@ -7189,10 +7148,7 @@ namespace ts {
             const operator = binaryExpression.operatorToken.kind;
             if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
                 // In an assignment expression, the right operand is contextually typed by the type of the left operand.
-                // In JS files where a special assignment is taking place, don't contextually type the RHS to avoid
-                // incorrectly assuming a circular 'any' (the type of the LHS is determined by the RHS)
-                if (node === binaryExpression.right &&
-                    !(node.parserContextFlags & ParserContextFlags.JavaScriptFile && getSpecialPropertyAssignmentKind(binaryExpression))) {
+                if (node === binaryExpression.right) {
                     return checkExpression(binaryExpression.left);
                 }
             }
@@ -9676,9 +9632,21 @@ namespace ts {
                 return voidType;
             }
             if (node.kind === SyntaxKind.NewExpression) {
-                if (signature.kind === SignatureKind.Call) {
-                    // When resolved signature is a call signature (and not a construct signature) the result type is any
-                    if (compilerOptions.noImplicitAny) {
+                const declaration = signature.declaration;
+
+                if (declaration &&
+                    declaration.kind !== SyntaxKind.Constructor &&
+                    declaration.kind !== SyntaxKind.ConstructSignature &&
+                    declaration.kind !== SyntaxKind.ConstructorType) {
+
+                    // When resolved signature is a call signature (and not a construct signature) the result type is any, unless
+                    // the declaring function had members created through 'x.prototype.y = expr' or 'this.y = expr' psuedodeclarations
+                    // in a JS file
+                    const funcSymbol = checkExpression(node.expression).symbol;
+                    if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function)) {
+                        return createAnonymousType(undefined, funcSymbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                    }
+                    else if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;

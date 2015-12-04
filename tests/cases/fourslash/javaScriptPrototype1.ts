@@ -22,8 +22,8 @@
 // Members of the class instance
 goTo.marker('1');
 edit.insert('.');
-verify.memberListContains('foo', undefined, undefined, 'method');
-verify.memberListContains('bar', undefined, undefined, 'method');
+verify.memberListContains('foo', undefined, undefined, 'property');
+verify.memberListContains('bar', undefined, undefined, 'property');
 edit.backspace();
 
 // Members of a class method (1)
