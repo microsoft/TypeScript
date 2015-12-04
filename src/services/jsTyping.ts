@@ -6,77 +6,131 @@
 /* @internal */
 namespace ts.JsTyping {
 
+    type AutoTypingsInfo = {
+        _autoTypings: string[],
+        autoTypingsEnabled: boolean,
+        include: string[],
+        exclude: string[]
+    };
+
     type HostType = {
+        directoryExists: (path: string) => boolean;
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
         readDirectory: (path: string, extension?: string, exclude?: string[], depth?: number) => string[];
         writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void;
     };
 
-    interface TsdJsonCacheInfo {
-        path: string;
-        value: any;
-    }
-
     var _host: HostType;
-    
+
+    var autoTypingsComment =
+        `//  This file contains a list of JavaScript typings (d.ts) that have
+//  been auto-referenced to provide a better completion list experience.
+//  For more information see the following page on the TypeScript wiki:
+//  https://github.com/Microsoft/TypeScript/wiki/AutoTypings
+`;
+
     // a typing name to typing file path mapping
     var inferredTypings: Map<string> = {};
 
-    function tryParseJson(jsonPath: string) {
-        try {
-            return JSON.parse(jsonPath);
+    function tryParseJson(jsonPath: string): any {
+        if (_host.fileExists(jsonPath)) {
+            try {
+                // Strip out single-line comments
+                let contents = _host.readFile(jsonPath).replace(/^\/\/(.*)$/gm, "");
+                return JSON.parse(contents);
+            }
+            catch (e) { }
         }
-        catch (e) { return undefined; }
+        return undefined;
     }
     
     /**
      * @param cachePath is the path to the cache location, which contains a tsd.json file and a typings folder
      */
     export function discoverTypings(
-        host: HostType, fileNames: string[], cachePath: string, compilerOptions?: CompilerOptions, safeList?: string[], noDevDependencies?: boolean)
-        : { cachedTypingPaths: string[], newTypingNames: string[] } {
+        host: HostType, fileNames: string[], cachePath: string, projectRootPath: string, compilerOptions?: CompilerOptions, includeList?: string[], safeList?: string[], noDevDependencies?: boolean)
+        : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
         _host = host;
+
+        // Clear inferred typings map
+        inferredTypings = {};
+
+        let filesToWatch: string[] = [];
+
         // Directories to search for package.json, bower.json and other typing information
         let searchDirs: string[] = [];
 
-        for (let fileName of fileNames) {
-            if (ts.getBaseFileName(fileName) !== "lib.d.ts") {
-                let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
-                if (searchDirs.indexOf(dir) < 0) {
-                    searchDirs.push(dir);
-                }
+        // Check the typings config path to see if auto-typings is
+        // enabled and if the there are any typings in the include/exclude list
+        let exclude: string[] = [];
+        let autoTypingsJsonPath = ts.combinePaths(ts.normalizePath(projectRootPath), "autoTypings.json");
+        let autoTypingsJsonDict = tryParseJson(autoTypingsJsonPath);
+        let isAutoTypingsEnabled = true;
+        if (autoTypingsJsonDict) {
+            filesToWatch.push(autoTypingsJsonPath);
+            if (autoTypingsJsonDict.hasOwnProperty("autoTypingsEnabled") && autoTypingsJsonDict["autoTypingsEnabled"] === false) {
+                isAutoTypingsEnabled = false;
+            }
+
+            if (autoTypingsJsonDict.hasOwnProperty("exclude")) {
+                exclude = autoTypingsJsonDict["exclude"];
+            }
+
+            if (autoTypingsJsonDict.hasOwnProperty("include")) {
+                mergeTypings(autoTypingsJsonDict["include"]);
             }
         }
 
-        for (let searchDir of searchDirs) {
-            let packageJsonPath = ts.combinePaths(searchDir, "package.json");
-            getTypingNamesFromJson(packageJsonPath);
+        if (isAutoTypingsEnabled) {
+            // Merge host specific include typings list
+            if (includeList) {
+                mergeTypings(includeList);
+            }
 
-            let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
-            getTypingNamesFromJson(bowerJsonPath);
+            for (let fileName of fileNames) {
+                if (ts.getBaseFileName(fileName) !== "lib.d.ts") {
+                    let dir = ts.getDirectoryPath(ts.normalizePath(fileName));
+                    if (searchDirs.indexOf(dir) < 0) {
+                        searchDirs.push(dir);
+                    }
+                }
+            }
 
-            let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
-            getTypingNamesFromNodeModuleFolder(nodeModulesPath);
-        }
+            for (let searchDir of searchDirs) {
+                let packageJsonPath = ts.combinePaths(searchDir, "package.json");
+                getTypingNamesFromJson(packageJsonPath, filesToWatch);
+
+                let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
+                getTypingNamesFromJson(bowerJsonPath, filesToWatch);
+
+                let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
+                getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
+            }
         
-        // Todo: use a real safe list
-        getTypingNamesFromSourceFileNames(fileNames, ["react", "jquery"]);
-        getTypingNamesFromCompilerOptions(compilerOptions);
+            // Todo: use a real safe list
+            getTypingNamesFromSourceFileNames(fileNames, ["react", "jquery"]);
+            getTypingNamesFromCompilerOptions(compilerOptions);
+        }
 
         let normalizedCachePath = ts.normalizePath(cachePath);
         let typingsPath = ts.combinePaths(normalizedCachePath, "typings");
-        let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
-        if (tsdJsonCacheInfo) {
-            let cacheTsdJsonDict = tsdJsonCacheInfo.value;
-            // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped. 
-            // Therefore if they don't come with d.ts files, we should not retry downloading these packages.
+        let tsdJsonPath = ts.combinePaths(normalizedCachePath, "tsd.json");
+        let cacheTsdJsonDict = tryParseJson(tsdJsonPath);
+        if (cacheTsdJsonDict) {
+            // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped.
+            // Therefore if they don't come with d.ts files we should not retry downloading these packages.
             if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
                 for (let notFoundTypingName of cacheTsdJsonDict["notFound"]) {
                     if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
                         delete inferredTypings[notFoundTypingName];
                     }
                 }
+            }
+
+            // Remove typings that the user has added to the exclude list
+            for (let excludeTypingName of exclude) {
+                delete inferredTypings[excludeTypingName];
             }
 
             // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
@@ -109,7 +163,7 @@ namespace ts.JsTyping {
             }
         }
 
-        return { cachedTypingPaths, newTypingNames };
+        return { cachedTypingPaths, newTypingNames, filesToWatch };
     }
 
     /**
@@ -126,10 +180,11 @@ namespace ts.JsTyping {
     /**
      * Get the typing info from common package manager json files like package.json or bower.json
      */
-    function getTypingNamesFromJson(jsonPath: string) {
-        if (_host.fileExists(jsonPath)) {
-            let jsonDict = tryParseJson(_host.readFile(jsonPath));
-            if (jsonDict && jsonDict.hasOwnProperty("dependencies")) {
+    function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
+        let jsonDict = tryParseJson(jsonPath);
+        if (jsonDict) {
+            filesToWatch.push(jsonPath);
+            if (jsonDict.hasOwnProperty("dependencies")) {
                 mergeTypings(Object.keys(jsonDict.dependencies));
             }
         }
@@ -148,7 +203,7 @@ namespace ts.JsTyping {
         let exactlyMatched: string[] = []
         let notExactlyMatched: string[] = []
         for (let fileName of fileNames) {
-            let baseName = ts.getBaseFileName(fileName);
+            let baseName = ts.getBaseFileName(ts.normalizePath(fileName));
             let baseNameWithoutExtension = baseName.substring(0, baseName.lastIndexOf("."));
             (safeList.indexOf(baseNameWithoutExtension) >= 0) ? exactlyMatched.push(baseNameWithoutExtension) : notExactlyMatched.push(baseNameWithoutExtension);
         }
@@ -163,9 +218,9 @@ namespace ts.JsTyping {
      * Infer typing names from node_module folder
      * @param nodeModulesPath is the path to the "node_modules" folder
      */
-    function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string) {
+    function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string, filesToWatch: string[]) {
         // Todo: add support for ModuleResolutionHost too
-        if (!_host.fileExists(nodeModulesPath)) {
+        if (!_host.directoryExists(nodeModulesPath)) {
             return;
         }
 
@@ -173,8 +228,10 @@ namespace ts.JsTyping {
         let packageJsonFiles =
             _host.readDirectory(nodeModulesPath, /*extension*/undefined, /*exclude*/undefined, /*depth*/ 2).filter(f => ts.getBaseFileName(f) === "package.json");
         for (let packageJsonFile of packageJsonFiles) {
-            let packageJsonContent = tryParseJson(_host.readFile(packageJsonFile));
+            let packageJsonContent = tryParseJson(packageJsonFile);
             if (!packageJsonContent) { continue; }
+
+            filesToWatch.push(packageJsonFile);
 
             // npm 3 has the package.json contains a "_requiredBy" field
             // we should include all the top level module names for npm 2, and only module names whose
@@ -205,43 +262,88 @@ namespace ts.JsTyping {
 
     /**
      * Updates the tsd.json cache's "notFound" custom property. This property is used to determine if an attempt has already been
-     * made to resolve a particular typing. Also updates typings.json, a project scope configuration file that can be used
+     * made to resolve a particular typing. Also updates autoTypings.json, a project scope configuration file that can be used
      * to turn off the typing auto-acquisition feature, verify the list of typings that are being auto-referenced and exclude
      * typings from this list.
      * @param cachedTypingsPaths The list of resolved cached d.ts paths
      * @param newTypings The list of new typings that the host attempted to acquire using TSD
      * @param cachePath The path to the local tsd.json cache
-     * @param typingsConfigPath The path to the project's typings.json
+     * @param projectRootPath The project root path used for autoTypings.json
      */
     export function updateTypingsConfig(
-        host: HostType, cachedTypingsPaths: string[], newTypings: string[], cachePath: string, typingsConfigPath: string): void {
-        let tsdJsonCacheInfo = tryGetTsdJsonCacheInfo(host, cachePath);
-        if (tsdJsonCacheInfo) {
+        host: HostType, cachedTypingsPaths: string[], newTypingNames: string[], cachePath: string, projectRootPath: string): void {
+        let installedTypingsCache: string[];
+        let tsdJsonPath = ts.combinePaths(ts.normalizePath(cachePath), "tsd.json");
+        let cacheTsdJsonDict = tryParseJson(tsdJsonPath);
+        if (cacheTsdJsonDict) {
             let notFound: string[] = [];
-            let cacheTsdJsonDict = tsdJsonCacheInfo.value;
             if (cacheTsdJsonDict.hasOwnProperty("installed")) {
-                let installedTypings = Object.keys(cacheTsdJsonDict.installed);
-                notFound = ts.filter(newTypings, i => !isInstalled(i, installedTypings));
+                installedTypingsCache = Object.keys(cacheTsdJsonDict.installed);
+                notFound = ts.filter(newTypingNames, i => !isInstalled(i, installedTypingsCache));
             }
             if (cacheTsdJsonDict.hasOwnProperty("notFound")) {
-                notFound = cacheTsdJsonDict["notFound"].concat(notFound);
+                notFound = ts.deduplicate<string>(cacheTsdJsonDict["notFound"].concat(notFound));
             }
             if (notFound.length > 0) {
                 cacheTsdJsonDict["notFound"] = notFound;
-                host.writeFile(tsdJsonCacheInfo.path, JSON.stringify(cacheTsdJsonDict));
+                host.writeFile(tsdJsonPath, JSON.stringify(cacheTsdJsonDict));
             }
         }
+
+        // Update autoTypings.json
+        let newAutoTypingsJsonString: string = autoTypingsComment;
+
+        // Get the list of new and cached injected typings
+        let installedKeys: string[] = [];
+        if (installedTypingsCache) {
+            installedKeys = ts.filter(newTypingNames, i => isInstalled(i, installedTypingsCache));
+        }
+
+        let cachedTypingNames: string[] = [];
+        for (let cachedTypingPath of cachedTypingsPaths) {
+            let directoryPath = ts.getDirectoryPath(cachedTypingPath);
+            cachedTypingNames.push(directoryPath.substring(directoryPath.lastIndexOf(directorySeparator) + 1, directoryPath.length));
+        }
+
+        installedKeys = installedKeys.concat(cachedTypingNames);
+
+        let autoTypingsEnabled = true;
+        let include: string[] = [];
+        let exclude: string[] = [];
+
+        let autoTypingsJsonPath = ts.combinePaths(projectRootPath, "autoTypings.json");
+        let autoTypingsJsonDict = tryParseJson(autoTypingsJsonPath);
+        if (autoTypingsJsonDict) {
+            if (autoTypingsJsonDict.hasOwnProperty("exclude")) {
+                exclude = autoTypingsJsonDict["exclude"];
+            }
+
+            if (autoTypingsJsonDict.hasOwnProperty("include")) {
+                include = autoTypingsJsonDict["include"];
+            }
+
+            if (autoTypingsJsonDict.hasOwnProperty("autoTypingsEnabled") && autoTypingsJsonDict["autoTypingsEnabled"] === false) {
+                autoTypingsEnabled = false;
+            }
+        }
+      
+        let autoTypingsInfo = {
+            _autoTypings: installedKeys,
+            autoTypingsEnabled: autoTypingsEnabled,
+            include: include,
+            exclude: exclude
+        };
+
+        var newAutoTypingsInfoString = stringifyWithFormatting(autoTypingsInfo);
+        if (stringifyWithFormatting(autoTypingsJsonDict) === newAutoTypingsInfoString) {
+            return;
+        }
+        newAutoTypingsJsonString += newAutoTypingsInfoString;
+        host.writeFile(autoTypingsJsonPath, newAutoTypingsJsonString);
     }
 
-    function tryGetTsdJsonCacheInfo(host: HostType, cachePath: string): TsdJsonCacheInfo {
-        let cacheTsdJsonPath = ts.combinePaths(ts.normalizePath(cachePath), "tsd.json");
-        if (host.fileExists(cacheTsdJsonPath)) {
-            let value = tryParseJson(host.readFile(cacheTsdJsonPath));
-            if (value) {
-                return { path: cacheTsdJsonPath, value };
-            }
-        }
-        return undefined;
+    function stringifyWithFormatting(typingsInfo: AutoTypingsInfo) {
+        return JSON.stringify(typingsInfo, null, "  ");
     }
 
     function isInstalled(typing: string, installedKeys: string[]) {
