@@ -1,7 +1,7 @@
 // Update TypeScript Version
 
-/// <reference path="../src/harness/external/node.d.ts" />
-"use strict";
+/// <reference path=".\typings\node\node.d.ts" />
+
 import * as fs from "fs";
 import * as path from "path";
 
@@ -34,20 +34,15 @@ interface PackageJson {
  */
 const formats: {[idx: string]: FormatInformation} = {
     "src/compiler/program.ts": {
-        pattern: /version\s*=\s*"[0-9]+\.[0-9]+\.[0-9]"/g,
+        pattern: /const\s*version\s*=\s*"[0-9]+\.[0-9]+\.[0-9]"/g,
         serialize: (version: string) => {
-            return `version = "${version}"`;
+            return `const version = "${version}"`;
         },
         nightlySerialize: (nightlyVersion: string) => {
-            return `version = "${nightlyVersion}"`;
+            return `const version = "${nightlyVersion}"`;
         }
     }
 };
-
-function getFileExtension(filePath: string): string {
-    const pieces = filePath.split(".");
-    return pieces.length < 2 ? "" : pieces[pieces.length - 1];
-}
 
 function getFileInformationSync(filePath: string): FileInformation {
     try {
@@ -55,7 +50,7 @@ function getFileInformationSync(filePath: string): FileInformation {
         return {
             filePath,
             content: data,
-            ext: getFileExtension(filePath)
+            ext: path.extname(filePath)
         }
     }
     catch (error) {
@@ -81,10 +76,11 @@ function distributeVersion() {
         if (!fs.existsSync(filePath)) {
             continue;
         }
+        const format = formats[filePath];
+        const fileInfo = getFileInformationSync(filePath);
+
         try {
-            const fileInfo = getFileInformationSync(filePath);
-            const format = formats[filePath];
-            fs.writeFile(fileInfo.filePath, fileInfo.content.replace(format.pattern,
+            fs.writeFileSync(fileInfo.filePath, fileInfo.content.replace(format.pattern,
                 format.serialize(version)));
         }
         catch (err) {
@@ -123,11 +119,12 @@ function distributeNightlyVersion() {
         if (!format.nightlySerialize) {
             continue;
         }
-        try {
-            const fileInfo = getFileInformationSync(filePath);
 
-            fs.writeFile(fileInfo.filePath, fileInfo.content.replace(format.pattern,
-                                            format.nightlySerialize(nightlyVersion)));
+        const fileInfo = getFileInformationSync(filePath);
+
+        try {
+            fs.writeFileSync(fileInfo.filePath, fileInfo.content.replace(format.pattern,
+                             format.nightlySerialize(nightlyVersion)));
         }
         catch (err) {
             console.log(err);
@@ -136,34 +133,32 @@ function distributeNightlyVersion() {
 }
 
 function main() {
-    let  distributeNightly = false;
+    let validArguments = false;
 
     // Parse command line input checking if the users specify whether to configure version for nightly publishing
     if (process.argv.length > 2) {
-        // Parse command line arguments
-        const arg0 = process.argv[2];
+        const distributionType = process.argv[2];
 
-        if (arg0 === "-h" || arg0 === "--help") {
-            // display help and exit
-            console.log("Usage: ");
-            console.log("\tnode distributeVersion.js (--nightly || -n)");
-            return;
+        if (distributionType ===  "-n" || distributionType === "--nightly") {
+            validArguments = true;
+            console.log("Distributing nightly version using version from version file");
+            distributeNightlyVersion();
         }
-        else if (arg0 === "-n" || arg0 === "--nightly") {
-            distributeNightly = true;
-        }
-        else {
-            return;
+        else if (distributionType === "-r" || distributionType === "--release") {
+            validArguments = true
+            console.log("Distributing release version using version from version file");
+            distributeVersion();
         }
     }
 
-    if (distributeNightly) {
-        console.log("Distributing nightly version using base version from package.json");
-        distributeNightlyVersion();
-    }
-    else {
-        console.log("Distributing version using version from package.json");
-        distributeVersion();
+    // Users either don't specify what type of distribution to run, or provide invalid arguments.
+    if (!validArguments) {
+        console.log(`
+Usage: node distributeVersion.js [options]
+Options:
+    -n, --nightly: distribute nightly version (e.g. 1.8.0-dev.20151022)
+    -r, --release: distribute release version (e.g. 1.8.0)
+        `);
     }
 }
 
