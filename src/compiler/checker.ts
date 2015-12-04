@@ -1103,39 +1103,81 @@ namespace ts {
             return links.resolvedExports || (links.resolvedExports = getExportsForModule(moduleSymbol));
         }
 
-        function extendExportSymbols(target: SymbolTable, source: SymbolTable) {
+        interface ExportCollisionTracker {
+            specifierText: string;
+            exportsWithDuplicate: ExportDeclaration[];
+        }
+
+        /**
+         * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
+         * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
+         */
+        function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: Map<ExportCollisionTracker>, exportNode?: ExportDeclaration) {
             for (const id in source) {
                 if (id !== "default" && !hasProperty(target, id)) {
                     target[id] = source[id];
+                    if (lookupTable && exportNode) {
+                        lookupTable[id] = {
+                            specifierText: getTextOfNode(exportNode.moduleSpecifier)
+                        } as ExportCollisionTracker;
+                    }
+                }
+                else if (lookupTable && exportNode && id !== "default" && hasProperty(target, id) && resolveSymbol(target[id]) !== resolveSymbol(source[id])) {
+                    if (!lookupTable[id].exportsWithDuplicate) {
+                        lookupTable[id].exportsWithDuplicate = [exportNode];
+                    }
+                    else {
+                        lookupTable[id].exportsWithDuplicate.push(exportNode);
+                    }
                 }
             }
         }
 
         function getExportsForModule(moduleSymbol: Symbol): SymbolTable {
-            let result: SymbolTable;
             const visitedSymbols: Symbol[] = [];
-            visit(moduleSymbol);
-            return result || moduleSymbol.exports;
+            return visit(moduleSymbol) || moduleSymbol.exports;
 
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
-            function visit(symbol: Symbol) {
-                if (symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol)) {
-                    visitedSymbols.push(symbol);
-                    if (symbol !== moduleSymbol) {
-                        if (!result) {
-                            result = cloneSymbolTable(moduleSymbol.exports);
-                        }
-                        extendExportSymbols(result, symbol.exports);
-                    }
-                    // All export * declarations are collected in an __export symbol by the binder
-                    const exportStars = symbol.exports["__export"];
-                    if (exportStars) {
-                        for (const node of exportStars.declarations) {
-                            visit(resolveExternalModuleName(node, (<ExportDeclaration>node).moduleSpecifier));
-                        }
-                    }
+            function visit(symbol: Symbol): SymbolTable {
+                if (!(symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol))) {
+                    return;
                 }
+                visitedSymbols.push(symbol);
+                const symbols = cloneSymbolTable(symbol.exports);
+                // All export * declarations are collected in an __export symbol by the binder
+                const exportStars = symbol.exports["__export"];
+                if (exportStars) {
+                    const nestedSymbols: SymbolTable = {};
+                    const lookupTable: Map<ExportCollisionTracker> = {};
+                    for (const node of exportStars.declarations) {
+                        const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
+                        const exportedSymbols = visit(resolvedModule);
+                        extendExportSymbols(
+                            nestedSymbols,
+                            exportedSymbols,
+                            lookupTable,
+                            node as ExportDeclaration
+                        );
+                    }
+                    for (const id in lookupTable) {
+                        const { exportsWithDuplicate } = lookupTable[id];
+                        // It's not an error if the file with multiple `export *`s with duplicate names exports a member with that name itself
+                        if (id === "export=" || !(exportsWithDuplicate && exportsWithDuplicate.length) || hasProperty(symbols, id)) {
+                            continue;
+                        }
+                        for (const node of exportsWithDuplicate) {
+                            diagnostics.add(createDiagnosticForNode(
+                                node,
+                                Diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
+                                lookupTable[id].specifierText,
+                                id
+                            ));
+                        }
+                    }
+                    extendExportSymbols(symbols, nestedSymbols);
+                }
+                return symbols;
             }
         }
 
@@ -14132,7 +14174,28 @@ namespace ts {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                 }
+                // Checks for export * conflicts
+                const exports = getExportsOfModule(moduleSymbol);
+                for (const id in exports) {
+                    if (id === "__export") {
+                        continue;
+                    }
+                    const { declarations, flags } = exports[id];
+                    // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
+                    if (!(flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) && declarations.length > 1) {
+                        const exportedDeclarations: Declaration[] = filter(declarations, isNotOverload);
+                        if (exportedDeclarations.length > 1) {
+                            for (const declaration of exportedDeclarations) {
+                                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, id));
+                            }
+                        }
+                    }
+                }
                 links.exportsChecked = true;
+            }
+
+            function isNotOverload(declaration: Declaration): boolean {
+                return declaration.kind !== SyntaxKind.FunctionDeclaration || !!(declaration as FunctionDeclaration).body;
             }
         }
 

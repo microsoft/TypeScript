@@ -5795,9 +5795,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (!shouldHoistDeclarationInSystemJsModule(node)) {
                     // do not emit var if variable was already hoisted
-                    if (!(node.flags & NodeFlags.Export) || isES6ExportedDeclaration(node)) {
+
+                    const isES6ExportedEnum = isES6ExportedDeclaration(node);
+                    if (!(node.flags & NodeFlags.Export) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.EnumDeclaration))) {
                         emitStart(node);
-                        if (isES6ExportedDeclaration(node)) {
+                        if (isES6ExportedEnum) {
                             write("export ");
                         }
                         write("var ");
@@ -5894,6 +5896,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return languageVersion === ScriptTarget.ES6 && !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
             }
 
+            function isFirstDeclarationOfKind(node: Declaration, declarations: Declaration[], kind: SyntaxKind) {
+                return !forEach(declarations, declaration => declaration.kind === kind && declaration.pos < node.pos);
+            }
+
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
                 const shouldEmit = shouldEmitModuleDeclaration(node);
@@ -5905,15 +5911,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const emitVarForModule = !hoistedInDeclarationScope && !isModuleMergedWithES6Class(node);
 
                 if (emitVarForModule) {
-                    emitStart(node);
-                    if (isES6ExportedDeclaration(node)) {
-                        write("export ");
+                    const isES6ExportedNamespace = isES6ExportedDeclaration(node);
+                    if (!isES6ExportedNamespace || isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.ModuleDeclaration)) {
+                        emitStart(node);
+                        if (isES6ExportedNamespace) {
+                            write("export ");
+                        }
+                        write("var ");
+                        emit(node.name);
+                        write(";");
+                        emitEnd(node);
+                        writeLine();
                     }
-                    write("var ");
-                    emit(node.name);
-                    write(";");
-                    emitEnd(node);
-                    writeLine();
                 }
 
                 emitStart(node);

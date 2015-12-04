@@ -844,6 +844,10 @@
         "category": "Error",
         "code": 2307
     },
+    "Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": {
+        "category": "Error",
+        "code": 2308
+    },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
         "code": 2309
@@ -899,6 +903,10 @@
     "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2322
+    },
+    "Cannot redeclare exported variable '{0}'.": {
+        "category": "Error",
+        "code": 2323
     },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
