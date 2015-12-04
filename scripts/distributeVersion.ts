@@ -46,12 +46,12 @@ const formats: {[idx: string]: FormatInformation} = {
 
 function getFileInformationSync(filePath: string): FileInformation {
     try {
-        const data = fs.readFileSync(filePath, "utf8")
+        const data = fs.readFileSync(filePath, "utf8");
         return {
             filePath,
             content: data,
             ext: path.extname(filePath)
-        }
+        };
     }
     catch (error) {
         throw new Error("Error in getFileInformationSync: " + error);
@@ -145,7 +145,7 @@ function main() {
             distributeNightlyVersion();
         }
         else if (distributionType === "-r" || distributionType === "--release") {
-            validArguments = true
+            validArguments = true;
             console.log("Distributing release version using version from version file");
             distributeVersion();
         }
