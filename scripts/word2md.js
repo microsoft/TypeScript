@@ -232,4 +232,4 @@ function main(args) {
     app.quit();
 }
 main(sys.args);
-//# sourceMappingURL=file:///c:/ts/scripts/word2md.js.map
+//# sourceMappingURL=file:///C:/ts/scripts/word2md.js.map
