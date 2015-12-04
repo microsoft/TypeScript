@@ -1030,19 +1030,17 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            // For JavaScript files, we don't want to report the normal typescript semantic errors.
-            // Instead, we just report errors for using TypeScript-only constructs from within a
-            // JavaScript file.
-            if (isSourceFileJavaScript(sourceFile)) {
-                return getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken);
-            }
-
             return runWithCancellationToken(() => {
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                const checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                // For JavaScript files, we don't want to report the normal typescript semantic errors.
+                // Instead, we just report errors for using TypeScript-only constructs from within a
+                // JavaScript file.
+                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ?
+                    getJavaScriptSemanticDiagnosticsForFile(sourceFile, cancellationToken) :
+                    typeChecker.getDiagnostics(sourceFile, cancellationToken);
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
@@ -1448,6 +1446,8 @@ namespace ts {
                         const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
 
                         if (importedFile && resolution.isExternalLibraryImport) {
+                            // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
+                            // this check is ok. Otherwise this would be never true for javascript file
                             if (!isExternalModule(importedFile)) {
                                 const start = getTokenPosOfNode(file.imports[i], file);
                                 fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
