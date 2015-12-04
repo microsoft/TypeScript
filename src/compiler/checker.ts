@@ -2938,10 +2938,6 @@ namespace ts {
             return type.resolvedBaseConstructorType;
         }
 
-        function hasClassOrInterfaceBaseType(type: InterfaceType): boolean {
-            return !!forEach(getBaseTypes(type), t => !!(t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)));
-        }
-
         function getBaseTypes(type: InterfaceType): ObjectType[] {
             const isClass = type.symbol.flags & SymbolFlags.Class;
             const isInterface = type.symbol.flags & SymbolFlags.Interface;
@@ -3375,9 +3371,6 @@ namespace ts {
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
-            if (!hasClassOrInterfaceBaseType(classType)) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
-            }
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
             if(baseSignatures.length === 0) {
