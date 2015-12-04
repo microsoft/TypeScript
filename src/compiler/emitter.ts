@@ -7814,6 +7814,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const shebang = getShebang(currentText);
                 if (shebang) {
                     write(shebang);
+                    writeLine();
                 }
             }
         }
