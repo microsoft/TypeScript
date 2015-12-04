@@ -43,8 +43,6 @@ namespace ts {
         let emptyArray: any[] = [];
         let emptySymbols: SymbolTable = {};
 
-        let jsxElementClassType: Type = undefined;
-
         let compilerOptions = host.getCompilerOptions();
         let languageVersion = compilerOptions.target || ScriptTarget.ES3;
         let modulekind = compilerOptions.module ? compilerOptions.module : languageVersion === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
@@ -4940,6 +4938,9 @@ namespace ts {
                     }
                     return objectTypeRelatedTo(<ObjectType>source, <ObjectType>target, /*reportErrors*/ false);
                 }
+                if (source.flags & TypeFlags.TypeParameter && target.flags & TypeFlags.TypeParameter) {
+                    return typeParameterIdenticalTo(<TypeParameter>source, <TypeParameter>target);
+                }
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
                     if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
@@ -5068,6 +5069,20 @@ namespace ts {
                     result &= related;
                 }
                 return result;
+            }
+
+            function typeParameterIdenticalTo(source: TypeParameter, target: TypeParameter): Ternary {
+                if (source.symbol.name !== target.symbol.name) {
+                    return Ternary.False;
+                }
+                // covers case when both type parameters does not have constraint (both equal to noConstraintType)
+                if (source.constraint === target.constraint) {
+                    return Ternary.True;
+                }
+                if (source.constraint === noConstraintType || target.constraint === noConstraintType) {
+                    return Ternary.False;
+                }
+                return isIdenticalTo(source.constraint, target.constraint);
             }
 
             // Determine if two object types are related by structure. First, check if the result is already available in the global cache.
@@ -5592,20 +5607,27 @@ namespace ts {
                     return Ternary.False;
                 }
             }
-            // Check that the two signatures have the same number of type parameters. We might consider
-            // also checking that any type parameter constraints match, but that would require instantiating
-            // the constraints with a common set of type arguments to get relatable entities in places where
-            // type parameters occur in the constraints. The complexity of doing that doesn't seem worthwhile,
-            // particularly as we're comparing erased versions of the signatures below.
-            if ((source.typeParameters ? source.typeParameters.length : 0) !== (target.typeParameters ? target.typeParameters.length : 0)) {
+            let result = Ternary.True;
+            if (source.typeParameters && target.typeParameters) {
+                if (source.typeParameters.length !== target.typeParameters.length) {
+                    return Ternary.False;
+                }
+                for (let i = 0, len = source.typeParameters.length; i < len; ++i) {
+                    let related = compareTypes(source.typeParameters[i], target.typeParameters[i]);
+                    if (!related) {
+                        return Ternary.False;
+                    }
+                    result &= related;
+                }
+            }
+            else if (source.typeParameters || target.typeParameters) {
                 return Ternary.False;
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
             source = getErasedSignature(source);
             target = getErasedSignature(target);
-            let result = Ternary.True;
-            const targetLen = target.parameters.length;
+            let targetLen = target.parameters.length;
             for (let i = 0; i < targetLen; i++) {
                 let s = isRestParameterIndex(source, i) ? getRestTypeOfSignature(source) : getTypeOfSymbol(source.parameters[i]);
                 let t = isRestParameterIndex(target, i) ? getRestTypeOfSignature(target) : getTypeOfSymbol(target.parameters[i]);
@@ -5906,17 +5928,6 @@ namespace ts {
             }
 
             function inferFromTypes(source: Type, target: Type) {
-                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
-                    source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
-                    // Source and target are both unions or both intersections. To improve the quality of
-                    // inferences we first reduce the types by removing constituents that are identically
-                    // matched by a constituent in the other type. For example, when inferring from
-                    // 'string | string[]' to 'string | T', we reduce the types to 'string[]' and 'T'.
-                    const reducedSource = reduceUnionOrIntersectionType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target);
-                    const reducedTarget = reduceUnionOrIntersectionType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source);
-                    source = reducedSource;
-                    target = reducedTarget;
-                }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
@@ -5927,7 +5938,8 @@ namespace ts {
                     if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                         return;
                     }
-                    const typeParameters = context.typeParameters;
+
+                    let typeParameters = context.typeParameters;
                     for (let i = 0; i < typeParameters.length; i++) {
                         if (target === typeParameters[i]) {
                             let inferences = context.inferences[i];
@@ -5999,9 +6011,12 @@ namespace ts {
                 }
                 else {
                     source = getApparentType(source);
-                    if (source.flags & TypeFlags.ObjectType && (target.flags & (TypeFlags.Reference | TypeFlags.Tuple) ||
-                        (target.flags & TypeFlags.Anonymous) && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
-                        // If source is an object type, and target is a type reference, a tuple type, the type of a method, or a type literal, infer from members
+                    if (source.flags & TypeFlags.ObjectType && (
+                        target.flags & TypeFlags.Reference && (<TypeReference>target).typeArguments ||
+                        target.flags & TypeFlags.Tuple ||
+                        target.flags & TypeFlags.Anonymous && target.symbol && target.symbol.flags & (SymbolFlags.Method | SymbolFlags.TypeLiteral | SymbolFlags.Class))) {
+                        // If source is an object type, and target is a type reference with type arguments, a tuple type,
+                        // the type of a method, or a type literal, infer from members
                         if (isInProcess(source, target)) {
                             return;
                         }
@@ -6072,41 +6087,6 @@ namespace ts {
                     }
                 }
             }
-        }
-
-        function typeIdenticalToSomeType(source: Type, target: UnionOrIntersectionType): boolean {
-            for (const t of target.types) {
-                if (isTypeIdenticalTo(source, t)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /**
-         * Return the reduced form of the source type. This type is computed by by removing all source
-         * constituents that have an identical match in the target type.
-         */
-        function reduceUnionOrIntersectionType(source: UnionOrIntersectionType, target: UnionOrIntersectionType) {
-            let sourceTypes = source.types;
-            let sourceIndex = 0;
-            let modified = false;
-            while (sourceIndex < sourceTypes.length) {
-                if (typeIdenticalToSomeType(sourceTypes[sourceIndex], target)) {
-                    if (!modified) {
-                        sourceTypes = sourceTypes.slice(0);
-                        modified = true;
-                    }
-                    sourceTypes.splice(sourceIndex, 1);
-                }
-                else {
-                    sourceIndex++;
-                }
-            }
-            if (modified) {
-                return source.flags & TypeFlags.Union ? getUnionType(sourceTypes, /*noSubtypeReduction*/ true) : getIntersectionType(sourceTypes);
-            }
-            return source;
         }
 
         function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
@@ -7882,6 +7862,7 @@ namespace ts {
             return prop || unknownSymbol;
         }
 
+        let jsxElementClassType: Type = undefined;
         function getJsxGlobalElementClassType(): Type {
             if (!jsxElementClassType) {
                 jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
