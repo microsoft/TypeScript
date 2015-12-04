@@ -693,7 +693,7 @@ namespace ts {
     }
 
     export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
-        return predicate.kind === TypePredicateKind.Identifier;
+        return predicate && predicate.kind === TypePredicateKind.Identifier;
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {

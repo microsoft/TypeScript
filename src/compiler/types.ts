@@ -2108,6 +2108,7 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
+        PredicateType           = 0x08000000,
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2138,6 +2139,11 @@ namespace ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
+    }
+
+    // Predicate types (TypeFlags.Predicate)
+    export interface PredicateType extends Type {
+        predicate: ThisTypePredicate;
     }
 
     // String literal types (TypeFlags.StringLiteral)

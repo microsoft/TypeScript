@@ -1,0 +1,136 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts ===
+// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+namespace Test {
+>Test : typeof Test
+
+	export class FileSystemObject {
+>FileSystemObject : FileSystemObject
+
+		get isFile(): this is File {
+>isFile : this is File
+>File : File
+
+			return this instanceof File;
+>this instanceof File : boolean
+>this : this
+>File : typeof File
+		}
+		set isFile(param) {
+>isFile : this is File
+>param : this is File
+
+			// noop
+		}
+		get isDirectory(): this is Directory {
+>isDirectory : this is Directory
+>Directory : Directory
+
+			return this instanceof Directory;
+>this instanceof Directory : boolean
+>this : this
+>Directory : typeof Directory
+		}
+		isNetworked: this is (Networked & this);
+>isNetworked : this is Networked & this
+>Networked : Networked
+
+		constructor(public path: string) {}
+>path : string
+	}
+
+	export class File extends FileSystemObject {
+>File : File
+>FileSystemObject : FileSystemObject
+
+		constructor(path: string, public content: string) { super(path); }
+>path : string
+>content : string
+>super(path) : void
+>super : typeof FileSystemObject
+>path : string
+	}
+	export class Directory extends FileSystemObject {
+>Directory : Directory
+>FileSystemObject : FileSystemObject
+
+		children: FileSystemObject[];
+>children : FileSystemObject[]
+>FileSystemObject : FileSystemObject
+	}
+	export interface Networked {
+>Networked : Networked
+
+		host: string;
+>host : string
+	}
+
+	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+>file : FileSystemObject
+>FileSystemObject : FileSystemObject
+>new File("foo/bar.txt", "foo") : File
+>File : typeof File
+>"foo/bar.txt" : string
+>"foo" : string
+
+	file.isNetworked = false;
+>file.isNetworked = false : boolean
+>file.isNetworked : this is Networked & this
+>file : FileSystemObject
+>isNetworked : this is Networked & this
+>false : boolean
+
+	file.isNetworked = file.isDirectory;
+>file.isNetworked = file.isDirectory : this is Directory
+>file.isNetworked : this is Networked & this
+>file : FileSystemObject
+>isNetworked : this is Networked & this
+>file.isDirectory : this is Directory
+>file : FileSystemObject
+>isDirectory : this is Directory
+
+	file.isFile = file.isNetworked;
+>file.isFile = file.isNetworked : this is Networked & this
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+>file.isNetworked : this is Networked & this
+>file : FileSystemObject
+>isNetworked : this is Networked & this
+
+	let x = file.isFile;
+>x : this is File
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+
+	if (file.isFile) {
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+
+		file.content;
+>file.content : string
+>file : File
+>content : string
+	}
+	else if (file.isDirectory) {
+>file.isDirectory : this is Directory
+>file : FileSystemObject
+>isDirectory : this is Directory
+
+		file.children;
+>file.children : FileSystemObject[]
+>file : Directory
+>children : FileSystemObject[]
+	}
+	else if (file.isNetworked) {
+>file.isNetworked : this is Networked & this
+>file : FileSystemObject
+>isNetworked : this is Networked & this
+
+		file.host;
+>file.host : string
+>file : Networked & this
+>host : string
+	}
+}

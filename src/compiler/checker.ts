@@ -1670,10 +1670,16 @@ namespace ts {
                 function writeType(type: Type, flags: TypeFormatFlags) {
                     // Write undefined/null type as any
                     if (type.flags & TypeFlags.Intrinsic) {
-                        // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
-                        writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
-                            ? "any"
-                            : (<IntrinsicType>type).intrinsicName);
+                        if (type.flags & TypeFlags.PredicateType) {
+                            buildTypePredicateDisplay(writer, (type as PredicateType).predicate);
+                            buildTypeDisplay((type as PredicateType).predicate.type, writer, enclosingDeclaration, flags, symbolStack);
+                        }
+                        else {
+                            // Special handling for unknown / resolving types, they should show up as any and not unknown or __resolving
+                            writer.writeKeyword(!(globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike) && isTypeAny(type)
+                                ? "any"
+                                : (<IntrinsicType>type).intrinsicName);
+                        }
                     }
                     else if (type.flags & TypeFlags.ThisType) {
                         if (inObjectTypeLiteral) {
@@ -2046,6 +2052,18 @@ namespace ts {
                 writePunctuation(writer, SyntaxKind.CloseParenToken);
             }
 
+            function buildTypePredicateDisplay(writer: SymbolWriter, predicate: TypePredicate) {
+                if (isIdentifierTypePredicate(predicate)) {
+                    writer.writeParameter(predicate.parameterName);
+                }
+                else {
+                    writeKeyword(writer, SyntaxKind.ThisKeyword);
+                }
+                writeSpace(writer);
+                writeKeyword(writer, SyntaxKind.IsKeyword);
+                writeSpace(writer);
+            }
+
             function buildReturnTypeDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, symbolStack?: Symbol[]) {
                 if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
                     writeSpace(writer);
@@ -2059,15 +2077,7 @@ namespace ts {
                 let returnType: Type;
                 const predicate = signature.typePredicate;
                 if (predicate) {
-                    if (isIdentifierTypePredicate(predicate)) {
-                        writer.writeParameter(predicate.parameterName);
-                    }
-                    else {
-                        writeKeyword(writer, SyntaxKind.ThisKeyword);
-                    }
-                    writeSpace(writer);
-                    writeKeyword(writer, SyntaxKind.IsKeyword);
-                    writeSpace(writer);
+                    buildTypePredicateDisplay(writer, predicate);
                     returnType = predicate.type;
                 }
                 else {
@@ -3850,6 +3860,24 @@ namespace ts {
             return false;
         }
 
+        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
+            if (node.parameterName.kind === SyntaxKind.Identifier) {
+                const parameterName = node.parameterName as Identifier;
+                return {
+                    kind: TypePredicateKind.Identifier,
+                    parameterName: parameterName ? parameterName.text : undefined,
+                    parameterIndex: parameterName ? getTypePredicateParameterIndex((node.parent as SignatureDeclaration).parameters, parameterName) : undefined,
+                    type: getTypeFromTypeNode(node.type)
+                } as IdentifierTypePredicate;
+            }
+            else {
+                return {
+                    kind: TypePredicateKind.This,
+                    type: getTypeFromTypeNode(node.type)
+                } as ThisTypePredicate;
+            }
+        }
+
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
             const links = getNodeLinks(declaration);
             if (!links.resolvedSignature) {
@@ -3897,22 +3925,7 @@ namespace ts {
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);
                     if (declaration.type.kind === SyntaxKind.TypePredicate) {
-                        const typePredicateNode = declaration.type as TypePredicateNode;
-                        if (typePredicateNode.parameterName.kind === SyntaxKind.Identifier) {
-                            const parameterName = typePredicateNode.parameterName as Identifier;
-                            typePredicate = {
-                                kind: TypePredicateKind.Identifier,
-                                parameterName: parameterName ? parameterName.text : undefined,
-                                parameterIndex: parameterName ? getTypePredicateParameterIndex(declaration.parameters, parameterName) : undefined,
-                                type: getTypeFromTypeNode(typePredicateNode.type)
-                            };
-                        }
-                        else {
-                            typePredicate = {
-                                kind: TypePredicateKind.This,
-                                type: getTypeFromTypeNode(typePredicateNode.type)
-                            } as ThisTypePredicate;
-                        }
+                        typePredicate = createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode);
                     }
                 }
                 else {
@@ -4588,6 +4601,26 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getPredicateType(node: TypePredicateNode): Type {
+            if (!(node.parent.kind === SyntaxKind.PropertyDeclaration || node.parent.kind === SyntaxKind.GetAccessor)) {
+                return booleanType;
+            }
+            else {
+                const type = createType(TypeFlags.Boolean | TypeFlags.PredicateType) as PredicateType;
+                type.symbol = getSymbolOfNode(node);
+                type.predicate = createTypePredicateFromTypePredicateNode(node) as ThisTypePredicate;
+                return type;
+            }
+        }
+
+        function getTypeFromPredicateTypeNode(node: TypePredicateNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getPredicateType(node);
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -4609,7 +4642,7 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
-                    return booleanType;
+                    return getTypeFromPredicateTypeNode(<TypePredicateNode>node);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return getTypeFromTypeReference(<ExpressionWithTypeArguments>node);
                 case SyntaxKind.TypeQuery:
@@ -4998,6 +5031,7 @@ namespace ts {
                 if (relation === assignableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
+                    if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean && (source.flags & TypeFlags.PredicateType || target.flags & TypeFlags.PredicateType)) return Ternary.True;
                 }
 
                 if (source.flags & TypeFlags.FreshObjectLiteral) {
@@ -6747,20 +6781,37 @@ namespace ts {
                 }
                 const predicate = signature.typePredicate;
                 if (isIdentifierTypePredicate(predicate)) {
-                    if (expr.arguments[predicate.parameterIndex] &&
-                        getSymbolAtTypePredicatePosition(expr.arguments[predicate.parameterIndex]) === symbol) {
+                    const callExpression = expr as CallExpression;
+                    if (callExpression.arguments[predicate.parameterIndex] &&
+                        getSymbolAtTypePredicatePosition(callExpression.arguments[predicate.parameterIndex]) === symbol) {
                         return getNarrowedType(type, predicate.type, assumeTrue);
                     }
                 }
                 else {
                     const expression = skipParenthesizedNodes(expr.expression);
+                    return narrowTypeByThisTypePredicate(type, predicate, expression, assumeTrue);
+                }
+                return type;
+            }
 
-                    if (expression.kind === SyntaxKind.ElementAccessExpression || expression.kind === SyntaxKind.PropertyAccessExpression) {
-                        const accessExpression = expression as ElementAccessExpression | PropertyAccessExpression;
-                        const possibleIdentifier = skipParenthesizedNodes(accessExpression.expression);
-                        if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtTypePredicatePosition(possibleIdentifier) === symbol) {
-                            return getNarrowedType(type, predicate.type, assumeTrue);
-                        }
+            function narrowTypeByTypePredicateMember(type: Type, expr: ElementAccessExpression | PropertyAccessExpression, assumeTrue: boolean): Type {
+                if (type.flags & TypeFlags.Any) {
+                    return type;
+                }
+                const memberType = getTypeOfExpression(expr);
+                if (!(memberType.flags & TypeFlags.PredicateType)) {
+                    return type;
+                }
+
+                return narrowTypeByThisTypePredicate(type, (memberType as PredicateType).predicate, expr, assumeTrue);
+            }
+
+            function narrowTypeByThisTypePredicate(type: Type, predicate: ThisTypePredicate, expression: Expression, assumeTrue: boolean): Type {
+                if (expression.kind === SyntaxKind.ElementAccessExpression || expression.kind === SyntaxKind.PropertyAccessExpression) {
+                    const accessExpression = expression as ElementAccessExpression | PropertyAccessExpression;
+                    const possibleIdentifier = skipParenthesizedNodes(accessExpression.expression);
+                    if (possibleIdentifier.kind === SyntaxKind.Identifier && getSymbolAtTypePredicatePosition(possibleIdentifier) === symbol) {
+                        return getNarrowedType(type, predicate.type, assumeTrue);
                     }
                 }
                 return type;
@@ -6811,6 +6862,9 @@ namespace ts {
                             return narrowType(type, (<PrefixUnaryExpression>expr).operand, !assumeTrue);
                         }
                         break;
+                    case SyntaxKind.ElementAccessExpression:
+                    case SyntaxKind.PropertyAccessExpression:
+                        return narrowTypeByTypePredicateMember(type, expr as (ElementAccessExpression | PropertyAccessExpression), assumeTrue);
                 }
                 return type;
             }
@@ -11018,6 +11072,18 @@ namespace ts {
             return false;
         }
 
+        function isInLegalThisTypePredicatePosition(node: Node): boolean {
+            if (isInLegalTypePredicatePosition(node)) {
+                return true;
+            }
+            switch (node.parent.kind) {
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.GetAccessor:
+                    return node === (<SignatureDeclaration>node.parent).type;
+            }
+            return false;
+        }
+
         function checkSignatureDeclaration(node: SignatureDeclaration) {
             // Grammar checking
             if (node.kind === SyntaxKind.IndexSignature) {
@@ -11038,63 +11104,67 @@ namespace ts {
                 if (node.type.kind === SyntaxKind.TypePredicate) {
                     const typePredicate = getSignatureFromDeclaration(node).typePredicate;
                     const typePredicateNode = <TypePredicateNode>node.type;
-                    if (isInLegalTypePredicatePosition(typePredicateNode)) {
-                        if (isIdentifierTypePredicate(typePredicate)) {
-                            if (typePredicate.parameterIndex >= 0) {
-                                if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
-                                    error(typePredicateNode.parameterName,
-                                        Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
-                                }
-                                else {
-                                    checkTypeAssignableTo(typePredicate.type,
-                                        getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
-                                        typePredicateNode.type);
-                                }
+                    if (isIdentifierTypePredicate(typePredicate)) {
+                        if (!isInLegalTypePredicatePosition(typePredicateNode)) {
+                            error(typePredicateNode,
+                                Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                            return;
+                        }
+                        if (typePredicate.parameterIndex >= 0) {
+                            if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
+                                error(typePredicateNode.parameterName,
+                                    Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                             }
-                            else if (typePredicateNode.parameterName) {
-                                let hasReportedError = false;
-                                for (var param of node.parameters) {
-                                    if (hasReportedError) {
-                                        break;
-                                    }
-                                    if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
-                                        param.name.kind === SyntaxKind.ArrayBindingPattern) {
-
-                                        (function checkBindingPattern(pattern: BindingPattern) {
-                                            for (const element of pattern.elements) {
-                                                if (element.name.kind === SyntaxKind.Identifier &&
-                                                    (<Identifier>element.name).text === typePredicate.parameterName) {
-
-                                                    error(typePredicateNode.parameterName,
-                                                        Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                                        typePredicate.parameterName);
-                                                    hasReportedError = true;
-                                                    break;
-                                                }
-                                                else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
-                                                    element.name.kind === SyntaxKind.ObjectBindingPattern) {
-
-                                                    checkBindingPattern(<BindingPattern>element.name);
-                                                }
-                                            }
-                                        })(<BindingPattern>param.name);
-                                    }
-                                }
-                                if (!hasReportedError) {
-                                    error(typePredicateNode.parameterName,
-                                        Diagnostics.Cannot_find_parameter_0,
-                                        typePredicate.parameterName);
-                                }
+                            else {
+                                checkTypeAssignableTo(typePredicate.type,
+                                    getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
+                                    typePredicateNode.type);
                             }
                         }
-                        else {
-                            // Reuse this type diagnostics on the this type node to determine if a this type predicate is valid
-                            getTypeFromThisTypeNode(typePredicateNode.parameterName as ThisTypeNode);
+                        else if (typePredicateNode.parameterName) {
+                            let hasReportedError = false;
+                            for (var param of node.parameters) {
+                                if (hasReportedError) {
+                                    break;
+                                }
+                                if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
+                                    param.name.kind === SyntaxKind.ArrayBindingPattern) {
+
+                                    (function checkBindingPattern(pattern: BindingPattern) {
+                                        for (const element of pattern.elements) {
+                                            if (element.name.kind === SyntaxKind.Identifier &&
+                                                (<Identifier>element.name).text === typePredicate.parameterName) {
+
+                                                error(typePredicateNode.parameterName,
+                                                    Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                                                    typePredicate.parameterName);
+                                                hasReportedError = true;
+                                                break;
+                                            }
+                                            else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
+                                                element.name.kind === SyntaxKind.ObjectBindingPattern) {
+
+                                                checkBindingPattern(<BindingPattern>element.name);
+                                            }
+                                        }
+                                    })(<BindingPattern>param.name);
+                                }
+                            }
+                            if (!hasReportedError) {
+                                error(typePredicateNode.parameterName,
+                                    Diagnostics.Cannot_find_parameter_0,
+                                    typePredicate.parameterName);
+                            }
                         }
                     }
                     else {
-                        error(typePredicateNode,
-                            Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                        if (!isInLegalThisTypePredicatePosition(typePredicateNode)) {
+                            error(typePredicateNode,
+                                Diagnostics.A_this_based_type_predicate_is_only_allowed_in_class_or_interface_members_get_accessors_or_return_type_positions_for_functions_and_methods);
+                            return;
+                        }
+                        // Reuse this type diagnostics on the this type node to determine if a this type predicate is valid
+                        getTypeFromThisTypeNode(typePredicateNode.parameterName as ThisTypeNode);
                     }
                 }
                 else {
@@ -14222,8 +14292,11 @@ namespace ts {
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
-            if (!isInLegalTypePredicatePosition(node)) {
+            if (node.parameterName.kind === SyntaxKind.Identifier && !isInLegalTypePredicatePosition(node)) {
                 error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+            }
+            else if (node.parameterName.kind === SyntaxKind.ThisType && (!isInLegalThisTypePredicatePosition(node) || getTypeFromThisTypeNode(node.parameterName as ThisTypeNode) === unknownType)) {
+                error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_in_class_or_interface_members_get_accessors_or_return_type_positions_for_functions_and_methods);
             }
         }
 
