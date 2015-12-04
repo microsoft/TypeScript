@@ -19,12 +19,12 @@ namespace ts {
     }
     interface Flow {
         reachability: Reachability;
-        previous: FlowMarker[];
+        previous: FlowMarkerTarget[];
     }
 
     function or(state1: Flow, state2: Flow): Flow {
         let reachable = false;
-        let previous: FlowMarker[] = [];
+        let previous: FlowMarkerTarget[] = [];
         if (state1.reachability === Reachability.Reachable) {
             reachable = true;
             previous = state1.previous;
@@ -560,8 +560,13 @@ namespace ts {
 
             currentReachabilityState = preWhileState;
             const postWhileLabel = pushImplicitLabel(n);
+            bindBranchFlow(n, n.expression, true);
             bind(n.statement);
-            popImplicitLabel(postWhileLabel, postWhileState);
+
+            currentReachabilityState = postWhileState;
+            bindBranchFlow(n, n.expression, false);
+
+            popImplicitLabel(postWhileLabel, currentReachabilityState);
             bindIterationFlowMarkerEnd(n);
         }
 
@@ -628,17 +633,15 @@ namespace ts {
             const ifFalseState = n.expression.kind === SyntaxKind.TrueKeyword ? defaultUnreachable : currentReachabilityState;
 
             currentReachabilityState = ifTrueState;
+            bindBranchFlow(n, n.expression, true);
 
             bind(n.thenStatement);
-            if (n.elseStatement) {
-                const preElseState = currentReachabilityState;
-                currentReachabilityState = ifFalseState;
-                bind(n.elseStatement);
-                currentReachabilityState = or(currentReachabilityState, preElseState);
-            }
-            else {
-                currentReachabilityState = or(currentReachabilityState, ifFalseState);
-            }
+
+            const preElseState = currentReachabilityState;
+            currentReachabilityState = ifFalseState;
+            bindBranchFlow(n, n.expression, false);
+            if (n.elseStatement) bind(n.elseStatement);
+            currentReachabilityState = or(currentReachabilityState, preElseState);
         }
 
         function bindReturnOrThrow(n: ReturnStatement | ThrowStatement): void {
@@ -1511,7 +1514,7 @@ namespace ts {
             }
         }
 
-        function bindFlowMarker(node: FlowMarker) {
+        function bindFlowMarker(node: Node & FlowMarker) {
             node.previous = currentReachabilityState.previous;
             currentReachabilityState = {
                 reachability: currentReachabilityState.reachability,
@@ -1520,6 +1523,18 @@ namespace ts {
         }
         function bindIterationFlowMarkerEnd(node: IterationStatement & FlowMarker) {
             node.previous = [...node.previous, ...currentReachabilityState.previous];
+        }
+        function bindBranchFlow(node: BranchFlowNode, expression: Expression, trueBranch: boolean) {
+            const branchFlow: BranchFlow = {
+                previous: currentReachabilityState.previous,
+                node,
+                expression,
+                trueBranch
+            };
+            currentReachabilityState = {
+                reachability: currentReachabilityState.reachability,
+                previous: [branchFlow]
+            };
         }
 
         // reachability checks

@@ -480,8 +480,15 @@ namespace ts {
         flags: number;
     }
 
-    export interface FlowMarker extends Node {
-        previous?: FlowMarker[];
+    export type FlowMarkerTarget = (FlowMarker & Node) | BranchFlow;
+    export interface FlowMarker {
+        previous?: FlowMarkerTarget[];
+    }
+    export type BranchFlowNode = IfStatement | WhileStatement | ForStatement | DoStatement | ConditionalExpression | BinaryExpression
+    export interface BranchFlow extends FlowMarker {
+        node: BranchFlowNode;
+        expression: Expression;
+        trueBranch: boolean;
     }
 
     // @kind(SyntaxKind.AbstractKeyword)
