@@ -355,13 +355,6 @@ namespace ts {
                         target[id] = source[id];
                     }
                     else {
-                        if (target === globals && source !== builtinGlobals) {
-                            if (hasProperty(builtinGlobals, id) && source[id].declarations && source[id].declarations.length) {
-                                // Error on builtin redeclarations
-                                forEach(source[id].declarations, addDeclarationDiagnostic.bind(undefined, id));
-                                continue;
-                            }
-                        }
                         let symbol = target[id];
                         if (!(symbol.flags & SymbolFlags.Merged)) {
                             target[id] = symbol = cloneSymbol(symbol);
@@ -370,9 +363,23 @@ namespace ts {
                     }
                 }
             }
+        }
 
-            function addDeclarationDiagnostic(id: string, declaration: Declaration) {
-                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, id));
+        function addToSymbolTable(target: SymbolTable, source: SymbolTable, message: DiagnosticMessage) {
+            for (const id in source) {
+                if (hasProperty(source, id)) {
+                    if (hasProperty(target, id)) {
+                        // Error on redeclarations
+                        forEach(target[id].declarations, addDeclarationDiagnostic(id, message));
+                    }
+                    else {
+                        target[id] = source[id];
+                    }
+                }
+            }
+
+            function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
+                return (declaration: Declaration) => diagnostics.add(createDiagnosticForNode(declaration, message, id));
             }
         }
 
@@ -15340,15 +15347,15 @@ namespace ts {
                 bindSourceFile(file, compilerOptions);
             });
 
-            // Setup global builtins
-            mergeSymbolTable(globals, builtinGlobals);
-
             // Initialize global symbol table
             forEach(host.getSourceFiles(), file => {
                 if (!isExternalOrCommonJsModule(file)) {
                     mergeSymbolTable(globals, file.locals);
                 }
             });
+
+            // Setup global builtins
+            addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
