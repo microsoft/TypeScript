@@ -12,6 +12,7 @@ namespace ts {
         leadingCommentRanges?: CommentRange[];
         trailingCommentRanges?: CommentRange[];
         startsOnNewLine: boolean;
+        sourceMapNode?: Node;
     }
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
@@ -1624,6 +1625,12 @@ namespace ts {
         const node = <SynthesizedNode>createNode(kind, /* pos */ -1, /* end */ -1);
         node.startsOnNewLine = startsOnNewLine;
         return node;
+    }
+
+    export function createSourceMappedSynthesizedNode(kind: SyntaxKind, sourceMapNode: Node, startsOnNewLine?: boolean): Node {
+        const synthesizedNode = <SynthesizedNode>createSynthesizedNode(kind, startsOnNewLine);
+        synthesizedNode.sourceMapNode = sourceMapNode;
+        return synthesizedNode;
     }
 
     export function createSynthesizedNodeArray(): NodeArray<any> {

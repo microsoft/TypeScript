@@ -1979,16 +1979,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
-                const result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
+                const result = <PropertyAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.PropertyAccessExpression, name);
                 result.expression = parenthesizeForAccess(expression);
                 result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
-
                 return result;
             }
 
             function createElementAccessExpression(expression: Expression, argumentExpression: Expression): ElementAccessExpression {
-                const result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
+                const result = <ElementAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.ElementAccessExpression, argumentExpression);
                 result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
 
@@ -2016,7 +2015,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     return <LeftHandSideExpression>expr;
                 }
-                const node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
+                const node = <ParenthesizedExpression>createSourceMappedSynthesizedNode(SyntaxKind.ParenthesizedExpression, expr);
                 node.expression = expr;
                 return node;
             }
@@ -3862,7 +3861,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
-                        index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
+                        index = <Identifier | LiteralExpression>createSourceMappedSynthesizedNode(propName.kind, propName);
                         (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
                     }
 
