@@ -1153,7 +1153,7 @@ namespace ts {
                     for (const id in lookupTable) {
                         const { exportsWithDuplicate } = lookupTable[id];
                         // It's not an error if the file with multiple `export *`s with duplicate names exports a member with that name itself
-                        if (id === "export=" || !exportsWithDuplicate.length || hasProperty(symbols, id)) {
+                        if (id === "export=" || !(exportsWithDuplicate && exportsWithDuplicate.length) || hasProperty(symbols, id)) {
                             continue;
                         }
                         for (const node of exportsWithDuplicate) {
