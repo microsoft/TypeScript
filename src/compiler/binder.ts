@@ -1367,42 +1367,31 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
+            // Declare a 'member' in case it turns out the container was an ES5 class
             if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
                 container.symbol.members = container.symbol.members || {};
-                declareClassMember(node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
         }
 
         function bindPrototypePropertyAssignment(node: BinaryExpression) {
-            // We saw a node of the form 'x.prototype.y = z'.
-            // This does two things: turns 'x' into a constructor function, and
-            // adds a member 'y' to the result of that constructor function
-            // Get 'x', the class
-            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
+            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x was a function.
 
-            // Look up the function in the local scope, since prototype assignments should immediately
+            // Look up the function in the local scope, since prototype assignments should
             // follow the function declaration
+            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
             const funcSymbol = container.locals[classId.text];
-            if (!funcSymbol) {
+            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function)) {
                 return;
             }
 
-            // The function is now a constructor rather than a normal function
-            if (!funcSymbol.inferredConstructor) {
-                // Have the binder set up all the related class symbols for us
-                declareSymbol(container.locals, funcSymbol, funcSymbol.valueDeclaration, SymbolFlags.Class, SymbolFlags.None);
-                // funcSymbol.members = funcSymbol.members || {};
-                funcSymbol.members["__constructor"] = funcSymbol;
-                funcSymbol.inferredConstructor = true;
+            // Set up the members collection if it doesn't exist already
+            if (!funcSymbol.members) {
+                funcSymbol.members = {};
             }
 
-            // Get the exports of the class so we can add the method to it
-            const funcExports = declareSymbol(funcSymbol.exports, funcSymbol, <PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression, SymbolFlags.ObjectLiteral | SymbolFlags.Property, SymbolFlags.None);
-
-            // Declare the method
-            declareSymbol(funcExports.members, funcExports, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.None);
-            // and on the members of the function so it appears in 'prototype'
-            declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Method, SymbolFlags.PropertyExcludes);
+            // Declare the method/property
+            declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {
