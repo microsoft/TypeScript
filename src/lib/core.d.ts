@@ -498,6 +498,11 @@ interface NumberConstructor {
       * JavaScript displays POSITIVE_INFINITY values as infinity. 
       */
     POSITIVE_INFINITY: number;
+    
+    /**
+     * The Number.isNaN() method determines whether the passed value is NaN. More robust version of the original global isNaN().
+     */
+     isNaN(value: number): boolean;
 }
 
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
