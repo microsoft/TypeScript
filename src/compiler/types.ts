@@ -480,6 +480,10 @@ namespace ts {
         flags: number;
     }
 
+    export interface FlowMarker extends Node {
+        previous?: FlowMarker[];
+    }
+
     // @kind(SyntaxKind.AbstractKeyword)
     // @kind(SyntaxKind.AsyncKeyword)
     // @kind(SyntaxKind.ConstKeyword)
@@ -493,7 +497,7 @@ namespace ts {
     export interface Modifier extends Node { }
 
     // @kind(SyntaxKind.Identifier)
-    export interface Identifier extends PrimaryExpression {
+    export interface Identifier extends PrimaryExpression, FlowMarker {
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
     }
@@ -1117,7 +1121,7 @@ namespace ts {
         elseStatement?: Statement;
     }
 
-    export interface IterationStatement extends Statement {
+    export interface IterationStatement extends Statement, FlowMarker {
         statement: Statement;
     }
 
@@ -1198,7 +1202,7 @@ namespace ts {
     export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
     // @kind(SyntaxKind.LabeledStatement)
-    export interface LabeledStatement extends Statement {
+    export interface LabeledStatement extends Statement, FlowMarker {
         label: Identifier;
         statement: Statement;
     }
