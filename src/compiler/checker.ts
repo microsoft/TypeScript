@@ -9656,16 +9656,22 @@ namespace ts {
         function checkAssertion(node: AssertionExpression) {
             const exprType = getRegularTypeOfObjectLiteral(checkExpression(node.expression));
             const targetType = getTypeFromTypeNode(node.type);
-            if (produceDiagnostics && targetType !== unknownType) {
-                const widenedType = getWidenedType(exprType);
-
-                // Permit 'number[] | "foo"' to be asserted to 'string'.
-                const bothAreStringLike =
-                    someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
-                        someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
-                if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
-                    checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+            if (produceDiagnostics) {
+                if (node.type.kind === SyntaxKind.TypePredicate) {
+                    error(node.type, Diagnostics.A_type_predicate_is_not_allowed_as_part_of_a_type_assertion_expression);
                 }
+                else if (targetType !== unknownType) {
+                    const widenedType = getWidenedType(exprType);
+
+                    // Permit 'number[] | "foo"' to be asserted to 'string'.
+                    const bothAreStringLike =
+                        someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
+                        someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
+                    if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
+                        checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
+                    }
+                }
+
             }
             return targetType;
         }
