@@ -1986,8 +1986,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return result;
             }
 
-            function createElementAccessExpression(expression: Expression, argumentExpression: Expression): ElementAccessExpression {
-                const result = <ElementAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.ElementAccessExpression, argumentExpression);
+            function createElementAccessExpression(expression: Expression, argumentExpression: Expression, sourceMapNode?: Node): ElementAccessExpression {
+                const result = <ElementAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.ElementAccessExpression, sourceMapNode || argumentExpression);
                 result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
 
@@ -3996,7 +3996,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
+                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i), element));
                                 }
                                 else if (i === numElements - 1) {
                                     emitBindingElement(element, createSliceCall(value, i));
