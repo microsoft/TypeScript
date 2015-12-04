@@ -1099,7 +1099,7 @@ namespace ts {
         }
 
         /**
-         * Extends one symbol table with abother while collecting information on name collisions for error message generation into the `lookupTable` argument
+         * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
          * Not passing `lookupTable` and `exportNode` disables this collection, and just extends the tables
          */
         function extendExportSymbols(target: SymbolTable, source: SymbolTable, lookupTable?: Map<ExportCollisionTracker>, exportNode?: ExportDeclaration) {
@@ -1108,13 +1108,17 @@ namespace ts {
                     target[id] = source[id];
                     if (lookupTable && exportNode) {
                         lookupTable[id] = {
-                            specifierText: getTextOfNode(exportNode.moduleSpecifier),
-                            exportsWithDuplicate: []
-                        };
+                            specifierText: getTextOfNode(exportNode.moduleSpecifier)
+                        } as ExportCollisionTracker;
                     }
                 }
                 else if (lookupTable && exportNode && id !== "default" && hasProperty(target, id) && resolveSymbol(target[id]) !== resolveSymbol(source[id])) {
-                    lookupTable[id].exportsWithDuplicate.push(exportNode);
+                    if (!lookupTable[id].exportsWithDuplicate) {
+                        lookupTable[id].exportsWithDuplicate = [exportNode];
+                    }
+                    else {
+                        lookupTable[id].exportsWithDuplicate.push(exportNode);
+                    }
                 }
             }
         }
@@ -1126,43 +1130,44 @@ namespace ts {
             // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
             // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
             function visit(symbol: Symbol): SymbolTable {
-                if (symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol)) {
-                    visitedSymbols.push(symbol);
-                    const symbols = cloneSymbolTable(symbol.exports);
-                    // All export * declarations are collected in an __export symbol by the binder
-                    const exportStars = symbol.exports["__export"];
-                    if (exportStars) {
-                        const nestedSymbols: SymbolTable = {};
-                        const lookupTable: Map<ExportCollisionTracker> = {};
-                        for (const node of exportStars.declarations) {
-                            const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
-                            const exportedSymbols = visit(resolvedModule);
-                            extendExportSymbols(
-                                nestedSymbols,
-                                exportedSymbols,
-                                lookupTable,
-                                node as ExportDeclaration
-                            );
-                        }
-                        for (const id in lookupTable) {
-                            const { exportsWithDuplicate } = lookupTable[id];
-                            // It's not an error if the file with multiple `export *`s with duplicate names exports a member with that name itself
-                            if (id === "export=" || !exportsWithDuplicate.length || hasProperty(symbols, id)) {
-                                continue;
-                            }
-                            for (const node of exportsWithDuplicate) {
-                                diagnostics.add(createDiagnosticForNode(
-                                    node,
-                                    Diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
-                                    lookupTable[id].specifierText,
-                                    id
-                                ));
-                            }
-                        }
-                        extendExportSymbols(symbols, nestedSymbols);
-                    }
-                    return symbols;
+                if (!(symbol && symbol.flags & SymbolFlags.HasExports && !contains(visitedSymbols, symbol))) {
+                    return;
                 }
+                visitedSymbols.push(symbol);
+                const symbols = cloneSymbolTable(symbol.exports);
+                // All export * declarations are collected in an __export symbol by the binder
+                const exportStars = symbol.exports["__export"];
+                if (exportStars) {
+                    const nestedSymbols: SymbolTable = {};
+                    const lookupTable: Map<ExportCollisionTracker> = {};
+                    for (const node of exportStars.declarations) {
+                        const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier);
+                        const exportedSymbols = visit(resolvedModule);
+                        extendExportSymbols(
+                            nestedSymbols,
+                            exportedSymbols,
+                            lookupTable,
+                            node as ExportDeclaration
+                        );
+                    }
+                    for (const id in lookupTable) {
+                        const { exportsWithDuplicate } = lookupTable[id];
+                        // It's not an error if the file with multiple `export *`s with duplicate names exports a member with that name itself
+                        if (id === "export=" || !exportsWithDuplicate.length || hasProperty(symbols, id)) {
+                            continue;
+                        }
+                        for (const node of exportsWithDuplicate) {
+                            diagnostics.add(createDiagnosticForNode(
+                                node,
+                                Diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
+                                lookupTable[id].specifierText,
+                                id
+                            ));
+                        }
+                    }
+                    extendExportSymbols(symbols, nestedSymbols);
+                }
+                return symbols;
             }
         }
 
