@@ -6148,14 +6148,25 @@ namespace ts {
             function inferFromTypes(source: Type, target: Type) {
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
-                    // Source and target are both unions or both intersections. To improve the quality of
-                    // inferences we first reduce the types by removing constituents that are identically
-                    // matched by a constituent in the other type. For example, when inferring from
-                    // 'string | string[]' to 'string | T', we reduce the types to 'string[]' and 'T'.
-                    const reducedSource = reduceUnionOrIntersectionType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target);
-                    const reducedTarget = reduceUnionOrIntersectionType(<UnionOrIntersectionType>target, <UnionOrIntersectionType>source);
-                    source = reducedSource;
-                    target = reducedTarget;
+                    // Source and target are both unions or both intersections. First, find each
+                    // target constituent type that has an identically matching source constituent
+                    // type, and for each such target constituent type infer from the type to itself.
+                    // When inferring from a type to itself we effectively find all type parameter
+                    // occurrences within that type and infer themselves as their type arguments.
+                    let matchingTypes: Type[];
+                    for (const t of (<UnionOrIntersectionType>target).types) {
+                        if (typeIdenticalToSomeType(t, (<UnionOrIntersectionType>source).types)) {
+                            (matchingTypes || (matchingTypes = [])).push(t);
+                            inferFromTypes(t, t);
+                        }
+                    }
+                    // Next, to improve the quality of inferences, reduce the source and target types by
+                    // removing the identically matched constituents. For example, when inferring from
+                    // 'string | string[]' to 'string | T' we reduce the types to 'string[]' and 'T'.
+                    if (matchingTypes) {
+                        source = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>source, matchingTypes);
+                        target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
+                    }
                 }
                 if (target.flags & TypeFlags.TypeParameter) {
                     // If target is a type parameter, make an inference, unless the source type contains
@@ -6317,9 +6328,9 @@ namespace ts {
             }
         }
 
-        function typeIdenticalToSomeType(source: Type, target: UnionOrIntersectionType): boolean {
-            for (const t of target.types) {
-                if (isTypeIdenticalTo(source, t)) {
+        function typeIdenticalToSomeType(type: Type, types: Type[]): boolean {
+            for (const t of types) {
+                if (isTypeIdenticalTo(t, type)) {
                     return true;
                 }
             }
@@ -6327,29 +6338,17 @@ namespace ts {
         }
 
         /**
-         * Return the reduced form of the source type. This type is computed by by removing all source
-         * constituents that have an identical match in the target type.
+         * Return a new union or intersection type computed by removing a given set of types
+         * from a given union or intersection type.
          */
-        function reduceUnionOrIntersectionType(source: UnionOrIntersectionType, target: UnionOrIntersectionType) {
-            let sourceTypes = source.types;
-            let sourceIndex = 0;
-            let modified = false;
-            while (sourceIndex < sourceTypes.length) {
-                if (typeIdenticalToSomeType(sourceTypes[sourceIndex], target)) {
-                    if (!modified) {
-                        sourceTypes = sourceTypes.slice(0);
-                        modified = true;
-                    }
-                    sourceTypes.splice(sourceIndex, 1);
-                }
-                else {
-                    sourceIndex++;
+        function removeTypesFromUnionOrIntersection(type: UnionOrIntersectionType, typesToRemove: Type[]) {
+            const reducedTypes: Type[] = [];
+            for (const t of type.types) {
+                if (!typeIdenticalToSomeType(t, typesToRemove)) {
+                    reducedTypes.push(t);
                 }
             }
-            if (modified) {
-                return source.flags & TypeFlags.Union ? getUnionType(sourceTypes, /*noSubtypeReduction*/ true) : getIntersectionType(sourceTypes);
-            }
-            return source;
+            return type.flags & TypeFlags.Union ? getUnionType(reducedTypes, /*noSubtypeReduction*/ true) : getIntersectionType(reducedTypes);
         }
 
         function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
