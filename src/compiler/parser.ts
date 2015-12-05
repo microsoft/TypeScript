@@ -2259,6 +2259,14 @@ namespace ts {
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
+
+                if (token === SyntaxKind.EqualsToken) {
+                    // Although type literal properties cannot not have initializers, we attempt
+                    // to parse an initializer so we can report in the checker that an interface
+                    // property or type literal property cannot have an initializer.
+                    property.initializer = parseNonParameterInitializer();
+                }
+
                 parseTypeMemberSemicolon();
                 return finishNode(property);
             }
@@ -4902,7 +4910,7 @@ namespace ts {
 
                 if (!decorators) {
                     decorators = <NodeArray<Decorator>>[];
-                    decorators.pos = scanner.getStartPos();
+                    decorators.pos = decoratorStart;
                 }
 
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
@@ -5302,16 +5310,17 @@ namespace ts {
         }
 
         function parseModuleSpecifier(): Expression {
-            // We allow arbitrary expressions here, even though the grammar only allows string
-            // literals.  We check to ensure that it is only a string literal later in the grammar
-            // walker.
-            const result = parseExpression();
-            // Ensure the string being required is in our 'identifier' table.  This will ensure
-            // that features like 'find refs' will look inside this file when search for its name.
-            if (result.kind === SyntaxKind.StringLiteral) {
+            if (token === SyntaxKind.StringLiteral) {
+                const result = parseLiteralNode();
                 internIdentifier((<LiteralExpression>result).text);
+                return result;
             }
-            return result;
+            else {
+                // We allow arbitrary expressions here, even though the grammar only allows string
+                // literals.  We check to ensure that it is only a string literal later in the grammar
+                // check pass.
+                return parseExpression();
+            }
         }
 
         function parseNamespaceImport(): NamespaceImport {
@@ -5428,11 +5437,13 @@ namespace ts {
             // reference comment.
             while (true) {
                 const kind = triviaScanner.scan();
-                if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
-                    continue;
-                }
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
-                    break;
+                    if (isTrivia(kind)) {
+                        continue;
+                    }
+                    else {
+                        break;
+                    }
                 }
 
                 const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };

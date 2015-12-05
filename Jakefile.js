@@ -40,6 +40,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -59,6 +60,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -111,7 +113,8 @@ var scriptSources = [
     "tslint/nextLineRule.ts",
     "tslint/noNullRule.ts",
     "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts"
+    "tslint/typeOperatorSpacingRule.ts",
+    "tslint/noInOperatorRule.ts"
 ].map(function (f) {
     return path.join(scriptsDirectory, f);
 });
@@ -475,7 +478,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
                 fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
 
-                // Node package definition file to be distributed without the package. Created by replacing 
+                // Node package definition file to be distributed without the package. Created by replacing
                 // 'ts' namespace with '"typescript"' as a module.
                 var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
@@ -873,7 +876,8 @@ var tslintRules = ([
     "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
-    "typeOperatorSpacingRule"
+    "typeOperatorSpacingRule",
+    "noInOperatorRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -884,7 +888,7 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
 });
 
 function getLinterOptions() {
@@ -924,12 +928,16 @@ var lintTargets = compilerSources
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
+    var failed = 0;
     for (var i in lintTargets) {
         var result = lintFile(lintOptions, lintTargets[i]);
         if (result.failureCount > 0) {
             console.log(result.output);
-            fail('Linter errors.', result.failureCount);
+            failed += result.failureCount;
         }
+    }
+    if (failed > 0) {
+        fail('Linter errors.', failed);
     }
 });
 
@@ -947,7 +955,7 @@ function lintWatchFile(filename) {
         if (event !== "change") {
             return;
         }
-     
+
         if (!lintSemaphores[filename]) {
             lintSemaphores[filename] = true;
             lintFileAsync(getLinterOptions(), filename, function(err, result) {
