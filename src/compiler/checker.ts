@@ -51,6 +51,7 @@ namespace ts {
         const emitResolver = createResolver();
 
         const undefinedSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "undefined");
+        undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, "arguments");
 
         const checker: TypeChecker = {
@@ -234,6 +235,10 @@ namespace ts {
             ResolvedReturnType
         }
 
+        const builtinGlobals: SymbolTable = {
+            [undefinedSymbol.name]: undefinedSymbol
+        };
+
         initializeTypeChecker();
 
         return checker;
@@ -357,6 +362,24 @@ namespace ts {
                         mergeSymbol(symbol, source[id]);
                     }
                 }
+            }
+        }
+
+        function addToSymbolTable(target: SymbolTable, source: SymbolTable, message: DiagnosticMessage) {
+            for (const id in source) {
+                if (hasProperty(source, id)) {
+                    if (hasProperty(target, id)) {
+                        // Error on redeclarations
+                        forEach(target[id].declarations, addDeclarationDiagnostic(id, message));
+                    }
+                    else {
+                        target[id] = source[id];
+                    }
+                }
+            }
+
+            function addDeclarationDiagnostic(id: string, message: DiagnosticMessage) {
+                return (declaration: Declaration) => diagnostics.add(createDiagnosticForNode(declaration, message, id));
             }
         }
 
@@ -15327,10 +15350,12 @@ namespace ts {
                 }
             });
 
+            // Setup global builtins
+            addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
+
             getSymbolLinks(undefinedSymbol).type = undefinedType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments");
             getSymbolLinks(unknownSymbol).type = unknownType;
-            globals[undefinedSymbol.name] = undefinedSymbol;
 
             // Initialize special types
             globalArrayType = <GenericType>getGlobalType("Array", /*arity*/ 1);
