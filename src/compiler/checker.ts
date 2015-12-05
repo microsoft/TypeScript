@@ -6089,7 +6089,9 @@ namespace ts {
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
                     // Source and target are both unions or both intersections. First, find each
                     // target constituent type that has an identically matching source constituent
-                    // type, and for each such target constituent type, infer from the type to itself.
+                    // type, and for each such target constituent type infer from the type to itself.
+                    // When inferring from a type to itself we effectively find all type parameter
+                    // occurrences within that type and infer themselves as their type arguments.
                     let matchingTypes: Type[];
                     for (const t of (<UnionOrIntersectionType>target).types) {
                         if (typeIdenticalToSomeType(t, (<UnionOrIntersectionType>source).types)) {
@@ -6097,7 +6099,7 @@ namespace ts {
                             inferFromTypes(t, t);
                         }
                     }
-                    // To improve the quality of inferences, reduce the source and target types by
+                    // Next, to improve the quality of inferences, reduce the source and target types by
                     // removing the identically matched constituents. For example, when inferring from
                     // 'string | string[]' to 'string | T' we reduce the types to 'string[]' and 'T'.
                     if (matchingTypes) {
