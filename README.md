@@ -59,8 +59,7 @@ cd TypeScript
 Install Jake tools and dev dependencies:
 
 ```
-npm install -g jake
-npm install
+npm install -g jake && npm install
 ```
 
 Use one of the following to build and test:
