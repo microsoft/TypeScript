@@ -154,18 +154,18 @@ var a: {
 >U : U
 }
 var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint
->r3 : any
->a().foo() : any
->a().foo : any
->a() : any
+>r3 : string
+>a().foo() : string
+>a().foo : () => string
+>a() : A
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->foo : any
+>foo : () => string
 
 var r3b = a()['foo']();
->r3b : any
->a()['foo']() : any
->a()['foo'] : any
->a() : any
+>r3b : string
+>a()['foo']() : string
+>a()['foo'] : () => string
+>a() : A
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
 >'foo' : string
 

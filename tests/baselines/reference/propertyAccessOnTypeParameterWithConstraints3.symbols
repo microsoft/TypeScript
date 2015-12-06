@@ -135,11 +135,14 @@ var a: {
 }
 var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constraint
 >r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 41, 3))
+>a().foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 37, 3))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 
 var r3b = a()['foo']();
 >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 42, 3))
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 37, 3))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 
 // parameter supplied for type argument inference for U
 var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo
