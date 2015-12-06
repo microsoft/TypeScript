@@ -4152,7 +4152,7 @@ namespace ts {
                     return true;
                 }
                 (checked || (checked = [])).push(type);
-                let constraintDeclaration = getConstraintDeclaration(<TypeParameter>type);
+                const constraintDeclaration = getConstraintDeclaration(<TypeParameter>type);
                 type = constraintDeclaration && getTypeFromTypeNode(constraintDeclaration);
             }
             return false;
@@ -4165,7 +4165,7 @@ namespace ts {
                     type.constraint = targetConstraint ? instantiateType(targetConstraint, type.mapper) : noConstraintType;
                 }
                 else {
-                    let constraintDeclaration = getConstraintDeclaration(type);
+                    const constraintDeclaration = getConstraintDeclaration(type);
                     let constraint = getTypeFromTypeNode(constraintDeclaration);
                     if (hasConstraintReferenceTo(constraint, type)) {
                         error(constraintDeclaration, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(type));
