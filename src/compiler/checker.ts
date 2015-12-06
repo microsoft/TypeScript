@@ -6468,80 +6468,104 @@ namespace ts {
             }
         }
 
-        // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfSymbol(symbol: Symbol, node: Node) {
-            let type = getTypeOfSymbol(symbol);
-            // Only narrow when symbol is variable of type any or an object, union, or type parameter type
-            if (node && symbol.flags & SymbolFlags.Variable) {
-                if (isTypeAny(type) || type.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter)) {
-                    const declaration = getDeclarationOfKind(symbol, SyntaxKind.VariableDeclaration);
-                    const top = declaration && getDeclarationContainer(declaration);
-                    const originalType = type;
-                    const nodeStack: {node: Node, child: Node}[] = [];
-                    loop: while (node.parent) {
-                        const child = node;
-                        node = node.parent;
-                        switch (node.kind) {
-                            case SyntaxKind.IfStatement:
-                            case SyntaxKind.ConditionalExpression:
-                            case SyntaxKind.BinaryExpression:
-                                nodeStack.push({node, child});
-                                break;
-                            case SyntaxKind.SourceFile:
-                            case SyntaxKind.ModuleDeclaration:
-                                // Stop at the first containing file or module declaration
-                                break loop;
-                        }
-                        if (node === top) {
-                            break;
-                        }
-                    }
+        interface PreviousOccurency {
+            node: Identifier;
+            guards: BranchFlow[];
+        }
+        function getPreviousOccurencies(symbol: Symbol, identifier: Identifier, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
+            let stop = false;
+            const visited: { [id: number]: boolean } = {};
+            const visitedGuards: { [id: number]: BranchFlow } = {};
 
-                    let nodes: {node: Node, child: Node};
-                    while (nodes = nodeStack.pop()) {
-                        const {node, child} = nodes;
-                        switch (node.kind) {
-                            case SyntaxKind.IfStatement:
-                                // In a branch of an if statement, narrow based on controlling expression
-                                if (child !== (<IfStatement>node).expression) {
-                                    type = narrowType(type, (<IfStatement>node).expression, /*assumeTrue*/ child === (<IfStatement>node).thenStatement);
-                                }
-                                break;
-                            case SyntaxKind.ConditionalExpression:
-                                // In a branch of a conditional expression, narrow based on controlling condition
-                                if (child !== (<ConditionalExpression>node).condition) {
-                                    type = narrowType(type, (<ConditionalExpression>node).condition, /*assumeTrue*/ child === (<ConditionalExpression>node).whenTrue);
-                                }
-                                break;
-                            case SyntaxKind.BinaryExpression:
-                                // In the right operand of an && or ||, narrow based on left operand
-                                if (child === (<BinaryExpression>node).right) {
-                                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-                                        type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ true);
-                                    }
-                                    else if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.BarBarToken) {
-                                        type = narrowType(type, (<BinaryExpression>node).left, /*assumeTrue*/ false);
-                                    }
-                                }
-                                break;
-                            default:
-                                Debug.fail("Unreachable!");
-                        }
+            worker(identifier, [], 1);
+            return stop;
 
-                        // Use original type if construct contains assignments to variable
-                        if (type !== originalType && isVariableAssignedWithin(symbol, node)) {
-                            type = originalType;
-                        }
-                    }
-
-                    // Preserve old top-level behavior - if the branch is really an empty set, revert to prior type
-                    if (type === emptyUnionType) {
-                        type = originalType;
+            function worker(location: FlowMarkerTarget, guards: BranchFlow[], level: number) {
+                if (stop) return;
+                let isGuard = false;
+                if ((<Node> location).kind !== undefined) {
+                    if (visited[location.id]) return;
+                    visited[location.id] = true;
+                    const otherSymbol = getSymbolAtLocation(<Identifier> location);
+                    if (location !== identifier && (<Node> location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id) {
+                        stop = callback(<Identifier> location, guards);
+                        return;
                     }
                 }
+                else {
+                    if (visitedGuards[location.id]) return;
+                    isGuard = true;
+                    guards.push(<BranchFlow> location);
+                }
+                if (location.previous === undefined) {
+                    // We cannot do analysis in a catch or finally block
+                    stop = callback(undefined, guards);
+                    return;
+                }
+                for (const item of location.previous) {
+                    worker(item, guards, level + 1);
+                }
+                if (isGuard) {
+                    guards.pop();
+                }
             }
+        }
 
-            return type;
+        // Get the narrowed type of a given symbol at a given location
+        function getNarrowedTypeOfSymbol(symbol: Symbol, identifier: Identifier) {
+            if (identifier.localType) return identifier.localType;
+
+            const initialType = getTypeOfSymbol(symbol);
+            Debug.assert(identifier.kind === SyntaxKind.Identifier, "node in getNarrowedTypeOfSymbol should be an identifier");
+
+            // Only narrow when symbol is variable of type any or an object, union, or type parameter type
+            if (!identifier || !(symbol.flags & SymbolFlags.Variable)) return initialType;
+            if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
+
+            if (!symbol.declarations) return initialType;
+            for (const declaration of symbol.declarations) {
+                if (getSourceFile(declaration) !== getSourceFile(identifier)) return initialType;
+            }
+            const visited: FlowMarkerTarget[] = [];
+
+            const narrowedType = getType(identifier, false);
+            return identifier.localType = narrowedType;
+
+            function getType(location: Identifier, after: boolean) {
+                if (location === undefined) return initialType;
+                if (visited.indexOf(location) !== -1) return undefined;
+
+                if (after) {
+                    const assignment = getAssignmentAtLocation(location);
+                    if (assignment) return getTypeOfNode(assignment);
+                }
+
+                let types: Type[] = [];
+                visited.push(location);
+                const fallback = getPreviousOccurencies(symbol, location, handleGuards);
+                visited.pop();
+                if (fallback) {
+                    return initialType;
+                }
+                return types.length === 0 ? initialType : getUnionType(types);
+
+                function handleGuards(node: Identifier, guards: BranchFlow[]) {
+                    if (!node && guards.length === 0) {
+                        return true;
+                    }
+                    let type = getType(node, true);
+                    if (type === undefined) {
+                        type = initialType;
+                    }
+                    for (let i = guards.length - 1; i >= 0; i--) {
+                        const { expression, trueBranch } = guards[i];
+                        type = narrowType(type, expression, trueBranch);
+                    }
+                    if (type === initialType) return true;
+                    types.push(type);
+                    return false;
+                }
+            }
 
             function narrowTypeByEquality(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 // Check that we have 'typeof <symbol>' on the left and string literal on the right
@@ -6734,6 +6758,15 @@ namespace ts {
                         break;
                 }
                 return type;
+            }
+            function getAssignmentAtLocation(node: Identifier) {
+                const { parent } = node;
+                if (parent.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>parent).name === node) {
+                    return (<VariableDeclaration>parent).initializer;
+                }
+                if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                    return (<BinaryExpression>parent).right;
+                }
             }
         }
 
@@ -10535,8 +10568,17 @@ namespace ts {
                     const ok = checkReferenceExpression(left, Diagnostics.Invalid_left_hand_side_of_assignment_expression, Diagnostics.Left_hand_side_of_assignment_expression_cannot_be_a_constant);
                     // Use default messages
                     if (ok) {
+                        let leftOriginalType = leftType;
+                        if (left.kind === SyntaxKind.Identifier) {
+                            const symbol = getSymbolOfNode(left);
+                            if (!symbol) {
+                                leftOriginalType = anyType;
+                            } else {
+                                leftOriginalType = getTypeOfSymbol(symbol);
+                            }
+                        }
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableTo(valueType, leftType, left, /*headMessage*/ undefined);
+                        checkTypeAssignableTo(valueType, leftOriginalType, left, /*headMessage*/ undefined);
                     }
                 }
             }
