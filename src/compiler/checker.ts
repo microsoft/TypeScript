@@ -5232,8 +5232,9 @@ namespace ts {
                 if (sources.length !== targets.length && relation === identityRelation) {
                     return Ternary.False;
                 }
+                const length = sources.length <= targets.length ? sources.length : targets.length;
                 let result = Ternary.True;
-                for (let i = 0; i < targets.length; i++) {
+                for (let i = 0; i < length; i++) {
                     const related = isRelatedTo(sources[i], targets[i], reportErrors);
                     if (!related) {
                         return Ternary.False;
