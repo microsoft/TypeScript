@@ -486,6 +486,7 @@ namespace ts {
     }
     export type BranchFlowNode = IfStatement | WhileStatement | ForStatement | DoStatement | ConditionalExpression | BinaryExpression
     export interface BranchFlow extends FlowMarker {
+        id: number;
         node: BranchFlowNode;
         expression: Expression;
         trueBranch: boolean;
@@ -503,10 +504,19 @@ namespace ts {
     // @kind(SyntaxKind.StaticKeyword)
     export interface Modifier extends Node { }
 
+    /* @internal */
+    export enum NarrowingState {
+        Uninitialized,
+        Narrowing,
+        Done,
+        Failed
+    }
     // @kind(SyntaxKind.Identifier)
     export interface Identifier extends PrimaryExpression, FlowMarker {
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+        /* @internal */ narrowingState?: NarrowingState;
+        /* @internal */ localType?: Type;
     }
 
     // @kind(SyntaxKind.QualifiedName)
@@ -1714,7 +1724,7 @@ namespace ts {
     }
 
     export interface TypeChecker {
-        getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
+        getTypeOfSymbolAtLocation(symbol: Symbol, node: Identifier): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol;

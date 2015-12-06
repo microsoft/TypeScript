@@ -49,20 +49,20 @@ namespace ts {
             : Reachability.Unreachable;
         return {
             reachability,
-            previous: []
+            previous: undefined
         };
     }
     const defaultUnreachable: Flow = {
         reachability: Reachability.Unreachable,
-        previous: []
+        previous: undefined
     };
     const defaultReachable: Flow = {
         reachability: Reachability.Reachable,
-        previous: []
+        previous: undefined
     };
     const defaultUnintialized: Flow = {
         reachability: Reachability.Unintialized,
-        previous: []
+        previous: undefined
     };
 
     export function getModuleInstanceState(node: Node): ModuleInstanceState {
@@ -161,6 +161,7 @@ namespace ts {
         // not depending on if we see "use strict" in certain places (or if we hit a class/namespace).
         let inStrictMode: boolean;
 
+        let branchFlowId = 0;
         let symbolCount = 0;
         let Symbol: { new (flags: SymbolFlags, name: string): Symbol };
         let classifiableNames: Map<string>;
@@ -541,6 +542,12 @@ namespace ts {
                 case SyntaxKind.LabeledStatement:
                     bindLabeledStatement(<LabeledStatement>node);
                     break;
+                case SyntaxKind.BinaryExpression:
+                    bindBinaryExpression(<BinaryExpression>node);
+                    break;
+                case SyntaxKind.ConditionalExpression:
+                    bindConditionalExpression(<ConditionalExpression>node);
+                    break;
                 default:
                     forEachChild(node, bind);
                     break;
@@ -727,6 +734,50 @@ namespace ts {
             if (ok) {
                 popNamedLabel(n.label, currentReachabilityState);
             }
+        }
+
+        function bindBinaryExpression(node: BinaryExpression) {
+            const isAnd = node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken;
+            const isOr = node.operatorToken.kind === SyntaxKind.BarBarToken;
+
+            if (isInJavaScriptFile(node)) {
+                if (isExportsPropertyAssignment(node)) {
+                    bindExportsPropertyAssignment(<BinaryExpression>node);
+                }
+                else if (isModuleExportsAssignment(node)) {
+                    bindModuleExportsAssignment(<BinaryExpression>node);
+                }
+            }
+
+            if (isAnd || isOr) {
+                bind(node.left);
+                const preRightState = currentReachabilityState;
+                bindBranchFlow(node, node.left, isAnd);
+                bind(node.right);
+                currentReachabilityState = or(currentReachabilityState, preRightState);
+            }
+            else if (isAssignmentOperator(node.operatorToken.kind) && node.left.kind === SyntaxKind.Identifier) {
+                bind(node.right);
+                bind(node.left);
+            }
+            else {
+                forEachChild(node, bind);
+            }
+        }
+
+        function bindConditionalExpression(node: ConditionalExpression) {
+            bind(node.condition);
+            const postConditionState = currentReachabilityState;
+
+            bindBranchFlow(node, node.condition, true);
+            bind(node.whenTrue);
+            const postTrueState = currentReachabilityState;
+
+            currentReachabilityState = postConditionState;
+            bindBranchFlow(node, node.condition, false);
+            bind(node.whenFalse);
+
+            currentReachabilityState = or(postTrueState, currentReachabilityState);
         }
 
         function getContainerFlags(node: Node): ContainerFlags {
@@ -1171,7 +1222,7 @@ namespace ts {
 
             // Then we recurse into the children of the node to bind them as well.  For certain
             // symbols we do specialized work when we recurse.  For example, we'll keep track of
-            // the current 'container' node when it changes.  This helps us know which symbol table
+            // the current 'container' node when it changes. This helps us know which symbol table
             // a local should go into for example.
             bindChildren(node);
 
@@ -1225,14 +1276,6 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     return bindIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
-                    if (isInJavaScriptFile(node)) {
-                        if (isExportsPropertyAssignment(node)) {
-                            bindExportsPropertyAssignment(<BinaryExpression>node);
-                        }
-                        else if (isModuleExportsAssignment(node)) {
-                            bindModuleExportsAssignment(<BinaryExpression>node);
-                        }
-                    }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
                     return checkStrictModeCatchClause(<CatchClause>node);
@@ -1510,6 +1553,11 @@ namespace ts {
         function bindIdentifier(node: Identifier) {
             checkStrictModeIdentifier(node);
             if (isExpression(node)) {
+                if (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression> node.parent).name === node) {
+                    return;
+                }
+                node.narrowingState = NarrowingState.Uninitialized;
+                node.localType = undefined;
                 bindFlowMarker(node);
             }
         }
@@ -1522,10 +1570,13 @@ namespace ts {
             };
         }
         function bindIterationFlowMarkerEnd(node: IterationStatement & FlowMarker) {
-            node.previous = [...node.previous, ...currentReachabilityState.previous];
+            if (node.previous) {
+                node.previous = [...node.previous, ...currentReachabilityState.previous];
+            }
         }
         function bindBranchFlow(node: BranchFlowNode, expression: Expression, trueBranch: boolean) {
             const branchFlow: BranchFlow = {
+                id: branchFlowId++,
                 previous: currentReachabilityState.previous,
                 node,
                 expression,
