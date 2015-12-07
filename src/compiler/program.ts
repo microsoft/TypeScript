@@ -99,7 +99,7 @@ namespace ts {
                 jsonContent = { typings: undefined };
             }
 
-            if (jsonContent.typings) {
+            if (typeof jsonContent.typings === "string") {
                 const result = loadNodeModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
                 if (result) {
                     return result;
