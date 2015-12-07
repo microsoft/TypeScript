@@ -11037,7 +11037,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     const parent = <SignatureDeclaration>node.parent;
-                    if(node === parent.type) {
+                    if (node === parent.type) {
                         return parent;
                     }
             }
