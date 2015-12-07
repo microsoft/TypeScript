@@ -7,10 +7,10 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): err
   Property 'q' is missing in type 'SomeDerived'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Neither type 'SomeBase' nor type 'SomeOther' is assignable to the other.
   Property 'q' is missing in type 'SomeBase'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS17008: A type predicate is not allowed as part of a type assertion expression.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(45,2): error TS2322: Type 'number | string' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): error TS17008: A type predicate is not allowed as part of a type assertion expression.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 
 
 ==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (8 errors) ====
@@ -73,7 +73,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): err
     var str: string;
     if(<numOrStr is string>(numOrStr === undefined)) { // Error
         ~~~~~~~~~~~~~~~~~~
-!!! error TS17008: A type predicate is not allowed as part of a type assertion expression.
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     	str = numOrStr; // Error, no narrowing occurred
     	~~~
 !!! error TS2322: Type 'number | string' is not assignable to type 'string'.
@@ -82,7 +82,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): err
     
     if((numOrStr === undefined) as numOrStr is string) { // Error
                                    ~~~~~~~~~~~~~~~~~~
-!!! error TS17008: A type predicate is not allowed as part of a type assertion expression.
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     }
     
     

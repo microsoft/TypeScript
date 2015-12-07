@@ -9658,7 +9658,7 @@ namespace ts {
             const targetType = getTypeFromTypeNode(node.type);
             if (produceDiagnostics) {
                 if (node.type.kind === SyntaxKind.TypePredicate) {
-                    error(node.type, Diagnostics.A_type_predicate_is_not_allowed_as_part_of_a_type_assertion_expression);
+                    checkTypePredicate(<TypePredicateNode>node.type);
                 }
                 else if (targetType !== unknownType) {
                     const widenedType = getWidenedType(exprType);
