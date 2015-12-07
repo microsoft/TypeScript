@@ -342,6 +342,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
         }
