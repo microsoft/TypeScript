@@ -791,7 +791,10 @@
         "category": "Error",
         "code": 1247
     },
-
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -2507,6 +2510,10 @@
     "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
         "category": "Message",
         "code": 6112
+    },
+    "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
+        "category": "Message",
+        "code": 6113
     },    
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

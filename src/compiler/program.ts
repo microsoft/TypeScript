@@ -429,13 +429,18 @@ namespace ts {
             }
 
             if (jsonContent.typings) {
-                const typingsFile = normalizePath(combinePaths(candidate, jsonContent.typings));
-                if (traceEnabled) {
-                    trace(host, Diagnostics.package_json_has_typings_field_0_that_references_1, jsonContent.typings, typingsFile);
+                if (typeof jsonContent.typings === "string") {
+                    const typingsFile = normalizePath(combinePaths(candidate, jsonContent.typings));
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.package_json_has_typings_field_0_that_references_1, jsonContent.typings, typingsFile);
+                    }
+                    const result = loadModuleFromFile(extensions, typingsFile, failedLookupLocation, host, traceEnabled);
+                    if (result) {
+                        return result;
+                    }
                 }
-                const result = loadModuleFromFile(extensions, typingsFile , failedLookupLocation, host, traceEnabled);
-                if (result) {
-                    return result;
+                else if (traceEnabled) {
+                    trace(host, Diagnostics.Expected_type_of_typings_field_in_package_json_to_be_string_got_0, typeof jsonContent.typings);
                 }
             }
             else {
@@ -446,7 +451,7 @@ namespace ts {
         }
         else {
             if (traceEnabled) {
-                trace(host, Diagnostics.package_json_does_not_have_typings_field);
+                trace(host, Diagnostics.File_0_does_not_exist, packageJsonPath);
             }
             // record package json as one of failed lookup locations - in the future if this file will appear it will invalidate resolution results
             failedLookupLocation.push(packageJsonPath);

@@ -99,11 +99,32 @@ module ts {
             assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
         }
 
-        it("module name as directory - load from typings", () => {
+        it("module name as directory - load from 'typings'", () => {
             testLoadingFromPackageJson("/a/b/c/d.ts", "/a/b/c/bar/package.json", "c/d/e.d.ts", "/a/b/c/bar/c/d/e.d.ts", "./bar");
             testLoadingFromPackageJson("/a/b/c/d.ts", "/a/bar/package.json", "e.d.ts", "/a/bar/e.d.ts", "../../bar");
             testLoadingFromPackageJson("/a/b/c/d.ts", "/bar/package.json", "e.d.ts", "/bar/e.d.ts", "/bar");
             testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
+        });
+
+        function testTypingsIgnored(typings: any): void {
+            let containingFile = { name: "/a/b.ts" };
+            let packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ "typings": typings }) };
+            let moduleFile = { name: "/a/b.d.ts" };
+
+            let indexPath = "/node_modules/b/index.d.ts";
+            let indexFile = { name: indexPath }
+
+            let resolution = nodeModuleNameResolver("b", containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, moduleFile, indexFile));
+
+            assert.equal(resolution.resolvedModule.resolvedFileName, indexPath);
+        }
+
+        it("module name as directory - handle invalid 'typings'", () => {
+            testTypingsIgnored(["a", "b"]);
+            testTypingsIgnored({ "a": "b" });
+            testTypingsIgnored(true);
+            testTypingsIgnored(null);
+            testTypingsIgnored(undefined);
         });
 
         it("module name as directory - load index.d.ts", () => {
