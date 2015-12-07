@@ -791,7 +791,10 @@
         "category": "Error",
         "code": 1247
     },
-
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
