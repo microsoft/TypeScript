@@ -26,7 +26,8 @@ namespace ts {
             remove,
             forEachValue: forEachValueInMap,
             reduce,
-            clear
+            clear,
+            mergeFrom
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
@@ -59,6 +60,16 @@ namespace ts {
 
         function clear() {
             files = {};
+        }
+
+        function mergeFrom(other: FileMap<T>) {
+            other.forEachValue(mergeFromOther);
+        }
+
+        function mergeFromOther(key: Path, value: T) {
+            if (!contains(key)) {
+                set(key, value);
+            }
         }
 
         function toKey(path: Path): string {
@@ -822,6 +833,28 @@ namespace ts {
         return compareValues(aComponents.length, bComponents.length);
     }
 
+    export function containsPath(parent: string, child: string, currentDirectory: string, ignoreCase?: boolean) {
+        if (parent === undefined || child === undefined) return false;
+        if (parent === child) return true;
+        parent = removeTrailingDirectorySeparator(parent);
+        child = removeTrailingDirectorySeparator(child);
+        if (parent === child) return true;
+        const parentComponents = getNormalizedPathComponents(parent, currentDirectory);
+        const childComponents = getNormalizedPathComponents(child, currentDirectory);
+        if (childComponents.length < parentComponents.length) {
+            return false;
+        }
+
+        for (let i = 0; i < parentComponents.length; ++i) {
+            const result = compareStrings(parentComponents[i], childComponents[i], ignoreCase);
+            if (result !== Comparison.EqualTo) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         const pathLen = path.length;
         const extLen = extension.length;
@@ -848,6 +881,59 @@ namespace ts {
             }
         }
         return false;
+    }
+
+    /**
+     * Extension boundaries by priority. Lower numbers indicate higher priorities, and are
+     * aligned to the offset of the highest priority extension in the
+     * allSupportedExtensions array.
+     */
+    export const enum ExtensionPriority {
+        TypeScriptFiles = 0,
+        DeclarationAndJavaScriptFiles = 2,
+        Limit = 5,
+
+        Highest = TypeScriptFiles,
+        Lowest = DeclarationAndJavaScriptFiles,
+    }
+
+    export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
+        for (let i = supportedExtensions.length - 1; i >= 0; i--) {
+            if (fileExtensionIs(path, supportedExtensions[i])) {
+                return adjustExtensionPriority(<ExtensionPriority>i);
+            }
+        }
+
+        // If its not in the list of supported extensions, this is likely a
+        // TypeScript file with a non-ts extension
+        return ExtensionPriority.Highest;
+    }
+
+    /**
+     * Adjusts an extension priority to be the highest priority within the same range.
+     */
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
+            return ExtensionPriority.TypeScriptFiles;
+        }
+        else if (extensionPriority < ExtensionPriority.Limit) {
+            return ExtensionPriority.DeclarationAndJavaScriptFiles;
+        }
+        else {
+            return ExtensionPriority.Limit;
+        }
+    }
+
+    /**
+     * Gets the next lowest extension priority for a given priority.
+     */
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+        if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
+            return ExtensionPriority.DeclarationAndJavaScriptFiles;
+        }
+        else {
+            return ExtensionPriority.Limit;
+        }
     }
 
     const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];

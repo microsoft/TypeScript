@@ -75,6 +75,7 @@ namespace ts {
         readDirectory(rootDir: string, extension: string, exclude?: string): string;
         readDirectoryNames?(rootDir: string): string;
         readFileNames?(rootDir: string): string;
+        directoryExists?(path: string): boolean;
         useCaseSensitiveFileNames?: boolean;
     }
 
@@ -471,6 +472,18 @@ namespace ts {
 
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
+        }
+
+        public directoryExists(directoryName: string): boolean {
+            if (this.shimHost.directoryExists) {
+                return this.shimHost.directoryExists(directoryName);
+            }
+
+            if (sys) {
+                return sys.directoryExists(directoryName);
+            }
+
+            return false;
         }
 
         public readFile(fileName: string): string {

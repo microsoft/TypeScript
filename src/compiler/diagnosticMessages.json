@@ -2020,6 +2020,10 @@
         "category": "Error",
         "code": 5009
     },
+    "File specification cannot end in a recursive directory wildcard ('**'): '{0}'.": {
+        "category": "Error",
+        "code": 5010
+    },
     "File specification cannot contain multiple recursive directory wildcards ('**'): '{0}'.": {
         "category": "Error",
         "code": 5011

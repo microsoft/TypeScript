@@ -266,6 +266,7 @@ namespace Harness.LanguageService {
             throw new Error("Not implemented.");
         }
         fileExists(fileName: string) { return this.getScriptInfo(fileName) !== undefined; }
+        directoryExists(directoryName: string) { return false; }
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && snapshot.getText(0, snapshot.getLength());

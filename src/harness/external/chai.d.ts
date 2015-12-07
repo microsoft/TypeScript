@@ -167,12 +167,14 @@ declare module chai {
     module assert {
         function equal(actual: any, expected: any, message?: string): void;
         function notEqual(actual: any, expected: any, message?: string): void;
-        function deepEqual(actual: any, expected: any, message?: string): void;
-        function notDeepEqual(actual: any, expected: any, message?: string): void;
+        function deepEqual<T>(actual: T, expected: T, message?: string): void;
+        function notDeepEqual<T>(actual: T, expected: T, message?: string): void;
         function lengthOf(object: any[], length: number, message?: string): void;
         function isTrue(value: any, message?: string): void;
         function isFalse(value: any, message?: string): void;
         function isNull(value: any, message?: string): void;
         function isNotNull(value: any, message?: string): void;
+        function isUndefined(value: any, message?: string): void;
+        function isDefined(value: any, message?: string): void;
     }
 }

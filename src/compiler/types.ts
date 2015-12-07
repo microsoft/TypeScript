@@ -15,6 +15,7 @@ namespace ts {
 
         forEachValue(f: (key: Path, v: T) => void): void;
         reduce<U>(f: (memo: U, value: T, key: Path) => U, initial: U): U;
+        mergeFrom(other: FileMap<T>): void;
         clear(): void;
     }
 
@@ -1588,10 +1589,16 @@ namespace ts {
         readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
 
         /**
-          * Gets a value indicating whether the specified path exists.
+          * Gets a value indicating whether the specified path exists and is a file.
           * @param path The path to test.
           */
         fileExists(path: string): boolean;
+
+        /**
+          * Gets a value indicating whether the specified path exists and is a directory.
+          * @param path The path to test.
+          */
+        directoryExists(path: string): boolean;
 
         /**
          * Reads the files names in the directory.
@@ -2460,6 +2467,17 @@ namespace ts {
         options: CompilerOptions;
         fileNames: string[];
         errors: Diagnostic[];
+        wildcardDirectories?: Map<WatchDirectoryFlags>;
+    }
+
+    export const enum WatchDirectoryFlags {
+        None = 0,
+        Recursive = 1 << 0,
+    }
+
+    export interface ExpandResult {
+        fileNames: string[];
+        wildcardDirectories: Map<WatchDirectoryFlags>;
     }
 
     /* @internal */

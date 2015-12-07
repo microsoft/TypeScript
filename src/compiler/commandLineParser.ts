@@ -488,13 +488,15 @@ namespace ts {
         const { options: optionsFromJsonConfigFile, errors } = convertCompilerOptionsFromJson(json["compilerOptions"], basePath);
 
         const options = extend(existingOptions, optionsFromJsonConfigFile);
+        const { fileNames, wildcardDirectories } = getFileNames();
         return {
             options,
-            fileNames: getFileNames(),
-            errors
+            fileNames,
+            errors,
+            wildcardDirectories
         };
 
-        function getFileNames(): string[] {
+        function getFileNames(): ExpandResult {
             let fileNames: string[];
             if (hasProperty(json, "files")) {
                 if (isArray(json["files"])) {
@@ -526,17 +528,7 @@ namespace ts {
             }
 
             if (fileNames === undefined && includeSpecs === undefined) {
-                includeSpecs = ["**/*.ts"];
-                if (options.jsx) {
-                    includeSpecs.push("**/*.tsx");
-                }
-
-                if (options.allowJs) {
-                    includeSpecs.push("**/*.js");
-                    if (options.jsx) {
-                        includeSpecs.push("**/*.jsx");
-                    }
-                }
+                includeSpecs = ["**/*"];
             }
 
             return expandFiles(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
@@ -593,9 +585,43 @@ namespace ts {
     // Simplified whitelist, forces escaping of any non-word (or digit), non-whitespace character.
     const reservedCharacterPattern = /[^\w\s]/g;
 
-    const enum ExpandResult {
+    const enum ExpansionState {
         Ok,
         Error
+    }
+
+    interface ExpansionContext {
+        /** A pattern used to exclude a file specification.  */
+        excludePattern: RegExp;
+        /** Compiler options. */
+        options: CompilerOptions;
+        /** The host used to resolve files and directories. */
+        host: ParseConfigHost;
+        /** Errors to report. */
+        errors: Diagnostic[];
+        /** The set of literal files. */
+        literalFiles: FileMap<Path>;
+        /** The set of files matching a wildcard. */
+        wildcardFiles: FileMap<Path>;
+        /** Directories to be watched. */
+        wildcardDirectories: FileMap<WatchDirectoryFlags>;
+        /** Supported extensions. */
+        supportedExtensions: string[];
+        /**
+         * Path cache, used to reduce calls to the file system. `true` indicates a file exists,
+         * `false` indicates a file or directory does not exist. A DirectoryResult
+         * indicates the file and subdirectory names in a directory. */
+        cache: FileMap<boolean | DirectoryResult>;
+    }
+
+    const enum FileSystemEntryKind {
+        File,
+        Directory
+    }
+
+    interface DirectoryResult {
+        files?: string[];
+        directories?: string[];
     }
 
     /**
@@ -609,62 +635,118 @@ namespace ts {
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    export function expandFiles(fileNames: string[], includeSpecs: string[], excludeSpecs: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors?: Diagnostic[]): string[] {
+    export function expandFiles(fileNames: string[], includeSpecs: string[], excludeSpecs: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors?: Diagnostic[]): ExpandResult {
         basePath = normalizePath(basePath);
         basePath = removeTrailingDirectorySeparator(basePath);
 
+        // The exclude spec list is converted into a regular expression, which allows us to quickly
+        // test whether a file or directory should be excluded before recursively traversing the
+        // file system.
         const excludePattern = includeSpecs ? createExcludeRegularExpression(excludeSpecs, basePath, options, host, errors) : undefined;
-        const fileSet = createFileMap<Path>(host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper);
+        const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
 
-        // include every literal file.
+        // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
+        // file map with a possibly invariant key. We use this map later when when including
+        // wildcard paths.
+        const literalFiles = createFileMap<Path>(keyMapper);
+
+        // Wildcard paths (provided via the "includes" array in tscofnig.json) are stored in a
+        // file map with a possibly invariant key. We use this map to store paths matched
+        // via wildcard, and to handle extension priority.
+        const wildcardFiles = createFileMap<Path>(keyMapper);
+
+        // Wildcard directories (provided as part of a wildcard path) are stored in a
+        // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
+        // or a recursive directory. This information is used by filesystem watchers to monitor for
+        // new entries in these paths.
+        const wildcardDirectories = createFileMap<WatchDirectoryFlags>(keyMapper);
+
+        // To reduce the overhead of disk I/O (and marshalling to managed code when hosted in
+        // Visual Studio), file system queries are cached during the expansion session.
+        // If present, a cache entry can be one of three values:
+        // - A `false` value indicates the file or directory did not exist.
+        // - A `true` value indicates the path is a file and it exists.
+        // - An object value indicates the path is a directory and exists. The object may have
+        //   zero, one, or both of the following properties:
+        //   - A "files" array, which contains the file names in the directory.
+        //   - A "directories" array, which contains the subdirectory names in the directory.
+        const cache = createFileMap<boolean | DirectoryResult>(keyMapper);
+
+        // Rather than requery this for each file and filespec, we querythe supported extensions
+        // once and store it on the expansion context.
+        const supportedExtensions = getSupportedExtensions(options);
+
+        // The expansion context holds references to shared information for the various expansion
+        // operations to reduce the overhead of closures.
+        const context: ExpansionContext = {
+            options,
+            host,
+            errors,
+            excludePattern,
+            literalFiles,
+            wildcardFiles,
+            wildcardDirectories,
+            supportedExtensions,
+            cache
+        };
+
+        // Literal files are always included verbatim. An "include" or "exclude" specification cannot
+        // remove a literal file.
         if (fileNames) {
             for (const fileName of fileNames) {
                 const path = toPath(fileName, basePath, caseSensitiveKeyMapper);
-                if (!fileSet.contains(path)) {
-                    fileSet.set(path, path);
+                if (!literalFiles.contains(path)) {
+                    literalFiles.set(path, path);
                 }
             }
         }
 
-        // expand and include the provided files into the file set.
+        // Each "include" specification is expanded and matching files are added.
         if (includeSpecs) {
             for (let includeSpec of includeSpecs) {
                 includeSpec = normalizePath(includeSpec);
                 includeSpec = removeTrailingDirectorySeparator(includeSpec);
-                expandFileSpec(basePath, includeSpec, 0, excludePattern, options, host, errors, fileSet);
+                expandFileSpec(includeSpec, <Path>basePath, 0, context);
             }
         }
 
-        const output = fileSet.reduce(addFileToOutput, []);
-        return output;
+        return {
+            fileNames: wildcardFiles.reduce(addFileToOutput, literalFiles.reduce(addFileToOutput, [])),
+            wildcardDirectories: wildcardDirectories.reduce<Map<WatchDirectoryFlags>>(addDirectoryToOutput, {}),
+        };
     }
 
     /**
      * Expands a file specification with wildcards.
      *
-     * @param basePath The directory to expand.
      * @param fileSpec The original file specification.
+     * @param basePath The directory to expand. This path must exist.
      * @param start The starting offset in the file specification.
-     * @param excludePattern A pattern used to exclude a file specification.
-     * @param options Compiler options.
-     * @param host The host used to resolve files and directories.
-     * @param errors An array for diagnostic reporting.
-     * @param fileSet The set of matching files.
+     * @param context The expansion context.
      * @param isExpandingRecursiveDirectory A value indicating whether the file specification includes a recursive directory wildcard prior to the start of this segment.
      */
-    function expandFileSpec(basePath: string, fileSpec: string, start: number, excludePattern: RegExp, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], fileSet: FileMap<Path>, isExpandingRecursiveDirectory?: boolean): ExpandResult {
+    function expandFileSpec(fileSpec: string, basePath: Path, start: number, context: ExpansionContext, isExpandingRecursiveDirectory?: boolean): ExpansionState {
+        // A file specification must always point to a file. As a result, we always assume the
+        // path segment following the last directory separator points to a file. The only
+        // exception is when the final path segment is the recursive directory pattern "**", in
+        // which case we report an error.
+        const { host, options, errors, wildcardFiles, wildcardDirectories, excludePattern, cache, supportedExtensions } = context;
+
         // Skip expansion if the base path matches an exclude pattern.
-        if (isExcludedPath(excludePattern, basePath)) {
-            return ExpandResult.Ok;
+        if (isExcludedPath(basePath, excludePattern)) {
+            return ExpansionState.Ok;
         }
 
-        // Find the offset of the next wildcard in the file specification
+        // Find the offset of the next wildcard in the file specification. If there are no more
+        // wildcards, we can include the file if it exists and isn't excluded.
         let offset = indexOfWildcard(fileSpec, start);
         if (offset < 0) {
-            // There were no more wildcards, so include the file.
             const path = toPath(fileSpec.substring(start), basePath, caseSensitiveKeyMapper);
-            includeFile(path, excludePattern, options, host, fileSet);
-            return ExpandResult.Ok;
+            if (!isExcludedPath(path, excludePattern) && pathExists(path, FileSystemEntryKind.File, context)) {
+                includeFile(path, context, /*wildcardHasExtension*/ true);
+            }
+
+            return ExpansionState.Ok;
         }
 
         // Find the last directory separator before the wildcard to get the leading path.
@@ -672,11 +754,11 @@ namespace ts {
         if (offset > start) {
             // The wildcard occurs in a later segment, include remaining path up to
             // wildcard in prefix.
-            basePath = combinePaths(basePath, fileSpec.substring(start, offset));
+            basePath = toPath(fileSpec.substring(start, offset), basePath, caseSensitiveKeyMapper);
 
             // Skip this wildcard path if the base path now matches an exclude pattern.
-            if (isExcludedPath(excludePattern, basePath)) {
-                return ExpandResult.Ok;
+            if (isExcludedPath(basePath, excludePattern) || !pathExists(basePath, FileSystemEntryKind.Directory, context)) {
+                return ExpansionState.Ok;
             }
 
             start = offset + 1;
@@ -687,23 +769,34 @@ namespace ts {
 
         // Check if the current offset is the beginning of a recursive directory pattern.
         if (isRecursiveDirectoryWildcard(fileSpec, start, offset)) {
-            if (offset >= fileSpec.length) {
-                // If there is no file specification following the recursive directory pattern
-                // we cannot match any files, so we will ignore this pattern.
-                return ExpandResult.Ok;
-            }
-
             // Stop expansion if a file specification contains more than one recursive directory pattern.
             if (isExpandingRecursiveDirectory) {
                 if (errors) {
                     errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, fileSpec));
                 }
 
-                return ExpandResult.Error;
+                return ExpansionState.Error;
             }
 
+            if (offset >= fileSpec.length) {
+                // If there is no file specification following the recursive directory pattern
+                // then we report an error as we cannot match any files.
+                if (errors) {
+                    errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, fileSpec));
+                }
+
+                return ExpansionState.Error;
+            }
+
+            // Keep track of the recursive wildcard directory
+            wildcardDirectories.set(basePath, WatchDirectoryFlags.Recursive);
+
             // Expand the recursive directory pattern.
-            return expandRecursiveDirectory(basePath, fileSpec, offset + 1, excludePattern, options, host, errors, fileSet);
+            return expandRecursiveDirectory(fileSpec, basePath, offset + 1, context);
+        }
+
+        if (!isExpandingRecursiveDirectory) {
+            wildcardDirectories.set(basePath, WatchDirectoryFlags.None);
         }
 
         // Match the entries in the directory against the wildcard pattern.
@@ -712,103 +805,224 @@ namespace ts {
         // If there are no more directory separators (the offset is at the end of the file specification), then
         // this must be a file.
         if (offset >= fileSpec.length) {
-            const files = host.readFileNames(basePath);
-            for (const extension of getSupportedExtensions(options)) {
-                for (const file of files) {
-                    if (fileExtensionIs(file, extension)) {
-                        const path = toPath(file, basePath, caseSensitiveKeyMapper);
+            const wildcardHasExtension = fileSegmentHasExtension(fileSpec, start);
+            const fileNames = readDirectory(basePath, FileSystemEntryKind.File, context);
+            for (const fileName of fileNames) {
+                // Skip the file if it doesn't match the pattern.
+                if (!pattern.test(fileName)) {
+                    continue;
+                }
 
-                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
-                        // lets pick them when its turn comes up.
-                        if (extension === ".ts" && fileExtensionIs(file, ".d.ts")) {
-                            continue;
-                        }
+                const path = toPath(fileName, basePath, caseSensitiveKeyMapper);
 
-                        // If this is one of the output extension (which would be .d.ts and .js if we are allowing compilation of js files)
-                        // do not include this file if we included .ts or .tsx file with same base name as it could be output of the earlier compilation
-                        if (extension === ".d.ts" || (options.allowJs && contains(supportedJavascriptExtensions, extension))) {
-                            if (fileSet.contains(changeExtension(path, ".ts")) || fileSet.contains(changeExtension(path, ".tsx"))) {
-                                continue;
-                            }
-                        }
+                // If we have excluded this path, we should skip the file.
+                if (isExcludedPath(path, excludePattern)) {
+                    continue;
+                }
 
-                        // This wildcard has no further directory to process, so include the file.
-                        includeFile(path, excludePattern, options, host, fileSet);
+                // This wildcard has no further directory to process, so include the file.
+                includeFile(path, context, wildcardHasExtension);
+            }
+        }
+        else {
+            const directoryNames = readDirectory(basePath, FileSystemEntryKind.Directory, context);
+            for (const directoryName of directoryNames) {
+                if (pattern.test(directoryName)) {
+                    const newBasePath = toPath(directoryName, basePath, caseSensitiveKeyMapper);
+
+                    // Expand the entries in this directory.
+                    if (expandFileSpec(fileSpec, newBasePath, offset + 1, context, isExpandingRecursiveDirectory) === ExpansionState.Error) {
+                        return ExpansionState.Error;
                     }
                 }
             }
         }
-        else {
-            const directories = host.readDirectoryNames(basePath);
-            for (const directory of directories) {
-                // If this was a directory, process the directory.
-                const path = toPath(directory, basePath, caseSensitiveKeyMapper);
-                if (expandFileSpec(path, fileSpec, offset + 1, excludePattern, options, host, errors, fileSet, isExpandingRecursiveDirectory) === ExpandResult.Error) {
-                    return ExpandResult.Error;
-                }
-            }
-        }
 
-        return ExpandResult.Ok;
+        return ExpansionState.Ok;
     }
 
     /**
      * Expands a `**` recursive directory wildcard.
      *
-     * @param basePath The directory to recursively expand.
      * @param fileSpec The original file specification.
+     * @param basePath The directory to recursively expand.
      * @param start The starting offset in the file specification.
-     * @param excludePattern A pattern used to exclude a file specification.
-     * @param options Compiler options.
-     * @param host The host used to resolve files and directories.
-     * @param errors An array for diagnostic reporting.
-     * @param fileSet The set of matching files.
+     * @param context The expansion context.
      */
-    function expandRecursiveDirectory(basePath: string, fileSpec: string, start: number, excludePattern: RegExp, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[], fileSet: FileMap<Path>): ExpandResult {
-        // expand the non-recursive part of the file specification against the prefix path.
-        if (expandFileSpec(basePath, fileSpec, start, excludePattern, options, host, errors, fileSet, /*isExpandingRecursiveDirectory*/ true) === ExpandResult.Error) {
-            return ExpandResult.Error;
+    function expandRecursiveDirectory(fileSpec: string, basePath: Path, start: number, context: ExpansionContext): ExpansionState {
+        // Skip the directory if it is excluded.
+        if (isExcludedPath(basePath, context.excludePattern)) {
+            return ExpansionState.Ok;
+        }
+
+        // Expand the non-recursive part of the file specification against the prefix path.
+        if (expandFileSpec(fileSpec, basePath, start, context, /*isExpandingRecursiveDirectory*/ true) === ExpansionState.Error) {
+            return ExpansionState.Error;
         }
 
         // Recursively expand each subdirectory.
-        const directories = host.readDirectoryNames(basePath);
-        for (const entry of directories) {
-            const path = combinePaths(basePath, entry);
-            if (expandRecursiveDirectory(path, fileSpec, start, excludePattern, options, host, errors, fileSet) === ExpandResult.Error) {
-                return ExpandResult.Error;
+        const directoryNames = readDirectory(basePath, FileSystemEntryKind.Directory, context);
+        for (const directoryName of directoryNames) {
+            const newBasePath = toPath(directoryName, basePath, caseSensitiveKeyMapper);
+            if (expandRecursiveDirectory(fileSpec, newBasePath, start, context) === ExpansionState.Error) {
+                return ExpansionState.Error;
             }
         }
 
-        return ExpandResult.Ok;
+        return ExpansionState.Ok;
     }
 
     /**
      * Attempts to include a file in a file set.
      *
      * @param file The file to include.
-     * @param excludePattern A pattern used to exclude a file specification.
-     * @param options Compiler options.
-     * @param host The host used to resolve files and directories.
-     * @param fileSet The set of matching files.
+     * @param context The expansion context.
+     * @param wildcardHasExtension A value indicating whether the wildcard supplied an explicit extension.
      */
-    function includeFile(file: Path, excludePattern: RegExp, options: CompilerOptions, host: ParseConfigHost, fileSet: FileMap<Path>): void {
-        // Ignore the file if it should be excluded.
-        if (isExcludedPath(excludePattern, file)) {
-            return;
-        }
-
-        // Ignore the file if it doesn't exist.
-        if (!host.fileExists(file)) {
-            return;
-        }
+    function includeFile(file: Path, context: ExpansionContext, wildcardHasExtension: boolean): void {
+        const { options, literalFiles, wildcardFiles, excludePattern, supportedExtensions } = context;
 
         // Ignore the file if it does not have a supported extension.
-        if (!options.allowNonTsExtensions && !isSupportedSourceFileName(file, options)) {
+        if ((!wildcardHasExtension || !options.allowNonTsExtensions) && !isSupportedSourceFileName(file, options)) {
             return;
         }
 
-        if (!fileSet.contains(file)) {
-            fileSet.set(file, file);
+        // If we have already included a literal or wildcard path with a
+        // higher priority extension, we should skip this file.
+        //
+        // This handles cases where we may encounter both <file>.ts and
+        // <file>.d.ts (or <file>.js if "allowJs" is enabled) in the same
+        // directory when they are compilation outputs.
+        const extensionPriority = getExtensionPriority(file, supportedExtensions);
+        if (hasFileWithHigherPriorityExtension(file, extensionPriority, context)) {
+            return;
+        }
+
+        // We may have included a wildcard path with a lower priority
+        // extension due to the user-defined order of entries in the
+        // "include" array. If there is a lower priority extension in the
+        // same directory, we should remove it.
+        removeWildcardFilesWithLowerPriorityExtension(file, extensionPriority, context);
+
+        if (!literalFiles.contains(file) && !wildcardFiles.contains(file)) {
+            wildcardFiles.set(file, file);
+        }
+    }
+
+    /**
+     * Tests whether a path exists and is a specific kind of item. Results are
+     * cached for performance.
+     *
+     * @param path The path to tests.
+     * @param kind The kind of file system entry to find.
+     * @param context The expansion context.
+     */
+    function pathExists(path: Path, kind: FileSystemEntryKind, context: ExpansionContext) {
+        const { cache, host } = context;
+        const entry = cache.get(path);
+        if (entry === false) {
+            // If the entry is strictly `false` then the path doesn`t exist, regardless of its kind.
+            return false;
+        }
+        else if (entry === true) {
+            // If the entry is strictly `true` then a file exists at this path.
+            return kind === FileSystemEntryKind.File;
+        }
+        else if (typeof entry === "object") {
+            // If the entry is an object, then a directory exists at this path.
+            return kind === FileSystemEntryKind.Directory;
+        }
+        else {
+            // The entry does not exist in the cache, so we need to check the host.
+            if (kind === FileSystemEntryKind.File) {
+                const result = host.fileExists(path);
+                cache.set(path, result);
+                return result;
+            }
+            else if (kind === FileSystemEntryKind.Directory) {
+                const result = host.directoryExists(path);
+                cache.set(path, result ? {} : false);
+                return result;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Reads the contents of a directory for a specific kind of item. Results are
+     * cached for performance.
+     *
+     * @param basePath The path to the directory. The path must already exist.
+     * @param kind The kind of file system entry to find.
+     * @param context The expansion context.
+     */
+    function readDirectory(basePath: Path, kind: FileSystemEntryKind, context: ExpansionContext) {
+        const { cache, host } = context;
+
+        let entry = cache.get(basePath);
+        if (entry === undefined) {
+            entry = {};
+            cache.set(basePath, entry);
+        }
+
+        if (typeof entry === "object") {
+            if (kind === FileSystemEntryKind.File) {
+                if (entry.files === undefined) {
+                    entry.files = host.readFileNames(basePath);
+                }
+
+                return entry.files;
+            }
+            else if (kind === FileSystemEntryKind.Directory) {
+                if (entry.directories === undefined) {
+                    entry.directories = host.readDirectoryNames(basePath);
+                }
+
+                return entry.directories;
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Determines whether a literal or wildcard file has already been included that has a higher
+     * extension priority.
+     *
+     * @param file The path to the file.
+     * @param extensionPriority The priority of the extension.
+     * @param context The expansion context.
+     */
+    function hasFileWithHigherPriorityExtension(file: Path, extensionPriority: ExtensionPriority, context: ExpansionContext) {
+        const { literalFiles, wildcardFiles, supportedExtensions } = context;
+        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority);
+        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; ++i) {
+            const higherPriorityExtension = supportedExtensions[i];
+            const higherPriorityPath = changeExtension(file, higherPriorityExtension);
+            if (literalFiles.contains(higherPriorityPath) || wildcardFiles.contains(higherPriorityPath)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes files included via wildcard expansion with a lower extension priority that have
+     * already been included.
+     *
+     * @param file The path to the file.
+     * @param extensionPriority The priority of the extension.
+     * @param context The expansion context.
+     */
+    function removeWildcardFilesWithLowerPriorityExtension(file: Path, extensionPriority: ExtensionPriority, context: ExpansionContext) {
+        const { wildcardFiles, supportedExtensions } = context;
+        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority);
+        for (let i = nextExtensionPriority; i < supportedExtensions.length; ++i) {
+            const lowerPriorityExtension = supportedExtensions[i];
+            const lowerPriorityPath = changeExtension(file, lowerPriorityExtension);
+            wildcardFiles.remove(lowerPriorityPath);
         }
     }
 
@@ -824,13 +1038,45 @@ namespace ts {
     }
 
     /**
+     * Adds a watched directory to an output map.
+     *
+     * @param output The output map.
+     * @param flags The directory flags.
+     * @param directory The directory path.
+     */
+    function addDirectoryToOutput(output: Map<WatchDirectoryFlags>, flags: WatchDirectoryFlags, directory: string) {
+        output[directory] = flags;
+        return output;
+    }
+
+    /**
      * Determines whether a path should be excluded.
      *
-     * @param excludePattern A pattern used to exclude a file specification.
      * @param path The path to test for exclusion.
+     * @param excludePattern A pattern used to exclude a file specification.
      */
-    function isExcludedPath(excludePattern: RegExp, path: string) {
+    function isExcludedPath(path: string, excludePattern: RegExp) {
         return excludePattern ? excludePattern.test(path) : false;
+    }
+
+    /**
+     * Determines whether a file segment contains a valid extension.
+     *
+     * @param fileSpec The file specification.
+     * @param segmentStart The offset to the start of the file segment in the specification.
+     */
+    function fileSegmentHasExtension(fileSpec: string, segmentStart: number) {
+        // if the final path segment does not have a . token, the file does not have an extension.
+        if (fileSpec.indexOf(".", segmentStart) === -1) {
+            return false;
+        }
+
+        // if the extension for the final path segment is (".*"), then the file does not have an extension.
+        if (fileExtensionIs(fileSpec, ".*")) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -858,17 +1104,17 @@ namespace ts {
         let offset = indexOfWildcard(fileSpec, start);
         while (offset >= 0 && offset < end) {
             if (offset > start) {
-                // Escape and append the non-wildcard portion to the regular expression
+                // Escape and append the non-wildcard portion to the regular expression.
                 pattern += escapeRegularExpressionText(fileSpec, start, offset);
             }
 
             const charCode = fileSpec.charCodeAt(offset);
             if (charCode === CharacterCodes.asterisk) {
-                // Append a multi-character (zero or more characters) pattern to the regular expression
-                pattern += "[^/]*";
+                // Append a multi-character (zero or more characters) pattern to the regular expression.
+                pattern += "[^/]*?";
             }
             else if (charCode === CharacterCodes.question) {
-                // Append a single-character (zero or one character) pattern to the regular expression
+                // Append a single-character pattern to the regular expression.
                 pattern += "[^/]";
             }
 
@@ -1054,8 +1300,8 @@ namespace ts {
      * @param fileSpec The file specification.
      * @param start The starting offset in the file specification.
      */
-    function indexOfWildcard(fileSpec: string, start: number): number {
-        for (let i = start; i < fileSpec.length; ++i) {
+    function indexOfWildcard(fileSpec: string, start: number, end: number = fileSpec.length): number {
+        for (let i = start; i < end; ++i) {
             const ch = fileSpec.charCodeAt(i);
             if (ch === CharacterCodes.asterisk || ch === CharacterCodes.question) {
                 return i;
