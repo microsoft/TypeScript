@@ -3751,7 +3751,8 @@ namespace ts {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
                         m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
-                        m.kind !== SyntaxKind.BindingElement) {
+                        m.kind !== SyntaxKind.BindingElement &&
+                        m.kind !== SyntaxKind.MethodDeclaration) {
                         continue;
                     }
 

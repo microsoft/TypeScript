@@ -1453,6 +1453,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                     case SyntaxKind.IfStatement:
+                    case SyntaxKind.JsxClosingElement:
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.JsxSpreadAttribute:
@@ -3628,12 +3629,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // only allow export default at a source file level
                     if (modulekind === ModuleKind.CommonJS || modulekind === ModuleKind.AMD || modulekind === ModuleKind.UMD) {
                         if (!isEs6Module) {
-                            if (languageVersion === ScriptTarget.ES5) {
+                            if (languageVersion !== ScriptTarget.ES3) {
                                 // default value of configurable, enumerable, writable are `false`.
                                 write("Object.defineProperty(exports, \"__esModule\", { value: true });");
                                 writeLine();
                             }
-                            else if (languageVersion === ScriptTarget.ES3) {
+                            else {
                                 write("exports.__esModule = true;");
                                 writeLine();
                             }
@@ -4530,7 +4531,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 const isAsync = isAsyncFunctionLike(node);
-                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                if (isAsync) {
                     emitAsyncFunctionBodyForES6(node);
                 }
                 else {
@@ -5171,35 +5172,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (!(node.flags & NodeFlags.Export)) {
                     return;
                 }
-                // If this is an exported class, but not on the top level (i.e. on an internal
-                // module), export it
-                if (node.flags & NodeFlags.Default) {
-                    // if this is a top level default export of decorated class, write the export after the declaration.
-                    writeLine();
-                    if (thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
-                        write("export default ");
-                        emitDeclarationName(node);
-                        write(";");
-                    }
-                    else if (modulekind === ModuleKind.System) {
-                        write(`${exportFunctionForFile}("default", `);
-                        emitDeclarationName(node);
-                        write(");");
-                    }
-                    else if (modulekind !== ModuleKind.ES6) {
-                        write(`exports.default = `);
-                        emitDeclarationName(node);
-                        write(";");
-                    }
+                if (modulekind !== ModuleKind.ES6) {
+                    emitExportMemberAssignment(node as ClassDeclaration);
                 }
-                else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {
-                    writeLine();
-                    emitStart(node);
-                    emitModuleMemberName(node);
-                    write(" = ");
-                    emitDeclarationName(node);
-                    emitEnd(node);
-                    write(";");
+                else {
+                    // If this is an exported class, but not on the top level (i.e. on an internal
+                    // module), export it
+                    if (node.flags & NodeFlags.Default) {
+                        // if this is a top level default export of decorated class, write the export after the declaration.
+                        if (thisNodeIsDecorated) {
+                            writeLine();
+                            write("export default ");
+                            emitDeclarationName(node);
+                            write(";");
+                        }
+                    }
+                    else if (node.parent.kind !== SyntaxKind.SourceFile) {
+                        writeLine();
+                        emitStart(node);
+                        emitModuleMemberName(node);
+                        write(" = ");
+                        emitDeclarationName(node);
+                        emitEnd(node);
+                        write(";");
+                    }
                 }
             }
 
@@ -5800,9 +5796,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (!shouldHoistDeclarationInSystemJsModule(node)) {
                     // do not emit var if variable was already hoisted
-                    if (!(node.flags & NodeFlags.Export) || isES6ExportedDeclaration(node)) {
+
+                    const isES6ExportedEnum = isES6ExportedDeclaration(node);
+                    if (!(node.flags & NodeFlags.Export) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.EnumDeclaration))) {
                         emitStart(node);
-                        if (isES6ExportedDeclaration(node)) {
+                        if (isES6ExportedEnum) {
                             write("export ");
                         }
                         write("var ");
@@ -5899,6 +5897,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return languageVersion === ScriptTarget.ES6 && !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
             }
 
+            function isFirstDeclarationOfKind(node: Declaration, declarations: Declaration[], kind: SyntaxKind) {
+                return !forEach(declarations, declaration => declaration.kind === kind && declaration.pos < node.pos);
+            }
+
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
                 const shouldEmit = shouldEmitModuleDeclaration(node);
@@ -5910,15 +5912,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const emitVarForModule = !hoistedInDeclarationScope && !isModuleMergedWithES6Class(node);
 
                 if (emitVarForModule) {
-                    emitStart(node);
-                    if (isES6ExportedDeclaration(node)) {
-                        write("export ");
+                    const isES6ExportedNamespace = isES6ExportedDeclaration(node);
+                    if (!isES6ExportedNamespace || isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.ModuleDeclaration)) {
+                        emitStart(node);
+                        if (isES6ExportedNamespace) {
+                            write("export ");
+                        }
+                        write("var ");
+                        emit(node.name);
+                        write(";");
+                        emitEnd(node);
+                        writeLine();
                     }
-                    write("var ");
-                    emit(node.name);
-                    write(";");
-                    emitEnd(node);
-                    writeLine();
                 }
 
                 emitStart(node);
@@ -7819,6 +7824,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const shebang = getShebang(currentText);
                 if (shebang) {
                     write(shebang);
+                    writeLine();
                 }
             }
         }

@@ -791,7 +791,10 @@
         "category": "Error",
         "code": 1247
     },
-
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -843,6 +846,10 @@
     "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
+    },
+    "Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": {
+        "category": "Error",
+        "code": 2308
     },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
@@ -899,6 +906,10 @@
     "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2322
+    },
+    "Cannot redeclare exported variable '{0}'.": {
+        "category": "Error",
+        "code": 2323
     },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
@@ -1179,6 +1190,10 @@
     "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
         "category": "Error",
         "code": 2396
+    },
+    "Declaration name conflicts with built-in global identifier '{0}'.": {
+        "category": "Error",
+        "code": 2397
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -1731,6 +1746,10 @@
     "JSX expressions must have one parent element": {
         "category": "Error",
         "code": 2657
+    },
+    "Type '{0}' provides no match for the signature '{1}'": {
+        "category": "Error",
+        "code": 2658
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

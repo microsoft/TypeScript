@@ -461,6 +461,7 @@ namespace ts.formatting {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
+                case SyntaxKind.NamedImports:
                     return true;
             }
             return false;
