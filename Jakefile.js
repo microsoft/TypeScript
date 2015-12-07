@@ -387,12 +387,10 @@ desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
 // Generate version files
-
-var distributeVersionOutputFolder = path.join(builtLocalDirectory, "distributeVersion");
-var distributeVersionJS = path.join(distributeVersionOutputFolder, "distributeVersion.js");
-var distributeVersionTS = path.join(scriptsDirectory, "distributeVersion.ts");
-var packageJson = "package.json";
-var builtPackageJSON = path.join(distributeVersionOutputFolder, "package.json");
+var distributeVersionFolder = path.join(scriptsDirectory, "distributeVersion");
+var distributeVersionJS = path.join(distributeVersionFolder, "distributeVersion.js");
+var distributeVersionTS = path.join(distributeVersionFolder, "distributeVersion.ts");
+var versionJSON = path.join(distributeVersionFolder, "version.json");
 
 file(distributeVersionTS);
 compileFile(/*outFile*/ distributeVersionJS,
@@ -402,25 +400,17 @@ compileFile(/*outFile*/ distributeVersionJS,
         /*useBuiltCompiler*/ false,
         /*noOutFile*/ true,
         /*generateDeclarations*/ false,
-        /*outDir*/ distributeVersionOutputFolder,
+        /*outDir*/ undefined,
         /*preserveConstEnums*/ undefined,
         /*keepComments*/ false,
         /*noResolve*/ false,
         /*stripInternal*/ false);
 
-directory(distributeVersionOutputFolder);
-file(builtPackageJSON, [distributeVersionOutputFolder], function() {
-    if (fs.existsSync(distributeVersionOutputFolder)) {
-        console.log("Copy package.json to the buitl\local");
-        jake.cpR(packageJson, builtPackageJSON);
-    }
-});
-
 // Distribute release version
-
 desc("Run version distribution script")
-task("distribute-version", [distributeVersionJS, builtPackageJSON], function() {
-    var cmd = host + " " + distributeVersionJS + " --release";
+task("distribute-version", [distributeVersionJS], function() {
+    var cmd = host + " " + distributeVersionJS + " --release" +
+        " --versionFile " + versionJSON; 
     console.log(cmd);
     exec(cmd);
 }, {async: true});
@@ -431,7 +421,8 @@ task("setDebugMode", function() {
 });
 
 task("configure-nightly", [distributeVersionJS], function() {
-    var cmd = host + " " + distributeVersionJS + " --nightly";
+    var cmd = host + " " + distributeVersionJS + " --nightly" +
+                " --versionFile " + versionJSON;
     console.log(cmd);
     exec(cmd);
 }, { async: true });
@@ -587,7 +578,7 @@ task("generate-spec", [specMd]);
 
 // Makes a new LKG. This target does not build anything, but errors if not all the outputs are present in the built/local directory
 desc("Makes a new LKG out of the built js files");
-task("LKG", ["clean", "release", "local", builtPackageJSON, "distribute-version"].concat(libraryTargets), function() {
+task("LKG", ["clean", "distribute-version", "release", "local"].concat(libraryTargets), function() {
     var expectedFiles = [tscFile, servicesFile, serverFile, nodePackageFile, nodeDefinitionsFile, standaloneDefinitionsFile].concat(libraryTargets);
     var missingFiles = expectedFiles.filter(function (f) {
         return !fs.existsSync(f);

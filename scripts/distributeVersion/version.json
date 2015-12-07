@@ -1,0 +1,4 @@
+{
+    "_comment": "Each element is a digit in the version number. For example: [1, 8, 0, 0] is 1.8.0.0",
+    "version": [1, 9, 0, 0]
+}
