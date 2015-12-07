@@ -62,6 +62,8 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        readDirectoryNames(path: string): string[];
+        readFileNames(path: string): string[];
     };
 
     export var sys: System = (function () {
@@ -537,6 +539,8 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 readDirectory: ChakraHost.readDirectory,
+                readFileNames: ChakraHost.readFileNames,
+                readDirectoryNames: ChakraHost.readDirectoryNames,
                 exit: ChakraHost.quit,
             };
         }
