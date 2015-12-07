@@ -21,7 +21,7 @@ sourceFile:ES5For-of25.ts
 10>               ^
 11>                ^
 12>                 ^
-13>                  ^^^^^^^^^^^^^^^^^^^^^^->
+13>                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >var 
 3 >    a
@@ -47,17 +47,19 @@ sourceFile:ES5For-of25.ts
 11>Emitted(1, 18) Source(1, 18) + SourceIndex(0)
 12>Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 ---
->>>for (var _i = 0; _i < a.length; _i++) {
+>>>for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
 1->
 2 >^^^
 3 >   ^
 4 >    ^
 5 >     ^^^^^^^^^^
 6 >               ^^
-7 >                 ^^^^^^^^^^^^^
-8 >                              ^^
-9 >                                ^^^^
-10>                                    ^
+7 >                 ^^^^^^^
+8 >                        ^^
+9 >                          ^^^^^^^^^^^^^^^
+10>                                         ^^
+11>                                           ^^^^
+12>                                               ^
 1->
   >
 2 >for
@@ -65,40 +67,38 @@ sourceFile:ES5For-of25.ts
 4 >    (var v of 
 5 >     a
 6 >               
-7 >                 var v
-8 >                              
-9 >                                var v of a
-10>                                    )
+7 >                 a
+8 >                        
+9 >                          var v
+10>                                         
+11>                                           var v of a
+12>                                               )
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
 3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 4 >Emitted(2, 6) Source(2, 15) + SourceIndex(0)
 5 >Emitted(2, 16) Source(2, 16) + SourceIndex(0)
-6 >Emitted(2, 18) Source(2, 6) + SourceIndex(0)
-7 >Emitted(2, 31) Source(2, 11) + SourceIndex(0)
-8 >Emitted(2, 33) Source(2, 6) + SourceIndex(0)
-9 >Emitted(2, 37) Source(2, 16) + SourceIndex(0)
-10>Emitted(2, 38) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 18) Source(2, 15) + SourceIndex(0)
+7 >Emitted(2, 25) Source(2, 16) + SourceIndex(0)
+8 >Emitted(2, 27) Source(2, 6) + SourceIndex(0)
+9 >Emitted(2, 42) Source(2, 11) + SourceIndex(0)
+10>Emitted(2, 44) Source(2, 6) + SourceIndex(0)
+11>Emitted(2, 48) Source(2, 16) + SourceIndex(0)
+12>Emitted(2, 49) Source(2, 17) + SourceIndex(0)
 ---
->>>    var v = a[_i];
+>>>    var v = a_1[_i];
 1 >^^^^
 2 >    ^^^^
 3 >        ^
-4 >         ^^^
-5 >            ^
-6 >             ^^^^
+4 >         ^^^^^^^^^^
 1 >
 2 >    var 
 3 >        v
-4 >          of 
-5 >            a
-6 >             
+4 >         
 1 >Emitted(3, 5) Source(2, 6) + SourceIndex(0)
 2 >Emitted(3, 9) Source(2, 10) + SourceIndex(0)
 3 >Emitted(3, 10) Source(2, 11) + SourceIndex(0)
-4 >Emitted(3, 13) Source(2, 15) + SourceIndex(0)
-5 >Emitted(3, 14) Source(2, 16) + SourceIndex(0)
-6 >Emitted(3, 18) Source(2, 11) + SourceIndex(0)
+4 >Emitted(3, 20) Source(2, 11) + SourceIndex(0)
 ---
 >>>    v;
 1 >^^^^

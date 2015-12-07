@@ -46,16 +46,8 @@ var v = (_a = {},
         enumerable: true,
         configurable: true
     }),
-    Object.defineProperty(_a, "", {
-        set: function (v) { },
-        enumerable: true,
-        configurable: true
-    }),
-    Object.defineProperty(_a, 0, {
-        get: function () { return 0; },
-        enumerable: true,
-        configurable: true
-    }),
+    ,
+    ,
     Object.defineProperty(_a, a, {
         set: function (v) { },
         enumerable: true,

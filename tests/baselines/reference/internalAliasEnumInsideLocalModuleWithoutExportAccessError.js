@@ -15,6 +15,7 @@ export module c {
 var happyFriday = c.b.Friday;
 
 //// [internalAliasEnumInsideLocalModuleWithoutExportAccessError.js]
+"use strict";
 var a;
 (function (a) {
     (function (weekend) {

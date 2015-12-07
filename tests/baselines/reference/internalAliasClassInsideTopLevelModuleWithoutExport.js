@@ -12,6 +12,7 @@ export var cProp = new xc();
 var cReturnVal = cProp.foo(10);
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.js]
+"use strict";
 var x;
 (function (x) {
     var c = (function () {

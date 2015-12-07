@@ -9,9 +9,6 @@ class C1 {
 >f : (x: this) => this
 >x : this
 >undefined : undefined
-
-    constructor(x: this) { }
->x : this
 }
 
 class C2 {
@@ -96,7 +93,6 @@ class C5 {
 >f1 : (x: this) => this
 >(x: this): this => this : (x: this) => this
 >x : this
->this : this
 >this : this
 
         let f2 = (x: this) => this;

@@ -12,6 +12,7 @@ export var x: typeof a;
 
 
 //// [importDeclarationUsedAsTypeQuery_require.js]
+"use strict";
 var B = (function () {
     function B() {
     }
@@ -19,6 +20,7 @@ var B = (function () {
 })();
 exports.B = B;
 //// [importDeclarationUsedAsTypeQuery_1.js]
+"use strict";
 
 
 //// [importDeclarationUsedAsTypeQuery_require.d.ts]

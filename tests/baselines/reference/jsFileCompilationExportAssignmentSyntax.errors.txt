@@ -1,0 +1,12 @@
+error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
+tests/cases/compiler/a.js(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/a.js(1,1): error TS8003: 'export=' can only be used in a .ts file.
+
+
+!!! error TS5055: Cannot write file 'tests/cases/compiler/a.js' because it would overwrite input file.
+==== tests/cases/compiler/a.js (2 errors) ====
+    export = b;
+    ~~~~~~~~~~~
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+    ~~~~~~~~~~~
+!!! error TS8003: 'export=' can only be used in a .ts file.

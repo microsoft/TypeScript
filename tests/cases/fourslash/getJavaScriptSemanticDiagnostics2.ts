@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: a.js
 //// export = b;
 
@@ -11,5 +11,12 @@ verify.getSemanticDiagnostics(`[
     "length": 11,
     "category": "error",
     "code": 8003
+  },
+  {
+    "message": "Cannot compile modules unless the '--module' flag is provided.",
+    "start": 0,
+    "length": 11,
+    "category": "error",
+    "code": 1148
   }
 ]`);

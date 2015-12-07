@@ -1,4 +1,5 @@
 //// [forInContinueStatements.ts]
+
 for(var x in {}) {
     continue;
 }

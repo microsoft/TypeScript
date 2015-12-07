@@ -14,4 +14,6 @@ import y = require("./a");
 //// [ref.js]
 var x = 1;
 //// [a.js]
+"use strict";
 //// [b.js]
+"use strict";

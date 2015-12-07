@@ -1,4 +1,4 @@
-//// [tsxErrorRecovery1.tsx]
+//// [file.tsx]
 
 declare namespace JSX { interface Element { } }
 
@@ -9,7 +9,7 @@ function foo() {
 var y = { a: 1 };
 
 
-//// [tsxErrorRecovery1.jsx]
+//// [file.jsx]
 function foo() {
     var x = <div>  {}div>
 }

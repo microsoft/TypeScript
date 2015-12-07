@@ -8,3 +8,4 @@ export var x: number;
 import y = require("a");
 
 //// [b.js]
+"use strict";

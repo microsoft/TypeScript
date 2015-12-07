@@ -110,23 +110,23 @@ interface A { // T
     a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(a12, Decl(constructSignatureAssignabilityInInheritance2.ts, 19, 75))
 >x : Symbol(x, Decl(constructSignatureAssignabilityInInheritance2.ts, 20, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance2.ts, 0, 0))
 >y : Symbol(y, Decl(constructSignatureAssignabilityInInheritance2.ts, 20, 29))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(constructSignatureAssignabilityInInheritance2.ts, 3, 43))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(constructSignatureAssignabilityInInheritance2.ts, 2, 27))
 
     a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >a13 : Symbol(a13, Decl(constructSignatureAssignabilityInInheritance2.ts, 20, 68))
 >x : Symbol(x, Decl(constructSignatureAssignabilityInInheritance2.ts, 21, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance2.ts, 0, 0))
 >y : Symbol(y, Decl(constructSignatureAssignabilityInInheritance2.ts, 21, 29))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(constructSignatureAssignabilityInInheritance2.ts, 2, 27))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(constructSignatureAssignabilityInInheritance2.ts, 2, 27))
 
     a14: new (x: { a: string; b: number }) => Object;
@@ -134,7 +134,7 @@ interface A { // T
 >x : Symbol(x, Decl(constructSignatureAssignabilityInInheritance2.ts, 22, 14))
 >a : Symbol(a, Decl(constructSignatureAssignabilityInInheritance2.ts, 22, 18))
 >b : Symbol(b, Decl(constructSignatureAssignabilityInInheritance2.ts, 22, 29))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     a15: {
 >a15 : Symbol(a15, Decl(constructSignatureAssignabilityInInheritance2.ts, 22, 53))
@@ -195,8 +195,8 @@ interface A { // T
 
             new (a: Date): Date;
 >a : Symbol(a, Decl(constructSignatureAssignabilityInInheritance2.ts, 42, 17))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         }): any[];
     };
@@ -332,23 +332,23 @@ interface I extends A {
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
 >a12 : Symbol(a12, Decl(constructSignatureAssignabilityInInheritance2.ts, 60, 47))
 >T : Symbol(T, Decl(constructSignatureAssignabilityInInheritance2.ts, 61, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance2.ts, 0, 0))
 >x : Symbol(x, Decl(constructSignatureAssignabilityInInheritance2.ts, 61, 37))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance2.ts, 0, 0))
 >y : Symbol(y, Decl(constructSignatureAssignabilityInInheritance2.ts, 61, 52))
 >T : Symbol(T, Decl(constructSignatureAssignabilityInInheritance2.ts, 61, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(constructSignatureAssignabilityInInheritance2.ts, 2, 27))
 
     a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
 >a13 : Symbol(a13, Decl(constructSignatureAssignabilityInInheritance2.ts, 61, 77))
 >T : Symbol(T, Decl(constructSignatureAssignabilityInInheritance2.ts, 62, 14))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(constructSignatureAssignabilityInInheritance2.ts, 2, 27))
 >x : Symbol(x, Decl(constructSignatureAssignabilityInInheritance2.ts, 62, 40))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Base : Symbol(Base, Decl(constructSignatureAssignabilityInInheritance2.ts, 0, 0))
 >y : Symbol(y, Decl(constructSignatureAssignabilityInInheritance2.ts, 62, 55))
 >T : Symbol(T, Decl(constructSignatureAssignabilityInInheritance2.ts, 62, 14))

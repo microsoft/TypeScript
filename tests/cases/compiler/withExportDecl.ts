@@ -42,7 +42,7 @@ module m1 {
         return "Hello";
     }
 }
-declare export module m2 {
+export declare module m2 {
 
     export var a: number;
 }

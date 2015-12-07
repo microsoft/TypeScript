@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/for-ofStatements/for-of48.ts(4,12): error TS1005: ':' expected.
+tests/cases/conformance/es6/for-ofStatements/for-of48.ts(4,10): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of48.ts (1 errors) ====
@@ -6,8 +6,8 @@ tests/cases/conformance/es6/for-ofStatements/for-of48.ts(4,12): error TS1005: ':
     var array = [{ x: "", y: true }]
     enum E { x }
     for ({x, y = E.x} of array) {
-               ~
-!!! error TS1005: ':' expected.
+             ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
         x;
         y;
     }

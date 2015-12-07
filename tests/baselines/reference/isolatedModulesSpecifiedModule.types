@@ -1,4 +1,4 @@
-=== tests/cases/compiler/isolatedModulesSpecifiedModule.ts ===
+=== tests/cases/compiler/file1.ts ===
 export var x;
 >x : any
 

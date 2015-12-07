@@ -13,6 +13,7 @@ class Test1 extends C1<M2.M2C> {
 
 //// [moduleImportedForTypeArgumentPosition_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [moduleImportedForTypeArgumentPosition_1.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -21,6 +22,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var C1 = (function () {
         function C1() {
         }

@@ -81,10 +81,10 @@ sourceFile:sourceMap-Comments.ts
   >                 }
   >             
   >             }
-1->Emitted(3, 5) Source(1, 12) + SourceIndex(0) name (sas)
-2 >Emitted(3, 9) Source(1, 12) + SourceIndex(0) name (sas)
-3 >Emitted(3, 14) Source(1, 17) + SourceIndex(0) name (sas)
-4 >Emitted(3, 15) Source(19, 2) + SourceIndex(0) name (sas)
+1->Emitted(3, 5) Source(1, 12) + SourceIndex(0)
+2 >Emitted(3, 9) Source(1, 12) + SourceIndex(0)
+3 >Emitted(3, 14) Source(1, 17) + SourceIndex(0)
+4 >Emitted(3, 15) Source(19, 2) + SourceIndex(0)
 ---
 >>>    (function (tools) {
 1->^^^^
@@ -98,24 +98,24 @@ sourceFile:sourceMap-Comments.ts
 3 >               tools
 4 >                     
 5 >                      {
-1->Emitted(4, 5) Source(1, 12) + SourceIndex(0) name (sas)
-2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0) name (sas)
-3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0) name (sas)
-4 >Emitted(4, 23) Source(1, 18) + SourceIndex(0) name (sas)
-5 >Emitted(4, 24) Source(1, 19) + SourceIndex(0) name (sas)
+1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
+2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
+3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0)
+4 >Emitted(4, 23) Source(1, 18) + SourceIndex(0)
+5 >Emitted(4, 24) Source(1, 19) + SourceIndex(0)
 ---
 >>>        var Test = (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >    
-1->Emitted(5, 9) Source(2, 5) + SourceIndex(0) name (sas.tools)
+1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
 ---
 >>>            function Test() {
 1->^^^^^^^^^^^^
 2 >            ^^->
 1->
-1->Emitted(6, 13) Source(2, 5) + SourceIndex(0) name (sas.tools.Test)
+1->Emitted(6, 13) Source(2, 5) + SourceIndex(0)
 ---
 >>>            }
 1->^^^^^^^^^^^^
@@ -138,8 +138,8 @@ sourceFile:sourceMap-Comments.ts
   >        }
   >    
 2 >            }
-1->Emitted(7, 13) Source(17, 5) + SourceIndex(0) name (sas.tools.Test.constructor)
-2 >Emitted(7, 14) Source(17, 6) + SourceIndex(0) name (sas.tools.Test.constructor)
+1->Emitted(7, 13) Source(17, 5) + SourceIndex(0)
+2 >Emitted(7, 14) Source(17, 6) + SourceIndex(0)
 ---
 >>>            Test.prototype.doX = function () {
 1->^^^^^^^^^^^^
@@ -148,9 +148,9 @@ sourceFile:sourceMap-Comments.ts
 1->
 2 >            doX
 3 >                              
-1->Emitted(8, 13) Source(3, 16) + SourceIndex(0) name (sas.tools.Test)
-2 >Emitted(8, 31) Source(3, 19) + SourceIndex(0) name (sas.tools.Test)
-3 >Emitted(8, 34) Source(3, 9) + SourceIndex(0) name (sas.tools.Test)
+1->Emitted(8, 13) Source(3, 16) + SourceIndex(0)
+2 >Emitted(8, 31) Source(3, 19) + SourceIndex(0)
+3 >Emitted(8, 34) Source(3, 9) + SourceIndex(0)
 ---
 >>>                var f = 2;
 1 >^^^^^^^^^^^^^^^^
@@ -167,12 +167,12 @@ sourceFile:sourceMap-Comments.ts
 4 >                     : number = 
 5 >                        2
 6 >                         ;
-1 >Emitted(9, 17) Source(4, 13) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(9, 21) Source(4, 17) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(9, 22) Source(4, 18) + SourceIndex(0) name (sas.tools.Test.doX)
-4 >Emitted(9, 25) Source(4, 29) + SourceIndex(0) name (sas.tools.Test.doX)
-5 >Emitted(9, 26) Source(4, 30) + SourceIndex(0) name (sas.tools.Test.doX)
-6 >Emitted(9, 27) Source(4, 31) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(9, 17) Source(4, 13) + SourceIndex(0)
+2 >Emitted(9, 21) Source(4, 17) + SourceIndex(0)
+3 >Emitted(9, 22) Source(4, 18) + SourceIndex(0)
+4 >Emitted(9, 25) Source(4, 29) + SourceIndex(0)
+5 >Emitted(9, 26) Source(4, 30) + SourceIndex(0)
+6 >Emitted(9, 27) Source(4, 31) + SourceIndex(0)
 ---
 >>>                switch (f) {
 1->^^^^^^^^^^^^^^^^
@@ -192,14 +192,14 @@ sourceFile:sourceMap-Comments.ts
 6 >                         )
 7 >                           
 8 >                           {
-1->Emitted(10, 17) Source(5, 13) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(10, 23) Source(5, 19) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(10, 24) Source(5, 20) + SourceIndex(0) name (sas.tools.Test.doX)
-4 >Emitted(10, 25) Source(5, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-5 >Emitted(10, 26) Source(5, 22) + SourceIndex(0) name (sas.tools.Test.doX)
-6 >Emitted(10, 27) Source(5, 23) + SourceIndex(0) name (sas.tools.Test.doX)
-7 >Emitted(10, 28) Source(5, 24) + SourceIndex(0) name (sas.tools.Test.doX)
-8 >Emitted(10, 29) Source(5, 25) + SourceIndex(0) name (sas.tools.Test.doX)
+1->Emitted(10, 17) Source(5, 13) + SourceIndex(0)
+2 >Emitted(10, 23) Source(5, 19) + SourceIndex(0)
+3 >Emitted(10, 24) Source(5, 20) + SourceIndex(0)
+4 >Emitted(10, 25) Source(5, 21) + SourceIndex(0)
+5 >Emitted(10, 26) Source(5, 22) + SourceIndex(0)
+6 >Emitted(10, 27) Source(5, 23) + SourceIndex(0)
+7 >Emitted(10, 28) Source(5, 24) + SourceIndex(0)
+8 >Emitted(10, 29) Source(5, 25) + SourceIndex(0)
 ---
 >>>                    case 1:
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -210,9 +210,9 @@ sourceFile:sourceMap-Comments.ts
   >                
 2 >                    case 
 3 >                         1
-1 >Emitted(11, 21) Source(6, 17) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(11, 26) Source(6, 22) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(11, 27) Source(6, 23) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(11, 21) Source(6, 17) + SourceIndex(0)
+2 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
+3 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
 ---
 >>>                        break;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -222,9 +222,9 @@ sourceFile:sourceMap-Comments.ts
   >                    
 2 >                        break
 3 >                             ;
-1->Emitted(12, 25) Source(7, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(12, 30) Source(7, 26) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(12, 31) Source(7, 27) + SourceIndex(0) name (sas.tools.Test.doX)
+1->Emitted(12, 25) Source(7, 21) + SourceIndex(0)
+2 >Emitted(12, 30) Source(7, 26) + SourceIndex(0)
+3 >Emitted(12, 31) Source(7, 27) + SourceIndex(0)
 ---
 >>>                    case 2:
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -235,9 +235,9 @@ sourceFile:sourceMap-Comments.ts
   >                
 2 >                    case 
 3 >                         2
-1 >Emitted(13, 21) Source(8, 17) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(13, 26) Source(8, 22) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(13, 27) Source(8, 23) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(13, 21) Source(8, 17) + SourceIndex(0)
+2 >Emitted(13, 26) Source(8, 22) + SourceIndex(0)
+3 >Emitted(13, 27) Source(8, 23) + SourceIndex(0)
 ---
 >>>                        //line comment 1
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -246,8 +246,8 @@ sourceFile:sourceMap-Comments.ts
 1->:
   >                    
 2 >                        //line comment 1
-1->Emitted(14, 25) Source(9, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(14, 41) Source(9, 37) + SourceIndex(0) name (sas.tools.Test.doX)
+1->Emitted(14, 25) Source(9, 21) + SourceIndex(0)
+2 >Emitted(14, 41) Source(9, 37) + SourceIndex(0)
 ---
 >>>                        //line comment 2
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -255,8 +255,8 @@ sourceFile:sourceMap-Comments.ts
 1->
   >                    
 2 >                        //line comment 2
-1->Emitted(15, 25) Source(10, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(15, 41) Source(10, 37) + SourceIndex(0) name (sas.tools.Test.doX)
+1->Emitted(15, 25) Source(10, 21) + SourceIndex(0)
+2 >Emitted(15, 41) Source(10, 37) + SourceIndex(0)
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -266,9 +266,9 @@ sourceFile:sourceMap-Comments.ts
   >                    
 2 >                        break
 3 >                             ;
-1 >Emitted(16, 25) Source(11, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(16, 30) Source(11, 26) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(16, 31) Source(11, 27) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(16, 25) Source(11, 21) + SourceIndex(0)
+2 >Emitted(16, 30) Source(11, 26) + SourceIndex(0)
+3 >Emitted(16, 31) Source(11, 27) + SourceIndex(0)
 ---
 >>>                    case 3:
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -279,9 +279,9 @@ sourceFile:sourceMap-Comments.ts
   >                
 2 >                    case 
 3 >                         3
-1 >Emitted(17, 21) Source(12, 17) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(17, 26) Source(12, 22) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(17, 27) Source(12, 23) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(17, 21) Source(12, 17) + SourceIndex(0)
+2 >Emitted(17, 26) Source(12, 22) + SourceIndex(0)
+3 >Emitted(17, 27) Source(12, 23) + SourceIndex(0)
 ---
 >>>                        //a comment
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -289,8 +289,8 @@ sourceFile:sourceMap-Comments.ts
 1->:
   >                    
 2 >                        //a comment
-1->Emitted(18, 25) Source(13, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(18, 36) Source(13, 32) + SourceIndex(0) name (sas.tools.Test.doX)
+1->Emitted(18, 25) Source(13, 21) + SourceIndex(0)
+2 >Emitted(18, 36) Source(13, 32) + SourceIndex(0)
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -300,9 +300,9 @@ sourceFile:sourceMap-Comments.ts
   >                    
 2 >                        break
 3 >                             ;
-1 >Emitted(19, 25) Source(14, 21) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(19, 30) Source(14, 26) + SourceIndex(0) name (sas.tools.Test.doX)
-3 >Emitted(19, 31) Source(14, 27) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(19, 25) Source(14, 21) + SourceIndex(0)
+2 >Emitted(19, 30) Source(14, 26) + SourceIndex(0)
+3 >Emitted(19, 31) Source(14, 27) + SourceIndex(0)
 ---
 >>>                }
 1 >^^^^^^^^^^^^^^^^
@@ -310,8 +310,8 @@ sourceFile:sourceMap-Comments.ts
 1 >
   >            
 2 >                }
-1 >Emitted(20, 17) Source(15, 13) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(20, 18) Source(15, 14) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(20, 17) Source(15, 13) + SourceIndex(0)
+2 >Emitted(20, 18) Source(15, 14) + SourceIndex(0)
 ---
 >>>            };
 1 >^^^^^^^^^^^^
@@ -320,8 +320,8 @@ sourceFile:sourceMap-Comments.ts
 1 >
   >        
 2 >            }
-1 >Emitted(21, 13) Source(16, 9) + SourceIndex(0) name (sas.tools.Test.doX)
-2 >Emitted(21, 14) Source(16, 10) + SourceIndex(0) name (sas.tools.Test.doX)
+1 >Emitted(21, 13) Source(16, 9) + SourceIndex(0)
+2 >Emitted(21, 14) Source(16, 10) + SourceIndex(0)
 ---
 >>>            return Test;
 1->^^^^^^^^^^^^
@@ -329,8 +329,8 @@ sourceFile:sourceMap-Comments.ts
 1->
   >    
 2 >            }
-1->Emitted(22, 13) Source(17, 5) + SourceIndex(0) name (sas.tools.Test)
-2 >Emitted(22, 24) Source(17, 6) + SourceIndex(0) name (sas.tools.Test)
+1->Emitted(22, 13) Source(17, 5) + SourceIndex(0)
+2 >Emitted(22, 24) Source(17, 6) + SourceIndex(0)
 ---
 >>>        })();
 1 >^^^^^^^^
@@ -357,10 +357,10 @@ sourceFile:sourceMap-Comments.ts
   >                     }
   >                 }
   >             }
-1 >Emitted(23, 9) Source(17, 5) + SourceIndex(0) name (sas.tools.Test)
-2 >Emitted(23, 10) Source(17, 6) + SourceIndex(0) name (sas.tools.Test)
-3 >Emitted(23, 10) Source(2, 5) + SourceIndex(0) name (sas.tools)
-4 >Emitted(23, 14) Source(17, 6) + SourceIndex(0) name (sas.tools)
+1 >Emitted(23, 9) Source(17, 5) + SourceIndex(0)
+2 >Emitted(23, 10) Source(17, 6) + SourceIndex(0)
+3 >Emitted(23, 10) Source(2, 5) + SourceIndex(0)
+4 >Emitted(23, 14) Source(17, 6) + SourceIndex(0)
 ---
 >>>        tools.Test = Test;
 1->^^^^^^^^
@@ -387,10 +387,10 @@ sourceFile:sourceMap-Comments.ts
   >                          }
   >                      }
 4 >                         
-1->Emitted(24, 9) Source(2, 18) + SourceIndex(0) name (sas.tools)
-2 >Emitted(24, 19) Source(2, 22) + SourceIndex(0) name (sas.tools)
-3 >Emitted(24, 26) Source(17, 6) + SourceIndex(0) name (sas.tools)
-4 >Emitted(24, 27) Source(17, 6) + SourceIndex(0) name (sas.tools)
+1->Emitted(24, 9) Source(2, 18) + SourceIndex(0)
+2 >Emitted(24, 19) Source(2, 22) + SourceIndex(0)
+3 >Emitted(24, 26) Source(17, 6) + SourceIndex(0)
+4 >Emitted(24, 27) Source(17, 6) + SourceIndex(0)
 ---
 >>>    })(tools = sas.tools || (sas.tools = {}));
 1->^^^^
@@ -431,15 +431,15 @@ sourceFile:sourceMap-Comments.ts
   >                                          }
   >                                      
   >                                      }
-1->Emitted(25, 5) Source(19, 1) + SourceIndex(0) name (sas.tools)
-2 >Emitted(25, 6) Source(19, 2) + SourceIndex(0) name (sas.tools)
-3 >Emitted(25, 8) Source(1, 12) + SourceIndex(0) name (sas)
-4 >Emitted(25, 13) Source(1, 17) + SourceIndex(0) name (sas)
-5 >Emitted(25, 16) Source(1, 12) + SourceIndex(0) name (sas)
-6 >Emitted(25, 25) Source(1, 17) + SourceIndex(0) name (sas)
-7 >Emitted(25, 30) Source(1, 12) + SourceIndex(0) name (sas)
-8 >Emitted(25, 39) Source(1, 17) + SourceIndex(0) name (sas)
-9 >Emitted(25, 47) Source(19, 2) + SourceIndex(0) name (sas)
+1->Emitted(25, 5) Source(19, 1) + SourceIndex(0)
+2 >Emitted(25, 6) Source(19, 2) + SourceIndex(0)
+3 >Emitted(25, 8) Source(1, 12) + SourceIndex(0)
+4 >Emitted(25, 13) Source(1, 17) + SourceIndex(0)
+5 >Emitted(25, 16) Source(1, 12) + SourceIndex(0)
+6 >Emitted(25, 25) Source(1, 17) + SourceIndex(0)
+7 >Emitted(25, 30) Source(1, 12) + SourceIndex(0)
+8 >Emitted(25, 39) Source(1, 17) + SourceIndex(0)
+9 >Emitted(25, 47) Source(19, 2) + SourceIndex(0)
 ---
 >>>})(sas || (sas = {}));
 1 >
@@ -475,8 +475,8 @@ sourceFile:sourceMap-Comments.ts
   >                  }
   >              
   >              }
-1 >Emitted(26, 1) Source(19, 1) + SourceIndex(0) name (sas)
-2 >Emitted(26, 2) Source(19, 2) + SourceIndex(0) name (sas)
+1 >Emitted(26, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(26, 2) Source(19, 2) + SourceIndex(0)
 3 >Emitted(26, 4) Source(1, 8) + SourceIndex(0)
 4 >Emitted(26, 7) Source(1, 11) + SourceIndex(0)
 5 >Emitted(26, 12) Source(1, 8) + SourceIndex(0)

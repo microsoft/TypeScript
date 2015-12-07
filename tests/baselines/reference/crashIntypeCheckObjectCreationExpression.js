@@ -10,6 +10,7 @@ export class BuildWorkspaceService {
 
 //// [crashIntypeCheckObjectCreationExpression.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var BuildWorkspaceService = (function () {
         function BuildWorkspaceService() {
         }

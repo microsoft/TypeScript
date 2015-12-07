@@ -41,12 +41,12 @@ function foo4(x: number | string | boolean) {
                 : x.toString(); // number
         })(x); // x here is narrowed to number | boolean
 }
-// Type guards affect nested function expressions, but not nested function declarations
+// Type guards affect nested function expressions and nested function declarations
 function foo5(x: number | string | boolean) {
     if (typeof x === "string") {
         var y = x; // string;
         function foo() {
-            var z = x; // number | string | boolean, type guard has no effect
+            var z = x; // string
         }
     }
 }
@@ -121,12 +121,12 @@ function foo4(x) {
                 : x.toString(); // number
         })(x); // x here is narrowed to number | boolean
 }
-// Type guards affect nested function expressions, but not nested function declarations
+// Type guards affect nested function expressions and nested function declarations
 function foo5(x) {
     if (typeof x === "string") {
         var y = x; // string;
         function foo() {
-            var z = x; // number | string | boolean, type guard has no effect
+            var z = x; // string
         }
     }
 }
