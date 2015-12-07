@@ -58,7 +58,7 @@ namespace ts.JsTyping {
      * considered for typing.
      */
     export function discoverTypings(
-        host: HostType, fileNames: string[], cachePath: string, configFilePath: string, compilerOptions?: CompilerOptions, includeList?: string[], safeListFilePath?: string, noDevDependencies?: boolean)
+        host: HostType, fileNames: string[], globalCachePath: string, configFilePath: string, compilerOptions?: CompilerOptions, includeList?: string[], noDevDependencies?: boolean)
         : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         _host = host;
@@ -66,11 +66,13 @@ namespace ts.JsTyping {
         inferredTypings = {};
 
         // Normalize everything
-        cachePath = ts.normalizePath(cachePath);
+        globalCachePath = ts.normalizePath(globalCachePath);
         configFilePath = ts.normalizePath(configFilePath);
         fileNames = fileNames.map(ts.normalizePath).filter(f => ts.getBaseFileName(f) !== "lib.d.ts");
-        if (!_safeList && safeListFilePath) {
-            _safeList = tryParseJson(ts.normalizePath(safeListFilePath));
+
+        let safeListFilePath = ts.combinePaths(globalCachePath, "safeList.json");
+        if (!_safeList && _host.fileExists(safeListFilePath)) {
+            _safeList = tryParseJson(safeListFilePath);
         }
 
         let filesToWatch: string[] = [];
@@ -79,33 +81,51 @@ namespace ts.JsTyping {
 
         // Check the typings config path to see if auto-typings is
         // enabled and if the there are any typings in the include/exclude list
-        let exclude: string[] = [];
+        // 1. has config file, "enableAutoTyping" === false -> disable auto typing, no cache
+        // 2. has config file, no "enableAutoTyping" field or "enableAutoTyping" === true -> enable auto typing, use local cache
+        // 3. no config file -> enable auto typing, use global cache
+        // Note: a invalid config file is treated the same as no config file
         let configFileJsonDict = tryParseJson(configFilePath);
+        if (configFileJsonDict && configFileJsonDict["enableAutoTyping"] === false) {
+            return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] }
+        }
+
+        let exclude: string[] = [];
+        // Merge host specific include typings list
+        if (includeList) {
+            mergeTypings(includeList);
+        }
+
         if (configFileJsonDict) {
             filesToWatch.push(configFilePath);
-            if (configFileJsonDict.hasOwnProperty("exclude")) {
-                // The items in the "exclude" should be either file names or typing names
-                for (let excludeItem of configFileJsonDict["exclude"]) {
-                    if (ts.fileExtensionIs(excludeItem, ".d.ts")) {
-                        exclude.push(ts.combinePaths(ts.getDirectoryPath(configFilePath), excludeItem));
-                    }
-                    else {
-                        exclude.push(excludeItem);
+
+            // Check the autoTypingOptions in the config file
+            // 1. has "autoTypingOptions", in which "autoDiscoverTyping" === false -> respect the "include"/"exclude" list
+            // 2. has "autoTypingOptions", in which "autoDiscoverTyping" === true -> respect the "include"/"exclude" list, enable auto discovery
+            // 3. no "autoTypingOptions" -> enable auto discovery
+            let autoTypingOptions = configFileJsonDict["autoTypingOptions"];
+            if (autoTypingOptions) {
+                if (autoTypingOptions.hasOwnProperty("exclude")) {
+                    // The items in the "exclude" should be either file names or typing names
+                    for (let excludeItem of configFileJsonDict["exclude"]) {
+                        if (ts.fileExtensionIs(excludeItem, ".d.ts")) {
+                            exclude.push(ts.combinePaths(ts.getDirectoryPath(configFilePath), excludeItem));
+                        }
+                        else {
+                            exclude.push(excludeItem);
+                        }
                     }
                 }
-            }
 
-            if (configFileJsonDict.hasOwnProperty("include")) {
-                mergeTypings(configFileJsonDict["include"]);
+                if (configFileJsonDict.hasOwnProperty("include")) {
+                    mergeTypings(configFileJsonDict["include"]);
+                }
             }
         }
 
-        if (!configFileJsonDict || configFileJsonDict["autoTypingsEnabled"] === false) {
-            // Merge host specific include typings list
-            if (includeList) {
-                mergeTypings(includeList);
-            }
-
+        if (!(configFileJsonDict &&
+              configFileJsonDict["autoTypingOptions"] &&
+              configFileJsonDict["autoTypingOptions"]["autoDiscoverTyping"] === false)) {
             searchDirs = ts.deduplicate(fileNames.map(ts.getDirectoryPath));
             for (let searchDir of searchDirs) {
                 let packageJsonPath = ts.combinePaths(searchDir, "package.json");
@@ -122,6 +142,7 @@ namespace ts.JsTyping {
             getTypingNamesFromCompilerOptions(compilerOptions);
         }
 
+        let cachePath = configFileJsonDict ? ts.combinePaths(ts.getDirectoryPath(configFilePath), "autoTyping") : globalCachePath;
         let typingsPath = ts.combinePaths(cachePath, "typings");
         let tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
         let tsdJsonDict = tryParseJson(tsdJsonPath);
@@ -256,7 +277,7 @@ namespace ts.JsTyping {
         if (!options) {
             return;
         }
-        
+
         if (options.jsx === JsxEmit.React) {
             typingNames.push("react");
         }
@@ -332,7 +353,7 @@ namespace ts.JsTyping {
                 autoTypingsEnabled = false;
             }
         }
-      
+
         let autoTypingsInfo = {
             _autoTypings: installedKeys,
             autoTypingsEnabled: autoTypingsEnabled,

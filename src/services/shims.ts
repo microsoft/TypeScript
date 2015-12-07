@@ -1034,7 +1034,7 @@ namespace ts {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
                 let includeList: string[] = JSON.parse(includeListJson);
-                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, projectRootPath, compilerOptions, includeList, safeListJsonPath, noDevDependencies);
+                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, projectRootPath, compilerOptions, includeList, noDevDependencies);
             });
         }
 
