@@ -64,7 +64,7 @@ function getVersionSync(): string {
         const packageJson: VersionJson = JSON.parse(fs.readFileSync(versionFilePath, "utf8"));
         // The version has 4 digits, we only need 3
         const version = packageJson.version;
-        return version.slice(0,3).join(".");
+        return version.slice(0, 3).join(".");
     }
     catch (error) {
         throw new Error("Error in getVersionSync: " + error);
@@ -136,7 +136,7 @@ function main() {
     let distributionType: DistributionType = DistributionType.invalid;
 
     // Parse command line input checking if the users specify whether to configure version for nightly publishing
-    if (process.argv.length > 3) {       
+    if (process.argv.length > 3) {
         for (let i = 2; i < process.argv.length; ++i) {
             const argv = process.argv[i];
             if (argv ===  "-n" || argv === "--nightly") {
@@ -150,13 +150,13 @@ function main() {
             }
         }
     }
-    
+
     if (!versionFilePath) {
         displayUsage();
         return;
     }
-    
-    switch(distributionType) {
+
+    switch (distributionType) {
         case DistributionType.nightly:
             console.log("Distributing nightly version using version from version file");
             distributeNightlyVersion();

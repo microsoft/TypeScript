@@ -115,7 +115,7 @@ var scriptSources = [
     "tslint/preferConstRule.ts",
     "tslint/typeOperatorSpacingRule.ts",
     "tslint/noInOperatorRule.ts",
-    "distributeVersion.ts"
+    "distributeVersion/distributeVersion.ts"
 ].map(function (f) {
     return path.join(scriptsDirectory, f);
 });
