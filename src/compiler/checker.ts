@@ -11075,9 +11075,6 @@ namespace ts {
             forEach(node.parameters, checkParameter);
 
             checkSourceElement(node.type);
-            if (node.type && node.type.kind === SyntaxKind.TypePredicate) {
-
-            }
 
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
