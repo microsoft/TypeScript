@@ -1,0 +1,24 @@
+tests/cases/conformance/expressions/typeGuards/typePredicateUnions.ts(1,43): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typePredicateUnions.ts (1 errors) ====
+    function isA<A>(x: any, y: any): x is A | y is B {
+                                              ~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
+        return false;
+    }
+    
+    var x: number | number[];
+    var y: string | string[];
+    var num: number;
+    var nums: number[];
+    var strOrStrs: string | string[];
+    
+    if (isA<number>(x, y)) {
+        num = x;
+        strOrStrs = y;
+    }
+    else {
+        nums = x;
+        strOrStrs = y;
+    }
