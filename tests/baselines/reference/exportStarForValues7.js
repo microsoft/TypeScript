@@ -14,13 +14,16 @@ export var x = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.x = 1;
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports, file2_1) {
+    "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }

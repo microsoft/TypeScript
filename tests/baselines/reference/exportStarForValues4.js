@@ -18,12 +18,15 @@ var x = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x = 1;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x = 1;
 });

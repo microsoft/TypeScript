@@ -10,8 +10,10 @@ var x;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x;
 });

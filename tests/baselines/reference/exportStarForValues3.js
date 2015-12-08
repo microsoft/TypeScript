@@ -26,20 +26,25 @@ var x = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x = 1;
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x = 1;
 });
 //// [file4.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x = 1;
 });
 //// [file5.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var x = 1;
 });

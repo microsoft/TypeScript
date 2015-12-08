@@ -14,6 +14,7 @@ var x = 1;
 
 //// [file0.js]
 System.register([], function(exports_1) {
+    "use strict";
     var v;
     return {
         setters:[],
@@ -24,6 +25,7 @@ System.register([], function(exports_1) {
 });
 //// [file1.js]
 System.register([], function(exports_1) {
+    "use strict";
     return {
         setters:[],
         execute: function() {
@@ -32,6 +34,7 @@ System.register([], function(exports_1) {
 });
 //// [file2.js]
 System.register(["file0"], function(exports_1) {
+    "use strict";
     var x;
     function exportStar_1(m) {
         var exports = {};

@@ -18,9 +18,11 @@ export var x = 1;
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports, file2_1) {
+    "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
@@ -29,6 +31,7 @@ define(["require", "exports", "file2"], function (require, exports, file2_1) {
 });
 //// [file2.js]
 define(["require", "exports", "file3"], function (require, exports, file3_1) {
+    "use strict";
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }

@@ -10,6 +10,7 @@ export var x = 1;
 
 //// [file1.js]
 System.register([], function(exports_1) {
+    "use strict";
     return {
         setters:[],
         execute: function() {
@@ -18,6 +19,7 @@ System.register([], function(exports_1) {
 });
 //// [file2.js]
 System.register([], function(exports_1) {
+    "use strict";
     var x;
     return {
         setters:[],

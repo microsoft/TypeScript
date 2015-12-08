@@ -15025,6 +15025,8 @@ namespace ts {
             }
 
             const hasExportAssignment = getExportAssignmentSymbol(moduleSymbol) !== undefined;
+            // if module has export assignment then 'resolveExternalModuleSymbol' will return resolved symbol for export assignment
+            // otherwise it will return moduleSymbol itself
             moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
 
             const symbolLinks = getSymbolLinks(moduleSymbol);
