@@ -496,7 +496,8 @@ namespace ts.formatting {
             }
 
             function getEffectiveDelta(delta: number, child: TextRangeWithKind) {
-                return SmartIndenter.shouldInheritParentIndentation(node, child) ? 0 : delta;
+                // Delta value should be zero when the node explicitly prevents indentation of the child node
+                return SmartIndenter.nodeWillIndentChild(node, child, true) ? delta : 0;
             }
         }
 

@@ -465,11 +465,8 @@ namespace ts.formatting {
             }
             return false;
         }
-
-        /**
-         * Function returns true when a node with conditional indentation rule will indent certain child node
-         */
-        function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
+        
+        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
             let childKind = child ? child.kind : SyntaxKind.Unknown;
             switch (parent.kind) {
                 case SyntaxKind.DoStatement:
@@ -487,24 +484,15 @@ namespace ts.formatting {
                 case SyntaxKind.SetAccessor:
                     return childKind !== SyntaxKind.Block;
             }
-            // No explicit rule for selected nodes, so result will follow the default value argument
+            // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
         }
 
+        /*
+        Function returns true when the parent node should indent the given child by an explicit rule
+        */
         export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
-            if (nodeContentIsAlwaysIndented(parent.kind)) {
-                return true;
-            }
-            return nodeWillIndentChild(parent, child, false); 
-        }
-
-        /**
-         * Function returns true if existing node content indentation should be suppressed for a specific child
-         */
-        export function shouldInheritParentIndentation(parent: TextRangeWithKind, child: TextRangeWithKind): boolean {
-            // Consider parents without indentation rules can indent their children
-            // so that they can apply inherited delta value to them
-            return !nodeWillIndentChild(parent, child, true);
+            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false); 
         }
     }
 }
