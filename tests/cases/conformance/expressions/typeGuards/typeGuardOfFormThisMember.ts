@@ -33,6 +33,10 @@ namespace Test {
 	let x = file.isFile;
 	if (file.isFile) {
 		file.content;
+		if (file.isNetworked) {
+			file.host;
+			file.content;
+		}
 	}
 	else if (file.isDirectory) {
 		file.children;
@@ -75,29 +79,4 @@ namespace Test {
 	if (general.isMoreSpecific) {
 		general.do();
 	}
-
-
-	class doThing<T> {
-		constructor(private x: T) {}
-		isThing(x: any): x is doThing<T> {
-			return true;
-		}
-		
-	}
-	
-	let z: doThing<{}> = new doThing({x: 10});
-	let z1 = new doThing({x: 10});
-	if (z1.isThing(z)) {
-		z;
-	}
 }
-
-function f(g: (x: number) => void) {
-	
-	
-}
-
-f(function(x) {
-	
-	
-})

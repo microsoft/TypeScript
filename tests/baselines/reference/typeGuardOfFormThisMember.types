@@ -17,7 +17,7 @@ namespace Test {
 		}
 		set isFile(param) {
 >isFile : this is File
->param : this is File
+>param : boolean
 
 			// noop
 		}
@@ -74,31 +74,31 @@ namespace Test {
 
 	file.isNetworked = false;
 >file.isNetworked = false : boolean
->file.isNetworked : this is Networked & this
+>file.isNetworked : this is Networked & FileSystemObject
 >file : FileSystemObject
->isNetworked : this is Networked & this
+>isNetworked : this is Networked & FileSystemObject
 >false : boolean
 
 	file.isNetworked = file.isDirectory;
 >file.isNetworked = file.isDirectory : this is Directory
->file.isNetworked : this is Networked & this
+>file.isNetworked : this is Networked & FileSystemObject
 >file : FileSystemObject
->isNetworked : this is Networked & this
+>isNetworked : this is Networked & FileSystemObject
 >file.isDirectory : this is Directory
 >file : FileSystemObject
 >isDirectory : this is Directory
 
 	file.isFile = file.isNetworked;
->file.isFile = file.isNetworked : this is Networked & this
+>file.isFile = file.isNetworked : this is Networked & FileSystemObject
 >file.isFile : this is File
 >file : FileSystemObject
 >isFile : this is File
->file.isNetworked : this is Networked & this
+>file.isNetworked : this is Networked & FileSystemObject
 >file : FileSystemObject
->isNetworked : this is Networked & this
+>isNetworked : this is Networked & FileSystemObject
 
 	let x = file.isFile;
->x : this is File
+>x : boolean
 >file.isFile : this is File
 >file : FileSystemObject
 >isFile : this is File
@@ -112,6 +112,22 @@ namespace Test {
 >file.content : string
 >file : File
 >content : string
+
+		if (file.isNetworked) {
+>file.isNetworked : this is Networked & File
+>file : File
+>isNetworked : this is Networked & File
+
+			file.host;
+>file.host : string
+>file : Networked & File
+>host : string
+
+			file.content;
+>file.content : string
+>file : Networked & File
+>content : string
+		}
 	}
 	else if (file.isDirectory) {
 >file.isDirectory : this is Directory
@@ -124,13 +140,113 @@ namespace Test {
 >children : FileSystemObject[]
 	}
 	else if (file.isNetworked) {
->file.isNetworked : this is Networked & this
+>file.isNetworked : this is Networked & FileSystemObject
 >file : FileSystemObject
->isNetworked : this is Networked & this
+>isNetworked : this is Networked & FileSystemObject
 
 		file.host;
 >file.host : string
->file : Networked & this
+>file : Networked & FileSystemObject
 >host : string
 	}
+	
+	interface GenericLeadGuard<T> extends GenericGuard<T> {
+>GenericLeadGuard : GenericLeadGuard<T>
+>T : T
+>GenericGuard : GenericGuard<T>
+>T : T
+
+		lead(): void;
+>lead : () => void
+	}
+	
+	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+>GenericFollowerGuard : GenericFollowerGuard<T>
+>T : T
+>GenericGuard : GenericGuard<T>
+>T : T
+
+		follow(): void;
+>follow : () => void
+	}
+	
+	interface GenericGuard<T> {
+>GenericGuard : GenericGuard<T>
+>T : T
+
+		target: T;
+>target : T
+>T : T
+
+		isLeader: this is (GenericLeadGuard<T>);
+>isLeader : this is GenericLeadGuard<T>
+>GenericLeadGuard : GenericLeadGuard<T>
+>T : T
+
+		isFollower: this is GenericFollowerGuard<T>;
+>isFollower : this is GenericFollowerGuard<T>
+>GenericFollowerGuard : GenericFollowerGuard<T>
+>T : T
+	}
+
+	let guard: GenericGuard<File>;
+>guard : GenericGuard<File>
+>GenericGuard : GenericGuard<T>
+>File : File
+
+	if (guard.isLeader) {
+>guard.isLeader : this is GenericLeadGuard<File>
+>guard : GenericGuard<File>
+>isLeader : this is GenericLeadGuard<File>
+
+		guard.lead();
+>guard.lead() : void
+>guard.lead : () => void
+>guard : GenericLeadGuard<File>
+>lead : () => void
+	}
+	else if (guard.isFollower) {
+>guard.isFollower : this is GenericFollowerGuard<File>
+>guard : GenericGuard<File>
+>isFollower : this is GenericFollowerGuard<File>
+
+		guard.follow();
+>guard.follow() : void
+>guard.follow : () => void
+>guard : GenericFollowerGuard<File>
+>follow : () => void
+	}
+
+	interface SpecificGuard {
+>SpecificGuard : SpecificGuard
+
+		isMoreSpecific: this is MoreSpecificGuard;
+>isMoreSpecific : this is MoreSpecificGuard
+>MoreSpecificGuard : MoreSpecificGuard
+	}
+
+	interface MoreSpecificGuard extends SpecificGuard {
+>MoreSpecificGuard : MoreSpecificGuard
+>SpecificGuard : SpecificGuard
+
+		do(): void;
+>do : () => void
+	}
+
+	let general: SpecificGuard;
+>general : SpecificGuard
+>SpecificGuard : SpecificGuard
+
+	if (general.isMoreSpecific) {
+>general.isMoreSpecific : this is MoreSpecificGuard
+>general : SpecificGuard
+>isMoreSpecific : this is MoreSpecificGuard
+
+		general.do();
+>general.do() : void
+>general.do : () => void
+>general : MoreSpecificGuard
+>do : () => void
+	}
 }
+

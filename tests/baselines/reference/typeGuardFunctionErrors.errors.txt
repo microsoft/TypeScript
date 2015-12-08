@@ -25,7 +25,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(91,1):
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,9): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(98,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,25): error TS2519: A 'this'-based type predicate is only allowed in class or interface members, get accessors, or return type positions for functions and methods
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2322: Type 'boolean' is not assignable to type 'D'.
   Property 'm1' is missing in type 'Boolean'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2409: Return type of constructor signature must be assignable to the instance type of the class
@@ -33,6 +33,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(107,20
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(110,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(111,16): error TS2408: Setters cannot return a value.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(116,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(120,22): error TS1225: Cannot find parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(120,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(124,20): error TS1229: A type predicate cannot reference a rest parameter.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(129,34): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
@@ -40,7 +41,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(133,34
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39): error TS1230: A type predicate cannot reference element 'p1' in a binding pattern.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (33 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (34 errors) ====
     
     class A {
         propA: number;
@@ -194,7 +195,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
     class D {
         constructor(p1: A): p1 is C {
                             ~~~~~~~
-!!! error TS2519: A 'this'-based type predicate is only allowed in class or interface members, get accessors, or return type positions for functions and methods
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
                    ~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'D'.
@@ -224,6 +225,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
     
     interface I2 {
         [index: number]: p1 is C;
+                         ~~
+!!! error TS1225: Cannot find parameter 'p1'.
                          ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
     }

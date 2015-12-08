@@ -102,6 +102,22 @@ namespace Test {
 >file.content : Symbol(File.content, Decl(typeGuardOfFormThisMember.ts, 17, 27))
 >file : Symbol(file, Decl(typeGuardOfFormThisMember.ts, 26, 4))
 >content : Symbol(File.content, Decl(typeGuardOfFormThisMember.ts, 17, 27))
+
+		if (file.isNetworked) {
+>file.isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMember.ts, 11, 3))
+>file : Symbol(file, Decl(typeGuardOfFormThisMember.ts, 26, 4))
+>isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMember.ts, 11, 3))
+
+			file.host;
+>file.host : Symbol(Networked.host, Decl(typeGuardOfFormThisMember.ts, 22, 29))
+>file : Symbol(file, Decl(typeGuardOfFormThisMember.ts, 26, 4))
+>host : Symbol(Networked.host, Decl(typeGuardOfFormThisMember.ts, 22, 29))
+
+			file.content;
+>file.content : Symbol(File.content, Decl(typeGuardOfFormThisMember.ts, 17, 27))
+>file : Symbol(file, Decl(typeGuardOfFormThisMember.ts, 26, 4))
+>content : Symbol(File.content, Decl(typeGuardOfFormThisMember.ts, 17, 27))
+		}
 	}
 	else if (file.isDirectory) {
 >file.isDirectory : Symbol(FileSystemObject.isDirectory, Decl(typeGuardOfFormThisMember.ts, 8, 3))
@@ -123,4 +139,101 @@ namespace Test {
 >file : Symbol(file, Decl(typeGuardOfFormThisMember.ts, 26, 4))
 >host : Symbol(Networked.host, Decl(typeGuardOfFormThisMember.ts, 22, 29))
 	}
+	
+	interface GenericLeadGuard<T> extends GenericGuard<T> {
+>GenericLeadGuard : Symbol(GenericLeadGuard, Decl(typeGuardOfFormThisMember.ts, 43, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 45, 28))
+>GenericGuard : Symbol(GenericGuard, Decl(typeGuardOfFormThisMember.ts, 51, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 45, 28))
+
+		lead(): void;
+>lead : Symbol(lead, Decl(typeGuardOfFormThisMember.ts, 45, 56))
+	}
+	
+	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+>GenericFollowerGuard : Symbol(GenericFollowerGuard, Decl(typeGuardOfFormThisMember.ts, 47, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 49, 32))
+>GenericGuard : Symbol(GenericGuard, Decl(typeGuardOfFormThisMember.ts, 51, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 49, 32))
+
+		follow(): void;
+>follow : Symbol(follow, Decl(typeGuardOfFormThisMember.ts, 49, 60))
+	}
+	
+	interface GenericGuard<T> {
+>GenericGuard : Symbol(GenericGuard, Decl(typeGuardOfFormThisMember.ts, 51, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 53, 24))
+
+		target: T;
+>target : Symbol(target, Decl(typeGuardOfFormThisMember.ts, 53, 28))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 53, 24))
+
+		isLeader: this is (GenericLeadGuard<T>);
+>isLeader : Symbol(isLeader, Decl(typeGuardOfFormThisMember.ts, 54, 12))
+>GenericLeadGuard : Symbol(GenericLeadGuard, Decl(typeGuardOfFormThisMember.ts, 43, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 53, 24))
+
+		isFollower: this is GenericFollowerGuard<T>;
+>isFollower : Symbol(isFollower, Decl(typeGuardOfFormThisMember.ts, 55, 42))
+>GenericFollowerGuard : Symbol(GenericFollowerGuard, Decl(typeGuardOfFormThisMember.ts, 47, 2))
+>T : Symbol(T, Decl(typeGuardOfFormThisMember.ts, 53, 24))
+	}
+
+	let guard: GenericGuard<File>;
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 59, 4))
+>GenericGuard : Symbol(GenericGuard, Decl(typeGuardOfFormThisMember.ts, 51, 2))
+>File : Symbol(File, Decl(typeGuardOfFormThisMember.ts, 14, 2))
+
+	if (guard.isLeader) {
+>guard.isLeader : Symbol(GenericGuard.isLeader, Decl(typeGuardOfFormThisMember.ts, 54, 12))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 59, 4))
+>isLeader : Symbol(GenericGuard.isLeader, Decl(typeGuardOfFormThisMember.ts, 54, 12))
+
+		guard.lead();
+>guard.lead : Symbol(GenericLeadGuard.lead, Decl(typeGuardOfFormThisMember.ts, 45, 56))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 59, 4))
+>lead : Symbol(GenericLeadGuard.lead, Decl(typeGuardOfFormThisMember.ts, 45, 56))
+	}
+	else if (guard.isFollower) {
+>guard.isFollower : Symbol(GenericGuard.isFollower, Decl(typeGuardOfFormThisMember.ts, 55, 42))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 59, 4))
+>isFollower : Symbol(GenericGuard.isFollower, Decl(typeGuardOfFormThisMember.ts, 55, 42))
+
+		guard.follow();
+>guard.follow : Symbol(GenericFollowerGuard.follow, Decl(typeGuardOfFormThisMember.ts, 49, 60))
+>guard : Symbol(guard, Decl(typeGuardOfFormThisMember.ts, 59, 4))
+>follow : Symbol(GenericFollowerGuard.follow, Decl(typeGuardOfFormThisMember.ts, 49, 60))
+	}
+
+	interface SpecificGuard {
+>SpecificGuard : Symbol(SpecificGuard, Decl(typeGuardOfFormThisMember.ts, 65, 2))
+
+		isMoreSpecific: this is MoreSpecificGuard;
+>isMoreSpecific : Symbol(isMoreSpecific, Decl(typeGuardOfFormThisMember.ts, 67, 26))
+>MoreSpecificGuard : Symbol(MoreSpecificGuard, Decl(typeGuardOfFormThisMember.ts, 69, 2))
+	}
+
+	interface MoreSpecificGuard extends SpecificGuard {
+>MoreSpecificGuard : Symbol(MoreSpecificGuard, Decl(typeGuardOfFormThisMember.ts, 69, 2))
+>SpecificGuard : Symbol(SpecificGuard, Decl(typeGuardOfFormThisMember.ts, 65, 2))
+
+		do(): void;
+>do : Symbol(do, Decl(typeGuardOfFormThisMember.ts, 71, 52))
+	}
+
+	let general: SpecificGuard;
+>general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 75, 4))
+>SpecificGuard : Symbol(SpecificGuard, Decl(typeGuardOfFormThisMember.ts, 65, 2))
+
+	if (general.isMoreSpecific) {
+>general.isMoreSpecific : Symbol(SpecificGuard.isMoreSpecific, Decl(typeGuardOfFormThisMember.ts, 67, 26))
+>general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 75, 4))
+>isMoreSpecific : Symbol(SpecificGuard.isMoreSpecific, Decl(typeGuardOfFormThisMember.ts, 67, 26))
+
+		general.do();
+>general.do : Symbol(MoreSpecificGuard.do, Decl(typeGuardOfFormThisMember.ts, 71, 52))
+>general : Symbol(general, Decl(typeGuardOfFormThisMember.ts, 75, 4))
+>do : Symbol(MoreSpecificGuard.do, Decl(typeGuardOfFormThisMember.ts, 71, 52))
+	}
 }
+

@@ -32,6 +32,10 @@ namespace Test {
 	let x = file.isFile;
 	if (file.isFile) {
 		file.content;
+		if (file.isNetworked) {
+			file.host;
+			file.content;
+		}
 	}
 	else if (file.isDirectory) {
 		file.children;
@@ -39,7 +43,43 @@ namespace Test {
 	else if (file.isNetworked) {
 		file.host;
 	}
+	
+	interface GenericLeadGuard<T> extends GenericGuard<T> {
+		lead(): void;
+	}
+	
+	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+		follow(): void;
+	}
+	
+	interface GenericGuard<T> {
+		target: T;
+		isLeader: this is (GenericLeadGuard<T>);
+		isFollower: this is GenericFollowerGuard<T>;
+	}
+
+	let guard: GenericGuard<File>;
+	if (guard.isLeader) {
+		guard.lead();
+	}
+	else if (guard.isFollower) {
+		guard.follow();
+	}
+
+	interface SpecificGuard {
+		isMoreSpecific: this is MoreSpecificGuard;
+	}
+
+	interface MoreSpecificGuard extends SpecificGuard {
+		do(): void;
+	}
+
+	let general: SpecificGuard;
+	if (general.isMoreSpecific) {
+		general.do();
+	}
 }
+
 
 //// [typeGuardOfFormThisMember.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -98,12 +138,27 @@ var Test;
     var x = file.isFile;
     if (file.isFile) {
         file.content;
+        if (file.isNetworked) {
+            file.host;
+            file.content;
+        }
     }
     else if (file.isDirectory) {
         file.children;
     }
     else if (file.isNetworked) {
         file.host;
+    }
+    var guard;
+    if (guard.isLeader) {
+        guard.lead();
+    }
+    else if (guard.isFollower) {
+        guard.follow();
+    }
+    var general;
+    if (general.isMoreSpecific) {
+        general.do();
     }
 })(Test || (Test = {}));
 

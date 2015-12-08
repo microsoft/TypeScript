@@ -4612,11 +4612,15 @@ namespace ts {
                 return booleanType;
             }
             else {
-                const type = createType(TypeFlags.Boolean | TypeFlags.PredicateType) as PredicateType;
-                type.symbol = getSymbolOfNode(node);
-                type.predicate = createTypePredicateFromTypePredicateNode(node) as ThisTypePredicate;
-                return type;
+                return createPredicateType(getSymbolOfNode(node), createTypePredicateFromTypePredicateNode(node) as ThisTypePredicate);
             }
+        }
+
+        function createPredicateType(symbol: Symbol, predicate: ThisTypePredicate) {
+                const type = createType(TypeFlags.Boolean | TypeFlags.PredicateType) as PredicateType;
+                type.symbol = symbol;
+                type.predicate = predicate;
+                return type;
         }
 
         function getTypeFromPredicateTypeNode(node: TypePredicateNode): Type {
@@ -4866,6 +4870,9 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.Intersection) {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType));
+                }
+                if (type.flags & TypeFlags.PredicateType) {
+                    return createPredicateType(type.symbol, {kind: TypePredicateKind.This, type: instantiateType((type as PredicateType).predicate.type, mapper)} as ThisTypePredicate);
                 }
             }
             return type;

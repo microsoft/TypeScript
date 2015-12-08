@@ -370,3 +370,16 @@ if (mimic.isFollower()) {
 >isFollower : Symbol(RoyalGuard.isFollower, Decl(typeGuardFunctionOfFormThis.ts, 3, 5))
 }
 
+
+interface MimicGuardInterface {
+>MimicGuardInterface : Symbol(MimicGuardInterface, Decl(typeGuardFunctionOfFormThis.ts, 133, 1))
+
+    isLeader(): this is LeadGuard;
+>isLeader : Symbol(isLeader, Decl(typeGuardFunctionOfFormThis.ts, 136, 31))
+>LeadGuard : Symbol(LeadGuard, Decl(typeGuardFunctionOfFormThis.ts, 7, 1))
+
+    isFollower(): this is FollowerGuard;
+>isFollower : Symbol(isFollower, Decl(typeGuardFunctionOfFormThis.ts, 137, 34))
+>FollowerGuard : Symbol(FollowerGuard, Decl(typeGuardFunctionOfFormThis.ts, 11, 1))
+}
+

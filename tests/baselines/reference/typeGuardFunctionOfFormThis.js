@@ -135,6 +135,12 @@ if (mimic.isFollower()) {
 }
 
 
+interface MimicGuardInterface {
+    isLeader(): this is LeadGuard;
+    isFollower(): this is FollowerGuard;
+}
+
+
 //// [typeGuardFunctionOfFormThis.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -335,3 +341,7 @@ declare class MimicFollower extends MimicGuard {
     follow(): void;
 }
 declare let mimic: MimicGuard;
+interface MimicGuardInterface {
+    isLeader(): this is LeadGuard;
+    isFollower(): this is FollowerGuard;
+}

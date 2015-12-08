@@ -426,3 +426,16 @@ if (mimic.isFollower()) {
 >isFollower : () => this is FollowerGuard
 }
 
+
+interface MimicGuardInterface {
+>MimicGuardInterface : MimicGuardInterface
+
+    isLeader(): this is LeadGuard;
+>isLeader : () => this is LeadGuard
+>LeadGuard : LeadGuard
+
+    isFollower(): this is FollowerGuard;
+>isFollower : () => this is FollowerGuard
+>FollowerGuard : FollowerGuard
+}
+
