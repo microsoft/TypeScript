@@ -1,4 +1,4 @@
-tests/cases/conformance/types/union/unionTypeMembers.ts(44,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeMembers.ts(44,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: number) => number)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeMembers.ts(51,3): error TS2339: Property 'propertyOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
 tests/cases/conformance/types/union/unionTypeMembers.ts(52,3): error TS2339: Property 'propertyOnlyInI2' does not exist on type 'I1<number> | I2<number>'.
 tests/cases/conformance/types/union/unionTypeMembers.ts(53,3): error TS2339: Property 'methodOnlyInI1' does not exist on type 'I1<number> | I2<number>'.
@@ -51,7 +51,7 @@ tests/cases/conformance/types/union/unionTypeMembers.ts(54,3): error TS2339: Pro
     x.commonMethodDifferentParameterType; // No error - property exists
     x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: number) => number)' has no compatible call signatures.
                                                     // and the call signatures arent identical
     num = x.commonMethodWithTypeParameter(num);
     num = x.commonMethodWithOwnTypeParameter(num);

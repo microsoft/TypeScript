@@ -2,14 +2,14 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS23
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(24,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(26,36): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(29,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(30,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(31,1): error TS2349: Cannot invoke an expression whose type lacks a call signature.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(29,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(30,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(31,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(36,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(37,12): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(40,12): error TS2346: Supplied parameters do not match any signature of call target.
@@ -60,13 +60,13 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
     unionOfDifferentParameterTypes(10);// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
     unionOfDifferentParameterTypes("hello");// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
     unionOfDifferentParameterTypes();// error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
     
     var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
     unionOfDifferentNumberOfSignatures(); // error - no call signatures
@@ -80,13 +80,13 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
     var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
     unionWithDifferentParameterCount();// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
     unionWithDifferentParameterCount("hello");// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
     unionWithDifferentParameterCount("hello", 10);// no  call signature
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2349: Cannot invoke an expression whose type lacks a call signature.
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: string) => string) | ((a: string, b: number) => number)' has no compatible call signatures.
     
     var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
     strOrNum = unionWithOptionalParameter1('hello');
