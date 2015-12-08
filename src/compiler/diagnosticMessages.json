@@ -1007,7 +1007,7 @@
         "category": "Error",
         "code": 2348
     },
-    "Cannot invoke an expression whose type lacks a call signature.": {
+    "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.": {
         "category": "Error",
         "code": 2349
     },
