@@ -646,12 +646,12 @@ namespace ts {
         const keyMapper = host.useCaseSensitiveFileNames ? caseSensitiveKeyMapper : caseInsensitiveKeyMapper;
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
-        // file map with a possibly invariant key. We use this map later when when including
+        // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
         const literalFiles = createFileMap<Path>(keyMapper);
 
-        // Wildcard paths (provided via the "includes" array in tscofnig.json) are stored in a
-        // file map with a possibly invariant key. We use this map to store paths matched
+        // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
+        // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
         const wildcardFiles = createFileMap<Path>(keyMapper);
 
@@ -672,7 +672,7 @@ namespace ts {
         //   - A "directories" array, which contains the subdirectory names in the directory.
         const cache = createFileMap<boolean | DirectoryResult>(keyMapper);
 
-        // Rather than requery this for each file and filespec, we querythe supported extensions
+        // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options);
 
