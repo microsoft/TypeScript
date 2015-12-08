@@ -2545,15 +2545,15 @@ namespace ts {
                     return id;
                 }
             });
-            const t = parseType();
+            const type = parseType();
             if (typePredicateVariable) {
                 const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
                 node.parameterName = typePredicateVariable;
-                node.type = t;
+                node.type = type;
                 return finishNode(node);
             }
             else {
-                return t;
+                return type;
             }
         }
 

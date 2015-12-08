@@ -11004,37 +11004,19 @@ namespace ts {
             }
             else if (node.parameterName) {
                 let hasReportedError = false;
-                for (var param of parent.parameters) {
-                    if (hasReportedError) {
-                        break;
-                    }
-                    if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
-                        param.name.kind === SyntaxKind.ArrayBindingPattern) {
-
-                        (function checkBindingPattern(pattern: BindingPattern) {
-                            for (const element of pattern.elements) {
-                                if (element.name.kind === SyntaxKind.Identifier &&
-                                    (<Identifier>element.name).text === typePredicate.parameterName) {
-
-                                    error(node.parameterName,
-                                        Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                        typePredicate.parameterName);
-                                    hasReportedError = true;
-                                    break;
-                                }
-                                else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
-                                    element.name.kind === SyntaxKind.ObjectBindingPattern) {
-
-                                    checkBindingPattern(<BindingPattern>element.name);
-                                }
-                            }
-                        })(<BindingPattern>param.name);
+                for (const param of parent.parameters) {
+                    if ((param.name.kind === SyntaxKind.ObjectBindingPattern ||
+                        param.name.kind === SyntaxKind.ArrayBindingPattern) &&
+                        checkBindingPatternForTypePredicateVariable(
+                            <BindingPattern>param.name,
+                            node.parameterName,
+                            typePredicate.parameterName)) {
+                            hasReportedError = true;
+                            break;
                     }
                 }
                 if (!hasReportedError) {
-                    error(node.parameterName,
-                        Diagnostics.Cannot_find_parameter_0,
-                        typePredicate.parameterName);
+                    error(node.parameterName, Diagnostics.Cannot_find_parameter_0, typePredicate.parameterName);
                 }
             }
         }
@@ -11052,6 +11034,30 @@ namespace ts {
                     if (node === parent.type) {
                         return parent;
                     }
+            }
+        }
+
+        function checkBindingPatternForTypePredicateVariable(
+            pattern: BindingPattern,
+            predicateVariableNode: Node,
+            predicateVariableName: string) {
+            for (const element of pattern.elements) {
+                if (element.name.kind === SyntaxKind.Identifier &&
+                    (<Identifier>element.name).text === predicateVariableName) {
+                    error(predicateVariableNode,
+                        Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                        predicateVariableName);
+                    return true;
+                }
+                else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
+                    element.name.kind === SyntaxKind.ObjectBindingPattern) {
+                    if (checkBindingPatternForTypePredicateVariable(
+                        <BindingPattern>element.name,
+                        predicateVariableNode,
+                         predicateVariableName)) {
+                        return true;
+                    }
+                }
             }
         }
 
