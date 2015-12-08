@@ -23,10 +23,10 @@ declare module "express" {
             post(path: RegExp, handler: (req: Function) => void ): void;
 >post : Symbol(post, Decl(declareExternalModuleWithExportAssignedFundule.ts, 10, 48))
 >path : Symbol(path, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 17))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, 825, 1), Decl(lib.d.ts, 876, 11))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >handler : Symbol(handler, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 30))
 >req : Symbol(req, Decl(declareExternalModuleWithExportAssignedFundule.ts, 12, 41))
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         }
 

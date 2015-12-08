@@ -21,6 +21,7 @@ var catThing = {
 var catBag = new CatBag(catThing);
 
 //// [prespecializedGenericMembers1.js]
+"use strict";
 var Cat = (function () {
     function Cat() {
     }

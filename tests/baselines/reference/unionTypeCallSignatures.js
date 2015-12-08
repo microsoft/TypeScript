@@ -70,6 +70,9 @@ strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
 strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
 strOrNum = unionWithRestParameter3(); // error no call signature
 
+var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
+strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
+strOrNum = unionWithRestParameter4("hello", "world");
 
 
 //// [unionTypeCallSignatures.js]
@@ -132,3 +135,6 @@ strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
 strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
 strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
 strOrNum = unionWithRestParameter3(); // error no call signature
+var unionWithRestParameter4;
+strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
+strOrNum = unionWithRestParameter4("hello", "world");

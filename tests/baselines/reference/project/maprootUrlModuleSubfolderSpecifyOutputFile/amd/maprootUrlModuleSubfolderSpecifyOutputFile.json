@@ -6,21 +6,15 @@
     ],
     "out": "bin/test.js",
     "sourceMap": true,
-    "mapRoot": "http://www.typescriptlang.org/",
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "http://www.typescriptlang.org/",
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",
         "test.ts"
     ],
     "emittedFiles": [
-        "ref/m1.js.map",
-        "ref/m1.js",
-        "ref/m1.d.ts",
-        "test.js.map",
-        "test.js",
-        "test.d.ts",
         "bin/test.js.map",
         "bin/test.js",
         "bin/test.d.ts"

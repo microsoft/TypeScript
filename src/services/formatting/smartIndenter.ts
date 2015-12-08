@@ -13,6 +13,12 @@ namespace ts.formatting {
                 return 0; // past EOF
             }
 
+            // no indentation when the indent style is set to none,
+            // so we can return fast
+            if (options.IndentStyle === IndentStyle.None) {
+                return 0;
+            }
+
             let precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
                 return 0;
@@ -25,6 +31,26 @@ namespace ts.formatting {
             }
 
             let lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+
+            // indentation is first non-whitespace character in a previous line
+            // for block indentation, we should look for a line which contains something that's not
+            // whitespace.
+            if (options.IndentStyle === IndentStyle.Block) {
+
+                // move backwards until we find a line with a non-whitespace character,
+                // then find the first non-whitespace character for that line.
+                let current = position;
+                while (current > 0){
+                    let char = sourceFile.text.charCodeAt(current);
+                    if (!isWhiteSpace(char) && !isLineBreak(char)) {
+                        break;
+                    }
+                    current--;
+                }
+
+                let lineStart = ts.getLineStartPositionForPosition(current, sourceFile);
+                return SmartIndenter.findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
+            }
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
@@ -218,7 +244,7 @@ namespace ts.formatting {
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
             return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
-        
+
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 let elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
@@ -319,7 +345,7 @@ namespace ts.formatting {
             }
 
             return Value.Unknown;
-            
+
             function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
                 while (true) {
                     switch (node.kind) {
@@ -334,7 +360,6 @@ namespace ts.formatting {
                             return node;
                     }
                 }
-                return node;
             }
         }
 
@@ -436,6 +461,7 @@ namespace ts.formatting {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.TaggedTemplateExpression:
                 case SyntaxKind.AwaitExpression:
+                case SyntaxKind.NamedImports:
                     return true;
             }
             return false;

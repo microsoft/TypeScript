@@ -9,6 +9,7 @@ export var x: b;
 
 
 //// [internalAliasInterfaceInsideTopLevelModuleWithExport.js]
+"use strict";
 
 
 //// [internalAliasInterfaceInsideTopLevelModuleWithExport.d.ts]

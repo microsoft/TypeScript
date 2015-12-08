@@ -23,6 +23,7 @@ var x = new UserServices().getUserName();
 
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var App;
     (function (App) {
         var Services;
@@ -43,6 +44,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {
+    "use strict";
     var Services = appJs.Services;
     var UserServices = Services.UserServices;
     var x = new UserServices().getUserName();

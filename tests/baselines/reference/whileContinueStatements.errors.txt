@@ -1,0 +1,59 @@
+tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts(5,1): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/conformance/statements/continueStatements/whileContinueStatements.ts (1 errors) ====
+    while(true) {
+        continue;
+    } 
+    
+    while (true) {
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+        if (true) {
+            continue;
+        }
+    }
+    
+    ONE:
+    
+    while (true) {
+        continue ONE;
+    }
+    
+    TWO:
+    THREE:
+    while (true) {
+        continue THREE;
+    }
+    
+    FOUR:
+    while (true) {
+        FIVE:
+        while (true) {
+            continue FOUR;
+        }
+    }
+    
+    while (true) {
+        SIX:
+        while (true)
+            continue SIX;
+    }
+    
+    SEVEN:
+    while (true)
+        while (true)
+            while (true)
+                continue SEVEN;
+    
+    EIGHT:
+    while (true) {
+        var fn = function () { }
+        continue EIGHT;
+    }
+    
+    NINE:
+    while (true) {
+        if (true) { continue NINE; }
+    }
+    

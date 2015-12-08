@@ -1,67 +1,67 @@
-=== tests/cases/conformance/jsx/tsxGenericArrowFunctionParsing.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : Symbol(JSX, Decl(tsxGenericArrowFunctionParsing.tsx, 0, 0))
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { isElement; }
->Element : Symbol(Element, Decl(tsxGenericArrowFunctionParsing.tsx, 0, 20))
->isElement : Symbol(isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+>isElement : Symbol(isElement, Decl(file.tsx, 1, 20))
 }
 
 var T, T1, T2;
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
->T1 : Symbol(T1, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 6))
->T2 : Symbol(T2, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 10))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
+>T1 : Symbol(T1, Decl(file.tsx, 4, 6))
+>T2 : Symbol(T2, Decl(file.tsx, 4, 10))
 
 // This is an element
 var x1 = <T>() => {}</T>;
->x1 : Symbol(x1, Decl(tsxGenericArrowFunctionParsing.tsx, 7, 3))
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
+>x1 : Symbol(x1, Decl(file.tsx, 7, 3))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x1.isElement;
->x1.isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
->x1 : Symbol(x1, Decl(tsxGenericArrowFunctionParsing.tsx, 7, 3))
->isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
+>x1.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
+>x1 : Symbol(x1, Decl(file.tsx, 7, 3))
+>isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
 
 // This is a generic function
 var x2 = <T extends {}>() => {};
->x2 : Symbol(x2, Decl(tsxGenericArrowFunctionParsing.tsx, 11, 3))
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 11, 10))
+>x2 : Symbol(x2, Decl(file.tsx, 11, 3))
+>T : Symbol(T, Decl(file.tsx, 11, 10))
 
 x2();
->x2 : Symbol(x2, Decl(tsxGenericArrowFunctionParsing.tsx, 11, 3))
+>x2 : Symbol(x2, Decl(file.tsx, 11, 3))
 
 // This is a generic function
 var x3 = <T, T1>() => {};
->x3 : Symbol(x3, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 3))
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 10))
->T1 : Symbol(T1, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 12))
+>x3 : Symbol(x3, Decl(file.tsx, 15, 3))
+>T : Symbol(T, Decl(file.tsx, 15, 10))
+>T1 : Symbol(T1, Decl(file.tsx, 15, 12))
 
 x3();
->x3 : Symbol(x3, Decl(tsxGenericArrowFunctionParsing.tsx, 15, 3))
+>x3 : Symbol(x3, Decl(file.tsx, 15, 3))
 
 // This is an element
 var x4 = <T extends={true}>() => {}</T>;
->x4 : Symbol(x4, Decl(tsxGenericArrowFunctionParsing.tsx, 19, 3))
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
+>x4 : Symbol(x4, Decl(file.tsx, 19, 3))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
 >extends : Symbol(unknown)
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x4.isElement;
->x4.isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
->x4 : Symbol(x4, Decl(tsxGenericArrowFunctionParsing.tsx, 19, 3))
->isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
+>x4.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
+>x4 : Symbol(x4, Decl(file.tsx, 19, 3))
+>isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
 
 // This is an element
 var x5 = <T extends>() => {}</T>;
->x5 : Symbol(x5, Decl(tsxGenericArrowFunctionParsing.tsx, 23, 3))
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
+>x5 : Symbol(x5, Decl(file.tsx, 23, 3))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
 >extends : Symbol(unknown)
->T : Symbol(T, Decl(tsxGenericArrowFunctionParsing.tsx, 4, 3))
+>T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x5.isElement;
->x5.isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
->x5 : Symbol(x5, Decl(tsxGenericArrowFunctionParsing.tsx, 23, 3))
->isElement : Symbol(JSX.Element.isElement, Decl(tsxGenericArrowFunctionParsing.tsx, 1, 20))
+>x5.isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
+>x5 : Symbol(x5, Decl(file.tsx, 23, 3))
+>isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
 
 

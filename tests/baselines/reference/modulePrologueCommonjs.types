@@ -1,0 +1,7 @@
+=== tests/cases/compiler/modulePrologueCommonjs.ts ===
+"use strict";
+>"use strict" : string
+
+export class Foo {}
+>Foo : Foo
+

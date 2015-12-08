@@ -1,4 +1,5 @@
 === tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts ===
+
 class Base { private p; }
 >Base : Base
 >p : any

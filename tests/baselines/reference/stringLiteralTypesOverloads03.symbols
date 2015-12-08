@@ -1,0 +1,131 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads03.ts ===
+
+interface Base {
+>Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
+
+    x: string;
+>x : Symbol(x, Decl(stringLiteralTypesOverloads03.ts, 1, 16))
+
+    y: number;
+>y : Symbol(y, Decl(stringLiteralTypesOverloads03.ts, 2, 14))
+}
+
+interface HelloOrWorld extends Base {
+>HelloOrWorld : Symbol(HelloOrWorld, Decl(stringLiteralTypesOverloads03.ts, 4, 1))
+>Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
+
+    p1: boolean;
+>p1 : Symbol(p1, Decl(stringLiteralTypesOverloads03.ts, 6, 37))
+}
+
+interface JustHello extends Base {
+>JustHello : Symbol(JustHello, Decl(stringLiteralTypesOverloads03.ts, 8, 1))
+>Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
+
+    p2: boolean;
+>p2 : Symbol(p2, Decl(stringLiteralTypesOverloads03.ts, 10, 34))
+}
+
+interface JustWorld extends Base {
+>JustWorld : Symbol(JustWorld, Decl(stringLiteralTypesOverloads03.ts, 12, 1))
+>Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
+
+    p3: boolean;
+>p3 : Symbol(p3, Decl(stringLiteralTypesOverloads03.ts, 14, 34))
+}
+
+let hello: "hello";
+>hello : Symbol(hello, Decl(stringLiteralTypesOverloads03.ts, 18, 3))
+
+let world: "world";
+>world : Symbol(world, Decl(stringLiteralTypesOverloads03.ts, 19, 3))
+
+let helloOrWorld: "hello" | "world";
+>helloOrWorld : Symbol(helloOrWorld, Decl(stringLiteralTypesOverloads03.ts, 20, 3))
+
+function f(p: "hello"): JustHello;
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 22, 11))
+>JustHello : Symbol(JustHello, Decl(stringLiteralTypesOverloads03.ts, 8, 1))
+
+function f(p: "hello" | "world"): HelloOrWorld;
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 23, 11))
+>HelloOrWorld : Symbol(HelloOrWorld, Decl(stringLiteralTypesOverloads03.ts, 4, 1))
+
+function f(p: "world"): JustWorld;
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 24, 11))
+>JustWorld : Symbol(JustWorld, Decl(stringLiteralTypesOverloads03.ts, 12, 1))
+
+function f(p: string): Base;
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 25, 11))
+>Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
+
+function f(...args: any[]): any {
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>args : Symbol(args, Decl(stringLiteralTypesOverloads03.ts, 26, 11))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+let fResult1 = f(hello);
+>fResult1 : Symbol(fResult1, Decl(stringLiteralTypesOverloads03.ts, 30, 3))
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>hello : Symbol(hello, Decl(stringLiteralTypesOverloads03.ts, 18, 3))
+
+let fResult2 = f(world);
+>fResult2 : Symbol(fResult2, Decl(stringLiteralTypesOverloads03.ts, 31, 3))
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>world : Symbol(world, Decl(stringLiteralTypesOverloads03.ts, 19, 3))
+
+let fResult3 = f(helloOrWorld);
+>fResult3 : Symbol(fResult3, Decl(stringLiteralTypesOverloads03.ts, 32, 3))
+>f : Symbol(f, Decl(stringLiteralTypesOverloads03.ts, 20, 36), Decl(stringLiteralTypesOverloads03.ts, 22, 34), Decl(stringLiteralTypesOverloads03.ts, 23, 47), Decl(stringLiteralTypesOverloads03.ts, 24, 34), Decl(stringLiteralTypesOverloads03.ts, 25, 28))
+>helloOrWorld : Symbol(helloOrWorld, Decl(stringLiteralTypesOverloads03.ts, 20, 3))
+
+function g(p: string): Base;
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 34, 11))
+>Base : Symbol(Base, Decl(stringLiteralTypesOverloads03.ts, 0, 0))
+
+function g(p: "hello"): JustHello;
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 35, 11))
+>JustHello : Symbol(JustHello, Decl(stringLiteralTypesOverloads03.ts, 8, 1))
+
+function g(p: "hello" | "world"): HelloOrWorld;
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 36, 11))
+>HelloOrWorld : Symbol(HelloOrWorld, Decl(stringLiteralTypesOverloads03.ts, 4, 1))
+
+function g(p: "world"): JustWorld;
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>p : Symbol(p, Decl(stringLiteralTypesOverloads03.ts, 37, 11))
+>JustWorld : Symbol(JustWorld, Decl(stringLiteralTypesOverloads03.ts, 12, 1))
+
+function g(...args: any[]): any {
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>args : Symbol(args, Decl(stringLiteralTypesOverloads03.ts, 38, 11))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+let gResult1 = g(hello);
+>gResult1 : Symbol(gResult1, Decl(stringLiteralTypesOverloads03.ts, 42, 3))
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>hello : Symbol(hello, Decl(stringLiteralTypesOverloads03.ts, 18, 3))
+
+let gResult2 = g(world);
+>gResult2 : Symbol(gResult2, Decl(stringLiteralTypesOverloads03.ts, 43, 3))
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>world : Symbol(world, Decl(stringLiteralTypesOverloads03.ts, 19, 3))
+
+let gResult3 = g(helloOrWorld);
+>gResult3 : Symbol(gResult3, Decl(stringLiteralTypesOverloads03.ts, 44, 3))
+>g : Symbol(g, Decl(stringLiteralTypesOverloads03.ts, 32, 31), Decl(stringLiteralTypesOverloads03.ts, 34, 28), Decl(stringLiteralTypesOverloads03.ts, 35, 34), Decl(stringLiteralTypesOverloads03.ts, 36, 47), Decl(stringLiteralTypesOverloads03.ts, 37, 34))
+>helloOrWorld : Symbol(helloOrWorld, Decl(stringLiteralTypesOverloads03.ts, 20, 3))
+

@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(1,17): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(1,17): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(1,35): error TS2304: Cannot find name 'HTMLElement'.
 tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(2,42): error TS2304: Cannot find name '_classNameRegexp'.
 
@@ -6,7 +6,7 @@ tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts(2,42): error T
 ==== tests/cases/conformance/parser/ecmascript5/parserArgumentList1.ts (3 errors) ====
     export function removeClass (node:HTMLElement, className:string) {
                     ~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
                                       ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'HTMLElement'.
     	node.className = node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {

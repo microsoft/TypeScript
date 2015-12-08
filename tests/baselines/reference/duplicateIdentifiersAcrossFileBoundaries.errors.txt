@@ -1,24 +1,16 @@
-tests/cases/compiler/file1.ts(2,11): error TS2518: Only an ambient class can be merged with an interface.
-tests/cases/compiler/file1.ts(3,7): error TS2518: Only an ambient class can be merged with an interface.
 tests/cases/compiler/file1.ts(4,7): error TS2300: Duplicate identifier 'C2'.
 tests/cases/compiler/file1.ts(5,10): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/file1.ts(9,12): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/file2.ts(1,7): error TS2518: Only an ambient class can be merged with an interface.
-tests/cases/compiler/file2.ts(2,11): error TS2518: Only an ambient class can be merged with an interface.
 tests/cases/compiler/file2.ts(3,10): error TS2300: Duplicate identifier 'C2'.
 tests/cases/compiler/file2.ts(4,7): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/file2.ts(7,8): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged
 tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/compiler/file1.ts (5 errors) ====
+==== tests/cases/compiler/file1.ts (3 errors) ====
     
     interface I { }
-              ~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     class C1 { }
-          ~~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     class C2 { }
           ~~
 !!! error TS2300: Duplicate identifier 'C2'.
@@ -39,13 +31,9 @@ tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
         }
     }
     
-==== tests/cases/compiler/file2.ts (6 errors) ====
+==== tests/cases/compiler/file2.ts (4 errors) ====
     class I { } // error -- cannot merge interface with non-ambient class
-          ~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     interface C1 { } // error -- cannot merge interface with non-ambient class
-              ~~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     function C2() { } // error -- cannot merge function with non-ambient class
              ~~
 !!! error TS2300: Duplicate identifier 'C2'.

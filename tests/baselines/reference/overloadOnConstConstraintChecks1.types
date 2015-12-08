@@ -22,23 +22,23 @@ interface MyDoc { // Document
 >MyDoc : MyDoc
 
     createElement(tagName: string): Base;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
 >tagName : string
 >Base : Base
 
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
->tagName : 'canvas'
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>tagName : "canvas"
 >Derived1 : Derived1
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
->tagName : 'div'
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>tagName : "div"
 >Derived2 : Derived2
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
->tagName : 'span'
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>tagName : "span"
 >Derived3 : Derived3
 
     // + 100 more
@@ -49,27 +49,27 @@ class D implements MyDoc {
 >MyDoc : MyDoc
 
     createElement(tagName:string): Base;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
 >tagName : string
 >Base : Base
 
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
->tagName : 'canvas'
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>tagName : "canvas"
 >Derived1 : Derived1
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
->tagName : 'div'
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>tagName : "div"
 >Derived2 : Derived2
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
->tagName : 'span'
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>tagName : "span"
 >Derived3 : Derived3
 
     createElement(tagName:any): Base {
->createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: 'div'): Derived2; (tagName: 'span'): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
 >tagName : any
 >Base : Base
 

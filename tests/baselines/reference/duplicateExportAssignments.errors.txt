@@ -1,4 +1,4 @@
-tests/cases/conformance/externalModules/foo1.ts(3,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/externalModules/foo1.ts(3,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/conformance/externalModules/foo1.ts(3,1): error TS2300: Duplicate identifier 'export='.
 tests/cases/conformance/externalModules/foo1.ts(4,1): error TS2300: Duplicate identifier 'export='.
 tests/cases/conformance/externalModules/foo2.ts(3,1): error TS2300: Duplicate identifier 'export='.
@@ -17,7 +17,7 @@ tests/cases/conformance/externalModules/foo5.ts(6,1): error TS2300: Duplicate id
     var y = 20;
     export = x;
     ~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     ~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'export='.
     export = y;

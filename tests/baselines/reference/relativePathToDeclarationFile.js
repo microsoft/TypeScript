@@ -27,6 +27,7 @@ if(foo.M2.x){
 
 
 //// [file1.js]
+"use strict";
 var foo = require('foo');
 var other = require('./other');
 var relMod = require('./sub/relMod');

@@ -1,5 +1,5 @@
-/// <reference path="../../node_modules/tslint/typings/typescriptServices.d.ts" />
-/// <reference path="../../node_modules/tslint/lib/tslint.d.ts" />
+import * as Lint from "tslint/lib/lint";
+import * as ts from "typescript";
 
 const OPTION_CATCH = "check-catch";
 const OPTION_ELSE = "check-else";

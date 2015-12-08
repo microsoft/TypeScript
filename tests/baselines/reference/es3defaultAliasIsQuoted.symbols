@@ -13,7 +13,7 @@ export default function assert(value: boolean) {
 
     if (!value) throw new Error("Assertion failed!");
 >value : Symbol(value, Decl(es3defaultAliasQuoted_file0.ts, 5, 31))
->Error : Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
+>Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 
 === tests/cases/compiler/es3defaultAliasQuoted_file1.ts ===

@@ -4,14 +4,14 @@ class C {
 
     [x: number]: Date;
 >x : Symbol(x, Decl(indexersInClassType.ts, 1, 5))
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     [x: string]: Object;
 >x : Symbol(x, Decl(indexersInClassType.ts, 2, 5))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     1: Date;
->Date : Symbol(Date, Decl(lib.d.ts, 633, 23), Decl(lib.d.ts, 815, 11))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     'a': {}
 

@@ -16,7 +16,7 @@ declare namespace ts.server.protocol {
           */
         type: string;
     }
-    
+
     /** 
       * Client-initiated request message 
       */
@@ -31,7 +31,7 @@ declare namespace ts.server.protocol {
           */
         arguments?: any;
     }
-    
+
     /**
       * Request to reload the project structure for all the opened files 
       */
@@ -107,7 +107,7 @@ declare namespace ts.server.protocol {
       * A request to get the project information of the current file
       */
     export interface ProjectInfoRequest extends Request {
-        arguments: ProjectInfoRequestArgs
+        arguments: ProjectInfoRequestArgs;
     }
 
     /** 
@@ -200,7 +200,7 @@ declare namespace ts.server.protocol {
     /**
       * Object found in response messages defining a span of text in source code.
       */
-    export interface TextSpan { 
+    export interface TextSpan {
         /**
           * First character of the definition.
           */
@@ -261,18 +261,18 @@ declare namespace ts.server.protocol {
       * in the file at a given line and column.
       */
     export interface DocumentHighlightsRequest extends FileLocationRequest {
-        arguments: DocumentHighlightsRequestArgs
+        arguments: DocumentHighlightsRequestArgs;
     }
 
     export interface HighlightSpan extends TextSpan {
-        kind: string
+        kind: string;
     }
 
     export interface DocumentHighlightsItem {
         /**
           * File containing highlight spans.
           */
-        file: string,
+        file: string;
 
         /**
           * Spans to highlight in file.
@@ -422,76 +422,76 @@ declare namespace ts.server.protocol {
      * Editor options
      */
     export interface EditorOptions {
-      
+
         /** Number of spaces for each tab. Default value is 4. */
         tabSize?: number;
-        
+
         /** Number of spaces to indent during formatting. Default value is 4. */
         indentSize?: number;
-        
+
         /** The new line character to be used. Default value is the OS line delimiter. */
         newLineCharacter?: string;
-        
+
         /** Whether tabs should be converted to spaces. Default value is true. */
-        convertTabsToSpaces?: boolean;        
+        convertTabsToSpaces?: boolean;
     }
-        
+
     /**
      * Format options
      */
     export interface FormatOptions extends EditorOptions {
-      
+
         /** Defines space handling after a comma delimiter. Default value is true. */
         insertSpaceAfterCommaDelimiter?: boolean;
-        
+
         /** Defines space handling after a semicolon in a for statemen. Default value is true */
         insertSpaceAfterSemicolonInForStatements?: boolean;
-        
+
         /** Defines space handling after a binary operator. Default value is true. */
         insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-        
+
         /** Defines space handling after keywords in control flow statement. Default value is true. */
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-        
+
         /** Defines space handling after function keyword for anonymous functions. Default value is false. */
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-        
+
         /** Defines space handling after opening and before closing non empty parenthesis. Default value is false. */
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
 
         /** Defines space handling after opening and before closing non empty brackets. Default value is false. */
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-        
+
         /** Defines whether an open brace is put onto a new line for functions or not. Default value is false. */
         placeOpenBraceOnNewLineForFunctions?: boolean;
-        
+
         /** Defines whether an open brace is put onto a new line for control blocks or not. Default value is false. */
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
-        
+
         /** Index operator */
-        [key:string] : string | number | boolean;
+        [key: string] : string | number | boolean;
     }
-  
+
     /**
       * Information found in a configure request.
       */
     export interface ConfigureRequestArguments {
-      
+
         /** 
           * Information about the host, for example 'Emacs 24.4' or
           * 'Sublime Text version 3075'
           */
         hostInfo?: string;
-        
+
         /**
           * If present, tab settings apply only to this file.
           */
         file?: string;
-        
+
         /**
          * The format options to use during formatting and other code editing features.
          */
-        formatOptions?: FormatOptions;        
+        formatOptions?: FormatOptions;
     }
 
     /**
@@ -513,6 +513,11 @@ declare namespace ts.server.protocol {
       *  Information found in an "open" request.
       */
     export interface OpenRequestArgs extends FileRequestArgs {
+        /**
+         * Used when a version of the file content is known to be more up to date than the one on disk. 
+         * Then the known content will be used upon opening instead of the disk copy   
+         */
+        fileContent?: string;
     }
 
     /**
@@ -561,27 +566,27 @@ declare namespace ts.server.protocol {
           * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
           */
         kind: string;
-        
+
         /**
           * Optional modifiers for the kind (such as 'public').
           */
         kindModifiers: string;
-        
+
         /**
           * Starting file location of symbol.
           */
         start: Location;
-        
+
         /**
           * One past last character of symbol.
           */
         end: Location;
-        
+
         /**
           * Type and kind of symbol.
           */
         displayString: string;
-        
+
         /**
           * Documentation associated with symbol.
           */
@@ -603,7 +608,7 @@ declare namespace ts.server.protocol {
           * Last line of range for which to format text in file.
           */
         endLine: number;
-        
+
         /**
           * Character offset on last line of range for which to format text in file.
           */
@@ -619,7 +624,7 @@ declare namespace ts.server.protocol {
       */
     export interface FormatRequest extends FileLocationRequest {
         arguments: FormatRequestArgs;
-    } 
+    }
 
     /**
       * Object found in response messages defining an editing
@@ -638,7 +643,7 @@ declare namespace ts.server.protocol {
           * One character past last character of the text span to edit.
           */
         end: Location;
-        
+
         /**
           * Replace the span defined above with this string (may be
           * the empty string).
@@ -723,7 +728,7 @@ declare namespace ts.server.protocol {
           * Text of an item describing the symbol.
           */
         text: string;
-        
+
         /**
           * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
           */
@@ -773,7 +778,7 @@ declare namespace ts.server.protocol {
           * Display parts of the symbol (similar to quick info).
           */
         displayParts: SymbolDisplayPart[];
-        
+
         /**
           * Documentation strings for the symbol.
           */
@@ -790,94 +795,94 @@ declare namespace ts.server.protocol {
 
     /**
      * Signature help information for a single parameter    
-     */    
+     */
     export interface SignatureHelpParameter {
-        
+
         /**
          * The parameter's name
-         */        
+         */
         name: string;
-                
+
         /**
           * Documentation of the parameter.
           */
         documentation: SymbolDisplayPart[];
-                
+
         /**
           * Display parts of the parameter.
           */
         displayParts: SymbolDisplayPart[];
-                
+
         /**
          * Whether the parameter is optional or not.         
-         */        
+         */
         isOptional: boolean;
     }
-        
+
     /**
      * Represents a single signature to show in signature help.    
-     */    
+     */
     export interface SignatureHelpItem {
-      
+
         /**
          * Whether the signature accepts a variable number of arguments. 
-         */        
+         */
         isVariadic: boolean;
-        
+
         /**
          * The prefix display parts.
-         */        
+         */
         prefixDisplayParts: SymbolDisplayPart[];
-        
+
         /**
          * The suffix disaply parts.
-         */        
+         */
         suffixDisplayParts: SymbolDisplayPart[];
-        
+
         /**
          * The separator display parts.
-         */        
+         */
         separatorDisplayParts: SymbolDisplayPart[];
-        
+
         /**
          * The signature helps items for the parameters. 
-         */        
+         */
         parameters: SignatureHelpParameter[];
-                
+
         /**
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
     }
-    
+
     /**
      * Signature help items found in the response of a signature help request.
      */
     export interface SignatureHelpItems {
-      
+
         /**
          * The signature help items.    
-         */        
+         */
         items: SignatureHelpItem[];
-                
+
         /**
          * The span for which signature help should appear on a signature 
-         */        
+         */
         applicableSpan: TextSpan;
-                
+
         /**
          * The item selected in the set of available help items. 
-         */        
+         */
         selectedItemIndex: number;
-                
+
         /**
          * The argument selected in the set of parameters.
-         */        
+         */
         argumentIndex: number;
-        
+
         /**
          * The argument count
-         */        
+         */
         argumentCount: number;
     }
 
@@ -885,9 +890,9 @@ declare namespace ts.server.protocol {
      * Arguments of a signature help request.
      */
     export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
-      
+
     }
-    
+
     /**
       * Signature help request; value of command field is "signatureHelp".
       * Given a file location (file, line, col), return the signature 
@@ -899,7 +904,7 @@ declare namespace ts.server.protocol {
 
     /**
      * Repsonse object for a SignatureHelpRequest.
-     */  
+     */
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
@@ -926,9 +931,9 @@ declare namespace ts.server.protocol {
       * it request for every file in this project.
       */
     export interface GeterrForProjectRequest extends Request {
-        arguments: GeterrForProjectRequestArgs
+        arguments: GeterrForProjectRequestArgs;
     }
-    
+
     /**
       * Arguments for geterr messages.
       */
@@ -968,12 +973,12 @@ declare namespace ts.server.protocol {
           * Starting file location at which text appies.
           */
         start: Location;
-        
+
         /**
           * The last file location at which the text applies.
           */
         end: Location;
-        
+
         /**
           * Text of diagnostic message.
           */
@@ -985,7 +990,7 @@ declare namespace ts.server.protocol {
           * The file for which diagnostic information is reported.
           */
         file: string;
-      
+
         /**
           * An array of diagnostic information items.
           */
@@ -999,7 +1004,7 @@ declare namespace ts.server.protocol {
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
     }
- 
+
     /**
       * Arguments for reload request.
       */
@@ -1083,12 +1088,12 @@ declare namespace ts.server.protocol {
           * The symbol's name.
           */
         name: string;
-       
+
         /**
           * The symbol's kind (such as 'className' or 'parameterName').
           */
         kind: string;
-        
+
         /**
           * exact, substring, or prefix.
           */
@@ -1098,39 +1103,39 @@ declare namespace ts.server.protocol {
           * If this was a case sensitive or insensitive match.
           */
         isCaseSensitive?: boolean;
-        
+
         /**
           * Optional modifiers for the kind (such as 'public').
           */
         kindModifiers?: string;
-        
+
         /** 
           * The file in which the symbol is found.
           */
         file: string;
-        
+
         /**
           * The location within file at which the symbol is found.
           */
         start: Location;
-        
+
         /**
           * One past the last character of the symbol.
           */
         end: Location;
-        
+
         /**
           * Name of symbol's container symbol (if any); for example,
           * the class name if symbol is a class member.
           */
         containerName?: string;
-        
+
         /**
           * Kind of symbol's container symbol (if any).
           */
         containerKind?: string;
     }
-    
+
     /**
       * Navto response message. Body is an array of navto items.  Each
       * item gives a symbol that matched the search term.
@@ -1208,7 +1213,7 @@ declare namespace ts.server.protocol {
         childItems?: NavigationBarItem[];
     }
 
-    export interface NavBarResponse extends Response { 
+    export interface NavBarResponse extends Response {
         body?: NavigationBarItem[];
     }
 }

@@ -13,7 +13,7 @@ class a {
     public get d() {
         return 30;
     }
-    public set d() {
+    public set d(a: number) {
     }
 
     public static get p2() {
@@ -107,7 +107,7 @@ var a = (function () {
         get: function () {
             return 30;
         },
-        set: function () {
+        set: function (a) {
         },
         enumerable: true,
         configurable: true

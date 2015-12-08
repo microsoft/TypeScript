@@ -1,0 +1,40 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts ===
+enum E {}
+>E : E
+
+enum V {}
+>V : V
+
+let x: number|string|E|V;
+>x : number | string | E | V
+>E : E
+>V : V
+
+if (typeof x === "number") {
+>typeof x === "number" : boolean
+>typeof x : string
+>x : number | string | E | V
+>"number" : string
+
+    x; // number|E|V
+>x : number | E | V
+}
+else {
+    x; // string
+>x : string
+}
+
+if (typeof x !== "number") {
+>typeof x !== "number" : boolean
+>typeof x : string
+>x : number | string | E | V
+>"number" : string
+
+    x; // string
+>x : string
+}
+else {
+    x; // number|E|V
+>x : number | E | V
+}
+

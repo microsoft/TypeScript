@@ -14,6 +14,7 @@ module M {
 
 //// [systemModuleConstEnums.js]
 System.register([], function(exports_1) {
+    "use strict";
     function foo() {
         use(0 /* X */);
         use(0 /* X */);

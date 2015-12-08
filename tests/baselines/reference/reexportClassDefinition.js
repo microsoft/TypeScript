@@ -18,6 +18,7 @@ class x extends foo2.x {}
 
 
 //// [foo1.js]
+"use strict";
 var x = (function () {
     function x() {
     }
@@ -25,11 +26,13 @@ var x = (function () {
 })();
 module.exports = x;
 //// [foo2.js]
+"use strict";
 var foo1 = require('./foo1');
 module.exports = {
     x: foo1
 };
 //// [foo3.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }

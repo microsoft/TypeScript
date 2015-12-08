@@ -40,6 +40,7 @@ compile(process.argv.slice(2), {
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+"use strict";
 var ts = require("typescript");
 function compile(fileNames, options) {
     var program = ts.createProgram(fileNames, options);
@@ -57,5 +58,5 @@ function compile(fileNames, options) {
 exports.compile = compile;
 compile(process.argv.slice(2), {
     noEmitOnError: true, noImplicitAny: true,
-    target: 1 /* ES5 */, module: 1 /* CommonJS */
+    target: ts.ScriptTarget.ES5, module: ts.ModuleKind.CommonJS
 });

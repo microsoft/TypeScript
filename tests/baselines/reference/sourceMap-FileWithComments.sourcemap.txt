@@ -88,15 +88,15 @@ sourceFile:sourceMap-FileWithComments.ts
   >
   >    
 2 >    // Class
-1 >Emitted(4, 5) Source(10, 5) + SourceIndex(0) name (Shapes)
-2 >Emitted(4, 13) Source(10, 13) + SourceIndex(0) name (Shapes)
+1 >Emitted(4, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(4, 13) Source(10, 13) + SourceIndex(0)
 ---
 >>>    var Point = (function () {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^->
 1->
   >    
-1->Emitted(5, 5) Source(11, 5) + SourceIndex(0) name (Shapes)
+1->Emitted(5, 5) Source(11, 5) + SourceIndex(0)
 ---
 >>>        // Constructor
 1->^^^^^^^^
@@ -105,8 +105,8 @@ sourceFile:sourceMap-FileWithComments.ts
 1->export class Point implements IPoint {
   >        
 2 >        // Constructor
-1->Emitted(6, 9) Source(12, 9) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(6, 23) Source(12, 23) + SourceIndex(0) name (Shapes.Point)
+1->Emitted(6, 9) Source(12, 9) + SourceIndex(0)
+2 >Emitted(6, 23) Source(12, 23) + SourceIndex(0)
 ---
 >>>        function Point(x, y) {
 1->^^^^^^^^
@@ -120,11 +120,11 @@ sourceFile:sourceMap-FileWithComments.ts
 3 >                       x: number
 4 >                        , public 
 5 >                          y: number
-1->Emitted(7, 9) Source(13, 9) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(7, 24) Source(13, 28) + SourceIndex(0) name (Shapes.Point)
-3 >Emitted(7, 25) Source(13, 37) + SourceIndex(0) name (Shapes.Point)
-4 >Emitted(7, 27) Source(13, 46) + SourceIndex(0) name (Shapes.Point)
-5 >Emitted(7, 28) Source(13, 55) + SourceIndex(0) name (Shapes.Point)
+1->Emitted(7, 9) Source(13, 9) + SourceIndex(0)
+2 >Emitted(7, 24) Source(13, 28) + SourceIndex(0)
+3 >Emitted(7, 25) Source(13, 37) + SourceIndex(0)
+4 >Emitted(7, 27) Source(13, 46) + SourceIndex(0)
+5 >Emitted(7, 28) Source(13, 55) + SourceIndex(0)
 ---
 >>>            this.x = x;
 1 >^^^^^^^^^^^^
@@ -138,11 +138,11 @@ sourceFile:sourceMap-FileWithComments.ts
 3 >                  
 4 >                     x
 5 >                      : number
-1 >Emitted(8, 13) Source(13, 28) + SourceIndex(0) name (Shapes.Point.constructor)
-2 >Emitted(8, 19) Source(13, 29) + SourceIndex(0) name (Shapes.Point.constructor)
-3 >Emitted(8, 22) Source(13, 28) + SourceIndex(0) name (Shapes.Point.constructor)
-4 >Emitted(8, 23) Source(13, 29) + SourceIndex(0) name (Shapes.Point.constructor)
-5 >Emitted(8, 24) Source(13, 37) + SourceIndex(0) name (Shapes.Point.constructor)
+1 >Emitted(8, 13) Source(13, 28) + SourceIndex(0)
+2 >Emitted(8, 19) Source(13, 29) + SourceIndex(0)
+3 >Emitted(8, 22) Source(13, 28) + SourceIndex(0)
+4 >Emitted(8, 23) Source(13, 29) + SourceIndex(0)
+5 >Emitted(8, 24) Source(13, 37) + SourceIndex(0)
 ---
 >>>            this.y = y;
 1->^^^^^^^^^^^^
@@ -155,11 +155,11 @@ sourceFile:sourceMap-FileWithComments.ts
 3 >                  
 4 >                     y
 5 >                      : number
-1->Emitted(9, 13) Source(13, 46) + SourceIndex(0) name (Shapes.Point.constructor)
-2 >Emitted(9, 19) Source(13, 47) + SourceIndex(0) name (Shapes.Point.constructor)
-3 >Emitted(9, 22) Source(13, 46) + SourceIndex(0) name (Shapes.Point.constructor)
-4 >Emitted(9, 23) Source(13, 47) + SourceIndex(0) name (Shapes.Point.constructor)
-5 >Emitted(9, 24) Source(13, 55) + SourceIndex(0) name (Shapes.Point.constructor)
+1->Emitted(9, 13) Source(13, 46) + SourceIndex(0)
+2 >Emitted(9, 19) Source(13, 47) + SourceIndex(0)
+3 >Emitted(9, 22) Source(13, 46) + SourceIndex(0)
+4 >Emitted(9, 23) Source(13, 47) + SourceIndex(0)
+5 >Emitted(9, 24) Source(13, 55) + SourceIndex(0)
 ---
 >>>        }
 1 >^^^^^^^^
@@ -167,8 +167,8 @@ sourceFile:sourceMap-FileWithComments.ts
 3 >         ^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >        }
-1 >Emitted(10, 9) Source(13, 59) + SourceIndex(0) name (Shapes.Point.constructor)
-2 >Emitted(10, 10) Source(13, 60) + SourceIndex(0) name (Shapes.Point.constructor)
+1 >Emitted(10, 9) Source(13, 59) + SourceIndex(0)
+2 >Emitted(10, 10) Source(13, 60) + SourceIndex(0)
 ---
 >>>        // Instance member
 1->^^^^^^^^
@@ -178,8 +178,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >
   >        
 2 >        // Instance member
-1->Emitted(11, 9) Source(15, 9) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(11, 27) Source(15, 27) + SourceIndex(0) name (Shapes.Point)
+1->Emitted(11, 9) Source(15, 9) + SourceIndex(0)
+2 >Emitted(11, 27) Source(15, 27) + SourceIndex(0)
 ---
 >>>        Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
 1->^^^^^^^^
@@ -241,35 +241,35 @@ sourceFile:sourceMap-FileWithComments.ts
 27>                                                                                                   ;
 28>                                                                                                     
 29>                                                                                                     }
-1->Emitted(12, 9) Source(16, 9) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(12, 32) Source(16, 16) + SourceIndex(0) name (Shapes.Point)
-3 >Emitted(12, 35) Source(16, 9) + SourceIndex(0) name (Shapes.Point)
-4 >Emitted(12, 49) Source(16, 21) + SourceIndex(0) name (Shapes.Point.getDist)
-5 >Emitted(12, 55) Source(16, 27) + SourceIndex(0) name (Shapes.Point.getDist)
-6 >Emitted(12, 56) Source(16, 28) + SourceIndex(0) name (Shapes.Point.getDist)
-7 >Emitted(12, 60) Source(16, 32) + SourceIndex(0) name (Shapes.Point.getDist)
-8 >Emitted(12, 61) Source(16, 33) + SourceIndex(0) name (Shapes.Point.getDist)
-9 >Emitted(12, 65) Source(16, 37) + SourceIndex(0) name (Shapes.Point.getDist)
-10>Emitted(12, 66) Source(16, 38) + SourceIndex(0) name (Shapes.Point.getDist)
-11>Emitted(12, 70) Source(16, 42) + SourceIndex(0) name (Shapes.Point.getDist)
-12>Emitted(12, 71) Source(16, 43) + SourceIndex(0) name (Shapes.Point.getDist)
-13>Emitted(12, 72) Source(16, 44) + SourceIndex(0) name (Shapes.Point.getDist)
-14>Emitted(12, 75) Source(16, 47) + SourceIndex(0) name (Shapes.Point.getDist)
-15>Emitted(12, 79) Source(16, 51) + SourceIndex(0) name (Shapes.Point.getDist)
-16>Emitted(12, 80) Source(16, 52) + SourceIndex(0) name (Shapes.Point.getDist)
-17>Emitted(12, 81) Source(16, 53) + SourceIndex(0) name (Shapes.Point.getDist)
-18>Emitted(12, 84) Source(16, 56) + SourceIndex(0) name (Shapes.Point.getDist)
-19>Emitted(12, 88) Source(16, 60) + SourceIndex(0) name (Shapes.Point.getDist)
-20>Emitted(12, 89) Source(16, 61) + SourceIndex(0) name (Shapes.Point.getDist)
-21>Emitted(12, 90) Source(16, 62) + SourceIndex(0) name (Shapes.Point.getDist)
-22>Emitted(12, 93) Source(16, 65) + SourceIndex(0) name (Shapes.Point.getDist)
-23>Emitted(12, 97) Source(16, 69) + SourceIndex(0) name (Shapes.Point.getDist)
-24>Emitted(12, 98) Source(16, 70) + SourceIndex(0) name (Shapes.Point.getDist)
-25>Emitted(12, 99) Source(16, 71) + SourceIndex(0) name (Shapes.Point.getDist)
-26>Emitted(12, 100) Source(16, 72) + SourceIndex(0) name (Shapes.Point.getDist)
-27>Emitted(12, 101) Source(16, 73) + SourceIndex(0) name (Shapes.Point.getDist)
-28>Emitted(12, 102) Source(16, 74) + SourceIndex(0) name (Shapes.Point.getDist)
-29>Emitted(12, 103) Source(16, 75) + SourceIndex(0) name (Shapes.Point.getDist)
+1->Emitted(12, 9) Source(16, 9) + SourceIndex(0)
+2 >Emitted(12, 32) Source(16, 16) + SourceIndex(0)
+3 >Emitted(12, 35) Source(16, 9) + SourceIndex(0)
+4 >Emitted(12, 49) Source(16, 21) + SourceIndex(0)
+5 >Emitted(12, 55) Source(16, 27) + SourceIndex(0)
+6 >Emitted(12, 56) Source(16, 28) + SourceIndex(0)
+7 >Emitted(12, 60) Source(16, 32) + SourceIndex(0)
+8 >Emitted(12, 61) Source(16, 33) + SourceIndex(0)
+9 >Emitted(12, 65) Source(16, 37) + SourceIndex(0)
+10>Emitted(12, 66) Source(16, 38) + SourceIndex(0)
+11>Emitted(12, 70) Source(16, 42) + SourceIndex(0)
+12>Emitted(12, 71) Source(16, 43) + SourceIndex(0)
+13>Emitted(12, 72) Source(16, 44) + SourceIndex(0)
+14>Emitted(12, 75) Source(16, 47) + SourceIndex(0)
+15>Emitted(12, 79) Source(16, 51) + SourceIndex(0)
+16>Emitted(12, 80) Source(16, 52) + SourceIndex(0)
+17>Emitted(12, 81) Source(16, 53) + SourceIndex(0)
+18>Emitted(12, 84) Source(16, 56) + SourceIndex(0)
+19>Emitted(12, 88) Source(16, 60) + SourceIndex(0)
+20>Emitted(12, 89) Source(16, 61) + SourceIndex(0)
+21>Emitted(12, 90) Source(16, 62) + SourceIndex(0)
+22>Emitted(12, 93) Source(16, 65) + SourceIndex(0)
+23>Emitted(12, 97) Source(16, 69) + SourceIndex(0)
+24>Emitted(12, 98) Source(16, 70) + SourceIndex(0)
+25>Emitted(12, 99) Source(16, 71) + SourceIndex(0)
+26>Emitted(12, 100) Source(16, 72) + SourceIndex(0)
+27>Emitted(12, 101) Source(16, 73) + SourceIndex(0)
+28>Emitted(12, 102) Source(16, 74) + SourceIndex(0)
+29>Emitted(12, 103) Source(16, 75) + SourceIndex(0)
 ---
 >>>        // Static member
 1 >^^^^^^^^
@@ -279,8 +279,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >
   >        
 2 >        // Static member
-1 >Emitted(13, 9) Source(18, 9) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(13, 25) Source(18, 25) + SourceIndex(0) name (Shapes.Point)
+1 >Emitted(13, 9) Source(18, 9) + SourceIndex(0)
+2 >Emitted(13, 25) Source(18, 25) + SourceIndex(0)
 ---
 >>>        Point.origin = new Point(0, 0);
 1->^^^^^^^^
@@ -306,17 +306,17 @@ sourceFile:sourceMap-FileWithComments.ts
 9 >                                    0
 10>                                     )
 11>                                      ;
-1->Emitted(14, 9) Source(19, 16) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(14, 21) Source(19, 22) + SourceIndex(0) name (Shapes.Point)
-3 >Emitted(14, 24) Source(19, 25) + SourceIndex(0) name (Shapes.Point)
-4 >Emitted(14, 28) Source(19, 29) + SourceIndex(0) name (Shapes.Point)
-5 >Emitted(14, 33) Source(19, 34) + SourceIndex(0) name (Shapes.Point)
-6 >Emitted(14, 34) Source(19, 35) + SourceIndex(0) name (Shapes.Point)
-7 >Emitted(14, 35) Source(19, 36) + SourceIndex(0) name (Shapes.Point)
-8 >Emitted(14, 37) Source(19, 38) + SourceIndex(0) name (Shapes.Point)
-9 >Emitted(14, 38) Source(19, 39) + SourceIndex(0) name (Shapes.Point)
-10>Emitted(14, 39) Source(19, 40) + SourceIndex(0) name (Shapes.Point)
-11>Emitted(14, 40) Source(19, 41) + SourceIndex(0) name (Shapes.Point)
+1->Emitted(14, 9) Source(19, 16) + SourceIndex(0)
+2 >Emitted(14, 21) Source(19, 22) + SourceIndex(0)
+3 >Emitted(14, 24) Source(19, 25) + SourceIndex(0)
+4 >Emitted(14, 28) Source(19, 29) + SourceIndex(0)
+5 >Emitted(14, 33) Source(19, 34) + SourceIndex(0)
+6 >Emitted(14, 34) Source(19, 35) + SourceIndex(0)
+7 >Emitted(14, 35) Source(19, 36) + SourceIndex(0)
+8 >Emitted(14, 37) Source(19, 38) + SourceIndex(0)
+9 >Emitted(14, 38) Source(19, 39) + SourceIndex(0)
+10>Emitted(14, 39) Source(19, 40) + SourceIndex(0)
+11>Emitted(14, 40) Source(19, 41) + SourceIndex(0)
 ---
 >>>        return Point;
 1 >^^^^^^^^
@@ -324,8 +324,8 @@ sourceFile:sourceMap-FileWithComments.ts
 1 >
   >    
 2 >        }
-1 >Emitted(15, 9) Source(20, 5) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(15, 21) Source(20, 6) + SourceIndex(0) name (Shapes.Point)
+1 >Emitted(15, 9) Source(20, 5) + SourceIndex(0)
+2 >Emitted(15, 21) Source(20, 6) + SourceIndex(0)
 ---
 >>>    })();
 1 >^^^^
@@ -346,10 +346,10 @@ sourceFile:sourceMap-FileWithComments.ts
   >             // Static member
   >             static origin = new Point(0, 0);
   >         }
-1 >Emitted(16, 5) Source(20, 5) + SourceIndex(0) name (Shapes.Point)
-2 >Emitted(16, 6) Source(20, 6) + SourceIndex(0) name (Shapes.Point)
-3 >Emitted(16, 6) Source(11, 5) + SourceIndex(0) name (Shapes)
-4 >Emitted(16, 10) Source(20, 6) + SourceIndex(0) name (Shapes)
+1 >Emitted(16, 5) Source(20, 5) + SourceIndex(0)
+2 >Emitted(16, 6) Source(20, 6) + SourceIndex(0)
+3 >Emitted(16, 6) Source(11, 5) + SourceIndex(0)
+4 >Emitted(16, 10) Source(20, 6) + SourceIndex(0)
 ---
 >>>    Shapes.Point = Point;
 1->^^^^
@@ -370,10 +370,10 @@ sourceFile:sourceMap-FileWithComments.ts
   >                        static origin = new Point(0, 0);
   >                    }
 4 >                        
-1->Emitted(17, 5) Source(11, 18) + SourceIndex(0) name (Shapes)
-2 >Emitted(17, 17) Source(11, 23) + SourceIndex(0) name (Shapes)
-3 >Emitted(17, 25) Source(20, 6) + SourceIndex(0) name (Shapes)
-4 >Emitted(17, 26) Source(20, 6) + SourceIndex(0) name (Shapes)
+1->Emitted(17, 5) Source(11, 18) + SourceIndex(0)
+2 >Emitted(17, 17) Source(11, 23) + SourceIndex(0)
+3 >Emitted(17, 25) Source(20, 6) + SourceIndex(0)
+4 >Emitted(17, 26) Source(20, 6) + SourceIndex(0)
 ---
 >>>    // Variable comment after class
 1->^^^^
@@ -382,8 +382,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >
   >    
 2 >    // Variable comment after class
-1->Emitted(18, 5) Source(22, 5) + SourceIndex(0) name (Shapes)
-2 >Emitted(18, 36) Source(22, 36) + SourceIndex(0) name (Shapes)
+1->Emitted(18, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(18, 36) Source(22, 36) + SourceIndex(0)
 ---
 >>>    var a = 10;
 1 >^^^^
@@ -400,12 +400,12 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >          = 
 5 >            10
 6 >              ;
-1 >Emitted(19, 5) Source(23, 5) + SourceIndex(0) name (Shapes)
-2 >Emitted(19, 9) Source(23, 9) + SourceIndex(0) name (Shapes)
-3 >Emitted(19, 10) Source(23, 10) + SourceIndex(0) name (Shapes)
-4 >Emitted(19, 13) Source(23, 13) + SourceIndex(0) name (Shapes)
-5 >Emitted(19, 15) Source(23, 15) + SourceIndex(0) name (Shapes)
-6 >Emitted(19, 16) Source(23, 16) + SourceIndex(0) name (Shapes)
+1 >Emitted(19, 5) Source(23, 5) + SourceIndex(0)
+2 >Emitted(19, 9) Source(23, 9) + SourceIndex(0)
+3 >Emitted(19, 10) Source(23, 10) + SourceIndex(0)
+4 >Emitted(19, 13) Source(23, 13) + SourceIndex(0)
+5 >Emitted(19, 15) Source(23, 15) + SourceIndex(0)
+6 >Emitted(19, 16) Source(23, 16) + SourceIndex(0)
 ---
 >>>    function foo() {
 1->^^^^
@@ -413,7 +413,7 @@ sourceFile:sourceMap-FileWithComments.ts
 1->
   >
   >    
-1->Emitted(20, 5) Source(25, 5) + SourceIndex(0) name (Shapes)
+1->Emitted(20, 5) Source(25, 5) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -422,8 +422,8 @@ sourceFile:sourceMap-FileWithComments.ts
 1->export function foo() {
   >    
 2 >    }
-1->Emitted(21, 5) Source(26, 5) + SourceIndex(0) name (Shapes.foo)
-2 >Emitted(21, 6) Source(26, 6) + SourceIndex(0) name (Shapes.foo)
+1->Emitted(21, 5) Source(26, 5) + SourceIndex(0)
+2 >Emitted(21, 6) Source(26, 6) + SourceIndex(0)
 ---
 >>>    Shapes.foo = foo;
 1->^^^^
@@ -436,10 +436,10 @@ sourceFile:sourceMap-FileWithComments.ts
 3 >              () {
   >                  }
 4 >                    
-1->Emitted(22, 5) Source(25, 21) + SourceIndex(0) name (Shapes)
-2 >Emitted(22, 15) Source(25, 24) + SourceIndex(0) name (Shapes)
-3 >Emitted(22, 21) Source(26, 6) + SourceIndex(0) name (Shapes)
-4 >Emitted(22, 22) Source(26, 6) + SourceIndex(0) name (Shapes)
+1->Emitted(22, 5) Source(25, 21) + SourceIndex(0)
+2 >Emitted(22, 15) Source(25, 24) + SourceIndex(0)
+3 >Emitted(22, 21) Source(26, 6) + SourceIndex(0)
+4 >Emitted(22, 22) Source(26, 6) + SourceIndex(0)
 ---
 >>>    /**  comment after function
 1->^^^^
@@ -447,7 +447,7 @@ sourceFile:sourceMap-FileWithComments.ts
 1->
   >
   >    
-1->Emitted(23, 5) Source(28, 5) + SourceIndex(0) name (Shapes)
+1->Emitted(23, 5) Source(28, 5) + SourceIndex(0)
 ---
 >>>    * this is another comment
 >>>    */
@@ -456,7 +456,7 @@ sourceFile:sourceMap-FileWithComments.ts
 1->/**  comment after function
   >    * this is another comment 
   >    */
-1->Emitted(25, 7) Source(30, 7) + SourceIndex(0) name (Shapes)
+1->Emitted(25, 7) Source(30, 7) + SourceIndex(0)
 ---
 >>>    var b = 10;
 1->^^^^
@@ -473,12 +473,12 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >          = 
 5 >            10
 6 >              ;
-1->Emitted(26, 5) Source(31, 5) + SourceIndex(0) name (Shapes)
-2 >Emitted(26, 9) Source(31, 9) + SourceIndex(0) name (Shapes)
-3 >Emitted(26, 10) Source(31, 10) + SourceIndex(0) name (Shapes)
-4 >Emitted(26, 13) Source(31, 13) + SourceIndex(0) name (Shapes)
-5 >Emitted(26, 15) Source(31, 15) + SourceIndex(0) name (Shapes)
-6 >Emitted(26, 16) Source(31, 16) + SourceIndex(0) name (Shapes)
+1->Emitted(26, 5) Source(31, 5) + SourceIndex(0)
+2 >Emitted(26, 9) Source(31, 9) + SourceIndex(0)
+3 >Emitted(26, 10) Source(31, 10) + SourceIndex(0)
+4 >Emitted(26, 13) Source(31, 13) + SourceIndex(0)
+5 >Emitted(26, 15) Source(31, 15) + SourceIndex(0)
+6 >Emitted(26, 16) Source(31, 16) + SourceIndex(0)
 ---
 >>>})(Shapes || (Shapes = {}));
 1->
@@ -520,8 +520,8 @@ sourceFile:sourceMap-FileWithComments.ts
   >                        */
   >                        var b = 10;
   >                    }
-1->Emitted(27, 1) Source(32, 1) + SourceIndex(0) name (Shapes)
-2 >Emitted(27, 2) Source(32, 2) + SourceIndex(0) name (Shapes)
+1->Emitted(27, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(27, 2) Source(32, 2) + SourceIndex(0)
 3 >Emitted(27, 4) Source(8, 8) + SourceIndex(0)
 4 >Emitted(27, 10) Source(8, 14) + SourceIndex(0)
 5 >Emitted(27, 15) Source(8, 8) + SourceIndex(0)
