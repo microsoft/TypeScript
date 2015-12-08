@@ -10985,6 +10985,87 @@ namespace ts {
             return -1;
         }
 
+        function checkTypePredicate(node: TypePredicateNode) {
+            const parent = getTypePredicateParent(node);
+            if (!parent) {
+                error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                return;
+            }
+
+            const typePredicate = getSignatureFromDeclaration(parent).typePredicate;
+            if (typePredicate.parameterIndex >= 0) {
+                if (parent.parameters[typePredicate.parameterIndex].dotDotDotToken) {
+                    error(node.parameterName,
+                        Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
+                }
+                else {
+                    checkTypeAssignableTo(typePredicate.type,
+                        getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
+                        node.type);
+                }
+            }
+            else if (node.parameterName) {
+                let hasReportedError = false;
+                for (var param of parent.parameters) {
+                    if (hasReportedError) {
+                        break;
+                    }
+                    if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
+                        param.name.kind === SyntaxKind.ArrayBindingPattern) {
+
+                        (function checkBindingPattern(pattern: BindingPattern) {
+                            for (const element of pattern.elements) {
+                                if (element.name.kind === SyntaxKind.Identifier &&
+                                    (<Identifier>element.name).text === typePredicate.parameterName) {
+
+                                    error(node.parameterName,
+                                        Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                                        typePredicate.parameterName);
+                                    hasReportedError = true;
+                                    break;
+                                }
+                                else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
+                                    element.name.kind === SyntaxKind.ObjectBindingPattern) {
+
+                                    checkBindingPattern(<BindingPattern>element.name);
+                                }
+                            }
+                        })(<BindingPattern>param.name);
+                    }
+                }
+                if (!hasReportedError) {
+                    error(node.parameterName,
+                        Diagnostics.Cannot_find_parameter_0,
+                        typePredicate.parameterName);
+                }
+            }
+
+            if (node.type && node.type.kind === SyntaxKind.UnionType) {
+                for (const type of (<UnionTypeNode>node.type).types) {
+                    if (type.kind === SyntaxKind.TypePredicate) {
+                        checkTypePredicate(<TypePredicateNode>type);
+                    }
+                }
+            }
+        }
+
+        function getTypePredicateParent(node: Node): SignatureDeclaration {
+            switch (node.parent.kind) {
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    const parent = <SignatureDeclaration>node.parent;
+                    if (node === parent.type) {
+                        return parent;
+                    }
+            }
+            return undefined;
+        }
+
         function isInLegalTypePredicatePosition(node: Node): boolean {
             switch (node.parent.kind) {
                 case SyntaxKind.ArrowFunction:
@@ -11015,67 +11096,7 @@ namespace ts {
 
             forEach(node.parameters, checkParameter);
 
-            if (node.type) {
-                if (node.type.kind === SyntaxKind.TypePredicate) {
-                    const typePredicate = getSignatureFromDeclaration(node).typePredicate;
-                    const typePredicateNode = <TypePredicateNode>node.type;
-                    if (isInLegalTypePredicatePosition(typePredicateNode)) {
-                        if (typePredicate.parameterIndex >= 0) {
-                            if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
-                                error(typePredicateNode.parameterName,
-                                    Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
-                            }
-                            else {
-                                checkTypeAssignableTo(typePredicate.type,
-                                    getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
-                                    typePredicateNode.type);
-                            }
-                        }
-                        else if (typePredicateNode.parameterName) {
-                            let hasReportedError = false;
-                            for (var param of node.parameters) {
-                                if (hasReportedError) {
-                                    break;
-                                }
-                                if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
-                                    param.name.kind === SyntaxKind.ArrayBindingPattern) {
-
-                                    (function checkBindingPattern(pattern: BindingPattern) {
-                                        for (const element of pattern.elements) {
-                                            if (element.name.kind === SyntaxKind.Identifier &&
-                                                (<Identifier>element.name).text === typePredicate.parameterName) {
-
-                                                error(typePredicateNode.parameterName,
-                                                    Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                                    typePredicate.parameterName);
-                                                hasReportedError = true;
-                                                break;
-                                            }
-                                            else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
-                                                element.name.kind === SyntaxKind.ObjectBindingPattern) {
-
-                                                checkBindingPattern(<BindingPattern>element.name);
-                                            }
-                                        }
-                                    })(<BindingPattern>param.name);
-                                }
-                            }
-                            if (!hasReportedError) {
-                                error(typePredicateNode.parameterName,
-                                    Diagnostics.Cannot_find_parameter_0,
-                                    typePredicate.parameterName);
-                            }
-                        }
-                    }
-                    else {
-                        error(typePredicateNode,
-                            Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
-                    }
-                }
-                else {
-                    checkSourceElement(node.type);
-                }
-            }
+            checkSourceElement(node.type);
 
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
@@ -14214,12 +14235,6 @@ namespace ts {
 
             function isNotOverload(declaration: Declaration): boolean {
                 return declaration.kind !== SyntaxKind.FunctionDeclaration || !!(declaration as FunctionDeclaration).body;
-            }
-        }
-
-        function checkTypePredicate(node: TypePredicateNode) {
-            if (!isInLegalTypePredicatePosition(node)) {
-                error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
             }
         }
 
