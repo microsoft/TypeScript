@@ -60,6 +60,10 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        newLine?: string;
+        useCaseSensitiveFileNames?: boolean;
+        watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
+        watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
     };
 
     export var sys: System = (function () {
@@ -474,9 +478,9 @@ namespace ts {
         function getChakraSystem(): System {
 
             return {
-                newLine: "\r\n",
+                newLine: ChakraHost.newLine || "\r\n",
                 args: ChakraHost.args,
-                useCaseSensitiveFileNames: false,
+                useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
                 write: ChakraHost.echo,
                 readFile(path: string, encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost
@@ -498,6 +502,8 @@ namespace ts {
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 readDirectory: ChakraHost.readDirectory,
                 exit: ChakraHost.quit,
+                watchFile: ChakraHost.watchFile,
+                watchDirectory: ChakraHost.watchDirectory
             };
         }
 
