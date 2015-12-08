@@ -711,8 +711,8 @@ namespace ts {
         }
 
         return {
-            fileNames: wildcardFiles.reduce(addFileToOutput, literalFiles.reduce(addFileToOutput, [])),
-            wildcardDirectories: wildcardDirectories.reduce<Map<WatchDirectoryFlags>>(addDirectoryToOutput, {}),
+            fileNames: wildcardFiles.reduceProperties(addFileToOutput, literalFiles.reduceProperties(addFileToOutput, [])),
+            wildcardDirectories: wildcardDirectories.reduceProperties<Map<WatchDirectoryFlags>>(addDirectoryToOutput, {}),
         };
     }
 

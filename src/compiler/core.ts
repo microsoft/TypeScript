@@ -25,7 +25,7 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
-            reduce,
+            reduceProperties: reducePropertiesInMap,
             clear,
             mergeFrom
         };
@@ -36,7 +36,7 @@ namespace ts {
             }
         }
 
-        function reduce<U>(callback: (memo: U, value: T, key: Path) => U, initial: U) {
+        function reducePropertiesInMap<U>(callback: (memo: U, value: T, key: Path) => U, initial: U) {
             return reduceProperties(files, callback, initial);
         }
 

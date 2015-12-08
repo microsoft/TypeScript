@@ -14,7 +14,7 @@ namespace ts {
         remove(fileName: Path): void;
 
         forEachValue(f: (key: Path, v: T) => void): void;
-        reduce<U>(f: (memo: U, value: T, key: Path) => U, initial: U): U;
+        reduceProperties<U>(f: (memo: U, value: T, key: Path) => U, initial: U): U;
         mergeFrom(other: FileMap<T>): void;
         clear(): void;
     }
