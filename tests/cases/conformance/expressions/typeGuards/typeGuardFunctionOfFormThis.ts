@@ -133,3 +133,9 @@ if (mimic.isFollower()) {
     mimic.follow();
     mimic.isFollower = a.isFollower;
 }
+
+
+interface MimicGuardInterface {
+    isLeader(): this is LeadGuard;
+    isFollower(): this is FollowerGuard;
+}

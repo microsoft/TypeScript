@@ -40,4 +40,64 @@ namespace Test {
 	else if (file.isNetworked) {
 		file.host;
 	}
+	
+	interface GenericLeadGuard<T> extends GenericGuard<T> {
+		lead(): void;
+	}
+	
+	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+		follow(): void;
+	}
+	
+	interface GenericGuard<T> {
+		target: T;
+		isLeader: this is (GenericLeadGuard<T>);
+		isFollower: this is GenericFollowerGuard<T>;
+	}
+
+	let guard: GenericGuard<File>;
+	if (guard.isLeader) {
+		guard.lead();
+	}
+	else if (guard.isFollower) {
+		guard.follow();
+	}
+
+	interface SpecificGuard {
+		isMoreSpecific: this is MoreSpecificGuard;
+	}
+
+	interface MoreSpecificGuard extends SpecificGuard {
+		do(): void;
+	}
+
+	let general: SpecificGuard;
+	if (general.isMoreSpecific) {
+		general.do();
+	}
+
+
+	class doThing<T> {
+		constructor(private x: T) {}
+		isThing(x: any): x is doThing<T> {
+			return true;
+		}
+		
+	}
+	
+	let z: doThing<{}> = new doThing({x: 10});
+	let z1 = new doThing({x: 10});
+	if (z1.isThing(z)) {
+		z;
+	}
 }
+
+function f(g: (x: number) => void) {
+	
+	
+}
+
+f(function(x) {
+	
+	
+})

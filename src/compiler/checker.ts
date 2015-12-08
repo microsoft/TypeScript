@@ -2634,7 +2634,13 @@ namespace ts {
                 // During a normal type check we'll never get to here with a property assignment (the check of the containing
                 // object literal uses a different path). We exclude widening only so that language services and type verification
                 // tools see the actual type.
-                return declaration.kind !== SyntaxKind.PropertyAssignment ? getWidenedType(type) : type;
+                if (declaration.kind === SyntaxKind.PropertyAssignment) {
+                    return type;
+                }
+                if (type.flags & TypeFlags.PredicateType && (declaration.kind === SyntaxKind.PropertyDeclaration || declaration.kind === SyntaxKind.PropertySignature)) {
+                    return type;
+                }
+                return getWidenedType(type);
             }
 
             // Rest parameters default to type any[], other parameters default to type any
@@ -4602,7 +4608,7 @@ namespace ts {
         }
 
         function getPredicateType(node: TypePredicateNode): Type {
-            if (!(node.parent.kind === SyntaxKind.PropertyDeclaration || node.parent.kind === SyntaxKind.GetAccessor)) {
+            if (!(node.parent.kind === SyntaxKind.PropertyDeclaration || node.parent.kind === SyntaxKind.PropertySignature || node.parent.kind === SyntaxKind.GetAccessor)) {
                 return booleanType;
             }
             else {
@@ -6008,6 +6014,9 @@ namespace ts {
 
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
+                if (type.flags & TypeFlags.PredicateType) {
+                    return booleanType;
+                }
                 if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                     return anyType;
                 }
@@ -11078,8 +11087,9 @@ namespace ts {
             }
             switch (node.parent.kind) {
                 case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
                 case SyntaxKind.GetAccessor:
-                    return node === (<SignatureDeclaration>node.parent).type;
+                    return node === (node.parent as (PropertyDeclaration | GetAccessorDeclaration | PropertySignature)).type;
             }
             return false;
         }
@@ -11104,12 +11114,8 @@ namespace ts {
                 if (node.type.kind === SyntaxKind.TypePredicate) {
                     const typePredicate = getSignatureFromDeclaration(node).typePredicate;
                     const typePredicateNode = <TypePredicateNode>node.type;
+                    checkSourceElement(typePredicateNode);
                     if (isIdentifierTypePredicate(typePredicate)) {
-                        if (!isInLegalTypePredicatePosition(typePredicateNode)) {
-                            error(typePredicateNode,
-                                Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
-                            return;
-                        }
                         if (typePredicate.parameterIndex >= 0) {
                             if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
                                 error(typePredicateNode.parameterName,
@@ -11156,15 +11162,6 @@ namespace ts {
                                     typePredicate.parameterName);
                             }
                         }
-                    }
-                    else {
-                        if (!isInLegalThisTypePredicatePosition(typePredicateNode)) {
-                            error(typePredicateNode,
-                                Diagnostics.A_this_based_type_predicate_is_only_allowed_in_class_or_interface_members_get_accessors_or_return_type_positions_for_functions_and_methods);
-                            return;
-                        }
-                        // Reuse this type diagnostics on the this type node to determine if a this type predicate is valid
-                        getTypeFromThisTypeNode(typePredicateNode.parameterName as ThisTypeNode);
                     }
                 }
                 else {
@@ -14295,8 +14292,13 @@ namespace ts {
             if (node.parameterName.kind === SyntaxKind.Identifier && !isInLegalTypePredicatePosition(node)) {
                 error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
             }
-            else if (node.parameterName.kind === SyntaxKind.ThisType && (!isInLegalThisTypePredicatePosition(node) || getTypeFromThisTypeNode(node.parameterName as ThisTypeNode) === unknownType)) {
-                error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_in_class_or_interface_members_get_accessors_or_return_type_positions_for_functions_and_methods);
+            else if (node.parameterName.kind === SyntaxKind.ThisType) {
+                if (!isInLegalThisTypePredicatePosition(node)) {
+                    error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_in_class_or_interface_members_get_accessors_or_return_type_positions_for_functions_and_methods);
+                }
+                else {
+                    getTypeFromThisTypeNode(node.parameterName as ThisTypeNode);
+                }
             }
         }
 
