@@ -1,4 +1,4 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(11,10): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(7,10): error TS2394: Overload signature is not compatible with function implementation.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts (1 errors) ====
@@ -9,12 +9,12 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloads01.ts(11,
     function getFalsyPrimitive(x: "number"): number;
     function getFalsyPrimitive(x: "boolean"): boolean;
     function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
+             ~~~~~~~~~~~~~~~~~
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
     function getFalsyPrimitive(x: "number" | "string"): number | string;
     function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
-    function getFalsyPrimitive(x: PrimitiveName) {
-             ~~~~~~~~~~~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
+    function getFalsyPrimitive(x: PrimitiveName): number | string | boolean {
         if (x === "string") {
             return "";
         }
