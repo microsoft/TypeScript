@@ -241,6 +241,10 @@ namespace ts {
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        },
+        {
+            name: "allowJs",
+            type: "boolean"
         }
     ];
 
@@ -409,12 +413,11 @@ namespace ts {
       */
     export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
-
-        return {
-            options: getCompilerOptions(),
-            fileNames: getFileNames(),
-            errors
-        };
+        
+        let options = getCompilerOptions();
+        let fileNames = getFileNames(options.allowJs);
+        
+        return { options, fileNames, errors };
 
         function getCompilerOptions(): CompilerOptions {
             let options: CompilerOptions = {};
@@ -461,7 +464,7 @@ namespace ts {
             return options;
         }
 
-        function getFileNames(): string[] {
+        function getFileNames(allowJs: boolean): string[] {
             let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
@@ -473,9 +476,10 @@ namespace ts {
             }
             else {
                 let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let sysFiles = host.readDirectory(basePath, ".ts", exclude)
-                    .concat(host.readDirectory(basePath, ".tsx", exclude))
-                    .concat(host.readDirectory(basePath, ".js", exclude));
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                if (allowJs) {
+                    sysFiles = sysFiles.concat(host.readDirectory(basePath, ".js", exclude));
+                }
                 for (let i = 0; i < sysFiles.length; i++) {
                     let name = sysFiles[i];
                     if (fileExtensionIs(name, ".d.ts")) {

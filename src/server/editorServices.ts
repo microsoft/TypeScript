@@ -16,7 +16,7 @@ namespace ts.server {
     }
 
     var lineCollectionCapacity = 4;
-    var cachePath = ts.combinePaths(process.env.HOME, ".typingCache");
+    var globalCachePath = ts.combinePaths(process.env.HOME, ".typingCache");
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -909,10 +909,16 @@ namespace ts.server {
         // the newly opened file.
         findConfigFile(searchPath: string): string {
             while (true) {
-                var fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (this.host.fileExists(fileName)) {
-                    return fileName;
+                // "tsconfig" > "jsconfig"
+                let tsConfigFile = ts.combinePaths(searchPath, "tsconfig.json");
+                let jsConfigFile = ts.combinePaths(searchPath, "jsconfig.json");
+                if (this.host.fileExists(tsConfigFile)) {
+                    return tsConfigFile;
                 }
+                if (this.host.fileExists(jsConfigFile)) {
+                    return jsConfigFile;
+                }
+
                 var parentPath = ts.getDirectoryPath(searchPath);
                 if (parentPath === searchPath) {
                     break;
@@ -922,21 +928,17 @@ namespace ts.server {
             return undefined;
         }
 
-        acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypingPaths, newTypingNames } = this.resolveTypingsForJs(path, project);
-            this.downloadTypingFilesForJs(cachedTypingPaths, newTypingNames, project);
-        }
-
         resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
             this.log("Files for JS typing:" + fileName);
             // TODO: replace 2nd cachePath for projectRootPath
-            return ts.JsTyping.discoverTypings(sys, project.getFileNames(), cachePath, cachePath);
+            return ts.JsTyping.discoverTypings(sys, project.getFileNames(), globalCachePath, project.projectFilename);
         }
 
-        downloadTypingFilesForJs(cachedTypingPaths: string[], newTypings: string[], project: Project) {
+        acquireTypingForJs(path: string, project: Project) {
+            let { cachedTypingPaths, newTypingNames } = this.resolveTypingsForJs(path, project);
             let tsd = require("tsd");
-            let tsdJsonPath = ts.combinePaths(cachePath, 'tsd.json');
-            let typingPath = ts.combinePaths(cachePath, 'typings');
+            let tsdJsonPath = ts.combinePaths(globalCachePath, 'tsd.json');
+            let typingPath = ts.combinePaths(globalCachePath, 'typings');
             let api = tsd.getAPI(tsdJsonPath);
             let cachedInstalledPaths: Map<string>;
 
@@ -949,11 +951,11 @@ namespace ts.server {
             cachedTypingPaths.forEach(p => addTypingToProject(p, project));
             project.projectService.updateProjectStructure();
 
-            this.log("New typings to download: " + newTypings);
-            if (newTypings && newTypings.length > 0) {
+            this.log("New typings to download: " + newTypingNames);
+            if (newTypingNames && newTypingNames.length > 0) {
                 let query = new tsd.Query();
-                for(let newTyping of newTypings) {
-                    query.addNamePattern(newTyping);
+                for(let newTypingName of newTypingNames) {
+                    query.addNamePattern(newTypingName);
                 }
                 
                 let promise: PromiseLike<void>;
@@ -1117,6 +1119,10 @@ namespace ts.server {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
+                if (rawConfig.config.compilerOptions.allowJs === true || ts.getBaseFileName(configFilename) === "jsconfig.json") {
+                    rawConfig.config.compilerOptions.allowJs = true;
+                }
+                
                 var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
