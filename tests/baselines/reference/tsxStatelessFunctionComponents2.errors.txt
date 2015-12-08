@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/jsx/file.tsx(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/conformance/jsx/file.tsx(20,16): error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(26,42): error TS2339: Property 'subtr' does not exist on type 'string'.
 tests/cases/conformance/jsx/file.tsx(28,33): error TS2339: Property 'notARealProperty' does not exist on type 'BigGreeter'.
@@ -9,7 +9,7 @@ tests/cases/conformance/jsx/file.tsx(36,26): error TS2339: Property 'propertyNot
     
     import React = require('react');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     
     function Greet(x: {name?: string}) {
     	return <div>Hello, {x}</div>;

@@ -1,11 +1,11 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts(1,17): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts(1,17): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts(2,4): error TS1184: Modifiers cannot appear here.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts (2 errors) ====
     export function foo() {
                     ~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
        export var x = this;
        ~~~~~~
 !!! error TS1184: Modifiers cannot appear here.

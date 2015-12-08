@@ -5,7 +5,7 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalMod
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(38,25): error TS2507: Type 'any' is not a constructor function type.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(44,9): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(45,9): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(48,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts(48,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
 ==== tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalModule.ts (8 errors) ====
@@ -72,4 +72,4 @@ tests/cases/conformance/expressions/thisKeyword/thisInInvalidContextsExternalMod
     
     export = this; // Should be an error
     ~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.

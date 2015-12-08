@@ -1,4 +1,4 @@
-tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
   Property 'length' is missing in type 'ObservableArray<T>'.
 
@@ -6,7 +6,7 @@ tests/cases/compiler/genericArrayExtenstions.ts(1,22): error TS2420: Class 'Obse
 ==== tests/cases/compiler/genericArrayExtenstions.ts (2 errors) ====
     export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
                          ~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
                          ~~~~~~~~~~~~~~~
 !!! error TS2420: Class 'ObservableArray<T>' incorrectly implements interface 'T[]'.
 !!! error TS2420:   Property 'length' is missing in type 'ObservableArray<T>'.
