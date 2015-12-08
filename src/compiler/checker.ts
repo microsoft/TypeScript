@@ -15969,6 +15969,11 @@ namespace ts {
                     return grammarErrorOnNode((<ShorthandPropertyAssignment>prop).equalsToken, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
                 }
 
+                // Modifiers cannot appear in property assignments
+                if (prop.modifiers && prop.modifiers.length > 0) {
+                    grammarErrorOnNode(prop.modifiers[0], Diagnostics.Modifiers_cannot_appear_here);
+                }
+
                 // ECMA-262 11.1.5 Object Initialiser
                 // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
                 // a.This production is contained in strict code and IsDataDescriptor(previous) is true and
