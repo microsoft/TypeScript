@@ -371,6 +371,10 @@ namespace ts.server {
         openRefCount = 0;
 
         constructor(public projectService: ProjectService, public projectOptions?: ProjectOptions) {
+            if (projectOptions && projectOptions.files) {
+                // If files are listed explicitly, allow all extensions
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
+            }
             this.compilerService = new CompilerService(this, projectOptions && projectOptions.compilerOptions);
         }
 
@@ -384,7 +388,7 @@ namespace ts.server {
         }
 
         openReferencedFile(filename: string) {
-            return this.projectService.openFile(filename, false);
+            return this.projectService.openFile(filename, /*openedByClient*/ false);
         }
 
         getRootFiles() {
@@ -461,6 +465,7 @@ namespace ts.server {
         setProjectOptions(projectOptions: ProjectOptions) {
             this.projectOptions = projectOptions;
             if (projectOptions.compilerOptions) {
+                projectOptions.compilerOptions.allowNonTsExtensions = true;
                 this.compilerService.setCompilerOptions(projectOptions.compilerOptions);
             }
         }
@@ -559,7 +564,7 @@ namespace ts.server {
             // If a change was made inside "folder/file", node will trigger the callback twice:
             // one with the fileName being "folder/file", and the other one with "folder".
             // We don't respond to the second one.
-            if (fileName && !ts.isSupportedSourceFileName(fileName)) {
+            if (fileName && !ts.isSupportedSourceFileName(fileName, project.projectOptions ? project.projectOptions.compilerOptions : undefined)) {
                 return;
             }
 
@@ -1001,14 +1006,15 @@ namespace ts.server {
 
         /**
          * @param filename is absolute pathname
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openFile(fileName: string, openedByClient: boolean) {
+        openFile(fileName: string, openedByClient: boolean, fileContent?: string) {
             fileName = ts.normalizePath(fileName);
             let info = ts.lookUp(this.filenameToScriptInfo, fileName);
             if (!info) {
                 let content: string;
                 if (this.host.fileExists(fileName)) {
-                    content = this.host.readFile(fileName);
+                    content = fileContent || this.host.readFile(fileName);
                 }
                 if (!content) {
                     if (openedByClient) {
@@ -1025,6 +1031,9 @@ namespace ts.server {
                 }
             }
             if (info) {
+                if (fileContent) {
+                    info.svc.reload(fileContent);
+                }
                 if (openedByClient) {
                     info.isOpen = true;
                 }
@@ -1055,10 +1064,11 @@ namespace ts.server {
         /**
          * Open file whose contents is managed by the client
          * @param filename is absolute pathname
+         * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string) {
+        openClientFile(fileName: string, fileContent?: string) {
             this.openOrUpdateConfiguredProjectForFile(fileName);
-            const info = this.openFile(fileName, true);
+            const info = this.openFile(fileName, /*openedByClient*/ true, fileContent);
             this.addOpenFile(info);
             this.printProjects();
             return info;
@@ -1267,7 +1277,7 @@ namespace ts.server {
                     for (const fileName of fileNamesToAdd) {
                         let info = this.getScriptInfo(fileName);
                         if (!info) {
-                            info = this.openFile(fileName, false);
+                            info = this.openFile(fileName, /*openedByClient*/ false);
                         }
                         else {
                             // if the root file was opened by client, it would belong to either 
@@ -1316,7 +1326,9 @@ namespace ts.server {
                 this.setCompilerOptions(opt);
             }
             else {
-                this.setCompilerOptions(ts.getDefaultCompilerOptions());
+                const defaultOpts = ts.getDefaultCompilerOptions();
+                defaultOpts.allowNonTsExtensions = true;
+                this.setCompilerOptions(defaultOpts);
             }
             this.languageService = ts.createLanguageService(this.host, this.documentRegistry);
             this.classifier = ts.createClassifier();

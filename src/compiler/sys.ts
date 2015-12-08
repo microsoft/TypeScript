@@ -47,6 +47,21 @@ namespace ts {
         constructor(o: any);
     }
 
+    declare var ChakraHost: {
+        args: string[];
+        currentDirectory: string;
+        executingFile: string;
+        echo(s: string): void;
+        quit(exitCode?: number): void;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
+        resolvePath(path: string): string;
+        readFile(path: string): string;
+        writeFile(path: string, contents: string): void;
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+    };
+
     export var sys: System = (function () {
 
         function getWScriptSystem(): System {
@@ -194,6 +209,7 @@ namespace ts {
                 }
             };
         }
+
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -281,7 +297,7 @@ namespace ts {
             // REVIEW: for now this implementation uses polling.
             // The advantage of polling is that it works reliably
             // on all os and with network mounted files.
-            // For 90 referenced files, the average time to detect 
+            // For 90 referenced files, the average time to detect
             // changes is 2*msInterval (by default 5 seconds).
             // The overhead of this is .04 percent (1/2500) with
             // average pause of < 1 millisecond (and max
@@ -406,7 +422,7 @@ namespace ts {
                     };
                 },
                 watchDirectory: (path, callback, recursive) => {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
+                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     return _fs.watch(
                         path,
@@ -454,6 +470,37 @@ namespace ts {
                 }
             };
         }
+
+        function getChakraSystem(): System {
+
+            return {
+                newLine: "\r\n",
+                args: ChakraHost.args,
+                useCaseSensitiveFileNames: false,
+                write: ChakraHost.echo,
+                readFile(path: string, encoding?: string) {
+                    // encoding is automatically handled by the implementation in ChakraHost
+                    return ChakraHost.readFile(path);
+                },
+                writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
+                    // If a BOM is required, emit one
+                    if (writeByteOrderMark) {
+                        data = "\uFEFF" + data;
+                    }
+
+                    ChakraHost.writeFile(path, data);
+                },
+                resolvePath: ChakraHost.resolvePath,
+                fileExists: ChakraHost.fileExists,
+                directoryExists: ChakraHost.directoryExists,
+                createDirectory: ChakraHost.createDirectory,
+                getExecutingFilePath: () => ChakraHost.executingFile,
+                getCurrentDirectory: () => ChakraHost.currentDirectory,
+                readDirectory: ChakraHost.readDirectory,
+                exit: ChakraHost.quit,
+            };
+        }
+
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
@@ -462,8 +509,13 @@ namespace ts {
             // process.browser check excludes webpack and browserify
             return getNodeSystem();
         }
+        else if (typeof ChakraHost !== "undefined") {
+            return getChakraSystem();
+        }
         else {
             return undefined; // Unsupported host
         }
     })();
 }
+
+

@@ -1,8 +1,8 @@
-error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
 
 
-!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
-==== m1.ts (0 errors) ====
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+==== ref/m1.ts (0 errors) ====
     var m1_a1 = 10;
     class m1_c1 {
         public m1_c1_p1: number;
@@ -12,7 +12,7 @@ error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
     function m1_f1() {
         return m1_instance1;
     }
-==== m2.ts (0 errors) ====
+==== ref/m2.ts (0 errors) ====
     export var m2_a1 = 10;
     export class m2_c1 {
         public m2_c1_p1: number;

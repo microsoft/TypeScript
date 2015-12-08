@@ -22,6 +22,7 @@ var spread1 = <div x='' {...foo} y='' />;
 
 //// [file.js]
 //// [react-consumer.js]
+"use strict";
 var test_1 = require("./test");
 // Should emit test_1.React.createElement
 //  and React.__spread

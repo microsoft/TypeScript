@@ -23,7 +23,7 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(7, 5) Source(1, 1) + SourceIndex(0) name (AbstractGreeter)
+1->Emitted(7, 5) Source(1, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -32,16 +32,16 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 1->class AbstractGreeter {
   >
 2 >    }
-1->Emitted(8, 5) Source(2, 1) + SourceIndex(0) name (AbstractGreeter.constructor)
-2 >Emitted(8, 6) Source(2, 2) + SourceIndex(0) name (AbstractGreeter.constructor)
+1->Emitted(8, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(8, 6) Source(2, 2) + SourceIndex(0)
 ---
 >>>    return AbstractGreeter;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >    }
-1->Emitted(9, 5) Source(2, 1) + SourceIndex(0) name (AbstractGreeter)
-2 >Emitted(9, 27) Source(2, 2) + SourceIndex(0) name (AbstractGreeter)
+1->Emitted(9, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(9, 27) Source(2, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -54,8 +54,8 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 > 
 4 > class AbstractGreeter {
   > }
-1 >Emitted(10, 1) Source(2, 1) + SourceIndex(0) name (AbstractGreeter)
-2 >Emitted(10, 2) Source(2, 2) + SourceIndex(0) name (AbstractGreeter)
+1 >Emitted(10, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(2, 2) + SourceIndex(0)
 3 >Emitted(10, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(10, 6) Source(2, 2) + SourceIndex(0)
 ---
@@ -72,22 +72,22 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->class Greeter extends 
 2 >    AbstractGreeter
-1->Emitted(12, 5) Source(4, 23) + SourceIndex(0) name (Greeter)
-2 >Emitted(12, 32) Source(4, 38) + SourceIndex(0) name (Greeter)
+1->Emitted(12, 5) Source(4, 23) + SourceIndex(0)
+2 >Emitted(12, 32) Source(4, 38) + SourceIndex(0)
 ---
 >>>    function Greeter() {
 1 >^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-1 >Emitted(13, 5) Source(4, 1) + SourceIndex(0) name (Greeter)
+1 >Emitted(13, 5) Source(4, 1) + SourceIndex(0)
 ---
 >>>        _super.apply(this, arguments);
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->class Greeter extends 
 2 >        AbstractGreeter
-1->Emitted(14, 9) Source(4, 23) + SourceIndex(0) name (Greeter.constructor)
-2 >Emitted(14, 39) Source(4, 38) + SourceIndex(0) name (Greeter.constructor)
+1->Emitted(14, 9) Source(4, 23) + SourceIndex(0)
+2 >Emitted(14, 39) Source(4, 38) + SourceIndex(0)
 ---
 >>>        this.a = 10;
 1 >^^^^^^^^
@@ -102,11 +102,11 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >               = 
 4 >                 10
 5 >                   ;
-1 >Emitted(15, 9) Source(5, 12) + SourceIndex(0) name (Greeter.constructor)
-2 >Emitted(15, 15) Source(5, 13) + SourceIndex(0) name (Greeter.constructor)
-3 >Emitted(15, 18) Source(5, 16) + SourceIndex(0) name (Greeter.constructor)
-4 >Emitted(15, 20) Source(5, 18) + SourceIndex(0) name (Greeter.constructor)
-5 >Emitted(15, 21) Source(5, 19) + SourceIndex(0) name (Greeter.constructor)
+1 >Emitted(15, 9) Source(5, 12) + SourceIndex(0)
+2 >Emitted(15, 15) Source(5, 13) + SourceIndex(0)
+3 >Emitted(15, 18) Source(5, 16) + SourceIndex(0)
+4 >Emitted(15, 20) Source(5, 18) + SourceIndex(0)
+5 >Emitted(15, 21) Source(5, 19) + SourceIndex(0)
 ---
 >>>        this.nameA = "Ten";
 1->^^^^^^^^
@@ -120,11 +120,11 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >                   = 
 4 >                     "Ten"
 5 >                          ;
-1->Emitted(16, 9) Source(6, 12) + SourceIndex(0) name (Greeter.constructor)
-2 >Emitted(16, 19) Source(6, 17) + SourceIndex(0) name (Greeter.constructor)
-3 >Emitted(16, 22) Source(6, 20) + SourceIndex(0) name (Greeter.constructor)
-4 >Emitted(16, 27) Source(6, 25) + SourceIndex(0) name (Greeter.constructor)
-5 >Emitted(16, 28) Source(6, 26) + SourceIndex(0) name (Greeter.constructor)
+1->Emitted(16, 9) Source(6, 12) + SourceIndex(0)
+2 >Emitted(16, 19) Source(6, 17) + SourceIndex(0)
+3 >Emitted(16, 22) Source(6, 20) + SourceIndex(0)
+4 >Emitted(16, 27) Source(6, 25) + SourceIndex(0)
+5 >Emitted(16, 28) Source(6, 26) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -133,8 +133,8 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 1 >
   >
 2 >    }
-1 >Emitted(17, 5) Source(7, 1) + SourceIndex(0) name (Greeter.constructor)
-2 >Emitted(17, 6) Source(7, 2) + SourceIndex(0) name (Greeter.constructor)
+1 >Emitted(17, 5) Source(7, 1) + SourceIndex(0)
+2 >Emitted(17, 6) Source(7, 2) + SourceIndex(0)
 ---
 >>>    return Greeter;
 1->^^^^
@@ -142,8 +142,8 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
 3 >                  ^^^->
 1->
 2 >    }
-1->Emitted(18, 5) Source(7, 1) + SourceIndex(0) name (Greeter)
-2 >Emitted(18, 19) Source(7, 2) + SourceIndex(0) name (Greeter)
+1->Emitted(18, 5) Source(7, 1) + SourceIndex(0)
+2 >Emitted(18, 19) Source(7, 2) + SourceIndex(0)
 ---
 >>>})(AbstractGreeter);
 1->
@@ -162,8 +162,8 @@ sourceFile:sourceMapValidationClassWithDefaultConstructorAndExtendsClause.ts
   >                      public a = 10;
   >                      public nameA = "Ten";
   >                  }
-1->Emitted(19, 1) Source(7, 1) + SourceIndex(0) name (Greeter)
-2 >Emitted(19, 2) Source(7, 2) + SourceIndex(0) name (Greeter)
+1->Emitted(19, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(19, 2) Source(7, 2) + SourceIndex(0)
 3 >Emitted(19, 2) Source(4, 1) + SourceIndex(0)
 4 >Emitted(19, 4) Source(4, 23) + SourceIndex(0)
 5 >Emitted(19, 19) Source(4, 38) + SourceIndex(0)

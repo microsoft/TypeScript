@@ -1,2 +1,2 @@
 //// [out-flag.js.map]
-{"version":3,"file":"out-flag.js","sourceRoot":"","sources":["out-flag.ts"],"names":["MyClass","MyClass.constructor","MyClass.Count","MyClass.SetCount"],"mappings":"AAAA,eAAe;AAEf,oBAAoB;AACpB;IAAAA;IAYAC,CAACA;IAVGD,uBAAuBA;IAChBA,uBAAKA,GAAZA;QAEIE,MAAMA,CAACA,EAAEA,CAACA;IACdA,CAACA;IAEMF,0BAAQA,GAAfA,UAAgBA,KAAaA;QAEzBG,EAAEA;IACNA,CAACA;IACLH,cAACA;AAADA,CAACA,AAZD,IAYC"}
+{"version":3,"file":"out-flag.js","sourceRoot":"","sources":["out-flag.ts"],"names":[],"mappings":"AAAA,eAAe;AAEf,oBAAoB;AACpB;IAAA;IAYA,CAAC;IAVG,uBAAuB;IAChB,uBAAK,GAAZ;QAEI,MAAM,CAAC,EAAE,CAAC;IACd,CAAC;IAEM,0BAAQ,GAAf,UAAgB,KAAa;QAEzB,EAAE;IACN,CAAC;IACL,cAAC;AAAD,CAAC,AAZD,IAYC"}

@@ -33,6 +33,7 @@ export class MyComponent {
 
 //// [file.jsx]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var MyComponent = (function () {
         function MyComponent() {
         }

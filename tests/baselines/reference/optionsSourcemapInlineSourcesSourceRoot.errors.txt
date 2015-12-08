@@ -1,0 +1,7 @@
+error TS5053: Option 'sourceRoot' cannot be specified with option 'inlineSources'.
+
+
+!!! error TS5053: Option 'sourceRoot' cannot be specified with option 'inlineSources'.
+==== tests/cases/compiler/optionsSourcemapInlineSourcesSourceRoot.ts (0 errors) ====
+    
+    var a = 10;

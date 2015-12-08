@@ -1,4 +1,3 @@
-/// <reference path="binder.ts" />
 /// <reference path="sys.ts" />
 
 /* @internal */
@@ -38,6 +37,8 @@ namespace ts {
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
         getNewLine(): string;
+
+        isEmitBlocked(emitFileName: string): boolean;
 
         writeFile: WriteFileCallback;
     }
@@ -362,6 +363,10 @@ namespace ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isExternalOrCommonJsModule(file: SourceFile): boolean {
+        return (file.externalModuleIndicator || file.commonJsModuleIndicator) !== undefined;
+    }
+
     export function isDeclarationFile(file: SourceFile): boolean {
         return (file.flags & NodeFlags.DeclarationFile) !== 0;
     }
@@ -461,9 +466,6 @@ namespace ts {
                 return true;
             case SyntaxKind.VoidKeyword:
                 return node.parent.kind !== SyntaxKind.VoidExpression;
-            case SyntaxKind.StringLiteral:
-                // Specialized signatures can have string literals as their parameters' type names
-                return node.parent.kind === SyntaxKind.Parameter;
             case SyntaxKind.ExpressionWithTypeArguments:
                 return !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 
@@ -904,23 +906,6 @@ namespace ts {
         return false;
     }
 
-    export function childIsDecorated(node: Node): boolean {
-        switch (node.kind) {
-            case SyntaxKind.ClassDeclaration:
-                return forEach((<ClassDeclaration>node).members, nodeOrChildIsDecorated);
-
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.SetAccessor:
-                return forEach((<FunctionLikeDeclaration>node).parameters, nodeIsDecorated);
-        }
-
-        return false;
-    }
-
-    export function nodeOrChildIsDecorated(node: Node): boolean {
-        return nodeIsDecorated(node) || childIsDecorated(node);
-    }
-
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression;
     }
@@ -1054,6 +1039,57 @@ namespace ts {
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
+    }
+
+    export function isSourceFileJavaScript(file: SourceFile): boolean {
+        return isInJavaScriptFile(file);
+    }
+
+    export function isInJavaScriptFile(node: Node): boolean {
+        return node && !!(node.parserContextFlags & ParserContextFlags.JavaScriptFile);
+    }
+
+    /**
+     * Returns true if the node is a CallExpression to the identifier 'require' with
+     * exactly one string literal argument.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isRequireCall(expression: Node): expression is CallExpression {
+        // of the form 'require("name")'
+        return expression.kind === SyntaxKind.CallExpression &&
+                (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
+                (<Identifier>(<CallExpression>expression).expression).text === "require" &&
+                (<CallExpression>expression).arguments.length === 1 &&
+                (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
+    }
+
+    /**
+     * Returns true if the node is an assignment to a property on the identifier 'exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isExportsPropertyAssignment(expression: Node): boolean {
+        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
+    }
+
+    /**
+     * Returns true if the node is an assignment to the property access expression 'module.exports'.
+     * This function does not test if the node is in a JavaScript file or not.
+    */
+    export function isModuleExportsAssignment(expression: Node): boolean {
+        // of the form 'module.exports = expr' where 'expr' is arbitrary
+        return isInJavaScriptFile(expression) &&
+            (expression.kind === SyntaxKind.BinaryExpression) &&
+            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
+            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
+            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
+            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
     }
 
     export function getExternalModuleName(node: Node): Expression {
@@ -1273,7 +1309,7 @@ namespace ts {
     }
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
-    export function isDeclarationName(name: Node): boolean {
+    export function isDeclarationName(name: Node): name is Identifier | StringLiteral | LiteralExpression {
         if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
             return false;
         }
@@ -1435,6 +1471,10 @@ namespace ts {
         return isFunctionLike(node) && (node.flags & NodeFlags.Async) !== 0 && !isAccessor(node);
     }
 
+    export function isStringOrNumericLiteral(kind: SyntaxKind): boolean {
+        return kind === SyntaxKind.StringLiteral || kind === SyntaxKind.NumericLiteral;
+    }
+
     /**
      * A declaration has a dynamic name if both of the following are true:
      *   1. The declaration has a computed property name
@@ -1443,9 +1483,13 @@ namespace ts {
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name &&
-            declaration.name.kind === SyntaxKind.ComputedPropertyName &&
-            !isWellKnownSymbolSyntactically((<ComputedPropertyName>declaration.name).expression);
+        return declaration.name && isDynamicName(declaration.name);
+    }
+
+    export function isDynamicName(name: DeclarationName): boolean {
+        return name.kind === SyntaxKind.ComputedPropertyName &&
+            !isStringOrNumericLiteral((<ComputedPropertyName>name).expression.kind) &&
+            !isWellKnownSymbolSyntactically((<ComputedPropertyName>name).expression);
     }
 
     /**
@@ -1483,7 +1527,7 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier && (<Identifier>node).text === "Symbol";
     }
 
-    export function isModifier(token: SyntaxKind): boolean {
+    export function isModifierKind(token: SyntaxKind): boolean {
         switch (token) {
             case SyntaxKind.AbstractKeyword:
             case SyntaxKind.AsyncKeyword:
@@ -1516,20 +1560,60 @@ namespace ts {
         return isFunctionLike(n) || n.kind === SyntaxKind.ModuleDeclaration || n.kind === SyntaxKind.SourceFile;
     }
 
-    export function cloneEntityName(node: EntityName): EntityName {
-        if (node.kind === SyntaxKind.Identifier) {
-            const clone = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-            clone.text = (<Identifier>node).text;
-            return clone;
+    /**
+     * Creates a shallow, memberwise clone of a node. The "kind", "pos", "end", "flags", and "parent"
+     * properties are excluded by default, and can be provided via the "location", "flags", and
+     * "parent" parameters.
+     * @param node The node to clone.
+     * @param location An optional TextRange to use to supply the new position.
+     * @param flags The NodeFlags to use for the cloned node.
+     * @param parent The parent for the new node.
+     */
+    export function cloneNode<T extends Node>(node: T, location?: TextRange, flags?: NodeFlags, parent?: Node): T {
+        // We don't use "clone" from core.ts here, as we need to preserve the prototype chain of
+        // the original node. We also need to exclude specific properties and only include own-
+        // properties (to skip members already defined on the shared prototype).
+        const clone = location !== undefined
+            ? <T>createNode(node.kind, location.pos, location.end)
+            : <T>createSynthesizedNode(node.kind);
+
+        for (const key in node) {
+            if (clone.hasOwnProperty(key) || !node.hasOwnProperty(key)) {
+                continue;
+            }
+
+            (<any>clone)[key] = (<any>node)[key];
         }
-        else {
-            const clone = <QualifiedName>createSynthesizedNode(SyntaxKind.QualifiedName);
-            clone.left = cloneEntityName((<QualifiedName>node).left);
-            clone.left.parent = clone;
-            clone.right = <Identifier>cloneEntityName((<QualifiedName>node).right);
-            clone.right.parent = clone;
-            return clone;
+
+        if (flags !== undefined) {
+            clone.flags = flags;
         }
+
+        if (parent !== undefined) {
+            clone.parent = parent;
+        }
+
+        return clone;
+    }
+
+    /**
+     * Creates a deep clone of an EntityName, with new parent pointers.
+     * @param node The EntityName to clone.
+     * @param parent The parent for the cloned node.
+     */
+    export function cloneEntityName(node: EntityName, parent?: Node): EntityName {
+        const clone = cloneNode(node, node, node.flags, parent);
+        if (isQualifiedName(clone)) {
+            const { left, right } = clone;
+            clone.left = cloneEntityName(left, clone);
+            clone.right = cloneNode(right, right, right.flags, parent);
+        }
+
+        return clone;
+    }
+
+    export function isQualifiedName(node: Node): node is QualifiedName {
+        return node.kind === SyntaxKind.QualifiedName;
     }
 
     export function nodeIsSynthesized(node: Node): boolean {
@@ -1805,8 +1889,10 @@ namespace ts {
      * Resolves a local path to a path which is absolute to the base of the emit
      */
     export function getExternalModuleNameFromPath(host: EmitHost, fileName: string): string {
-        const dir = host.getCurrentDirectory();
-        const relativePath = getRelativePathToDirectoryOrUrl(dir, fileName, dir, f => host.getCanonicalFileName(f), /*isAbsolutePathAnUrl*/ false);
+        const getCanonicalFileName = (f: string) => host.getCanonicalFileName(f);
+        const dir = toPath(host.getCommonSourceDirectory(), host.getCurrentDirectory(), getCanonicalFileName);
+        const filePath = getNormalizedAbsolutePath(fileName, host.getCurrentDirectory());
+        const relativePath = getRelativePathToDirectoryOrUrl(dir, filePath, dir, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
         return removeFileExtension(relativePath);
     }
 
@@ -1823,15 +1909,85 @@ namespace ts {
         return emitOutputFilePathWithoutExtension + extension;
     }
 
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+        return compilerOptions.module ?
+            compilerOptions.module :
+            getEmitScriptTarget(compilerOptions) === ScriptTarget.ES6 ? ModuleKind.ES6 : ModuleKind.None;
+    }
+
+    export interface EmitFileNames {
+        jsFilePath: string;
+        sourceMapFilePath: string;
+        declarationFilePath: string;
+    }
+
+    export function forEachExpectedEmitFile(host: EmitHost,
+        action: (emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) => void,
+        targetSourceFile?: SourceFile) {
+        const options = host.getCompilerOptions();
+        // Emit on each source file
+        if (options.outFile || options.out) {
+            onBundledEmit(host);
+        }
+        else {
+            const sourceFiles = targetSourceFile === undefined ? host.getSourceFiles() : [targetSourceFile];
+            for (const sourceFile of sourceFiles) {
+                if (!isDeclarationFile(sourceFile)) {
+                    onSingleFileEmit(host, sourceFile);
+                }
+            }
+        }
+
+        function onSingleFileEmit(host: EmitHost, sourceFile: SourceFile) {
+            const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host,
+                sourceFile.languageVariant === LanguageVariant.JSX && options.jsx === JsxEmit.Preserve ? ".jsx" : ".js");
+            const emitFileNames: EmitFileNames = {
+                jsFilePath,
+                sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
+                declarationFilePath: !isSourceFileJavaScript(sourceFile) ? getDeclarationEmitFilePath(jsFilePath, options) : undefined
+            };
+            action(emitFileNames, [sourceFile], /*isBundledEmit*/false);
+        }
+
+        function onBundledEmit(host: EmitHost) {
+            // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
+            const bundledSources = filter(host.getSourceFiles(),
+                sourceFile => !isDeclarationFile(sourceFile) && // Not a declaration file
+                    (!isExternalModule(sourceFile) || // non module file
+                        (getEmitModuleKind(options) && isExternalModule(sourceFile)))); // module that can emit - note falsy value from getEmitModuleKind means the module kind that shouldn't be emitted
+            if (bundledSources.length) {
+                const jsFilePath = options.outFile || options.out;
+                const emitFileNames: EmitFileNames = {
+                    jsFilePath,
+                    sourceMapFilePath: getSourceMapFilePath(jsFilePath, options),
+                    declarationFilePath: getDeclarationEmitFilePath(jsFilePath, options)
+                };
+                action(emitFileNames, bundledSources, /*isBundledEmit*/true);
+            }
+        }
+
+        function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+            return options.sourceMap ? jsFilePath + ".map" : undefined;
+        }
+
+        function getDeclarationEmitFilePath(jsFilePath: string, options: CompilerOptions) {
+            return options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
+        }
+    }
+
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
         let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, host.getCurrentDirectory());
         sourceFilePath = sourceFilePath.replace(host.getCommonSourceDirectory(), "");
         return combinePaths(newDirPath, sourceFilePath);
     }
 
-    export function writeFile(host: EmitHost, diagnostics: Diagnostic[], fileName: string, data: string, writeByteOrderMark: boolean) {
+    export function writeFile(host: EmitHost, diagnostics: DiagnosticCollection, fileName: string, data: string, writeByteOrderMark: boolean) {
         host.writeFile(fileName, data, writeByteOrderMark, hostErrorMessage => {
-            diagnostics.push(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
+            diagnostics.add(createCompilerDiagnostic(Diagnostics.Could_not_write_file_0_Colon_1, fileName, hostErrorMessage));
         });
     }
 
@@ -1853,18 +2009,6 @@ namespace ts {
 
     export function getSetAccessorTypeAnnotationNode(accessor: AccessorDeclaration): TypeNode {
         return accessor && accessor.parameters.length > 0 && accessor.parameters[0].type;
-    }
-
-    export function shouldEmitToOwnFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        if (!isDeclarationFile(sourceFile)) {
-            if ((isExternalModule(sourceFile) || !(compilerOptions.outFile || compilerOptions.out))) {
-                // 1. in-browser single file compilation scenario
-                // 2. non .js file
-                return compilerOptions.isolatedModules || !fileExtensionIs(sourceFile.fileName, ".js");
-            }
-            return false;
-        }
-        return false;
     }
 
     export function getAllAccessorDeclarations(declarations: NodeArray<Declaration>, accessor: AccessorDeclaration) {
@@ -2210,12 +2354,8 @@ namespace ts {
         return symbol && symbol.valueDeclaration && (symbol.valueDeclaration.flags & NodeFlags.Default) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isJavaScript(fileName: string) {
-        return fileExtensionIs(fileName, ".js");
-    }
-
-    export function isTsx(fileName: string) {
-        return fileExtensionIs(fileName, ".tsx");
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     /**
@@ -2254,6 +2394,55 @@ namespace ts {
         }
 
         return output;
+    }
+
+    /**
+     * Serialize an object graph into a JSON string. This is intended only for use on an acyclic graph
+     * as the fallback implementation does not check for circular references by default.
+     */
+    export const stringify: (value: any) => string = typeof JSON !== "undefined" && JSON.stringify
+        ? JSON.stringify
+        : stringifyFallback;
+
+    /**
+     * Serialize an object graph into a JSON string.
+     */
+    function stringifyFallback(value: any): string {
+        // JSON.stringify returns `undefined` here, instead of the string "undefined".
+        return value === undefined ? undefined : stringifyValue(value);
+    }
+
+    function stringifyValue(value: any): string {
+        return typeof value === "string" ? `"${escapeString(value)}"`
+             : typeof value === "number" ? isFinite(value) ? String(value) : "null"
+             : typeof value === "boolean" ? value ? "true" : "false"
+             : typeof value === "object" && value ? isArray(value) ? cycleCheck(stringifyArray, value) : cycleCheck(stringifyObject, value)
+             : /*fallback*/ "null";
+    }
+
+    function cycleCheck(cb: (value: any) => string, value: any) {
+        Debug.assert(!value.hasOwnProperty("__cycle"), "Converting circular structure to JSON");
+        value.__cycle = true;
+        const result = cb(value);
+        delete value.__cycle;
+        return result;
+    }
+
+    function stringifyArray(value: any) {
+        return `[${reduceLeft(value, stringifyElement, "")}]`;
+    }
+
+    function stringifyElement(memo: string, value: any) {
+        return (memo ? memo + "," : memo) + stringifyValue(value);
+    }
+
+    function stringifyObject(value: any) {
+        return `{${reduceProperties(value, stringifyProperty, "")}}`;
+    }
+
+    function stringifyProperty(memo: string, value: any, key: string) {
+        return value === undefined || typeof value === "function" || key === "__cycle" ? memo
+             : (memo ? memo + "," : memo) + `"${escapeString(key)}":${stringifyValue(value)}`;
     }
 
     const base64Digits = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";

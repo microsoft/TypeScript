@@ -179,5 +179,5 @@
 ////{| "indent": 0 |}
 
 test.markers().forEach(marker => {
-    verify.indentationAtPositionIs(marker.fileName, marker.position, marker.data.indent, IndentStyle.Block);
+    verify.indentationAtPositionIs(marker.fileName, marker.position, marker.data.indent, ts.IndentStyle.Block);
 });

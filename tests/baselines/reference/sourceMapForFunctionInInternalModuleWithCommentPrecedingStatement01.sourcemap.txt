@@ -51,7 +51,7 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 2 >    ^^^^^^^^^^^^^^^^^->
 1->
   >    
-1->Emitted(3, 5) Source(2, 5) + SourceIndex(0) name (Q)
+1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
 ---
 >>>        // Test this
 1->^^^^^^^^
@@ -59,8 +59,8 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 1->function P() {
   >        
 2 >        // Test this
-1->Emitted(4, 9) Source(3, 9) + SourceIndex(0) name (Q.P)
-2 >Emitted(4, 21) Source(3, 21) + SourceIndex(0) name (Q.P)
+1->Emitted(4, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(4, 21) Source(3, 21) + SourceIndex(0)
 ---
 >>>        var a = 1;
 1 >^^^^^^^^
@@ -76,12 +76,12 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 4 >              = 
 5 >                1
 6 >                 ;
-1 >Emitted(5, 9) Source(4, 9) + SourceIndex(0) name (Q.P)
-2 >Emitted(5, 13) Source(4, 13) + SourceIndex(0) name (Q.P)
-3 >Emitted(5, 14) Source(4, 14) + SourceIndex(0) name (Q.P)
-4 >Emitted(5, 17) Source(4, 17) + SourceIndex(0) name (Q.P)
-5 >Emitted(5, 18) Source(4, 18) + SourceIndex(0) name (Q.P)
-6 >Emitted(5, 19) Source(4, 19) + SourceIndex(0) name (Q.P)
+1 >Emitted(5, 9) Source(4, 9) + SourceIndex(0)
+2 >Emitted(5, 13) Source(4, 13) + SourceIndex(0)
+3 >Emitted(5, 14) Source(4, 14) + SourceIndex(0)
+4 >Emitted(5, 17) Source(4, 17) + SourceIndex(0)
+5 >Emitted(5, 18) Source(4, 18) + SourceIndex(0)
+6 >Emitted(5, 19) Source(4, 19) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -90,8 +90,8 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(5, 5) + SourceIndex(0) name (Q.P)
-2 >Emitted(6, 6) Source(5, 6) + SourceIndex(0) name (Q.P)
+1 >Emitted(6, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(5, 6) + SourceIndex(0)
 ---
 >>>})(Q || (Q = {}));
 1->
@@ -115,8 +115,8 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
   >                  var a = 1;
   >              }
   >          }
-1->Emitted(7, 1) Source(6, 1) + SourceIndex(0) name (Q)
-2 >Emitted(7, 2) Source(6, 2) + SourceIndex(0) name (Q)
+1->Emitted(7, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(7, 2) Source(6, 2) + SourceIndex(0)
 3 >Emitted(7, 4) Source(1, 8) + SourceIndex(0)
 4 >Emitted(7, 5) Source(1, 9) + SourceIndex(0)
 5 >Emitted(7, 10) Source(1, 8) + SourceIndex(0)

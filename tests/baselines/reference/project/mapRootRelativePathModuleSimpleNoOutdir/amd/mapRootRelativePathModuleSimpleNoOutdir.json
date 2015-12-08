@@ -5,9 +5,9 @@
         "test.ts"
     ],
     "sourceMap": true,
-    "mapRoot": "../mapFiles",
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "../mapFiles",
     "resolvedInputFiles": [
         "lib.d.ts",
         "m1.ts",

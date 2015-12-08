@@ -31,13 +31,17 @@ namespace ts {
     }
 
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, targetSourceFile: SourceFile): Diagnostic[] {
-        const diagnostics: Diagnostic[] = [];
-        const jsFilePath = getOwnEmitOutputFilePath(targetSourceFile, host, ".js");
-        emitDeclarations(host, resolver, diagnostics, jsFilePath, targetSourceFile);
-        return diagnostics;
+        const declarationDiagnostics = createDiagnosticCollection();
+        forEachExpectedEmitFile(host, getDeclarationDiagnosticsFromFile, targetSourceFile);
+        return declarationDiagnostics.getDiagnostics(targetSourceFile.fileName);
+
+        function getDeclarationDiagnosticsFromFile({ declarationFilePath }, sources: SourceFile[], isBundledEmit: boolean) {
+            emitDeclarations(host, resolver, declarationDiagnostics, declarationFilePath, sources, isBundledEmit);
+        }
     }
 
-    function emitDeclarations(host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[], jsFilePath: string, root?: SourceFile): DeclarationEmit {
+    function emitDeclarations(host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, declarationFilePath: string,
+        sourceFiles: SourceFile[], isBundledEmit: boolean): DeclarationEmit {
         const newLine = host.getNewLine();
         const compilerOptions = host.getCompilerOptions();
 
@@ -58,7 +62,7 @@ namespace ts {
         let errorNameNode: DeclarationName;
         const emitJsDocComments = compilerOptions.removeComments ? function (declaration: Node) { } : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
-        let noDeclare = !root;
+        let noDeclare: boolean;
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -68,105 +72,78 @@ namespace ts {
         // and we could be collecting these paths from multiple files into single one with --out option
         let referencePathsOutput = "";
 
-        if (root) {
-            // Emitting just a single file, so emit references in this file only
+        // Emit references corresponding to each file
+        const emittedReferencedFiles: SourceFile[] = [];
+        let addedGlobalFileReference = false;
+        let allSourcesModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
+        forEach(sourceFiles, sourceFile => {
+            // Dont emit for javascript file
+            if (isSourceFileJavaScript(sourceFile)) {
+                return;
+            }
+
+            // Check what references need to be added
             if (!compilerOptions.noResolve) {
-                let addedGlobalFileReference = false;
-                forEach(root.referencedFiles, fileReference => {
-                    const referencedFile = tryResolveScriptReference(host, root, fileReference);
+                forEach(sourceFile.referencedFiles, fileReference => {
+                    const referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
 
-                    // All the references that are not going to be part of same file
-                    if (referencedFile && ((referencedFile.flags & NodeFlags.DeclarationFile) || // This is a declare file reference
-                        shouldEmitToOwnFile(referencedFile, compilerOptions) || // This is referenced file is emitting its own js file
-                        !addedGlobalFileReference)) { // Or the global out file corresponding to this reference was not added
-
-                        writeReferencePath(referencedFile);
-                        if (!isExternalModuleOrDeclarationFile(referencedFile)) {
+                    // Emit reference in dts, if the file reference was not already emitted
+                    if (referencedFile && !contains(emittedReferencedFiles, referencedFile)) {
+                        // Add a reference to generated dts file,
+                        // global file reference is added only 
+                        //  - if it is not bundled emit (because otherwise it would be self reference)
+                        //  - and it is not already added
+                        if (writeReferencePath(referencedFile, !isBundledEmit && !addedGlobalFileReference)) {
                             addedGlobalFileReference = true;
                         }
+                        emittedReferencedFiles.push(referencedFile);
                     }
                 });
             }
 
-            emitSourceFile(root);
+            if (!isBundledEmit || !isExternalModule(sourceFile)) {
+                noDeclare = false;
+                emitSourceFile(sourceFile);
+            }
+            else if (isExternalModule(sourceFile)) {
+                noDeclare = true;
+                write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
+                writeLine();
+                increaseIndent();
+                emitSourceFile(sourceFile);
+                decreaseIndent();
+                write("}");
+                writeLine();
+            }
 
             // create asynchronous output for the importDeclarations
             if (moduleElementDeclarationEmitInfo.length) {
                 const oldWriter = writer;
                 forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                    if (aliasEmitInfo.isVisible) {
+                    if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
                         Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
                         createAndSetNewTextWriterWithSymbolWriter();
-                        Debug.assert(aliasEmitInfo.indent === 0);
+                        Debug.assert(aliasEmitInfo.indent === 0 || (aliasEmitInfo.indent === 1 && isBundledEmit));
+                        for (let i = 0; i < aliasEmitInfo.indent; i++) {
+                            increaseIndent();
+                        }
                         writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
                         aliasEmitInfo.asynchronousOutput = writer.getText();
+                        for (let i = 0; i < aliasEmitInfo.indent; i++) {
+                            decreaseIndent();
+                        }
                     }
                 });
                 setWriter(oldWriter);
+
+                allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
+                moduleElementDeclarationEmitInfo = [];
             }
-        }
-        else {
-            // Emit references corresponding to this file
-            const emittedReferencedFiles: SourceFile[] = [];
-            let prevModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
-            forEach(host.getSourceFiles(), sourceFile => {
-                if (!isDeclarationFile(sourceFile)) {
-                    // Check what references need to be added
-                    if (!compilerOptions.noResolve) {
-                        forEach(sourceFile.referencedFiles, fileReference => {
-                            const referencedFile = tryResolveScriptReference(host, sourceFile, fileReference);
-
-                            // If the reference file is a declaration file, emit that reference
-                            if (referencedFile && (isDeclarationFile(referencedFile) &&
-                                !contains(emittedReferencedFiles, referencedFile))) { // If the file reference was not already emitted
-
-                                writeReferencePath(referencedFile);
-                                emittedReferencedFiles.push(referencedFile);
-                            }
-                        });
-                    }
-                }
-
-                if (!isExternalModuleOrDeclarationFile(sourceFile)) {
-                    noDeclare = false;
-                    emitSourceFile(sourceFile);
-                }
-                else if (isExternalModule(sourceFile)) {
-                    noDeclare = true;
-                    write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
-                    writeLine();
-                    increaseIndent();
-                    emitSourceFile(sourceFile);
-                    decreaseIndent();
-                    write("}");
-                    writeLine();
-
-                    // create asynchronous output for the importDeclarations
-                    if (moduleElementDeclarationEmitInfo.length) {
-                        const oldWriter = writer;
-                        forEach(moduleElementDeclarationEmitInfo, aliasEmitInfo => {
-                            if (aliasEmitInfo.isVisible && !aliasEmitInfo.asynchronousOutput) {
-                                Debug.assert(aliasEmitInfo.node.kind === SyntaxKind.ImportDeclaration);
-                                createAndSetNewTextWriterWithSymbolWriter();
-                                Debug.assert(aliasEmitInfo.indent === 1);
-                                increaseIndent();
-                                writeImportDeclaration(<ImportDeclaration>aliasEmitInfo.node);
-                                aliasEmitInfo.asynchronousOutput = writer.getText();
-                                decreaseIndent();
-                            }
-                        });
-                        setWriter(oldWriter);
-                    }
-                    prevModuleElementDeclarationEmitInfo = prevModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
-                    moduleElementDeclarationEmitInfo = [];
-                }
-            });
-            moduleElementDeclarationEmitInfo = moduleElementDeclarationEmitInfo.concat(prevModuleElementDeclarationEmitInfo);
-        }
+        });
 
         return {
             reportedDeclarationError,
-            moduleElementDeclarationEmitInfo,
+            moduleElementDeclarationEmitInfo: allSourcesModuleElementDeclarationEmitInfo,
             synchronousDeclarationOutput: writer.getText(),
             referencePathsOutput,
         };
@@ -278,14 +255,14 @@ namespace ts {
                 const errorInfo = writer.getSymbolAccessibilityDiagnostic(symbolAccesibilityResult);
                 if (errorInfo) {
                     if (errorInfo.typeName) {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
+                        emitterDiagnostics.add(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             getTextOfNodeFromSourceText(currentText, errorInfo.typeName),
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
                     }
                     else {
-                        diagnostics.push(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
+                        emitterDiagnostics.add(createDiagnosticForNode(symbolAccesibilityResult.errorNode || errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             symbolAccesibilityResult.errorSymbolName,
                             symbolAccesibilityResult.errorModuleName));
@@ -300,7 +277,8 @@ namespace ts {
 
         function reportInaccessibleThisError() {
             if (errorNameNode) {
-                diagnostics.push(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
+                reportedDeclarationError = true;
+                emitterDiagnostics.add(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_this_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode)));
             }
         }
@@ -378,8 +356,8 @@ namespace ts {
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.VoidKeyword:
-                case SyntaxKind.ThisKeyword:
-                case SyntaxKind.StringLiteral:
+                case SyntaxKind.ThisType:
+                case SyntaxKind.StringLiteralType:
                     return writeTextOfNode(currentText, type);
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
@@ -680,7 +658,7 @@ namespace ts {
             }
             else {
                 write("require(");
-                writeTextOfNode(currentText, getExternalModuleImportEqualsDeclarationExpression(node));
+                emitExternalModuleSpecifier(node);
                 write(");");
             }
             writer.writeLine();
@@ -737,14 +715,23 @@ namespace ts {
                 }
                 write(" from ");
             }
-            emitExternalModuleSpecifier(node.moduleSpecifier);
+            emitExternalModuleSpecifier(node);
             write(";");
             writer.writeLine();
         }
 
-        function emitExternalModuleSpecifier(moduleSpecifier: Expression) {
-            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && (!root) && (compilerOptions.out || compilerOptions.outFile)) {
-                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, moduleSpecifier.parent as (ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration));
+        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration) {
+            let moduleSpecifier: Node;
+            if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+                const node = parent as ImportEqualsDeclaration;
+                moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
+            }
+            else {
+                const node = parent as (ImportDeclaration | ExportDeclaration);
+                moduleSpecifier = node.moduleSpecifier;
+            }
+            if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
+                const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
                     write("\"");
                     write(moduleName);
@@ -787,7 +774,7 @@ namespace ts {
             }
             if (node.moduleSpecifier) {
                 write(" from ");
-                emitExternalModuleSpecifier(node.moduleSpecifier);
+                emitExternalModuleSpecifier(node);
             }
             write(";");
             writer.writeLine();
@@ -1643,34 +1630,58 @@ namespace ts {
             }
         }
 
-        function writeReferencePath(referencedFile: SourceFile) {
-            let declFileName = referencedFile.flags & NodeFlags.DeclarationFile
-                ? referencedFile.fileName // Declaration file, use declaration file name
-                : shouldEmitToOwnFile(referencedFile, compilerOptions)
-                    ? getOwnEmitOutputFilePath(referencedFile, host, ".d.ts") // Own output file so get the .d.ts file
-                    : removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts"; // Global out file
+        /**
+         * Adds the reference to referenced file, returns true if global file reference was emitted
+         * @param referencedFile
+         * @param addBundledFileReference Determines if global file reference corresponding to bundled file should be emitted or not
+         */
+        function writeReferencePath(referencedFile: SourceFile, addBundledFileReference: boolean): boolean {
+            let declFileName: string;
+            let addedBundledEmitReference = false;
+            if (isDeclarationFile(referencedFile)) {
+                // Declaration file, use declaration file name
+                declFileName = referencedFile.fileName;
+            }
+            else {
+                // Get the declaration file path
+                forEachExpectedEmitFile(host, getDeclFileName, referencedFile);
+            }
 
-            declFileName = getRelativePathToDirectoryOrUrl(
-                getDirectoryPath(normalizeSlashes(jsFilePath)),
-                declFileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-            /*isAbsolutePathAnUrl*/ false);
+            if (declFileName) {
+                declFileName = getRelativePathToDirectoryOrUrl(
+                    getDirectoryPath(normalizeSlashes(declarationFilePath)),
+                    declFileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ false);
 
-            referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+                referencePathsOutput += "/// <reference path=\"" + declFileName + "\" />" + newLine;
+            }
+            return addedBundledEmitReference;
+
+            function getDeclFileName(emitFileNames: EmitFileNames, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+                // Dont add reference path to this file if it is a bundled emit and caller asked not emit bundled file path
+                if (isBundledEmit && !addBundledFileReference) {
+                    return;
+                }
+
+                Debug.assert(!!emitFileNames.declarationFilePath || isSourceFileJavaScript(referencedFile), "Declaration file is not present only for javascript files");
+                declFileName = emitFileNames.declarationFilePath || emitFileNames.jsFilePath;
+                addedBundledEmitReference = isBundledEmit;
+            }
         }
     }
 
     /* @internal */
-    export function writeDeclarationFile(jsFilePath: string, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, diagnostics: Diagnostic[]) {
-        const emitDeclarationResult = emitDeclarations(host, resolver, diagnostics, jsFilePath, sourceFile);
-        // TODO(shkamat): Should we not write any declaration file if any of them can produce error,
-        // or should we just not write this file like we are doing now
-        if (!emitDeclarationResult.reportedDeclarationError) {
+    export function writeDeclarationFile(declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection) {
+        const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFiles, isBundledEmit);
+        const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
+        if (!emitSkipped) {
             const declarationOutput = emitDeclarationResult.referencePathsOutput
                 + getDeclarationOutput(emitDeclarationResult.synchronousDeclarationOutput, emitDeclarationResult.moduleElementDeclarationEmitInfo);
-            writeFile(host, diagnostics, removeFileExtension(jsFilePath) + ".d.ts", declarationOutput, host.getCompilerOptions().emitBOM);
+            writeFile(host, emitterDiagnostics, declarationFilePath, declarationOutput, host.getCompilerOptions().emitBOM);
         }
+        return emitSkipped;
 
         function getDeclarationOutput(synchronousDeclarationOutput: string, moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[]) {
             let appliedSyncOutputPos = 0;

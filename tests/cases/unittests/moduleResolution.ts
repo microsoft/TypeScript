@@ -50,16 +50,16 @@ module ts {
     describe("Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (let ext of supportedExtensions) {
+            for (let ext of supportedTypeScriptExtensions) {
                 let containingFile = { name: containingFileName }
                 let moduleFile = { name: moduleFileNameNoExt + ext }
-                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
                 assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
                 assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
 
                 let failedLookupLocations: string[] = [];
                 let dir = getDirectoryPath(containingFileName);
-                for (let e of supportedExtensions) {
+                for (let e of supportedTypeScriptExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -92,25 +92,46 @@ module ts {
             let containingFile = { name: containingFileName };
             let packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
             let moduleFile = { name: moduleFileName };
-            let resolution = nodeModuleNameResolver(moduleName, containingFile.name, createModuleResolutionHost(containingFile, packageJson, moduleFile));
+            let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
             // expect three failed lookup location - attempt to load module as file with all supported extensions
-            assert.equal(resolution.failedLookupLocations.length, 3);
+            assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
         }
 
-        it("module name as directory - load from typings", () => {
+        it("module name as directory - load from 'typings'", () => {
             testLoadingFromPackageJson("/a/b/c/d.ts", "/a/b/c/bar/package.json", "c/d/e.d.ts", "/a/b/c/bar/c/d/e.d.ts", "./bar");
             testLoadingFromPackageJson("/a/b/c/d.ts", "/a/bar/package.json", "e.d.ts", "/a/bar/e.d.ts", "../../bar");
             testLoadingFromPackageJson("/a/b/c/d.ts", "/bar/package.json", "e.d.ts", "/bar/e.d.ts", "/bar");
             testLoadingFromPackageJson("c:/a/b/c/d.ts", "c:/bar/package.json", "e.d.ts", "c:/bar/e.d.ts", "c:/bar");
         });
 
+        function testTypingsIgnored(typings: any): void {
+            let containingFile = { name: "/a/b.ts" };
+            let packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ "typings": typings }) };
+            let moduleFile = { name: "/a/b.d.ts" };
+
+            let indexPath = "/node_modules/b/index.d.ts";
+            let indexFile = { name: indexPath }
+
+            let resolution = nodeModuleNameResolver("b", containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, moduleFile, indexFile));
+
+            assert.equal(resolution.resolvedModule.resolvedFileName, indexPath);
+        }
+
+        it("module name as directory - handle invalid 'typings'", () => {
+            testTypingsIgnored(["a", "b"]);
+            testTypingsIgnored({ "a": "b" });
+            testTypingsIgnored(true);
+            testTypingsIgnored(null);
+            testTypingsIgnored(undefined);
+        });
+
         it("module name as directory - load index.d.ts", () => {
             let containingFile = { name: "/a/b/c.ts" };
             let packageJson = { name: "/a/b/foo/package.json", content: JSON.stringify({ main: "/c/d" }) };
             let indexFile = { name: "/a/b/foo/index.d.ts" };
-            let resolution = nodeModuleNameResolver("./foo", containingFile.name, createModuleResolutionHost(containingFile, packageJson, indexFile));
+            let resolution = nodeModuleNameResolver("./foo", containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, indexFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, indexFile.name);
             assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
             assert.deepEqual(resolution.failedLookupLocations, [
@@ -127,7 +148,7 @@ module ts {
         it("load module as file - ts files not loaded", () => {
             let containingFile = { name: "/a/b/c/d/e.ts" };
             let moduleFile = { name: "/a/b/node_modules/foo.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.deepEqual(resolution.failedLookupLocations, [
                 "/a/b/c/d/node_modules/foo.ts",
@@ -143,14 +164,14 @@ module ts {
                 "/a/b/c/node_modules/foo/package.json",
                 "/a/b/c/node_modules/foo/index.ts",
                 "/a/b/c/node_modules/foo/index.tsx",
-                "/a/b/c/node_modules/foo/index.d.ts"
+                "/a/b/c/node_modules/foo/index.d.ts",
             ])
         });
 
         it("load module as file", () => {
             let containingFile = { name: "/a/b/c/d/e.ts" };
             let moduleFile = { name: "/a/b/node_modules/foo.d.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
         });
@@ -158,7 +179,7 @@ module ts {
         it("load module as directory", () => {
             let containingFile = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
             let moduleFile = { name: "/a/node_modules/foo/index.d.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, createModuleResolutionHost(containingFile, moduleFile));
+            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
             assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
             assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
             assert.deepEqual(resolution.failedLookupLocations, [
@@ -352,6 +373,31 @@ export = C;
                 "moduleC.ts": "export var x"
             };
             test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "", /* useCaseSensitiveFileNames */ false, ["moduleA.ts", "moduleB.ts", "moduleC.ts"], [1149, 1149]);
+        });
+
+        it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
+            const files: Map<string> = {
+                "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
+                "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
+                "/a/B/c/moduleC.ts": "export var x",
+                "/a/B/c/moduleD.ts": `
+import a = require("./moduleA.ts");
+import b = require("./moduleB.ts");
+                `
+            };
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /* useCaseSensitiveFileNames */ false, ["moduleD.ts"], [1149]);
+        });
+        it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
+            const files: Map<string> = {
+                "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
+                "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
+                "/a/B/c/moduleC.ts": "export var x",
+                "/a/B/c/moduleD.ts": `
+import a = require("./moduleA.ts");
+import b = require("./moduleB.ts");
+                `
+            };
+            test(files, { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },  "/a/B/c", /* useCaseSensitiveFileNames */ false, ["moduleD.ts"], []);
         })
     });
 }

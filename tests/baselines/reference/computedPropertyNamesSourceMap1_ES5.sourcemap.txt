@@ -18,7 +18,7 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (C)
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -30,8 +30,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   >    }
   >
 2 >    }
-1->Emitted(3, 5) Source(5, 1) + SourceIndex(0) name (C.constructor)
-2 >Emitted(3, 6) Source(5, 2) + SourceIndex(0) name (C.constructor)
+1->Emitted(3, 5) Source(5, 1) + SourceIndex(0)
+2 >Emitted(3, 6) Source(5, 2) + SourceIndex(0)
 ---
 >>>    C.prototype["hello"] = function () {
 1->^^^^
@@ -44,11 +44,11 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 3 >                "hello"
 4 >                       ]
 5 >                        
-1->Emitted(4, 5) Source(2, 5) + SourceIndex(0) name (C)
-2 >Emitted(4, 17) Source(2, 6) + SourceIndex(0) name (C)
-3 >Emitted(4, 24) Source(2, 13) + SourceIndex(0) name (C)
-4 >Emitted(4, 25) Source(2, 14) + SourceIndex(0) name (C)
-5 >Emitted(4, 28) Source(2, 5) + SourceIndex(0) name (C)
+1->Emitted(4, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(4, 17) Source(2, 6) + SourceIndex(0)
+3 >Emitted(4, 24) Source(2, 13) + SourceIndex(0)
+4 >Emitted(4, 25) Source(2, 14) + SourceIndex(0)
+5 >Emitted(4, 28) Source(2, 5) + SourceIndex(0)
 ---
 >>>        debugger;
 1 >^^^^^^^^
@@ -58,9 +58,9 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   >        
 2 >        debugger
 3 >                ;
-1 >Emitted(5, 9) Source(3, 9) + SourceIndex(0) name (C["hello"])
-2 >Emitted(5, 17) Source(3, 17) + SourceIndex(0) name (C["hello"])
-3 >Emitted(5, 18) Source(3, 18) + SourceIndex(0) name (C["hello"])
+1 >Emitted(5, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(5, 17) Source(3, 17) + SourceIndex(0)
+3 >Emitted(5, 18) Source(3, 18) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -69,8 +69,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1 >
   >    
 2 >    }
-1 >Emitted(6, 5) Source(4, 5) + SourceIndex(0) name (C["hello"])
-2 >Emitted(6, 6) Source(4, 6) + SourceIndex(0) name (C["hello"])
+1 >Emitted(6, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(6, 6) Source(4, 6) + SourceIndex(0)
 ---
 >>>    return C;
 1->^^^^
@@ -78,8 +78,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1->
   >
 2 >    }
-1->Emitted(7, 5) Source(5, 1) + SourceIndex(0) name (C)
-2 >Emitted(7, 13) Source(5, 2) + SourceIndex(0) name (C)
+1->Emitted(7, 5) Source(5, 1) + SourceIndex(0)
+2 >Emitted(7, 13) Source(5, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -95,8 +95,8 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
   >         debugger;
   >     }
   > }
-1 >Emitted(8, 1) Source(5, 1) + SourceIndex(0) name (C)
-2 >Emitted(8, 2) Source(5, 2) + SourceIndex(0) name (C)
+1 >Emitted(8, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(8, 2) Source(5, 2) + SourceIndex(0)
 3 >Emitted(8, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(8, 6) Source(5, 2) + SourceIndex(0)
 ---

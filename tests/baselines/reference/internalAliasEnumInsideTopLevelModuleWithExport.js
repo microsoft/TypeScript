@@ -13,6 +13,7 @@ export var bVal: b = b.Sunday;
 
 //// [internalAliasEnumInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var a;
     (function (a) {
         (function (weekend) {

@@ -23,11 +23,14 @@ var x1: number = m;
 
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport_0.js]
+"use strict";
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {};
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.js]
+"use strict";
 var es6ImportDefaultBindingFollowedWithNamedImport_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImport_0");
 var x1 = es6ImportDefaultBindingFollowedWithNamedImport_0_1.a;
 var es6ImportDefaultBindingFollowedWithNamedImport_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImport_0");

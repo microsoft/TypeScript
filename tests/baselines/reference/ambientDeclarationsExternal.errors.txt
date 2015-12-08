@@ -1,11 +1,11 @@
-tests/cases/conformance/ambient/consumer.ts(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/ambient/consumer.ts(2,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
 ==== tests/cases/conformance/ambient/consumer.ts (1 errors) ====
     /// <reference path="decls.ts" />
     import imp1 = require('equ');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     
     
     // Ambient external module members are always exported with or without export keyword when module lacks export assignment

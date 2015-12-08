@@ -40,6 +40,7 @@ var compilerSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -59,6 +60,7 @@ var servicesSources = [
     "utilities.ts",
     "binder.ts",
     "checker.ts",
+    "sourcemap.ts",
     "declarationEmitter.ts",
     "emitter.ts",
     "program.ts",
@@ -104,6 +106,17 @@ var serverCoreSources = [
     "server.ts"
 ].map(function (f) {
     return path.join(serverDirectory, f);
+});
+
+var scriptSources = [
+    "tslint/booleanTriviaRule.ts",
+    "tslint/nextLineRule.ts",
+    "tslint/noNullRule.ts",
+    "tslint/preferConstRule.ts",
+    "tslint/typeOperatorSpacingRule.ts",
+    "tslint/noInOperatorRule.ts"
+].map(function (f) {
+    return path.join(scriptsDirectory, f);
 });
 
 var serverSources = serverCoreSources.concat(servicesSources);
@@ -365,7 +378,6 @@ file(builtGeneratedDiagnosticMessagesJSON,[generatedDiagnosticMessagesJSON], fun
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
 task("generate-diagnostics", [diagnosticInfoMapTs]);
 
-
 // Publish nightly
 var configureNightlyJs = path.join(scriptsDirectory, "configureNightly.js");
 var configureNightlyTs = path.join(scriptsDirectory, "configureNightly.ts");
@@ -466,7 +478,7 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 var nodeDefinitionsFileContents = definitionFileContents + "\r\nexport = ts;";
                 fs.writeFileSync(nodeDefinitionsFile, nodeDefinitionsFileContents);
 
-                // Node package definition file to be distributed without the package. Created by replacing 
+                // Node package definition file to be distributed without the package. Created by replacing
                 // 'ts' namespace with '"typescript"' as a module.
                 var nodeStandaloneDefinitionsFileContents = definitionFileContents.replace(/declare (namespace|module) ts/g, 'declare module "typescript"');
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
@@ -864,7 +876,8 @@ var tslintRules = ([
     "noNullRule",
     "preferConstRule",
     "booleanTriviaRule",
-    "typeOperatorSpacingRule"
+    "typeOperatorSpacingRule",
+    "noInOperatorRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -875,7 +888,7 @@ var tslintRulesOutFiles = tslintRules.map(function(p) {
 desc("Compiles tslint rules to js");
 task("build-rules", tslintRulesOutFiles);
 tslintRulesFiles.forEach(function(ruleFile, i) {
-    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint")); 
+    compileFile(tslintRulesOutFiles[i], [ruleFile], [ruleFile], [], /*useBuiltCompiler*/ false, /*noOutFile*/ true, /*generateDeclarations*/ false, path.join(builtLocalDirectory, "tslint"));
 });
 
 function getLinterOptions() {
@@ -909,17 +922,22 @@ function lintFileAsync(options, path, cb) {
 
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
-    .concat(serverCoreSources);
+    .concat(serverCoreSources)
+    .concat(scriptSources);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
+    var failed = 0;
     for (var i in lintTargets) {
         var result = lintFile(lintOptions, lintTargets[i]);
         if (result.failureCount > 0) {
             console.log(result.output);
-            fail('Linter errors.', result.failureCount);
+            failed += result.failureCount;
         }
+    }
+    if (failed > 0) {
+        fail('Linter errors.', failed);
     }
 });
 
@@ -937,7 +955,7 @@ function lintWatchFile(filename) {
         if (event !== "change") {
             return;
         }
-     
+
         if (!lintSemaphores[filename]) {
             lintSemaphores[filename] = true;
             lintFileAsync(getLinterOptions(), filename, function(err, result) {

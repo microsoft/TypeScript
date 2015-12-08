@@ -7,7 +7,7 @@ namespace Harness.LanguageService {
     export class ScriptInfo {
         public version: number = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
-        public lineMap: number[] = undefined;
+        private lineMap: number[] = undefined;
 
         constructor(public fileName: string, public content: string) {
             this.setContent(content);
@@ -15,7 +15,11 @@ namespace Harness.LanguageService {
 
         private setContent(content: string): void {
             this.content = content;
-            this.lineMap = ts.computeLineStarts(content);
+            this.lineMap = undefined;
+        }
+
+        public getLineMap(): number[] {
+            return this.lineMap || (this.lineMap = ts.computeLineStarts(this.content));
         }
 
         public updateContent(content: string): void {
@@ -153,7 +157,7 @@ namespace Harness.LanguageService {
             throw new Error("No script with name '" + fileName + "'");
         }
 
-        public openFile(fileName: string): void {
+        public openFile(fileName: string, content?: string): void {
         }
 
         /**
@@ -164,7 +168,7 @@ namespace Harness.LanguageService {
             const script: ScriptInfo = this.fileNameToScript[fileName];
             assert.isNotNull(script);
 
-            return ts.computeLineAndCharacterOfPosition(script.lineMap, position);
+            return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
     }
 
@@ -197,7 +201,7 @@ namespace Harness.LanguageService {
         getHost() { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
         getClassifier(): ts.Classifier { return ts.createClassifier(); }
-        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
     }
 
     /// Shim adapter
@@ -493,9 +497,9 @@ namespace Harness.LanguageService {
             this.client = client;
         }
 
-        openFile(fileName: string): void {
-            super.openFile(fileName);
-            this.client.openFile(fileName);
+        openFile(fileName: string, content?: string): void {
+            super.openFile(fileName, content);
+            this.client.openFile(fileName, content);
         }
 
         editScript(fileName: string, start: number, end: number, newText: string) {

@@ -12,10 +12,12 @@ import * as nameSpaceBinding2 from "es6ImportNameSpaceImportAmd_0"; // elide thi
 
 //// [es6ImportNameSpaceImportAmd_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.a = 10;
 });
 //// [es6ImportNameSpaceImportAmd_1.js]
 define(["require", "exports", "es6ImportNameSpaceImportAmd_0"], function (require, exports, nameSpaceBinding) {
+    "use strict";
     var x = nameSpaceBinding.a;
 });
 

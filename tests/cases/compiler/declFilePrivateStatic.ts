@@ -1,4 +1,5 @@
 // @declaration: true
+// @target: es5
 
 class C {
     private static x = 1;

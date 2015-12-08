@@ -18,7 +18,7 @@ sourceFile:../../../../FolderA/FolderB/FolderC/fileC.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(2, 5) Source(1, 1) + SourceIndex(0) name (C)
+1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -27,16 +27,16 @@ sourceFile:../../../../FolderA/FolderB/FolderC/fileC.ts
 1->class C {
   >
 2 >    }
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (C.constructor)
-2 >Emitted(3, 6) Source(2, 2) + SourceIndex(0) name (C.constructor)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(3, 6) Source(2, 2) + SourceIndex(0)
 ---
 >>>    return C;
 1->^^^^
 2 >    ^^^^^^^^
 1->
 2 >    }
-1->Emitted(4, 5) Source(2, 1) + SourceIndex(0) name (C)
-2 >Emitted(4, 13) Source(2, 2) + SourceIndex(0) name (C)
+1->Emitted(4, 5) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 13) Source(2, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -49,8 +49,8 @@ sourceFile:../../../../FolderA/FolderB/FolderC/fileC.ts
 3 > 
 4 > class C {
   > }
-1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0) name (C)
-2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0) name (C)
+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0)
 3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
 4 >Emitted(5, 6) Source(2, 2) + SourceIndex(0)
 ---
@@ -83,7 +83,7 @@ sourceFile:../../../FolderA/FolderB/fileB.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (B)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -93,16 +93,16 @@ sourceFile:../../../FolderA/FolderB/fileB.ts
   >    public c: C;
   >
 2 >    }
-1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (B.constructor)
-2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (B.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>    return B;
 1->^^^^
 2 >    ^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (B)
-2 >Emitted(5, 13) Source(4, 2) + SourceIndex(0) name (B)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 13) Source(4, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -116,8 +116,8 @@ sourceFile:../../../FolderA/FolderB/fileB.ts
 4 > class B {
   >     public c: C;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (B)
-2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (B)
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
 ---
