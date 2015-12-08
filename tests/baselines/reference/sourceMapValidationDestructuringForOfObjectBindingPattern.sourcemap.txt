@@ -331,9 +331,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 6 >               
 7 >                 robots
 8 >                                  
-9 >                                    let {name: nameA }
+9 >                                    robots
 10>                                                        
-11>                                                          let {name: nameA } of robots
+11>                                                          robots
 12>                                                              )
 1->Emitted(10, 1) Source(29, 1) + SourceIndex(0)
 2 >Emitted(10, 4) Source(29, 4) + SourceIndex(0)
@@ -342,9 +342,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 5 >Emitted(10, 16) Source(29, 34) + SourceIndex(0)
 6 >Emitted(10, 18) Source(29, 28) + SourceIndex(0)
 7 >Emitted(10, 35) Source(29, 34) + SourceIndex(0)
-8 >Emitted(10, 37) Source(29, 6) + SourceIndex(0)
-9 >Emitted(10, 57) Source(29, 24) + SourceIndex(0)
-10>Emitted(10, 59) Source(29, 6) + SourceIndex(0)
+8 >Emitted(10, 37) Source(29, 28) + SourceIndex(0)
+9 >Emitted(10, 57) Source(29, 34) + SourceIndex(0)
+10>Emitted(10, 59) Source(29, 28) + SourceIndex(0)
 11>Emitted(10, 63) Source(29, 34) + SourceIndex(0)
 12>Emitted(10, 64) Source(29, 35) + SourceIndex(0)
 ---
@@ -419,9 +419,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 8 >                      getRobots
 9 >                               ()
 10>                                 
-11>                                   let {name: nameA }
+11>                                   getRobots()
 12>                                                 
-13>                                                   let {name: nameA } of getRobots()
+13>                                                   getRobots()
 14>                                                       )
 1->Emitted(14, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(14, 4) Source(32, 4) + SourceIndex(0)
@@ -432,9 +432,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(14, 23) Source(32, 28) + SourceIndex(0)
 8 >Emitted(14, 32) Source(32, 37) + SourceIndex(0)
 9 >Emitted(14, 34) Source(32, 39) + SourceIndex(0)
-10>Emitted(14, 36) Source(32, 6) + SourceIndex(0)
-11>Emitted(14, 50) Source(32, 24) + SourceIndex(0)
-12>Emitted(14, 52) Source(32, 6) + SourceIndex(0)
+10>Emitted(14, 36) Source(32, 28) + SourceIndex(0)
+11>Emitted(14, 50) Source(32, 39) + SourceIndex(0)
+12>Emitted(14, 52) Source(32, 28) + SourceIndex(0)
 13>Emitted(14, 56) Source(32, 39) + SourceIndex(0)
 14>Emitted(14, 57) Source(32, 40) + SourceIndex(0)
 ---
@@ -545,9 +545,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 26>                                                                                                }
 27>                                                                                                 ]
 28>                                                                                                  
-29>                                                                                                    let {name: nameA }
+29>                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 30>                                                                                                                  
-31>                                                                                                                    let {name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+31>                                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 32>                                                                                                                        )
 1->Emitted(18, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(18, 4) Source(35, 4) + SourceIndex(0)
@@ -576,9 +576,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 25>Emitted(18, 96) Source(35, 101) + SourceIndex(0)
 26>Emitted(18, 98) Source(35, 103) + SourceIndex(0)
 27>Emitted(18, 99) Source(35, 104) + SourceIndex(0)
-28>Emitted(18, 101) Source(35, 6) + SourceIndex(0)
-29>Emitted(18, 115) Source(35, 24) + SourceIndex(0)
-30>Emitted(18, 117) Source(35, 6) + SourceIndex(0)
+28>Emitted(18, 101) Source(35, 28) + SourceIndex(0)
+29>Emitted(18, 115) Source(35, 104) + SourceIndex(0)
+30>Emitted(18, 117) Source(35, 28) + SourceIndex(0)
 31>Emitted(18, 121) Source(35, 104) + SourceIndex(0)
 32>Emitted(18, 122) Source(35, 105) + SourceIndex(0)
 ---
@@ -650,9 +650,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 6 >               
 7 >                 multiRobots
 8 >                                            
-9 >                                              let { skills: { primary: primaryA, secondary: secondaryA } }
+9 >                                              multiRobots
 10>                                                                       
-11>                                                                         let { skills: { primary: primaryA, secondary: secondaryA } } of multiRobots
+11>                                                                         multiRobots
 12>                                                                             )
 1->Emitted(22, 1) Source(38, 1) + SourceIndex(0)
 2 >Emitted(22, 4) Source(38, 4) + SourceIndex(0)
@@ -661,9 +661,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 5 >Emitted(22, 16) Source(38, 81) + SourceIndex(0)
 6 >Emitted(22, 18) Source(38, 70) + SourceIndex(0)
 7 >Emitted(22, 45) Source(38, 81) + SourceIndex(0)
-8 >Emitted(22, 47) Source(38, 6) + SourceIndex(0)
-9 >Emitted(22, 72) Source(38, 66) + SourceIndex(0)
-10>Emitted(22, 74) Source(38, 6) + SourceIndex(0)
+8 >Emitted(22, 47) Source(38, 70) + SourceIndex(0)
+9 >Emitted(22, 72) Source(38, 81) + SourceIndex(0)
+10>Emitted(22, 74) Source(38, 70) + SourceIndex(0)
 11>Emitted(22, 78) Source(38, 81) + SourceIndex(0)
 12>Emitted(22, 79) Source(38, 82) + SourceIndex(0)
 ---
@@ -751,9 +751,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 8 >                      getMultiRobots
 9 >                                    ()
 10>                                      
-11>                                        let { skills: { primary: primaryA, secondary: secondaryA } }
+11>                                        getMultiRobots()
 12>                                                      
-13>                                                        let { skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()
+13>                                                        getMultiRobots()
 14>                                                            )
 1->Emitted(26, 1) Source(41, 1) + SourceIndex(0)
 2 >Emitted(26, 4) Source(41, 4) + SourceIndex(0)
@@ -764,9 +764,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(26, 23) Source(41, 70) + SourceIndex(0)
 8 >Emitted(26, 37) Source(41, 84) + SourceIndex(0)
 9 >Emitted(26, 39) Source(41, 86) + SourceIndex(0)
-10>Emitted(26, 41) Source(41, 6) + SourceIndex(0)
-11>Emitted(26, 55) Source(41, 66) + SourceIndex(0)
-12>Emitted(26, 57) Source(41, 6) + SourceIndex(0)
+10>Emitted(26, 41) Source(41, 70) + SourceIndex(0)
+11>Emitted(26, 55) Source(41, 86) + SourceIndex(0)
+12>Emitted(26, 57) Source(41, 70) + SourceIndex(0)
 13>Emitted(26, 61) Source(41, 86) + SourceIndex(0)
 14>Emitted(26, 62) Source(41, 87) + SourceIndex(0)
 ---
@@ -950,9 +950,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 18>                                                                            }
 19>                                                                             ]
 20>                                                                              
-21>                                                                                let { skills: { primary: primaryA, secondary: secondaryA } }
+21>                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+  >                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
 22>                                                                                              
-23>                                                                                                let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+23>                                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
   >                                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
 24>                                                                                                    )
 1->Emitted(31, 5) Source(45, 5) + SourceIndex(0)
@@ -974,9 +975,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 17>Emitted(31, 76) Source(45, 76) + SourceIndex(0)
 18>Emitted(31, 78) Source(45, 78) + SourceIndex(0)
 19>Emitted(31, 79) Source(45, 79) + SourceIndex(0)
-20>Emitted(31, 81) Source(44, 6) + SourceIndex(0)
-21>Emitted(31, 95) Source(44, 66) + SourceIndex(0)
-22>Emitted(31, 97) Source(44, 6) + SourceIndex(0)
+20>Emitted(31, 81) Source(44, 70) + SourceIndex(0)
+21>Emitted(31, 95) Source(45, 79) + SourceIndex(0)
+22>Emitted(31, 97) Source(44, 70) + SourceIndex(0)
 23>Emitted(31, 101) Source(45, 79) + SourceIndex(0)
 24>Emitted(31, 102) Source(45, 80) + SourceIndex(0)
 ---
@@ -1061,9 +1062,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 6 >               
 7 >                 robots
 8 >                                  
-9 >                                    let {name: nameA, skill: skillA }
+9 >                                    robots
 10>                                                        
-11>                                                          let {name: nameA, skill: skillA } of robots
+11>                                                          robots
 12>                                                              )
 1->Emitted(35, 1) Source(49, 1) + SourceIndex(0)
 2 >Emitted(35, 4) Source(49, 4) + SourceIndex(0)
@@ -1072,28 +1073,34 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 5 >Emitted(35, 16) Source(49, 49) + SourceIndex(0)
 6 >Emitted(35, 18) Source(49, 43) + SourceIndex(0)
 7 >Emitted(35, 35) Source(49, 49) + SourceIndex(0)
-8 >Emitted(35, 37) Source(49, 6) + SourceIndex(0)
-9 >Emitted(35, 57) Source(49, 39) + SourceIndex(0)
-10>Emitted(35, 59) Source(49, 6) + SourceIndex(0)
+8 >Emitted(35, 37) Source(49, 43) + SourceIndex(0)
+9 >Emitted(35, 57) Source(49, 49) + SourceIndex(0)
+10>Emitted(35, 59) Source(49, 43) + SourceIndex(0)
 11>Emitted(35, 63) Source(49, 49) + SourceIndex(0)
 12>Emitted(35, 64) Source(49, 50) + SourceIndex(0)
 ---
 >>>    var _p = robots_2[_o], nameA = _p.name, skillA = _p.skill;
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                           ^^^^^^^^^^^^^^^
-4 >                                          ^^
-5 >                                            ^^^^^^^^^^^^^^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^
+4 >                         ^^
+5 >                           ^^^^^^^^^^^^^^^
+6 >                                          ^^
+7 >                                            ^^^^^^^^^^^^^^^^^
 1 >
-2 >    let {
-3 >                           name: nameA
-4 >                                          , 
-5 >                                            skill: skillA
+2 >    
+3 >        let {name: nameA, skill: skillA }
+4 >                         
+5 >                           name: nameA
+6 >                                          , 
+7 >                                            skill: skillA
 1 >Emitted(36, 5) Source(49, 6) + SourceIndex(0)
-2 >Emitted(36, 28) Source(49, 11) + SourceIndex(0)
-3 >Emitted(36, 43) Source(49, 22) + SourceIndex(0)
-4 >Emitted(36, 45) Source(49, 24) + SourceIndex(0)
-5 >Emitted(36, 62) Source(49, 37) + SourceIndex(0)
+2 >Emitted(36, 9) Source(49, 6) + SourceIndex(0)
+3 >Emitted(36, 26) Source(49, 39) + SourceIndex(0)
+4 >Emitted(36, 28) Source(49, 11) + SourceIndex(0)
+5 >Emitted(36, 43) Source(49, 22) + SourceIndex(0)
+6 >Emitted(36, 45) Source(49, 24) + SourceIndex(0)
+7 >Emitted(36, 62) Source(49, 37) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1156,9 +1163,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 8 >                      getRobots
 9 >                               ()
 10>                                 
-11>                                   let {name: nameA, skill: skillA }
+11>                                   getRobots()
 12>                                                 
-13>                                                   let {name: nameA, skill: skillA } of getRobots()
+13>                                                   getRobots()
 14>                                                       )
 1->Emitted(39, 1) Source(52, 1) + SourceIndex(0)
 2 >Emitted(39, 4) Source(52, 4) + SourceIndex(0)
@@ -1169,28 +1176,34 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(39, 23) Source(52, 43) + SourceIndex(0)
 8 >Emitted(39, 32) Source(52, 52) + SourceIndex(0)
 9 >Emitted(39, 34) Source(52, 54) + SourceIndex(0)
-10>Emitted(39, 36) Source(52, 6) + SourceIndex(0)
-11>Emitted(39, 50) Source(52, 39) + SourceIndex(0)
-12>Emitted(39, 52) Source(52, 6) + SourceIndex(0)
+10>Emitted(39, 36) Source(52, 43) + SourceIndex(0)
+11>Emitted(39, 50) Source(52, 54) + SourceIndex(0)
+12>Emitted(39, 52) Source(52, 43) + SourceIndex(0)
 13>Emitted(39, 56) Source(52, 54) + SourceIndex(0)
 14>Emitted(39, 57) Source(52, 55) + SourceIndex(0)
 ---
 >>>    var _s = _r[_q], nameA = _s.name, skillA = _s.skill;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^^^^^^^^^^^^^
-4 >                                    ^^
-5 >                                      ^^^^^^^^^^^^^^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^^^^^^^^^^
 1->
-2 >    let {
-3 >                     name: nameA
-4 >                                    , 
-5 >                                      skill: skillA
+2 >    
+3 >        let {name: nameA, skill: skillA }
+4 >                   
+5 >                     name: nameA
+6 >                                    , 
+7 >                                      skill: skillA
 1->Emitted(40, 5) Source(52, 6) + SourceIndex(0)
-2 >Emitted(40, 22) Source(52, 11) + SourceIndex(0)
-3 >Emitted(40, 37) Source(52, 22) + SourceIndex(0)
-4 >Emitted(40, 39) Source(52, 24) + SourceIndex(0)
-5 >Emitted(40, 56) Source(52, 37) + SourceIndex(0)
+2 >Emitted(40, 9) Source(52, 6) + SourceIndex(0)
+3 >Emitted(40, 20) Source(52, 39) + SourceIndex(0)
+4 >Emitted(40, 22) Source(52, 11) + SourceIndex(0)
+5 >Emitted(40, 37) Source(52, 22) + SourceIndex(0)
+6 >Emitted(40, 39) Source(52, 24) + SourceIndex(0)
+7 >Emitted(40, 56) Source(52, 37) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1288,9 +1301,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 26>                                                                                                }
 27>                                                                                                 ]
 28>                                                                                                  
-29>                                                                                                    let {name: nameA, skill: skillA }
+29>                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 30>                                                                                                                  
-31>                                                                                                                    let {name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
+31>                                                                                                                    [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]
 32>                                                                                                                        )
 1->Emitted(43, 1) Source(55, 1) + SourceIndex(0)
 2 >Emitted(43, 4) Source(55, 4) + SourceIndex(0)
@@ -1319,28 +1332,34 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 25>Emitted(43, 96) Source(55, 116) + SourceIndex(0)
 26>Emitted(43, 98) Source(55, 118) + SourceIndex(0)
 27>Emitted(43, 99) Source(55, 119) + SourceIndex(0)
-28>Emitted(43, 101) Source(55, 6) + SourceIndex(0)
-29>Emitted(43, 115) Source(55, 39) + SourceIndex(0)
-30>Emitted(43, 117) Source(55, 6) + SourceIndex(0)
+28>Emitted(43, 101) Source(55, 43) + SourceIndex(0)
+29>Emitted(43, 115) Source(55, 119) + SourceIndex(0)
+30>Emitted(43, 117) Source(55, 43) + SourceIndex(0)
 31>Emitted(43, 121) Source(55, 119) + SourceIndex(0)
 32>Emitted(43, 122) Source(55, 120) + SourceIndex(0)
 ---
 >>>    var _v = _u[_t], nameA = _v.name, skillA = _v.skill;
 1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^^^^^^^^^^^^^
-4 >                                    ^^
-5 >                                      ^^^^^^^^^^^^^^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^^^^^^^^^^
 1 >
-2 >    let {
-3 >                     name: nameA
-4 >                                    , 
-5 >                                      skill: skillA
+2 >    
+3 >        let {name: nameA, skill: skillA }
+4 >                   
+5 >                     name: nameA
+6 >                                    , 
+7 >                                      skill: skillA
 1 >Emitted(44, 5) Source(55, 6) + SourceIndex(0)
-2 >Emitted(44, 22) Source(55, 11) + SourceIndex(0)
-3 >Emitted(44, 37) Source(55, 22) + SourceIndex(0)
-4 >Emitted(44, 39) Source(55, 24) + SourceIndex(0)
-5 >Emitted(44, 56) Source(55, 37) + SourceIndex(0)
+2 >Emitted(44, 9) Source(55, 6) + SourceIndex(0)
+3 >Emitted(44, 20) Source(55, 39) + SourceIndex(0)
+4 >Emitted(44, 22) Source(55, 11) + SourceIndex(0)
+5 >Emitted(44, 37) Source(55, 22) + SourceIndex(0)
+6 >Emitted(44, 39) Source(55, 24) + SourceIndex(0)
+7 >Emitted(44, 56) Source(55, 37) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1399,9 +1418,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 6 >               
 7 >                 multiRobots
 8 >                                            
-9 >                                              let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
+9 >                                              multiRobots
 10>                                                                       
-11>                                                                         let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of multiRobots
+11>                                                                         multiRobots
 12>                                                                             )
 1->Emitted(47, 1) Source(58, 1) + SourceIndex(0)
 2 >Emitted(47, 4) Source(58, 4) + SourceIndex(0)
@@ -1410,40 +1429,46 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 5 >Emitted(47, 16) Source(58, 93) + SourceIndex(0)
 6 >Emitted(47, 18) Source(58, 82) + SourceIndex(0)
 7 >Emitted(47, 45) Source(58, 93) + SourceIndex(0)
-8 >Emitted(47, 47) Source(58, 6) + SourceIndex(0)
-9 >Emitted(47, 72) Source(58, 78) + SourceIndex(0)
-10>Emitted(47, 74) Source(58, 6) + SourceIndex(0)
+8 >Emitted(47, 47) Source(58, 82) + SourceIndex(0)
+9 >Emitted(47, 72) Source(58, 93) + SourceIndex(0)
+10>Emitted(47, 74) Source(58, 82) + SourceIndex(0)
 11>Emitted(47, 78) Source(58, 93) + SourceIndex(0)
 12>Emitted(47, 79) Source(58, 94) + SourceIndex(0)
 ---
 >>>    var _x = multiRobots_2[_w], nameA = _x.name, _y = _x.skills, primaryA = _y.primary, secondaryA = _y.secondary;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                ^^^^^^^^^^^^^^^
-4 >                                               ^^
-5 >                                                 ^^^^^^^^^^^^^^
-6 >                                                               ^^
-7 >                                                                 ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                                      ^^
-9 >                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^
+4 >                              ^^
+5 >                                ^^^^^^^^^^^^^^^
+6 >                                               ^^
+7 >                                                 ^^^^^^^^^^^^^^
+8 >                                                               ^^
+9 >                                                                 ^^^^^^^^^^^^^^^^^^^^^
+10>                                                                                      ^^
+11>                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    let {
-3 >                                name: nameA
-4 >                                               , 
-5 >                                                 skills
-6 >                                                               : { 
-7 >                                                                 primary: primaryA
-8 >                                                                                      , 
-9 >                                                                                        secondary: secondaryA
+2 >    
+3 >        let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
+4 >                              
+5 >                                name: nameA
+6 >                                               , 
+7 >                                                 skills
+8 >                                                               : { 
+9 >                                                                 primary: primaryA
+10>                                                                                      , 
+11>                                                                                        secondary: secondaryA
 1->Emitted(48, 5) Source(58, 6) + SourceIndex(0)
-2 >Emitted(48, 33) Source(58, 11) + SourceIndex(0)
-3 >Emitted(48, 48) Source(58, 22) + SourceIndex(0)
-4 >Emitted(48, 50) Source(58, 24) + SourceIndex(0)
-5 >Emitted(48, 64) Source(58, 30) + SourceIndex(0)
-6 >Emitted(48, 66) Source(58, 34) + SourceIndex(0)
-7 >Emitted(48, 87) Source(58, 51) + SourceIndex(0)
-8 >Emitted(48, 89) Source(58, 53) + SourceIndex(0)
-9 >Emitted(48, 114) Source(58, 74) + SourceIndex(0)
+2 >Emitted(48, 9) Source(58, 6) + SourceIndex(0)
+3 >Emitted(48, 31) Source(58, 78) + SourceIndex(0)
+4 >Emitted(48, 33) Source(58, 11) + SourceIndex(0)
+5 >Emitted(48, 48) Source(58, 22) + SourceIndex(0)
+6 >Emitted(48, 50) Source(58, 24) + SourceIndex(0)
+7 >Emitted(48, 64) Source(58, 30) + SourceIndex(0)
+8 >Emitted(48, 66) Source(58, 34) + SourceIndex(0)
+9 >Emitted(48, 87) Source(58, 51) + SourceIndex(0)
+10>Emitted(48, 89) Source(58, 53) + SourceIndex(0)
+11>Emitted(48, 114) Source(58, 74) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1506,9 +1531,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 8 >                      getMultiRobots
 9 >                                    ()
 10>                                      
-11>                                        let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
+11>                                        getMultiRobots()
 12>                                                      
-13>                                                        let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of getMultiRobots()
+13>                                                        getMultiRobots()
 14>                                                            )
 1->Emitted(51, 1) Source(61, 1) + SourceIndex(0)
 2 >Emitted(51, 4) Source(61, 4) + SourceIndex(0)
@@ -1519,40 +1544,46 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 7 >Emitted(51, 23) Source(61, 82) + SourceIndex(0)
 8 >Emitted(51, 37) Source(61, 96) + SourceIndex(0)
 9 >Emitted(51, 39) Source(61, 98) + SourceIndex(0)
-10>Emitted(51, 41) Source(61, 6) + SourceIndex(0)
-11>Emitted(51, 55) Source(61, 78) + SourceIndex(0)
-12>Emitted(51, 57) Source(61, 6) + SourceIndex(0)
+10>Emitted(51, 41) Source(61, 82) + SourceIndex(0)
+11>Emitted(51, 55) Source(61, 98) + SourceIndex(0)
+12>Emitted(51, 57) Source(61, 82) + SourceIndex(0)
 13>Emitted(51, 61) Source(61, 98) + SourceIndex(0)
 14>Emitted(51, 62) Source(61, 99) + SourceIndex(0)
 ---
 >>>    var _1 = _0[_z], nameA = _1.name, _2 = _1.skills, primaryA = _2.primary, secondaryA = _2.secondary;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^^^^^^^^^^^^^
-4 >                                    ^^
-5 >                                      ^^^^^^^^^^^^^^
-6 >                                                    ^^
-7 >                                                      ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                           ^^
-9 >                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^^^^^^^
+8 >                                                    ^^
+9 >                                                      ^^^^^^^^^^^^^^^^^^^^^
+10>                                                                           ^^
+11>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    let {
-3 >                     name: nameA
-4 >                                    , 
-5 >                                      skills
-6 >                                                    : { 
-7 >                                                      primary: primaryA
-8 >                                                                           , 
-9 >                                                                             secondary: secondaryA
+2 >    
+3 >        let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
+4 >                   
+5 >                     name: nameA
+6 >                                    , 
+7 >                                      skills
+8 >                                                    : { 
+9 >                                                      primary: primaryA
+10>                                                                           , 
+11>                                                                             secondary: secondaryA
 1->Emitted(52, 5) Source(61, 6) + SourceIndex(0)
-2 >Emitted(52, 22) Source(61, 11) + SourceIndex(0)
-3 >Emitted(52, 37) Source(61, 22) + SourceIndex(0)
-4 >Emitted(52, 39) Source(61, 24) + SourceIndex(0)
-5 >Emitted(52, 53) Source(61, 30) + SourceIndex(0)
-6 >Emitted(52, 55) Source(61, 34) + SourceIndex(0)
-7 >Emitted(52, 76) Source(61, 51) + SourceIndex(0)
-8 >Emitted(52, 78) Source(61, 53) + SourceIndex(0)
-9 >Emitted(52, 103) Source(61, 74) + SourceIndex(0)
+2 >Emitted(52, 9) Source(61, 6) + SourceIndex(0)
+3 >Emitted(52, 20) Source(61, 78) + SourceIndex(0)
+4 >Emitted(52, 22) Source(61, 11) + SourceIndex(0)
+5 >Emitted(52, 37) Source(61, 22) + SourceIndex(0)
+6 >Emitted(52, 39) Source(61, 24) + SourceIndex(0)
+7 >Emitted(52, 53) Source(61, 30) + SourceIndex(0)
+8 >Emitted(52, 55) Source(61, 34) + SourceIndex(0)
+9 >Emitted(52, 76) Source(61, 51) + SourceIndex(0)
+10>Emitted(52, 78) Source(61, 53) + SourceIndex(0)
+11>Emitted(52, 103) Source(61, 74) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1712,9 +1743,10 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 18>                                                                            }
 19>                                                                             ]
 20>                                                                              
-21>                                                                                let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
+21>                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+  >                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
 22>                                                                                              
-23>                                                                                                let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
+23>                                                                                                [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
   >                                                                                                    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]
 24>                                                                                                    )
 1->Emitted(56, 5) Source(65, 5) + SourceIndex(0)
@@ -1736,40 +1768,46 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern.ts
 17>Emitted(56, 76) Source(65, 76) + SourceIndex(0)
 18>Emitted(56, 78) Source(65, 78) + SourceIndex(0)
 19>Emitted(56, 79) Source(65, 79) + SourceIndex(0)
-20>Emitted(56, 81) Source(64, 6) + SourceIndex(0)
-21>Emitted(56, 95) Source(64, 78) + SourceIndex(0)
-22>Emitted(56, 97) Source(64, 6) + SourceIndex(0)
+20>Emitted(56, 81) Source(64, 82) + SourceIndex(0)
+21>Emitted(56, 95) Source(65, 79) + SourceIndex(0)
+22>Emitted(56, 97) Source(64, 82) + SourceIndex(0)
 23>Emitted(56, 101) Source(65, 79) + SourceIndex(0)
 24>Emitted(56, 102) Source(65, 80) + SourceIndex(0)
 ---
 >>>    var _5 = _4[_3], nameA = _5.name, _6 = _5.skills, primaryA = _6.primary, secondaryA = _6.secondary;
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^
-3 >                     ^^^^^^^^^^^^^^^
-4 >                                    ^^
-5 >                                      ^^^^^^^^^^^^^^
-6 >                                                    ^^
-7 >                                                      ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                           ^^
-9 >                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^^^^^^^^^^^^^
+6 >                                    ^^
+7 >                                      ^^^^^^^^^^^^^^
+8 >                                                    ^^
+9 >                                                      ^^^^^^^^^^^^^^^^^^^^^
+10>                                                                           ^^
+11>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    let {
-3 >                     name: nameA
-4 >                                    , 
-5 >                                      skills
-6 >                                                    : { 
-7 >                                                      primary: primaryA
-8 >                                                                           , 
-9 >                                                                             secondary: secondaryA
+2 >    
+3 >        let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
+4 >                   
+5 >                     name: nameA
+6 >                                    , 
+7 >                                      skills
+8 >                                                    : { 
+9 >                                                      primary: primaryA
+10>                                                                           , 
+11>                                                                             secondary: secondaryA
 1->Emitted(57, 5) Source(64, 6) + SourceIndex(0)
-2 >Emitted(57, 22) Source(64, 11) + SourceIndex(0)
-3 >Emitted(57, 37) Source(64, 22) + SourceIndex(0)
-4 >Emitted(57, 39) Source(64, 24) + SourceIndex(0)
-5 >Emitted(57, 53) Source(64, 30) + SourceIndex(0)
-6 >Emitted(57, 55) Source(64, 34) + SourceIndex(0)
-7 >Emitted(57, 76) Source(64, 51) + SourceIndex(0)
-8 >Emitted(57, 78) Source(64, 53) + SourceIndex(0)
-9 >Emitted(57, 103) Source(64, 74) + SourceIndex(0)
+2 >Emitted(57, 9) Source(64, 6) + SourceIndex(0)
+3 >Emitted(57, 20) Source(64, 78) + SourceIndex(0)
+4 >Emitted(57, 22) Source(64, 11) + SourceIndex(0)
+5 >Emitted(57, 37) Source(64, 22) + SourceIndex(0)
+6 >Emitted(57, 39) Source(64, 24) + SourceIndex(0)
+7 >Emitted(57, 53) Source(64, 30) + SourceIndex(0)
+8 >Emitted(57, 55) Source(64, 34) + SourceIndex(0)
+9 >Emitted(57, 76) Source(64, 51) + SourceIndex(0)
+10>Emitted(57, 78) Source(64, 53) + SourceIndex(0)
+11>Emitted(57, 103) Source(64, 74) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^

@@ -3315,21 +3315,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("; ");
 
                 // _i < _a.length;
-                emitStart(node.initializer);
+                emitStart(node.expression);
                 emitNodeWithoutSourceMap(counter);
                 write(" < ");
 
                 emitNodeWithCommentsAndWithoutSourcemap(rhsReference);
                 write(".length");
 
-                emitEnd(node.initializer);
+                emitEnd(node.expression);
                 write("; ");
 
                 // _i++)
-                emitStart(node.initializer);
+                emitStart(node.expression);
                 emitNodeWithoutSourceMap(counter);
                 write("++");
-                emitEnd(node.initializer);
+                emitEnd(node.expression);
                 emitToken(SyntaxKind.CloseParenToken, node.expression.end);
 
                 // Body
@@ -3339,7 +3339,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // Initialize LHS
                 // let v = _a[_i];
-                const rhsIterationValue = createElementAccessExpression(rhsReference, counter);
+                const rhsIterationValue = createElementAccessExpression(rhsReference, counter, node.initializer);
                 emitStart(node.initializer);
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
