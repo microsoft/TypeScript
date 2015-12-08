@@ -16,9 +16,9 @@ unionOfDifferentReturnType1(true); // error in type of parameter
 unionOfDifferentReturnType1(); // error missing parameter
 
 var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
-unionOfDifferentParameterTypes(10); //no error
-unionOfDifferentParameterTypes("hello"); //no error
-unionOfDifferentParameterTypes();  //error TS2346
+unionOfDifferentParameterTypes(10);// error - no call signatures
+unionOfDifferentParameterTypes("hello");// error - no call signatures
+unionOfDifferentParameterTypes();// error - no call signatures
 
 var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
 unionOfDifferentNumberOfSignatures(); // error - no call signatures
@@ -26,9 +26,9 @@ unionOfDifferentNumberOfSignatures(10); // error - no call signatures
 unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
 
 var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
-unionWithDifferentParameterCount();  //error TS2346
-unionWithDifferentParameterCount("hello"); //no error
-unionWithDifferentParameterCount("hello", 10); //no error
+unionWithDifferentParameterCount();// no  call signature
+unionWithDifferentParameterCount("hello");// no  call signature
+unionWithDifferentParameterCount("hello", 10);// no  call signature
 
 var unionWithOptionalParameter1: { (a: string, b?: number): string; } | { (a: string, b?: number): number; };
 strOrNum = unionWithOptionalParameter1('hello');

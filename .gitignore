@@ -44,3 +44,4 @@ internal/
 .settings
 .vscode/*
 !.vscode/tasks.json
+.idea
