@@ -15970,9 +15970,14 @@ namespace ts {
                 }
 
                 // Modifiers cannot appear in property assignments
-                if (prop.modifiers && prop.modifiers.length > 0) {
-                    grammarErrorOnNode(prop.modifiers[0], Diagnostics.Modifiers_cannot_appear_here);
-                }
+                forEach(prop.modifiers, mod => {
+                    if (mod.kind !== SyntaxKind.AsyncKeyword) {
+                        grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
+                    }
+                    else if (prop.kind !== SyntaxKind.MethodDeclaration) {
+                        grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
+                    }
+                });
 
                 // ECMA-262 11.1.5 Object Initialiser
                 // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
