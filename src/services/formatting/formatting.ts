@@ -359,7 +359,7 @@ namespace ts.formatting {
             parentStartLine: number,
             range: TextRange,
             inheritedIndentation: number): number {
-            
+
             if (rangeOverlapsWithStartEnd(range, startPos, endPos) ||
                 rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */) {
                 
