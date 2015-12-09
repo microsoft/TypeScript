@@ -34,7 +34,6 @@ function blah () {
 function blah() {
     var v;
     function foo() { }
-    __export(require("ambient"));
     exports["default"] = v;
     var C = (function () {
         function C() {

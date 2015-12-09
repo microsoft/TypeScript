@@ -15017,6 +15017,35 @@ namespace ts {
             return getReferencedValueSymbol(node) === argumentsSymbol;
         }
 
+        function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
+            let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
+            if (!moduleSymbol) {
+                // module not found - be conservative
+                return true;
+            }
+
+            const hasExportAssignment = getExportAssignmentSymbol(moduleSymbol) !== undefined;
+            // if module has export assignment then 'resolveExternalModuleSymbol' will return resolved symbol for export assignment
+            // otherwise it will return moduleSymbol itself
+            moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
+
+            const symbolLinks = getSymbolLinks(moduleSymbol);
+            if (symbolLinks.exportsSomeValue === undefined) {
+                // for export assignments - check if resolved symbol for RHS is itself a value
+                // otherwise - check if at least one export is value
+                symbolLinks.exportsSomeValue = hasExportAssignment
+                    ? !!(moduleSymbol.flags & SymbolFlags.Value)
+                    : forEachValue(getExportsOfModule(moduleSymbol), isValue);
+            }
+
+            return symbolLinks.exportsSomeValue;
+
+            function isValue(s: Symbol): boolean {
+                s = resolveSymbol(s);
+                return s && !!(s.flags & SymbolFlags.Value);
+            }
+        }
+
         // When resolved as an expression identifier, if the given node references an exported entity, return the declaration
         // node of the exported entity's container. Otherwise, return undefined.
         function getReferencedExportContainer(node: Identifier): SourceFile | ModuleDeclaration | EnumDeclaration {
@@ -15322,6 +15351,7 @@ namespace ts {
                 getReferencedValueDeclaration,
                 getTypeReferenceSerializationKind,
                 isOptionalParameter,
+                moduleExportsSomeValue,
                 isArgumentsLocalBinding,
                 getExternalModuleFileFromDeclaration
             };
@@ -15968,6 +15998,13 @@ namespace ts {
                     // outside of destructuring it is a syntax error
                     return grammarErrorOnNode((<ShorthandPropertyAssignment>prop).equalsToken, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
                 }
+
+                // Modifiers are never allowed on properties except for 'async' on a method declaration
+                forEach(prop.modifiers, mod => {
+                    if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
+                        grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
+                    }
+                });
 
                 // ECMA-262 11.1.5 Object Initialiser
                 // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true

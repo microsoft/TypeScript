@@ -13,7 +13,7 @@ verify.getSemanticDiagnostics(`[
     "code": 8003
   },
   {
-    "message": "Cannot compile modules unless the '--module' flag is provided.",
+    "message": "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.",
     "start": 0,
     "length": 11,
     "category": "error",
