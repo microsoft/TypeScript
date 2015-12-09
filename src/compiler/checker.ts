@@ -6537,7 +6537,7 @@ namespace ts {
 
                 if (after) {
                     const assignment = getAssignmentAtLocation(location);
-                    if (assignment) return getTypeOfNode(assignment);
+                    if (assignment) return narrowTypeByAssignment(assignment);
                 }
 
                 let types: Type[] = [];
@@ -6767,6 +6767,22 @@ namespace ts {
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                     return (<BinaryExpression>parent).right;
                 }
+            }
+            function narrowTypeByAssignment(expression: Expression) {
+                // Narrow union types only
+                if (!(initialType.flags & TypeFlags.Union)) return initialType; 
+                const type = getTypeOfNode(expression);
+                const constituentTypes = (<UnionType> initialType).types;
+                const assignableTypes: Type[] = [];
+                for (const constituentType of constituentTypes) {
+                    if (isTypeAssignableTo(type, constituentType)) {
+                        assignableTypes.push(constituentType);
+                    }
+                }
+                if (assignableTypes.length === 0) {
+                    return initialType;
+                }
+                return getUnionType(assignableTypes);
             }
         }
 
