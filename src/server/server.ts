@@ -188,4 +188,6 @@ namespace ts.server {
         // Start listening
         ioSession.listen();
     });
+
+    module.export = ts;
 }
