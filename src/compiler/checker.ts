@@ -4959,6 +4959,25 @@ namespace ts {
             return checkTypeRelatedTo(sourceType, targetType, assignableRelation, /*errorNode*/ undefined);
         }
 
+        function isImplementationCompatibleWithOverload(implementation: Signature, overload: Signature): boolean {
+            const erasedSource = getErasedSignature(implementation);
+            const erasedTarget = getErasedSignature(overload);
+
+            const sourceReturnType = getReturnTypeOfSignature(erasedSource);
+            const targetReturnType = getReturnTypeOfSignature(erasedTarget);
+            if (checkTypeRelatedTo(sourceReturnType, targetReturnType, assignableRelation, /*errorNode*/ undefined)
+                || checkTypeRelatedTo(targetReturnType, sourceReturnType, assignableRelation, /*errorNode*/ undefined)) {
+                const anyReturningSource = cloneSignature(erasedSource);
+                const anyReturningTarget = cloneSignature(erasedTarget);
+                anyReturningSource.resolvedReturnType = anyType;
+                anyReturningTarget.resolvedReturnType = anyType;
+
+                const anyReturningSourceType = getOrCreateTypeFromSignature(anyReturningSource);
+                const anyReturningTargetType = getOrCreateTypeFromSignature(anyReturningTarget);
+                return checkTypeRelatedTo(anyReturningSourceType, anyReturningTargetType, assignableRelation, /*errorNode*/ undefined);
+            }
+        }
+
         /**
          * Checks if 'source' is related to 'target' (e.g.: is a assignable to).
          * @param source The left-hand-side of the relation.
@@ -11683,7 +11702,7 @@ namespace ts {
                         //
                         // The implementation is completely unrelated to the specialized signature, yet we do not check this.
                         for (const signature of signatures) {
-                            if (!signature.hasStringLiterals && !isSignatureAssignableTo(bodySignature, signature)) {
+                            if (!signature.hasStringLiterals && !isImplementationCompatibleWithOverload(bodySignature, signature)) {
                                 error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
                                 break;
                             }
