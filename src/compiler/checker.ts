@@ -15971,10 +15971,7 @@ namespace ts {
 
                 // Modifiers cannot appear in property assignments
                 forEach(prop.modifiers, mod => {
-                    if (mod.kind !== SyntaxKind.AsyncKeyword) {
-                        grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
-                    }
-                    else if (prop.kind !== SyntaxKind.MethodDeclaration) {
+                    if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
                         grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
                     }
                 });
