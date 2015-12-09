@@ -61,6 +61,7 @@ namespace ts {
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
+            isUnknownSymbol: symbol => symbol === unknownSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
 
@@ -7979,6 +7980,7 @@ namespace ts {
                     if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, JsxNames.IntrinsicElements);
                     }
+                    return unknownSymbol;
                 }
             }
 
@@ -14574,7 +14576,7 @@ namespace ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags, includeAllGlobalSymbols: boolean): Symbol[] {
             const symbols: SymbolTable = {};
             let memberFlags: NodeFlags = 0;
 
@@ -14637,7 +14639,9 @@ namespace ts {
                     location = location.parent;
                 }
 
-                copySymbols(globals, meaning);
+                if (includeAllGlobalSymbols) {
+                    copySymbols(globals, meaning);
+                }
             }
 
             /**

@@ -1717,7 +1717,7 @@ namespace ts {
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
 
-        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
+        getSymbolsInScope(location: Node, meaning: SymbolFlags, includeAllGlobalSymbols: boolean): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;
@@ -1733,6 +1733,7 @@ namespace ts {
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
+        isUnknownSymbol(symbol: Symbol): boolean;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
