@@ -6904,7 +6904,7 @@ namespace ts {
                                         .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members) {
-                        return createAnonymousType(undefined, classSymbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                        return getInferredClassType(classSymbol);
                     }
                 }
             }
