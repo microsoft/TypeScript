@@ -5,7 +5,7 @@
 
 namespace ts.server {
     const spaceCache: string[] = [];
-
+ha
     interface StackTraceError extends Error {
         stack?: string;
     }
@@ -949,7 +949,7 @@ namespace ts.server {
         exit() {
         }
 
-        private handlers: Map<(request: protocol.Request) => {response?: any, responseRequired?: boolean}> = {
+        handlers: Map<(request: protocol.Request) => {response?: any, responseRequired?: boolean}> = {
             [CommandNames.Exit]: () => {
                 this.exit();
                 return { responseRequired: false};
