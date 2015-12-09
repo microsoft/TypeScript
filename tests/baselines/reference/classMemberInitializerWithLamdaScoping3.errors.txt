@@ -1,4 +1,4 @@
-tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts(4,14): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts(4,14): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts(8,21): error TS2301: Initializer of instance member variable 'messageHandler' cannot reference identifier 'field1' declared in the constructor.
 
 
@@ -11,7 +11,7 @@ tests/cases/compiler/classMemberInitializerWithLamdaScoping3_1.ts(8,21): error T
     };
     export class Test1 {
                  ~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
         constructor(private field1: string) {
         }
         messageHandler = () => {

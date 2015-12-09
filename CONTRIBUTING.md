@@ -36,10 +36,12 @@ Your pull request should:
  
 The library sources are in: [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
 
-To build the library files, run
+Library files in `built/local/` are updated by running
 ```Shell
-jake lib
+jake
 ```
+
+The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
 
 #### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
 

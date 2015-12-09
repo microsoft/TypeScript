@@ -290,7 +290,6 @@ exports.a8 = function_module_2.a;
 var class_module_2 = require("class-module");
 exports.a0 = class_module_2.a;
 // export-star
-__export(require("interface"));
 __export(require("variable"));
 __export(require("interface-variable"));
 __export(require("module"));
