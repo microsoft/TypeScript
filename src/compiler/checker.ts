@@ -5103,7 +5103,7 @@ namespace ts {
                         const targetPredicate = target as PredicateType;
                         if (sourcePredicate.predicate.kind !== targetPredicate.predicate.kind) {
                             if (reportErrors) {
-                                reportError(Diagnostics.A_this_based_type_guard_is_not_assignable_to_a_parameter_based_type_guard);
+                                reportError(Diagnostics.A_this_based_type_guard_is_not_compatible_with_a_parameter_based_type_guard);
                                 reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
                             }
                             return Ternary.False;
@@ -6506,10 +6506,7 @@ namespace ts {
 
             function isAssignedInBinaryExpression(node: BinaryExpression) {
                 if (node.operatorToken.kind >= SyntaxKind.FirstAssignment && node.operatorToken.kind <= SyntaxKind.LastAssignment) {
-                    let n = node.left;
-                    while (n.kind === SyntaxKind.ParenthesizedExpression) {
-                        n = (<ParenthesizedExpression>n).expression;
-                    }
+                    const n = skipParenthesizedNodes(node.left);
                     if (n.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>n) === symbol) {
                         return true;
                     }
@@ -6844,13 +6841,6 @@ namespace ts {
                 return type;
             }
 
-            function skipParenthesizedNodes(expression: Expression): Expression {
-                while (expression.kind === SyntaxKind.ParenthesizedExpression) {
-                    expression = (expression as ParenthesizedExpression).expression;
-                }
-                return expression;
-            }
-
             function getSymbolAtTypePredicatePosition(expr: Expression): Symbol {
                 expr = skipParenthesizedNodes(expr);
                 switch (expr.kind) {
@@ -6895,6 +6885,13 @@ namespace ts {
                 }
                 return type;
             }
+        }
+
+        function skipParenthesizedNodes(expression: Expression): Expression {
+            while (expression.kind === SyntaxKind.ParenthesizedExpression) {
+                expression = (expression as ParenthesizedExpression).expression;
+            }
+            return expression;
         }
 
         function checkIdentifier(node: Identifier): Type {
@@ -11085,7 +11082,7 @@ namespace ts {
             return -1;
         }
 
-        function isInLegalTypePredicatePosition(node: Node): boolean {
+        function isInLegalParameterTypePredicatePosition(node: Node): boolean {
             switch (node.parent.kind) {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.CallSignature:
@@ -11100,7 +11097,7 @@ namespace ts {
         }
 
         function isInLegalThisTypePredicatePosition(node: Node): boolean {
-            if (isInLegalTypePredicatePosition(node)) {
+            if (isInLegalParameterTypePredicatePosition(node)) {
                 return true;
             }
             switch (node.parent.kind) {
@@ -14332,12 +14329,12 @@ namespace ts {
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
-            if (node.parameterName.kind === SyntaxKind.Identifier && !isInLegalTypePredicatePosition(node)) {
+            if (node.parameterName.kind === SyntaxKind.Identifier && !isInLegalParameterTypePredicatePosition(node)) {
                 error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
             }
             else if (node.parameterName.kind === SyntaxKind.ThisType) {
                 if (!isInLegalThisTypePredicatePosition(node)) {
-                    error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_in_class_or_interface_members_get_accessors_or_return_type_positions_for_functions_and_methods);
+                    error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_within_a_class_or_interface_s_members_get_accessors_or_return_type_positions_for_functions_and_methods);
                 }
                 else {
                     getTypeFromThisTypeNode(node.parameterName as ThisTypeNode);

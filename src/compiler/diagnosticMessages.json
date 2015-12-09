@@ -1647,11 +1647,11 @@
         "category": "Error",
         "code": 2517
     },
-    "A 'this'-based type guard is not assignable to a parameter-based type guard": {
+    "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
         "category": "Error",
         "code": 2518
     },
-    "A 'this'-based type predicate is only allowed in class or interface members, get accessors, or return type positions for functions and methods": {
+    "A 'this'-based type predicate is only allowed within a class or interface's members, get accessors, or return type positions for functions and methods.": {
         "category": "Error",
         "code": 2519
     },
