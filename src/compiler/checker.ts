@@ -15969,7 +15969,7 @@ namespace ts {
                     return grammarErrorOnNode((<ShorthandPropertyAssignment>prop).equalsToken, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
                 }
 
-                // Modifiers cannot appear in property assignments
+                // Modifiers are never allowed on properties except for 'async' on a method declaration
                 forEach(prop.modifiers, mod => {
                     if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
                         grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
