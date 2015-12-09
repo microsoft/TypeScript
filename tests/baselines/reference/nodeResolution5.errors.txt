@@ -1,0 +1,14 @@
+tests/cases/compiler/b.ts(1,20): error TS2656: Exported external package typings file 'tests/cases/compiler/node_modules/a.d.ts' is not a module. Please contact the package author to update the package definition.
+
+
+==== tests/cases/compiler/b.ts (1 errors) ====
+    import y = require("a"); 
+                       ~~~
+!!! error TS2656: Exported external package typings file 'a.d.ts' is not a module. Please contact the package author to update the package definition.
+    
+==== tests/cases/compiler/node_modules/a.d.ts (0 errors) ====
+    
+    declare module "a" {
+        var x: number;
+    }
+    

@@ -18,6 +18,7 @@ export class B {
 
 
 //// [decoratorMetadataOnInferredType.js]
+"use strict";
 var A = (function () {
     function A() {
         console.log('new A');
@@ -33,7 +34,7 @@ var B = (function () {
     __decorate([
         decorator, 
         __metadata('design:type', Object)
-    ], B.prototype, "x");
+    ], B.prototype, "x", void 0);
     return B;
 })();
 exports.B = B;

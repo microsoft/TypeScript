@@ -1,4 +1,5 @@
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck31.ts(2,11): error TS2322: Type 'IterableIterator<(x: any) => any>' is not assignable to type '() => Iterable<(x: string) => number>'.
+  Type 'IterableIterator<(x: any) => any>' provides no match for the signature '(): Iterable<(x: string) => number>'
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck31.ts (1 errors) ====
@@ -10,4 +11,5 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck31.ts(2,11): erro
         } ()
     ~~~~~~~~
 !!! error TS2322: Type 'IterableIterator<(x: any) => any>' is not assignable to type '() => Iterable<(x: string) => number>'.
+!!! error TS2322:   Type 'IterableIterator<(x: any) => any>' provides no match for the signature '(): Iterable<(x: string) => number>'
     }

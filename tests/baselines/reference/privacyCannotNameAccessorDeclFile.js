@@ -35,7 +35,7 @@ export module SpecializedWidget {
 
 //// [privacyCannotNameAccessorDeclFile_exporter.ts]
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
-import Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
+import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -51,7 +51,7 @@ export function createExportedWidget4() {
 }
 
 //// [privacyCannotNameAccessorDeclFile_consumer.ts]
-import exporter = require("privacyCannotNameAccessorDeclFile_exporter");
+import exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 export class publicClassWithWithPrivateGetAccessorTypes {
     static get myPublicStaticMethod() { // Error
         return exporter.createExportedWidget1();
@@ -138,6 +138,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.js]
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
+"use strict";
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -164,8 +165,9 @@ var SpecializedWidget;
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
+"use strict";
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
-var Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
+var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -184,7 +186,8 @@ function createExportedWidget4() {
 }
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameAccessorDeclFile_consumer.js]
-var exporter = require("privacyCannotNameAccessorDeclFile_exporter");
+"use strict";
+var exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
 var publicClassWithWithPrivateGetAccessorTypes = (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
     }
@@ -403,7 +406,7 @@ export declare module SpecializedWidget {
 }
 //// [privacyCannotNameAccessorDeclFile_exporter.d.ts]
 /// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
-import Widgets = require("privacyCannotNameAccessorDeclFile_Widgets");
+import Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;

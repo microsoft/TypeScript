@@ -1,3 +1,4 @@
+"use strict";
 var m1 = require("ref/m1");
 var m2 = require("../outputdir_module_multifolder_ref/m2");
 exports.a1 = 10;

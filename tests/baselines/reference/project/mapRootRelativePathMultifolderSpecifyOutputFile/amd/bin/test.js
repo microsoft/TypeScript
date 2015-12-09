@@ -30,4 +30,4 @@ var instance1 = new c1();
 function f1() {
     return instance1;
 }
-//# sourceMappingURL=../../mapFiles/test.js.map
+//# sourceMappingURL=../../../mapFiles/test.js.map

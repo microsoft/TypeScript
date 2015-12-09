@@ -102,6 +102,7 @@ export var publicUse_im_private_mu_public: im_private_mu_public.i;
 
 //// [privacyTopLevelInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     // private elements
     var m_private;
     (function (m_private) {

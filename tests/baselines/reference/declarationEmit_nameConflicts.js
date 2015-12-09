@@ -5,7 +5,7 @@ module f { export class c { } }
 export = f;
 
 //// [declarationEmit_nameConflicts_0.ts]
-import im = require('declarationEmit_nameConflicts_1');
+import im = require('./declarationEmit_nameConflicts_1');
 export module M {
     export function f() { }
     export class C { }
@@ -50,6 +50,7 @@ export module M.Q {
 }
 
 //// [declarationEmit_nameConflicts_1.js]
+"use strict";
 var f;
 (function (f) {
     var c = (function () {
@@ -61,7 +62,8 @@ var f;
 })(f || (f = {}));
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
-var im = require('declarationEmit_nameConflicts_1');
+"use strict";
+var im = require('./declarationEmit_nameConflicts_1');
 var M;
 (function (M) {
     function f() { }
@@ -138,7 +140,7 @@ declare module f {
 }
 export = f;
 //// [declarationEmit_nameConflicts_0.d.ts]
-import im = require('declarationEmit_nameConflicts_1');
+import im = require('./declarationEmit_nameConflicts_1');
 export declare module M {
     function f(): void;
     class C {

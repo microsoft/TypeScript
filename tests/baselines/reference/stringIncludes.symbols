@@ -5,11 +5,11 @@ var includes: boolean;
 
 includes = "abcde".includes("cd");
 >includes : Symbol(includes, Decl(stringIncludes.ts, 1, 3))
->"abcde".includes : Symbol(String.includes, Decl(lib.d.ts, 4222, 37))
->includes : Symbol(String.includes, Decl(lib.d.ts, 4222, 37))
+>"abcde".includes : Symbol(String.includes, Decl(lib.d.ts, --, --))
+>includes : Symbol(String.includes, Decl(lib.d.ts, --, --))
 
 includes = "abcde".includes("cd", 2);
 >includes : Symbol(includes, Decl(stringIncludes.ts, 1, 3))
->"abcde".includes : Symbol(String.includes, Decl(lib.d.ts, 4222, 37))
->includes : Symbol(String.includes, Decl(lib.d.ts, 4222, 37))
+>"abcde".includes : Symbol(String.includes, Decl(lib.d.ts, --, --))
+>includes : Symbol(String.includes, Decl(lib.d.ts, --, --))
 

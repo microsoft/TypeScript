@@ -14,15 +14,15 @@ var fa: number[];
 
 fa = fa.concat([0]);
 >fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->fa.concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>fa.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 fa = fa.concat(0);
 >fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->fa.concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>fa.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->concat : Symbol(Array.concat, Decl(lib.d.ts, 1025, 13), Decl(lib.d.ts, 1030, 46))
+>concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 
 

@@ -13,6 +13,7 @@ var y:number = x.test;
 
 
 //// [foo_0.js]
+"use strict";
 var Foo = (function () {
     function Foo() {
     }
@@ -20,6 +21,7 @@ var Foo = (function () {
 })();
 module.exports = Foo;
 //// [foo_1.js]
+"use strict";
 var foo = require("./foo_0");
 var x = new foo();
 var y = x.test;

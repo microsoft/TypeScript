@@ -1,12 +1,13 @@
 /// <reference path="harness.ts" />
 /// <reference path="runnerbase.ts" />
+/* tslint:disable:no-null */
 
 class Test262BaselineRunner extends RunnerBase {
     private static basePath = "internal/cases/test262";
     private static helpersFilePath = "tests/cases/test262-harness/helpers.d.ts";
-    private static helperFile = {
+    private static helperFile: Harness.Compiler.TestFile = {
         unitName: Test262BaselineRunner.helpersFilePath,
-        content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath)
+        content: Harness.IO.readFile(Test262BaselineRunner.helpersFilePath),
     };
     private static testFileExtensionRegex = /\.js$/;
     private static options: ts.CompilerOptions = {
@@ -30,17 +31,17 @@ class Test262BaselineRunner extends RunnerBase {
             let testState: {
                 filename: string;
                 compilerResult: Harness.Compiler.CompilerResult;
-                inputFiles: { unitName: string; content: string }[];
-                program: ts.Program;
+                inputFiles: Harness.Compiler.TestFile[];
             };
 
             before(() => {
-                let content = Harness.IO.readFile(filePath);
-                let testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
-                let testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, testFilename);
+                const content = Harness.IO.readFile(filePath);
+                const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
+                const testCaseContent = Harness.TestCaseParser.makeUnitsFromTest(content, testFilename);
 
-                let inputFiles = testCaseContent.testUnitData.map(unit => {
-                    return { unitName: Test262BaselineRunner.getTestFilePath(unit.name), content: unit.content };
+                const inputFiles: Harness.Compiler.TestFile[] = testCaseContent.testUnitData.map(unit => {
+                    const unitName = Test262BaselineRunner.getTestFilePath(unit.name);
+                    return { unitName, content: unit.content };
                 });
 
                 // Emit the results
@@ -48,13 +49,16 @@ class Test262BaselineRunner extends RunnerBase {
                     filename: testFilename,
                     inputFiles: inputFiles,
                     compilerResult: undefined,
-                    program: undefined,
                 };
 
-                Harness.Compiler.getCompiler().compileFiles([Test262BaselineRunner.helperFile].concat(inputFiles), /*otherFiles*/ [], (compilerResult, program) => {
-                    testState.compilerResult = compilerResult;
-                    testState.program = program;
-                }, /*settingsCallback*/ undefined, Test262BaselineRunner.options);
+                const output = Harness.Compiler.compileFiles(
+                    [Test262BaselineRunner.helperFile].concat(inputFiles),
+                    /*otherFiles*/ [],
+                    /* harnessOptions */ undefined,
+                    Test262BaselineRunner.options,
+                    /* currentDirectory */ undefined
+                    );
+                testState.compilerResult = output.result;
             });
 
             after(() => {
@@ -63,14 +67,14 @@ class Test262BaselineRunner extends RunnerBase {
 
             it("has the expected emitted code", () => {
                 Harness.Baseline.runBaseline("has the expected emitted code", testState.filename + ".output.js", () => {
-                    let files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
+                    const files = testState.compilerResult.files.filter(f => f.fileName !== Test262BaselineRunner.helpersFilePath);
                     return Harness.Compiler.collateOutputs(files);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
 
             it("has the expected errors", () => {
                 Harness.Baseline.runBaseline("has the expected errors", testState.filename + ".errors.txt", () => {
-                    let errors = testState.compilerResult.errors;
+                    const errors = testState.compilerResult.errors;
                     if (errors.length === 0) {
                         return null;
                     }
@@ -79,14 +83,14 @@ class Test262BaselineRunner extends RunnerBase {
                 }, false, Test262BaselineRunner.baselineOptions);
             });
 
-            it("satisfies inletiants", () => {
-                let sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+            it("satisfies invariants", () => {
+                const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                 Utils.assertInvariants(sourceFile, /*parent:*/ undefined);
             });
 
             it("has the expected AST", () => {
                 Harness.Baseline.runBaseline("has the expected AST", testState.filename + ".AST.txt", () => {
-                    let sourceFile = testState.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
+                    const sourceFile = testState.compilerResult.program.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename));
                     return Utils.sourceFileToJSON(sourceFile);
                 }, false, Test262BaselineRunner.baselineOptions);
             });
@@ -96,7 +100,7 @@ class Test262BaselineRunner extends RunnerBase {
     public initializeTests() {
         // this will set up a series of describe/it blocks to run between the setup and cleanup phases
         if (this.tests.length === 0) {
-            let testFiles = this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true });
+            const testFiles = this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true });
             testFiles.forEach(fn => {
                 this.runTest(ts.normalizePath(fn));
             });

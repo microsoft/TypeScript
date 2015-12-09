@@ -5,17 +5,20 @@
 export var a = 10;
 
 //// [es6ImportNamedImportInExportAssignment_1.ts]
-import { a } from "es6ImportNamedImportInExportAssignment_0";
+import { a } from "./es6ImportNamedImportInExportAssignment_0";
 export = a;
 
 //// [es6ImportNamedImportInExportAssignment_0.js]
-export var a = 10;
+"use strict";
+exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
-import { a } from "es6ImportNamedImportInExportAssignment_0";
+"use strict";
+var es6ImportNamedImportInExportAssignment_0_1 = require("./es6ImportNamedImportInExportAssignment_0");
+module.exports = es6ImportNamedImportInExportAssignment_0_1.a;
 
 
 //// [es6ImportNamedImportInExportAssignment_0.d.ts]
 export declare var a: number;
 //// [es6ImportNamedImportInExportAssignment_1.d.ts]
-import { a } from "es6ImportNamedImportInExportAssignment_0";
+import { a } from "./es6ImportNamedImportInExportAssignment_0";
 export = a;

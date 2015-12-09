@@ -14,6 +14,7 @@ enum void {}
 
 
 //// [reservedWords2.js]
+"use strict";
 require();
 while ( = require("dfdf"))
     ;

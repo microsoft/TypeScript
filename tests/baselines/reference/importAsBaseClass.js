@@ -6,11 +6,12 @@ export class Greeter {
 }
 
 //// [importAsBaseClass_1.ts]
-import Greeter = require("importAsBaseClass_0");
+import Greeter = require("./importAsBaseClass_0");
 class Hello extends Greeter { }
 
 
 //// [importAsBaseClass_0.js]
+"use strict";
 var Greeter = (function () {
     function Greeter() {
     }
@@ -19,12 +20,13 @@ var Greeter = (function () {
 })();
 exports.Greeter = Greeter;
 //// [importAsBaseClass_1.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Greeter = require("importAsBaseClass_0");
+var Greeter = require("./importAsBaseClass_0");
 var Hello = (function (_super) {
     __extends(Hello, _super);
     function Hello() {

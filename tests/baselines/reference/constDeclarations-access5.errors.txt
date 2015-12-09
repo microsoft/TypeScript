@@ -1,5 +1,3 @@
-error TS1204: Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.
-tests/cases/compiler/constDeclarations_access_2.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from "mod"', 'import {a} from "mod"' or 'import d from "mod"' instead.
 tests/cases/compiler/constDeclarations_access_2.ts(4,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
 tests/cases/compiler/constDeclarations_access_2.ts(5,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
 tests/cases/compiler/constDeclarations_access_2.ts(6,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
@@ -20,12 +18,9 @@ tests/cases/compiler/constDeclarations_access_2.ts(22,3): error TS2449: The oper
 tests/cases/compiler/constDeclarations_access_2.ts(24,1): error TS2450: Left-hand side of assignment expression cannot be a constant.
 
 
-!!! error TS1204: Cannot compile modules into 'commonjs', 'amd', 'system' or 'umd' when targeting 'ES6' or higher.
-==== tests/cases/compiler/constDeclarations_access_2.ts (19 errors) ====
+==== tests/cases/compiler/constDeclarations_access_2.ts (18 errors) ====
     ///<reference path='constDeclarations_access_1.ts'/>
     import m = require('constDeclarations_access_1');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1202: Import assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'import * as ns from "mod"', 'import {a} from "mod"' or 'import d from "mod"' instead.
     // Errors
     m.x = 1;
     ~~~

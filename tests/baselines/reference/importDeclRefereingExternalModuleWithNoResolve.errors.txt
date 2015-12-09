@@ -1,18 +1,18 @@
-tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(1,20): error TS2307: Cannot find module 'externalModule'.
-tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(2,16): error TS2435: Ambient modules cannot be nested in other modules.
+tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(2,16): error TS2435: Ambient modules cannot be nested in other modules or namespaces.
 tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(3,26): error TS2307: Cannot find module 'externalModule'.
 
 
 ==== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts (4 errors) ====
     import b = require("externalModule");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
                        ~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'externalModule'.
     declare module "m1" {
                    ~~~~
-!!! error TS2435: Ambient modules cannot be nested in other modules.
+!!! error TS2435: Ambient modules cannot be nested in other modules or namespaces.
         import im2 = require("externalModule");
                              ~~~~~~~~~~~~~~~~
 !!! error TS2307: Cannot find module 'externalModule'.

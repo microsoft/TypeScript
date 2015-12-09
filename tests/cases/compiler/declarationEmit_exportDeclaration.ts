@@ -8,7 +8,7 @@ export function bar() { }
 export interface Buzz { }
 
 // @filename: index.ts
-import {foo, bar, Buzz} from "utils";
+import {foo, bar, Buzz} from "./utils";
 
 foo();
 let obj: Buzz;

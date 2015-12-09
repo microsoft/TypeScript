@@ -7,7 +7,7 @@ class TesterB {
 export = TesterB;
 
 //// [unusedImportDeclaration_testerA.ts]
-import B = require("unusedImportDeclaration_testerB");
+import B = require("./unusedImportDeclaration_testerB");
 var thingy: B = {
     me: "A"
 };
@@ -16,6 +16,7 @@ foo("IN " + thingy.me + "!");
 
 
 //// [unusedImportDeclaration_testerB.js]
+"use strict";
 var TesterB = (function () {
     function TesterB() {
     }
@@ -23,6 +24,7 @@ var TesterB = (function () {
 })();
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
+"use strict";
 var thingy = {
     me: "A"
 };

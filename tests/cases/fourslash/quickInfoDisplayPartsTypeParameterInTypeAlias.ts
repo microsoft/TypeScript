@@ -3,9 +3,6 @@
 ////type /*0*/List</*1*/T> = /*2*/T[]
 ////type /*3*/List2</*4*/T extends string> = /*5*/T[];
 
-type List2<T extends string> = T[];
-
-type L<T> = T[]
 let typeAliashDisplayParts = [{ text: "type", kind: "keyword" }, { text: " ", kind: "space" }, { text: "List", kind: "aliasName" },
     { text: "<", kind: "punctuation" }, { text: "T", kind: "typeParameterName" }, { text: ">", kind: "punctuation" }];
 

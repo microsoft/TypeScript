@@ -123,6 +123,7 @@ namespace ts.formatting {
         public SpaceAfterModuleName: Rule;
 
         // Lambda expressions
+        public SpaceBeforeArrow: Rule;
         public SpaceAfterArrow: Rule;
 
         // Optional parameters and let args
@@ -214,10 +215,13 @@ namespace ts.formatting {
         public SpaceBetweenYieldOrYieldStarAndOperand: Rule;
 
         // Async functions
+        public SpaceBetweenAsyncAndOpenParen: Rule;
         public SpaceBetweenAsyncAndFunctionKeyword: Rule;
 
-        // Tagged template string
+        // Template strings
         public SpaceBetweenTagAndTemplateString: Rule;
+        public NoSpaceAfterTemplateHeadAndMiddle: Rule;
+        public NoSpaceBeforeTemplateMiddleAndTail: Rule;
 
         constructor() {
             ///
@@ -251,7 +255,7 @@ namespace ts.formatting {
 
             // No space before and after indexer
             this.NoSpaceBeforeOpenBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext ), RuleAction.Delete));
+            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext), RuleAction.Delete));
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
@@ -339,6 +343,7 @@ namespace ts.formatting {
             this.SpaceAfterModuleName = new Rule(RuleDescriptor.create1(SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsModuleDeclContext), RuleAction.Space));
 
             // Lambda expressions
+            this.SpaceBeforeArrow = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.EqualsGreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceAfterArrow = new Rule(RuleDescriptor.create3(SyntaxKind.EqualsGreaterThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // Optional parameters and let args
@@ -367,14 +372,16 @@ namespace ts.formatting {
             this.SpaceBetweenYieldOrYieldStarAndOperand = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.YieldKeyword, SyntaxKind.AsteriskToken]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsYieldOrYieldStarWithOperand), RuleAction.Space));
 
             // Async-await
+            this.SpaceBetweenAsyncAndOpenParen = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken), RuleOperation.create2(new RuleOperationContext(Rules.IsArrowFunctionContext, Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceBetweenAsyncAndFunctionKeyword = new Rule(RuleDescriptor.create1(SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // template string
             this.SpaceBetweenTagAndTemplateString = new Rule(RuleDescriptor.create3(SyntaxKind.Identifier, Shared.TokenRange.FromTokens([SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.NoSpaceAfterTemplateHeadAndMiddle = new Rule(RuleDescriptor.create4(Shared.TokenRange.FromTokens([SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle]), Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
+            this.NoSpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // These rules are higher in priority than user-configurable rules.
-            this.HighPriorityCommonRules =
-            [
+            this.HighPriorityCommonRules = [
                 this.IgnoreBeforeComment, this.IgnoreAfterLineComment,
                 this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQuestionMark, this.SpaceAfterQuestionMarkInConditionalOperator,
                 this.NoSpaceAfterQuestionMark,
@@ -398,14 +405,14 @@ namespace ts.formatting {
                 this.NoSpaceBeforeOpenParenInFuncCall,
                 this.SpaceBeforeBinaryKeywordOperator, this.SpaceAfterBinaryKeywordOperator,
                 this.SpaceAfterVoidOperator,
-                this.SpaceBetweenAsyncAndFunctionKeyword,
-                this.SpaceBetweenTagAndTemplateString,
+                this.SpaceBetweenAsyncAndOpenParen, this.SpaceBetweenAsyncAndFunctionKeyword,
+                this.SpaceBetweenTagAndTemplateString, this.NoSpaceAfterTemplateHeadAndMiddle, this.NoSpaceBeforeTemplateMiddleAndTail,
 
                 // TypeScript-specific rules
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
                 this.SpaceAfterCertainTypeScriptKeywords, this.SpaceBeforeCertainTypeScriptKeywords,
                 this.SpaceAfterModuleName,
-                this.SpaceAfterArrow,
+                this.SpaceBeforeArrow, this.SpaceAfterArrow,
                 this.NoSpaceAfterEllipsis,
                 this.NoSpaceAfterOptionalParameters,
                 this.NoSpaceBetweenEmptyInterfaceBraceBrackets,
@@ -421,8 +428,7 @@ namespace ts.formatting {
             ];
 
             // These rules are lower in priority than user-configurable rules.
-            this.LowPriorityCommonRules =
-            [
+            this.LowPriorityCommonRules = [
                 this.NoSpaceBeforeSemicolon,
                 this.SpaceBeforeOpenBraceInControl, this.SpaceBeforeOpenBraceInFunction, this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock,
                 this.NoSpaceBeforeComma,
@@ -705,6 +711,10 @@ namespace ts.formatting {
             return context.currentTokenSpan.kind !== SyntaxKind.CommaToken;
         }
 
+        static IsArrowFunctionContext(context: FormattingContext): boolean {
+            return context.contextNode.kind === SyntaxKind.ArrowFunction;
+        }
+
         static IsSameLineTokenContext(context: FormattingContext): boolean {
             return context.TokensAreOnSameLine();
         }
@@ -728,7 +738,7 @@ namespace ts.formatting {
         }
 
         static IsStartOfVariableDeclarationList(context: FormattingContext): boolean {
-            return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList && 
+            return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList &&
                 context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
         }
 

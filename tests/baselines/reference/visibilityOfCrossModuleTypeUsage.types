@@ -1,5 +1,5 @@
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs.ts ===
-import commands = require('visibilityOfCrossModuleTypeUsage_commands');
+import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 >commands : typeof commands
 
 function run(configuration: commands.IConfiguration) {
@@ -23,10 +23,10 @@ function run(configuration: commands.IConfiguration) {
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
 //visibilityOfCrossModuleTypeUsage
 
-import fs = require('visibilityOfCrossModuleTypeUsage_fs');
+import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
 >fs : typeof fs
 
-import server = require('visibilityOfCrossModuleTypeUsage_server');
+import server = require('./visibilityOfCrossModuleTypeUsage_server');
 >server : typeof server
 
 export interface IConfiguration {

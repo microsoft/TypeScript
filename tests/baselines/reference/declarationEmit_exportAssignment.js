@@ -7,16 +7,18 @@ export function bar() { }
 export interface Buzz { }
 
 //// [index.ts]
-import {foo} from "utils";
+import {foo} from "./utils";
 export = foo;
 
 //// [utils.js]
+"use strict";
 function foo() { }
 exports.foo = foo;
 function bar() { }
 exports.bar = bar;
 //// [index.js]
-var utils_1 = require("utils");
+"use strict";
+var utils_1 = require("./utils");
 module.exports = utils_1.foo;
 
 
@@ -26,5 +28,5 @@ export declare function bar(): void;
 export interface Buzz {
 }
 //// [index.d.ts]
-import { foo } from "utils";
+import { foo } from "./utils";
 export = foo;

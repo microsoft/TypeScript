@@ -16,11 +16,12 @@ export class C2 implements I2 {
 }
 
 //// [client.ts]
-import { C, I, C2 } from "server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 export type cValInterface = I;
 export var cVal = new C();
 
 //// [server.js]
+"use strict";
 var C = (function () {
     function C() {
         this.prop = "hello";
@@ -36,7 +37,8 @@ var C2 = (function () {
 })();
 exports.C2 = C2;
 //// [client.js]
-var server_1 = require("server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
+"use strict";
+var server_1 = require("./server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 exports.cVal = new server_1.C();
 
 
@@ -54,6 +56,6 @@ export declare class C2 implements I2 {
     prop2: string;
 }
 //// [client.d.ts]
-import { C, I } from "server";
+import { C, I } from "./server";
 export declare type cValInterface = I;
 export declare var cVal: C;
