@@ -189,5 +189,5 @@ namespace ts.server {
         ioSession.listen();
     });
 
-    module.export = ts;
+    module.exports = ts;
 }
