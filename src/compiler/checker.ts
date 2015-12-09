@@ -2671,11 +2671,6 @@ namespace ts {
                         // Handle exports.p = expr or this.p = expr or className.prototype.method = expr
                         return links.type = checkExpressionCached((<BinaryExpression>declaration.parent).right);
                     }
-                    else {
-                        // Declaration for className.prototype in inferred JS class
-                        const type = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, undefined, undefined);
-                        return links.type = type;
-                    }
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -6908,7 +6903,7 @@ namespace ts {
                                         .expression as PropertyAccessExpression) // x.prototype
                                         .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
-                    if (classSymbol.members) {
+                    if (classSymbol && classSymbol.members) {
                         return createAnonymousType(undefined, classSymbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
                     }
                 }
@@ -9635,6 +9630,14 @@ namespace ts {
             return links.resolvedSignature;
         }
 
+        function getInferredClassType(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.inferredClassType) {
+                links.inferredClassType = createAnonymousType(undefined, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+            }
+            return links.inferredClassType;
+        }
+
         /**
          * Syntactically and semantically checks a call or new expression.
          * @param node The call/new expression to be checked.
@@ -9661,7 +9664,7 @@ namespace ts {
                     // in a JS file
                     const funcSymbol = checkExpression(node.expression).symbol;
                     if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function)) {
-                        return createAnonymousType(undefined, funcSymbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                        return getInferredClassType(funcSymbol);
                     }
                     else if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
