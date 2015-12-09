@@ -5,6 +5,7 @@
 
 namespace ts.server {
     const spaceCache: string[] = [];
+
     interface StackTraceError extends Error {
         stack?: string;
     }
