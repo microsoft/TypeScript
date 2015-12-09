@@ -6,6 +6,10 @@ namespace Test {
 	export class FileSystemObject {
 >FileSystemObject : FileSystemObject
 
+		isFSO: this is FileSystemObject;
+>isFSO : this is FileSystemObject
+>FileSystemObject : FileSystemObject
+
 		get isFile(): this is File {
 >isFile : this is File
 >File : File
@@ -79,23 +83,21 @@ namespace Test {
 >isNetworked : this is Networked & FileSystemObject
 >false : boolean
 
-	file.isNetworked = file.isDirectory;
->file.isNetworked = file.isDirectory : this is Directory
->file.isNetworked : this is Networked & FileSystemObject
+	file.isFSO = file.isFile;
+>file.isFSO = file.isFile : this is File
+>file.isFSO : this is FileSystemObject
 >file : FileSystemObject
->isNetworked : this is Networked & FileSystemObject
->file.isDirectory : this is Directory
->file : FileSystemObject
->isDirectory : this is Directory
-
-	file.isFile = file.isNetworked;
->file.isFile = file.isNetworked : this is Networked & FileSystemObject
+>isFSO : this is FileSystemObject
 >file.isFile : this is File
 >file : FileSystemObject
 >isFile : this is File
->file.isNetworked : this is Networked & FileSystemObject
+
+	file.isFile = true;
+>file.isFile = true : boolean
+>file.isFile : this is File
 >file : FileSystemObject
->isNetworked : this is Networked & FileSystemObject
+>isFile : this is File
+>true : boolean
 
 	let x = file.isFile;
 >x : boolean

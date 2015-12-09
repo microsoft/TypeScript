@@ -123,8 +123,8 @@ namespace ts {
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
-        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
+        const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
 
         const globals: SymbolTable = {};
 
@@ -2074,15 +2074,7 @@ namespace ts {
                 }
                 writeSpace(writer);
 
-                let returnType: Type;
-                const predicate = signature.typePredicate;
-                if (predicate) {
-                    buildTypePredicateDisplay(writer, predicate);
-                    returnType = predicate.type;
-                }
-                else {
-                    returnType = getReturnTypeOfSignature(signature);
-                }
+                const returnType = getReturnTypeOfSignature(signature);
                 buildTypeDisplay(returnType, writer, enclosingDeclaration, flags, symbolStack);
             }
 
@@ -3378,13 +3370,12 @@ namespace ts {
         }
 
         function createSignature(declaration: SignatureDeclaration, typeParameters: TypeParameter[], parameters: Symbol[],
-            resolvedReturnType: Type, typePredicate: IdentifierTypePredicate | ThisTypePredicate, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
+            resolvedReturnType: Type, minArgumentCount: number, hasRestParameter: boolean, hasStringLiterals: boolean): Signature {
             const sig = new Signature(checker);
             sig.declaration = declaration;
             sig.typeParameters = typeParameters;
             sig.parameters = parameters;
             sig.resolvedReturnType = resolvedReturnType;
-            sig.typePredicate = typePredicate;
             sig.minArgumentCount = minArgumentCount;
             sig.hasRestParameter = hasRestParameter;
             sig.hasStringLiterals = hasStringLiterals;
@@ -3392,13 +3383,13 @@ namespace ts {
         }
 
         function cloneSignature(sig: Signature): Signature {
-            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType, sig.typePredicate,
+            return createSignature(sig.declaration, sig.typeParameters, sig.parameters, sig.resolvedReturnType,
                 sig.minArgumentCount, sig.hasRestParameter, sig.hasStringLiterals);
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             if (!hasClassBaseType(classType)) {
-                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, undefined, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
+                return [createSignature(undefined, classType.localTypeParameters, emptyArray, classType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false)];
             }
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
             const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
@@ -3924,15 +3915,11 @@ namespace ts {
                 }
 
                 let returnType: Type;
-                let typePredicate: IdentifierTypePredicate | ThisTypePredicate;
                 if (classType) {
                     returnType = classType;
                 }
                 else if (declaration.type) {
                     returnType = getTypeFromTypeNode(declaration.type);
-                    if (declaration.type.kind === SyntaxKind.TypePredicate) {
-                        typePredicate = createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode);
-                    }
                 }
                 else {
                     // TypeScript 1.0 spec (April 2014):
@@ -3947,8 +3934,7 @@ namespace ts {
                     }
                 }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, typePredicate,
-                    minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
+                links.resolvedSignature = createSignature(declaration, typeParameters, parameters, returnType, minArgumentCount, hasRestParameter(declaration), hasStringLiterals);
             }
             return links.resolvedSignature;
         }
@@ -4608,15 +4594,10 @@ namespace ts {
         }
 
         function getPredicateType(node: TypePredicateNode): Type {
-            if (!(node.parent.kind === SyntaxKind.PropertyDeclaration || node.parent.kind === SyntaxKind.PropertySignature || node.parent.kind === SyntaxKind.GetAccessor)) {
-                return booleanType;
-            }
-            else {
-                return createPredicateType(getSymbolOfNode(node), createTypePredicateFromTypePredicateNode(node) as ThisTypePredicate);
-            }
+            return createPredicateType(getSymbolOfNode(node), createTypePredicateFromTypePredicateNode(node));
         }
 
-        function createPredicateType(symbol: Symbol, predicate: ThisTypePredicate) {
+        function createPredicateType(symbol: Symbol, predicate: ThisTypePredicate | IdentifierTypePredicate) {
                 const type = createType(TypeFlags.Boolean | TypeFlags.PredicateType) as PredicateType;
                 type.symbol = symbol;
                 type.predicate = predicate;
@@ -4801,7 +4782,6 @@ namespace ts {
             const result = createSignature(signature.declaration, freshTypeParameters,
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
                 instantiateType(signature.resolvedReturnType, mapper),
-                signature.typePredicate && cloneTypePredicate(signature.typePredicate, mapper),
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasStringLiterals);
             result.target = signature;
             result.mapper = mapper;
@@ -4872,7 +4852,8 @@ namespace ts {
                     return getIntersectionType(instantiateList((<IntersectionType>type).types, mapper, instantiateType));
                 }
                 if (type.flags & TypeFlags.PredicateType) {
-                    return createPredicateType(type.symbol, {kind: TypePredicateKind.This, type: instantiateType((type as PredicateType).predicate.type, mapper)} as ThisTypePredicate);
+                    const predicate = (type as PredicateType).predicate;
+                    return createPredicateType(type.symbol, cloneTypePredicate(predicate, mapper));
                 }
             }
             return type;
@@ -5044,7 +5025,36 @@ namespace ts {
                 if (relation === assignableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
                     if (source === numberType && target.flags & TypeFlags.Enum) return Ternary.True;
-                    if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean && (source.flags & TypeFlags.PredicateType || target.flags & TypeFlags.PredicateType)) return Ternary.True;
+                }
+                if (source.flags & TypeFlags.Boolean && target.flags & TypeFlags.Boolean) {
+                    if (source.flags & TypeFlags.PredicateType && target.flags & TypeFlags.PredicateType) {
+                        const sourcePredicate = source as PredicateType;
+                        const targetPredicate = target as PredicateType;
+                        if (sourcePredicate.predicate.kind !== targetPredicate.predicate.kind) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.A_this_based_type_guard_is_not_assignable_to_a_parameter_based_type_guard);
+                                reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
+                            }
+                            return Ternary.False;
+                        }
+                        if (sourcePredicate.predicate.kind === TypePredicateKind.Identifier) {
+                            const sourceIdentifierPredicate = sourcePredicate.predicate as IdentifierTypePredicate;
+                            const targetIdentifierPredicate = targetPredicate.predicate as IdentifierTypePredicate;
+                            if (sourceIdentifierPredicate.parameterIndex !== targetIdentifierPredicate.parameterIndex) {
+                                if (reportErrors) {
+                                    reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceIdentifierPredicate.parameterName, targetIdentifierPredicate.parameterName);
+                                    reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
+                                }
+                                return Ternary.False;
+                            }
+                        }
+                        const related = isRelatedTo(sourcePredicate.predicate.type, targetPredicate.predicate.type, reportErrors, headMessage);
+                        if (related === Ternary.False && reportErrors) {
+                            reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
+                        }
+                        return related;
+                    }
+                    return Ternary.True;
                 }
 
                 if (source.flags & TypeFlags.FreshObjectLiteral) {
@@ -5619,65 +5629,6 @@ namespace ts {
                     result &= related;
                 }
 
-                if (source.typePredicate && target.typePredicate) {
-                    const sourcePredicate = source.typePredicate;
-                    const targetPredicate = target.typePredicate;
-                    if (source.typePredicate.kind !== target.typePredicate.kind) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.A_this_based_type_guard_is_not_assignable_to_a_parameter_based_type_guard);
-                        }
-                        return Ternary.False;
-                    }
-                    if (!(isIdentifierTypePredicate(sourcePredicate) && isIdentifierTypePredicate(targetPredicate))) {
-                        if (!isTypeIdenticalTo(sourcePredicate.type, targetPredicate.type)) {
-                            if (reportErrors) {
-                                const sourceTypeText = typeToString(sourcePredicate.type);
-                                const targetTypeText = typeToString(targetPredicate.type);
-                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
-                                    sourceTypeText,
-                                    targetTypeText);
-                            }
-                            return Ternary.False;
-                        }
-                    }
-                    else {
-                        const hasDifferentParameterIndex = sourcePredicate.parameterIndex !== targetPredicate.parameterIndex;
-                        let hasDifferentTypes: boolean;
-                        if (hasDifferentParameterIndex ||
-                            (hasDifferentTypes = !isTypeIdenticalTo(sourcePredicate.type, targetPredicate.type))) {
-
-                            if (reportErrors) {
-                                const sourceParamText = sourcePredicate.parameterName;
-                                const targetParamText = targetPredicate.parameterName;
-                                const sourceTypeText = typeToString(sourcePredicate.type);
-                                const targetTypeText = typeToString(targetPredicate.type);
-
-                                if (hasDifferentParameterIndex) {
-                                    reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1,
-                                        sourceParamText,
-                                        targetParamText);
-                                }
-                                else if (hasDifferentTypes) {
-                                    reportError(Diagnostics.Type_0_is_not_assignable_to_type_1,
-                                        sourceTypeText,
-                                        targetTypeText);
-                                }
-
-                                reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1,
-                                    `${sourceParamText} is ${sourceTypeText}`,
-                                    `${targetParamText} is ${targetTypeText}`);
-                            }
-                            return Ternary.False;
-                        }
-                    }
-                }
-                else if (!source.typePredicate && target.typePredicate) {
-                    if (reportErrors) {
-                        reportError(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
-                    }
-                    return Ternary.False;
-                }
-
                 const targetReturnType = getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) return result;
                 const sourceReturnType = getReturnTypeOfSignature(source);
@@ -6239,6 +6190,11 @@ namespace ts {
                         inferFromTypes(sourceTypes[i], targetTypes[i]);
                     }
                 }
+                else if (source.flags & TypeFlags.PredicateType && target.flags & TypeFlags.PredicateType) {
+                    if ((source as PredicateType).predicate.kind === (target as PredicateType).predicate.kind) {
+                        inferFromTypes((source as PredicateType).predicate.type, (target as PredicateType).predicate.type);
+                    }
+                }
                 else if (source.flags & TypeFlags.Tuple && target.flags & TypeFlags.Tuple && (<TupleType>source).elementTypes.length === (<TupleType>target).elementTypes.length) {
                     // If source and target are tuples of the same size, infer from element types
                     const sourceTypes = (<TupleType>source).elementTypes;
@@ -6331,21 +6287,7 @@ namespace ts {
 
             function inferFromSignature(source: Signature, target: Signature) {
                 forEachMatchingParameterType(source, target, inferFromTypes);
-                if (source.typePredicate && target.typePredicate) {
-                    if (target.typePredicate.kind === source.typePredicate.kind) {
-                        if ((target.typePredicate.kind === TypePredicateKind.Identifier
-                            && (target.typePredicate as IdentifierTypePredicate).parameterIndex === (source.typePredicate as IdentifierTypePredicate).parameterIndex)
-                            || target.typePredicate.kind === TypePredicateKind.This) {
-                            // Return types from type predicates are treated as booleans. In order to infer types
-                            // from type predicates we would need to infer using the type within the type predicate
-                            // (i.e. 'Foo' from 'x is Foo').
-                            inferFromTypes(source.typePredicate.type, target.typePredicate.type);
-                        }
-                    }
-                }
-                else {
-                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
-                }
+                inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
 
             function inferFromIndexTypes(source: Type, target: Type, sourceKind: IndexKind, targetKind: IndexKind) {
@@ -6791,11 +6733,12 @@ namespace ts {
                     return type;
                 }
                 const signature = getResolvedSignature(expr);
+                const predicateType = getReturnTypeOfSignature(signature);
 
-                if (!signature.typePredicate) {
+                if (!predicateType || !(predicateType.flags & TypeFlags.PredicateType)) {
                     return type;
                 }
-                const predicate = signature.typePredicate;
+                const predicate = (predicateType as PredicateType).predicate;
                 if (isIdentifierTypePredicate(predicate)) {
                     const callExpression = expr as CallExpression;
                     if (callExpression.arguments[predicate.parameterIndex] &&
@@ -6819,7 +6762,7 @@ namespace ts {
                     return type;
                 }
 
-                return narrowTypeByThisTypePredicate(type, (memberType as PredicateType).predicate, expr, assumeTrue);
+                return narrowTypeByThisTypePredicate(type, (memberType as PredicateType).predicate as ThisTypePredicate, expr, assumeTrue);
             }
 
             function narrowTypeByThisTypePredicate(type: Type, predicate: ThisTypePredicate, expression: Expression, assumeTrue: boolean): Type {
@@ -11119,8 +11062,12 @@ namespace ts {
 
             if (node.type) {
                 if (node.type.kind === SyntaxKind.TypePredicate) {
-                    const typePredicate = getSignatureFromDeclaration(node).typePredicate;
-                    const typePredicateNode = <TypePredicateNode>node.type;
+                    const returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                    if (!returnType || !(returnType.flags & TypeFlags.PredicateType)) {
+                        return;
+                    }
+                    const typePredicate = (returnType as PredicateType).predicate;
+                    const typePredicateNode = node.type as TypePredicateNode;
                     checkSourceElement(typePredicateNode);
                     if (isIdentifierTypePredicate(typePredicate)) {
                         if (typePredicate.parameterIndex >= 0) {
@@ -13126,7 +13073,7 @@ namespace ts {
                             error(node.expression, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                         }
                     }
-                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || signature.typePredicate) {
+                    else if (func.type || isGetAccessorWithAnnotatatedSetAccessor(func) || returnType.flags & TypeFlags.PredicateType) {
                         if (isAsyncFunctionLike(func)) {
                             const promisedType = getPromisedType(returnType);
                             const awaitedType = checkAwaitedType(exprType, node.expression, Diagnostics.Return_expression_in_async_function_does_not_have_a_valid_callable_then_member);

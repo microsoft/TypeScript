@@ -3,6 +3,7 @@
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 namespace Test {
 	export class FileSystemObject {
+		isFSO: this is FileSystemObject;
 		get isFile(): this is File {
 			return this instanceof File;
 		}
@@ -28,8 +29,8 @@ namespace Test {
 
 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
 	file.isNetworked = false;
-	file.isNetworked = file.isDirectory;
-	file.isFile = file.isNetworked;
+	file.isFSO = file.isFile;
+	file.isFile = true;
 	let x = file.isFile;
 	if (file.isFile) {
 		file.content;

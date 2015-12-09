@@ -1,4 +1,4 @@
-//// [typeGuardOfFormThisMember.ts]
+//// [typeGuardOfFormThisMemberErrors.ts]
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 namespace Test {
 	export class FileSystemObject {
@@ -27,62 +27,12 @@ namespace Test {
 	}
 
 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
-	file.isNetworked = false;
-	file.isFSO = file.isFile;
-	file.isFile = true;
-	let x = file.isFile;
-	if (file.isFile) {
-		file.content;
-		if (file.isNetworked) {
-			file.host;
-			file.content;
-		}
-	}
-	else if (file.isDirectory) {
-		file.children;
-	}
-	else if (file.isNetworked) {
-		file.host;
-	}
-	
-	interface GenericLeadGuard<T> extends GenericGuard<T> {
-		lead(): void;
-	}
-	
-	interface GenericFollowerGuard<T> extends GenericGuard<T> {
-		follow(): void;
-	}
-	
-	interface GenericGuard<T> {
-		target: T;
-		isLeader: this is (GenericLeadGuard<T>);
-		isFollower: this is GenericFollowerGuard<T>;
-	}
-
-	let guard: GenericGuard<File>;
-	if (guard.isLeader) {
-		guard.lead();
-	}
-	else if (guard.isFollower) {
-		guard.follow();
-	}
-
-	interface SpecificGuard {
-		isMoreSpecific: this is MoreSpecificGuard;
-	}
-
-	interface MoreSpecificGuard extends SpecificGuard {
-		do(): void;
-	}
-
-	let general: SpecificGuard;
-	if (general.isMoreSpecific) {
-		general.do();
-	}
+	file.isNetworked = file.isFile;
+	file.isFSO = file.isNetworked;
+	file.isFile = file.isFSO;
 }
 
-
-//// [typeGuardOfFormThisMember.js]
+//// [typeGuardOfFormThisMemberErrors.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -133,38 +83,13 @@ var Test;
     })(FileSystemObject);
     Test.Directory = Directory;
     var file = new File("foo/bar.txt", "foo");
-    file.isNetworked = false;
-    file.isFSO = file.isFile;
-    file.isFile = true;
-    var x = file.isFile;
-    if (file.isFile) {
-        file.content;
-        if (file.isNetworked) {
-            file.host;
-            file.content;
-        }
-    }
-    else if (file.isDirectory) {
-        file.children;
-    }
-    else if (file.isNetworked) {
-        file.host;
-    }
-    var guard;
-    if (guard.isLeader) {
-        guard.lead();
-    }
-    else if (guard.isFollower) {
-        guard.follow();
-    }
-    var general;
-    if (general.isMoreSpecific) {
-        general.do();
-    }
+    file.isNetworked = file.isFile;
+    file.isFSO = file.isNetworked;
+    file.isFile = file.isFSO;
 })(Test || (Test = {}));
 
 
-//// [typeGuardOfFormThisMember.d.ts]
+//// [typeGuardOfFormThisMemberErrors.d.ts]
 declare namespace Test {
     class FileSystemObject {
         path: string;

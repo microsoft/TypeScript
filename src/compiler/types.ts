@@ -2143,7 +2143,7 @@ namespace ts {
 
     // Predicate types (TypeFlags.Predicate)
     export interface PredicateType extends Type {
-        predicate: ThisTypePredicate;
+        predicate: ThisTypePredicate | IdentifierTypePredicate;
     }
 
     // String literal types (TypeFlags.StringLiteral)
@@ -2262,7 +2262,6 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
-        typePredicate?: ThisTypePredicate | IdentifierTypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
