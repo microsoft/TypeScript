@@ -40,7 +40,7 @@ sourceFile:../outputdir_singleFile/test.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(3, 5) Source(2, 1) + SourceIndex(0) name (c1)
+1->Emitted(3, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -50,16 +50,16 @@ sourceFile:../outputdir_singleFile/test.ts
   >    public p1: number;
   >
 2 >    }
-1->Emitted(4, 5) Source(4, 1) + SourceIndex(0) name (c1.constructor)
-2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0) name (c1.constructor)
+1->Emitted(4, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>    return c1;
 1->^^^^
 2 >    ^^^^^^^^^
 1->
 2 >    }
-1->Emitted(5, 5) Source(4, 1) + SourceIndex(0) name (c1)
-2 >Emitted(5, 14) Source(4, 2) + SourceIndex(0) name (c1)
+1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(5, 14) Source(4, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -73,8 +73,8 @@ sourceFile:../outputdir_singleFile/test.ts
 4 > class c1 {
   >     public p1: number;
   > }
-1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0) name (c1)
-2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0) name (c1)
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(6, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(6, 6) Source(4, 2) + SourceIndex(0)
 ---
@@ -125,11 +125,11 @@ sourceFile:../outputdir_singleFile/test.ts
 3 >           
 4 >           instance1
 5 >                    ;
-1->Emitted(9, 5) Source(8, 5) + SourceIndex(0) name (f1)
-2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0) name (f1)
-3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0) name (f1)
-4 >Emitted(9, 21) Source(8, 21) + SourceIndex(0) name (f1)
-5 >Emitted(9, 22) Source(8, 22) + SourceIndex(0) name (f1)
+1->Emitted(9, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(9, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(9, 12) Source(8, 12) + SourceIndex(0)
+4 >Emitted(9, 21) Source(8, 21) + SourceIndex(0)
+5 >Emitted(9, 22) Source(8, 22) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -138,7 +138,7 @@ sourceFile:../outputdir_singleFile/test.ts
 1 >
   >
 2 >}
-1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0) name (f1)
-2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0) name (f1)
+1 >Emitted(10, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(9, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=../../../mapFiles/test.js.map

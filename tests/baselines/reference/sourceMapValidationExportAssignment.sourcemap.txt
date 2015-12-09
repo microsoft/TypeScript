@@ -20,7 +20,7 @@ sourceFile:sourceMapValidationExportAssignment.ts
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(4, 9) Source(1, 1) + SourceIndex(0) name (a)
+1->Emitted(4, 9) Source(1, 1) + SourceIndex(0)
 ---
 >>>        }
 1->^^^^^^^^
@@ -30,16 +30,16 @@ sourceFile:sourceMapValidationExportAssignment.ts
   >    public c;
   >
 2 >        }
-1->Emitted(5, 9) Source(3, 1) + SourceIndex(0) name (a.constructor)
-2 >Emitted(5, 10) Source(3, 2) + SourceIndex(0) name (a.constructor)
+1->Emitted(5, 9) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 10) Source(3, 2) + SourceIndex(0)
 ---
 >>>        return a;
 1->^^^^^^^^
 2 >        ^^^^^^^^
 1->
 2 >        }
-1->Emitted(6, 9) Source(3, 1) + SourceIndex(0) name (a)
-2 >Emitted(6, 17) Source(3, 2) + SourceIndex(0) name (a)
+1->Emitted(6, 9) Source(3, 1) + SourceIndex(0)
+2 >Emitted(6, 17) Source(3, 2) + SourceIndex(0)
 ---
 >>>    })();
 1 >^^^^
@@ -53,8 +53,8 @@ sourceFile:sourceMapValidationExportAssignment.ts
 4 >     class a {
   >         public c;
   >     }
-1 >Emitted(7, 5) Source(3, 1) + SourceIndex(0) name (a)
-2 >Emitted(7, 6) Source(3, 2) + SourceIndex(0) name (a)
+1 >Emitted(7, 5) Source(3, 1) + SourceIndex(0)
+2 >Emitted(7, 6) Source(3, 2) + SourceIndex(0)
 3 >Emitted(7, 6) Source(1, 1) + SourceIndex(0)
 4 >Emitted(7, 10) Source(3, 2) + SourceIndex(0)
 ---

@@ -439,12 +439,16 @@ namespace ts {
 
     export const enum JsxFlags {
         None = 0,
+        /** An element from a named property of the JSX.IntrinsicElements interface */
         IntrinsicNamedElement = 1 << 0,
+        /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 1 << 1,
-        ClassElement = 1 << 2,
-        UnknownElement = 1 << 3,
+        /** An element backed by a class, class-like, or function value */
+        ValueElement = 1 << 2,
+        /** Element resolution failed */
+        UnknownElement = 1 << 4,
 
-        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement
+        IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
 
 
@@ -607,6 +611,7 @@ namespace ts {
         name: PropertyName;                 // Declared property name
         questionToken?: Node;               // Present on optional property
         type?: TypeNode;                    // Optional type annotation
+        initializer?: Expression;           // Optional initializer
     }
 
     // @kind(SyntaxKind.PropertyDeclaration)
@@ -1772,7 +1777,7 @@ namespace ts {
     export interface SymbolDisplayBuilder {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
-        buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
+        buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplayFromSymbol(symbol: Symbol, writer: SymbolWriter, enclosingDeclaraiton?: Node, flags?: TypeFormatFlags): void;
@@ -1902,6 +1907,7 @@ namespace ts {
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
+        moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration): SourceFile;
     }
@@ -2020,6 +2026,7 @@ namespace ts {
         exportsChecked?: boolean;           // True if exports of external module have been checked
         isNestedRedeclaration?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
+        exportsSomeValue?: boolean;         // true if module exports some value (not just types)
     }
 
     /* @internal */

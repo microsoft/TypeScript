@@ -16,7 +16,7 @@ namespace ts.BreakpointResolver {
 
         let tokenAtLocation = getTokenAtPosition(sourceFile, position);
         let lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
-        if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart()).line > lineOfPosition) {
+        if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart(sourceFile)).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line
             // eg: let x =10; |--- cursor is here
             //     let y = 10; 
@@ -39,14 +39,21 @@ namespace ts.BreakpointResolver {
         return spanInNode(tokenAtLocation);
 
         function textSpan(startNode: Node, endNode?: Node) {
-            return createTextSpanFromBounds(startNode.getStart(), (endNode || startNode).getEnd());
+            const start = startNode.decorators ?
+                skipTrivia(sourceFile.text, startNode.decorators.end) :
+                startNode.getStart(sourceFile);
+            return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
         }
 
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TextSpan {
-            if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart()).line) {
+            if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line) {
                 return spanInNode(node);
             }
             return spanInNode(otherwiseOnNode);
+        }
+
+        function spanInNodeArray<T>(nodeArray: NodeArray<T>) {
+            return createTextSpanFromBounds(skipTrivia(sourceFile.text, nodeArray.pos), nodeArray.end);
         }
 
         function spanInPreviousNode(node: Node): TextSpan {
@@ -63,6 +70,11 @@ namespace ts.BreakpointResolver {
                     if (node.parent.kind === SyntaxKind.DoStatement) {
                         // Set span as if on while keyword
                         return spanInPreviousNode(node);
+                    }
+
+                    if (node.parent.kind === SyntaxKind.Decorator) {
+                        // Set breakpoint on the decorator emit
+                        return spanInNode(node.parent);
                     }
 
                     if (node.parent.kind === SyntaxKind.ForStatement) {
@@ -206,6 +218,9 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.WithStatement:
                         // span in statement
                         return spanInNode((<WithStatement>node).statement);
+
+                    case SyntaxKind.Decorator:
+                        return spanInNodeArray(node.parent.decorators);
 
                     // No breakpoint in interface, type alias
                     case SyntaxKind.InterfaceDeclaration:

@@ -1134,6 +1134,14 @@ namespace ts {
             return token === t && tryParse(nextTokenCanFollowModifier);
         }
 
+        function nextTokenIsOnSameLineAndCanFollowModifier() {
+            nextToken();
+            if (scanner.hasPrecedingLineBreak()) {
+                return false;
+            }
+            return canFollowModifier();
+        }
+
         function nextTokenCanFollowModifier() {
             if (token === SyntaxKind.ConstKeyword) {
                 // 'const' is only a modifier if followed by 'enum'.
@@ -1154,11 +1162,7 @@ namespace ts {
                 return canFollowModifier();
             }
 
-            nextToken();
-            if (scanner.hasPrecedingLineBreak()) {
-                return false;
-            }
-            return canFollowModifier();
+            return nextTokenIsOnSameLineAndCanFollowModifier();
         }
 
         function parseAnyContextualModifier(): boolean {
@@ -2259,6 +2263,14 @@ namespace ts {
                 property.name = name;
                 property.questionToken = questionToken;
                 property.type = parseTypeAnnotation();
+
+                if (token === SyntaxKind.EqualsToken) {
+                    // Although type literal properties cannot not have initializers, we attempt
+                    // to parse an initializer so we can report in the checker that an interface
+                    // property or type literal property cannot have an initializer.
+                    property.initializer = parseNonParameterInitializer();
+                }
+
                 parseTypeMemberSemicolon();
                 return finishNode(property);
             }
@@ -3627,7 +3639,7 @@ namespace ts {
 
             parseExpected(SyntaxKind.OpenBraceToken);
             if (token !== SyntaxKind.CloseBraceToken) {
-                node.expression = parseExpression();
+                node.expression = parseAssignmentExpressionOrHigher();
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3969,6 +3981,7 @@ namespace ts {
             }
             else {
                 const propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
+                propertyAssignment.modifiers = modifiers;
                 propertyAssignment.name = propertyName;
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
@@ -4902,7 +4915,7 @@ namespace ts {
 
                 if (!decorators) {
                     decorators = <NodeArray<Decorator>>[];
-                    decorators.pos = scanner.getStartPos();
+                    decorators.pos = decoratorStart;
                 }
 
                 const decorator = <Decorator>createNode(SyntaxKind.Decorator, decoratorStart);
@@ -4915,15 +4928,31 @@ namespace ts {
             return decorators;
         }
 
-        function parseModifiers(): ModifiersArray {
+        /*
+         * There are situations in which a modifier like 'const' will appear unexpectedly, such as on a class member.
+         * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
+         * and turns it into a standalone declaration), then it is better to parse it and report an error later.
+         *
+         * In such situations, 'permitInvalidConstAsModifier' should be set to true.
+         */
+        function parseModifiers(permitInvalidConstAsModifier?: boolean): ModifiersArray {
             let flags = 0;
             let modifiers: ModifiersArray;
             while (true) {
                 const modifierStart = scanner.getStartPos();
                 const modifierKind = token;
 
-                if (!parseAnyContextualModifier()) {
-                    break;
+                if (token === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
+                    // We need to ensure that any subsequent modifiers appear on the same line
+                    // so that when 'const' is a standalone declaration, we don't issue an error.                
+                    if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
+                        break;
+                    }
+                }
+                else {
+                    if (!parseAnyContextualModifier()) {
+                        break;
+                    }
                 }
 
                 if (!modifiers) {
@@ -4968,7 +4997,7 @@ namespace ts {
 
             const fullStart = getNodePos();
             const decorators = parseDecorators();
-            const modifiers = parseModifiers();
+            const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true);
 
             const accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
             if (accessor) {
@@ -5302,16 +5331,17 @@ namespace ts {
         }
 
         function parseModuleSpecifier(): Expression {
-            // We allow arbitrary expressions here, even though the grammar only allows string
-            // literals.  We check to ensure that it is only a string literal later in the grammar
-            // walker.
-            const result = parseExpression();
-            // Ensure the string being required is in our 'identifier' table.  This will ensure
-            // that features like 'find refs' will look inside this file when search for its name.
-            if (result.kind === SyntaxKind.StringLiteral) {
+            if (token === SyntaxKind.StringLiteral) {
+                const result = parseLiteralNode();
                 internIdentifier((<LiteralExpression>result).text);
+                return result;
             }
-            return result;
+            else {
+                // We allow arbitrary expressions here, even though the grammar only allows string
+                // literals.  We check to ensure that it is only a string literal later in the grammar
+                // check pass.
+                return parseExpression();
+            }
         }
 
         function parseNamespaceImport(): NamespaceImport {
@@ -5428,11 +5458,13 @@ namespace ts {
             // reference comment.
             while (true) {
                 const kind = triviaScanner.scan();
-                if (kind === SyntaxKind.WhitespaceTrivia || kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.MultiLineCommentTrivia) {
-                    continue;
-                }
                 if (kind !== SyntaxKind.SingleLineCommentTrivia) {
-                    break;
+                    if (isTrivia(kind)) {
+                        continue;
+                    }
+                    else {
+                        break;
+                    }
                 }
 
                 const range = { pos: triviaScanner.getTokenPos(), end: triviaScanner.getTextPos(), kind: triviaScanner.getToken() };

@@ -1,2 +1,2 @@
 //// [computedPropertyNamesSourceMap1_ES5.js.map]
-{"version":3,"file":"computedPropertyNamesSourceMap1_ES5.js","sourceRoot":"","sources":["computedPropertyNamesSourceMap1_ES5.ts"],"names":["C","C.constructor","C[\"hello\"]"],"mappings":"AAAA;IAAAA;IAIAC,CAACA;IAHGD,YAACA,OAAOA,CAACA,GAATA;QACIE,QAAQA,CAACA;IACbA,CAACA;IACLF,QAACA;AAADA,CAACA,AAJD,IAIC"}
+{"version":3,"file":"computedPropertyNamesSourceMap1_ES5.js","sourceRoot":"","sources":["computedPropertyNamesSourceMap1_ES5.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,YAAC,OAAO,CAAC,GAAT;QACI,QAAQ,CAAC;IACb,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
