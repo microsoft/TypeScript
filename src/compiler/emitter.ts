@@ -3880,7 +3880,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return call;
                 }
 
-                function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression) {
+                function emitObjectLiteralAssignment(target: ObjectLiteralExpression, value: Expression, sourceMapNode: Node) {
                     const properties = target.properties;
                     if (properties.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
@@ -3891,7 +3891,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                             const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
-                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName), p);
+                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName), properties.length === 1 ? sourceMapNode : p);
                         }
                     }
                 }
@@ -3928,7 +3928,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         target = (<BinaryExpression>target).left;
                     }
                     if (target.kind === SyntaxKind.ObjectLiteralExpression) {
-                        emitObjectLiteralAssignment(<ObjectLiteralExpression>target, value);
+                        emitObjectLiteralAssignment(<ObjectLiteralExpression>target, value, sourceMapNode);
                     }
                     else if (target.kind === SyntaxKind.ArrayLiteralExpression) {
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, sourceMapNode);

@@ -311,9 +311,9 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     { 
-6 >      name: nameA
-7 >                         } = 
+5 >     
+6 >      { name: nameA } = robot
+7 >                        
 8 >                          robot
 9 >                               
 10>                                , 
@@ -333,8 +333,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >Emitted(11, 4) Source(29, 4) + SourceIndex(0)
 3 >Emitted(11, 5) Source(29, 5) + SourceIndex(0)
 4 >Emitted(11, 6) Source(29, 6) + SourceIndex(0)
-5 >Emitted(11, 7) Source(29, 8) + SourceIndex(0)
-6 >Emitted(11, 25) Source(29, 19) + SourceIndex(0)
+5 >Emitted(11, 7) Source(29, 6) + SourceIndex(0)
+6 >Emitted(11, 25) Source(29, 29) + SourceIndex(0)
 7 >Emitted(11, 27) Source(29, 24) + SourceIndex(0)
 8 >Emitted(11, 32) Source(29, 29) + SourceIndex(0)
 9 >Emitted(11, 33) Source(29, 29) + SourceIndex(0)
@@ -420,8 +420,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name: nameA } = getRobot()
 7 >                     
-8 >                       name: nameA
-9 >                                       } = getRobot()
+8 >                       { name: nameA } = getRobot()
+9 >                                      
 10>                                           , 
 11>                                             i
 12>                                               = 
@@ -441,8 +441,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(14, 6) Source(32, 6) + SourceIndex(0)
 5 >Emitted(14, 7) Source(32, 6) + SourceIndex(0)
 6 >Emitted(14, 22) Source(32, 34) + SourceIndex(0)
-7 >Emitted(14, 24) Source(32, 8) + SourceIndex(0)
-8 >Emitted(14, 39) Source(32, 19) + SourceIndex(0)
+7 >Emitted(14, 24) Source(32, 6) + SourceIndex(0)
+8 >Emitted(14, 39) Source(32, 34) + SourceIndex(0)
 9 >Emitted(14, 44) Source(32, 34) + SourceIndex(0)
 10>Emitted(14, 46) Source(32, 36) + SourceIndex(0)
 11>Emitted(14, 47) Source(32, 37) + SourceIndex(0)
@@ -526,8 +526,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }
 7 >                                                 
-8 >                                                   name: nameA
-9 >                                                                   } = <Robot>{ name: "trimmer", skill: "trimming" }
+8 >                                                   { name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }
+9 >                                                                  
 10>                                                                       , 
 11>                                                                         i
 12>                                                                           = 
@@ -547,8 +547,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(17, 6) Source(35, 6) + SourceIndex(0)
 5 >Emitted(17, 7) Source(35, 6) + SourceIndex(0)
 6 >Emitted(17, 50) Source(35, 69) + SourceIndex(0)
-7 >Emitted(17, 52) Source(35, 8) + SourceIndex(0)
-8 >Emitted(17, 67) Source(35, 19) + SourceIndex(0)
+7 >Emitted(17, 52) Source(35, 6) + SourceIndex(0)
+8 >Emitted(17, 67) Source(35, 69) + SourceIndex(0)
 9 >Emitted(17, 72) Source(35, 69) + SourceIndex(0)
 10>Emitted(17, 74) Source(35, 71) + SourceIndex(0)
 11>Emitted(17, 75) Source(35, 72) + SourceIndex(0)
@@ -989,9 +989,9 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     { 
-6 >      name
-7 >                        } = 
+5 >     
+6 >      { name } = robot
+7 >                       
 8 >                         robot
 9 >                              
 10>                               , 
@@ -1011,8 +1011,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >Emitted(30, 4) Source(49, 4) + SourceIndex(0)
 3 >Emitted(30, 5) Source(49, 5) + SourceIndex(0)
 4 >Emitted(30, 6) Source(49, 6) + SourceIndex(0)
-5 >Emitted(30, 7) Source(49, 8) + SourceIndex(0)
-6 >Emitted(30, 24) Source(49, 12) + SourceIndex(0)
+5 >Emitted(30, 7) Source(49, 6) + SourceIndex(0)
+6 >Emitted(30, 24) Source(49, 22) + SourceIndex(0)
 7 >Emitted(30, 26) Source(49, 17) + SourceIndex(0)
 8 >Emitted(30, 31) Source(49, 22) + SourceIndex(0)
 9 >Emitted(30, 32) Source(49, 22) + SourceIndex(0)
@@ -1098,8 +1098,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name } = getRobot()
 7 >                     
-8 >                       name
-9 >                                      } = getRobot()
+8 >                       { name } = getRobot()
+9 >                                     
 10>                                          , 
 11>                                            i
 12>                                              = 
@@ -1119,8 +1119,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(33, 6) Source(52, 6) + SourceIndex(0)
 5 >Emitted(33, 7) Source(52, 6) + SourceIndex(0)
 6 >Emitted(33, 22) Source(52, 27) + SourceIndex(0)
-7 >Emitted(33, 24) Source(52, 8) + SourceIndex(0)
-8 >Emitted(33, 38) Source(52, 12) + SourceIndex(0)
+7 >Emitted(33, 24) Source(52, 6) + SourceIndex(0)
+8 >Emitted(33, 38) Source(52, 27) + SourceIndex(0)
 9 >Emitted(33, 43) Source(52, 27) + SourceIndex(0)
 10>Emitted(33, 45) Source(52, 29) + SourceIndex(0)
 11>Emitted(33, 46) Source(52, 30) + SourceIndex(0)
@@ -1204,8 +1204,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name } = <Robot>{ name: "trimmer", skill: "trimming" }
 7 >                                                 
-8 >                                                   name
-9 >                                                                  } = <Robot>{ name: "trimmer", skill: "trimming" }
+8 >                                                   { name } = <Robot>{ name: "trimmer", skill: "trimming" }
+9 >                                                                 
 10>                                                                      , 
 11>                                                                        i
 12>                                                                          = 
@@ -1225,8 +1225,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(36, 6) Source(55, 6) + SourceIndex(0)
 5 >Emitted(36, 7) Source(55, 6) + SourceIndex(0)
 6 >Emitted(36, 50) Source(55, 62) + SourceIndex(0)
-7 >Emitted(36, 52) Source(55, 8) + SourceIndex(0)
-8 >Emitted(36, 66) Source(55, 12) + SourceIndex(0)
+7 >Emitted(36, 52) Source(55, 6) + SourceIndex(0)
+8 >Emitted(36, 66) Source(55, 62) + SourceIndex(0)
 9 >Emitted(36, 71) Source(55, 62) + SourceIndex(0)
 10>Emitted(36, 73) Source(55, 64) + SourceIndex(0)
 11>Emitted(36, 74) Source(55, 65) + SourceIndex(0)
