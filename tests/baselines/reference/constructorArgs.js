@@ -25,7 +25,7 @@ var Super = (function () {
     function Super(value) {
     }
     return Super;
-})();
+}());
 var Sub = (function (_super) {
     __extends(Sub, _super);
     function Sub(options) {
@@ -33,4 +33,4 @@ var Sub = (function (_super) {
         this.options = options;
     }
     return Sub;
-})(Super);
+}(Super));

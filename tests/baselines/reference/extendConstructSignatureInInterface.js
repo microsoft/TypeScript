@@ -23,5 +23,5 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     return E;
-})(CStatic);
+}(CStatic));
 var e = new E(1);

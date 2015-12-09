@@ -19,12 +19,12 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
             _super.apply(this, arguments);
         }
         return D;
-    })(M.C);
+    }(M.C));
 })(M || (M = {}));

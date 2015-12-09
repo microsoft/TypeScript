@@ -23,7 +23,7 @@ var d = (function () {
         return ns.toString();
     };
     return d;
-})();
+}());
 var e = (function () {
     function e() {
     }
@@ -31,4 +31,4 @@ var e = (function () {
         return ns.toString();
     };
     return e;
-})();
+}());

@@ -39,7 +39,7 @@
         function C() {
         }
         return C;
-    })();
+    }());
     exports["default"] = C;
     function bee() { }
     exports.bee = bee;

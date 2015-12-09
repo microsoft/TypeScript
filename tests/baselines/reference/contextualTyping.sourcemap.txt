@@ -107,7 +107,7 @@ sourceFile:contextualTyping.ts
 1->Emitted(8, 5) Source(18, 1) + SourceIndex(0)
 2 >Emitted(8, 16) Source(18, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -1043,7 +1043,7 @@ sourceFile:contextualTyping.ts
 1->Emitted(47, 5) Source(63, 1) + SourceIndex(0)
 2 >Emitted(47, 16) Source(63, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -2350,7 +2350,7 @@ sourceFile:contextualTyping.ts
 1->Emitted(97, 5) Source(155, 55) + SourceIndex(0)
 2 >Emitted(97, 17) Source(155, 56) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

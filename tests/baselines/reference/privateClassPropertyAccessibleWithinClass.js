@@ -52,7 +52,7 @@ var C = (function () {
     C.foo = function () { return this.foo; };
     C.bar = function () { this.foo(); };
     return C;
-})();
+}());
 // added level of function nesting
 var C2 = (function () {
     function C2() {
@@ -96,4 +96,4 @@ var C2 = (function () {
         (function () { return _this.foo(); });
     };
     return C2;
-})();
+}());

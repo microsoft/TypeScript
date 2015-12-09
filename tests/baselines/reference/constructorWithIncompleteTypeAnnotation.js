@@ -331,7 +331,7 @@ var TypeScriptAllInOne;
             console.log(e);
         };
         return Program;
-    })();
+    }());
     TypeScriptAllInOne.Program = Program;
     try {
     }
@@ -484,7 +484,7 @@ var BasicFeatures = (function () {
             return 1;
     };
     return BasicFeatures;
-})();
+}());
 var CLASS = (function () {
     function CLASS() {
         this.d = function () { yield 0; };
@@ -507,13 +507,13 @@ var CLASS = (function () {
             return false;
     };
     return CLASS;
-})();
+}());
 // todo: use these
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 method1(val, number);
 {
     return val;
@@ -531,13 +531,13 @@ var B = (function (_super) {
         return this.method1(2);
     };
     return B;
-})(A);
+}(A));
 var Overloading = (function () {
     function Overloading() {
         this.otherValue = 42;
     }
     return Overloading;
-})();
+}());
 Overloads(value, string);
 Overloads();
 while ()

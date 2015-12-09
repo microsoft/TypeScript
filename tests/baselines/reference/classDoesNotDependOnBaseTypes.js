@@ -27,11 +27,11 @@ var StringTreeCollectionBase = (function () {
     function StringTreeCollectionBase() {
     }
     return StringTreeCollectionBase;
-})();
+}());
 var StringTreeCollection = (function (_super) {
     __extends(StringTreeCollection, _super);
     function StringTreeCollection() {
         _super.apply(this, arguments);
     }
     return StringTreeCollection;
-})(StringTreeCollectionBase);
+}(StringTreeCollectionBase));

@@ -61,17 +61,17 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var a;
 var r = a.a;
 // generic interfaces in a module
@@ -81,15 +81,15 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     var C2 = (function () {
         function C2() {
         }
         return C2;
-    })();
+    }());
     var D = (function () {
         function D() {
         }
         return D;
-    })();
+    }());
 })(M || (M = {}));

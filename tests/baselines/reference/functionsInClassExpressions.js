@@ -22,4 +22,4 @@ var Foo = (function () {
     }
     class_1.prototype.m = function () { return this.bar; };
     return class_1;
-})();
+}());

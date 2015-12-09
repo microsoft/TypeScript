@@ -49,14 +49,14 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 function foo1(x) { }
 function foo2(x) { }
 function foo3(x) { }

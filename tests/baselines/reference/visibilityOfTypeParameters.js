@@ -15,7 +15,7 @@ var MyClass = (function () {
         return val;
     };
     return MyClass;
-})();
+}());
 exports.MyClass = MyClass;
 
 

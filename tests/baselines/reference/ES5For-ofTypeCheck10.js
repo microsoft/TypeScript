@@ -32,4 +32,4 @@ var StringIterator = (function () {
         return this;
     };
     return StringIterator;
-})();
+}());

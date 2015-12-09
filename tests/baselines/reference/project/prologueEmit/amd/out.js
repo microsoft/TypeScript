@@ -13,7 +13,7 @@ var m;
         function base() {
         }
         return base;
-    })();
+    }());
     m.base = base;
     var child = (function (_super) {
         __extends(child, _super);
@@ -21,6 +21,6 @@ var m;
             _super.apply(this, arguments);
         }
         return child;
-    })(base);
+    }(base));
     m.child = child;
 })(m || (m = {}));

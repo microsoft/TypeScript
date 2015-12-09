@@ -116,7 +116,7 @@ var Base = (function () {
         d4.x; // OK, accessed within their declaring class
     };
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
@@ -135,7 +135,7 @@ var Derived1 = (function (_super) {
         d4.x; // Error, isn't accessed through an instance of the enclosing class
     };
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
@@ -154,7 +154,7 @@ var Derived2 = (function (_super) {
         d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
     };
     return Derived2;
-})(Base);
+}(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
@@ -173,7 +173,7 @@ var Derived3 = (function (_super) {
         d4.x; // Error, isn't accessed through an instance of the enclosing class
     };
     return Derived3;
-})(Derived1);
+}(Derived1));
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4() {
@@ -192,7 +192,7 @@ var Derived4 = (function (_super) {
         d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
     };
     return Derived4;
-})(Derived2);
+}(Derived2));
 var b;
 var d1;
 var d2;

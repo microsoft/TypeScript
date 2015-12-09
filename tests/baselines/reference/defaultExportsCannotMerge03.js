@@ -31,7 +31,7 @@ var Decl = (function () {
     function Decl() {
     }
     return Decl;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Decl;
 //// [m2.js]

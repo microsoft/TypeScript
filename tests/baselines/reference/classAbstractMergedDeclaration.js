@@ -45,42 +45,42 @@ var CM = (function () {
     function CM() {
     }
     return CM;
-})();
+}());
 var MC = (function () {
     function MC() {
     }
     return MC;
-})();
+}());
 var CI = (function () {
     function CI() {
     }
     return CI;
-})();
+}());
 var IC = (function () {
     function IC() {
     }
     return IC;
-})();
+}());
 var CC1 = (function () {
     function CC1() {
     }
     return CC1;
-})();
+}());
 var CC1 = (function () {
     function CC1() {
     }
     return CC1;
-})();
+}());
 var CC2 = (function () {
     function CC2() {
     }
     return CC2;
-})();
+}());
 var CC2 = (function () {
     function CC2() {
     }
     return CC2;
-})();
+}());
 new CM;
 new MC;
 new CI;

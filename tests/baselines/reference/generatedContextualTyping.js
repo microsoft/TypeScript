@@ -365,21 +365,21 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         _super.apply(this, arguments);
     }
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base);
+}(Base));
 var b = new Base(), d1 = new Derived1(), d2 = new Derived2();
 var x1 = function () { return [d1, d2]; };
 var x2 = function () { return [d1, d2]; };
@@ -398,673 +398,673 @@ var x13 = (function () {
         this.member = function () { return [d1, d2]; };
     }
     return x13;
-})();
+}());
 var x14 = (function () {
     function x14() {
         this.member = function () { return [d1, d2]; };
     }
     return x14;
-})();
+}());
 var x15 = (function () {
     function x15() {
         this.member = function named() { return [d1, d2]; };
     }
     return x15;
-})();
+}());
 var x16 = (function () {
     function x16() {
         this.member = function () { return [d1, d2]; };
     }
     return x16;
-})();
+}());
 var x17 = (function () {
     function x17() {
         this.member = function () { return [d1, d2]; };
     }
     return x17;
-})();
+}());
 var x18 = (function () {
     function x18() {
         this.member = function named() { return [d1, d2]; };
     }
     return x18;
-})();
+}());
 var x19 = (function () {
     function x19() {
         this.member = [d1, d2];
     }
     return x19;
-})();
+}());
 var x20 = (function () {
     function x20() {
         this.member = [d1, d2];
     }
     return x20;
-})();
+}());
 var x21 = (function () {
     function x21() {
         this.member = [d1, d2];
     }
     return x21;
-})();
+}());
 var x22 = (function () {
     function x22() {
         this.member = { n: [d1, d2] };
     }
     return x22;
-})();
+}());
 var x23 = (function () {
     function x23() {
         this.member = function (n) { var n; return null; };
     }
     return x23;
-})();
+}());
 var x24 = (function () {
     function x24() {
         this.member = { func: function (n) { return [d1, d2]; } };
     }
     return x24;
-})();
+}());
 var x25 = (function () {
     function x25() {
         this.member = function () { return [d1, d2]; };
     }
     return x25;
-})();
+}());
 var x26 = (function () {
     function x26() {
         this.member = function () { return [d1, d2]; };
     }
     return x26;
-})();
+}());
 var x27 = (function () {
     function x27() {
         this.member = function named() { return [d1, d2]; };
     }
     return x27;
-})();
+}());
 var x28 = (function () {
     function x28() {
         this.member = function () { return [d1, d2]; };
     }
     return x28;
-})();
+}());
 var x29 = (function () {
     function x29() {
         this.member = function () { return [d1, d2]; };
     }
     return x29;
-})();
+}());
 var x30 = (function () {
     function x30() {
         this.member = function named() { return [d1, d2]; };
     }
     return x30;
-})();
+}());
 var x31 = (function () {
     function x31() {
         this.member = [d1, d2];
     }
     return x31;
-})();
+}());
 var x32 = (function () {
     function x32() {
         this.member = [d1, d2];
     }
     return x32;
-})();
+}());
 var x33 = (function () {
     function x33() {
         this.member = [d1, d2];
     }
     return x33;
-})();
+}());
 var x34 = (function () {
     function x34() {
         this.member = { n: [d1, d2] };
     }
     return x34;
-})();
+}());
 var x35 = (function () {
     function x35() {
         this.member = function (n) { var n; return null; };
     }
     return x35;
-})();
+}());
 var x36 = (function () {
     function x36() {
         this.member = { func: function (n) { return [d1, d2]; } };
     }
     return x36;
-})();
+}());
 var x37 = (function () {
     function x37() {
         this.member = function () { return [d1, d2]; };
     }
     return x37;
-})();
+}());
 var x38 = (function () {
     function x38() {
         this.member = function () { return [d1, d2]; };
     }
     return x38;
-})();
+}());
 var x39 = (function () {
     function x39() {
         this.member = function named() { return [d1, d2]; };
     }
     return x39;
-})();
+}());
 var x40 = (function () {
     function x40() {
         this.member = function () { return [d1, d2]; };
     }
     return x40;
-})();
+}());
 var x41 = (function () {
     function x41() {
         this.member = function () { return [d1, d2]; };
     }
     return x41;
-})();
+}());
 var x42 = (function () {
     function x42() {
         this.member = function named() { return [d1, d2]; };
     }
     return x42;
-})();
+}());
 var x43 = (function () {
     function x43() {
         this.member = [d1, d2];
     }
     return x43;
-})();
+}());
 var x44 = (function () {
     function x44() {
         this.member = [d1, d2];
     }
     return x44;
-})();
+}());
 var x45 = (function () {
     function x45() {
         this.member = [d1, d2];
     }
     return x45;
-})();
+}());
 var x46 = (function () {
     function x46() {
         this.member = { n: [d1, d2] };
     }
     return x46;
-})();
+}());
 var x47 = (function () {
     function x47() {
         this.member = function (n) { var n; return null; };
     }
     return x47;
-})();
+}());
 var x48 = (function () {
     function x48() {
         this.member = { func: function (n) { return [d1, d2]; } };
     }
     return x48;
-})();
+}());
 var x49 = (function () {
     function x49() {
     }
     x49.member = function () { return [d1, d2]; };
     return x49;
-})();
+}());
 var x50 = (function () {
     function x50() {
     }
     x50.member = function () { return [d1, d2]; };
     return x50;
-})();
+}());
 var x51 = (function () {
     function x51() {
     }
     x51.member = function named() { return [d1, d2]; };
     return x51;
-})();
+}());
 var x52 = (function () {
     function x52() {
     }
     x52.member = function () { return [d1, d2]; };
     return x52;
-})();
+}());
 var x53 = (function () {
     function x53() {
     }
     x53.member = function () { return [d1, d2]; };
     return x53;
-})();
+}());
 var x54 = (function () {
     function x54() {
     }
     x54.member = function named() { return [d1, d2]; };
     return x54;
-})();
+}());
 var x55 = (function () {
     function x55() {
     }
     x55.member = [d1, d2];
     return x55;
-})();
+}());
 var x56 = (function () {
     function x56() {
     }
     x56.member = [d1, d2];
     return x56;
-})();
+}());
 var x57 = (function () {
     function x57() {
     }
     x57.member = [d1, d2];
     return x57;
-})();
+}());
 var x58 = (function () {
     function x58() {
     }
     x58.member = { n: [d1, d2] };
     return x58;
-})();
+}());
 var x59 = (function () {
     function x59() {
     }
     x59.member = function (n) { var n; return null; };
     return x59;
-})();
+}());
 var x60 = (function () {
     function x60() {
     }
     x60.member = { func: function (n) { return [d1, d2]; } };
     return x60;
-})();
+}());
 var x61 = (function () {
     function x61() {
     }
     x61.member = function () { return [d1, d2]; };
     return x61;
-})();
+}());
 var x62 = (function () {
     function x62() {
     }
     x62.member = function () { return [d1, d2]; };
     return x62;
-})();
+}());
 var x63 = (function () {
     function x63() {
     }
     x63.member = function named() { return [d1, d2]; };
     return x63;
-})();
+}());
 var x64 = (function () {
     function x64() {
     }
     x64.member = function () { return [d1, d2]; };
     return x64;
-})();
+}());
 var x65 = (function () {
     function x65() {
     }
     x65.member = function () { return [d1, d2]; };
     return x65;
-})();
+}());
 var x66 = (function () {
     function x66() {
     }
     x66.member = function named() { return [d1, d2]; };
     return x66;
-})();
+}());
 var x67 = (function () {
     function x67() {
     }
     x67.member = [d1, d2];
     return x67;
-})();
+}());
 var x68 = (function () {
     function x68() {
     }
     x68.member = [d1, d2];
     return x68;
-})();
+}());
 var x69 = (function () {
     function x69() {
     }
     x69.member = [d1, d2];
     return x69;
-})();
+}());
 var x70 = (function () {
     function x70() {
     }
     x70.member = { n: [d1, d2] };
     return x70;
-})();
+}());
 var x71 = (function () {
     function x71() {
     }
     x71.member = function (n) { var n; return null; };
     return x71;
-})();
+}());
 var x72 = (function () {
     function x72() {
     }
     x72.member = { func: function (n) { return [d1, d2]; } };
     return x72;
-})();
+}());
 var x73 = (function () {
     function x73() {
     }
     x73.member = function () { return [d1, d2]; };
     return x73;
-})();
+}());
 var x74 = (function () {
     function x74() {
     }
     x74.member = function () { return [d1, d2]; };
     return x74;
-})();
+}());
 var x75 = (function () {
     function x75() {
     }
     x75.member = function named() { return [d1, d2]; };
     return x75;
-})();
+}());
 var x76 = (function () {
     function x76() {
     }
     x76.member = function () { return [d1, d2]; };
     return x76;
-})();
+}());
 var x77 = (function () {
     function x77() {
     }
     x77.member = function () { return [d1, d2]; };
     return x77;
-})();
+}());
 var x78 = (function () {
     function x78() {
     }
     x78.member = function named() { return [d1, d2]; };
     return x78;
-})();
+}());
 var x79 = (function () {
     function x79() {
     }
     x79.member = [d1, d2];
     return x79;
-})();
+}());
 var x80 = (function () {
     function x80() {
     }
     x80.member = [d1, d2];
     return x80;
-})();
+}());
 var x81 = (function () {
     function x81() {
     }
     x81.member = [d1, d2];
     return x81;
-})();
+}());
 var x82 = (function () {
     function x82() {
     }
     x82.member = { n: [d1, d2] };
     return x82;
-})();
+}());
 var x83 = (function () {
     function x83() {
     }
     x83.member = function (n) { var n; return null; };
     return x83;
-})();
+}());
 var x84 = (function () {
     function x84() {
     }
     x84.member = { func: function (n) { return [d1, d2]; } };
     return x84;
-})();
+}());
 var x85 = (function () {
     function x85(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
     }
     return x85;
-})();
+}());
 var x86 = (function () {
     function x86(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
     }
     return x86;
-})();
+}());
 var x87 = (function () {
     function x87(parm) {
         if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
     }
     return x87;
-})();
+}());
 var x88 = (function () {
     function x88(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
     }
     return x88;
-})();
+}());
 var x89 = (function () {
     function x89(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
     }
     return x89;
-})();
+}());
 var x90 = (function () {
     function x90(parm) {
         if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
     }
     return x90;
-})();
+}());
 var x91 = (function () {
     function x91(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
     }
     return x91;
-})();
+}());
 var x92 = (function () {
     function x92(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
     }
     return x92;
-})();
+}());
 var x93 = (function () {
     function x93(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
     }
     return x93;
-})();
+}());
 var x94 = (function () {
     function x94(parm) {
         if (parm === void 0) { parm = { n: [d1, d2] }; }
     }
     return x94;
-})();
+}());
 var x95 = (function () {
     function x95(parm) {
         if (parm === void 0) { parm = function (n) { var n; return null; }; }
     }
     return x95;
-})();
+}());
 var x96 = (function () {
     function x96(parm) {
         if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
     }
     return x96;
-})();
+}());
 var x97 = (function () {
     function x97(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x97;
-})();
+}());
 var x98 = (function () {
     function x98(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x98;
-})();
+}());
 var x99 = (function () {
     function x99(parm) {
         if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x99;
-})();
+}());
 var x100 = (function () {
     function x100(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x100;
-})();
+}());
 var x101 = (function () {
     function x101(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x101;
-})();
+}());
 var x102 = (function () {
     function x102(parm) {
         if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x102;
-})();
+}());
 var x103 = (function () {
     function x103(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
         this.parm = parm;
     }
     return x103;
-})();
+}());
 var x104 = (function () {
     function x104(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
         this.parm = parm;
     }
     return x104;
-})();
+}());
 var x105 = (function () {
     function x105(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
         this.parm = parm;
     }
     return x105;
-})();
+}());
 var x106 = (function () {
     function x106(parm) {
         if (parm === void 0) { parm = { n: [d1, d2] }; }
         this.parm = parm;
     }
     return x106;
-})();
+}());
 var x107 = (function () {
     function x107(parm) {
         if (parm === void 0) { parm = function (n) { var n; return null; }; }
         this.parm = parm;
     }
     return x107;
-})();
+}());
 var x108 = (function () {
     function x108(parm) {
         if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
         this.parm = parm;
     }
     return x108;
-})();
+}());
 var x109 = (function () {
     function x109(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x109;
-})();
+}());
 var x110 = (function () {
     function x110(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x110;
-})();
+}());
 var x111 = (function () {
     function x111(parm) {
         if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x111;
-})();
+}());
 var x112 = (function () {
     function x112(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x112;
-})();
+}());
 var x113 = (function () {
     function x113(parm) {
         if (parm === void 0) { parm = function () { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x113;
-})();
+}());
 var x114 = (function () {
     function x114(parm) {
         if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
         this.parm = parm;
     }
     return x114;
-})();
+}());
 var x115 = (function () {
     function x115(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
         this.parm = parm;
     }
     return x115;
-})();
+}());
 var x116 = (function () {
     function x116(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
         this.parm = parm;
     }
     return x116;
-})();
+}());
 var x117 = (function () {
     function x117(parm) {
         if (parm === void 0) { parm = [d1, d2]; }
         this.parm = parm;
     }
     return x117;
-})();
+}());
 var x118 = (function () {
     function x118(parm) {
         if (parm === void 0) { parm = { n: [d1, d2] }; }
         this.parm = parm;
     }
     return x118;
-})();
+}());
 var x119 = (function () {
     function x119(parm) {
         if (parm === void 0) { parm = function (n) { var n; return null; }; }
         this.parm = parm;
     }
     return x119;
-})();
+}());
 var x120 = (function () {
     function x120(parm) {
         if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
         this.parm = parm;
     }
     return x120;
-})();
+}());
 function x121(parm) {
     if (parm === void 0) { parm = function () { return [d1, d2]; }; }
 }

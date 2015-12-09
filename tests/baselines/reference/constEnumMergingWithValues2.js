@@ -14,6 +14,6 @@ define(["require", "exports"], function (require, exports) {
         function foo() {
         }
         return foo;
-    })();
+    }());
     return foo;
 });

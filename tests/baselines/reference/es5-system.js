@@ -28,7 +28,7 @@ System.register([], function(exports_1) {
                     return 42;
                 };
                 return A;
-            })();
+            }());
             exports_1("default", A);
         }
     }

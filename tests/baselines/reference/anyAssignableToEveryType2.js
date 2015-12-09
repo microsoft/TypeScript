@@ -136,12 +136,12 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var A2 = (function () {
     function A2() {
     }
     return A2;
-})();
+}());
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -155,7 +155,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var c;
 (function (c) {
     c.bar = 1;

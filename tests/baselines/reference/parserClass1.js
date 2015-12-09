@@ -22,5 +22,5 @@ var NullLogger = (function () {
     NullLogger.prototype.log = function (s) {
     };
     return NullLogger;
-})();
+}());
 exports.NullLogger = NullLogger;

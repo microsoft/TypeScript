@@ -34,14 +34,14 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var LanguageSpec_section_4_5_inference = (function () {
     function LanguageSpec_section_4_5_inference() {
     }
@@ -82,4 +82,4 @@ var LanguageSpec_section_4_5_inference = (function () {
         configurable: true
     });
     return LanguageSpec_section_4_5_inference;
-})();
+}());

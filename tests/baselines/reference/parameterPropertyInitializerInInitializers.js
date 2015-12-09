@@ -11,4 +11,4 @@ var Foo = (function () {
         this.y = y;
     }
     return Foo;
-})();
+}());

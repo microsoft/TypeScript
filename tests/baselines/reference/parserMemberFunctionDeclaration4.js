@@ -10,4 +10,4 @@ var C = (function () {
     C.prototype.Foo = function () { }
     exports.Foo = Foo;;
     return C;
-})();
+}());

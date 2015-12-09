@@ -23,5 +23,5 @@ define(["require", "exports"], function (require, exports) {
             this.listeners = {};
         }
         return Emitter;
-    })();
+    }());
 });

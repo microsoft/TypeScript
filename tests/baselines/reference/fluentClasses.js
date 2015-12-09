@@ -31,7 +31,7 @@ var A = (function () {
         return this;
     };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -41,7 +41,7 @@ var B = (function (_super) {
         return this;
     };
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -51,6 +51,6 @@ var C = (function (_super) {
         return this;
     };
     return C;
-})(B);
+}(B));
 var c;
 var z = c.foo().bar().baz(); // Fluent pattern

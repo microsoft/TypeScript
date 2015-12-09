@@ -45,7 +45,7 @@ var M1;
             this.m1.x = 20; // Error
         }
         return C1;
-    })();
+    }());
     M1.C1 = C1;
 })(M1 = exports.M1 || (exports.M1 = {}));
 //// [foo2.js]
@@ -63,6 +63,6 @@ var M1;
             tmp.x = 20; // Error			
         }
         return C1;
-    })();
+    }());
     M1.C1 = C1;
 })(M1 = exports.M1 || (exports.M1 = {}));

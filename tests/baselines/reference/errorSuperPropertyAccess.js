@@ -165,7 +165,7 @@ var NoBase = (function () {
         configurable: true
     });
     return NoBase;
-})();
+}());
 var SomeBase = (function () {
     function SomeBase() {
         this.privateMember = 0;
@@ -178,7 +178,7 @@ var SomeBase = (function () {
     SomeBase.privateStaticMember = 0;
     SomeBase.publicStaticMember = 0;
     return SomeBase;
-})();
+}());
 //super.publicInstanceMemberNotFunction in constructor of derived class
 //super.publicInstanceMemberNotFunction in instance member function of derived class
 //super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
@@ -212,7 +212,7 @@ var SomeDerived1 = (function (_super) {
         };
     };
     return SomeDerived1;
-})(SomeBase);
+}(SomeBase));
 //super.privateProperty in constructor of derived class
 //super.privateProperty in instance member function of derived class
 //super.privateProperty in instance member accessor(get and set) of derived class
@@ -237,7 +237,7 @@ var SomeDerived2 = (function (_super) {
         configurable: true
     });
     return SomeDerived2;
-})(SomeBase);
+}(SomeBase));
 //super.publicStaticMemberNotFunction in static member function of derived class
 //super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
 //super.privateStaticProperty in static member function of derived class
@@ -268,6 +268,6 @@ var SomeDerived3 = (function (_super) {
         configurable: true
     });
     return SomeDerived3;
-})(SomeBase);
+}(SomeBase));
 // In object literal
 var obj = { n: _super.wat, p: _super.foo.call(this) };

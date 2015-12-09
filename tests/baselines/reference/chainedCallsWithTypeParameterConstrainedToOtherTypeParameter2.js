@@ -59,7 +59,7 @@ var Chain = (function () {
         return null;
     };
     return Chain;
-})();
+}());
 var Chain2 = (function () {
     function Chain2(value) {
         this.value = value;
@@ -78,4 +78,4 @@ var Chain2 = (function () {
         return null;
     };
     return Chain2;
-})();
+}());

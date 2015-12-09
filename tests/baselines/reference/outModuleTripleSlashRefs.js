@@ -41,7 +41,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 define("ref/a", ["require", "exports"], function (require, exports) {
     "use strict";
     /// <reference path="./b.ts" />
@@ -49,7 +49,7 @@ define("ref/a", ["require", "exports"], function (require, exports) {
         function A() {
         }
         return A;
-    })();
+    }());
     exports.A = A;
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
@@ -60,7 +60,7 @@ define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
             _super.apply(this, arguments);
         }
         return B;
-    })(a_1.A);
+    }(a_1.A));
     exports.B = B;
 });
 //# sourceMappingURL=all.js.map

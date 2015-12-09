@@ -46,7 +46,7 @@ var C = (function () {
     });
     C.bar = function () { };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -68,4 +68,4 @@ var D = (function (_super) {
         configurable: true
     });
     return D;
-})(C);
+}(C));

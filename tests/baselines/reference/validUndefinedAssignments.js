@@ -35,7 +35,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var f;
 f = x;
 var g;

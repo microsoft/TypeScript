@@ -20,6 +20,6 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 var c = new C();
 c.P(1, 2, 3);

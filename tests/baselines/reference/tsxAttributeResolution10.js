@@ -40,7 +40,7 @@ define(["require", "exports"], function (require, exports) {
         MyComponent.prototype.render = function () {
         };
         return MyComponent;
-    })();
+    }());
     exports.MyComponent = MyComponent;
     // Should be an error
     <MyComponent bar='world'/>;

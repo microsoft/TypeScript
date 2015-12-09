@@ -58,7 +58,7 @@ var BigGreeter = (function (_super) {
         return <div></div>;
     };
     return BigGreeter;
-})(React.Component);
+}(React.Component));
 // OK
 var a = <Greet />;
 // OK - always valid to specify 'key'
