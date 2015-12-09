@@ -5633,6 +5633,16 @@ namespace ts {
                 if (targetReturnType === voidType) return result;
                 const sourceReturnType = getReturnTypeOfSignature(source);
 
+                // The follow block preserves old behavior forbidding boolean returning functions from being assignable to type guard returning functions
+                if (targetReturnType.flags & TypeFlags.PredicateType && (targetReturnType as PredicateType).predicate.kind === TypePredicateKind.Identifier) {
+                    if (!(sourceReturnType.flags & TypeFlags.PredicateType)) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
+                        }
+                        return Ternary.False;
+                    }
+                }
+
                 return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
             }
 

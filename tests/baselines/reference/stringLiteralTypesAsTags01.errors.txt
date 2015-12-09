@@ -1,7 +1,8 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(20,10): error TS2394: Overload signature is not compatible with function implementation.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(22,21): error TS2304: Cannot find name 'is'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (1 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts (2 errors) ====
     
     type Kind = "A" | "B"
     
@@ -22,6 +23,8 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags01.ts(22,21)
     function hasKind(entity: Entity, kind: "A"): entity is A;
     function hasKind(entity: Entity, kind: "B"): entity is B;
     function hasKind(entity: Entity, kind: Kind): entity is Entity;
+             ~~~~~~~
+!!! error TS2394: Overload signature is not compatible with function implementation.
     function hasKind(entity: Entity, kind: Kind): boolean {
         return kind === is;
                         ~~
