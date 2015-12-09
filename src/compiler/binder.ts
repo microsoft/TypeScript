@@ -1277,13 +1277,14 @@ namespace ts {
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
-            if (node.parameterName && node.parameterName.kind === SyntaxKind.Identifier) {
-                checkStrictModeIdentifier(node.parameterName as Identifier);
+            const { parameterName, type } = node;
+            if (parameterName && parameterName.kind === SyntaxKind.Identifier) {
+                checkStrictModeIdentifier(parameterName as Identifier);
             }
-            if (node.parameterName && node.parameterName.kind === SyntaxKind.ThisType) {
+            if (parameterName && parameterName.kind === SyntaxKind.ThisType) {
                 seenThisKeyword = true;
             }
-            bind(node.type);
+            bind(type);
         }
 
         function bindSourceFileIfExternalModule() {
