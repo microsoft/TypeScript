@@ -130,7 +130,7 @@ function baz1<a>(value: void|a): void {
 >a : a
 
       if (isNonVoid(value)) {
->isNonVoid(value) : value is {}
+>isNonVoid(value) : value is a
 >isNonVoid : <a>(value: void | a) => value is a
 >value : void | a
 
