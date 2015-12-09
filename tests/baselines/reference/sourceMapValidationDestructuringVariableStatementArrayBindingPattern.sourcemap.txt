@@ -100,12 +100,12 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
   >
   >
   >
-2 >let 
-3 >    [, nameA] = robotA
-4 >                     ;
+2 >let [, 
+3 >    nameA
+4 >                     ] = robotA;
 1 >Emitted(3, 1) Source(9, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(9, 5) + SourceIndex(0)
-3 >Emitted(3, 22) Source(9, 23) + SourceIndex(0)
+2 >Emitted(3, 5) Source(9, 8) + SourceIndex(0)
+3 >Emitted(3, 22) Source(9, 13) + SourceIndex(0)
 4 >Emitted(3, 23) Source(9, 24) + SourceIndex(0)
 ---
 >>>var numberB = robotB[0];

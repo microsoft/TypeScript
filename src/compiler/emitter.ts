@@ -4007,7 +4007,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         let nodeForSourceMap: Node;
                         // If binding element is part of binding pattern with single element, use binding pattern
-                        if (target.kind === SyntaxKind.BindingElement && hasSingleBindingElement(<BindingPattern>target.parent)) {
+                        if (target.kind === SyntaxKind.BindingElement && (<BindingPattern>target.parent).elements.length === 1) {
                             nodeForSourceMap = (target.parent.parent.kind === SyntaxKind.VariableDeclaration || target.parent.parent.kind === SyntaxKind.Parameter) ?
                                 target.parent.parent : // Set sourcemap as whole variable declaration
                                 target.parent; // Only binding Pattern
@@ -4017,26 +4017,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, nodeForSourceMap);
                         emitCount++;
-                    }
-
-                    function hasSingleBindingElement(pattern: BindingPattern) {
-                        if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
-                            return pattern.elements.length === 1;
-                        }
-
-                        let hasFoundEmittingElement = false;
-                        for (const element of pattern.elements) {
-                            if (element.kind !== SyntaxKind.OmittedExpression) {
-                                if (hasFoundEmittingElement) {
-                                    // More than one elements are going to be emitted
-                                    return false;
-                                }
-                                hasFoundEmittingElement = true;
-                            }
-                        }
-
-                        // If we found exactly one emitting element
-                        return hasFoundEmittingElement;
                     }
                 }
             }

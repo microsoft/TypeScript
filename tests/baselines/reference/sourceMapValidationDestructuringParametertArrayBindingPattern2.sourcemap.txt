@@ -75,9 +75,9 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^^^->
 1->
-2 >        [, skillA]: Robot
-1->Emitted(3, 9) Source(7, 15) + SourceIndex(0)
-2 >Emitted(3, 23) Source(7, 32) + SourceIndex(0)
+2 >        skillA
+1->Emitted(3, 9) Source(7, 18) + SourceIndex(0)
+2 >Emitted(3, 23) Source(7, 24) + SourceIndex(0)
 ---
 >>>    console.log(skillA);
 1->^^^^
@@ -88,7 +88,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 6 >                ^^^^^^
 7 >                      ^
 8 >                       ^
-1->) {
+1->]: Robot) {
   >    
 2 >    console
 3 >           .

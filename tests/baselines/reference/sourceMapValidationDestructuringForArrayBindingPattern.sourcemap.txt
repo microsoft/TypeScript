@@ -242,9 +242,9 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern.ts
 3 >    
 4 >    (
 5 >     let
-6 >         
-7 >         [, nameA] = robotA
-8 >                          , 
+6 >         [, 
+7 >         nameA
+8 >                          ] = robotA, 
 9 >                            i
 10>                              = 
 11>                                0
@@ -262,8 +262,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern.ts
 3 >Emitted(10, 5) Source(18, 5) + SourceIndex(0)
 4 >Emitted(10, 6) Source(18, 6) + SourceIndex(0)
 5 >Emitted(10, 9) Source(18, 9) + SourceIndex(0)
-6 >Emitted(10, 10) Source(18, 10) + SourceIndex(0)
-7 >Emitted(10, 27) Source(18, 28) + SourceIndex(0)
+6 >Emitted(10, 10) Source(18, 13) + SourceIndex(0)
+7 >Emitted(10, 27) Source(18, 18) + SourceIndex(0)
 8 >Emitted(10, 29) Source(18, 30) + SourceIndex(0)
 9 >Emitted(10, 30) Source(18, 31) + SourceIndex(0)
 10>Emitted(10, 33) Source(18, 34) + SourceIndex(0)
@@ -347,8 +347,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern.ts
 6 >         
 7 >         [, nameA] = getRobot()
 8 >                        
-9 >                          [, nameA] = getRobot()
-10>                                       , 
+9 >                          nameA
+10>                                       ] = getRobot(), 
 11>                                         i
 12>                                           = 
 13>                                             0
@@ -368,8 +368,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern.ts
 5 >Emitted(13, 9) Source(21, 9) + SourceIndex(0)
 6 >Emitted(13, 10) Source(21, 10) + SourceIndex(0)
 7 >Emitted(13, 25) Source(21, 32) + SourceIndex(0)
-8 >Emitted(13, 27) Source(21, 10) + SourceIndex(0)
-9 >Emitted(13, 40) Source(21, 32) + SourceIndex(0)
+8 >Emitted(13, 27) Source(21, 13) + SourceIndex(0)
+9 >Emitted(13, 40) Source(21, 18) + SourceIndex(0)
 10>Emitted(13, 42) Source(21, 34) + SourceIndex(0)
 11>Emitted(13, 43) Source(21, 35) + SourceIndex(0)
 12>Emitted(13, 46) Source(21, 38) + SourceIndex(0)
@@ -453,8 +453,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern.ts
 6 >         
 7 >         [, nameA] = [2, "trimmer", "trimming"]
 8 >                                        
-9 >                                          [, nameA] = [2, "trimmer", "trimming"]
-10>                                                       , 
+9 >                                          nameA
+10>                                                       ] = [2, "trimmer", "trimming"], 
 11>                                                         i
 12>                                                           = 
 13>                                                             0
@@ -474,8 +474,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern.ts
 5 >Emitted(16, 9) Source(24, 9) + SourceIndex(0)
 6 >Emitted(16, 10) Source(24, 10) + SourceIndex(0)
 7 >Emitted(16, 41) Source(24, 48) + SourceIndex(0)
-8 >Emitted(16, 43) Source(24, 10) + SourceIndex(0)
-9 >Emitted(16, 56) Source(24, 48) + SourceIndex(0)
+8 >Emitted(16, 43) Source(24, 13) + SourceIndex(0)
+9 >Emitted(16, 56) Source(24, 18) + SourceIndex(0)
 10>Emitted(16, 58) Source(24, 50) + SourceIndex(0)
 11>Emitted(16, 59) Source(24, 51) + SourceIndex(0)
 12>Emitted(16, 62) Source(24, 54) + SourceIndex(0)

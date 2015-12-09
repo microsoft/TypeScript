@@ -111,12 +111,12 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 1 >
   >
   >
-2 >let 
-3 >    [, skillA] = multiRobotA
-4 >                           ;
+2 >let [, 
+3 >    skillA
+4 >                           ] = multiRobotA;
 1 >Emitted(3, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(8, 5) + SourceIndex(0)
-3 >Emitted(3, 28) Source(8, 29) + SourceIndex(0)
+2 >Emitted(3, 5) Source(8, 8) + SourceIndex(0)
+3 >Emitted(3, 28) Source(8, 14) + SourceIndex(0)
 4 >Emitted(3, 29) Source(8, 30) + SourceIndex(0)
 ---
 >>>var nameMB = multiRobotB[0];

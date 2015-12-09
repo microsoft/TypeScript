@@ -370,12 +370,12 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 2 >    
 3 >        let [, nameA]
 4 >                         
-5 >                           [, nameA]
+5 >                           nameA
 1 >Emitted(14, 5) Source(21, 6) + SourceIndex(0)
 2 >Emitted(14, 9) Source(21, 6) + SourceIndex(0)
 3 >Emitted(14, 26) Source(21, 19) + SourceIndex(0)
-4 >Emitted(14, 28) Source(21, 10) + SourceIndex(0)
-5 >Emitted(14, 41) Source(21, 19) + SourceIndex(0)
+4 >Emitted(14, 28) Source(21, 13) + SourceIndex(0)
+5 >Emitted(14, 41) Source(21, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -386,7 +386,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1 > of robots) {
+1 >] of robots) {
   >    
 2 >    console
 3 >           .
@@ -466,12 +466,12 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 2 >    
 3 >        let [, nameA]
 4 >                   
-5 >                     [, nameA]
+5 >                     nameA
 1 >Emitted(18, 5) Source(24, 6) + SourceIndex(0)
 2 >Emitted(18, 9) Source(24, 6) + SourceIndex(0)
 3 >Emitted(18, 20) Source(24, 19) + SourceIndex(0)
-4 >Emitted(18, 22) Source(24, 10) + SourceIndex(0)
-5 >Emitted(18, 35) Source(24, 19) + SourceIndex(0)
+4 >Emitted(18, 22) Source(24, 13) + SourceIndex(0)
+5 >Emitted(18, 35) Source(24, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -482,7 +482,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1 > of getRobots()) {
+1 >] of getRobots()) {
   >    
 2 >    console
 3 >           .
@@ -568,12 +568,12 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 2 >    
 3 >        let [, nameA]
 4 >                   
-5 >                     [, nameA]
+5 >                     nameA
 1 >Emitted(22, 5) Source(27, 6) + SourceIndex(0)
 2 >Emitted(22, 9) Source(27, 6) + SourceIndex(0)
 3 >Emitted(22, 20) Source(27, 19) + SourceIndex(0)
-4 >Emitted(22, 22) Source(27, 10) + SourceIndex(0)
-5 >Emitted(22, 35) Source(27, 19) + SourceIndex(0)
+4 >Emitted(22, 22) Source(27, 13) + SourceIndex(0)
+5 >Emitted(22, 35) Source(27, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -584,7 +584,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1 > of [robotA, robotB]) {
+1 >] of [robotA, robotB]) {
   >    
 2 >    console
 3 >           .
