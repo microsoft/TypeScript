@@ -78,7 +78,7 @@ var m1;
             function c() {
             }
             return c;
-        })();
+        }());
         m2.c = c;
         ;
         /** i*/
@@ -109,7 +109,7 @@ var m4;
             function c() {
             }
             return c;
-        })();
+        }());
         m2.c = c;
         ;
         /** i */

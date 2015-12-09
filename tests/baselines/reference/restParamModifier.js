@@ -9,4 +9,4 @@ var C = (function () {
         if (string === void 0) { string = []; }
     }
     return C;
-})();
+}());

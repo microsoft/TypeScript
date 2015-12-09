@@ -57,7 +57,7 @@ var A = (function () {
     }
     A.prototype.foo = function () { return ''; };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -65,12 +65,12 @@ var B = (function (_super) {
     }
     B.prototype.bar = function () { return ''; };
     return B;
-})(A);
+}(A));
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var a;
 // error
 var b = {

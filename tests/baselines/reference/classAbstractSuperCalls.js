@@ -38,7 +38,7 @@ var A = (function () {
     }
     A.prototype.foo = function () { return 1; };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -47,7 +47,7 @@ var B = (function (_super) {
     B.prototype.bar = function () { _super.prototype.foo.call(this); };
     B.prototype.baz = function () { return this.foo; };
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -57,18 +57,18 @@ var C = (function (_super) {
     C.prototype.qux = function () { return _super.prototype.foo.call(this) || _super.prototype.foo; }; // 2 errors, foo is abstract
     C.prototype.norf = function () { return _super.prototype.bar.call(this); };
     return C;
-})(B);
+}(B));
 var AA = (function () {
     function AA() {
     }
     AA.prototype.foo = function () { return 1; };
     AA.prototype.bar = function () { return this.foo(); };
     return AA;
-})();
+}());
 var BB = (function (_super) {
     __extends(BB, _super);
     function BB() {
         _super.apply(this, arguments);
     }
     return BB;
-})(AA);
+}(AA));

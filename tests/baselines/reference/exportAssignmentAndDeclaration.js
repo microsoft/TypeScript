@@ -23,6 +23,6 @@ define(["require", "exports"], function (require, exports) {
         function C1() {
         }
         return C1;
-    })();
+    }());
     return C1;
 });

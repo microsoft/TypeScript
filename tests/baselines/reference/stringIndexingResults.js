@@ -41,7 +41,7 @@ var C = (function () {
         this.y = '';
     }
     return C;
-})();
+}());
 var c;
 var r1 = c['y'];
 var r2 = c['a'];

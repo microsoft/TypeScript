@@ -140,7 +140,7 @@ var C4 = (function () {
         var a = _a[0], b = _a[1], q = _a[2];
     };
     return C4;
-})();
+}());
 // Destructuring parameter declarations do not permit type annotations on the individual binding patterns,
 // as such annotations would conflict with the already established meaning of colons in object literals.
 // Type annotations must instead be written on the top- level parameter declaration

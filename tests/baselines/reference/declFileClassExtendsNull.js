@@ -15,7 +15,7 @@ var ExtendsNull = (function (_super) {
         _super.apply(this, arguments);
     }
     return ExtendsNull;
-})(null);
+}(null));
 
 
 //// [declFileClassExtendsNull.d.ts]

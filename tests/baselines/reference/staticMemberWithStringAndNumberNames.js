@@ -25,4 +25,4 @@ var C = (function () {
     C.s2 = C['0'];
     C.s3 = C[0];
     return C;
-})();
+}());

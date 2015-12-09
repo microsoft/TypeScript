@@ -30,37 +30,37 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 exports.a = a;
 var x = (function () {
     function x() {
     }
     return x;
-})();
+}());
 exports.x = x;
 var m = (function () {
     function m() {
     }
     return m;
-})();
+}());
 exports.m = m;
 var a11 = (function () {
     function a11() {
     }
     return a11;
-})();
+}());
 exports.a11 = a11;
 var a12 = (function () {
     function a12() {
     }
     return a12;
-})();
+}());
 exports.a12 = a12;
 var x11 = (function () {
     function x11() {
     }
     return x11;
-})();
+}());
 exports.x11 = x11;
 //// [client.js]
 "use strict";

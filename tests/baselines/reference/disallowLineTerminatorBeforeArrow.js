@@ -157,7 +157,7 @@ var m;
             };
         }
         return City;
-    })();
+    }());
     (function (Enum) {
         Enum[Enum["claw"] = (function () {
             return 10;

@@ -19,7 +19,7 @@ var Clod = (function () {
     Clod.x = 10;
     Clod.y = 10;
     return Clod;
-})();
+}());
 var Clod;
 (function (Clod) {
     var p = Clod.x;

@@ -15,14 +15,14 @@ function f() {
         function C() {
         }
         return C;
-    })();
+    }());
     var c1 = C;
     {
         var C_1 = (function () {
             function C_1() {
             }
             return C_1;
-        })();
+        }());
         var c2 = C_1;
     }
     return C === c1;

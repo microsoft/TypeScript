@@ -33,7 +33,7 @@ var _modes;
         function Mode() {
         }
         return Mode;
-    })();
+    }());
 })(_modes || (_modes = {}));
 //_modes. // produces an internal error - please implement in derived class
 var editor;
@@ -45,5 +45,5 @@ var editor;
             var x;
         }
         return Bug;
-    })();
+    }());
 })(editor || (editor = {}));

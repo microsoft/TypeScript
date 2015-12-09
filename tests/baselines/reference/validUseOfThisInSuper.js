@@ -20,7 +20,7 @@ var Base = (function () {
         this.b = b;
     }
     return Base;
-})();
+}());
 var Super = (function (_super) {
     __extends(Super, _super);
     function Super() {
@@ -28,4 +28,4 @@ var Super = (function (_super) {
         _super.call(this, (function () { return _this; })()); // ok since this is not the case: The constructor declares parameter properties or the containing class declares instance member variables with initializers.
     }
     return Super;
-})(Base);
+}(Base));

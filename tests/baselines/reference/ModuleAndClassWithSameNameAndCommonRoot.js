@@ -54,7 +54,7 @@ var X;
                 this.y = y;
             }
             return Point;
-        })();
+        }());
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -68,4 +68,4 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());

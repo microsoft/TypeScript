@@ -35,7 +35,7 @@ define(["require", "exports"], function (require, exports) {
                     return "Bill Gates";
                 };
                 return UserServices;
-            })();
+            }());
             Services.UserServices = UserServices;
         })(Services = App.Services || (App.Services = {}));
     })(App || (App = {}));

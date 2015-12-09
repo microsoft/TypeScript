@@ -35,5 +35,5 @@ define(["require", "exports", "foo"], function (require, exports, foo) {
             this.bar = new foo.Foo();
         }
         return Test;
-    })();
+    }());
 });

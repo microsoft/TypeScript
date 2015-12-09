@@ -24,7 +24,7 @@ define(["require", "exports"], function (require, exports) {
             return null;
         };
         return Promise;
-    })();
+    }());
     exports.Promise = Promise;
 });
 //// [memberAccessMustUseModuleInstances_1.js]

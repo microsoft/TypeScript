@@ -26,7 +26,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var C;
 (function (C) {
     C.x = 1;

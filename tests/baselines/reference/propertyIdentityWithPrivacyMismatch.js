@@ -37,12 +37,12 @@ define(["require", "exports"], function (require, exports) {
         function Foo1() {
         }
         return Foo1;
-    })();
+    }());
     var Foo2 = (function () {
         function Foo2() {
         }
         return Foo2;
-    })();
+    }());
     var y;
     var y;
 });

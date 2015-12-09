@@ -101,7 +101,7 @@ var A = (function () {
         }
     };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
@@ -121,4 +121,4 @@ var B = (function () {
     B.prototype.bar = function (a) {
     };
     return B;
-})();
+}());

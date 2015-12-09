@@ -14,7 +14,7 @@ var A = (function () {
     }
     A.prototype.foo = function () { };
     return A;
-})();
+}());
 var x = A;
 var C = (function (_super) {
     __extends(C, _super);
@@ -22,4 +22,4 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(x); // error, could not find symbol xs
+}(x)); // error, could not find symbol xs

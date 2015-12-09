@@ -29,7 +29,7 @@ var Sammy = (function () {
         return -1;
     };
     return Sammy;
-})();
+}());
 var Sammy;
 (function (Sammy) {
     Sammy.x = 1;

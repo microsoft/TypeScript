@@ -14,11 +14,11 @@ var B = (function (_super) {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
         _super.apply(this, arguments);
     }
     return A;
-})(A);
+}(A));

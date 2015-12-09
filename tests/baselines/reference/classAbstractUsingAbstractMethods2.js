@@ -37,21 +37,21 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -59,7 +59,7 @@ var D = (function (_super) {
     }
     D.prototype.foo = function () { };
     return D;
-})(A);
+}(A));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -67,26 +67,26 @@ var E = (function (_super) {
     }
     E.prototype.foo = function () { };
     return E;
-})(A);
+}(A));
 var AA = (function () {
     function AA() {
     }
     return AA;
-})();
+}());
 var BB = (function (_super) {
     __extends(BB, _super);
     function BB() {
         _super.apply(this, arguments);
     }
     return BB;
-})(AA);
+}(AA));
 var CC = (function (_super) {
     __extends(CC, _super);
     function CC() {
         _super.apply(this, arguments);
     }
     return CC;
-})(AA);
+}(AA));
 var DD = (function (_super) {
     __extends(DD, _super);
     function DD() {
@@ -94,4 +94,4 @@ var DD = (function (_super) {
     }
     DD.prototype.foo = function () { };
     return DD;
-})(AA);
+}(AA));

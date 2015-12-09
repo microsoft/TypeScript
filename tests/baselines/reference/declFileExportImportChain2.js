@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
                 function c1() {
                 }
                 return c1;
-            })();
+            }());
             m2.c1 = c1;
         })(m2 = m1.m2 || (m1.m2 = {}));
     })(m1 || (m1 = {}));

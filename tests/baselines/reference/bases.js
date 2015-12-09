@@ -32,7 +32,7 @@ var B = (function () {
         any;
     }
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -40,6 +40,6 @@ var C = (function (_super) {
         any;
     }
     return C;
-})(B);
+}(B));
 new C().x;
 new C().y;

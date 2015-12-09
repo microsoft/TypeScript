@@ -59,7 +59,7 @@ var Base = (function () {
         Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
     };
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
@@ -72,7 +72,7 @@ var Derived1 = (function (_super) {
         Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
     };
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
@@ -85,7 +85,7 @@ var Derived2 = (function (_super) {
         Derived3.x; // Error, redefined in a subclass, can only be accessed in the declaring class or one of its subclasses
     };
     return Derived2;
-})(Base);
+}(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
@@ -98,7 +98,7 @@ var Derived3 = (function (_super) {
         Derived3.x; // OK, accessed within their declaring class
     };
     return Derived3;
-})(Derived1);
+}(Derived1));
 Base.x; // Error, neither within their declaring class nor classes derived from their declaring class
 Derived1.x; // Error, neither within their declaring class nor classes derived from their declaring class
 Derived2.x; // Error, neither within their declaring class nor classes derived from their declaring class

@@ -32,7 +32,7 @@ var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 exports.Model = Model;
 //// [aliasUsageInIndexerOfClass_moduleA.js]
 "use strict";
@@ -48,7 +48,7 @@ var VisualizationModel = (function (_super) {
         _super.apply(this, arguments);
     }
     return VisualizationModel;
-})(Backbone.Model);
+}(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInIndexerOfClass_main.js]
 "use strict";
@@ -58,9 +58,9 @@ var N = (function () {
         this.x = moduleA;
     }
     return N;
-})();
+}());
 var N2 = (function () {
     function N2() {
     }
     return N2;
-})();
+}());

@@ -21,4 +21,4 @@ var TestFile = (function () {
         this.message = getMessage();
     }
     return TestFile;
-})();
+}());

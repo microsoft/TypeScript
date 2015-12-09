@@ -17,4 +17,4 @@ var foo = (function () {
     }
     foo.bar = 1;
     return foo;
-})();
+}());

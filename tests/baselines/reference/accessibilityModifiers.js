@@ -84,7 +84,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 // Errors, accessibility modifiers must precede static
 var D = (function () {
     function D() {
@@ -123,7 +123,7 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());
 // Errors, multiple accessibility modifier
 var E = (function () {
     function E() {
@@ -140,4 +140,4 @@ var E = (function () {
         configurable: true
     });
     return E;
-})();
+}());

@@ -18,7 +18,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 function bar() {
 }
 /// <reference path="c.js"/>

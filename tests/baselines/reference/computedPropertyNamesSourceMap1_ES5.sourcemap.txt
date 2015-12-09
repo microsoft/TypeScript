@@ -81,7 +81,7 @@ sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 1->Emitted(7, 5) Source(5, 1) + SourceIndex(0)
 2 >Emitted(7, 13) Source(5, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

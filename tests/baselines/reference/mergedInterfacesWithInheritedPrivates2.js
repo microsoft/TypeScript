@@ -41,26 +41,26 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
         _super.apply(this, arguments);
     }
     return E;
-})(C2);
+}(C2));
 var a;
 var r = a.x; // error
 var r2 = a.w; // error
