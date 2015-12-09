@@ -179,10 +179,13 @@ namespace ts.server {
     // Override sys.write because fs.writeSync is not reliable on Node 4
     ts.sys.write = (s: string) => writeMessage(s);
 
-    const ioSession = new IOSession(ts.sys, logger);
-    process.on("uncaughtException", function(err: Error) {
-        ioSession.logError(err, "unknown");
+    process.nextTick(() => { // allow extension to Session prototype to happen by external hosting code
+
+        const ioSession = new IOSession(ts.sys, logger);
+        process.on("uncaughtException", function(err: Error) {
+            ioSession.logError(err, "unknown");
+        });
+        // Start listening
+        ioSession.listen();
     });
-    // Start listening
-    ioSession.listen();
 }
