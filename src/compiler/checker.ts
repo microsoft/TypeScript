@@ -6472,12 +6472,12 @@ namespace ts {
             node: Identifier;
             guards: BranchFlow[];
         }
-        function getPreviousOccurencies(symbol: Symbol, identifier: Identifier, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
+        function getPreviousOccurencies(symbol: Symbol, where: Node, callback: (node: Identifier, guards: BranchFlow[]) => boolean) {
             let stop = false;
             const visited: { [id: number]: boolean } = {};
             const visitedGuards: { [id: number]: BranchFlow } = {};
 
-            worker(identifier, [], 1);
+            worker(where, [], 1);
             return stop;
 
             function worker(location: FlowMarkerTarget, guards: BranchFlow[], level: number) {
@@ -6487,7 +6487,7 @@ namespace ts {
                     if (visited[location.id]) return;
                     visited[location.id] = true;
                     const otherSymbol = getSymbolAtLocation(<Identifier> location);
-                    if (location !== identifier && (<Node> location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id) {
+                    if (location !== where && (<Node> location).kind === SyntaxKind.Identifier && otherSymbol && otherSymbol.id === symbol.id) {
                         stop = callback(<Identifier> location, guards);
                         return;
                     }
@@ -6512,37 +6512,48 @@ namespace ts {
         }
 
         // Get the narrowed type of a given symbol at a given location
-        function getNarrowedTypeOfSymbol(symbol: Symbol, identifier: Identifier) {
-            if (identifier.localType) return identifier.localType;
-
+        function getNarrowedTypeOfSymbol(symbol: Symbol, location: Node) {
             const initialType = getTypeOfSymbol(symbol);
-            Debug.assert(identifier.kind === SyntaxKind.Identifier, "node in getNarrowedTypeOfSymbol should be an identifier");
+            Debug.assert(location.kind === SyntaxKind.Identifier, "node in getNarrowedTypeOfSymbol should be an identifier");
 
             // Only narrow when symbol is variable of type any or an object, union, or type parameter type
-            if (!identifier || !(symbol.flags & SymbolFlags.Variable)) return initialType;
+            if (!location || !(symbol.flags & SymbolFlags.Variable)) return initialType;
             if (!isTypeAny(initialType) && !(initialType.flags & (TypeFlags.ObjectType | TypeFlags.Union | TypeFlags.TypeParameter))) return initialType;
+
+            let saveLocalType = false;
+            if (location.kind === SyntaxKind.Identifier) {
+                const locationSymbol = getSymbolOfNode(location);
+                if (locationSymbol && locationSymbol.id === symbol.id) {
+                    if ((<Identifier>location).localType) return (<Identifier>location).localType;
+                    saveLocalType = true;
+                }
+            }
 
             if (!symbol.declarations) return initialType;
             for (const declaration of symbol.declarations) {
-                if (getSourceFile(declaration) !== getSourceFile(identifier)) return initialType;
+                if (getSourceFile(declaration) !== getSourceFile(location)) return initialType;
             }
             const visited: FlowMarkerTarget[] = [];
 
-            const narrowedType = getType(identifier, false);
-            return identifier.localType = narrowedType;
+            const narrowedType = getType(location, false);
+            if (saveLocalType) {
+                (<Identifier>location).localType = narrowedType;
+            }
+            return narrowedType;
 
-            function getType(location: Identifier, after: boolean) {
-                if (location === undefined) return initialType;
-                if (visited.indexOf(location) !== -1) return undefined;
+            function getType(where: Node, after: boolean) {
+                if (where === undefined) return initialType;
+                if (visited.indexOf(where) !== -1) return undefined;
 
-                if (after) {
-                    const assignment = getAssignmentAtLocation(location);
+                const isIdentifier = where.kind === SyntaxKind.Identifier;
+                if (isIdentifier && after) {
+                    const assignment = getAssignmentAtLocation(<Identifier>where);
                     if (assignment) return narrowTypeByAssignment(assignment);
                 }
 
                 let types: Type[] = [];
-                visited.push(location);
-                const fallback = getPreviousOccurencies(symbol, location, handleGuards);
+                visited.push(where);
+                const fallback = getPreviousOccurencies(symbol, where, handleGuards);
                 visited.pop();
                 if (fallback) {
                     return initialType;

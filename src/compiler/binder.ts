@@ -151,8 +151,8 @@ namespace ts {
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
-        let currentReachabilityState: Flow;
-        let labelStack: [Flow, FlowMarker][];
+        let currentReachabilityState: Flow = defaultReachable;
+        let labelStack: [Flow, Node][];
         let labelIndexMap: Map<number>;
         let implicitLabels: number[];
 
@@ -439,7 +439,7 @@ namespace ts {
             }
 
             let savedReachabilityState: Flow;
-            let savedLabelStack: [Flow, FlowMarker][];
+            let savedLabelStack: [Flow, Node][];
             let savedLabels: Map<number>;
             let savedImplicitLabels: number[];
             let savedHasExplicitReturn: boolean;
@@ -1202,6 +1202,7 @@ namespace ts {
             }
 
             node.parent = parent;
+            node.previous = currentReachabilityState.previous;
 
             const savedInStrictMode = inStrictMode;
             if (!savedInStrictMode) {
@@ -1562,14 +1563,13 @@ namespace ts {
             }
         }
 
-        function bindFlowMarker(node: Node & FlowMarker) {
-            node.previous = currentReachabilityState.previous;
+        function bindFlowMarker(node: Node) {
             currentReachabilityState = {
                 reachability: currentReachabilityState.reachability,
                 previous: [node]
             };
         }
-        function bindIterationFlowMarkerEnd(node: IterationStatement & FlowMarker) {
+        function bindIterationFlowMarkerEnd(node: IterationStatement) {
             if (node.previous) {
                 node.previous = [...node.previous, ...currentReachabilityState.previous];
             }
@@ -1590,7 +1590,7 @@ namespace ts {
 
         // reachability checks
 
-        function pushNamedLabel(name: Identifier, node: FlowMarker): boolean {
+        function pushNamedLabel(name: Identifier, node: Node): boolean {
             initializeReachabilityStateIfNecessary();
 
             if (hasProperty(labelIndexMap, name.text)) {
@@ -1600,7 +1600,7 @@ namespace ts {
             return true;
         }
 
-        function pushImplicitLabel(node: FlowMarker): number {
+        function pushImplicitLabel(node: Node): number {
             initializeReachabilityStateIfNecessary();
 
             const index = labelStack.push([defaultUnintialized, node]) - 1;

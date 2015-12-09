@@ -464,7 +464,8 @@ namespace ts {
         decorators?: NodeArray<Decorator>;              // Array of decorators (in document order)
         modifiers?: ModifiersArray;                     // Array of modifiers
         /* @internal */ id?: number;                    // Unique id (used to look up NodeLinks)
-        parent?: Node;                                  // Parent node (initialized by binding
+        parent?: Node;                                  // Parent node (initialized by binding)
+        previous?: FlowMarkerTarget[];                  // Previous occurencies of flowmarkers (initialized by binding)
         /* @internal */ jsDocComment?: JSDocComment;    // JSDoc for the node, if it has any.  Only for .js files.
         /* @internal */ symbol?: Symbol;                // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;           // Locals associated with node (initialized by binding)
@@ -480,13 +481,11 @@ namespace ts {
         flags: number;
     }
 
-    export type FlowMarkerTarget = (FlowMarker & Node) | BranchFlow;
-    export interface FlowMarker {
-        previous?: FlowMarkerTarget[];
-    }
+    export type FlowMarkerTarget = Node | BranchFlow;
     export type BranchFlowNode = IfStatement | WhileStatement | ForStatement | DoStatement | ConditionalExpression | BinaryExpression
-    export interface BranchFlow extends FlowMarker {
+    export interface BranchFlow {
         id: number;
+        previous: FlowMarkerTarget[];
         node: BranchFlowNode;
         expression: Expression;
         trueBranch: boolean;
@@ -512,7 +511,7 @@ namespace ts {
         Failed
     }
     // @kind(SyntaxKind.Identifier)
-    export interface Identifier extends PrimaryExpression, FlowMarker {
+    export interface Identifier extends PrimaryExpression {
         text: string;                                  // Text of identifier (with escapes converted to characters)
         originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
         /* @internal */ narrowingState?: NarrowingState;
@@ -1138,7 +1137,7 @@ namespace ts {
         elseStatement?: Statement;
     }
 
-    export interface IterationStatement extends Statement, FlowMarker {
+    export interface IterationStatement extends Statement {
         statement: Statement;
     }
 
@@ -1219,7 +1218,7 @@ namespace ts {
     export type CaseOrDefaultClause = CaseClause | DefaultClause;
 
     // @kind(SyntaxKind.LabeledStatement)
-    export interface LabeledStatement extends Statement, FlowMarker {
+    export interface LabeledStatement extends Statement {
         label: Identifier;
         statement: Statement;
     }
@@ -1724,7 +1723,7 @@ namespace ts {
     }
 
     export interface TypeChecker {
-        getTypeOfSymbolAtLocation(symbol: Symbol, node: Identifier): Type;
+        getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol;
