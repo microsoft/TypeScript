@@ -1986,8 +1986,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return result;
             }
 
-            function createElementAccessExpression(expression: Expression, argumentExpression: Expression, sourceMapNode?: Node): ElementAccessExpression {
-                const result = <ElementAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.ElementAccessExpression, sourceMapNode || argumentExpression);
+            function createElementAccessExpression(expression: Expression, argumentExpression: Expression, sourceMapNode: Node): ElementAccessExpression {
+                const result = <ElementAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.ElementAccessExpression, sourceMapNode);
                 result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
 
@@ -3775,7 +3775,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (!canDefineTempVariablesInPlace) {
                     recordTempDeclaration(identifier);
                 }
-                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment, expression);
+                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment, expression.parent || expression);
                 return identifier;
             }
 
@@ -3867,7 +3867,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     return !nameIsComputed && index.kind === SyntaxKind.Identifier
                         ? createPropertyAccessExpression(object, <Identifier>index)
-                        : createElementAccessExpression(object, index);
+                        : createElementAccessExpression(object, index, index);
                 }
 
                 function createSliceCall(value: Expression, sliceIndex: number): CallExpression {
@@ -3891,12 +3891,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                             const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
-                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName));
+                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName), p);
                         }
                     }
                 }
 
-                function emitArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression) {
+                function emitArrayLiteralAssignment(target: ArrayLiteralExpression, value: Expression, sourceMapNode: Node) {
                     const elements = target.elements;
                     if (elements.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
@@ -3907,16 +3907,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         const e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)));
+                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i), e), elements.length === 1 ? sourceMapNode : e);
                             }
                             else if (i === elements.length - 1) {
-                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i));
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i), elements.length === 1 ? sourceMapNode : e);
                             }
                         }
                     }
                 }
 
-                function emitDestructuringAssignment(target: Expression | ShorthandPropertyAssignment, value: Expression) {
+                function emitDestructuringAssignment(target: Expression | ShorthandPropertyAssignment, value: Expression, sourceMapNode: Node) {
                     if (target.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         if ((<ShorthandPropertyAssignment>target).objectAssignmentInitializer) {
                             value = createDefaultValueCheck(value, (<ShorthandPropertyAssignment>target).objectAssignmentInitializer);
@@ -3931,11 +3931,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitObjectLiteralAssignment(<ObjectLiteralExpression>target, value);
                     }
                     else if (target.kind === SyntaxKind.ArrayLiteralExpression) {
-                        emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value);
+                        emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, sourceMapNode);
                     }
                     else {
                         // TODO
-                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, { pos: -1, end: -1 });
+                        emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, sourceMapNode);
                         emitCount++;
                     }
                 }
@@ -3948,14 +3948,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emit(value);
                     }
                     else if (isAssignmentExpressionStatement) {
-                        emitDestructuringAssignment(target, value);
+                        emitDestructuringAssignment(target, value, root);
                     }
                     else {
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
                         value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
-                        emitDestructuringAssignment(target, value);
+                        emitDestructuringAssignment(target, value, root);
                         write(", ");
                         emit(value);
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {

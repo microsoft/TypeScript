@@ -985,8 +985,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >    
 4 >    (
 5 >     let
-6 >         {name: nameA, skill: skillA } = 
-7 >         getRobot()
+6 >         
+7 >         {name: nameA, skill: skillA } = getRobot()
 8 >                        
 9 >                          name: nameA
 10>                                         , 
@@ -1009,7 +1009,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >Emitted(30, 5) Source(50, 5) + SourceIndex(0)
 4 >Emitted(30, 6) Source(50, 6) + SourceIndex(0)
 5 >Emitted(30, 9) Source(50, 9) + SourceIndex(0)
-6 >Emitted(30, 10) Source(50, 42) + SourceIndex(0)
+6 >Emitted(30, 10) Source(50, 10) + SourceIndex(0)
 7 >Emitted(30, 25) Source(50, 52) + SourceIndex(0)
 8 >Emitted(30, 27) Source(50, 11) + SourceIndex(0)
 9 >Emitted(30, 42) Source(50, 22) + SourceIndex(0)
@@ -1097,8 +1097,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >    
 4 >    (
 5 >     let
-6 >         {name: nameA, skill: skillA } = 
-7 >         <Robot>{ name: "trimmer", skill: "trimming" }
+6 >         
+7 >         {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimming" }
 8 >                                                    
 9 >                                                      name: nameA
 10>                                                                     , 
@@ -1121,7 +1121,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >Emitted(33, 5) Source(53, 5) + SourceIndex(0)
 4 >Emitted(33, 6) Source(53, 6) + SourceIndex(0)
 5 >Emitted(33, 9) Source(53, 9) + SourceIndex(0)
-6 >Emitted(33, 10) Source(53, 42) + SourceIndex(0)
+6 >Emitted(33, 10) Source(53, 10) + SourceIndex(0)
 7 >Emitted(33, 53) Source(53, 87) + SourceIndex(0)
 8 >Emitted(33, 55) Source(53, 11) + SourceIndex(0)
 9 >Emitted(33, 70) Source(53, 22) + SourceIndex(0)
@@ -1331,8 +1331,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >    
 4 >    (
 5 >     let
-6 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
-7 >         getMultiRobot()
+6 >         
+7 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot()
 8 >                             
 9 >                               name: nameA
 10>                                              , 
@@ -1359,7 +1359,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >Emitted(39, 5) Source(59, 5) + SourceIndex(0)
 4 >Emitted(39, 6) Source(59, 6) + SourceIndex(0)
 5 >Emitted(39, 9) Source(59, 9) + SourceIndex(0)
-6 >Emitted(39, 10) Source(59, 81) + SourceIndex(0)
+6 >Emitted(39, 10) Source(59, 10) + SourceIndex(0)
 7 >Emitted(39, 30) Source(59, 96) + SourceIndex(0)
 8 >Emitted(39, 32) Source(59, 11) + SourceIndex(0)
 9 >Emitted(39, 47) Source(59, 22) + SourceIndex(0)
@@ -1455,9 +1455,9 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >    
 4 >    (
 5 >     let
-6 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
-  >            
-7 >         <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
+6 >         
+7 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
+  >             <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
 8 >                                                                                       
 9 >                                                                                         name: nameA
 10>                                                                                                        , 
@@ -1486,7 +1486,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 3 >Emitted(42, 5) Source(62, 5) + SourceIndex(0)
 4 >Emitted(42, 6) Source(62, 6) + SourceIndex(0)
 5 >Emitted(42, 9) Source(62, 9) + SourceIndex(0)
-6 >Emitted(42, 10) Source(63, 5) + SourceIndex(0)
+6 >Emitted(42, 10) Source(62, 10) + SourceIndex(0)
 7 >Emitted(42, 88) Source(63, 90) + SourceIndex(0)
 8 >Emitted(42, 90) Source(62, 11) + SourceIndex(0)
 9 >Emitted(42, 105) Source(62, 22) + SourceIndex(0)

@@ -200,8 +200,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 12>                                                                                                                       ^
 1->
   >
-2 >let [nameMC2, [primarySkillC, secondarySkillC]] = 
-3 >    ["roomba", ["vaccum", "mopping"]]
+2 >let 
+3 >    [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]]
 4 >                                          
 5 >                                            nameMC2
 6 >                                                           , 
@@ -212,7 +212,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 11>                                                                                                secondarySkillC
 12>                                                                                                                       ]] = ["roomba", ["vaccum", "mopping"]];
 1->Emitted(7, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(7, 5) Source(13, 51) + SourceIndex(0)
+2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(7, 43) Source(13, 84) + SourceIndex(0)
 4 >Emitted(7, 45) Source(13, 6) + SourceIndex(0)
 5 >Emitted(7, 60) Source(13, 13) + SourceIndex(0)

@@ -234,8 +234,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 12>                                                                                                                                                                          ^
 1->
   >
-2 >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = 
-3 >    { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
+2 >var 
+3 >    { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
 4 >                                                                                       
 5 >                                                                                         name: nameC
 6 >                                                                                                        , 
@@ -246,7 +246,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 11>                                                                                                                                                 secondary: secondaryB
 12>                                                                                                                                                                           } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
 1->Emitted(5, 1) Source(16, 1) + SourceIndex(0)
-2 >Emitted(5, 5) Source(16, 77) + SourceIndex(0)
+2 >Emitted(5, 5) Source(16, 5) + SourceIndex(0)
 3 >Emitted(5, 88) Source(16, 155) + SourceIndex(0)
 4 >Emitted(5, 90) Source(16, 7) + SourceIndex(0)
 5 >Emitted(5, 105) Source(16, 18) + SourceIndex(0)

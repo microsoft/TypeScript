@@ -176,15 +176,15 @@ sourceFile:sourceMapValidationDestructuringVariableStatement.ts
 8 >                                                                                      ^
 1->
   >
-2 >var { name: nameC, skill: skillC } = 
-3 >    { name: "Edger", skill: "cutting edges" }
+2 >var 
+3 >    { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
 4 >                                                  
 5 >                                                    name: nameC
 6 >                                                                   , 
 7 >                                                                     skill: skillC
 8 >                                                                                       } = { name: "Edger", skill: "cutting edges" };
 1->Emitted(6, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(6, 5) Source(13, 38) + SourceIndex(0)
+2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(6, 51) Source(13, 79) + SourceIndex(0)
 4 >Emitted(6, 53) Source(13, 7) + SourceIndex(0)
 5 >Emitted(6, 68) Source(13, 18) + SourceIndex(0)
