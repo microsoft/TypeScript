@@ -1,4 +1,4 @@
-//// [tsxEmit3.tsx]
+//// [file.tsx]
 
 declare module JSX {
 	interface Element { }
@@ -41,7 +41,7 @@ module M {
 }
 
 
-//// [tsxEmit3.jsx]
+//// [file.jsx]
 var M;
 (function (M) {
     var Foo = (function () {
@@ -83,4 +83,4 @@ var M;
     // Emit M_1.Foo
     M_1.Foo, <M_1.Foo />;
 })(M || (M = {}));
-//# sourceMappingURL=tsxEmit3.jsx.map
+//# sourceMappingURL=file.jsx.map

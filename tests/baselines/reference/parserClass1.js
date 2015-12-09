@@ -10,6 +10,7 @@
     }
 
 //// [parserClass1.js]
+"use strict";
 var NullLogger = (function () {
     function NullLogger() {
     }

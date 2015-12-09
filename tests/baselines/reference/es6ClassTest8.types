@@ -119,7 +119,7 @@ class Camera {
         this.forward = Vector.norm(Vector.minus(lookAt,this.pos));
 >this.forward = Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
 >this.forward : Vector
->this : Camera
+>this : this
 >forward : Vector
 >Vector.norm(Vector.minus(lookAt,this.pos)) : Vector
 >Vector.norm : (v: Vector) => Vector
@@ -131,13 +131,13 @@ class Camera {
 >minus : (v1: Vector, v2: Vector) => Vector
 >lookAt : Vector
 >this.pos : Vector
->this : Camera
+>this : this
 >pos : Vector
 
         this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down)));
 >this.right = Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
 >this.right : Vector
->this : Camera
+>this : this
 >right : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, down))) : Vector
 >Vector.times : (v1: Vector, v2: Vector) => Vector
@@ -153,14 +153,14 @@ class Camera {
 >Vector : typeof Vector
 >cross : (v1: Vector, v2: Vector) => Vector
 >this.forward : Vector
->this : Camera
+>this : this
 >forward : Vector
 >down : Vector
 
         this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right)));    
 >this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
 >this.up : Vector
->this : Camera
+>this : this
 >up : Vector
 >Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right))) : Vector
 >Vector.times : (v1: Vector, v2: Vector) => Vector
@@ -176,10 +176,10 @@ class Camera {
 >Vector : typeof Vector
 >cross : (v1: Vector, v2: Vector) => Vector
 >this.forward : Vector
->this : Camera
+>this : this
 >forward : Vector
 >this.right : Vector
->this : Camera
+>this : this
 >right : Vector
     }
 }

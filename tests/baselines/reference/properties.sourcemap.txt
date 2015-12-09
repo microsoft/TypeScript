@@ -19,7 +19,7 @@ sourceFile:properties.ts
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(2, 5) Source(2, 1) + SourceIndex(0) name (MyClass)
+1->Emitted(2, 5) Source(2, 1) + SourceIndex(0)
 ---
 >>>    }
 1->^^^^
@@ -38,8 +38,8 @@ sourceFile:properties.ts
   >    }
   >
 2 >    }
-1->Emitted(3, 5) Source(13, 1) + SourceIndex(0) name (MyClass.constructor)
-2 >Emitted(3, 6) Source(13, 2) + SourceIndex(0) name (MyClass.constructor)
+1->Emitted(3, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(3, 6) Source(13, 2) + SourceIndex(0)
 ---
 >>>    Object.defineProperty(MyClass.prototype, "Count", {
 1->^^^^
@@ -48,15 +48,15 @@ sourceFile:properties.ts
 1->
 2 >    public get 
 3 >                          Count
-1->Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (MyClass)
-2 >Emitted(4, 27) Source(4, 16) + SourceIndex(0) name (MyClass)
-3 >Emitted(4, 53) Source(4, 21) + SourceIndex(0) name (MyClass)
+1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 27) Source(4, 16) + SourceIndex(0)
+3 >Emitted(4, 53) Source(4, 21) + SourceIndex(0)
 ---
 >>>        get: function () {
 1 >^^^^^^^^^^^^^
 2 >             ^^^^^^^^^^->
 1 >
-1 >Emitted(5, 14) Source(4, 5) + SourceIndex(0) name (MyClass)
+1 >Emitted(5, 14) Source(4, 5) + SourceIndex(0)
 ---
 >>>            return 42;
 1->^^^^^^^^^^^^
@@ -71,11 +71,11 @@ sourceFile:properties.ts
 3 >                   
 4 >                   42
 5 >                     ;
-1->Emitted(6, 13) Source(6, 9) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(6, 19) Source(6, 15) + SourceIndex(0) name (MyClass.Count)
-3 >Emitted(6, 20) Source(6, 16) + SourceIndex(0) name (MyClass.Count)
-4 >Emitted(6, 22) Source(6, 18) + SourceIndex(0) name (MyClass.Count)
-5 >Emitted(6, 23) Source(6, 19) + SourceIndex(0) name (MyClass.Count)
+1->Emitted(6, 13) Source(6, 9) + SourceIndex(0)
+2 >Emitted(6, 19) Source(6, 15) + SourceIndex(0)
+3 >Emitted(6, 20) Source(6, 16) + SourceIndex(0)
+4 >Emitted(6, 22) Source(6, 18) + SourceIndex(0)
+5 >Emitted(6, 23) Source(6, 19) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^
@@ -84,8 +84,8 @@ sourceFile:properties.ts
 1 >
   >    
 2 >        }
-1 >Emitted(7, 9) Source(7, 5) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(7, 10) Source(7, 6) + SourceIndex(0) name (MyClass.Count)
+1 >Emitted(7, 9) Source(7, 5) + SourceIndex(0)
+2 >Emitted(7, 10) Source(7, 6) + SourceIndex(0)
 ---
 >>>        set: function (value) {
 1->^^^^^^^^^^^^^
@@ -96,9 +96,9 @@ sourceFile:properties.ts
   >    
 2 >             public set Count(
 3 >                       value: number
-1->Emitted(8, 14) Source(9, 5) + SourceIndex(0) name (MyClass)
-2 >Emitted(8, 24) Source(9, 22) + SourceIndex(0) name (MyClass)
-3 >Emitted(8, 29) Source(9, 35) + SourceIndex(0) name (MyClass)
+1->Emitted(8, 14) Source(9, 5) + SourceIndex(0)
+2 >Emitted(8, 24) Source(9, 22) + SourceIndex(0)
+3 >Emitted(8, 29) Source(9, 35) + SourceIndex(0)
 ---
 >>>            //
 1 >^^^^^^^^^^^^
@@ -107,8 +107,8 @@ sourceFile:properties.ts
   >    {
   >        
 2 >            //
-1 >Emitted(9, 13) Source(11, 9) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(9, 15) Source(11, 11) + SourceIndex(0) name (MyClass.Count)
+1 >Emitted(9, 13) Source(11, 9) + SourceIndex(0)
+2 >Emitted(9, 15) Source(11, 11) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^
@@ -117,8 +117,8 @@ sourceFile:properties.ts
 1 >
   >    
 2 >        }
-1 >Emitted(10, 9) Source(12, 5) + SourceIndex(0) name (MyClass.Count)
-2 >Emitted(10, 10) Source(12, 6) + SourceIndex(0) name (MyClass.Count)
+1 >Emitted(10, 9) Source(12, 5) + SourceIndex(0)
+2 >Emitted(10, 10) Source(12, 6) + SourceIndex(0)
 ---
 >>>        enumerable: true,
 >>>        configurable: true
@@ -126,7 +126,7 @@ sourceFile:properties.ts
 1->^^^^^^^
 2 >       ^^^^^^^^^^^^^->
 1->
-1->Emitted(13, 8) Source(7, 6) + SourceIndex(0) name (MyClass)
+1->Emitted(13, 8) Source(7, 6) + SourceIndex(0)
 ---
 >>>    return MyClass;
 1->^^^^
@@ -139,8 +139,8 @@ sourceFile:properties.ts
   >    }
   >
 2 >    }
-1->Emitted(14, 5) Source(13, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(14, 19) Source(13, 2) + SourceIndex(0) name (MyClass)
+1->Emitted(14, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(14, 19) Source(13, 2) + SourceIndex(0)
 ---
 >>>})();
 1 >
@@ -163,8 +163,8 @@ sourceFile:properties.ts
   >         //
   >     }
   > }
-1 >Emitted(15, 1) Source(13, 1) + SourceIndex(0) name (MyClass)
-2 >Emitted(15, 2) Source(13, 2) + SourceIndex(0) name (MyClass)
+1 >Emitted(15, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(15, 2) Source(13, 2) + SourceIndex(0)
 3 >Emitted(15, 2) Source(2, 1) + SourceIndex(0)
 4 >Emitted(15, 6) Source(13, 2) + SourceIndex(0)
 ---

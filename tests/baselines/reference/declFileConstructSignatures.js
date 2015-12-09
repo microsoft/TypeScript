@@ -66,6 +66,7 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 }
 
 //// [declFileConstructSignatures_0.js]
+"use strict";
 //// [declFileConstructSignatures_1.js]
 
 

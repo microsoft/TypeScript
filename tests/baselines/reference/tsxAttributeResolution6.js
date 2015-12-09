@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution6.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -18,12 +18,12 @@ declare module JSX {
 <test2 n />;
 
 
-//// [tsxAttributeResolution6.jsx]
+//// [file.jsx]
 // Error
-<test1 s=/>;
+<test1 s/>;
 <test1 n='true'/>;
 <test2 />;
 // OK
-<test1 n=/>;
+<test1 n/>;
 <test1 n={false}/>;
-<test2 n=/>;
+<test2 n/>;

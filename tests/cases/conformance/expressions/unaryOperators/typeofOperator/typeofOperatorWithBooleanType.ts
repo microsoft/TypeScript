@@ -1,3 +1,5 @@
+// @allowUnusedLabels: true
+
 // typeof  operator on boolean type
 var BOOLEAN: boolean;
 

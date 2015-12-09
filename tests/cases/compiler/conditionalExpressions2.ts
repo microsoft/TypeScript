@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 var a = false ? 1 : null;
 var b = false ? undefined : 0;
 var c = false ? 1 : 0;

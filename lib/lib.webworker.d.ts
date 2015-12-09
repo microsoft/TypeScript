@@ -57,7 +57,7 @@ declare module Intl {
         currency?: string;
         currencyDisplay?: string;
         useGrouping?: boolean;
-        minimumintegerDigits?: number;
+        minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
         maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
@@ -70,7 +70,7 @@ declare module Intl {
         style: string;
         currency?: string;
         currencyDisplay?: string;
-        minimumintegerDigits: number;
+        minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
         minimumSignificantDigits?: number;
@@ -104,6 +104,7 @@ declare module Intl {
         timeZoneName?: string;
         formatMatcher?: string;
         hour12?: boolean;
+        timeZone?: string;
     }
 
     interface ResolvedDateTimeFormatOptions {
@@ -173,18 +174,45 @@ interface Number {
 
 interface Date {
     /**
-      * Converts a date to a string by using the current or specified locale.  
+      * Converts a date and time to a string by using the current or specified locale.  
       * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
     toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    /**
+      * Converts a date to a string by using the current or specified locale.  
+      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
 
+    /**
+      * Converts a time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
+    
+    /**
+      * Converts a date and time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    
     /**
       * Converts a date to a string by using the current or specified locale.  
       * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+
+    /**
+      * Converts a time to a string by using the current or specified locale.  
+      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param options An object that contains one or more properties that specify comparison options.
+      */
+    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
 }
 
 
@@ -206,7 +234,7 @@ interface AudioBuffer {
     length: number;
     numberOfChannels: number;
     sampleRate: number;
-    getChannelData(channel: number): any;
+    getChannelData(channel: number): Float32Array;
 }
 
 declare var AudioBuffer: {
@@ -654,13 +682,11 @@ interface ImageData {
     width: number;
 }
 
-interface ImageDataConstructor {
+declare var ImageData: {
     prototype: ImageData;
     new(width: number, height: number): ImageData;
     new(array: Uint8ClampedArray, width: number, height: number): ImageData;
 }
-
-declare var ImageData: ImageDataConstructor; 
 
 interface MSApp {
     clearTemporaryWebDataAsync(): MSAppAsyncOperation;
@@ -1083,7 +1109,6 @@ interface WorkerUtils extends Object, WindowBase64 {
     setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
-
 interface BlobPropertyBag {
     type?: string;
     endings?: string;
@@ -1097,8 +1122,6 @@ interface FilePropertyBag {
 interface EventListenerObject {
     handleEvent(evt: Event): void;
 }
-
-declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface MessageEventInit extends EventInit {
     data?: any;
@@ -1114,6 +1137,8 @@ interface ProgressEventInit extends EventInit {
     loaded?: number;
     total?: number;
 }
+
+declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
     (message: string, filename?: string, lineno?: number, colno?: number, error?:Error): void;

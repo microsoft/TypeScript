@@ -3,8 +3,8 @@
 //// [visibilityOfCrossModuleTypeUsage_commands.ts]
 //visibilityOfCrossModuleTypeUsage
 
-import fs = require('visibilityOfCrossModuleTypeUsage_fs');
-import server = require('visibilityOfCrossModuleTypeUsage_server');
+import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
+import server = require('./visibilityOfCrossModuleTypeUsage_server');
 
 export interface IConfiguration {
     workspace: server.IWorkspace;
@@ -20,15 +20,18 @@ export interface IWorkspace {
 }
 
 //// [visibilityOfCrossModuleTypeUsage_fs.ts]
-import commands = require('visibilityOfCrossModuleTypeUsage_commands');
+import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 function run(configuration: commands.IConfiguration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 }
 
 //// [visibilityOfCrossModuleTypeUsage_server.js]
+"use strict";
 //// [visibilityOfCrossModuleTypeUsage_commands.js]
 //visibilityOfCrossModuleTypeUsage
+"use strict";
 //// [visibilityOfCrossModuleTypeUsage_fs.js]
+"use strict";
 function run(configuration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 }

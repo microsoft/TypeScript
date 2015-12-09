@@ -7,6 +7,6 @@ tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts(1,8): error TS1192: Modul
     export = a;
     
 ==== tests/cases/compiler/es6ImportDefaultBindingInEs5_1.ts (1 errors) ====
-    import defaultBinding from "es6ImportDefaultBindingInEs5_0";
+    import defaultBinding from "./es6ImportDefaultBindingInEs5_0";
            ~~~~~~~~~~~~~~
 !!! error TS1192: Module '"tests/cases/compiler/es6ImportDefaultBindingInEs5_0"' has no default export.

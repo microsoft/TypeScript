@@ -7,7 +7,7 @@ class Bug {
 
     private static func: Function[] = [
 >func : Symbol(Bug.func, Decl(thisInPropertyBoundDeclarations.ts, 1, 25))
->Function : Symbol(Function, Decl(lib.d.ts, 223, 38), Decl(lib.d.ts, 269, 11))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
      (that: Bug, name: string) => {
 >that : Symbol(that, Decl(thisInPropertyBoundDeclarations.ts, 4, 6))
@@ -15,9 +15,9 @@ class Bug {
 >name : Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 4, 16))
 
          that.foo(name);
->that.foo : Symbol(foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
+>that.foo : Symbol(Bug.foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
 >that : Symbol(that, Decl(thisInPropertyBoundDeclarations.ts, 4, 6))
->foo : Symbol(foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
+>foo : Symbol(Bug.foo, Decl(thisInPropertyBoundDeclarations.ts, 7, 6))
 >name : Symbol(name, Decl(thisInPropertyBoundDeclarations.ts, 4, 16))
      }
     ];

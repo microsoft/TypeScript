@@ -36,7 +36,7 @@ export module SpecializedWidget {
 
 //// [privacyCannotNameVarTypeDeclFile_exporter.ts]
 ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
-import Widgets = require("privacyCannotNameVarTypeDeclFile_Widgets");
+import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -52,7 +52,7 @@ export function createExportedWidget4() {
 }
 
 //// [privacyCannotNameVarTypeDeclFile_consumer.ts]
-import exporter = require("privacyCannotNameVarTypeDeclFile_exporter");
+import exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
 export class publicClassWithWithPrivatePropertyTypes {
     static myPublicStaticProperty = exporter.createExportedWidget1(); // Error
     private static myPrivateStaticProperty = exporter.createExportedWidget1();
@@ -102,6 +102,7 @@ var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4()
 
 //// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.js]
 //// [privacyCannotNameVarTypeDeclFile_Widgets.js]
+"use strict";
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -128,8 +129,9 @@ var SpecializedWidget;
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyCannotNameVarTypeDeclFile_exporter.js]
+"use strict";
 ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
-var Widgets = require("privacyCannotNameVarTypeDeclFile_Widgets");
+var Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -148,7 +150,8 @@ function createExportedWidget4() {
 }
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameVarTypeDeclFile_consumer.js]
-var exporter = require("privacyCannotNameVarTypeDeclFile_exporter");
+"use strict";
+var exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
 var publicClassWithWithPrivatePropertyTypes = (function () {
     function publicClassWithWithPrivatePropertyTypes() {
         this.myPublicProperty = exporter.createExportedWidget1(); // Error
@@ -231,7 +234,7 @@ export declare module SpecializedWidget {
 }
 //// [privacyCannotNameVarTypeDeclFile_exporter.d.ts]
 /// <reference path="privacyCannotNameVarTypeDeclFile_GlobalWidgets.d.ts" />
-import Widgets = require("privacyCannotNameVarTypeDeclFile_Widgets");
+import Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;

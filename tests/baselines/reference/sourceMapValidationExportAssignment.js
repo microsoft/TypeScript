@@ -6,6 +6,7 @@ export = a;
 
 //// [sourceMapValidationExportAssignment.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var a = (function () {
         function a() {
         }

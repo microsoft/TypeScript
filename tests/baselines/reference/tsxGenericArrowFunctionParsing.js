@@ -1,4 +1,4 @@
-//// [tsxGenericArrowFunctionParsing.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { isElement; }
 }
@@ -27,7 +27,7 @@ x5.isElement;
 
 
 
-//// [tsxGenericArrowFunctionParsing.jsx]
+//// [file.jsx]
 var T, T1, T2;
 // This is an element
 var x1 = <T>() => </T>;
@@ -42,5 +42,5 @@ x3();
 var x4 = <T extends={true}>() => </T>;
 x4.isElement;
 // This is an element
-var x5 = <T extends=>() => </T>;
+var x5 = <T extends>() => </T>;
 x5.isElement;

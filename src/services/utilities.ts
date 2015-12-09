@@ -9,7 +9,7 @@ namespace ts {
     export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
         Debug.assert(line >= 0);
         let lineStarts = sourceFile.getLineStarts();
-        
+
         let lineIndex = line;
         if (lineIndex + 1 === lineStarts.length) {
             // last line - return EOF
@@ -128,7 +128,8 @@ namespace ts {
                 return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
 
             case SyntaxKind.ExpressionStatement:
-                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile);
+                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -170,7 +171,7 @@ namespace ts {
             case SyntaxKind.VoidExpression:
             case SyntaxKind.YieldExpression:
             case SyntaxKind.SpreadElementExpression:
-                let unaryWordExpression = (<TypeOfExpression|DeleteExpression|VoidExpression|YieldExpression|SpreadElementExpression>n);
+                let unaryWordExpression = (<TypeOfExpression | DeleteExpression | VoidExpression | YieldExpression | SpreadElementExpression>n);
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
@@ -252,18 +253,18 @@ namespace ts {
         });
 
         // Either we didn't find an appropriate list, or the list must contain us.
-        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node)); 
+        Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node));
         return syntaxList;
     }
 
-    /* Gets the token whose text has range [start, end) and 
+    /* Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
     export function getTouchingWord(sourceFile: SourceFile, position: number): Node {
         return getTouchingToken(sourceFile, position, n => isWord(n.kind));
     }
 
-    /* Gets the token whose text has range [start, end) and position >= start 
+    /* Gets the token whose text has range [start, end) and position >= start
      * and (position < end or (position === end && token is keyword or identifier or numeric\string litera))
      */
     export function getTouchingPropertyName(sourceFile: SourceFile, position: number): Node {
@@ -388,10 +389,10 @@ namespace ts {
                 // if this is the case - then we should assume that token in question is located in previous child.
                 if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
                     const start = child.getStart(sourceFile);
-                    const lookInPreviousChild = 
+                    const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
-                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText 
-                    
+                        (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
+
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
                         let candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
@@ -406,7 +407,7 @@ namespace ts {
 
             Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
 
-            // Here we know that none of child token nodes embrace the position, 
+            // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
@@ -425,10 +426,10 @@ namespace ts {
             }
         }
     }
-    
+
     export function isInString(sourceFile: SourceFile, position: number) {
         let token = getTokenAtPosition(sourceFile, position);
-        return token && token.kind === SyntaxKind.StringLiteral && position > token.getStart();
+        return token && (token.kind === SyntaxKind.StringLiteral || token.kind === SyntaxKind.StringLiteralType) && position > token.getStart();
     }
 
     export function isInComment(sourceFile: SourceFile, position: number) {
@@ -444,7 +445,7 @@ namespace ts {
 
         if (token && position <= token.getStart()) {
             let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
-                
+
             // The end marker of a single-line comment does not include the newline character.
             // In the following case, we are inside a comment (^ denotes the cursor position):
             //
@@ -473,7 +474,7 @@ namespace ts {
         let commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
 
         return forEach(commentRanges, jsDocPrefix);
-        
+
         function jsDocPrefix(c: CommentRange): boolean {
             var text = sourceFile.text;
             return text.length >= c.pos + 3 && text[c.pos] === '/' && text[c.pos + 1] === '*' && text[c.pos + 2] === '*';
@@ -562,6 +563,16 @@ namespace ts {
         return kind === SyntaxKind.SingleLineCommentTrivia || kind === SyntaxKind.MultiLineCommentTrivia;
     }
 
+    export function isStringOrRegularExpressionOrTemplateLiteral(kind: SyntaxKind): boolean {
+        if (kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.StringLiteralType
+            || kind === SyntaxKind.RegularExpressionLiteral
+            || isTemplateLiteralKind(kind)) {
+            return true;
+        }
+        return false;
+    }
+
     export function isPunctuation(kind: SyntaxKind): boolean {
         return SyntaxKind.FirstPunctuation <= kind && kind <= SyntaxKind.LastPunctuation;
     }
@@ -626,7 +637,8 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: () => { }
+            trackSymbol: () => { },
+            reportInaccessibleThisError: () => { }
         };
 
         function writeIndent() {
@@ -689,7 +701,7 @@ namespace ts {
     }
 
     export function displayPart(text: string, kind: SymbolDisplayPartKind, symbol?: Symbol): SymbolDisplayPart {
-        return <SymbolDisplayPart> {
+        return <SymbolDisplayPart>{
             text: text,
             kind: SymbolDisplayPartKind[kind]
         };

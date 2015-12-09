@@ -38,6 +38,7 @@ new multiM.d();
 
 //// [commentsMultiModuleMultiFile_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     /** this is multi declare module*/
     var multiM;
     (function (multiM) {
@@ -72,6 +73,7 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     /** this is multi module 3 comment*/
     var multiM;
     (function (multiM) {

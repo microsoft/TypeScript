@@ -1,5 +1,7 @@
 tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+  Type 'Object' provides no match for the signature '(): void'
 tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
+  Type 'Object' provides no match for the signature '(): void'
 
 
 ==== tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts (2 errors) ====
@@ -13,6 +15,7 @@ tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOf
     i = f;
     ~
 !!! error TS2322: Type 'Object' is not assignable to type 'I'.
+!!! error TS2322:   Type 'Object' provides no match for the signature '(): void'
     
     var a: {
         (): void
@@ -21,3 +24,4 @@ tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOf
     a = f;
     ~
 !!! error TS2322: Type 'Object' is not assignable to type '() => void'.
+!!! error TS2322:   Type 'Object' provides no match for the signature '(): void'

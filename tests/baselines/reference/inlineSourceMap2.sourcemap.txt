@@ -1,6 +1,6 @@
 ===================================================================
 JsFile: outfile.js
-mapUrl: file:///folder/outfile.js.map
+mapUrl: data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3V0ZmlsZS5qcyIsInNvdXJjZVJvb3QiOiJmaWxlOi8vL2ZvbGRlci8iLCJzb3VyY2VzIjpbImlubGluZVNvdXJjZU1hcDIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0EsdUJBQXVCO0FBRXZCLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztBQUNWLE9BQU8sQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMifQ==
 sourceRoot: file:///folder/
 sources: inlineSourceMap2.ts
 ===================================================================

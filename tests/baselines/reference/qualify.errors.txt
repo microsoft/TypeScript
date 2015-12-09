@@ -7,7 +7,9 @@ tests/cases/compiler/qualify.ts(45,13): error TS2322: Type 'I4' is not assignabl
 tests/cases/compiler/qualify.ts(46,13): error TS2322: Type 'I4' is not assignable to type 'I3[]'.
   Property 'length' is missing in type 'I4'.
 tests/cases/compiler/qualify.ts(47,13): error TS2322: Type 'I4' is not assignable to type '() => I3'.
+  Type 'I4' provides no match for the signature '(): I3'
 tests/cases/compiler/qualify.ts(48,13): error TS2322: Type 'I4' is not assignable to type '(k: I3) => void'.
+  Type 'I4' provides no match for the signature '(k: I3): void'
 tests/cases/compiler/qualify.ts(49,13): error TS2322: Type 'I4' is not assignable to type '{ k: I3; }'.
   Property 'k' is missing in type 'I4'.
 tests/cases/compiler/qualify.ts(58,5): error TS2322: Type 'I' is not assignable to type 'T.I'.
@@ -76,9 +78,11 @@ tests/cases/compiler/qualify.ts(58,5): error TS2322: Type 'I' is not assignable 
             var v4:()=>K1.I3=v1;
                 ~~
 !!! error TS2322: Type 'I4' is not assignable to type '() => I3'.
+!!! error TS2322:   Type 'I4' provides no match for the signature '(): I3'
             var v5:(k:K1.I3)=>void=v1;
                 ~~
 !!! error TS2322: Type 'I4' is not assignable to type '(k: I3) => void'.
+!!! error TS2322:   Type 'I4' provides no match for the signature '(k: I3): void'
             var v6:{k:K1.I3;}=v1;
                 ~~
 !!! error TS2322: Type 'I4' is not assignable to type '{ k: I3; }'.

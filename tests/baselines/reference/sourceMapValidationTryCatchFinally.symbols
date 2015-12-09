@@ -26,7 +26,7 @@ try
 >x : Symbol(x, Decl(sourceMapValidationTryCatchFinally.ts, 0, 3))
 
     throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
+>Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
 catch (e)
 >e : Symbol(e, Decl(sourceMapValidationTryCatchFinally.ts, 13, 7))

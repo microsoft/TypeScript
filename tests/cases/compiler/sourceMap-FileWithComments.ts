@@ -1,5 +1,5 @@
 // @sourcemap: true
-// @comments: true
+// @removeComments: false
 
 // Interface
 interface IPoint {

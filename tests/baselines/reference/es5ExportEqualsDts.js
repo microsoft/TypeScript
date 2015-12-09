@@ -14,6 +14,7 @@ module A {
 export = A
 
 //// [es5ExportEqualsDts.js]
+"use strict";
 var A = (function () {
     function A() {
     }

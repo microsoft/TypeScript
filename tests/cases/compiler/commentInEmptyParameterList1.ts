@@ -1,3 +1,3 @@
-// @comments:true
+// @removeComments: false
 function foo(/** nothing */) {
 }

@@ -36,7 +36,7 @@ export module SpecializedWidget {
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts]
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
-import Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -52,7 +52,7 @@ export function createExportedWidget4() {
 }
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts]
-import exporter = require("privacyFunctionCannotNameParameterTypeDeclFile_exporter");
+import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 export class publicClassWithWithPrivateParmeterTypes {
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
     }
@@ -158,6 +158,7 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.js]
 //// [privacyFunctionCannotNameParameterTypeDeclFile_Widgets.js]
+"use strict";
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -184,8 +185,9 @@ var SpecializedWidget;
     SpecializedWidget.createWidget2 = createWidget2;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.js]
+"use strict";
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
-var Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+var Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
 function createExportedWidget1() {
     return Widgets.createWidget1();
@@ -204,7 +206,8 @@ function createExportedWidget4() {
 }
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.js]
-var exporter = require("privacyFunctionCannotNameParameterTypeDeclFile_exporter");
+"use strict";
+var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = (function () {
     function publicClassWithWithPrivateParmeterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
@@ -417,7 +420,7 @@ export declare module SpecializedWidget {
 }
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.d.ts]
 /// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
-import Widgets = require("privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;

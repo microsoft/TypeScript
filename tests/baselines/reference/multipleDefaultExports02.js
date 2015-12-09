@@ -11,11 +11,12 @@ export default function bar() {
 }
 
 //// [m2.ts]
-import Entity from "m1"
+import Entity from "./m1"
 
 Entity();
 
 //// [m1.js]
+"use strict";
 function foo() {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -25,5 +26,6 @@ function bar() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = bar;
 //// [m2.js]
-var m1_1 = require("m1");
+"use strict";
+var m1_1 = require("./m1");
 m1_1.default();

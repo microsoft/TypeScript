@@ -10,6 +10,7 @@ export function test(foo: Foo) {
 
 
 //// [exportVisibility.js]
+"use strict";
 var Foo = (function () {
     function Foo() {
     }

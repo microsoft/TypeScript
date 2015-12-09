@@ -191,6 +191,7 @@ module privateModule {
 }
 
 //// [privacyTypeParametersOfInterfaceDeclFile.js]
+"use strict";
 var privateClass = (function () {
     function privateClass() {
     }

@@ -1,4 +1,6 @@
 tests/cases/conformance/es6/modules/main.ts(1,8): error TS1192: Module '"tests/cases/conformance/es6/modules/t4"' has no default export.
+tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
+tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
 
 
 ==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
@@ -16,10 +18,14 @@ tests/cases/conformance/es6/modules/main.ts(1,8): error TS1192: Module '"tests/c
     var z = "z";
     export { x, y, z };
     
-==== tests/cases/conformance/es6/modules/t4.ts (0 errors) ====
+==== tests/cases/conformance/es6/modules/t4.ts (2 errors) ====
     export * from "./t1";
     export * from "./t2";
     export * from "./t3";
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./t1" has already exported a member named 'x'. Consider explicitly re-exporting to resolve the ambiguity.
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2308: Module "./t1" has already exported a member named 'y'. Consider explicitly re-exporting to resolve the ambiguity.
     
 ==== tests/cases/conformance/es6/modules/main.ts (1 errors) ====
     import hello, { x, y, z, foo } from "./t4";

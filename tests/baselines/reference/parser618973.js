@@ -5,6 +5,7 @@ export export class Foo {
 }
 
 //// [parser618973.js]
+"use strict";
 var Foo = (function () {
     function Foo() {
     }

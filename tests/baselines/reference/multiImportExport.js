@@ -5,10 +5,10 @@ import Drawing = require('./Drawing');
 var addr = new Drawing.Math.Adder();
 
 //// [Drawing.ts]
-export import Math = require('Math/Math')
+export import Math = require('./Math/Math')
 
 //// [Math.ts]
-import Adder = require('Math/Adder');
+import Adder = require('./Adder');
 
 var Math = {
     Adder:Adder
@@ -26,6 +26,7 @@ class Adder {
 export = Adder;
 
 //// [Adder.js]
+"use strict";
 var Adder = (function () {
     function Adder() {
     }
@@ -35,14 +36,17 @@ var Adder = (function () {
 })();
 module.exports = Adder;
 //// [Math.js]
-var Adder = require('Math/Adder');
+"use strict";
+var Adder = require('./Adder');
 var Math = {
     Adder: Adder
 };
 module.exports = Math;
 //// [Drawing.js]
-exports.Math = require('Math/Math');
+"use strict";
+exports.Math = require('./Math/Math');
 //// [consumer.js]
+"use strict";
 var Drawing = require('./Drawing');
 var addr = new Drawing.Math.Adder();
 
@@ -53,11 +57,11 @@ declare class Adder {
 }
 export = Adder;
 //// [Math.d.ts]
-import Adder = require('Math/Adder');
+import Adder = require('./Adder');
 declare var Math: {
     Adder: typeof Adder;
 };
 export = Math;
 //// [Drawing.d.ts]
-export import Math = require('Math/Math');
+export import Math = require('./Math/Math');
 //// [consumer.d.ts]
