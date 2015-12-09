@@ -6770,7 +6770,7 @@ namespace ts {
             }
             function narrowTypeByAssignment(expression: Expression) {
                 // Narrow union types only
-                if (!(initialType.flags & TypeFlags.Union)) return initialType; 
+                if (!(initialType.flags & TypeFlags.Union)) return initialType;
                 const type = getTypeOfNode(expression);
                 const constituentTypes = (<UnionType> initialType).types;
                 const assignableTypes: Type[] = [];
