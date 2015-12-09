@@ -48,17 +48,18 @@ namespace ts.JsTyping {
     /**
      * @param cachePath is the path to the cache location, which contains a tsd.json file and a typings folder
      * @param fileNames are the file names that belongs to the same project
-     * @param cachePath is the place where all the acquired d.ts files will be saved to
-     * @param projectRootPath 
-     * @param compilerOptions is used for typing inferring.
-     * @param includeList is a list of packages that are included by the host regardless of the inferring process. It is 
-     * useful in cases like node.d.ts for NTVS. 
-     * @param safeListFilePath is the path of the safe list used to filter loose file names.
-     * @param noDevDependencies is indicating the "devDependencies" list in package.json or other json files should be 
-     * considered for typing.
+     * @param globalCachePath is used 1. to get safe list file path 2. when we can't locate the project root path 
+     * @param projectRootPath
+     * @param typingOptions
+     * @param compilerOptions is used for typing inferring. 
      */
     export function discoverTypings(
-        host: HostType, fileNames: string[], globalCachePath: string, configFilePath: string, compilerOptions?: CompilerOptions, includeList?: string[], noDevDependencies?: boolean)
+        host: HostType,
+        fileNames: string[],
+        globalCachePath: string,
+        cachePath: string,
+        typingOptions: TypingOptions,
+        compilerOptions?: CompilerOptions)
         : { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         _host = host;
@@ -67,7 +68,7 @@ namespace ts.JsTyping {
 
         // Normalize everything
         globalCachePath = ts.normalizePath(globalCachePath);
-        configFilePath = ts.normalizePath(configFilePath);
+        cachePath = cachePath ? ts.normalizePath(cachePath) : globalCachePath;
         fileNames = fileNames.map(ts.normalizePath).filter(f => ts.getBaseFileName(f) !== "lib.d.ts");
 
         let safeListFilePath = ts.combinePaths(globalCachePath, "safeList.json");
@@ -78,126 +79,89 @@ namespace ts.JsTyping {
         let filesToWatch: string[] = [];
         // Directories to search for package.json, bower.json and other typing information
         let searchDirs: string[] = [];
-
-        // Check the typings config path to see if auto-typings is
-        // enabled and if the there are any typings in the include/exclude list
-        // 1. has config file, "enableAutoTyping" === false -> disable auto typing, no cache
-        // 2. has config file, no "enableAutoTyping" field or "enableAutoTyping" === true -> enable auto typing, use local cache
-        // 3. no config file -> enable auto typing, use global cache
-        // Note: a invalid config file is treated the same as no config file
-        let configFileJsonDict = tryParseJson(configFilePath);
-        if (configFileJsonDict && configFileJsonDict["enableAutoTyping"] === false) {
-            return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] }
-        }
-
         let exclude: string[] = [];
-        // Merge host specific include typings list
-        if (includeList) {
-            mergeTypings(includeList);
-        }
 
-        if (configFileJsonDict) {
-            filesToWatch.push(configFilePath);
+        if (typingOptions) {
+            mergeTypings(typingOptions.include);
+            exclude = typingOptions.exclude ? typingOptions.exclude : [];
 
-            // Check the autoTypingOptions in the config file
-            // 1. has "autoTypingOptions", in which "autoDiscoverTyping" === false -> respect the "include"/"exclude" list
-            // 2. has "autoTypingOptions", in which "autoDiscoverTyping" === true -> respect the "include"/"exclude" list, enable auto discovery
-            // 3. no "autoTypingOptions" -> enable auto discovery
-            let autoTypingOptions = configFileJsonDict["autoTypingOptions"];
-            if (autoTypingOptions) {
-                if (autoTypingOptions.hasOwnProperty("exclude")) {
-                    // The items in the "exclude" should be either file names or typing names
-                    for (let excludeItem of configFileJsonDict["exclude"]) {
-                        if (ts.fileExtensionIs(excludeItem, ".d.ts")) {
-                            exclude.push(ts.combinePaths(ts.getDirectoryPath(configFilePath), excludeItem));
+            if (typingOptions.enableAutoDiscovery) {
+                searchDirs = ts.deduplicate(fileNames.map(ts.getDirectoryPath));
+                for (let searchDir of searchDirs) {
+                    let packageJsonPath = ts.combinePaths(searchDir, "package.json");
+                    getTypingNamesFromJson(packageJsonPath, filesToWatch);
+
+                    let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
+                    getTypingNamesFromJson(bowerJsonPath, filesToWatch);
+
+                    let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
+                    getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
+                }
+
+                getTypingNamesFromSourceFileNames(fileNames);
+                getTypingNamesFromCompilerOptions(compilerOptions);
+            }
+
+            let typingsPath = ts.combinePaths(cachePath, "typings");
+            let tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
+            let tsdJsonDict = tryParseJson(tsdJsonPath);
+            if (tsdJsonDict) {
+                // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped.
+                // Therefore if they don't come with d.ts files we should not retry downloading these packages.
+                if (hasProperty(tsdJsonDict, "notFound")) {
+                    for (let notFoundTypingName of tsdJsonDict["notFound"]) {
+                        if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
+                            delete inferredTypings[notFoundTypingName];
                         }
-                        else {
-                            exclude.push(excludeItem);
+                    }
+                }
+
+                // Remove typings that the user has added to the exclude list
+                for (let excludeTypingName of exclude) {
+                    delete inferredTypings[excludeTypingName];
+                }
+
+                // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
+                // of this object has a key of the relative file path, and a value that contains the corresponding
+                // commit hash.
+                if (hasProperty(tsdJsonDict, "installed")) {
+                    for (let cachedTypingPath of Object.keys(tsdJsonDict.installed)) {
+                        // Assuming the cachedTypingPath has the format of "[package name]/[file name]"
+                        let cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf('/'));
+                        // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
+                        // d.ts file that coming with the package. That one should take higher priority.
+                        if (hasProperty(inferredTypings, cachedTypingName) && !inferredTypings[cachedTypingName]) {
+                            inferredTypings[cachedTypingName] = ts.combinePaths(typingsPath, cachedTypingPath);
                         }
                     }
                 }
-
-                if (configFileJsonDict.hasOwnProperty("include")) {
-                    mergeTypings(configFileJsonDict["include"]);
-                }
-            }
-        }
-
-        if (!(configFileJsonDict &&
-              configFileJsonDict["autoTypingOptions"] &&
-              configFileJsonDict["autoTypingOptions"]["autoDiscoverTyping"] === false)) {
-            searchDirs = ts.deduplicate(fileNames.map(ts.getDirectoryPath));
-            for (let searchDir of searchDirs) {
-                let packageJsonPath = ts.combinePaths(searchDir, "package.json");
-                getTypingNamesFromJson(packageJsonPath, filesToWatch);
-
-                let bowerJsonPath = ts.combinePaths(searchDir, "bower.json");
-                getTypingNamesFromJson(bowerJsonPath, filesToWatch);
-
-                let nodeModulesPath = ts.combinePaths(searchDir, "node_modules");
-                getTypingNamesFromNodeModuleFolder(nodeModulesPath, filesToWatch);
             }
 
-            getTypingNamesFromSourceFileNames(fileNames);
-            getTypingNamesFromCompilerOptions(compilerOptions);
-        }
-
-        let cachePath = configFileJsonDict ? ts.combinePaths(ts.getDirectoryPath(configFilePath), "autoTyping") : globalCachePath;
-        let typingsPath = ts.combinePaths(cachePath, "typings");
-        let tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
-        let tsdJsonDict = tryParseJson(tsdJsonPath);
-        if (tsdJsonDict) {
-            // The "notFound" property in the tsd.json is a list of items that were not found in DefinitelyTyped.
-            // Therefore if they don't come with d.ts files we should not retry downloading these packages.
-            if (tsdJsonDict.hasOwnProperty("notFound")) {
-                for (let notFoundTypingName of tsdJsonDict["notFound"]) {
-                    if (inferredTypings.hasOwnProperty(notFoundTypingName) && !inferredTypings[notFoundTypingName]) {
-                        delete inferredTypings[notFoundTypingName];
-                    }
-                }
-            }
-
-            // Remove typings that the user has added to the exclude list
-            for (let excludeTypingName of exclude) {
-                delete inferredTypings[excludeTypingName];
-            }
-
-            // The "installed" property in the tsd.json serves as a registry of installed typings. Each item 
-            // of this object has a key of the relative file path, and a value that contains the corresponding
-            // commit hash.
-            if (tsdJsonDict.hasOwnProperty("installed")) {
-                for (let cachedTypingPath of Object.keys(tsdJsonDict.installed)) {
-                    // Assuming the cachedTypingPath has the format of "[package name]/[file name]"
-                    let cachedTypingName = cachedTypingPath.substr(0, cachedTypingPath.indexOf('/'));
-                    // If the inferred[cachedTypingName] is already not null, which means we found a corresponding
-                    // d.ts file that coming with the package. That one should take higher priority.
-                    if (!inferredTypings[cachedTypingName]) {
-                        inferredTypings[cachedTypingName] = ts.combinePaths(typingsPath, cachedTypingPath);
-                    }
-                }
-            }
-        }
-
-        let newTypingNames: string[] = [];
-        let cachedTypingPaths: string[] = [];
-        for (let typing in inferredTypings) {
-            if (inferredTypings[typing]) {
-                if (exclude.indexOf(inferredTypings[typing]) < 0) {
+            let newTypingNames: string[] = [];
+            let cachedTypingPaths: string[] = [];
+            for (let typing in inferredTypings) {
+                if (inferredTypings[typing]) {
                     cachedTypingPaths.push(inferredTypings[typing]);
                 }
+                else {
+                    newTypingNames.push(typing);
+                }
             }
-            else {
-                newTypingNames.push(typing);
-            }
+            return { cachedTypingPaths, newTypingNames, filesToWatch };
         }
-
-        return { cachedTypingPaths, newTypingNames, filesToWatch };
+        else {
+            return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] }
+        }
     }
 
     /**
      * Merge a given list of typingNames to the inferredTypings map
      */
     function mergeTypings(typingNames: string[]) {
+        if (!typingNames) {
+            return;
+        }
+
         for (let typing of typingNames) {
             if (!inferredTypings.hasOwnProperty(typing)) {
                 inferredTypings[typing] = undefined;
@@ -226,9 +190,10 @@ namespace ts.JsTyping {
      * @param safeList is the list of names that we are confident they are library names that requires typing
      */
     function getTypingNamesFromSourceFileNames(fileNames: string[]) {
-        let inferredTypingNames = fileNames.map(f => ts.removeFileExtension(ts.getBaseFileName(f.toLowerCase())));
+        let jsFileNames = fileNames.filter(f => ts.fileExtensionIs(f, ".js"));
+        let inferredTypingNames = jsFileNames.map(f => ts.removeFileExtension(ts.getBaseFileName(f.toLowerCase())));
         let cleanedTypingNames = inferredTypingNames.map(f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
-        !_safeList === undefined ? mergeTypings(cleanedTypingNames) : mergeTypings(cleanedTypingNames.filter(_safeList.hasOwnProperty));
+        _safeList === undefined ? mergeTypings(cleanedTypingNames) : mergeTypings(cleanedTypingNames.filter(_safeList.hasOwnProperty));
     }
 
     /**

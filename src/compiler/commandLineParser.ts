@@ -411,13 +411,14 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string, configFileName?: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
-        
+        let isJsConfigFile = configFileName && ts.getBaseFileName(configFileName) === "jsconfig.json";
         let options = getCompilerOptions();
         let fileNames = getFileNames(options.allowJs);
+        let typingOptions = getTypingOptions();
         
-        return { options, fileNames, errors };
+        return { options, fileNames, typingOptions, errors };
 
         function getCompilerOptions(): CompilerOptions {
             let options: CompilerOptions = {};
@@ -425,6 +426,12 @@ namespace ts {
             forEach(optionDeclarations, option => {
                 optionNameMap[option.name] = option;
             });
+
+            // for jsConfig.json files, js files are always included
+            if (isJsConfigFile) {
+                options.allowJs = true;
+            }
+            
             let jsonOptions = json["compilerOptions"];
             if (jsonOptions) {
                 for (let id in jsonOptions) {
@@ -463,6 +470,34 @@ namespace ts {
             }
             return options;
         }
+        
+        function getTypingOptions(): TypingOptions {
+            let options: TypingOptions = { enableAutoDiscovery: false };
+            let jsonTypingOptions = json["typingOptions"];
+            if (jsonTypingOptions) {
+                for (let id in jsonTypingOptions) {
+                    if (id === "enableAutoDiscovery") {
+                        if (typeof jsonTypingOptions[id] === "boolean") {
+                            options.enableAutoDiscovery = jsonTypingOptions[id];
+                        }
+                        else {
+                            // Todo: add diagnostics
+                        }
+                    }
+                    else if (id === "include") {
+                        options.include = jsonTypingOptions[id] instanceof Array ? <string[]>jsonTypingOptions[id] : [];
+                    }
+                    else if (id === "exclude") {
+                        options.exclude = jsonTypingOptions[id] instanceof Array ? <string[]>jsonTypingOptions[id] : [];
+                    }
+                    else {
+                        // Todo: change diagnostics
+                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+                    }
+                }
+            }
+            return options;
+        }
 
         function getFileNames(allowJs: boolean): string[] {
             let fileNames: string[] = [];
@@ -475,7 +510,11 @@ namespace ts {
                 }
             }
             else {
-                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
+                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : [];
+                // For jsconfig file, node_modules folder should not be added to the project
+                if (isJsConfigFile) {
+                    exclude.push("node_modules");
+                }
                 let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
                 if (allowJs) {
                     sysFiles = sysFiles.concat(host.readDirectory(basePath, ".js", exclude));

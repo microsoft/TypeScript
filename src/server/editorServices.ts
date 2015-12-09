@@ -349,6 +349,7 @@ namespace ts.server {
         // these fields can be present in the project file
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
+        typingOptions?: ts.TypingOptions;
     }
 
     export class Project {
@@ -928,17 +929,34 @@ namespace ts.server {
             return undefined;
         }
 
-        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
-            this.log("Files for JS typing:" + fileName);
-            // TODO: replace 2nd cachePath for projectRootPath
-            return ts.JsTyping.discoverTypings(sys, project.getFileNames(), globalCachePath, project.projectFilename);
-        }
-
         acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypingPaths, newTypingNames } = this.resolveTypingsForJs(path, project);
+            let cachePath = project.isConfiguredProject() 
+                ? ts.combinePaths(ts.getDirectoryPath(project.projectFilename), "inferTypings")
+                : globalCachePath;
+                
+            let typingOptions = project.projectOptions ? project.projectOptions.typingOptions : undefined;
+            let compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
+
+            let { cachedTypingPaths, newTypingNames, filesToWatch } = ts.JsTyping.discoverTypings(
+                sys, 
+                project.getFileNames(), 
+                globalCachePath, 
+                cachePath,
+                typingOptions, 
+                compilerOptions
+            );
+
+            // Bail out when the autoTyping is disabled
+            if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
+                return;
+            }
+
+            if (!sys.directoryExists(cachePath)) {
+                sys.createDirectory(cachePath);
+            }
             let tsd = require("tsd");
-            let tsdJsonPath = ts.combinePaths(globalCachePath, 'tsd.json');
-            let typingPath = ts.combinePaths(globalCachePath, 'typings');
+            let tsdJsonPath = ts.combinePaths(cachePath, 'tsd.json');
+            let typingPath = ts.combinePaths(cachePath, 'typings');
             let api = tsd.getAPI(tsdJsonPath);
             let cachedInstalledPaths: Map<string>;
 
@@ -1114,16 +1132,12 @@ namespace ts.server {
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
             var contents = this.host.readFile(configFilename)
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
+            var rawConfig: { config?: any; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
             if (rawConfig.error) {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
-                if (rawConfig.config.compilerOptions.allowJs === true || ts.getBaseFileName(configFilename) === "jsconfig.json") {
-                    rawConfig.config.compilerOptions.allowJs = true;
-                }
-                
-                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath, configFilename);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
                 }
@@ -1133,7 +1147,8 @@ namespace ts.server {
                 else {
                     var projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        compilerOptions: parsedCommandLine.options,
+                        typingOptions: parsedCommandLine.typingOptions
                     };
                     return { succeeded: true, projectOptions };
                 }

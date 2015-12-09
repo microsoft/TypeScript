@@ -1029,12 +1029,13 @@ namespace ts {
                 });
         }
 
-        public resolveTypeDefinitions(fileNamesJson: string, cachePath: string, projectRootPath: string, compilerOptionsJson?: string, includeListJson?: string, safeListJsonPath?: string, noDevDependencies?: boolean): string {
+        public resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson?: string, compilerOptionsJson?: string): string {
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
+                let cachePath = projectRootPath ? ts.combinePaths(projectRootPath, "inferTypings") : globalCachePath;
+                let typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
-                let includeList: string[] = JSON.parse(includeListJson);
-                return ts.JsTyping.discoverTypings(this.host, fileNames, cachePath, projectRootPath, compilerOptions, includeList, noDevDependencies);
+                return ts.JsTyping.discoverTypings(this.host, fileNames, globalCachePath, cachePath, typingOptions, compilerOptions);
             });
         }
 
