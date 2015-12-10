@@ -15,6 +15,7 @@ namespace ts.formatting {
         advance(): void;
         isOnToken(): boolean;
         readTokenInfo(n: Node): TokenInfo;
+        getCurrentLeadingTrivia(): TextRangeWithKind[];
         lastTrailingTriviaWasNewLine(): boolean;
         close(): void;
     }
@@ -43,9 +44,10 @@ namespace ts.formatting {
         let lastTokenInfo: TokenInfo;
 
         return {
-            advance: advance,
-            readTokenInfo: readTokenInfo,
-            isOnToken: isOnToken,
+            advance,
+            readTokenInfo,
+            isOnToken,
+            getCurrentLeadingTrivia: () => leadingTrivia,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             close: () => {
                 Debug.assert(scanner !== undefined);
@@ -156,7 +158,7 @@ namespace ts.formatting {
             if (!isOnToken()) {
                 // scanner is not on the token (either advance was not called yet or scanner is already past the end position)
                 return {
-                    leadingTrivia: leadingTrivia,
+                    leadingTrivia,
                     trailingTrivia: undefined,
                     token: undefined
                 };

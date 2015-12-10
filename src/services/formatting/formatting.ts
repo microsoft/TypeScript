@@ -342,7 +342,7 @@ namespace ts.formatting {
         }
 
         if (!formattingScanner.isOnToken()) {
-            let leadingTrivia = formattingScanner.readTokenInfo(undefined).leadingTrivia;
+            let leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
                 processTrivia(leadingTrivia, enclosingNode, enclosingNode, undefined);
                 trimTrailingWhitespacesForRemainingRange();
