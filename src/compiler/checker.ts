@@ -6038,11 +6038,11 @@ namespace ts {
 
         function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
-                if (type.flags & TypeFlags.PredicateType) {
-                    return booleanType;
-                }
                 if (type.flags & (TypeFlags.Undefined | TypeFlags.Null)) {
                     return anyType;
+                }
+                if (type.flags & TypeFlags.PredicateType) {
+                    return booleanType;
                 }
                 if (type.flags & TypeFlags.ObjectLiteral) {
                     return getWidenedTypeOfObjectLiteral(type);
@@ -14329,15 +14329,16 @@ namespace ts {
         }
 
         function checkTypePredicate(node: TypePredicateNode) {
-            if (node.parameterName.kind === SyntaxKind.Identifier && !isInLegalParameterTypePredicatePosition(node)) {
+            const { parameterName } = node;
+            if (parameterName.kind === SyntaxKind.Identifier && !isInLegalParameterTypePredicatePosition(node)) {
                 error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
             }
-            else if (node.parameterName.kind === SyntaxKind.ThisType) {
+            else if (parameterName.kind === SyntaxKind.ThisType) {
                 if (!isInLegalThisTypePredicatePosition(node)) {
                     error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_within_a_class_or_interface_s_members_get_accessors_or_return_type_positions_for_functions_and_methods);
                 }
                 else {
-                    getTypeFromThisTypeNode(node.parameterName as ThisTypeNode);
+                    getTypeFromThisTypeNode(parameterName as ThisTypeNode);
                 }
             }
         }
