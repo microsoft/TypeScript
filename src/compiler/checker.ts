@@ -4744,16 +4744,10 @@ namespace ts {
             return t => instantiateType(mapper1(t), mapper2);
         }
 
-        function instantiateTypeParameter(typeParameter: TypeParameter, mapper: TypeMapper): TypeParameter {
+        function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
             const result = <TypeParameter>createType(TypeFlags.TypeParameter);
             result.symbol = typeParameter.symbol;
-            if (typeParameter.constraint) {
-                result.constraint = instantiateType(typeParameter.constraint, mapper);
-            }
-            else {
-                result.target = typeParameter;
-                result.mapper = mapper;
-            }
+            result.target = typeParameter;
             return result;
         }
 
@@ -4761,8 +4755,14 @@ namespace ts {
             let freshTypeParameters: TypeParameter[];
             let freshTypePredicate: TypePredicate;
             if (signature.typeParameters && !eraseTypeParameters) {
-                freshTypeParameters = instantiateList(signature.typeParameters, mapper, instantiateTypeParameter);
+                // First create a fresh set of type parameters, then include a mapping from the old to the
+                // new type parameters in the mapper function. Finally store this mapper in the new type
+                // parameters such that we can use it when instantiating constraints.
+                freshTypeParameters = map(signature.typeParameters, cloneTypeParameter);
                 mapper = combineTypeMappers(createTypeMapper(signature.typeParameters, freshTypeParameters), mapper);
+                for (const tp of freshTypeParameters) {
+                    tp.mapper = mapper;
+                }
             }
             if (signature.typePredicate) {
                 freshTypePredicate = {
