@@ -5757,15 +5757,17 @@ namespace ts {
             }
 
             function enumRelatedTo(source: Type, target: Type) {
-                if (source.symbol.name !== target.symbol.name) {
+                if (source.symbol.name !== target.symbol.name ||
+                    source.symbol.flags & SymbolFlags.ConstEnum ||
+                    target.symbol.flags & SymbolFlags.ConstEnum) {
                     return Ternary.False;
                 }
-                const sourceDecl = <EnumDeclaration>getMergedSymbol(source.symbol).valueDeclaration;
-                const targetDecl = <EnumDeclaration>getMergedSymbol(target.symbol).valueDeclaration;
+                const sourceDecl = <EnumDeclaration>getDeclarationOfKind(source.symbol, SyntaxKind.EnumDeclaration);
+                const targetDecl = <EnumDeclaration>getDeclarationOfKind(target.symbol, SyntaxKind.EnumDeclaration);
                 const targetMembers = arrayToMap(targetDecl.members, member => getTextOfPropertyName(<PropertyName>member.name));
                 for (const member of sourceDecl.members) {
                     const name = getTextOfPropertyName(<PropertyName>member.name);
-                    if (!targetMembers[name]) {
+                    if (!hasProperty(targetMembers, name)) {
                         reportError(Diagnostics.Property_0_is_missing_in_type_1,
                                     name,
                                     typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
