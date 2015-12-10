@@ -37,6 +37,14 @@ namespace Decl {
         a, b, c = 3,
     }
 }
+namespace Merged {
+    export enum E {
+        a, b, 
+    }
+    export enum E {
+        c = 3, d,
+    }
+}
 
 var abc: First.E;
 var secondAbc: Abc.E;
@@ -46,6 +54,7 @@ var secondCd: Cd.E;
 var nope: Abc.Nope;
 var k: Const.E;
 var decl: Decl.E;
+var merged: Merged.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -59,10 +68,14 @@ secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
 decl = abc; // ok
 
-k = k; // const is only assignable to itself
+// const is only assignable to itself
+k = k;
 abc = k; // error
 k = abc;
 
+// merged enums compare all their members
+abc = merged; // missing 'd'
+merged = abc; // ok
 
 //// [enumAssignmentCompat3.js]
 var First;
@@ -118,6 +131,19 @@ var Cd;
 var Decl;
 (function (Decl) {
 })(Decl || (Decl = {}));
+var Merged;
+(function (Merged) {
+    (function (E) {
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
+    })(Merged.E || (Merged.E = {}));
+    var E = Merged.E;
+    (function (E) {
+        E[E["c"] = 3] = "c";
+        E[E["d"] = 4] = "d";
+    })(Merged.E || (Merged.E = {}));
+    var E = Merged.E;
+})(Merged || (Merged = {}));
 var abc;
 var secondAbc;
 var secondAbcd;
@@ -126,6 +152,7 @@ var secondCd;
 var nope;
 var k;
 var decl;
+var merged;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -138,6 +165,10 @@ secondAb = abc; // missing 'c'
 secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
 decl = abc; // ok
-k = k; // const is only assignable to itself
+// const is only assignable to itself
+k = k;
 abc = k; // error
 k = abc;
+// merged enums compare all their members
+abc = merged; // missing 'd'
+merged = abc; // ok

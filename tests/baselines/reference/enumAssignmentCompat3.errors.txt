@@ -1,18 +1,20 @@
-tests/cases/compiler/enumAssignmentCompat3.ts(49,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(58,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
   Property 'd' is missing in type 'First.E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(51,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(60,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
   Property 'd' is missing in type 'First.E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(52,1): error TS2322: Type 'Nope' is not assignable to type 'E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(56,1): error TS2322: Type 'First.E' is not assignable to type 'Ab.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(61,1): error TS2322: Type 'Nope' is not assignable to type 'E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(65,1): error TS2322: Type 'First.E' is not assignable to type 'Ab.E'.
   Property 'c' is missing in type 'Ab.E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(57,1): error TS2322: Type 'First.E' is not assignable to type 'Cd.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(66,1): error TS2322: Type 'First.E' is not assignable to type 'Cd.E'.
   Property 'a' is missing in type 'Cd.E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(58,1): error TS2322: Type 'E' is not assignable to type 'Nope'.
-tests/cases/compiler/enumAssignmentCompat3.ts(62,1): error TS2322: Type 'Const.E' is not assignable to type 'First.E'.
-tests/cases/compiler/enumAssignmentCompat3.ts(63,1): error TS2322: Type 'First.E' is not assignable to type 'Const.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(67,1): error TS2322: Type 'E' is not assignable to type 'Nope'.
+tests/cases/compiler/enumAssignmentCompat3.ts(72,1): error TS2322: Type 'Const.E' is not assignable to type 'First.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(73,1): error TS2322: Type 'First.E' is not assignable to type 'Const.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(76,1): error TS2322: Type 'Merged.E' is not assignable to type 'First.E'.
+  Property 'd' is missing in type 'First.E'.
 
 
-==== tests/cases/compiler/enumAssignmentCompat3.ts (8 errors) ====
+==== tests/cases/compiler/enumAssignmentCompat3.ts (9 errors) ====
     namespace First {
         export enum E {
             a, b, c,
@@ -51,6 +53,14 @@ tests/cases/compiler/enumAssignmentCompat3.ts(63,1): error TS2322: Type 'First.E
             a, b, c = 3,
         }
     }
+    namespace Merged {
+        export enum E {
+            a, b, 
+        }
+        export enum E {
+            c = 3, d,
+        }
+    }
     
     var abc: First.E;
     var secondAbc: Abc.E;
@@ -60,6 +70,7 @@ tests/cases/compiler/enumAssignmentCompat3.ts(63,1): error TS2322: Type 'First.E
     var nope: Abc.Nope;
     var k: Const.E;
     var decl: Decl.E;
+    var merged: Merged.E;
     abc = secondAbc; // ok
     abc = secondAbcd; // missing 'd'
     ~~~
@@ -89,7 +100,8 @@ tests/cases/compiler/enumAssignmentCompat3.ts(63,1): error TS2322: Type 'First.E
 !!! error TS2322: Type 'E' is not assignable to type 'Nope'.
     decl = abc; // ok
     
-    k = k; // const is only assignable to itself
+    // const is only assignable to itself
+    k = k;
     abc = k; // error
     ~~~
 !!! error TS2322: Type 'Const.E' is not assignable to type 'First.E'.
@@ -97,3 +109,9 @@ tests/cases/compiler/enumAssignmentCompat3.ts(63,1): error TS2322: Type 'First.E
     ~
 !!! error TS2322: Type 'First.E' is not assignable to type 'Const.E'.
     
+    // merged enums compare all their members
+    abc = merged; // missing 'd'
+    ~~~
+!!! error TS2322: Type 'Merged.E' is not assignable to type 'First.E'.
+!!! error TS2322:   Property 'd' is missing in type 'First.E'.
+    merged = abc; // ok

@@ -36,6 +36,14 @@ namespace Decl {
         a, b, c = 3,
     }
 }
+namespace Merged {
+    export enum E {
+        a, b, 
+    }
+    export enum E {
+        c = 3, d,
+    }
+}
 
 var abc: First.E;
 var secondAbc: Abc.E;
@@ -45,6 +53,7 @@ var secondCd: Cd.E;
 var nope: Abc.Nope;
 var k: Const.E;
 var decl: Decl.E;
+var merged: Merged.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -58,6 +67,11 @@ secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
 decl = abc; // ok
 
-k = k; // const is only assignable to itself
+// const is only assignable to itself
+k = k;
 abc = k; // error
 k = abc;
+
+// merged enums compare all their members
+abc = merged; // missing 'd'
+merged = abc; // ok
