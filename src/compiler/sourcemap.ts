@@ -281,15 +281,7 @@ namespace ts {
             updateLastEncodedAndRecordedSpans();
         }
 
-        function getSourceMapRange(range: TextRange) {
-            while ((range as SynthesizedNode).sourceMapNode) {
-                range = (range as SynthesizedNode).sourceMapNode;
-            }
-            return range;
-        }
-
         function getStartPos(range: TextRange) {
-            range = getSourceMapRange(range);
             const rangeHasDecorators = !!(range as Node).decorators;
             return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
         }
@@ -299,7 +291,6 @@ namespace ts {
         }
 
         function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
-            range = getSourceMapRange(range);
             emitPos(range.end);
             stopOverridingSpan = stopOverridingEnd;
         }

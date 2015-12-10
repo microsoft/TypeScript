@@ -311,9 +311,9 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     
-6 >      { name: nameA } = robot
-7 >                        
+5 >     { 
+6 >      name: nameA
+7 >                         } = 
 8 >                          robot
 9 >                               
 10>                                , 
@@ -333,8 +333,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >Emitted(11, 4) Source(29, 4) + SourceIndex(0)
 3 >Emitted(11, 5) Source(29, 5) + SourceIndex(0)
 4 >Emitted(11, 6) Source(29, 6) + SourceIndex(0)
-5 >Emitted(11, 7) Source(29, 6) + SourceIndex(0)
-6 >Emitted(11, 25) Source(29, 29) + SourceIndex(0)
+5 >Emitted(11, 7) Source(29, 8) + SourceIndex(0)
+6 >Emitted(11, 25) Source(29, 19) + SourceIndex(0)
 7 >Emitted(11, 27) Source(29, 24) + SourceIndex(0)
 8 >Emitted(11, 32) Source(29, 29) + SourceIndex(0)
 9 >Emitted(11, 33) Source(29, 29) + SourceIndex(0)
@@ -420,8 +420,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name: nameA } = getRobot()
 7 >                     
-8 >                       { name: nameA } = getRobot()
-9 >                                      
+8 >                       name: nameA
+9 >                                       } = getRobot()
 10>                                           , 
 11>                                             i
 12>                                               = 
@@ -441,8 +441,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(14, 6) Source(32, 6) + SourceIndex(0)
 5 >Emitted(14, 7) Source(32, 6) + SourceIndex(0)
 6 >Emitted(14, 22) Source(32, 34) + SourceIndex(0)
-7 >Emitted(14, 24) Source(32, 6) + SourceIndex(0)
-8 >Emitted(14, 39) Source(32, 34) + SourceIndex(0)
+7 >Emitted(14, 24) Source(32, 8) + SourceIndex(0)
+8 >Emitted(14, 39) Source(32, 19) + SourceIndex(0)
 9 >Emitted(14, 44) Source(32, 34) + SourceIndex(0)
 10>Emitted(14, 46) Source(32, 36) + SourceIndex(0)
 11>Emitted(14, 47) Source(32, 37) + SourceIndex(0)
@@ -526,8 +526,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }
 7 >                                                 
-8 >                                                   { name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }
-9 >                                                                  
+8 >                                                   name: nameA
+9 >                                                                   } = <Robot>{ name: "trimmer", skill: "trimming" }
 10>                                                                       , 
 11>                                                                         i
 12>                                                                           = 
@@ -547,8 +547,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(17, 6) Source(35, 6) + SourceIndex(0)
 5 >Emitted(17, 7) Source(35, 6) + SourceIndex(0)
 6 >Emitted(17, 50) Source(35, 69) + SourceIndex(0)
-7 >Emitted(17, 52) Source(35, 6) + SourceIndex(0)
-8 >Emitted(17, 67) Source(35, 69) + SourceIndex(0)
+7 >Emitted(17, 52) Source(35, 8) + SourceIndex(0)
+8 >Emitted(17, 67) Source(35, 19) + SourceIndex(0)
 9 >Emitted(17, 72) Source(35, 69) + SourceIndex(0)
 10>Emitted(17, 74) Source(35, 71) + SourceIndex(0)
 11>Emitted(17, 75) Source(35, 72) + SourceIndex(0)
@@ -633,8 +633,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     { skills: 
-6 >      { primary: primaryA, secondary: secondaryA }
+5 >     { 
+6 >      skills: { primary: primaryA, secondary: secondaryA }
 7 >                            
 8 >                              primary: primaryA
 9 >                                                   , 
@@ -659,7 +659,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >Emitted(20, 4) Source(38, 4) + SourceIndex(0)
 3 >Emitted(20, 5) Source(38, 5) + SourceIndex(0)
 4 >Emitted(20, 6) Source(38, 6) + SourceIndex(0)
-5 >Emitted(20, 7) Source(38, 16) + SourceIndex(0)
+5 >Emitted(20, 7) Source(38, 8) + SourceIndex(0)
 6 >Emitted(20, 29) Source(38, 60) + SourceIndex(0)
 7 >Emitted(20, 31) Source(38, 18) + SourceIndex(0)
 8 >Emitted(20, 52) Source(38, 35) + SourceIndex(0)
@@ -754,7 +754,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot()
 7 >                          
-8 >                            { primary: primaryA, secondary: secondaryA }
+8 >                            skills: { primary: primaryA, secondary: secondaryA }
 9 >                                          
 10>                                            primary: primaryA
 11>                                                                 , 
@@ -779,7 +779,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(23, 6) Source(41, 6) + SourceIndex(0)
 5 >Emitted(23, 7) Source(41, 6) + SourceIndex(0)
 6 >Emitted(23, 27) Source(41, 80) + SourceIndex(0)
-7 >Emitted(23, 29) Source(41, 16) + SourceIndex(0)
+7 >Emitted(23, 29) Source(41, 8) + SourceIndex(0)
 8 >Emitted(23, 43) Source(41, 60) + SourceIndex(0)
 9 >Emitted(23, 45) Source(41, 18) + SourceIndex(0)
 10>Emitted(23, 66) Source(41, 35) + SourceIndex(0)
@@ -860,7 +860,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >      { skills: { primary: primaryA, secondary: secondaryA } } =
   >          <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
 7 >                                                                                    
-8 >                                                                                      { primary: primaryA, secondary: secondaryA }
+8 >                                                                                      skills: { primary: primaryA, secondary: secondaryA }
 9 >                                                                                                    
 10>                                                                                                      primary: primaryA
 11>                                                                                                                           , 
@@ -873,7 +873,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(26, 6) Source(44, 6) + SourceIndex(0)
 5 >Emitted(26, 7) Source(44, 6) + SourceIndex(0)
 6 >Emitted(26, 85) Source(45, 90) + SourceIndex(0)
-7 >Emitted(26, 87) Source(44, 16) + SourceIndex(0)
+7 >Emitted(26, 87) Source(44, 8) + SourceIndex(0)
 8 >Emitted(26, 101) Source(44, 60) + SourceIndex(0)
 9 >Emitted(26, 103) Source(44, 18) + SourceIndex(0)
 10>Emitted(26, 124) Source(44, 35) + SourceIndex(0)
@@ -989,9 +989,9 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     
-6 >      { name } = robot
-7 >                       
+5 >     { 
+6 >      name
+7 >                        } = 
 8 >                         robot
 9 >                              
 10>                               , 
@@ -1011,8 +1011,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >Emitted(30, 4) Source(49, 4) + SourceIndex(0)
 3 >Emitted(30, 5) Source(49, 5) + SourceIndex(0)
 4 >Emitted(30, 6) Source(49, 6) + SourceIndex(0)
-5 >Emitted(30, 7) Source(49, 6) + SourceIndex(0)
-6 >Emitted(30, 24) Source(49, 22) + SourceIndex(0)
+5 >Emitted(30, 7) Source(49, 8) + SourceIndex(0)
+6 >Emitted(30, 24) Source(49, 12) + SourceIndex(0)
 7 >Emitted(30, 26) Source(49, 17) + SourceIndex(0)
 8 >Emitted(30, 31) Source(49, 22) + SourceIndex(0)
 9 >Emitted(30, 32) Source(49, 22) + SourceIndex(0)
@@ -1098,8 +1098,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name } = getRobot()
 7 >                     
-8 >                       { name } = getRobot()
-9 >                                     
+8 >                       name
+9 >                                      } = getRobot()
 10>                                          , 
 11>                                            i
 12>                                              = 
@@ -1119,8 +1119,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(33, 6) Source(52, 6) + SourceIndex(0)
 5 >Emitted(33, 7) Source(52, 6) + SourceIndex(0)
 6 >Emitted(33, 22) Source(52, 27) + SourceIndex(0)
-7 >Emitted(33, 24) Source(52, 6) + SourceIndex(0)
-8 >Emitted(33, 38) Source(52, 27) + SourceIndex(0)
+7 >Emitted(33, 24) Source(52, 8) + SourceIndex(0)
+8 >Emitted(33, 38) Source(52, 12) + SourceIndex(0)
 9 >Emitted(33, 43) Source(52, 27) + SourceIndex(0)
 10>Emitted(33, 45) Source(52, 29) + SourceIndex(0)
 11>Emitted(33, 46) Source(52, 30) + SourceIndex(0)
@@ -1204,8 +1204,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { name } = <Robot>{ name: "trimmer", skill: "trimming" }
 7 >                                                 
-8 >                                                   { name } = <Robot>{ name: "trimmer", skill: "trimming" }
-9 >                                                                 
+8 >                                                   name
+9 >                                                                  } = <Robot>{ name: "trimmer", skill: "trimming" }
 10>                                                                      , 
 11>                                                                        i
 12>                                                                          = 
@@ -1225,8 +1225,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(36, 6) Source(55, 6) + SourceIndex(0)
 5 >Emitted(36, 7) Source(55, 6) + SourceIndex(0)
 6 >Emitted(36, 50) Source(55, 62) + SourceIndex(0)
-7 >Emitted(36, 52) Source(55, 6) + SourceIndex(0)
-8 >Emitted(36, 66) Source(55, 62) + SourceIndex(0)
+7 >Emitted(36, 52) Source(55, 8) + SourceIndex(0)
+8 >Emitted(36, 66) Source(55, 12) + SourceIndex(0)
 9 >Emitted(36, 71) Source(55, 62) + SourceIndex(0)
 10>Emitted(36, 73) Source(55, 64) + SourceIndex(0)
 11>Emitted(36, 74) Source(55, 65) + SourceIndex(0)
@@ -1311,8 +1311,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     { skills: 
-6 >      { primary, secondary }
+5 >     { 
+6 >      skills: { primary, secondary }
 7 >                            
 8 >                              primary
 9 >                                                  , 
@@ -1337,7 +1337,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 2 >Emitted(39, 4) Source(58, 4) + SourceIndex(0)
 3 >Emitted(39, 5) Source(58, 5) + SourceIndex(0)
 4 >Emitted(39, 6) Source(58, 6) + SourceIndex(0)
-5 >Emitted(39, 7) Source(58, 16) + SourceIndex(0)
+5 >Emitted(39, 7) Source(58, 8) + SourceIndex(0)
 6 >Emitted(39, 29) Source(58, 38) + SourceIndex(0)
 7 >Emitted(39, 31) Source(58, 18) + SourceIndex(0)
 8 >Emitted(39, 51) Source(58, 25) + SourceIndex(0)
@@ -1432,7 +1432,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 5 >     
 6 >      { skills: { primary, secondary } } = getMultiRobot()
 7 >                          
-8 >                            { primary, secondary }
+8 >                            skills: { primary, secondary }
 9 >                                          
 10>                                            primary
 11>                                                                , 
@@ -1457,7 +1457,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(42, 6) Source(61, 6) + SourceIndex(0)
 5 >Emitted(42, 7) Source(61, 6) + SourceIndex(0)
 6 >Emitted(42, 27) Source(61, 58) + SourceIndex(0)
-7 >Emitted(42, 29) Source(61, 16) + SourceIndex(0)
+7 >Emitted(42, 29) Source(61, 8) + SourceIndex(0)
 8 >Emitted(42, 43) Source(61, 38) + SourceIndex(0)
 9 >Emitted(42, 45) Source(61, 18) + SourceIndex(0)
 10>Emitted(42, 65) Source(61, 25) + SourceIndex(0)
@@ -1538,7 +1538,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >      { skills: { primary, secondary } } =
   >          <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
 7 >                                                                                    
-8 >                                                                                      { primary, secondary }
+8 >                                                                                      skills: { primary, secondary }
 9 >                                                                                                    
 10>                                                                                                      primary
 11>                                                                                                                          , 
@@ -1551,7 +1551,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(45, 6) Source(64, 6) + SourceIndex(0)
 5 >Emitted(45, 7) Source(64, 6) + SourceIndex(0)
 6 >Emitted(45, 85) Source(65, 90) + SourceIndex(0)
-7 >Emitted(45, 87) Source(64, 16) + SourceIndex(0)
+7 >Emitted(45, 87) Source(64, 8) + SourceIndex(0)
 8 >Emitted(45, 101) Source(64, 38) + SourceIndex(0)
 9 >Emitted(45, 103) Source(64, 18) + SourceIndex(0)
 10>Emitted(45, 123) Source(64, 25) + SourceIndex(0)
@@ -2013,8 +2013,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >    (
 5 >     { 
 6 >      name: nameA
-7 >                             , skills: 
-8 >                               { primary: primaryA, secondary: secondaryA }
+7 >                             , 
+8 >                               skills: { primary: primaryA, secondary: secondaryA }
 9 >                                                     
 10>                                                       primary: primaryA
 11>                                                                            , 
@@ -2041,7 +2041,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(58, 6) Source(80, 6) + SourceIndex(0)
 5 >Emitted(58, 7) Source(80, 8) + SourceIndex(0)
 6 >Emitted(58, 30) Source(80, 19) + SourceIndex(0)
-7 >Emitted(58, 32) Source(80, 29) + SourceIndex(0)
+7 >Emitted(58, 32) Source(80, 21) + SourceIndex(0)
 8 >Emitted(58, 54) Source(80, 73) + SourceIndex(0)
 9 >Emitted(58, 56) Source(80, 31) + SourceIndex(0)
 10>Emitted(58, 77) Source(80, 48) + SourceIndex(0)
@@ -2139,8 +2139,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >      { name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot()
 7 >                          
 8 >                            name: nameA
-9 >                                           , skills: 
-10>                                             { primary: primaryA, secondary: secondaryA }
+9 >                                           , 
+10>                                             skills: { primary: primaryA, secondary: secondaryA }
 11>                                                           
 12>                                                             primary: primaryA
 13>                                                                                  , 
@@ -2167,7 +2167,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >Emitted(61, 27) Source(83, 93) + SourceIndex(0)
 7 >Emitted(61, 29) Source(83, 8) + SourceIndex(0)
 8 >Emitted(61, 44) Source(83, 19) + SourceIndex(0)
-9 >Emitted(61, 46) Source(83, 29) + SourceIndex(0)
+9 >Emitted(61, 46) Source(83, 21) + SourceIndex(0)
 10>Emitted(61, 60) Source(83, 73) + SourceIndex(0)
 11>Emitted(61, 62) Source(83, 31) + SourceIndex(0)
 12>Emitted(61, 83) Source(83, 48) + SourceIndex(0)
@@ -2251,8 +2251,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
   >          <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
 7 >                                                                                    
 8 >                                                                                      name: nameA
-9 >                                                                                                     , skills: 
-10>                                                                                                       { primary: primaryA, secondary: secondaryA }
+9 >                                                                                                     , 
+10>                                                                                                       skills: { primary: primaryA, secondary: secondaryA }
 11>                                                                                                                     
 12>                                                                                                                       primary: primaryA
 13>                                                                                                                                            , 
@@ -2267,7 +2267,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >Emitted(64, 85) Source(87, 90) + SourceIndex(0)
 7 >Emitted(64, 87) Source(86, 8) + SourceIndex(0)
 8 >Emitted(64, 102) Source(86, 19) + SourceIndex(0)
-9 >Emitted(64, 104) Source(86, 29) + SourceIndex(0)
+9 >Emitted(64, 104) Source(86, 21) + SourceIndex(0)
 10>Emitted(64, 118) Source(86, 73) + SourceIndex(0)
 11>Emitted(64, 120) Source(86, 31) + SourceIndex(0)
 12>Emitted(64, 141) Source(86, 48) + SourceIndex(0)
@@ -2727,8 +2727,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >    (
 5 >     { 
 6 >      name
-7 >                            , skills: 
-8 >                              { primary, secondary }
+7 >                            , 
+8 >                              skills: { primary, secondary }
 9 >                                                    
 10>                                                      primary
 11>                                                                          , 
@@ -2755,7 +2755,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 4 >Emitted(77, 6) Source(100, 6) + SourceIndex(0)
 5 >Emitted(77, 7) Source(100, 8) + SourceIndex(0)
 6 >Emitted(77, 29) Source(100, 12) + SourceIndex(0)
-7 >Emitted(77, 31) Source(100, 22) + SourceIndex(0)
+7 >Emitted(77, 31) Source(100, 14) + SourceIndex(0)
 8 >Emitted(77, 53) Source(100, 44) + SourceIndex(0)
 9 >Emitted(77, 55) Source(100, 24) + SourceIndex(0)
 10>Emitted(77, 75) Source(100, 31) + SourceIndex(0)
@@ -2853,8 +2853,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >      { name, skills: { primary, secondary } } = getMultiRobot()
 7 >                          
 8 >                            name
-9 >                                          , skills: 
-10>                                            { primary, secondary }
+9 >                                          , 
+10>                                            skills: { primary, secondary }
 11>                                                          
 12>                                                            primary
 13>                                                                                , 
@@ -2881,7 +2881,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >Emitted(80, 27) Source(103, 64) + SourceIndex(0)
 7 >Emitted(80, 29) Source(103, 8) + SourceIndex(0)
 8 >Emitted(80, 43) Source(103, 12) + SourceIndex(0)
-9 >Emitted(80, 45) Source(103, 22) + SourceIndex(0)
+9 >Emitted(80, 45) Source(103, 14) + SourceIndex(0)
 10>Emitted(80, 59) Source(103, 44) + SourceIndex(0)
 11>Emitted(80, 61) Source(103, 24) + SourceIndex(0)
 12>Emitted(80, 81) Source(103, 31) + SourceIndex(0)
@@ -2965,8 +2965,8 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
   >          <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
 7 >                                                                                    
 8 >                                                                                      name
-9 >                                                                                                    , skills: 
-10>                                                                                                      { primary, secondary }
+9 >                                                                                                    , 
+10>                                                                                                      skills: { primary, secondary }
 11>                                                                                                                    
 12>                                                                                                                      primary
 13>                                                                                                                                          , 
@@ -2981,7 +2981,7 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern2.ts
 6 >Emitted(83, 85) Source(107, 90) + SourceIndex(0)
 7 >Emitted(83, 87) Source(106, 8) + SourceIndex(0)
 8 >Emitted(83, 101) Source(106, 12) + SourceIndex(0)
-9 >Emitted(83, 103) Source(106, 22) + SourceIndex(0)
+9 >Emitted(83, 103) Source(106, 14) + SourceIndex(0)
 10>Emitted(83, 117) Source(106, 44) + SourceIndex(0)
 11>Emitted(83, 119) Source(106, 24) + SourceIndex(0)
 12>Emitted(83, 139) Source(106, 31) + SourceIndex(0)

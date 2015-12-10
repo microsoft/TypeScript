@@ -1979,15 +1979,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function createPropertyAccessExpression(expression: Expression, name: Identifier): PropertyAccessExpression {
-                const result = <PropertyAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.PropertyAccessExpression, name);
+                const result = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
                 result.expression = parenthesizeForAccess(expression);
                 result.dotToken = createSynthesizedNode(SyntaxKind.DotToken);
                 result.name = name;
                 return result;
             }
 
-            function createElementAccessExpression(expression: Expression, argumentExpression: Expression, sourceMapNode: Node): ElementAccessExpression {
-                const result = <ElementAccessExpression>createSourceMappedSynthesizedNode(SyntaxKind.ElementAccessExpression, sourceMapNode);
+            function createElementAccessExpression(expression: Expression, argumentExpression: Expression): ElementAccessExpression {
+                const result = <ElementAccessExpression>createSynthesizedNode(SyntaxKind.ElementAccessExpression);
                 result.expression = parenthesizeForAccess(expression);
                 result.argumentExpression = argumentExpression;
 
@@ -2015,7 +2015,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     return <LeftHandSideExpression>expr;
                 }
-                const node = <ParenthesizedExpression>createSourceMappedSynthesizedNode(SyntaxKind.ParenthesizedExpression, expr);
+                const node = <ParenthesizedExpression>createSynthesizedNode(SyntaxKind.ParenthesizedExpression);
                 node.expression = expr;
                 return node;
             }
@@ -3326,7 +3326,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // Initialize LHS
                 // let v = _a[_i];
-                const rhsIterationValue = createElementAccessExpression(rhsReference, counter, node.initializer);
+                const rhsIterationValue = createElementAccessExpression(rhsReference, counter);
                 emitStart(node.initializer);
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     write("var ");
@@ -3716,7 +3716,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * @param value an expression as a right-hand-side operand of the assignment
              * @param shouldEmitCommaBeforeAssignment a boolean indicating whether to prefix an assignment with comma
              */
-            function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean, nodeForSourceMap: TextRange) {
+            function emitAssignment(name: Identifier, value: Expression, shouldEmitCommaBeforeAssignment: boolean, nodeForSourceMap: Node) {
                 if (shouldEmitCommaBeforeAssignment) {
                     write(", ");
                 }
@@ -3732,7 +3732,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const isVariableDeclarationOrBindingElement =
                     name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
 
-                emitStart(nodeForSourceMap);
+                // If this is first var declaration, we need to stary at var/let/const keyword instead
+                // otherwise use nodeForSourceMap as the start position
+                emitStart(isFirstVariableDeclaration(nodeForSourceMap) ? nodeForSourceMap.parent : nodeForSourceMap);
                 withTemporaryNoSourceMap(() => {
                     if (isVariableDeclarationOrBindingElement) {
                         emitModuleMemberName(<Declaration>name.parent);
@@ -3757,13 +3759,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * @param canDefineTempVariablesInPlace a boolean indicating whether you can define the temporary variable at an assignment location
              * @param shouldEmitCommaBeforeAssignment a boolean indicating whether an assignment should prefix with comma
              */
-            function emitTempVariableAssignment(expression: Expression, canDefineTempVariablesInPlace: boolean, shouldEmitCommaBeforeAssignment: boolean): Identifier {
+            function emitTempVariableAssignment(expression: Expression, canDefineTempVariablesInPlace: boolean, shouldEmitCommaBeforeAssignment: boolean, sourceMapNode?: Node): Identifier {
                 const identifier = createTempVariable(TempFlags.Auto);
                 if (!canDefineTempVariablesInPlace) {
                     recordTempDeclaration(identifier);
                 }
-                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment, expression.parent || expression);
+                emitAssignment(identifier, expression, shouldEmitCommaBeforeAssignment, sourceMapNode || expression.parent);
                 return identifier;
+            }
+
+            function isFirstVariableDeclaration(root: Node) {
+                return root.kind === SyntaxKind.VariableDeclaration &&
+                    root.parent.kind === SyntaxKind.VariableDeclarationList &&
+                    (<VariableDeclarationList>root.parent).declarations[0] === root;
             }
 
             function emitDestructuring(root: BinaryExpression | VariableDeclaration | ParameterDeclaration, isAssignmentExpressionStatement: boolean, value?: Expression) {
@@ -3789,9 +3797,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     Debug.assert(!isAssignmentExpressionStatement);
                     // If first variable declaration of variable statement correct the start location
-                    if (root.kind === SyntaxKind.VariableDeclaration &&
-                        root.parent.kind === SyntaxKind.VariableDeclarationList &&
-                        (<VariableDeclarationList>root.parent).declarations[0] === root) {
+                    if (isFirstVariableDeclaration(root)) {
                         // Use emit location of "var " as next emit start entry
                         sourceMap.changeEmitSourcePos();
                     }
@@ -3808,20 +3814,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                  * @param reuseIdentifierExpressions true if identifier expressions can simply be returned;
                  *                                   false if it is necessary to always emit an identifier.
                  */
-                function ensureIdentifier(expr: Expression, reuseIdentifierExpressions: boolean): Expression {
+                function ensureIdentifier(expr: Expression, reuseIdentifierExpressions: boolean, sourceMapNode: Node): Expression {
                     if (expr.kind === SyntaxKind.Identifier && reuseIdentifierExpressions) {
                         return expr;
                     }
 
-                    const identifier = emitTempVariableAssignment(expr, canDefineTempVariablesInPlace, emitCount > 0);
+                    const identifier = emitTempVariableAssignment(expr, canDefineTempVariablesInPlace, emitCount > 0, sourceMapNode);
                     emitCount++;
                     return identifier;
                 }
 
-                function createDefaultValueCheck(value: Expression, defaultValue: Expression): Expression {
+                function createDefaultValueCheck(value: Expression, defaultValue: Expression, sourceMapNode: Node): Expression {
                     // The value expression will be evaluated twice, so for anything but a simple identifier
                     // we need to generate a temporary variable
-                    value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
+                    // If the temporary variable needs to be emitted use the source Map node for assignment of that statement
+                    value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, sourceMapNode);
                     // Return the expression 'value === void 0 ? defaultValue : value'
                     const equals = <BinaryExpression>createSynthesizedNode(SyntaxKind.BinaryExpression);
                     equals.left = value;
@@ -3846,22 +3853,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return node;
                 }
 
-                function createPropertyAccessForDestructuringProperty(object: Expression, propName: PropertyName, sourceMapNode: Node): Expression {
+                function createPropertyAccessForDestructuringProperty(object: Expression, propName: PropertyName): Expression {
                     let index: Expression;
                     const nameIsComputed = propName.kind === SyntaxKind.ComputedPropertyName;
                     if (nameIsComputed) {
-                        index = ensureIdentifier((<ComputedPropertyName>propName).expression, /*reuseIdentifierExpressions*/ false);
+                        // TODO to handle when we look into sourcemaps for computed properties, for now use propName
+                        index = ensureIdentifier((<ComputedPropertyName>propName).expression, /*reuseIdentifierExpressions*/ false, propName);
                     }
                     else {
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
-                        index = <Identifier | LiteralExpression>createSourceMappedSynthesizedNode(propName.kind, sourceMapNode);
+                        index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
                         (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
                     }
 
                     return !nameIsComputed && index.kind === SyntaxKind.Identifier
                         ? createPropertyAccessExpression(object, <Identifier>index)
-                        : createElementAccessExpression(object, index, index);
+                        : createElementAccessExpression(object, index);
                 }
 
                 function createSliceCall(value: Expression, sliceIndex: number): CallExpression {
@@ -3879,13 +3887,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (properties.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
+                        // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, sourceMapNode);
                     }
                     for (const p of properties) {
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                             const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
-                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName, target), properties.length === 1 ? sourceMapNode : p);
+                            // Assignment for target = value.propName should highligh whole property, hence use p as source map node
+                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName), p);
                         }
                     }
                 }
@@ -3895,30 +3905,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     if (elements.length !== 1) {
                         // For anything but a single element destructuring we need to generate a temporary
                         // to ensure value is evaluated exactly once.
-                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
+                        // When doing so we want to hightlight the passed in source map node since thats the one needing this temp assignment
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, sourceMapNode);
                     }
                     for (let i = 0; i < elements.length; i++) {
                         const e = elements[i];
                         if (e.kind !== SyntaxKind.OmittedExpression) {
+                            // Assignment for target = value.propName should highligh whole property, hence use e as source map node
                             if (e.kind !== SyntaxKind.SpreadElementExpression) {
-                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i), e), elements.length === 1 ? sourceMapNode : e);
+                                emitDestructuringAssignment(e, createElementAccessExpression(value, createNumericLiteral(i)), e);
                             }
                             else if (i === elements.length - 1) {
-                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i), elements.length === 1 ? sourceMapNode : e);
+                                emitDestructuringAssignment((<SpreadElementExpression>e).expression, createSliceCall(value, i), e);
                             }
                         }
                     }
                 }
 
                 function emitDestructuringAssignment(target: Expression | ShorthandPropertyAssignment, value: Expression, sourceMapNode: Node) {
+                    // When emitting target = value use source map node to highlight, including any temporary assignments needed for this
                     if (target.kind === SyntaxKind.ShorthandPropertyAssignment) {
                         if ((<ShorthandPropertyAssignment>target).objectAssignmentInitializer) {
-                            value = createDefaultValueCheck(value, (<ShorthandPropertyAssignment>target).objectAssignmentInitializer);
+                            value = createDefaultValueCheck(value, (<ShorthandPropertyAssignment>target).objectAssignmentInitializer, sourceMapNode);
                         }
                         target = (<ShorthandPropertyAssignment>target).name;
                     }
                     else if (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.EqualsToken) {
-                        value = createDefaultValueCheck(value, (<BinaryExpression>target).right);
+                        value = createDefaultValueCheck(value, (<BinaryExpression>target).right, sourceMapNode);
                         target = (<BinaryExpression>target).left;
                     }
                     if (target.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -3928,7 +3941,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitArrayLiteralAssignment(<ArrayLiteralExpression>target, value, sourceMapNode);
                     }
                     else {
-                        // TODO
                         emitAssignment(<Identifier>target, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, sourceMapNode);
                         emitCount++;
                     }
@@ -3942,13 +3954,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emit(value);
                     }
                     else if (isAssignmentExpressionStatement) {
+                        // Source map node for root.left = root.right is root
                         emitDestructuringAssignment(target, value, root);
                     }
                     else {
                         if (root.parent.kind !== SyntaxKind.ParenthesizedExpression) {
                             write("(");
                         }
-                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true);
+                        // Temporary assignment needed to emit root should highlight whole binary expression
+                        value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ true, root);
+                        // Source map node for root.left = root.right is root
                         emitDestructuringAssignment(target, value, root);
                         write(", ");
                         emit(value);
@@ -3959,9 +3974,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 function emitBindingElement(target: BindingElement | VariableDeclaration, value: Expression) {
+                    // Any temporary assignments needed to emit target = value should point to target
                     if (target.initializer) {
                         // Combine value and initializer
-                        value = value ? createDefaultValueCheck(value, target.initializer) : target.initializer;
+                        value = value ? createDefaultValueCheck(value, target.initializer, target) : target.initializer;
                     }
                     else if (!value) {
                         // Use 'void 0' in absence of value and initializer
@@ -3977,7 +3993,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             // to ensure value is evaluated exactly once. Additionally, if we have zero elements
                             // we need to emit *something* to ensure that in case a 'var' keyword was already emitted,
                             // so in that case, we'll intentionally create that temporary.
-                            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0);
+                            value = ensureIdentifier(value, /*reuseIdentifierExpressions*/ numElements !== 0, target);
                         }
 
                         for (let i = 0; i < numElements; i++) {
@@ -3985,12 +4001,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 const propName = element.propertyName || <Identifier>element.name;
-                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName, element));
+                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
                                     // Rewrite element to a declaration that accesses array element at index i
-                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i), element));
+                                    emitBindingElement(element, createElementAccessExpression(value, createNumericLiteral(i)));
                                 }
                                 else if (i === numElements - 1) {
                                     emitBindingElement(element, createSliceCall(value, i));

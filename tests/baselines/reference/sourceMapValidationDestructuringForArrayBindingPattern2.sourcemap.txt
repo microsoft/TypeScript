@@ -1043,9 +1043,9 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     
-6 >      [numberB] = robotA
-7 >                         
+5 >     [
+6 >      numberB
+7 >                         ] = 
 8 >                           robotA
 9 >                                 
 10>                                  , 
@@ -1065,8 +1065,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 2 >Emitted(33, 4) Source(43, 4) + SourceIndex(0)
 3 >Emitted(33, 5) Source(43, 5) + SourceIndex(0)
 4 >Emitted(33, 6) Source(43, 6) + SourceIndex(0)
-5 >Emitted(33, 7) Source(43, 6) + SourceIndex(0)
-6 >Emitted(33, 26) Source(43, 24) + SourceIndex(0)
+5 >Emitted(33, 7) Source(43, 7) + SourceIndex(0)
+6 >Emitted(33, 26) Source(43, 14) + SourceIndex(0)
 7 >Emitted(33, 28) Source(43, 18) + SourceIndex(0)
 8 >Emitted(33, 34) Source(43, 24) + SourceIndex(0)
 9 >Emitted(33, 35) Source(43, 24) + SourceIndex(0)
@@ -1152,8 +1152,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 5 >     
 6 >      [numberB] = getRobot()
 7 >                     
-8 >                       [numberB] = getRobot()
-9 >                                      
+8 >                       numberB
+9 >                                      ] = getRobot()
 10>                                           , 
 11>                                             i
 12>                                               = 
@@ -1173,8 +1173,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 4 >Emitted(36, 6) Source(46, 6) + SourceIndex(0)
 5 >Emitted(36, 7) Source(46, 6) + SourceIndex(0)
 6 >Emitted(36, 22) Source(46, 28) + SourceIndex(0)
-7 >Emitted(36, 24) Source(46, 6) + SourceIndex(0)
-8 >Emitted(36, 39) Source(46, 28) + SourceIndex(0)
+7 >Emitted(36, 24) Source(46, 7) + SourceIndex(0)
+8 >Emitted(36, 39) Source(46, 14) + SourceIndex(0)
 9 >Emitted(36, 44) Source(46, 28) + SourceIndex(0)
 10>Emitted(36, 46) Source(46, 30) + SourceIndex(0)
 11>Emitted(36, 47) Source(46, 31) + SourceIndex(0)
@@ -1258,8 +1258,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 5 >     
 6 >      [numberB] = [2, "trimmer", "trimming"]
 7 >                                     
-8 >                                       [numberB] = [2, "trimmer", "trimming"]
-9 >                                                      
+8 >                                       numberB
+9 >                                                      ] = [2, "trimmer", "trimming"]
 10>                                                           , 
 11>                                                             i
 12>                                                               = 
@@ -1279,8 +1279,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 4 >Emitted(39, 6) Source(49, 6) + SourceIndex(0)
 5 >Emitted(39, 7) Source(49, 6) + SourceIndex(0)
 6 >Emitted(39, 38) Source(49, 44) + SourceIndex(0)
-7 >Emitted(39, 40) Source(49, 6) + SourceIndex(0)
-8 >Emitted(39, 55) Source(49, 44) + SourceIndex(0)
+7 >Emitted(39, 40) Source(49, 7) + SourceIndex(0)
+8 >Emitted(39, 55) Source(49, 14) + SourceIndex(0)
 9 >Emitted(39, 60) Source(49, 44) + SourceIndex(0)
 10>Emitted(39, 62) Source(49, 46) + SourceIndex(0)
 11>Emitted(39, 63) Source(49, 47) + SourceIndex(0)
@@ -1361,9 +1361,9 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     
-6 >      [nameB] = multiRobotA
-7 >                            
+5 >     [
+6 >      nameB
+7 >                            ] = 
 8 >                              multiRobotA
 9 >                                         
 10>                                          , 
@@ -1383,8 +1383,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 2 >Emitted(42, 4) Source(52, 4) + SourceIndex(0)
 3 >Emitted(42, 5) Source(52, 5) + SourceIndex(0)
 4 >Emitted(42, 6) Source(52, 6) + SourceIndex(0)
-5 >Emitted(42, 7) Source(52, 6) + SourceIndex(0)
-6 >Emitted(42, 29) Source(52, 27) + SourceIndex(0)
+5 >Emitted(42, 7) Source(52, 7) + SourceIndex(0)
+6 >Emitted(42, 29) Source(52, 12) + SourceIndex(0)
 7 >Emitted(42, 31) Source(52, 16) + SourceIndex(0)
 8 >Emitted(42, 42) Source(52, 27) + SourceIndex(0)
 9 >Emitted(42, 43) Source(52, 27) + SourceIndex(0)
@@ -1470,8 +1470,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 5 >     
 6 >      [nameB] = getMultiRobot()
 7 >                          
-8 >                            [nameB] = getMultiRobot()
-9 >                                         
+8 >                            nameB
+9 >                                         ] = getMultiRobot()
 10>                                              , 
 11>                                                i
 12>                                                  = 
@@ -1491,8 +1491,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 4 >Emitted(45, 6) Source(55, 6) + SourceIndex(0)
 5 >Emitted(45, 7) Source(55, 6) + SourceIndex(0)
 6 >Emitted(45, 27) Source(55, 31) + SourceIndex(0)
-7 >Emitted(45, 29) Source(55, 6) + SourceIndex(0)
-8 >Emitted(45, 42) Source(55, 31) + SourceIndex(0)
+7 >Emitted(45, 29) Source(55, 7) + SourceIndex(0)
+8 >Emitted(45, 42) Source(55, 12) + SourceIndex(0)
 9 >Emitted(45, 47) Source(55, 31) + SourceIndex(0)
 10>Emitted(45, 49) Source(55, 33) + SourceIndex(0)
 11>Emitted(45, 50) Source(55, 34) + SourceIndex(0)
@@ -1576,8 +1576,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 5 >     
 6 >      [nameB] = ["trimmer", ["trimming", "edging"]]
 7 >                                              
-8 >                                                [nameB] = ["trimmer", ["trimming", "edging"]]
-9 >                                                             
+8 >                                                nameB
+9 >                                                             ] = ["trimmer", ["trimming", "edging"]]
 10>                                                                  , 
 11>                                                                    i
 12>                                                                      = 
@@ -1597,8 +1597,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 4 >Emitted(48, 6) Source(58, 6) + SourceIndex(0)
 5 >Emitted(48, 7) Source(58, 6) + SourceIndex(0)
 6 >Emitted(48, 47) Source(58, 51) + SourceIndex(0)
-7 >Emitted(48, 49) Source(58, 6) + SourceIndex(0)
-8 >Emitted(48, 62) Source(58, 51) + SourceIndex(0)
+7 >Emitted(48, 49) Source(58, 7) + SourceIndex(0)
+8 >Emitted(48, 62) Source(58, 12) + SourceIndex(0)
 9 >Emitted(48, 67) Source(58, 51) + SourceIndex(0)
 10>Emitted(48, 69) Source(58, 53) + SourceIndex(0)
 11>Emitted(48, 70) Source(58, 54) + SourceIndex(0)
@@ -2743,9 +2743,9 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 2 >for
 3 >    
 4 >    (
-5 >     
-6 >      [...multiRobotAInfo] = multiRobotA
-7 >                                            
+5 >     [
+6 >      ...multiRobotAInfo
+7 >                                            ] = 
 8 >                                              multiRobotA
 9 >                                                         
 10>                                                          , 
@@ -2765,8 +2765,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 2 >Emitted(78, 4) Source(90, 4) + SourceIndex(0)
 3 >Emitted(78, 5) Source(90, 5) + SourceIndex(0)
 4 >Emitted(78, 6) Source(90, 6) + SourceIndex(0)
-5 >Emitted(78, 7) Source(90, 6) + SourceIndex(0)
-6 >Emitted(78, 45) Source(90, 40) + SourceIndex(0)
+5 >Emitted(78, 7) Source(90, 7) + SourceIndex(0)
+6 >Emitted(78, 45) Source(90, 25) + SourceIndex(0)
 7 >Emitted(78, 47) Source(90, 29) + SourceIndex(0)
 8 >Emitted(78, 58) Source(90, 40) + SourceIndex(0)
 9 >Emitted(78, 59) Source(90, 40) + SourceIndex(0)
@@ -2852,8 +2852,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 5 >     
 6 >      [...multiRobotAInfo] = getMultiRobot()
 7 >                          
-8 >                            [...multiRobotAInfo] = getMultiRobot()
-9 >                                                         
+8 >                            ...multiRobotAInfo
+9 >                                                         ] = getMultiRobot()
 10>                                                              , 
 11>                                                                i
 12>                                                                  = 
@@ -2873,8 +2873,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 4 >Emitted(81, 6) Source(93, 6) + SourceIndex(0)
 5 >Emitted(81, 7) Source(93, 6) + SourceIndex(0)
 6 >Emitted(81, 27) Source(93, 44) + SourceIndex(0)
-7 >Emitted(81, 29) Source(93, 6) + SourceIndex(0)
-8 >Emitted(81, 58) Source(93, 44) + SourceIndex(0)
+7 >Emitted(81, 29) Source(93, 7) + SourceIndex(0)
+8 >Emitted(81, 58) Source(93, 25) + SourceIndex(0)
 9 >Emitted(81, 63) Source(93, 44) + SourceIndex(0)
 10>Emitted(81, 65) Source(93, 46) + SourceIndex(0)
 11>Emitted(81, 66) Source(93, 47) + SourceIndex(0)
@@ -2958,8 +2958,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 5 >     
 6 >      [...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]]
 7 >                                              
-8 >                                                [...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]]
-9 >                                                                             
+8 >                                                ...multiRobotAInfo
+9 >                                                                             ] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]]
 10>                                                                                  , 
 11>                                                                                    i
 12>                                                                                      = 
@@ -2979,8 +2979,8 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPattern2.ts
 4 >Emitted(84, 6) Source(96, 6) + SourceIndex(0)
 5 >Emitted(84, 7) Source(96, 6) + SourceIndex(0)
 6 >Emitted(84, 47) Source(96, 83) + SourceIndex(0)
-7 >Emitted(84, 49) Source(96, 6) + SourceIndex(0)
-8 >Emitted(84, 78) Source(96, 83) + SourceIndex(0)
+7 >Emitted(84, 49) Source(96, 7) + SourceIndex(0)
+8 >Emitted(84, 78) Source(96, 25) + SourceIndex(0)
 9 >Emitted(84, 83) Source(96, 83) + SourceIndex(0)
 10>Emitted(84, 85) Source(96, 85) + SourceIndex(0)
 11>Emitted(84, 86) Source(96, 86) + SourceIndex(0)

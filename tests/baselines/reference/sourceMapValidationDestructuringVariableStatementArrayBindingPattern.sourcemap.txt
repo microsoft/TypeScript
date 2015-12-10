@@ -158,33 +158,36 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern.
 ---
 >>>var _a = [3, "edging", "Trimming edges"], numberC = _a[0], nameC = _a[1], skillC = _a[2];
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                        ^^
-4 >                                          ^^^^^^^^^^^^^^^
-5 >                                                         ^^
-6 >                                                           ^^^^^^^^^^^^^
-7 >                                                                        ^^
-8 >                                                                          ^^^^^^^^^^^^^^
-9 >                                                                                        ^
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                        ^^
+5 >                                          ^^^^^^^^^^^^^^^
+6 >                                                         ^^
+7 >                                                           ^^^^^^^^^^^^^
+8 >                                                                        ^^
+9 >                                                                          ^^^^^^^^^^^^^^
+10>                                                                                        ^
 1->
-  >let 
-2 >[numberC, nameC, skillC] = [3, "edging", "Trimming edges"]
-3 >                                        
-4 >                                          numberC
-5 >                                                         , 
-6 >                                                           nameC
-7 >                                                                        , 
-8 >                                                                          skillC
-9 >                                                                                        ] = [3, "edging", "Trimming edges"];
-1->Emitted(7, 1) Source(14, 5) + SourceIndex(0)
-2 >Emitted(7, 41) Source(14, 63) + SourceIndex(0)
-3 >Emitted(7, 43) Source(14, 6) + SourceIndex(0)
-4 >Emitted(7, 58) Source(14, 13) + SourceIndex(0)
-5 >Emitted(7, 60) Source(14, 15) + SourceIndex(0)
-6 >Emitted(7, 73) Source(14, 20) + SourceIndex(0)
-7 >Emitted(7, 75) Source(14, 22) + SourceIndex(0)
-8 >Emitted(7, 89) Source(14, 28) + SourceIndex(0)
-9 >Emitted(7, 90) Source(14, 64) + SourceIndex(0)
+  >
+2 >
+3 >    let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"]
+4 >                                        
+5 >                                          numberC
+6 >                                                         , 
+7 >                                                           nameC
+8 >                                                                        , 
+9 >                                                                          skillC
+10>                                                                                        ] = [3, "edging", "Trimming edges"];
+1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(7, 5) Source(14, 1) + SourceIndex(0)
+3 >Emitted(7, 41) Source(14, 63) + SourceIndex(0)
+4 >Emitted(7, 43) Source(14, 6) + SourceIndex(0)
+5 >Emitted(7, 58) Source(14, 13) + SourceIndex(0)
+6 >Emitted(7, 60) Source(14, 15) + SourceIndex(0)
+7 >Emitted(7, 73) Source(14, 20) + SourceIndex(0)
+8 >Emitted(7, 75) Source(14, 22) + SourceIndex(0)
+9 >Emitted(7, 89) Source(14, 28) + SourceIndex(0)
+10>Emitted(7, 90) Source(14, 64) + SourceIndex(0)
 ---
 >>>var numberA3 = robotA[0], robotAInfo = robotA.slice(1);
 1 >
