@@ -135,9 +135,9 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^^^->
 1->
-2 >        [nameMB]: Robot
-1->Emitted(7, 9) Source(11, 15) + SourceIndex(0)
-2 >Emitted(7, 23) Source(11, 30) + SourceIndex(0)
+2 >        nameMB
+1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
+2 >Emitted(7, 23) Source(11, 22) + SourceIndex(0)
 ---
 >>>    console.log(nameMB);
 1->^^^^
@@ -148,7 +148,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 6 >                ^^^^^^
 7 >                      ^
 8 >                       ^
-1->) {
+1->]: Robot) {
   >    
 2 >    console
 3 >           .
@@ -271,9 +271,9 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >        [...multiRobotAInfo]: Robot
-1->Emitted(15, 9) Source(19, 15) + SourceIndex(0)
-2 >Emitted(15, 38) Source(19, 42) + SourceIndex(0)
+2 >        ...multiRobotAInfo
+1->Emitted(15, 9) Source(19, 16) + SourceIndex(0)
+2 >Emitted(15, 38) Source(19, 34) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -284,7 +284,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 6 >                ^^^^^^^^^^^^^^^
 7 >                               ^
 8 >                                ^
-1 >) {
+1 >]: Robot) {
   >    
 2 >    console
 3 >           .

@@ -742,13 +742,13 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 5 >                                                        ^^
 6 >                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    skills
-3 >                                 : { 
+2 >    { primary: primaryA, secondary: secondaryA }
+3 >                                 
 4 >                                   primary: primaryA
 5 >                                                        , 
 6 >                                                          secondary: secondaryA
-1->Emitted(25, 5) Source(41, 8) + SourceIndex(0)
-2 >Emitted(25, 34) Source(41, 14) + SourceIndex(0)
+1->Emitted(25, 5) Source(41, 16) + SourceIndex(0)
+2 >Emitted(25, 34) Source(41, 60) + SourceIndex(0)
 3 >Emitted(25, 36) Source(41, 18) + SourceIndex(0)
 4 >Emitted(25, 57) Source(41, 35) + SourceIndex(0)
 5 >Emitted(25, 59) Source(41, 37) + SourceIndex(0)
@@ -842,13 +842,13 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 5 >                                             ^^
 6 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    skills
-3 >                      : { 
+2 >    { primary: primaryA, secondary: secondaryA }
+3 >                      
 4 >                        primary: primaryA
 5 >                                             , 
 6 >                                               secondary: secondaryA
-1->Emitted(29, 5) Source(44, 8) + SourceIndex(0)
-2 >Emitted(29, 23) Source(44, 14) + SourceIndex(0)
+1->Emitted(29, 5) Source(44, 16) + SourceIndex(0)
+2 >Emitted(29, 23) Source(44, 60) + SourceIndex(0)
 3 >Emitted(29, 25) Source(44, 18) + SourceIndex(0)
 4 >Emitted(29, 46) Source(44, 35) + SourceIndex(0)
 5 >Emitted(29, 48) Source(44, 37) + SourceIndex(0)
@@ -1050,13 +1050,13 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 5 >                                             ^^
 6 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    skills
-3 >                      : { 
+2 >    { primary: primaryA, secondary: secondaryA }
+3 >                      
 4 >                        primary: primaryA
 5 >                                             , 
 6 >                                               secondary: secondaryA
-1 >Emitted(34, 5) Source(47, 8) + SourceIndex(0)
-2 >Emitted(34, 23) Source(47, 14) + SourceIndex(0)
+1 >Emitted(34, 5) Source(47, 16) + SourceIndex(0)
+2 >Emitted(34, 23) Source(47, 60) + SourceIndex(0)
 3 >Emitted(34, 25) Source(47, 18) + SourceIndex(0)
 4 >Emitted(34, 46) Source(47, 35) + SourceIndex(0)
 5 >Emitted(34, 48) Source(47, 37) + SourceIndex(0)
@@ -1456,13 +1456,13 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 5 >                                                       ^^
 6 >                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    skills
-3 >                                 : { 
+2 >    { primary, secondary }
+3 >                                 
 4 >                                   primary
 5 >                                                       , 
 6 >                                                         secondary
-1->Emitted(50, 5) Source(60, 8) + SourceIndex(0)
-2 >Emitted(50, 34) Source(60, 14) + SourceIndex(0)
+1->Emitted(50, 5) Source(60, 16) + SourceIndex(0)
+2 >Emitted(50, 34) Source(60, 38) + SourceIndex(0)
 3 >Emitted(50, 36) Source(60, 18) + SourceIndex(0)
 4 >Emitted(50, 56) Source(60, 25) + SourceIndex(0)
 5 >Emitted(50, 58) Source(60, 27) + SourceIndex(0)
@@ -1556,13 +1556,13 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 5 >                                            ^^
 6 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    skills
-3 >                      : { 
+2 >    { primary, secondary }
+3 >                      
 4 >                        primary
 5 >                                            , 
 6 >                                              secondary
-1->Emitted(54, 5) Source(63, 8) + SourceIndex(0)
-2 >Emitted(54, 23) Source(63, 14) + SourceIndex(0)
+1->Emitted(54, 5) Source(63, 16) + SourceIndex(0)
+2 >Emitted(54, 23) Source(63, 38) + SourceIndex(0)
 3 >Emitted(54, 25) Source(63, 18) + SourceIndex(0)
 4 >Emitted(54, 45) Source(63, 25) + SourceIndex(0)
 5 >Emitted(54, 47) Source(63, 27) + SourceIndex(0)
@@ -1764,13 +1764,13 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 5 >                                            ^^
 6 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    skills
-3 >                      : { 
+2 >    { primary, secondary }
+3 >                      
 4 >                        primary
 5 >                                            , 
 6 >                                              secondary
-1 >Emitted(59, 5) Source(66, 8) + SourceIndex(0)
-2 >Emitted(59, 23) Source(66, 14) + SourceIndex(0)
+1 >Emitted(59, 5) Source(66, 16) + SourceIndex(0)
+2 >Emitted(59, 23) Source(66, 38) + SourceIndex(0)
 3 >Emitted(59, 25) Source(66, 18) + SourceIndex(0)
 4 >Emitted(59, 45) Source(66, 25) + SourceIndex(0)
 5 >Emitted(59, 47) Source(66, 27) + SourceIndex(0)
@@ -2213,9 +2213,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >    {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
 3 >                           
 4 >                             name: nameA
-5 >                                             , 
-6 >                                               skills
-7 >                                                               : { 
+5 >                                             , skills: 
+6 >                                               { primary: primaryA, secondary: secondaryA }
+7 >                                                               
 8 >                                                                 primary: primaryA
 9 >                                                                                       , 
 10>                                                                                         secondary: secondaryA
@@ -2223,8 +2223,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >Emitted(75, 28) Source(81, 74) + SourceIndex(0)
 3 >Emitted(75, 30) Source(81, 7) + SourceIndex(0)
 4 >Emitted(75, 46) Source(81, 18) + SourceIndex(0)
-5 >Emitted(75, 48) Source(81, 20) + SourceIndex(0)
-6 >Emitted(75, 64) Source(81, 26) + SourceIndex(0)
+5 >Emitted(75, 48) Source(81, 28) + SourceIndex(0)
+6 >Emitted(75, 64) Source(81, 72) + SourceIndex(0)
 7 >Emitted(75, 66) Source(81, 30) + SourceIndex(0)
 8 >Emitted(75, 88) Source(81, 47) + SourceIndex(0)
 9 >Emitted(75, 90) Source(81, 49) + SourceIndex(0)
@@ -2325,9 +2325,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >    {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
 3 >                  
 4 >                    name: nameA
-5 >                                    , 
-6 >                                      skills
-7 >                                                      : { 
+5 >                                    , skills: 
+6 >                                      { primary: primaryA, secondary: secondaryA }
+7 >                                                      
 8 >                                                        primary: primaryA
 9 >                                                                              , 
 10>                                                                                secondary: secondaryA
@@ -2335,8 +2335,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >Emitted(79, 19) Source(84, 74) + SourceIndex(0)
 3 >Emitted(79, 21) Source(84, 7) + SourceIndex(0)
 4 >Emitted(79, 37) Source(84, 18) + SourceIndex(0)
-5 >Emitted(79, 39) Source(84, 20) + SourceIndex(0)
-6 >Emitted(79, 55) Source(84, 26) + SourceIndex(0)
+5 >Emitted(79, 39) Source(84, 28) + SourceIndex(0)
+6 >Emitted(79, 55) Source(84, 72) + SourceIndex(0)
 7 >Emitted(79, 57) Source(84, 30) + SourceIndex(0)
 8 >Emitted(79, 79) Source(84, 47) + SourceIndex(0)
 9 >Emitted(79, 81) Source(84, 49) + SourceIndex(0)
@@ -2546,9 +2546,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >    {name: nameA, skills: { primary: primaryA, secondary: secondaryA } }
 3 >                  
 4 >                    name: nameA
-5 >                                    , 
-6 >                                      skills
-7 >                                                      : { 
+5 >                                    , skills: 
+6 >                                      { primary: primaryA, secondary: secondaryA }
+7 >                                                      
 8 >                                                        primary: primaryA
 9 >                                                                              , 
 10>                                                                                secondary: secondaryA
@@ -2556,8 +2556,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >Emitted(84, 19) Source(87, 74) + SourceIndex(0)
 3 >Emitted(84, 21) Source(87, 7) + SourceIndex(0)
 4 >Emitted(84, 37) Source(87, 18) + SourceIndex(0)
-5 >Emitted(84, 39) Source(87, 20) + SourceIndex(0)
-6 >Emitted(84, 55) Source(87, 26) + SourceIndex(0)
+5 >Emitted(84, 39) Source(87, 28) + SourceIndex(0)
+6 >Emitted(84, 55) Source(87, 72) + SourceIndex(0)
 7 >Emitted(84, 57) Source(87, 30) + SourceIndex(0)
 8 >Emitted(84, 79) Source(87, 47) + SourceIndex(0)
 9 >Emitted(84, 81) Source(87, 49) + SourceIndex(0)
@@ -2998,9 +2998,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >    {name, skills: { primary, secondary } }
 3 >                            
 4 >                              name
-5 >                                             , 
-6 >                                               skills
-7 >                                                               : { 
+5 >                                             , skills: 
+6 >                                               { primary, secondary }
+7 >                                                               
 8 >                                                                 primary
 9 >                                                                                      , 
 10>                                                                                        secondary
@@ -3008,8 +3008,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >Emitted(100, 29) Source(100, 45) + SourceIndex(0)
 3 >Emitted(100, 31) Source(100, 7) + SourceIndex(0)
 4 >Emitted(100, 46) Source(100, 11) + SourceIndex(0)
-5 >Emitted(100, 48) Source(100, 13) + SourceIndex(0)
-6 >Emitted(100, 64) Source(100, 19) + SourceIndex(0)
+5 >Emitted(100, 48) Source(100, 21) + SourceIndex(0)
+6 >Emitted(100, 64) Source(100, 43) + SourceIndex(0)
 7 >Emitted(100, 66) Source(100, 23) + SourceIndex(0)
 8 >Emitted(100, 87) Source(100, 30) + SourceIndex(0)
 9 >Emitted(100, 89) Source(100, 32) + SourceIndex(0)
@@ -3110,9 +3110,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >    {name, skills: { primary, secondary } }
 3 >                  
 4 >                    name
-5 >                                   , 
-6 >                                     skills
-7 >                                                     : { 
+5 >                                   , skills: 
+6 >                                     { primary, secondary }
+7 >                                                     
 8 >                                                       primary
 9 >                                                                            , 
 10>                                                                              secondary
@@ -3120,8 +3120,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >Emitted(104, 19) Source(103, 45) + SourceIndex(0)
 3 >Emitted(104, 21) Source(103, 7) + SourceIndex(0)
 4 >Emitted(104, 36) Source(103, 11) + SourceIndex(0)
-5 >Emitted(104, 38) Source(103, 13) + SourceIndex(0)
-6 >Emitted(104, 54) Source(103, 19) + SourceIndex(0)
+5 >Emitted(104, 38) Source(103, 21) + SourceIndex(0)
+6 >Emitted(104, 54) Source(103, 43) + SourceIndex(0)
 7 >Emitted(104, 56) Source(103, 23) + SourceIndex(0)
 8 >Emitted(104, 77) Source(103, 30) + SourceIndex(0)
 9 >Emitted(104, 79) Source(103, 32) + SourceIndex(0)
@@ -3331,9 +3331,9 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >    {name, skills: { primary, secondary } }
 3 >                  
 4 >                    name
-5 >                                   , 
-6 >                                     skills
-7 >                                                     : { 
+5 >                                   , skills: 
+6 >                                     { primary, secondary }
+7 >                                                     
 8 >                                                       primary
 9 >                                                                            , 
 10>                                                                              secondary
@@ -3341,8 +3341,8 @@ sourceFile:sourceMapValidationDestructuringForOfObjectBindingPattern2.ts
 2 >Emitted(109, 19) Source(106, 45) + SourceIndex(0)
 3 >Emitted(109, 21) Source(106, 7) + SourceIndex(0)
 4 >Emitted(109, 36) Source(106, 11) + SourceIndex(0)
-5 >Emitted(109, 38) Source(106, 13) + SourceIndex(0)
-6 >Emitted(109, 54) Source(106, 19) + SourceIndex(0)
+5 >Emitted(109, 38) Source(106, 21) + SourceIndex(0)
+6 >Emitted(109, 54) Source(106, 43) + SourceIndex(0)
 7 >Emitted(109, 56) Source(106, 23) + SourceIndex(0)
 8 >Emitted(109, 77) Source(106, 30) + SourceIndex(0)
 9 >Emitted(109, 79) Source(106, 32) + SourceIndex(0)

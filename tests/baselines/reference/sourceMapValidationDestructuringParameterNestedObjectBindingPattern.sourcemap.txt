@@ -108,13 +108,13 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 5 >                                             ^^
 6 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >        skills
-3 >                      : { 
+2 >        skills: { primary: primaryA, secondary: secondaryA }
+3 >                      
 4 >                        primary: primaryA
 5 >                                             , 
 6 >                                               secondary: secondaryA
 1->Emitted(3, 9) Source(13, 17) + SourceIndex(0)
-2 >Emitted(3, 23) Source(13, 23) + SourceIndex(0)
+2 >Emitted(3, 23) Source(13, 69) + SourceIndex(0)
 3 >Emitted(3, 25) Source(13, 27) + SourceIndex(0)
 4 >Emitted(3, 46) Source(13, 44) + SourceIndex(0)
 5 >Emitted(3, 48) Source(13, 46) + SourceIndex(0)
@@ -182,15 +182,15 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 1->
 2 >        name: nameC
 3 >                       , 
-4 >                         skills
-5 >                                       : { 
+4 >                         skills: { primary: primaryB, secondary: secondaryB }
+5 >                                       
 6 >                                         primary: primaryB
 7 >                                                              , 
 8 >                                                                secondary: secondaryB
 1->Emitted(7, 9) Source(16, 17) + SourceIndex(0)
 2 >Emitted(7, 24) Source(16, 28) + SourceIndex(0)
 3 >Emitted(7, 26) Source(16, 30) + SourceIndex(0)
-4 >Emitted(7, 40) Source(16, 36) + SourceIndex(0)
+4 >Emitted(7, 40) Source(16, 82) + SourceIndex(0)
 5 >Emitted(7, 42) Source(16, 40) + SourceIndex(0)
 6 >Emitted(7, 63) Source(16, 57) + SourceIndex(0)
 7 >Emitted(7, 65) Source(16, 59) + SourceIndex(0)
@@ -251,9 +251,9 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 2 >        ^^^^^^^^^^^^^^^^^^
 3 >                          ^^^^^^^->
 1->
-2 >        { skills }: Robot
-1->Emitted(11, 9) Source(19, 15) + SourceIndex(0)
-2 >Emitted(11, 27) Source(19, 32) + SourceIndex(0)
+2 >        skills
+1->Emitted(11, 9) Source(19, 17) + SourceIndex(0)
+2 >Emitted(11, 27) Source(19, 23) + SourceIndex(0)
 ---
 >>>    console.log(skills.primary);
 1->^^^^
@@ -266,7 +266,7 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 8 >                       ^^^^^^^
 9 >                              ^
 10>                               ^
-1->) {
+1-> }: Robot) {
   >    
 2 >    console
 3 >           .

@@ -2802,7 +2802,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
              * Returns false if nothing was written - this can happen for source file level variable declarations
              *     in system modules where such variable declarations are hoisted.
              */
-            function tryEmitStartOfVariableDeclarationList(decl: VariableDeclarationList, startPos?: number): boolean {
+            function tryEmitStartOfVariableDeclarationList(decl: VariableDeclarationList): boolean {
                 if (shouldHoistVariable(decl, /*checkIfSourceFileLevelDecl*/ true)) {
                     // variables in variable declaration list were already hoisted
                     return false;
@@ -2817,34 +2817,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return false;
                 }
 
-                let tokenKind = SyntaxKind.VarKeyword;
+                emitStart(decl);
                 if (decl && languageVersion >= ScriptTarget.ES6) {
                     if (isLet(decl)) {
-                        tokenKind = SyntaxKind.LetKeyword;
+                        write("let ");
                     }
                     else if (isConst(decl)) {
-                        tokenKind = SyntaxKind.ConstKeyword;
+                        write("const ");
                     }
-                }
-
-                if (startPos !== undefined) {
-                    emitToken(tokenKind, startPos);
-                    write(" ");
+                    else {
+                        write("var ");
+                    }
                 }
                 else {
-                    switch (tokenKind) {
-                        case SyntaxKind.VarKeyword:
-                            write("var ");
-                            break;
-                        case SyntaxKind.LetKeyword:
-                            write("let ");
-                            break;
-                        case SyntaxKind.ConstKeyword:
-                            write("const ");
-                            break;
-                    }
+                    write("var ");
                 }
-
                 return true;
             }
 
@@ -3183,7 +3170,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 endPos = emitToken(SyntaxKind.OpenParenToken, endPos);
                 if (node.initializer && node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     const variableDeclarationList = <VariableDeclarationList>node.initializer;
-                    const startIsEmitted = tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                    const startIsEmitted = tryEmitStartOfVariableDeclarationList(variableDeclarationList);
                     if (startIsEmitted) {
                         emitCommaList(variableDeclarationList.declarations);
                     }
@@ -3224,7 +3211,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (node.initializer.kind === SyntaxKind.VariableDeclarationList) {
                     const variableDeclarationList = <VariableDeclarationList>node.initializer;
                     if (variableDeclarationList.declarations.length >= 1) {
-                        tryEmitStartOfVariableDeclarationList(variableDeclarationList, endPos);
+                        tryEmitStartOfVariableDeclarationList(variableDeclarationList);
                         emit(variableDeclarationList.declarations[0]);
                     }
                 }
@@ -3801,6 +3788,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
                 else {
                     Debug.assert(!isAssignmentExpressionStatement);
+                    // If first variable declaration of variable statement correct the start location
+                    if (root.kind === SyntaxKind.VariableDeclaration &&
+                        root.parent.kind === SyntaxKind.VariableDeclarationList &&
+                        (<VariableDeclarationList>root.parent).declarations[0] === root) {
+                        // Use emit location of "var " as next emit start entry
+                        sourceMap.changeEmitSourcePos();
+                    }
                     emitBindingElement(<BindingElement>root, value);
                 }
 
@@ -3852,7 +3846,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     return node;
                 }
 
-                function createPropertyAccessForDestructuringProperty(object: Expression, propName: PropertyName): Expression {
+                function createPropertyAccessForDestructuringProperty(object: Expression, propName: PropertyName, sourceMapNode: Node): Expression {
                     let index: Expression;
                     const nameIsComputed = propName.kind === SyntaxKind.ComputedPropertyName;
                     if (nameIsComputed) {
@@ -3861,7 +3855,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     else {
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
-                        index = <Identifier | LiteralExpression>createSourceMappedSynthesizedNode(propName.kind, propName);
+                        index = <Identifier | LiteralExpression>createSourceMappedSynthesizedNode(propName.kind, sourceMapNode);
                         (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
                     }
 
@@ -3891,7 +3885,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         if (p.kind === SyntaxKind.PropertyAssignment || p.kind === SyntaxKind.ShorthandPropertyAssignment) {
                             const propName = <Identifier | LiteralExpression>(<PropertyAssignment>p).name;
                             const target = p.kind === SyntaxKind.ShorthandPropertyAssignment ? <ShorthandPropertyAssignment>p : (<PropertyAssignment>p).initializer || propName;
-                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName), properties.length === 1 ? sourceMapNode : p);
+                            emitDestructuringAssignment(target, createPropertyAccessForDestructuringProperty(value, propName, target), properties.length === 1 ? sourceMapNode : p);
                         }
                     }
                 }
@@ -3991,7 +3985,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                                 // Rewrite element to a declaration with an initializer that fetches property
                                 const propName = element.propertyName || <Identifier>element.name;
-                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName));
+                                emitBindingElement(element, createPropertyAccessForDestructuringProperty(value, propName, element));
                             }
                             else if (element.kind !== SyntaxKind.OmittedExpression) {
                                 if (!element.dotDotDotToken) {
@@ -4005,17 +3999,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                     }
                     else {
-                        let nodeForSourceMap: Node;
-                        // If binding element is part of binding pattern with single element, use binding pattern
-                        if (target.kind === SyntaxKind.BindingElement && (<BindingPattern>target.parent).elements.length === 1) {
-                            nodeForSourceMap = (target.parent.parent.kind === SyntaxKind.VariableDeclaration || target.parent.parent.kind === SyntaxKind.Parameter) ?
-                                target.parent.parent : // Set sourcemap as whole variable declaration
-                                target.parent; // Only binding Pattern
-                        }
-                        else {
-                            nodeForSourceMap = target; // Binding Element
-                        }
-                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, nodeForSourceMap);
+                        emitAssignment(<Identifier>target.name, value, /*shouldEmitCommaBeforeAssignment*/ emitCount > 0, target);
                         emitCount++;
                     }
                 }

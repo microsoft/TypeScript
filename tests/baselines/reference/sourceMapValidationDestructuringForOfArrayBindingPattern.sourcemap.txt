@@ -362,20 +362,17 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _a = robots_1[_i], nameA = _a[1];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^
-4 >                         ^^
-5 >                           ^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^
+3 >                         ^^
+4 >                           ^^^^^^^^^^^^^
 1 >
-2 >    
-3 >        let [, nameA]
-4 >                         
-5 >                           nameA
+2 >    let [, nameA]
+3 >                         
+4 >                           nameA
 1 >Emitted(14, 5) Source(21, 6) + SourceIndex(0)
-2 >Emitted(14, 9) Source(21, 6) + SourceIndex(0)
-3 >Emitted(14, 26) Source(21, 19) + SourceIndex(0)
-4 >Emitted(14, 28) Source(21, 13) + SourceIndex(0)
-5 >Emitted(14, 41) Source(21, 18) + SourceIndex(0)
+2 >Emitted(14, 26) Source(21, 19) + SourceIndex(0)
+3 >Emitted(14, 28) Source(21, 13) + SourceIndex(0)
+4 >Emitted(14, 41) Source(21, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -458,20 +455,17 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _d = _c[_b], nameA = _d[1];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^
-4 >                   ^^
-5 >                     ^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^^^^
 1 >
-2 >    
-3 >        let [, nameA]
-4 >                   
-5 >                     nameA
+2 >    let [, nameA]
+3 >                   
+4 >                     nameA
 1 >Emitted(18, 5) Source(24, 6) + SourceIndex(0)
-2 >Emitted(18, 9) Source(24, 6) + SourceIndex(0)
-3 >Emitted(18, 20) Source(24, 19) + SourceIndex(0)
-4 >Emitted(18, 22) Source(24, 13) + SourceIndex(0)
-5 >Emitted(18, 35) Source(24, 18) + SourceIndex(0)
+2 >Emitted(18, 20) Source(24, 19) + SourceIndex(0)
+3 >Emitted(18, 22) Source(24, 13) + SourceIndex(0)
+4 >Emitted(18, 35) Source(24, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -560,20 +554,17 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _g = _f[_e], nameA = _g[1];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^
-4 >                   ^^
-5 >                     ^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^^^^
 1 >
-2 >    
-3 >        let [, nameA]
-4 >                   
-5 >                     nameA
+2 >    let [, nameA]
+3 >                   
+4 >                     nameA
 1 >Emitted(22, 5) Source(27, 6) + SourceIndex(0)
-2 >Emitted(22, 9) Source(27, 6) + SourceIndex(0)
-3 >Emitted(22, 20) Source(27, 19) + SourceIndex(0)
-4 >Emitted(22, 22) Source(27, 13) + SourceIndex(0)
-5 >Emitted(22, 35) Source(27, 18) + SourceIndex(0)
+2 >Emitted(22, 20) Source(27, 19) + SourceIndex(0)
+3 >Emitted(22, 22) Source(27, 13) + SourceIndex(0)
+4 >Emitted(22, 35) Source(27, 18) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -651,32 +642,29 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _j = multiRobots_1[_h], _k = _j[1], primarySkillA = _k[0], secondarySkillA = _k[1];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^
-4 >                              ^^
-5 >                                ^^^^^^^^^^
-6 >                                          ^^
-7 >                                            ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                 ^^
-9 >                                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^
+4 >                                ^^^^^^^^^^
+5 >                                          ^^
+6 >                                            ^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                 ^^
+8 >                                                                   ^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [, [primarySkillA, secondarySkillA]]
-4 >                              
-5 >                                [primarySkillA, secondarySkillA]
-6 >                                          
-7 >                                            primarySkillA
-8 >                                                                 , 
-9 >                                                                   secondarySkillA
+2 >    let [, [primarySkillA, secondarySkillA]]
+3 >                              
+4 >                                [primarySkillA, secondarySkillA]
+5 >                                          
+6 >                                            primarySkillA
+7 >                                                                 , 
+8 >                                                                   secondarySkillA
 1->Emitted(26, 5) Source(30, 6) + SourceIndex(0)
-2 >Emitted(26, 9) Source(30, 6) + SourceIndex(0)
-3 >Emitted(26, 31) Source(30, 46) + SourceIndex(0)
-4 >Emitted(26, 33) Source(30, 13) + SourceIndex(0)
-5 >Emitted(26, 43) Source(30, 45) + SourceIndex(0)
-6 >Emitted(26, 45) Source(30, 14) + SourceIndex(0)
-7 >Emitted(26, 66) Source(30, 27) + SourceIndex(0)
-8 >Emitted(26, 68) Source(30, 29) + SourceIndex(0)
-9 >Emitted(26, 91) Source(30, 44) + SourceIndex(0)
+2 >Emitted(26, 31) Source(30, 46) + SourceIndex(0)
+3 >Emitted(26, 33) Source(30, 13) + SourceIndex(0)
+4 >Emitted(26, 43) Source(30, 45) + SourceIndex(0)
+5 >Emitted(26, 45) Source(30, 14) + SourceIndex(0)
+6 >Emitted(26, 66) Source(30, 27) + SourceIndex(0)
+7 >Emitted(26, 68) Source(30, 29) + SourceIndex(0)
+8 >Emitted(26, 91) Source(30, 44) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -760,32 +748,29 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _o = _m[_l], _p = _o[1], primarySkillA = _p[0], secondarySkillA = _p[1];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^
-4 >                   ^^
-5 >                     ^^^^^^^^^^
-6 >                               ^^
-7 >                                 ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                      ^^
-9 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^
+5 >                               ^^
+6 >                                 ^^^^^^^^^^^^^^^^^^^^^
+7 >                                                      ^^
+8 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [, [primarySkillA, secondarySkillA]]
-4 >                   
-5 >                     [primarySkillA, secondarySkillA]
-6 >                               
-7 >                                 primarySkillA
-8 >                                                      , 
-9 >                                                        secondarySkillA
+2 >    let [, [primarySkillA, secondarySkillA]]
+3 >                   
+4 >                     [primarySkillA, secondarySkillA]
+5 >                               
+6 >                                 primarySkillA
+7 >                                                      , 
+8 >                                                        secondarySkillA
 1->Emitted(30, 5) Source(33, 6) + SourceIndex(0)
-2 >Emitted(30, 9) Source(33, 6) + SourceIndex(0)
-3 >Emitted(30, 20) Source(33, 46) + SourceIndex(0)
-4 >Emitted(30, 22) Source(33, 13) + SourceIndex(0)
-5 >Emitted(30, 32) Source(33, 45) + SourceIndex(0)
-6 >Emitted(30, 34) Source(33, 14) + SourceIndex(0)
-7 >Emitted(30, 55) Source(33, 27) + SourceIndex(0)
-8 >Emitted(30, 57) Source(33, 29) + SourceIndex(0)
-9 >Emitted(30, 80) Source(33, 44) + SourceIndex(0)
+2 >Emitted(30, 20) Source(33, 46) + SourceIndex(0)
+3 >Emitted(30, 22) Source(33, 13) + SourceIndex(0)
+4 >Emitted(30, 32) Source(33, 45) + SourceIndex(0)
+5 >Emitted(30, 34) Source(33, 14) + SourceIndex(0)
+6 >Emitted(30, 55) Source(33, 27) + SourceIndex(0)
+7 >Emitted(30, 57) Source(33, 29) + SourceIndex(0)
+8 >Emitted(30, 80) Source(33, 44) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -875,32 +860,29 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _s = _r[_q], _t = _s[1], primarySkillA = _t[0], secondarySkillA = _t[1];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^
-4 >                   ^^
-5 >                     ^^^^^^^^^^
-6 >                               ^^
-7 >                                 ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                      ^^
-9 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^
+5 >                               ^^
+6 >                                 ^^^^^^^^^^^^^^^^^^^^^
+7 >                                                      ^^
+8 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [, [primarySkillA, secondarySkillA]]
-4 >                   
-5 >                     [primarySkillA, secondarySkillA]
-6 >                               
-7 >                                 primarySkillA
-8 >                                                      , 
-9 >                                                        secondarySkillA
+2 >    let [, [primarySkillA, secondarySkillA]]
+3 >                   
+4 >                     [primarySkillA, secondarySkillA]
+5 >                               
+6 >                                 primarySkillA
+7 >                                                      , 
+8 >                                                        secondarySkillA
 1->Emitted(34, 5) Source(36, 6) + SourceIndex(0)
-2 >Emitted(34, 9) Source(36, 6) + SourceIndex(0)
-3 >Emitted(34, 20) Source(36, 46) + SourceIndex(0)
-4 >Emitted(34, 22) Source(36, 13) + SourceIndex(0)
-5 >Emitted(34, 32) Source(36, 45) + SourceIndex(0)
-6 >Emitted(34, 34) Source(36, 14) + SourceIndex(0)
-7 >Emitted(34, 55) Source(36, 27) + SourceIndex(0)
-8 >Emitted(34, 57) Source(36, 29) + SourceIndex(0)
-9 >Emitted(34, 80) Source(36, 44) + SourceIndex(0)
+2 >Emitted(34, 20) Source(36, 46) + SourceIndex(0)
+3 >Emitted(34, 22) Source(36, 13) + SourceIndex(0)
+4 >Emitted(34, 32) Source(36, 45) + SourceIndex(0)
+5 >Emitted(34, 34) Source(36, 14) + SourceIndex(0)
+6 >Emitted(34, 55) Source(36, 27) + SourceIndex(0)
+7 >Emitted(34, 57) Source(36, 29) + SourceIndex(0)
+8 >Emitted(34, 80) Source(36, 44) + SourceIndex(0)
 ---
 >>>    console.log(primarySkillA);
 1 >^^^^
@@ -978,14 +960,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var numberB = robots_2[_u][0];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [numberB]
-1 >Emitted(38, 5) Source(40, 6) + SourceIndex(0)
-2 >Emitted(38, 9) Source(40, 10) + SourceIndex(0)
-3 >Emitted(38, 34) Source(40, 19) + SourceIndex(0)
+2 >    numberB
+1 >Emitted(38, 5) Source(40, 11) + SourceIndex(0)
+2 >Emitted(38, 34) Source(40, 18) + SourceIndex(0)
 ---
 >>>    console.log(numberB);
 1 >^^^^
@@ -996,7 +975,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^^^
 7 >                       ^
 8 >                        ^
-1 > of robots) {
+1 >] of robots) {
   >    
 2 >    console
 3 >           .
@@ -1068,14 +1047,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var numberB = _w[_v][0];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [numberB]
-1 >Emitted(42, 5) Source(43, 6) + SourceIndex(0)
-2 >Emitted(42, 9) Source(43, 10) + SourceIndex(0)
-3 >Emitted(42, 28) Source(43, 19) + SourceIndex(0)
+2 >    numberB
+1 >Emitted(42, 5) Source(43, 11) + SourceIndex(0)
+2 >Emitted(42, 28) Source(43, 18) + SourceIndex(0)
 ---
 >>>    console.log(numberB);
 1 >^^^^
@@ -1086,7 +1062,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^^^
 7 >                       ^
 8 >                        ^
-1 > of getRobots()) {
+1 >] of getRobots()) {
   >    
 2 >    console
 3 >           .
@@ -1164,14 +1140,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var numberB = _y[_x][0];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [numberB]
-1 >Emitted(46, 5) Source(46, 6) + SourceIndex(0)
-2 >Emitted(46, 9) Source(46, 10) + SourceIndex(0)
-3 >Emitted(46, 28) Source(46, 19) + SourceIndex(0)
+2 >    numberB
+1 >Emitted(46, 5) Source(46, 11) + SourceIndex(0)
+2 >Emitted(46, 28) Source(46, 18) + SourceIndex(0)
 ---
 >>>    console.log(numberB);
 1 >^^^^
@@ -1182,7 +1155,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^^^
 7 >                       ^
 8 >                        ^
-1 > of [robotA, robotB]) {
+1 >] of [robotA, robotB]) {
   >    
 2 >    console
 3 >           .
@@ -1248,14 +1221,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var nameB = multiRobots_2[_z][0];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [nameB]
-1 >Emitted(50, 5) Source(49, 6) + SourceIndex(0)
-2 >Emitted(50, 9) Source(49, 10) + SourceIndex(0)
-3 >Emitted(50, 37) Source(49, 17) + SourceIndex(0)
+2 >    nameB
+1 >Emitted(50, 5) Source(49, 11) + SourceIndex(0)
+2 >Emitted(50, 37) Source(49, 16) + SourceIndex(0)
 ---
 >>>    console.log(nameB);
 1 >^^^^
@@ -1266,7 +1236,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1 > of multiRobots) {
+1 >] of multiRobots) {
   >    
 2 >    console
 3 >           .
@@ -1338,14 +1308,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var nameB = _1[_0][0];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [nameB]
-1 >Emitted(54, 5) Source(52, 6) + SourceIndex(0)
-2 >Emitted(54, 9) Source(52, 10) + SourceIndex(0)
-3 >Emitted(54, 26) Source(52, 17) + SourceIndex(0)
+2 >    nameB
+1 >Emitted(54, 5) Source(52, 11) + SourceIndex(0)
+2 >Emitted(54, 26) Source(52, 16) + SourceIndex(0)
 ---
 >>>    console.log(nameB);
 1 >^^^^
@@ -1356,7 +1323,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1 > of getMultiRobots()) {
+1 >] of getMultiRobots()) {
   >    
 2 >    console
 3 >           .
@@ -1434,14 +1401,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var nameB = _3[_2][0];
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [nameB]
-1 >Emitted(58, 5) Source(55, 6) + SourceIndex(0)
-2 >Emitted(58, 9) Source(55, 10) + SourceIndex(0)
-3 >Emitted(58, 26) Source(55, 17) + SourceIndex(0)
+2 >    nameB
+1 >Emitted(58, 5) Source(55, 11) + SourceIndex(0)
+2 >Emitted(58, 26) Source(55, 16) + SourceIndex(0)
 ---
 >>>    console.log(nameB);
 1 >^^^^
@@ -1452,7 +1416,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1 > of [multiRobotA, multiRobotB]) {
+1 >] of [multiRobotA, multiRobotB]) {
   >    
 2 >    console
 3 >           .
@@ -1520,32 +1484,29 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _5 = robots_3[_4], numberA2 = _5[0], nameA2 = _5[1], skillA2 = _5[2];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^
-4 >                         ^^
-5 >                           ^^^^^^^^^^^^^^^^
-6 >                                           ^^
-7 >                                             ^^^^^^^^^^^^^^
-8 >                                                           ^^
-9 >                                                             ^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^
+3 >                         ^^
+4 >                           ^^^^^^^^^^^^^^^^
+5 >                                           ^^
+6 >                                             ^^^^^^^^^^^^^^
+7 >                                                           ^^
+8 >                                                             ^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [numberA2, nameA2, skillA2]
-4 >                         
-5 >                           numberA2
-6 >                                           , 
-7 >                                             nameA2
-8 >                                                           , 
-9 >                                                             skillA2
+2 >    let [numberA2, nameA2, skillA2]
+3 >                         
+4 >                           numberA2
+5 >                                           , 
+6 >                                             nameA2
+7 >                                                           , 
+8 >                                                             skillA2
 1->Emitted(62, 5) Source(59, 6) + SourceIndex(0)
-2 >Emitted(62, 9) Source(59, 6) + SourceIndex(0)
-3 >Emitted(62, 26) Source(59, 37) + SourceIndex(0)
-4 >Emitted(62, 28) Source(59, 11) + SourceIndex(0)
-5 >Emitted(62, 44) Source(59, 19) + SourceIndex(0)
-6 >Emitted(62, 46) Source(59, 21) + SourceIndex(0)
-7 >Emitted(62, 60) Source(59, 27) + SourceIndex(0)
-8 >Emitted(62, 62) Source(59, 29) + SourceIndex(0)
-9 >Emitted(62, 77) Source(59, 36) + SourceIndex(0)
+2 >Emitted(62, 26) Source(59, 37) + SourceIndex(0)
+3 >Emitted(62, 28) Source(59, 11) + SourceIndex(0)
+4 >Emitted(62, 44) Source(59, 19) + SourceIndex(0)
+5 >Emitted(62, 46) Source(59, 21) + SourceIndex(0)
+6 >Emitted(62, 60) Source(59, 27) + SourceIndex(0)
+7 >Emitted(62, 62) Source(59, 29) + SourceIndex(0)
+8 >Emitted(62, 77) Source(59, 36) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -1629,32 +1590,29 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _8 = _7[_6], numberA2 = _8[0], nameA2 = _8[1], skillA2 = _8[2];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^
-4 >                   ^^
-5 >                     ^^^^^^^^^^^^^^^^
-6 >                                     ^^
-7 >                                       ^^^^^^^^^^^^^^
-8 >                                                     ^^
-9 >                                                       ^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^
+3 >                   ^^
+4 >                     ^^^^^^^^^^^^^^^^
+5 >                                     ^^
+6 >                                       ^^^^^^^^^^^^^^
+7 >                                                     ^^
+8 >                                                       ^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [numberA2, nameA2, skillA2]
-4 >                   
-5 >                     numberA2
-6 >                                     , 
-7 >                                       nameA2
-8 >                                                     , 
-9 >                                                       skillA2
+2 >    let [numberA2, nameA2, skillA2]
+3 >                   
+4 >                     numberA2
+5 >                                     , 
+6 >                                       nameA2
+7 >                                                     , 
+8 >                                                       skillA2
 1->Emitted(66, 5) Source(62, 6) + SourceIndex(0)
-2 >Emitted(66, 9) Source(62, 6) + SourceIndex(0)
-3 >Emitted(66, 20) Source(62, 37) + SourceIndex(0)
-4 >Emitted(66, 22) Source(62, 11) + SourceIndex(0)
-5 >Emitted(66, 38) Source(62, 19) + SourceIndex(0)
-6 >Emitted(66, 40) Source(62, 21) + SourceIndex(0)
-7 >Emitted(66, 54) Source(62, 27) + SourceIndex(0)
-8 >Emitted(66, 56) Source(62, 29) + SourceIndex(0)
-9 >Emitted(66, 71) Source(62, 36) + SourceIndex(0)
+2 >Emitted(66, 20) Source(62, 37) + SourceIndex(0)
+3 >Emitted(66, 22) Source(62, 11) + SourceIndex(0)
+4 >Emitted(66, 38) Source(62, 19) + SourceIndex(0)
+5 >Emitted(66, 40) Source(62, 21) + SourceIndex(0)
+6 >Emitted(66, 54) Source(62, 27) + SourceIndex(0)
+7 >Emitted(66, 56) Source(62, 29) + SourceIndex(0)
+8 >Emitted(66, 71) Source(62, 36) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -1744,32 +1702,29 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _11 = _10[_9], numberA2 = _11[0], nameA2 = _11[1], skillA2 = _11[2];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^
-4 >                     ^^
-5 >                       ^^^^^^^^^^^^^^^^^
-6 >                                        ^^
-7 >                                          ^^^^^^^^^^^^^^^
-8 >                                                         ^^
-9 >                                                           ^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^
+3 >                     ^^
+4 >                       ^^^^^^^^^^^^^^^^^
+5 >                                        ^^
+6 >                                          ^^^^^^^^^^^^^^^
+7 >                                                         ^^
+8 >                                                           ^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [numberA2, nameA2, skillA2]
-4 >                     
-5 >                       numberA2
-6 >                                        , 
-7 >                                          nameA2
-8 >                                                         , 
-9 >                                                           skillA2
+2 >    let [numberA2, nameA2, skillA2]
+3 >                     
+4 >                       numberA2
+5 >                                        , 
+6 >                                          nameA2
+7 >                                                         , 
+8 >                                                           skillA2
 1->Emitted(70, 5) Source(65, 6) + SourceIndex(0)
-2 >Emitted(70, 9) Source(65, 6) + SourceIndex(0)
-3 >Emitted(70, 22) Source(65, 37) + SourceIndex(0)
-4 >Emitted(70, 24) Source(65, 11) + SourceIndex(0)
-5 >Emitted(70, 41) Source(65, 19) + SourceIndex(0)
-6 >Emitted(70, 43) Source(65, 21) + SourceIndex(0)
-7 >Emitted(70, 58) Source(65, 27) + SourceIndex(0)
-8 >Emitted(70, 60) Source(65, 29) + SourceIndex(0)
-9 >Emitted(70, 76) Source(65, 36) + SourceIndex(0)
+2 >Emitted(70, 22) Source(65, 37) + SourceIndex(0)
+3 >Emitted(70, 24) Source(65, 11) + SourceIndex(0)
+4 >Emitted(70, 41) Source(65, 19) + SourceIndex(0)
+5 >Emitted(70, 43) Source(65, 21) + SourceIndex(0)
+6 >Emitted(70, 58) Source(65, 27) + SourceIndex(0)
+7 >Emitted(70, 60) Source(65, 29) + SourceIndex(0)
+8 >Emitted(70, 76) Source(65, 36) + SourceIndex(0)
 ---
 >>>    console.log(nameA2);
 1 >^^^^
@@ -1847,38 +1802,35 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _13 = multiRobots_3[_12], nameMA = _13[0], _14 = _13[1], primarySkillA = _14[0], secondarySkillA = _14[1];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                ^^
-5 >                                  ^^^^^^^^^^^^^^^
-6 >                                                 ^^
-7 >                                                   ^^^^^^^^^^^^
-8 >                                                               ^^
-9 >                                                                 ^^^^^^^^^^^^^^^^^^^^^^
-10>                                                                                       ^^
-11>                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                ^^
+4 >                                  ^^^^^^^^^^^^^^^
+5 >                                                 ^^
+6 >                                                   ^^^^^^^^^^^^
+7 >                                                               ^^
+8 >                                                                 ^^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                                       ^^
+10>                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [nameMA, [primarySkillA, secondarySkillA]]
-4 >                                
-5 >                                  nameMA
-6 >                                                 , 
-7 >                                                   [primarySkillA, secondarySkillA]
-8 >                                                               
-9 >                                                                 primarySkillA
-10>                                                                                       , 
-11>                                                                                         secondarySkillA
+2 >    let [nameMA, [primarySkillA, secondarySkillA]]
+3 >                                
+4 >                                  nameMA
+5 >                                                 , 
+6 >                                                   [primarySkillA, secondarySkillA]
+7 >                                                               
+8 >                                                                 primarySkillA
+9 >                                                                                       , 
+10>                                                                                         secondarySkillA
 1->Emitted(74, 5) Source(68, 6) + SourceIndex(0)
-2 >Emitted(74, 9) Source(68, 6) + SourceIndex(0)
-3 >Emitted(74, 33) Source(68, 52) + SourceIndex(0)
-4 >Emitted(74, 35) Source(68, 11) + SourceIndex(0)
-5 >Emitted(74, 50) Source(68, 17) + SourceIndex(0)
-6 >Emitted(74, 52) Source(68, 19) + SourceIndex(0)
-7 >Emitted(74, 64) Source(68, 51) + SourceIndex(0)
-8 >Emitted(74, 66) Source(68, 20) + SourceIndex(0)
-9 >Emitted(74, 88) Source(68, 33) + SourceIndex(0)
-10>Emitted(74, 90) Source(68, 35) + SourceIndex(0)
-11>Emitted(74, 114) Source(68, 50) + SourceIndex(0)
+2 >Emitted(74, 33) Source(68, 52) + SourceIndex(0)
+3 >Emitted(74, 35) Source(68, 11) + SourceIndex(0)
+4 >Emitted(74, 50) Source(68, 17) + SourceIndex(0)
+5 >Emitted(74, 52) Source(68, 19) + SourceIndex(0)
+6 >Emitted(74, 64) Source(68, 51) + SourceIndex(0)
+7 >Emitted(74, 66) Source(68, 20) + SourceIndex(0)
+8 >Emitted(74, 88) Source(68, 33) + SourceIndex(0)
+9 >Emitted(74, 90) Source(68, 35) + SourceIndex(0)
+10>Emitted(74, 114) Source(68, 50) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -1962,38 +1914,35 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _17 = _16[_15], nameMA = _17[0], _18 = _17[1], primarySkillA = _18[0], secondarySkillA = _18[1];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^
-4 >                      ^^
-5 >                        ^^^^^^^^^^^^^^^
-6 >                                       ^^
-7 >                                         ^^^^^^^^^^^^
-8 >                                                     ^^
-9 >                                                       ^^^^^^^^^^^^^^^^^^^^^^
-10>                                                                             ^^
-11>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
+4 >                        ^^^^^^^^^^^^^^^
+5 >                                       ^^
+6 >                                         ^^^^^^^^^^^^
+7 >                                                     ^^
+8 >                                                       ^^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                             ^^
+10>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [nameMA, [primarySkillA, secondarySkillA]]
-4 >                      
-5 >                        nameMA
-6 >                                       , 
-7 >                                         [primarySkillA, secondarySkillA]
-8 >                                                     
-9 >                                                       primarySkillA
-10>                                                                             , 
-11>                                                                               secondarySkillA
+2 >    let [nameMA, [primarySkillA, secondarySkillA]]
+3 >                      
+4 >                        nameMA
+5 >                                       , 
+6 >                                         [primarySkillA, secondarySkillA]
+7 >                                                     
+8 >                                                       primarySkillA
+9 >                                                                             , 
+10>                                                                               secondarySkillA
 1->Emitted(78, 5) Source(71, 6) + SourceIndex(0)
-2 >Emitted(78, 9) Source(71, 6) + SourceIndex(0)
-3 >Emitted(78, 23) Source(71, 52) + SourceIndex(0)
-4 >Emitted(78, 25) Source(71, 11) + SourceIndex(0)
-5 >Emitted(78, 40) Source(71, 17) + SourceIndex(0)
-6 >Emitted(78, 42) Source(71, 19) + SourceIndex(0)
-7 >Emitted(78, 54) Source(71, 51) + SourceIndex(0)
-8 >Emitted(78, 56) Source(71, 20) + SourceIndex(0)
-9 >Emitted(78, 78) Source(71, 33) + SourceIndex(0)
-10>Emitted(78, 80) Source(71, 35) + SourceIndex(0)
-11>Emitted(78, 104) Source(71, 50) + SourceIndex(0)
+2 >Emitted(78, 23) Source(71, 52) + SourceIndex(0)
+3 >Emitted(78, 25) Source(71, 11) + SourceIndex(0)
+4 >Emitted(78, 40) Source(71, 17) + SourceIndex(0)
+5 >Emitted(78, 42) Source(71, 19) + SourceIndex(0)
+6 >Emitted(78, 54) Source(71, 51) + SourceIndex(0)
+7 >Emitted(78, 56) Source(71, 20) + SourceIndex(0)
+8 >Emitted(78, 78) Source(71, 33) + SourceIndex(0)
+9 >Emitted(78, 80) Source(71, 35) + SourceIndex(0)
+10>Emitted(78, 104) Source(71, 50) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -2083,38 +2032,35 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _21 = _20[_19], nameMA = _21[0], _22 = _21[1], primarySkillA = _22[0], secondarySkillA = _22[1];
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^
-4 >                      ^^
-5 >                        ^^^^^^^^^^^^^^^
-6 >                                       ^^
-7 >                                         ^^^^^^^^^^^^
-8 >                                                     ^^
-9 >                                                       ^^^^^^^^^^^^^^^^^^^^^^
-10>                                                                             ^^
-11>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
+4 >                        ^^^^^^^^^^^^^^^
+5 >                                       ^^
+6 >                                         ^^^^^^^^^^^^
+7 >                                                     ^^
+8 >                                                       ^^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                             ^^
+10>                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [nameMA, [primarySkillA, secondarySkillA]]
-4 >                      
-5 >                        nameMA
-6 >                                       , 
-7 >                                         [primarySkillA, secondarySkillA]
-8 >                                                     
-9 >                                                       primarySkillA
-10>                                                                             , 
-11>                                                                               secondarySkillA
+2 >    let [nameMA, [primarySkillA, secondarySkillA]]
+3 >                      
+4 >                        nameMA
+5 >                                       , 
+6 >                                         [primarySkillA, secondarySkillA]
+7 >                                                     
+8 >                                                       primarySkillA
+9 >                                                                             , 
+10>                                                                               secondarySkillA
 1->Emitted(82, 5) Source(74, 6) + SourceIndex(0)
-2 >Emitted(82, 9) Source(74, 6) + SourceIndex(0)
-3 >Emitted(82, 23) Source(74, 52) + SourceIndex(0)
-4 >Emitted(82, 25) Source(74, 11) + SourceIndex(0)
-5 >Emitted(82, 40) Source(74, 17) + SourceIndex(0)
-6 >Emitted(82, 42) Source(74, 19) + SourceIndex(0)
-7 >Emitted(82, 54) Source(74, 51) + SourceIndex(0)
-8 >Emitted(82, 56) Source(74, 20) + SourceIndex(0)
-9 >Emitted(82, 78) Source(74, 33) + SourceIndex(0)
-10>Emitted(82, 80) Source(74, 35) + SourceIndex(0)
-11>Emitted(82, 104) Source(74, 50) + SourceIndex(0)
+2 >Emitted(82, 23) Source(74, 52) + SourceIndex(0)
+3 >Emitted(82, 25) Source(74, 11) + SourceIndex(0)
+4 >Emitted(82, 40) Source(74, 17) + SourceIndex(0)
+5 >Emitted(82, 42) Source(74, 19) + SourceIndex(0)
+6 >Emitted(82, 54) Source(74, 51) + SourceIndex(0)
+7 >Emitted(82, 56) Source(74, 20) + SourceIndex(0)
+8 >Emitted(82, 78) Source(74, 33) + SourceIndex(0)
+9 >Emitted(82, 80) Source(74, 35) + SourceIndex(0)
+10>Emitted(82, 104) Source(74, 50) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -2193,26 +2139,23 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _24 = robots_4[_23], numberA3 = _24[0], robotAInfo = _24.slice(1);
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^
-4 >                           ^^
-5 >                             ^^^^^^^^^^^^^^^^^
-6 >                                              ^^
-7 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^
+4 >                             ^^^^^^^^^^^^^^^^^
+5 >                                              ^^
+6 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [numberA3, ...robotAInfo]
-4 >                           
-5 >                             numberA3
-6 >                                              , 
-7 >                                                ...robotAInfo
+2 >    let [numberA3, ...robotAInfo]
+3 >                           
+4 >                             numberA3
+5 >                                              , 
+6 >                                                ...robotAInfo
 1->Emitted(86, 5) Source(78, 6) + SourceIndex(0)
-2 >Emitted(86, 9) Source(78, 6) + SourceIndex(0)
-3 >Emitted(86, 28) Source(78, 35) + SourceIndex(0)
-4 >Emitted(86, 30) Source(78, 11) + SourceIndex(0)
-5 >Emitted(86, 47) Source(78, 19) + SourceIndex(0)
-6 >Emitted(86, 49) Source(78, 21) + SourceIndex(0)
-7 >Emitted(86, 74) Source(78, 34) + SourceIndex(0)
+2 >Emitted(86, 28) Source(78, 35) + SourceIndex(0)
+3 >Emitted(86, 30) Source(78, 11) + SourceIndex(0)
+4 >Emitted(86, 47) Source(78, 19) + SourceIndex(0)
+5 >Emitted(86, 49) Source(78, 21) + SourceIndex(0)
+6 >Emitted(86, 74) Source(78, 34) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2296,26 +2239,23 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _27 = _26[_25], numberA3 = _27[0], robotAInfo = _27.slice(1);
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^
-4 >                      ^^
-5 >                        ^^^^^^^^^^^^^^^^^
-6 >                                         ^^
-7 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
+4 >                        ^^^^^^^^^^^^^^^^^
+5 >                                         ^^
+6 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [numberA3, ...robotAInfo]
-4 >                      
-5 >                        numberA3
-6 >                                         , 
-7 >                                           ...robotAInfo
+2 >    let [numberA3, ...robotAInfo]
+3 >                      
+4 >                        numberA3
+5 >                                         , 
+6 >                                           ...robotAInfo
 1->Emitted(90, 5) Source(81, 6) + SourceIndex(0)
-2 >Emitted(90, 9) Source(81, 6) + SourceIndex(0)
-3 >Emitted(90, 23) Source(81, 35) + SourceIndex(0)
-4 >Emitted(90, 25) Source(81, 11) + SourceIndex(0)
-5 >Emitted(90, 42) Source(81, 19) + SourceIndex(0)
-6 >Emitted(90, 44) Source(81, 21) + SourceIndex(0)
-7 >Emitted(90, 69) Source(81, 34) + SourceIndex(0)
+2 >Emitted(90, 23) Source(81, 35) + SourceIndex(0)
+3 >Emitted(90, 25) Source(81, 11) + SourceIndex(0)
+4 >Emitted(90, 42) Source(81, 19) + SourceIndex(0)
+5 >Emitted(90, 44) Source(81, 21) + SourceIndex(0)
+6 >Emitted(90, 69) Source(81, 34) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2405,26 +2345,23 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var _30 = _29[_28], numberA3 = _30[0], robotAInfo = _30.slice(1);
 1->^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^
-4 >                      ^^
-5 >                        ^^^^^^^^^^^^^^^^^
-6 >                                         ^^
-7 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^
+3 >                      ^^
+4 >                        ^^^^^^^^^^^^^^^^^
+5 >                                         ^^
+6 >                                           ^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
-2 >    
-3 >        let [numberA3, ...robotAInfo]
-4 >                      
-5 >                        numberA3
-6 >                                         , 
-7 >                                           ...robotAInfo
+2 >    let [numberA3, ...robotAInfo]
+3 >                      
+4 >                        numberA3
+5 >                                         , 
+6 >                                           ...robotAInfo
 1->Emitted(94, 5) Source(84, 6) + SourceIndex(0)
-2 >Emitted(94, 9) Source(84, 6) + SourceIndex(0)
-3 >Emitted(94, 23) Source(84, 35) + SourceIndex(0)
-4 >Emitted(94, 25) Source(84, 11) + SourceIndex(0)
-5 >Emitted(94, 42) Source(84, 19) + SourceIndex(0)
-6 >Emitted(94, 44) Source(84, 21) + SourceIndex(0)
-7 >Emitted(94, 69) Source(84, 34) + SourceIndex(0)
+2 >Emitted(94, 23) Source(84, 35) + SourceIndex(0)
+3 >Emitted(94, 25) Source(84, 11) + SourceIndex(0)
+4 >Emitted(94, 42) Source(84, 19) + SourceIndex(0)
+5 >Emitted(94, 44) Source(84, 21) + SourceIndex(0)
+6 >Emitted(94, 69) Source(84, 34) + SourceIndex(0)
 ---
 >>>    console.log(numberA3);
 1 >^^^^
@@ -2501,14 +2438,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var multiRobotAInfo = multiRobots_4[_31].slice(0);
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [...multiRobotAInfo]
-1 >Emitted(98, 5) Source(87, 6) + SourceIndex(0)
-2 >Emitted(98, 9) Source(87, 10) + SourceIndex(0)
-3 >Emitted(98, 54) Source(87, 30) + SourceIndex(0)
+2 >    ...multiRobotAInfo
+1 >Emitted(98, 5) Source(87, 11) + SourceIndex(0)
+2 >Emitted(98, 54) Source(87, 29) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -2519,7 +2453,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^^^^^^^^^^^
 7 >                               ^
 8 >                                ^
-1 > of multiRobots) {
+1 >] of multiRobots) {
   >    
 2 >    console
 3 >           .
@@ -2591,14 +2525,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var multiRobotAInfo = _33[_32].slice(0);
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [...multiRobotAInfo]
-1 >Emitted(102, 5) Source(90, 6) + SourceIndex(0)
-2 >Emitted(102, 9) Source(90, 10) + SourceIndex(0)
-3 >Emitted(102, 44) Source(90, 30) + SourceIndex(0)
+2 >    ...multiRobotAInfo
+1 >Emitted(102, 5) Source(90, 11) + SourceIndex(0)
+2 >Emitted(102, 44) Source(90, 29) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -2609,7 +2540,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^^^^^^^^^^^
 7 >                               ^
 8 >                                ^
-1 > of getMultiRobots()) {
+1 >] of getMultiRobots()) {
   >    
 2 >    console
 3 >           .
@@ -2687,14 +2618,11 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 ---
 >>>    var multiRobotAInfo = _35[_34].slice(0);
 1 >^^^^
-2 >    ^^^^
-3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
-2 >    let 
-3 >        [...multiRobotAInfo]
-1 >Emitted(106, 5) Source(93, 6) + SourceIndex(0)
-2 >Emitted(106, 9) Source(93, 10) + SourceIndex(0)
-3 >Emitted(106, 44) Source(93, 30) + SourceIndex(0)
+2 >    ...multiRobotAInfo
+1 >Emitted(106, 5) Source(93, 11) + SourceIndex(0)
+2 >Emitted(106, 44) Source(93, 29) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^
@@ -2705,7 +2633,7 @@ sourceFile:sourceMapValidationDestructuringForOfArrayBindingPattern.ts
 6 >                ^^^^^^^^^^^^^^^
 7 >                               ^
 8 >                                ^
-1 > of [multiRobotA, multiRobotB]) {
+1 >] of [multiRobotA, multiRobotB]) {
   >    
 2 >    console
 3 >           .

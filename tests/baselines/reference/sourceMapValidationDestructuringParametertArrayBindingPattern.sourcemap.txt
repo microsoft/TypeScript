@@ -129,9 +129,9 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^^^->
 1->
-2 >        [numberB]: Robot
-1->Emitted(7, 9) Source(11, 15) + SourceIndex(0)
-2 >Emitted(7, 24) Source(11, 31) + SourceIndex(0)
+2 >        numberB
+1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
+2 >Emitted(7, 24) Source(11, 23) + SourceIndex(0)
 ---
 >>>    console.log(numberB);
 1->^^^^
@@ -142,7 +142,7 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 6 >                ^^^^^^^
 7 >                       ^
 8 >                        ^
-1->) {
+1->]: Robot) {
   >    
 2 >    console
 3 >           .

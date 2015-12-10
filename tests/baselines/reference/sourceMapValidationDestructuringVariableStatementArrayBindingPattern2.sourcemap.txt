@@ -104,141 +104,123 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 ---
 >>>var skillA = multiRobotA[1];
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                           ^
-5 >                            ^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^
+4 >                            ^->
 1 >
   >
-  >
-2 >let [, 
-3 >    skillA
-4 >                           ] = multiRobotA;
-1 >Emitted(3, 1) Source(8, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(8, 8) + SourceIndex(0)
-3 >Emitted(3, 28) Source(8, 14) + SourceIndex(0)
-4 >Emitted(3, 29) Source(8, 30) + SourceIndex(0)
+  >let [, 
+2 >skillA
+3 >                           ] = multiRobotA;
+1 >Emitted(3, 1) Source(8, 8) + SourceIndex(0)
+2 >Emitted(3, 28) Source(8, 14) + SourceIndex(0)
+3 >Emitted(3, 29) Source(8, 30) + SourceIndex(0)
 ---
 >>>var nameMB = multiRobotB[0];
 1->
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                           ^
-5 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
-  >
-2 >let 
-3 >    [nameMB] = multiRobotB
-4 >                           ;
-1->Emitted(4, 1) Source(9, 1) + SourceIndex(0)
-2 >Emitted(4, 5) Source(9, 5) + SourceIndex(0)
-3 >Emitted(4, 28) Source(9, 27) + SourceIndex(0)
-4 >Emitted(4, 29) Source(9, 28) + SourceIndex(0)
+  >let [
+2 >nameMB
+3 >                           ] = multiRobotB;
+1->Emitted(4, 1) Source(9, 6) + SourceIndex(0)
+2 >Emitted(4, 28) Source(9, 12) + SourceIndex(0)
+3 >Emitted(4, 29) Source(9, 28) + SourceIndex(0)
 ---
 >>>var nameMA = multiRobotA[0], _a = multiRobotA[1], primarySkillA = _a[0], secondarySkillA = _a[1];
 1->
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^
-4 >                           ^^
-5 >                             ^^^^^^^^^^^^^^^^^^^
-6 >                                                ^^
-7 >                                                  ^^^^^^^^^^^^^^^^^^^^^
-8 >                                                                       ^^
-9 >                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
-10>                                                                                                ^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^
+4 >                             ^^^^^^^^^^^^^^^^^^^
+5 >                                                ^^
+6 >                                                  ^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                       ^^
+8 >                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                                                ^
 1->
-  >
-2 >let [
-3 >    nameMA
-4 >                           , 
-5 >                             [primarySkillA, secondarySkillA]
-6 >                                                
-7 >                                                  primarySkillA
-8 >                                                                       , 
-9 >                                                                         secondarySkillA
-10>                                                                                                ]] = multiRobotA;
-1->Emitted(5, 1) Source(10, 1) + SourceIndex(0)
-2 >Emitted(5, 5) Source(10, 6) + SourceIndex(0)
-3 >Emitted(5, 28) Source(10, 12) + SourceIndex(0)
-4 >Emitted(5, 30) Source(10, 14) + SourceIndex(0)
-5 >Emitted(5, 49) Source(10, 46) + SourceIndex(0)
-6 >Emitted(5, 51) Source(10, 15) + SourceIndex(0)
-7 >Emitted(5, 72) Source(10, 28) + SourceIndex(0)
-8 >Emitted(5, 74) Source(10, 30) + SourceIndex(0)
-9 >Emitted(5, 97) Source(10, 45) + SourceIndex(0)
-10>Emitted(5, 98) Source(10, 62) + SourceIndex(0)
+  >let [
+2 >nameMA
+3 >                           , 
+4 >                             [primarySkillA, secondarySkillA]
+5 >                                                
+6 >                                                  primarySkillA
+7 >                                                                       , 
+8 >                                                                         secondarySkillA
+9 >                                                                                                ]] = multiRobotA;
+1->Emitted(5, 1) Source(10, 6) + SourceIndex(0)
+2 >Emitted(5, 28) Source(10, 12) + SourceIndex(0)
+3 >Emitted(5, 30) Source(10, 14) + SourceIndex(0)
+4 >Emitted(5, 49) Source(10, 46) + SourceIndex(0)
+5 >Emitted(5, 51) Source(10, 15) + SourceIndex(0)
+6 >Emitted(5, 72) Source(10, 28) + SourceIndex(0)
+7 >Emitted(5, 74) Source(10, 30) + SourceIndex(0)
+8 >Emitted(5, 97) Source(10, 45) + SourceIndex(0)
+9 >Emitted(5, 98) Source(10, 62) + SourceIndex(0)
 ---
 >>>var nameMC = ["roomba", ["vaccum", "mopping"]][0];
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                                 ^
-5 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                 ^
+4 >                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
-  >
-2 >let 
-3 >    [nameMC] = ["roomba", ["vaccum", "mopping"]]
-4 >                                                 ;
-1 >Emitted(6, 1) Source(12, 1) + SourceIndex(0)
-2 >Emitted(6, 5) Source(12, 5) + SourceIndex(0)
-3 >Emitted(6, 50) Source(12, 49) + SourceIndex(0)
-4 >Emitted(6, 51) Source(12, 50) + SourceIndex(0)
+  >let [
+2 >nameMC
+3 >                                                 ] = ["roomba", ["vaccum", "mopping"]];
+1 >Emitted(6, 1) Source(12, 6) + SourceIndex(0)
+2 >Emitted(6, 50) Source(12, 12) + SourceIndex(0)
+3 >Emitted(6, 51) Source(12, 50) + SourceIndex(0)
 ---
 >>>var _b = ["roomba", ["vaccum", "mopping"]], nameMC2 = _b[0], _c = _b[1], primarySkillC = _c[0], secondarySkillC = _c[1];
 1->
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                          ^^
-5 >                                            ^^^^^^^^^^^^^^^
-6 >                                                           ^^
-7 >                                                             ^^^^^^^^^^
-8 >                                                                       ^^
-9 >                                                                         ^^^^^^^^^^^^^^^^^^^^^
-10>                                                                                              ^^
-11>                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^
-12>                                                                                                                       ^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                          ^^
+4 >                                            ^^^^^^^^^^^^^^^
+5 >                                                           ^^
+6 >                                                             ^^^^^^^^^^
+7 >                                                                       ^^
+8 >                                                                         ^^^^^^^^^^^^^^^^^^^^^
+9 >                                                                                              ^^
+10>                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^
+11>                                                                                                                       ^
 1->
-  >
-2 >let 
-3 >    [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]]
-4 >                                          
-5 >                                            nameMC2
-6 >                                                           , 
-7 >                                                             [primarySkillC, secondarySkillC]
-8 >                                                                       
-9 >                                                                         primarySkillC
-10>                                                                                              , 
-11>                                                                                                secondarySkillC
-12>                                                                                                                       ]] = ["roomba", ["vaccum", "mopping"]];
-1->Emitted(7, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
-3 >Emitted(7, 43) Source(13, 84) + SourceIndex(0)
-4 >Emitted(7, 45) Source(13, 6) + SourceIndex(0)
-5 >Emitted(7, 60) Source(13, 13) + SourceIndex(0)
-6 >Emitted(7, 62) Source(13, 15) + SourceIndex(0)
-7 >Emitted(7, 72) Source(13, 47) + SourceIndex(0)
-8 >Emitted(7, 74) Source(13, 16) + SourceIndex(0)
-9 >Emitted(7, 95) Source(13, 29) + SourceIndex(0)
-10>Emitted(7, 97) Source(13, 31) + SourceIndex(0)
-11>Emitted(7, 120) Source(13, 46) + SourceIndex(0)
-12>Emitted(7, 121) Source(13, 85) + SourceIndex(0)
+  >let 
+2 >[nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]]
+3 >                                          
+4 >                                            nameMC2
+5 >                                                           , 
+6 >                                                             [primarySkillC, secondarySkillC]
+7 >                                                                       
+8 >                                                                         primarySkillC
+9 >                                                                                              , 
+10>                                                                                                secondarySkillC
+11>                                                                                                                       ]] = ["roomba", ["vaccum", "mopping"]];
+1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
+2 >Emitted(7, 43) Source(13, 84) + SourceIndex(0)
+3 >Emitted(7, 45) Source(13, 6) + SourceIndex(0)
+4 >Emitted(7, 60) Source(13, 13) + SourceIndex(0)
+5 >Emitted(7, 62) Source(13, 15) + SourceIndex(0)
+6 >Emitted(7, 72) Source(13, 47) + SourceIndex(0)
+7 >Emitted(7, 74) Source(13, 16) + SourceIndex(0)
+8 >Emitted(7, 95) Source(13, 29) + SourceIndex(0)
+9 >Emitted(7, 97) Source(13, 31) + SourceIndex(0)
+10>Emitted(7, 120) Source(13, 46) + SourceIndex(0)
+11>Emitted(7, 121) Source(13, 85) + SourceIndex(0)
 ---
 >>>var multiRobotAInfo = multiRobotA.slice(0);
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-4 >                                          ^
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                          ^
 1 >
   >
-  >
-2 >let 
-3 >    [...multiRobotAInfo] = multiRobotA
-4 >                                          ;
-1 >Emitted(8, 1) Source(15, 1) + SourceIndex(0)
-2 >Emitted(8, 5) Source(15, 5) + SourceIndex(0)
-3 >Emitted(8, 43) Source(15, 39) + SourceIndex(0)
-4 >Emitted(8, 44) Source(15, 40) + SourceIndex(0)
+  >let [
+2 >...multiRobotAInfo
+3 >                                          ] = multiRobotA;
+1 >Emitted(8, 1) Source(15, 6) + SourceIndex(0)
+2 >Emitted(8, 43) Source(15, 24) + SourceIndex(0)
+3 >Emitted(8, 44) Source(15, 40) + SourceIndex(0)
 ---
 >>>if (nameMB == nameMA) {
 1 >

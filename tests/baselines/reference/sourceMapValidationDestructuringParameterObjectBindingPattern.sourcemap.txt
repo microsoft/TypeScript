@@ -100,9 +100,9 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 2 >        ^^^^^^^^^^^^^^^
 3 >                       ^->
 1->
-2 >        { name: nameA }: Robot
-1->Emitted(4, 9) Source(11, 15) + SourceIndex(0)
-2 >Emitted(4, 24) Source(11, 37) + SourceIndex(0)
+2 >        name: nameA
+1->Emitted(4, 9) Source(11, 17) + SourceIndex(0)
+2 >Emitted(4, 24) Source(11, 28) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1->^^^^
@@ -113,7 +113,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1->) {
+1-> }: Robot) {
   >    
 2 >    console
 3 >           .
@@ -223,9 +223,9 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^->
 1->
-2 >        { name }: Robot
-1->Emitted(12, 9) Source(17, 15) + SourceIndex(0)
-2 >Emitted(12, 23) Source(17, 30) + SourceIndex(0)
+2 >        name
+1->Emitted(12, 9) Source(17, 17) + SourceIndex(0)
+2 >Emitted(12, 23) Source(17, 21) + SourceIndex(0)
 ---
 >>>    console.log(name);
 1->^^^^
@@ -236,7 +236,7 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 6 >                ^^^^
 7 >                    ^
 8 >                     ^
-1->) {
+1-> }: Robot) {
   >    
 2 >    console
 3 >           .
