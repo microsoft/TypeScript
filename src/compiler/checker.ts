@@ -5040,6 +5040,11 @@ namespace ts {
                 if (source === undefinedType) return Ternary.True;
                 if (source === nullType && target !== undefinedType) return Ternary.True;
                 if (source.flags & TypeFlags.Enum && target === numberType) return Ternary.True;
+                if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum) {
+                    if (result = enumRelatedTo(source, target)) {
+                        return result;
+                    }
+                }
                 if (source.flags & TypeFlags.StringLiteral && target === stringType) return Ternary.True;
                 if (relation === assignableRelation) {
                     if (isTypeAny(source)) return Ternary.True;
@@ -5749,6 +5754,25 @@ namespace ts {
                     return isRelatedTo(sourceType, targetType);
                 }
                 return Ternary.False;
+            }
+
+            function enumRelatedTo(source: Type, target: Type) {
+                if (source.symbol.name !== target.symbol.name) {
+                    return Ternary.False;
+                }
+                const sourceDecl = <EnumDeclaration>getMergedSymbol(source.symbol).valueDeclaration;
+                const targetDecl = <EnumDeclaration>getMergedSymbol(target.symbol).valueDeclaration;
+                const targetMembers = arrayToMap(targetDecl.members, member => getTextOfPropertyName(<PropertyName>member.name));
+                for (const member of sourceDecl.members) {
+                    const name = getTextOfPropertyName(<PropertyName>member.name);
+                    if (!targetMembers[name]) {
+                        reportError(Diagnostics.Property_0_is_missing_in_type_1,
+                                    name,
+                                    typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                        return Ternary.False;
+                    }
+                }
+                return Ternary.True;
             }
         }
 
