@@ -24,7 +24,7 @@ namespace ts {
     interface WatchedFile {
         fileName: string;
         callback: (fileName: string, removed?: boolean) => void;
-        mtime: Date;
+        mtime?: Date;
     }
 
     export interface FileWatcher {
@@ -218,7 +218,7 @@ namespace ts {
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
-            function createWatchedFileSet(interval = 2500, chunkSize = 30) {
+            function createPollingWatchedFileSet(interval = 2500, chunkSize = 30) {
                 let watchedFiles: WatchedFile[] = [];
                 let nextFileToCheck = 0;
                 let watchTimer: any;
@@ -293,6 +293,50 @@ namespace ts {
                     removeFile: removeFile
                 };
             }
+            
+            function createWatchedFileSet() {
+                let watchedDirectories: { [path: string]: FileWatcher } = {};
+                let watchedFiles: { [fileName: string]: (fileName: string, removed?: boolean) => void; } = {};
+                
+                function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
+                    const file: WatchedFile = { fileName, callback };
+                    let watchedPaths = Object.keys(watchedDirectories);
+                    // Try to find parent paths that are already watched. If found, don't add directory watchers
+                    let watchedParentPaths = watchedPaths.filter(path => fileName.indexOf(path) === 0);
+                    // If adding new watchers, try to find children paths that are already watched. If found, close them. 
+                    if (watchedParentPaths.length === 0) {
+                        let pathToWatch = ts.getDirectoryPath(fileName);
+                        for (let watchedPath in watchedDirectories) {
+                            if (watchedPath.indexOf(pathToWatch) === 0) {
+                                watchedDirectories[watchedPath].close();
+                                delete watchedDirectories[watchedPath];
+                            }
+                        }
+                        watchedDirectories[pathToWatch] = _fs.watch(
+                            pathToWatch, 
+                            (eventName: string, relativeFileName: string) => fileEventHandler(eventName, ts.normalizePath(ts.combinePaths(pathToWatch, relativeFileName)))
+                        );
+                    }
+                    watchedFiles[fileName] = callback;
+                    return { fileName, callback }
+                }
+                
+                function removeFile(file: WatchedFile) {
+                    delete watchedFiles[file.fileName];
+                }
+                
+                function fileEventHandler(eventName: string, fileName: string) {
+                    if (watchedFiles[fileName]) {
+                        let callback = watchedFiles[fileName];
+                        callback(fileName);
+                    }
+                }
+                
+                return {
+                    addFile: addFile,
+                    removeFile: removeFile
+                }
+            }
 
             // REVIEW: for now this implementation uses polling.
             // The advantage of polling is that it works reliably
@@ -307,6 +351,7 @@ namespace ts {
             // changes for large reference sets? If so, do we want
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
+            const pollingWatchedFileSet = createPollingWatchedFileSet();
             const watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): Boolean {
@@ -411,14 +456,10 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    if (isNode4OrLater()) {
-                        // Note: in node the callback of fs.watch is given only the relative file name as a parameter
-                        return _fs.watch(fileName, (eventName: string, relativeFileName: string) => callback(fileName));
-                    }
-
-                    const watchedFile = watchedFileSet.addFile(fileName, callback);
+                    let fileSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
+                    const watchedFile = fileSet.addFile(fileName, callback);
                     return {
-                        close: () => watchedFileSet.removeFile(watchedFile)
+                        close: () => fileSet.removeFile(watchedFile)
                     };
                 },
                 watchDirectory: (path, callback, recursive) => {
