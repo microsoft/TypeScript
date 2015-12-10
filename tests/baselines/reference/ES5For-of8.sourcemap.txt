@@ -117,23 +117,20 @@ sourceFile:ES5For-of8.ts
 3 >       ^^
 4 >         ^
 5 >          ^
-6 >           ^^^
-7 >              ^^^^^^
-8 >                    ^->
+6 >           ^^^^^^^^^
+7 >                    ^->
 1 >
 2 >    foo
 3 >       ()
 4 >         .
 5 >          x
 6 >           
-7 >              foo().x
 1 >Emitted(5, 5) Source(4, 6) + SourceIndex(0)
 2 >Emitted(5, 8) Source(4, 9) + SourceIndex(0)
 3 >Emitted(5, 10) Source(4, 11) + SourceIndex(0)
 4 >Emitted(5, 11) Source(4, 12) + SourceIndex(0)
 5 >Emitted(5, 12) Source(4, 13) + SourceIndex(0)
-6 >Emitted(5, 15) Source(4, 6) + SourceIndex(0)
-7 >Emitted(5, 21) Source(4, 13) + SourceIndex(0)
+6 >Emitted(5, 21) Source(4, 13) + SourceIndex(0)
 ---
 >>>    var p = foo().x;
 1->^^^^
