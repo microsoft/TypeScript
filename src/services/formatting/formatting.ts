@@ -847,9 +847,7 @@ namespace ts.formatting {
                 }
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
-                trimTrailingWhitespaces =
-                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space | RuleAction.Ignore)) &&
-                    rule.Flag !== RuleFlags.CanDeleteNewLines;
+                trimTrailingWhitespaces = !(rule.Operation.Action & RuleAction.Delete) && rule.Flag !== RuleFlags.CanDeleteNewLines;
             }
             else {
                 trimTrailingWhitespaces = true;
@@ -950,6 +948,7 @@ namespace ts.formatting {
 
                 let whitespaceStart = getTrailingWhitespaceStartPosition(lineStartPosition, lineEndPosition);
                 if (whitespaceStart !== -1) {
+                    Debug.assert(whitespaceStart === lineStartPosition || !isWhiteSpace(sourceFile.text.charCodeAt(whitespaceStart - 1)));
                     recordDelete(whitespaceStart, lineEndPosition + 1 - whitespaceStart);
                 }
             }
@@ -965,8 +964,6 @@ namespace ts.formatting {
                 pos--;
             }
             if (pos !== end) {
-                // pos must be out of range or non-whitespace
-                Debug.assert(pos === start - 1 || !isWhiteSpace(sourceFile.text.charCodeAt(pos)));
                 return pos + 1;
             }
             return -1;
@@ -981,14 +978,7 @@ namespace ts.formatting {
             let startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
             let endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;
 
-            let endLineStartPosition = getStartPositionOfLine(endLine, sourceFile);
-            let endLineEndPosition = getEndLinePosition(endLine, sourceFile);
-
-            if (getTrailingWhitespaceStartPosition(endLineStartPosition, endLineEndPosition) === endLineStartPosition) {
-                // Trim the whole last line when it has whitespaces only
-                endLine++;
-            }
-            trimTrailingWhitespacesForLines(startLine, endLine, previousRange);
+            trimTrailingWhitespacesForLines(startLine, endLine + 1, previousRange);
         }
 
         function newTextChange(start: number, len: number, newText: string): TextChange {
