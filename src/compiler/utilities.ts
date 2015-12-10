@@ -27,6 +27,21 @@ namespace ts {
         return undefined;
     }
 
+    export function getDeclarationsOfKind(symbol: Symbol, kind: SyntaxKind): Declaration[] {
+        const declarations = symbol.declarations;
+        if (declarations) {
+            const declarationsOfKind: Declaration[] = [];
+            for (const declaration of declarations) {
+                if (declaration.kind === kind) {
+                    declarationsOfKind.push(declaration);
+                }
+            }
+            return declarationsOfKind;
+        }
+
+        return undefined;
+    }
+
     export interface StringSymbolWriter extends SymbolWriter {
         string(): string;
     }

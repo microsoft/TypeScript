@@ -5762,12 +5762,11 @@ namespace ts {
                     target.symbol.flags & SymbolFlags.ConstEnum) {
                     return Ternary.False;
                 }
-                const sourceDecl = <EnumDeclaration>getDeclarationOfKind(source.symbol, SyntaxKind.EnumDeclaration);
-                const targetDecl = <EnumDeclaration>getDeclarationOfKind(target.symbol, SyntaxKind.EnumDeclaration);
-                const targetMembers = arrayToMap(targetDecl.members, member => getTextOfPropertyName(<PropertyName>member.name));
-                for (const member of sourceDecl.members) {
+                const targetMembers = getEnumMembers(target.symbol);
+                const targetNames = arrayToMap(targetMembers, member => getTextOfPropertyName(<PropertyName>member.name));
+                for (const member of getEnumMembers(source.symbol)) {
                     const name = getTextOfPropertyName(<PropertyName>member.name);
-                    if (!hasProperty(targetMembers, name)) {
+                    if (!hasProperty(targetNames, name)) {
                         reportError(Diagnostics.Property_0_is_missing_in_type_1,
                                     name,
                                     typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
@@ -5776,6 +5775,20 @@ namespace ts {
                 }
                 return Ternary.True;
             }
+        }
+
+        function getEnumMembers(symbol: Symbol): EnumMember[] {
+            const declarations = getDeclarationsOfKind(symbol, SyntaxKind.EnumDeclaration);
+            if (!declarations) {
+                return emptyArray;
+            }
+            const members: EnumMember[] = [];
+            for (const declaration of declarations) {
+                for (const member of (<EnumDeclaration>declaration).members) {
+                    members.push(member);
+                }
+            }
+            return members;
         }
 
         // Return true if the given type is part of a deeply nested chain of generic instantiations. We consider this to be the case
