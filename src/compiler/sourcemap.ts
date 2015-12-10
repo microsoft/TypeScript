@@ -232,20 +232,17 @@ namespace ts {
             sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
-        function getSourceLinePos(pos: number) {
-            const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
-            // Convert the location to be one-based.
-            sourceLinePos.line++;
-            sourceLinePos.character++;
-            return sourceLinePos;
-        }
-
         function emitPos(pos: number) {
             if (pos === -1) {
                 return;
             }
 
-            const sourceLinePos = getSourceLinePos(pos);
+            const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
+
+            // Convert the location to be one-based.
+            sourceLinePos.line++;
+            sourceLinePos.character++;
+
             const emittedLine = writer.getLine();
             const emittedColumn = writer.getColumn();
 

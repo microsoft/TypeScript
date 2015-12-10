@@ -2832,6 +2832,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     write("var ");
                 }
+                // Note here we specifically dont emit end so that if we are going to emit binding pattern
+                // we can alter the source map correctly
                 return true;
             }
 
@@ -3732,7 +3734,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const isVariableDeclarationOrBindingElement =
                     name.parent && (name.parent.kind === SyntaxKind.VariableDeclaration || name.parent.kind === SyntaxKind.BindingElement);
 
-                // If this is first var declaration, we need to stary at var/let/const keyword instead
+                // If this is first var declaration, we need to start at var/let/const keyword instead
                 // otherwise use nodeForSourceMap as the start position
                 emitStart(isFirstVariableDeclaration(nodeForSourceMap) ? nodeForSourceMap.parent : nodeForSourceMap);
                 withTemporaryNoSourceMap(() => {
