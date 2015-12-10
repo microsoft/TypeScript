@@ -1,0 +1,75 @@
+tests/cases/compiler/enumAssignmentCompat3.ts(37,1): error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
+  Property 'd' is missing in type 'First.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(39,1): error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
+  Property 'd' is missing in type 'First.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(40,1): error TS2322: Type 'Nope' is not assignable to type 'E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(43,1): error TS2322: Type 'First.E' is not assignable to type 'Ab.E'.
+  Property 'c' is missing in type 'Ab.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(44,1): error TS2322: Type 'First.E' is not assignable to type 'Cd.E'.
+  Property 'a' is missing in type 'Cd.E'.
+tests/cases/compiler/enumAssignmentCompat3.ts(45,1): error TS2322: Type 'E' is not assignable to type 'Nope'.
+
+
+==== tests/cases/compiler/enumAssignmentCompat3.ts (6 errors) ====
+    namespace First {
+        export enum E {
+            a, b, c,
+        }
+    }
+    namespace Abc {
+        export enum E {
+            a, b, c,
+        }
+        export enum Nope {
+            a, b, c,
+        }
+    }
+    namespace Abcd {
+        export enum E {
+            a, b, c, d,
+        }
+    }
+    namespace Ab {
+        export enum E {
+            a, b,
+        }
+    }
+    namespace Cd {
+        export enum E {
+            c, d,
+        }
+    }
+    
+    var abc: First.E;
+    var secondAbc: Abc.E;
+    var secondAbcd: Abcd.E;
+    var secondAb: Ab.E;
+    var secondCd: Cd.E;
+    var nope: Abc.Nope;
+    abc = secondAbc; // ok
+    abc = secondAbcd; // missing 'd'
+    ~~~
+!!! error TS2322: Type 'Abcd.E' is not assignable to type 'First.E'.
+!!! error TS2322:   Property 'd' is missing in type 'First.E'.
+    abc = secondAb; // ok
+    abc = secondCd; // missing 'd'
+    ~~~
+!!! error TS2322: Type 'Cd.E' is not assignable to type 'First.E'.
+!!! error TS2322:   Property 'd' is missing in type 'First.E'.
+    abc = nope; // nope!
+    ~~~
+!!! error TS2322: Type 'Nope' is not assignable to type 'E'.
+    secondAbc = abc; // ok
+    secondAbcd = abc; // ok
+    secondAb = abc; // missing 'c'
+    ~~~~~~~~
+!!! error TS2322: Type 'First.E' is not assignable to type 'Ab.E'.
+!!! error TS2322:   Property 'c' is missing in type 'Ab.E'.
+    secondCd = abc; // missing 'a' and 'b'
+    ~~~~~~~~
+!!! error TS2322: Type 'First.E' is not assignable to type 'Cd.E'.
+!!! error TS2322:   Property 'a' is missing in type 'Cd.E'.
+    nope = abc; // nope!
+    ~~~~
+!!! error TS2322: Type 'E' is not assignable to type 'Nope'.
+    
