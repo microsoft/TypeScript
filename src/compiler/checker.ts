@@ -5762,33 +5762,19 @@ namespace ts {
                     target.symbol.flags & SymbolFlags.ConstEnum) {
                     return Ternary.False;
                 }
-                const targetMembers = getEnumMembers(target.symbol);
-                const targetNames = arrayToMap(targetMembers, member => getTextOfPropertyName(<PropertyName>member.name));
-                for (const member of getEnumMembers(source.symbol)) {
-                    const name = getTextOfPropertyName(<PropertyName>member.name);
-                    if (!hasProperty(targetNames, name)) {
+                const sourceMembers = resolveStructuredTypeMembers(getTypeOfSymbol(source.symbol)).properties;
+                const targetMembers = resolveStructuredTypeMembers(getTypeOfSymbol(target.symbol)).properties;
+                const targetNames = arrayToMap(targetMembers, member => member.name);
+                for (const member of sourceMembers) {
+                    if (!hasProperty(targetNames, member.name)) {
                         reportError(Diagnostics.Property_0_is_missing_in_type_1,
-                                    name,
+                                    member.name,
                                     typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
                         return Ternary.False;
                     }
                 }
                 return Ternary.True;
             }
-        }
-
-        function getEnumMembers(symbol: Symbol): EnumMember[] {
-            const declarations = getDeclarationsOfKind(symbol, SyntaxKind.EnumDeclaration);
-            if (!declarations) {
-                return emptyArray;
-            }
-            const members: EnumMember[] = [];
-            for (const declaration of declarations) {
-                for (const member of (<EnumDeclaration>declaration).members) {
-                    members.push(member);
-                }
-            }
-            return members;
         }
 
         // Return true if the given type is part of a deeply nested chain of generic instantiations. We consider this to be the case
