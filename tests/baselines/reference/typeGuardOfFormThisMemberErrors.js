@@ -63,7 +63,7 @@ var Test;
             configurable: true
         });
         return FileSystemObject;
-    })();
+    }());
     Test.FileSystemObject = FileSystemObject;
     var File = (function (_super) {
         __extends(File, _super);
@@ -72,7 +72,7 @@ var Test;
             this.content = content;
         }
         return File;
-    })(FileSystemObject);
+    }(FileSystemObject));
     Test.File = File;
     var Directory = (function (_super) {
         __extends(Directory, _super);
@@ -80,7 +80,7 @@ var Test;
             _super.apply(this, arguments);
         }
         return Directory;
-    })(FileSystemObject);
+    }(FileSystemObject));
     Test.Directory = Directory;
     var file = new File("foo/bar.txt", "foo");
     file.isNetworked = file.isFile;

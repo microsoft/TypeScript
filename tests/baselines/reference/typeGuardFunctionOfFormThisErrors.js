@@ -75,7 +75,7 @@ var RoyalGuard = (function () {
         return this instanceof FollowerGuard;
     };
     return RoyalGuard;
-})();
+}());
 var LeadGuard = (function (_super) {
     __extends(LeadGuard, _super);
     function LeadGuard() {
@@ -84,7 +84,7 @@ var LeadGuard = (function (_super) {
     LeadGuard.prototype.lead = function () { };
     ;
     return LeadGuard;
-})(RoyalGuard);
+}(RoyalGuard));
 var FollowerGuard = (function (_super) {
     __extends(FollowerGuard, _super);
     function FollowerGuard() {
@@ -93,7 +93,7 @@ var FollowerGuard = (function (_super) {
     FollowerGuard.prototype.follow = function () { };
     ;
     return FollowerGuard;
-})(RoyalGuard);
+}(RoyalGuard));
 var a = new FollowerGuard();
 var b = new LeadGuard();
 // Mismatched guards shouldn't be assignable

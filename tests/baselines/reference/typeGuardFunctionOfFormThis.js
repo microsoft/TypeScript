@@ -157,7 +157,7 @@ var RoyalGuard = (function () {
         return this instanceof FollowerGuard;
     };
     return RoyalGuard;
-})();
+}());
 var LeadGuard = (function (_super) {
     __extends(LeadGuard, _super);
     function LeadGuard() {
@@ -166,7 +166,7 @@ var LeadGuard = (function (_super) {
     LeadGuard.prototype.lead = function () { };
     ;
     return LeadGuard;
-})(RoyalGuard);
+}(RoyalGuard));
 var FollowerGuard = (function (_super) {
     __extends(FollowerGuard, _super);
     function FollowerGuard() {
@@ -175,7 +175,7 @@ var FollowerGuard = (function (_super) {
     FollowerGuard.prototype.follow = function () { };
     ;
     return FollowerGuard;
-})(RoyalGuard);
+}(RoyalGuard));
 var a = new FollowerGuard();
 if (a.isLeader()) {
     a.lead();
@@ -220,7 +220,7 @@ var ArrowGuard = (function () {
         };
     }
     return ArrowGuard;
-})();
+}());
 var ArrowElite = (function (_super) {
     __extends(ArrowElite, _super);
     function ArrowElite() {
@@ -228,7 +228,7 @@ var ArrowElite = (function (_super) {
     }
     ArrowElite.prototype.defend = function () { };
     return ArrowElite;
-})(ArrowGuard);
+}(ArrowGuard));
 var ArrowMedic = (function (_super) {
     __extends(ArrowMedic, _super);
     function ArrowMedic() {
@@ -236,7 +236,7 @@ var ArrowMedic = (function (_super) {
     }
     ArrowMedic.prototype.heal = function () { };
     return ArrowMedic;
-})(ArrowGuard);
+}(ArrowGuard));
 var guard = new ArrowGuard();
 if (guard.isElite()) {
     guard.defend();
@@ -262,7 +262,7 @@ var MimicGuard = (function () {
     MimicGuard.prototype.isFollower = function () { return this instanceof MimicFollower; };
     ;
     return MimicGuard;
-})();
+}());
 var MimicLeader = (function (_super) {
     __extends(MimicLeader, _super);
     function MimicLeader() {
@@ -270,7 +270,7 @@ var MimicLeader = (function (_super) {
     }
     MimicLeader.prototype.lead = function () { };
     return MimicLeader;
-})(MimicGuard);
+}(MimicGuard));
 var MimicFollower = (function (_super) {
     __extends(MimicFollower, _super);
     function MimicFollower() {
@@ -278,7 +278,7 @@ var MimicFollower = (function (_super) {
     }
     MimicFollower.prototype.follow = function () { };
     return MimicFollower;
-})(MimicGuard);
+}(MimicGuard));
 var mimic = new MimicGuard();
 a.isLeader = mimic.isLeader;
 a.isFollower = mimic.isFollower;
