@@ -82,14 +82,14 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 // in call type arguments
 var testClass1 = (function () {
     function testClass1() {
     }
     testClass1.prototype.method = function () { };
     return testClass1;
-})();
+}());
 var tc1 = new testClass1();
 tc1.method(); // error: could not find symbol V
 // in constructor type arguments
@@ -97,7 +97,7 @@ var testClass2 = (function () {
     function testClass2() {
     }
     return testClass2;
-})();
+}());
 var tc2 = new testClass2(); // error: could not find symbol V
 // in method return type annotation
 var testClass3 = (function () {
@@ -112,7 +112,7 @@ var testClass3 = (function () {
         configurable: true
     });
     return testClass3;
-})();
+}());
 // in function return type annotation
 function testFunction1() { return null; } // error: could not find symbol V
 // in paramter types
@@ -124,13 +124,13 @@ var testClass4 = (function () {
     function testClass4() {
     }
     return testClass4;
-})(); // error: could not find symbol V
+}()); // error: could not find symbol V
 var testClass6 = (function () {
     function testClass6() {
     }
     testClass6.prototype.method = function () { }; // error: could not find symbol V
     return testClass6;
-})();
+}());
 // in extends clause
 var testClass7 = (function (_super) {
     __extends(testClass7, _super);
@@ -138,10 +138,10 @@ var testClass7 = (function (_super) {
         _super.apply(this, arguments);
     }
     return testClass7;
-})(Foo); // error: could not find symbol V
+}(Foo)); // error: could not find symbol V
 // in implements clause
 var testClass8 = (function () {
     function testClass8() {
     }
     return testClass8;
-})(); // error: could not find symbol V
+}()); // error: could not find symbol V

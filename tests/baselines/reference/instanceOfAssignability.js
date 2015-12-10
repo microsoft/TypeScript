@@ -100,32 +100,32 @@ var Derived1 = (function () {
     function Derived1() {
     }
     return Derived1;
-})();
+}());
 // Derived2 is a subtype of Base that is not assignable to Derived1
 var Derived2 = (function () {
     function Derived2() {
     }
     return Derived2;
-})();
+}());
 var Animal = (function () {
     function Animal() {
     }
     return Animal;
-})();
+}());
 var Mammal = (function (_super) {
     __extends(Mammal, _super);
     function Mammal() {
         _super.apply(this, arguments);
     }
     return Mammal;
-})(Animal);
+}(Animal));
 var Giraffe = (function (_super) {
     __extends(Giraffe, _super);
     function Giraffe() {
         _super.apply(this, arguments);
     }
     return Giraffe;
-})(Mammal);
+}(Mammal));
 function fn1(x) {
     if (x instanceof Array) {
         // 1.5: y: Array<number>|Array<string>
@@ -179,7 +179,7 @@ var ABC = (function () {
     function ABC() {
     }
     return ABC;
-})();
+}());
 function fn8(x) {
     if (x instanceof ABC) {
         var y = x;

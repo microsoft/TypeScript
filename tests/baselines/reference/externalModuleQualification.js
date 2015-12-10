@@ -12,13 +12,14 @@ class NavigateAction {
 
 
 //// [externalModuleQualification.js]
+"use strict";
 exports.ID = "test";
 var DiffEditor = (function () {
     function DiffEditor(id) {
         if (id === void 0) { id = exports.ID; }
     }
     return DiffEditor;
-})();
+}());
 exports.DiffEditor = DiffEditor;
 var NavigateAction = (function () {
     function NavigateAction() {
@@ -26,4 +27,4 @@ var NavigateAction = (function () {
     NavigateAction.prototype.f = function (editor) {
     };
     return NavigateAction;
-})();
+}());

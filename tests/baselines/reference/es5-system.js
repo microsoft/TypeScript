@@ -16,6 +16,7 @@ export default class A
 
 //// [es5-system.js]
 System.register([], function(exports_1) {
+    "use strict";
     var A;
     return {
         setters:[],
@@ -27,7 +28,7 @@ System.register([], function(exports_1) {
                     return 42;
                 };
                 return A;
-            })();
+            }());
             exports_1("default", A);
         }
     }

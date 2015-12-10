@@ -24,7 +24,7 @@ var A = (function () {
     }
     A.prototype.foo = function (x) { };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -34,7 +34,7 @@ var B = (function (_super) {
         return null;
     };
     return B;
-})(A);
+}(A));
 var foo = new A();
 var r = new B();
 var r2 = new B(); // error

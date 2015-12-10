@@ -17,12 +17,12 @@ var C1 = (function () {
     }
     C1.prototype.func = function (param) { };
     return C1;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(C1);
+}(C1));
 var x = new C2(); // Valid

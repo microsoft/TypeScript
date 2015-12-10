@@ -1,4 +1,4 @@
-//// [exportAssignmentError.ts]
+//// [exportEqualsModule_A.ts]
 module M {
 	export var x;
 }
@@ -8,8 +8,9 @@ import M2 = M;
 export = M2; // should not error
 
 
-//// [exportAssignmentError.js]
+//// [exportEqualsModule_A.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var M;
     (function (M) {
     })(M || (M = {}));

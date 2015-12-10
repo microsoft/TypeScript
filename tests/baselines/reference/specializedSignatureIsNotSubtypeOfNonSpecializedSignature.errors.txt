@@ -23,7 +23,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignat
     
     class C {
         foo(x: 'a');
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: number);
         foo(x: any) { }
@@ -31,7 +31,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignat
     
     class C2<T> {
         foo(x: 'a');
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
         foo(x: any) { }
@@ -39,7 +39,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignat
     
     class C3<T extends String> {
         foo(x: 'a');
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         foo(x: T);
         foo(x: any) { }

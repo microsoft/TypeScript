@@ -63,7 +63,7 @@ var C = (function () {
         this["2"] = '';
     }
     return C;
-})();
+}());
 var c;
 var r1 = c['1'];
 var r2 = c['2'];

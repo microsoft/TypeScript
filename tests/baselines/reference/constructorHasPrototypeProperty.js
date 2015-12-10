@@ -43,14 +43,14 @@ var NonGeneric;
         function C() {
         }
         return C;
-    })();
+    }());
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
             _super.apply(this, arguments);
         }
         return D;
-    })(C);
+    }(C));
     var r = C.prototype;
     r.foo;
     var r2 = D.prototype;
@@ -62,14 +62,14 @@ var Generic;
         function C() {
         }
         return C;
-    })();
+    }());
     var D = (function (_super) {
         __extends(D, _super);
         function D() {
             _super.apply(this, arguments);
         }
         return D;
-    })(C);
+    }(C));
     var r = C.prototype; // C<any, any>
     var ra = r.foo; // any
     var r2 = D.prototype; // D<any, any>

@@ -21,14 +21,14 @@ var Base = (function () {
     }
     Base.prototype.foo = function (other) { };
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));
 var d = new Derived(); // bug caused an error here, couldn't select overload
 var d2;
 d2.foo();

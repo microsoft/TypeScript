@@ -17,6 +17,7 @@ module M {
 
 //// [aliasesInSystemModule2.js]
 System.register(["foo"], function(exports_1) {
+    "use strict";
     var foo_1;
     var cls, cls2, x, y, z, M;
     return {

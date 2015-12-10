@@ -78,6 +78,7 @@ function globalfooWithOverloads(a: any): any {
 }
 
 //// [declFileFunctions_0.js]
+"use strict";
 /** This comment should appear for foo*/
 function foo() {
 }

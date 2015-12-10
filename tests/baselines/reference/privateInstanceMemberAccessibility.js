@@ -23,7 +23,7 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -35,4 +35,4 @@ var Derived = (function (_super) {
         return _super.prototype.foo; // error
     };
     return Derived;
-})(Base);
+}(Base));

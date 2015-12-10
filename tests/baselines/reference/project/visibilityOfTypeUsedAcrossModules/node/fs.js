@@ -1,3 +1,4 @@
+"use strict";
 var RM = (function () {
     function RM() {
     }
@@ -11,5 +12,5 @@ var RM = (function () {
         var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
     };
     return RM;
-})();
+}());
 exports.RM = RM;

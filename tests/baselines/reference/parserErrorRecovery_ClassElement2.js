@@ -13,7 +13,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     var E;
     (function (E) {
     })(E || (E = {}));

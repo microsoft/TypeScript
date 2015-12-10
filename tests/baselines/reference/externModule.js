@@ -47,7 +47,7 @@ module;
         function XDate() {
         }
         return XDate;
-    })();
+    }());
     exports.XDate = XDate;
 }
 var d = new XDate();

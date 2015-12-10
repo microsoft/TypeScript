@@ -35,19 +35,19 @@ var List = (function () {
     function List() {
     }
     return List;
-})();
+}());
 var DerivedList = (function (_super) {
     __extends(DerivedList, _super);
     function DerivedList() {
         _super.apply(this, arguments);
     }
     return DerivedList;
-})(List);
+}(List));
 var MyList = (function () {
     function MyList() {
     }
     return MyList;
-})();
+}());
 var list;
 var list2;
 var myList;

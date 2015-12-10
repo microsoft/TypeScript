@@ -55,7 +55,7 @@ var A = (function () {
     }
     A.foo = function () { return 1; };
     return A;
-})();
+}());
 var M;
 (function (M) {
 })(M || (M = {}));

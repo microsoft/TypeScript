@@ -37,22 +37,22 @@ var X = (function () {
     function X() {
     }
     return X;
-})();
+}());
 var Y = (function () {
     function Y() {
     }
     return Y;
-})();
+}());
 var X_1 = (function () {
     function X_1() {
     }
     return X_1;
-})();
+}());
 var Y_1 = (function () {
     function Y_1() {
     }
     return Y_1;
-})();
+}());
 function foo(arg) { }
 var a = new Y();
 var b = new X();

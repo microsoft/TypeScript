@@ -23,7 +23,7 @@ var base = (function () {
     function base() {
     }
     return base;
-})();
+}());
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
@@ -33,4 +33,4 @@ var Foo = (function (_super) {
         console.log(_super); // Error as this doesnt not resolve to user defined _super
     };
     return Foo;
-})(base);
+}(base));

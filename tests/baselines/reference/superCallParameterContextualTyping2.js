@@ -22,7 +22,7 @@ var A = (function () {
         this.map = map;
     }
     return A;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     // Ensure 'value' is not of type 'any' by invoking it with type arguments.
@@ -30,4 +30,4 @@ var C = (function (_super) {
         _super.call(this, function (value) { return String(value()); });
     }
     return C;
-})(A);
+}(A));

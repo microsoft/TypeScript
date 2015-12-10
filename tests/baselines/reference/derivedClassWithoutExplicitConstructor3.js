@@ -59,7 +59,7 @@ var Base = (function () {
         this.a = x;
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(y, z) {
@@ -68,7 +68,7 @@ var Derived = (function (_super) {
         this.b = y;
     }
     return Derived;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
@@ -77,7 +77,7 @@ var Derived2 = (function (_super) {
         this.y = 'hello';
     }
     return Derived2;
-})(Derived);
+}(Derived));
 var r = new Derived(); // error
 var r2 = new Derived2(1); // error
 var r3 = new Derived('', '');
@@ -86,7 +86,7 @@ var Base2 = (function () {
         this.a = x;
     }
     return Base2;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D(y, z) {
@@ -95,7 +95,7 @@ var D = (function (_super) {
         this.b = y;
     }
     return D;
-})(Base);
+}(Base));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
@@ -104,7 +104,7 @@ var D2 = (function (_super) {
         this.y = null;
     }
     return D2;
-})(D);
+}(D));
 var d = new D2(); // error
 var d2 = new D2(new Date()); // error
 var d3 = new D2(new Date(), new Date()); // ok

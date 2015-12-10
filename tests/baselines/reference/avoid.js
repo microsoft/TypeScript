@@ -33,6 +33,6 @@ var C = (function () {
     C.prototype.g = function () {
     };
     return C;
-})();
+}());
 var z = new C().g(); // error void fn
 var N = new f(); // ok with void fn

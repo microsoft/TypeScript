@@ -139,6 +139,8 @@ namespace ts {
                 file.classifiableNames = classifiableNames;
             }
 
+            file = undefined;
+            options = undefined;
             parent = undefined;
             container = undefined;
             blockScopeContainer = undefined;
@@ -175,9 +177,14 @@ namespace ts {
                 symbol.members = {};
             }
 
-            if (symbolFlags & SymbolFlags.Value && !symbol.valueDeclaration) {
-                symbol.valueDeclaration = node;
-            }
+            if (symbolFlags & SymbolFlags.Value) {
+                const valueDeclaration = symbol.valueDeclaration;
+                if (!valueDeclaration ||
+                    (valueDeclaration.kind !== node.kind && valueDeclaration.kind === SyntaxKind.ModuleDeclaration)) {
+                    // other kinds of value declarations take precedence over modules
+                    symbol.valueDeclaration = node;
+                }
+        }
         }
 
         // Should not be called on a declaration with a computed property name,
@@ -189,7 +196,7 @@ namespace ts {
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = (<ComputedPropertyName>node.name).expression;
-                    // treat computed property names where expression is string/numeric literal as just string/numeric literal 
+                    // treat computed property names where expression is string/numeric literal as just string/numeric literal
                     if (isStringOrNumericLiteral(nameExpression.kind)) {
                         return (<LiteralExpression>nameExpression).text;
                     }
@@ -450,7 +457,7 @@ namespace ts {
 
         /**
          * Returns true if node and its subnodes were successfully traversed.
-         * Returning false means that node was not examined and caller needs to dive into the node himself. 
+         * Returning false means that node was not examined and caller needs to dive into the node himself.
          */
         function bindReachableStatement(node: Node): void {
             if (checkUnreachable(node)) {
@@ -560,7 +567,7 @@ namespace ts {
         }
 
         function bindIfStatement(n: IfStatement): void {
-            // denotes reachability state when entering 'thenStatement' part of the if statement: 
+            // denotes reachability state when entering 'thenStatement' part of the if statement:
             // i.e. if condition is false then thenStatement is unreachable
             const ifTrueState = n.expression.kind === SyntaxKind.FalseKeyword ? Reachability.Unreachable : currentReachabilityState;
             // denotes reachability state when entering 'elseStatement':
@@ -1179,10 +1186,11 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
-                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
                     seenThisKeyword = true;
                     return;
-
+                case SyntaxKind.TypePredicate:
+                    return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
@@ -1266,6 +1274,17 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return bindSourceFileIfExternalModule();
             }
+        }
+
+        function checkTypePredicate(node: TypePredicateNode) {
+            const { parameterName, type } = node;
+            if (parameterName && parameterName.kind === SyntaxKind.Identifier) {
+                checkStrictModeIdentifier(parameterName as Identifier);
+            }
+            if (parameterName && parameterName.kind === SyntaxKind.ThisType) {
+                seenThisKeyword = true;
+            }
+            bind(type);
         }
 
         function bindSourceFileIfExternalModule() {
@@ -1528,7 +1547,7 @@ namespace ts {
 
                         // unreachable code is reported if
                         // - user has explicitly asked about it AND
-                        // - statement is in not ambient context (statements in ambient context is already an error 
+                        // - statement is in not ambient context (statements in ambient context is already an error
                         //   so we should not report extras) AND
                         //   - node is not variable statement OR
                         //   - node is block scoped variable statement OR

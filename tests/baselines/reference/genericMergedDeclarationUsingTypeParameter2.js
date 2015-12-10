@@ -11,7 +11,7 @@ var foo = (function () {
     function foo(x) {
     }
     return foo;
-})();
+}());
 var foo;
 (function (foo) {
     var y = 1;

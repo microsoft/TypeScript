@@ -33,7 +33,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var f;
 C = x;
 var g;

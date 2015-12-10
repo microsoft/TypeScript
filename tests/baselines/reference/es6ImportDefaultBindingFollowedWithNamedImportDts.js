@@ -25,43 +25,45 @@ export var x6 = new m();
 
 
 //// [server.js]
+"use strict";
 var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 exports.a = a;
 var x = (function () {
     function x() {
     }
     return x;
-})();
+}());
 exports.x = x;
 var m = (function () {
     function m() {
     }
     return m;
-})();
+}());
 exports.m = m;
 var a11 = (function () {
     function a11() {
     }
     return a11;
-})();
+}());
 exports.a11 = a11;
 var a12 = (function () {
     function a12() {
     }
     return a12;
-})();
+}());
 exports.a12 = a12;
 var x11 = (function () {
     function x11() {
     }
     return x11;
-})();
+}());
 exports.x11 = x11;
 //// [client.js]
+"use strict";
 var server_1 = require("./server");
 exports.x1 = new server_1.a();
 var server_2 = require("./server");

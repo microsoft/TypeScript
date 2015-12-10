@@ -26,14 +26,16 @@ var z = new Entity();
 var sum = z.p1 + z.p2
 
 //// [m1.js]
+"use strict";
 var Decl = (function () {
     function Decl() {
     }
     return Decl;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Decl;
 //// [m2.js]
+"use strict";
 var m1_1 = require("m1");
 m1_1.default();
 var x;

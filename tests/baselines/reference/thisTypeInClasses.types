@@ -94,7 +94,6 @@ class C5 {
 >(x: this): this => this : (x: this) => this
 >x : this
 >this : this
->this : this
 
         let f2 = (x: this) => this;
 >f2 : (x: this) => this

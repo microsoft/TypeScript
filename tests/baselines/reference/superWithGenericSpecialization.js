@@ -24,14 +24,14 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.call(this); // uses the type parameter type of the base class, ie string
     }
     return D;
-})(C);
+}(C));
 var d;
 var r = d.x;
 var r2 = d.y;

@@ -435,7 +435,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided.": {
+    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -783,7 +783,18 @@
         "category": "Error",
         "code": 1245
     },
-
+    "An interface property cannot have an initializer.": {
+        "category": "Error",
+        "code": 1246
+    },
+    "A type literal property cannot have an initializer.": {
+        "category": "Error",
+        "code": 1247
+    },
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -835,6 +846,10 @@
     "Cannot find module '{0}'.": {
         "category": "Error",
         "code": 2307
+    },
+    "Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": {
+        "category": "Error",
+        "code": 2308
     },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
@@ -891,6 +906,10 @@
     "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2322
+    },
+    "Cannot redeclare exported variable '{0}'.": {
+        "category": "Error",
+        "code": 2323
     },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
@@ -1171,6 +1190,10 @@
     "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
         "category": "Error",
         "code": 2396
+    },
+    "Declaration name conflicts with built-in global identifier '{0}'.": {
+        "category": "Error",
+        "code": 2397
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -1622,7 +1645,15 @@
     },
     "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
-        "code":2517
+        "code": 2517
+    },
+    "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
+        "category": "Error",
+        "code": 2518
+    },
+    "A 'this'-based type predicate is only allowed within a class or interface's members, get accessors, or return type positions for functions and methods.": {
+        "category": "Error",
+        "code": 2519
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
@@ -1723,6 +1754,10 @@
     "JSX expressions must have one parent element": {
         "category": "Error",
         "code": 2657
+    },
+    "Type '{0}' provides no match for the signature '{1}'": {
+        "category": "Error",
+        "code": 2658
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2060,6 +2095,22 @@
         "category": "Error",
         "code": 5054
     },
+    "Cannot write file '{0}' because it would overwrite input file.": {
+        "category": "Error",
+        "code": 5055
+    },
+    "Cannot write file '{0}' because it would be overwritten by multiple input files.": {
+        "category": "Error",
+        "code": 5056
+    },
+    "Cannot find a tsconfig.json file at the specified directory: '{0}'": {
+        "category": "Error",
+        "code": 5057
+    },
+    "The specified path does not exist: '{0}'": {
+        "category": "Error",
+        "code": 5058
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2100,6 +2151,10 @@
     "Do not emit outputs.": {
         "category": "Message",
         "code": 6010
+    },
+    "Allow default imports from modules with no default export. This does not affect code emit, just typechecking.": {
+        "category": "Message",
+        "code": 6011
     },
   "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015' (experimental)": {
     "category": "Message",
@@ -2322,6 +2377,11 @@
         "category": "Error",
         "code": 6082
     },
+    "Allow javascript files to be compiled.": {
+        "category": "Message",
+        "code": 6083
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2405,7 +2465,7 @@
     "Not all code paths return a value.": {
         "category": "Error",
         "code": 7030
-    },    
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

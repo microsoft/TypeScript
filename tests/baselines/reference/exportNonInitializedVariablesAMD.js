@@ -36,6 +36,7 @@ export let h1: D = new D;
 
 //// [exportNonInitializedVariablesAMD.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var ;
     let;
     var ;
@@ -43,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
         function A() {
         }
         return A;
-    })();
+    }());
     var B;
     (function (B) {
         B.a = 1, B.c = 2;
@@ -61,7 +62,7 @@ define(["require", "exports"], function (require, exports) {
         function D() {
         }
         return D;
-    })();
+    }());
     exports.e1 = new D;
     exports.f1 = new D;
     exports.g1 = new D;

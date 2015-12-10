@@ -43,6 +43,7 @@ export {II as II1};
 
 //// [f1.js]
 System.register([], function(exports_1) {
+    "use strict";
     var A;
     return {
         setters:[],
@@ -51,13 +52,14 @@ System.register([], function(exports_1) {
                 function A() {
                 }
                 return A;
-            })();
+            }());
             exports_1("A", A);
         }
     }
 });
 //// [f2.js]
 System.register(["f1"], function(exports_1) {
+    "use strict";
     var f1_1;
     var x, N, IX;
     return {

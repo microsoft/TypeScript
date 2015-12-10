@@ -41,24 +41,26 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
-define("tests/cases/compiler/ref/a", ["require", "exports"], function (require, exports) {
+}());
+define("ref/a", ["require", "exports"], function (require, exports) {
+    "use strict";
     /// <reference path="./b.ts" />
     var A = (function () {
         function A() {
         }
         return A;
-    })();
+    }());
     exports.A = A;
 });
-define("tests/cases/compiler/b", ["require", "exports", "tests/cases/compiler/ref/a"], function (require, exports, a_1) {
+define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
+    "use strict";
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
             _super.apply(this, arguments);
         }
         return B;
-    })(a_1.A);
+    }(a_1.A));
     exports.B = B;
 });
 //# sourceMappingURL=all.js.map
@@ -69,13 +71,13 @@ declare class Foo {
     member: Bar;
 }
 declare var GlobalFoo: Foo;
-declare module "tests/cases/compiler/ref/a" {
+declare module "ref/a" {
     export class A {
         member: typeof GlobalFoo;
     }
 }
-declare module "tests/cases/compiler/b" {
-    import { A } from "tests/cases/compiler/ref/a";
+declare module "b" {
+    import { A } from "ref/a";
     export class B extends A {
     }
 }

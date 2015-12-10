@@ -2,7 +2,7 @@
 
 /* @internal */
 namespace ts.NavigationBar {
-    export function getNavigationBarItems(sourceFile: SourceFile): ts.NavigationBarItem[]  {
+    export function getNavigationBarItems(sourceFile: SourceFile, compilerOptions: CompilerOptions): ts.NavigationBarItem[]  {
         // If the source file has any child items, then it included in the tree
         // and takes lexical ownership of all other top-level items.
         let hasGlobalNode = false;

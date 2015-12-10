@@ -51,7 +51,7 @@ var Base = (function () {
         configurable: true
     });
     return Base;
-})();
+}());
 // error, not a subtype
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -68,7 +68,7 @@ var Derived = (function (_super) {
         configurable: true
     });
     return Derived;
-})(Base);
+}(Base));
 var r = Base.x; // ok
 var r2 = Derived.x; // error
 var r3 = Base.fn(); // ok

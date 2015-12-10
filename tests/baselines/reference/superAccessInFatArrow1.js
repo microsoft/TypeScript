@@ -29,7 +29,7 @@ var test;
         A.prototype.foo = function () {
         };
         return A;
-    })();
+    }());
     test.A = A;
     var B = (function (_super) {
         __extends(B, _super);
@@ -45,6 +45,6 @@ var test;
             });
         };
         return B;
-    })(A);
+    }(A));
     test.B = B;
 })(test || (test = {}));

@@ -52,13 +52,14 @@ export module foo {
 export var r13: typeof foo;
 
 //// [typeofAnExportedType.js]
+"use strict";
 exports.x = 1;
 exports.y = { foo: '' };
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 exports.C = C;
 var c2;
 var i2;
@@ -69,7 +70,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M = exports.M || (exports.M = {}));
 exports.Z = M;
@@ -86,6 +87,6 @@ var foo;
         function C() {
         }
         return C;
-    })();
+    }());
     foo.C = C;
 })(foo = exports.foo || (exports.foo = {}));

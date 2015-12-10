@@ -1,0 +1,254 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMember.ts ===
+// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+namespace Test {
+>Test : typeof Test
+
+	export class FileSystemObject {
+>FileSystemObject : FileSystemObject
+
+		isFSO: this is FileSystemObject;
+>isFSO : this is FileSystemObject
+>FileSystemObject : FileSystemObject
+
+		get isFile(): this is File {
+>isFile : this is File
+>File : File
+
+			return this instanceof File;
+>this instanceof File : boolean
+>this : this
+>File : typeof File
+		}
+		set isFile(param) {
+>isFile : this is File
+>param : boolean
+
+			// noop
+		}
+		get isDirectory(): this is Directory {
+>isDirectory : this is Directory
+>Directory : Directory
+
+			return this instanceof Directory;
+>this instanceof Directory : boolean
+>this : this
+>Directory : typeof Directory
+		}
+		isNetworked: this is (Networked & this);
+>isNetworked : this is Networked & this
+>Networked : Networked
+
+		constructor(public path: string) {}
+>path : string
+	}
+
+	export class File extends FileSystemObject {
+>File : File
+>FileSystemObject : FileSystemObject
+
+		constructor(path: string, public content: string) { super(path); }
+>path : string
+>content : string
+>super(path) : void
+>super : typeof FileSystemObject
+>path : string
+	}
+	export class Directory extends FileSystemObject {
+>Directory : Directory
+>FileSystemObject : FileSystemObject
+
+		children: FileSystemObject[];
+>children : FileSystemObject[]
+>FileSystemObject : FileSystemObject
+	}
+	export interface Networked {
+>Networked : Networked
+
+		host: string;
+>host : string
+	}
+
+	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+>file : FileSystemObject
+>FileSystemObject : FileSystemObject
+>new File("foo/bar.txt", "foo") : File
+>File : typeof File
+>"foo/bar.txt" : string
+>"foo" : string
+
+	file.isNetworked = false;
+>file.isNetworked = false : boolean
+>file.isNetworked : this is Networked & FileSystemObject
+>file : FileSystemObject
+>isNetworked : this is Networked & FileSystemObject
+>false : boolean
+
+	file.isFSO = file.isFile;
+>file.isFSO = file.isFile : this is File
+>file.isFSO : this is FileSystemObject
+>file : FileSystemObject
+>isFSO : this is FileSystemObject
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+
+	file.isFile = true;
+>file.isFile = true : boolean
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+>true : boolean
+
+	let x = file.isFile;
+>x : boolean
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+
+	if (file.isFile) {
+>file.isFile : this is File
+>file : FileSystemObject
+>isFile : this is File
+
+		file.content;
+>file.content : string
+>file : File
+>content : string
+
+		if (file.isNetworked) {
+>file.isNetworked : this is Networked & File
+>file : File
+>isNetworked : this is Networked & File
+
+			file.host;
+>file.host : string
+>file : Networked & File
+>host : string
+
+			file.content;
+>file.content : string
+>file : Networked & File
+>content : string
+		}
+	}
+	else if (file.isDirectory) {
+>file.isDirectory : this is Directory
+>file : FileSystemObject
+>isDirectory : this is Directory
+
+		file.children;
+>file.children : FileSystemObject[]
+>file : Directory
+>children : FileSystemObject[]
+	}
+	else if (file.isNetworked) {
+>file.isNetworked : this is Networked & FileSystemObject
+>file : FileSystemObject
+>isNetworked : this is Networked & FileSystemObject
+
+		file.host;
+>file.host : string
+>file : Networked & FileSystemObject
+>host : string
+	}
+	
+	interface GenericLeadGuard<T> extends GenericGuard<T> {
+>GenericLeadGuard : GenericLeadGuard<T>
+>T : T
+>GenericGuard : GenericGuard<T>
+>T : T
+
+		lead(): void;
+>lead : () => void
+	}
+	
+	interface GenericFollowerGuard<T> extends GenericGuard<T> {
+>GenericFollowerGuard : GenericFollowerGuard<T>
+>T : T
+>GenericGuard : GenericGuard<T>
+>T : T
+
+		follow(): void;
+>follow : () => void
+	}
+	
+	interface GenericGuard<T> {
+>GenericGuard : GenericGuard<T>
+>T : T
+
+		target: T;
+>target : T
+>T : T
+
+		isLeader: this is (GenericLeadGuard<T>);
+>isLeader : this is GenericLeadGuard<T>
+>GenericLeadGuard : GenericLeadGuard<T>
+>T : T
+
+		isFollower: this is GenericFollowerGuard<T>;
+>isFollower : this is GenericFollowerGuard<T>
+>GenericFollowerGuard : GenericFollowerGuard<T>
+>T : T
+	}
+
+	let guard: GenericGuard<File>;
+>guard : GenericGuard<File>
+>GenericGuard : GenericGuard<T>
+>File : File
+
+	if (guard.isLeader) {
+>guard.isLeader : this is GenericLeadGuard<File>
+>guard : GenericGuard<File>
+>isLeader : this is GenericLeadGuard<File>
+
+		guard.lead();
+>guard.lead() : void
+>guard.lead : () => void
+>guard : GenericLeadGuard<File>
+>lead : () => void
+	}
+	else if (guard.isFollower) {
+>guard.isFollower : this is GenericFollowerGuard<File>
+>guard : GenericGuard<File>
+>isFollower : this is GenericFollowerGuard<File>
+
+		guard.follow();
+>guard.follow() : void
+>guard.follow : () => void
+>guard : GenericFollowerGuard<File>
+>follow : () => void
+	}
+
+	interface SpecificGuard {
+>SpecificGuard : SpecificGuard
+
+		isMoreSpecific: this is MoreSpecificGuard;
+>isMoreSpecific : this is MoreSpecificGuard
+>MoreSpecificGuard : MoreSpecificGuard
+	}
+
+	interface MoreSpecificGuard extends SpecificGuard {
+>MoreSpecificGuard : MoreSpecificGuard
+>SpecificGuard : SpecificGuard
+
+		do(): void;
+>do : () => void
+	}
+
+	let general: SpecificGuard;
+>general : SpecificGuard
+>SpecificGuard : SpecificGuard
+
+	if (general.isMoreSpecific) {
+>general.isMoreSpecific : this is MoreSpecificGuard
+>general : SpecificGuard
+>isMoreSpecific : this is MoreSpecificGuard
+
+		general.do();
+>general.do() : void
+>general.do : () => void
+>general : MoreSpecificGuard
+>do : () => void
+	}
+}
+

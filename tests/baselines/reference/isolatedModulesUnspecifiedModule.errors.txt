@@ -2,5 +2,5 @@ error TS5047: Option 'isolatedModules' can only be used when either option '--mo
 
 
 !!! error TS5047: Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.
-==== tests/cases/compiler/isolatedModulesUnspecifiedModule.ts (0 errors) ====
+==== tests/cases/compiler/file1.ts (0 errors) ====
     export var x;
