@@ -193,7 +193,7 @@ namespace ts.JsTyping {
         let jsFileNames = fileNames.filter(f => ts.fileExtensionIs(f, ".js"));
         let inferredTypingNames = jsFileNames.map(f => ts.removeFileExtension(ts.getBaseFileName(f.toLowerCase())));
         let cleanedTypingNames = inferredTypingNames.map(f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
-        _safeList === undefined ? mergeTypings(cleanedTypingNames) : mergeTypings(cleanedTypingNames.filter(_safeList.hasOwnProperty));
+        _safeList === undefined ? mergeTypings(cleanedTypingNames) : mergeTypings(cleanedTypingNames.filter(f => _safeList.hasOwnProperty(f)));
     }
 
     /**
