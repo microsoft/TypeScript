@@ -16,7 +16,7 @@ namespace ts.server {
     }
 
     var lineCollectionCapacity = 4;
-    var cachePath = ts.combinePaths(process.env.HOME, ".typingCache");
+    var globalCachePath = ts.combinePaths(process.env.HOME, ".typingCache");
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -349,6 +349,7 @@ namespace ts.server {
         // these fields can be present in the project file
         files?: string[];
         compilerOptions?: ts.CompilerOptions;
+        typingOptions?: ts.TypingOptions;
     }
 
     export class Project {
@@ -909,10 +910,16 @@ namespace ts.server {
         // the newly opened file.
         findConfigFile(searchPath: string): string {
             while (true) {
-                var fileName = ts.combinePaths(searchPath, "tsconfig.json");
-                if (this.host.fileExists(fileName)) {
-                    return fileName;
+                // "tsconfig" > "jsconfig"
+                let tsConfigFile = ts.combinePaths(searchPath, "tsconfig.json");
+                let jsConfigFile = ts.combinePaths(searchPath, "jsconfig.json");
+                if (this.host.fileExists(tsConfigFile)) {
+                    return tsConfigFile;
                 }
+                if (this.host.fileExists(jsConfigFile)) {
+                    return jsConfigFile;
+                }
+
                 var parentPath = ts.getDirectoryPath(searchPath);
                 if (parentPath === searchPath) {
                     break;
@@ -923,17 +930,30 @@ namespace ts.server {
         }
 
         acquireTypingForJs(path: string, project: Project) {
-            let { cachedTypingPaths, newTypingNames } = this.resolveTypingsForJs(path, project);
-            this.downloadTypingFilesForJs(cachedTypingPaths, newTypingNames, project);
-        }
+            let cachePath = project.isConfiguredProject() 
+                ? ts.combinePaths(ts.getDirectoryPath(project.projectFilename), "inferTypings")
+                : globalCachePath;
+                
+            let typingOptions = project.projectOptions ? project.projectOptions.typingOptions : undefined;
+            let compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
 
-        resolveTypingsForJs(fileName: string, project: Project): { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
-            this.log("Files for JS typing:" + fileName);
-            // TODO: replace 2nd cachePath for projectRootPath
-            return ts.JsTyping.discoverTypings(sys, project.getFileNames(), cachePath, cachePath);
-        }
+            let { cachedTypingPaths, newTypingNames, filesToWatch } = ts.JsTyping.discoverTypings(
+                sys, 
+                project.getFileNames(), 
+                globalCachePath, 
+                cachePath,
+                typingOptions, 
+                compilerOptions
+            );
 
-        downloadTypingFilesForJs(cachedTypingPaths: string[], newTypings: string[], project: Project) {
+            // Bail out when the autoTyping is disabled
+            if (cachedTypingPaths.length === 0 && newTypingNames.length === 0) {
+                return;
+            }
+
+            if (!sys.directoryExists(cachePath)) {
+                sys.createDirectory(cachePath);
+            }
             let tsd = require("tsd");
             let tsdJsonPath = ts.combinePaths(cachePath, 'tsd.json');
             let typingPath = ts.combinePaths(cachePath, 'typings');
@@ -949,11 +969,11 @@ namespace ts.server {
             cachedTypingPaths.forEach(p => addTypingToProject(p, project));
             project.projectService.updateProjectStructure();
 
-            this.log("New typings to download: " + newTypings);
-            if (newTypings && newTypings.length > 0) {
+            this.log("New typings to download: " + newTypingNames);
+            if (newTypingNames && newTypingNames.length > 0) {
                 let query = new tsd.Query();
-                for(let newTyping of newTypings) {
-                    query.addNamePattern(newTyping);
+                for(let newTypingName of newTypingNames) {
+                    query.addNamePattern(newTypingName);
                 }
                 
                 let promise: PromiseLike<void>;
@@ -1112,12 +1132,12 @@ namespace ts.server {
             // file references will be relative to dirPath (or absolute)
             var dirPath = ts.getDirectoryPath(configFilename);
             var contents = this.host.readFile(configFilename)
-            var rawConfig: { config?: ProjectOptions; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
+            var rawConfig: { config?: any; error?: Diagnostic; } = ts.parseConfigFileText(configFilename, contents);
             if (rawConfig.error) {
                 return { succeeded: false, error: rawConfig.error };
             }
             else {
-                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath);
+                var parsedCommandLine = ts.parseConfigFile(rawConfig.config, this.host, dirPath, configFilename);
                 if (parsedCommandLine.errors && (parsedCommandLine.errors.length > 0)) {
                     return { succeeded: false, error: { errorMsg: "tsconfig option errors" } };
                 }
@@ -1127,7 +1147,8 @@ namespace ts.server {
                 else {
                     var projectOptions: ProjectOptions = {
                         files: parsedCommandLine.fileNames,
-                        compilerOptions: parsedCommandLine.options
+                        compilerOptions: parsedCommandLine.options,
+                        typingOptions: parsedCommandLine.typingOptions
                     };
                     return { succeeded: true, projectOptions };
                 }

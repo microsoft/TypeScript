@@ -241,6 +241,10 @@ namespace ts {
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
+        },
+        {
+            name: "allowJs",
+            type: "boolean"
         }
     ];
 
@@ -407,14 +411,14 @@ namespace ts {
       * @param basePath A root directory to resolve relative path entries in the config
       *    file to. e.g. outDir
       */
-    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string): ParsedCommandLine {
+    export function parseConfigFile(json: any, host: ParseConfigHost, basePath: string, configFileName?: string): ParsedCommandLine {
         let errors: Diagnostic[] = [];
-
-        return {
-            options: getCompilerOptions(),
-            fileNames: getFileNames(),
-            errors
-        };
+        let isJsConfigFile = configFileName && ts.getBaseFileName(configFileName) === "jsconfig.json";
+        let options = getCompilerOptions();
+        let fileNames = getFileNames(options.allowJs);
+        let typingOptions = getTypingOptions();
+        
+        return { options, fileNames, typingOptions, errors };
 
         function getCompilerOptions(): CompilerOptions {
             let options: CompilerOptions = {};
@@ -422,6 +426,12 @@ namespace ts {
             forEach(optionDeclarations, option => {
                 optionNameMap[option.name] = option;
             });
+
+            // for jsConfig.json files, js files are always included
+            if (isJsConfigFile) {
+                options.allowJs = true;
+            }
+            
             let jsonOptions = json["compilerOptions"];
             if (jsonOptions) {
                 for (let id in jsonOptions) {
@@ -460,8 +470,36 @@ namespace ts {
             }
             return options;
         }
+        
+        function getTypingOptions(): TypingOptions {
+            let options: TypingOptions = { enableAutoDiscovery: false };
+            let jsonTypingOptions = json["typingOptions"];
+            if (jsonTypingOptions) {
+                for (let id in jsonTypingOptions) {
+                    if (id === "enableAutoDiscovery") {
+                        if (typeof jsonTypingOptions[id] === "boolean") {
+                            options.enableAutoDiscovery = jsonTypingOptions[id];
+                        }
+                        else {
+                            // Todo: add diagnostics
+                        }
+                    }
+                    else if (id === "include") {
+                        options.include = jsonTypingOptions[id] instanceof Array ? <string[]>jsonTypingOptions[id] : [];
+                    }
+                    else if (id === "exclude") {
+                        options.exclude = jsonTypingOptions[id] instanceof Array ? <string[]>jsonTypingOptions[id] : [];
+                    }
+                    else {
+                        // Todo: change diagnostics
+                        errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
+                    }
+                }
+            }
+            return options;
+        }
 
-        function getFileNames(): string[] {
+        function getFileNames(allowJs: boolean): string[] {
             let fileNames: string[] = [];
             if (hasProperty(json, "files")) {
                 if (json["files"] instanceof Array) {
@@ -472,10 +510,15 @@ namespace ts {
                 }
             }
             else {
-                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : undefined;
-                let sysFiles = host.readDirectory(basePath, ".ts", exclude)
-                    .concat(host.readDirectory(basePath, ".tsx", exclude))
-                    .concat(host.readDirectory(basePath, ".js", exclude));
+                let exclude = json["exclude"] instanceof Array ? map(<string[]>json["exclude"], normalizeSlashes) : [];
+                // For jsconfig file, node_modules folder should not be added to the project
+                if (isJsConfigFile) {
+                    exclude.push("node_modules");
+                }
+                let sysFiles = host.readDirectory(basePath, ".ts", exclude).concat(host.readDirectory(basePath, ".tsx", exclude));
+                if (allowJs) {
+                    sysFiles = sysFiles.concat(host.readDirectory(basePath, ".js", exclude));
+                }
                 for (let i = 0; i < sysFiles.length; i++) {
                     let name = sysFiles[i];
                     if (fileExtensionIs(name, ".d.ts")) {
