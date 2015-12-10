@@ -14310,8 +14310,9 @@ namespace ts {
                         continue;
                     }
                     const { declarations, flags } = exports[id];
+                    let declarationLength = declarations.length;
                     // ECMA262: 15.2.1.1 It is a Syntax Error if the ExportedNames of ModuleItemList contains any duplicate entries. (TS Exceptions: namespaces, function overloads, enums, and interfaces)
-                    if (!(flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) && declarations.length > 1) {
+                    if (!(flags & (SymbolFlags.Namespace | SymbolFlags.Interface | SymbolFlags.Enum)) && (flags & SymbolFlags.TypeAlias ? declarationLength-- : true) && declarationLength > 1) {
                         const exportedDeclarations: Declaration[] = filter(declarations, isNotOverload);
                         if (exportedDeclarations.length > 1) {
                             for (const declaration of exportedDeclarations) {
