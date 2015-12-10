@@ -28,7 +28,7 @@ var B = (function () {
         this.y = y;
     }
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C(y, z, w) {
@@ -39,4 +39,4 @@ var C = (function (_super) {
     C.prototype.liftxyz = function () { return x + z + this.y; };
     C.prototype.liftxylocllz = function () { return x + z + this.y + this.ll; };
     return C;
-})(B);
+}(B));

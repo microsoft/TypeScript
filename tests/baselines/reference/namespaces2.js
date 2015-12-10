@@ -16,7 +16,7 @@ var A;
             function C() {
             }
             return C;
-        })();
+        }());
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

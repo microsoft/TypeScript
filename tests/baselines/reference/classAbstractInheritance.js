@@ -31,65 +31,65 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));
 var AA = (function () {
     function AA() {
     }
     return AA;
-})();
+}());
 var BB = (function (_super) {
     __extends(BB, _super);
     function BB() {
         _super.apply(this, arguments);
     }
     return BB;
-})(AA);
+}(AA));
 var CC = (function (_super) {
     __extends(CC, _super);
     function CC() {
         _super.apply(this, arguments);
     }
     return CC;
-})(AA);
+}(AA));
 var DD = (function (_super) {
     __extends(DD, _super);
     function DD() {
         _super.apply(this, arguments);
     }
     return DD;
-})(BB);
+}(BB));
 var EE = (function (_super) {
     __extends(EE, _super);
     function EE() {
         _super.apply(this, arguments);
     }
     return EE;
-})(BB);
+}(BB));
 var FF = (function (_super) {
     __extends(FF, _super);
     function FF() {
         _super.apply(this, arguments);
     }
     return FF;
-})(CC);
+}(CC));
 var GG = (function (_super) {
     __extends(GG, _super);
     function GG() {
         _super.apply(this, arguments);
     }
     return GG;
-})(CC);
+}(CC));

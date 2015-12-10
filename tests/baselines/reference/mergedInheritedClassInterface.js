@@ -57,7 +57,7 @@ var BaseClass = (function () {
     }
     BaseClass.prototype.baseMethod = function () { };
     return BaseClass;
-})();
+}());
 var Child = (function (_super) {
     __extends(Child, _super);
     function Child() {
@@ -65,20 +65,20 @@ var Child = (function (_super) {
     }
     Child.prototype.method = function () { };
     return Child;
-})(BaseClass);
+}(BaseClass));
 var ChildNoBaseClass = (function () {
     function ChildNoBaseClass() {
     }
     ChildNoBaseClass.prototype.method2 = function () { };
     return ChildNoBaseClass;
-})();
+}());
 var Grandchild = (function (_super) {
     __extends(Grandchild, _super);
     function Grandchild() {
         _super.apply(this, arguments);
     }
     return Grandchild;
-})(ChildNoBaseClass);
+}(ChildNoBaseClass));
 // checks if properties actually were merged
 var child;
 child.required;

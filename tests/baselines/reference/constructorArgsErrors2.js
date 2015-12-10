@@ -11,4 +11,4 @@ var foo = (function () {
         this.a = a;
     }
     return foo;
-})();
+}());

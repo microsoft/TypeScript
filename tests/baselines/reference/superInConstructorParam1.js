@@ -23,11 +23,11 @@ var B = (function () {
         return 0;
     };
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C(a) {
         if (a === void 0) { a = _super.prototype.foo.call(this); }
     }
     return C;
-})(B);
+}(B));

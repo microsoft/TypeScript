@@ -34,7 +34,7 @@ var C = (function () {
     C.f = function () { return ''; };
     C.g = function () { return ''; };
     return C;
-})();
+}());
 var c = new C();
 var r1 = c.x;
 var r2 = c.a;

@@ -49,7 +49,7 @@ var MyClass = (function () {
     function MyClass() {
     }
     return MyClass;
-})();
+}());
 // Let's use it
 // TODO: Error on missing 'reqd'
 var b1 = <MyClass reqd={true}/>;

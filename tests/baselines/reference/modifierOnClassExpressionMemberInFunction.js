@@ -17,7 +17,7 @@ function g() {
         C.prototype.foo = function () { };
         C.prop2 = 43;
         return C;
-    })();
+    }());
 }
 
 

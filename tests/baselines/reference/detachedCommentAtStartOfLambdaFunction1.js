@@ -28,4 +28,4 @@ var TestFile = (function () {
         };
     };
     return TestFile;
-})();
+}());

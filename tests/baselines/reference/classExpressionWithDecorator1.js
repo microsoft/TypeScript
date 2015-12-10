@@ -17,5 +17,5 @@ var C = (function () {
         decorate
     ], C);
     return C;
-})();
+}());
 ;

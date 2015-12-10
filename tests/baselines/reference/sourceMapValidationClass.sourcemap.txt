@@ -340,7 +340,7 @@ sourceFile:sourceMapValidationClass.ts
 1->Emitted(26, 5) Source(18, 1) + SourceIndex(0)
 2 >Emitted(26, 19) Source(18, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

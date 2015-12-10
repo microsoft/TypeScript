@@ -187,7 +187,7 @@ var C2 = (function () {
         var a = _a[0], b = _a[1], c = _a[2];
     };
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3() {
     }
@@ -201,7 +201,7 @@ var C3 = (function () {
         var a = _a[0], b = _a[1], c = _a[2];
     };
     return C3;
-})();
+}());
 function d5(_a) {
     var _b = _a === void 0 ? { x: 1, y: 2 } : _a, x = _b.x, y = _b.y;
 }

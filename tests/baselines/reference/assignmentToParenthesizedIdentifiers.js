@@ -130,6 +130,6 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 C = undefined; // Error
 (C) = undefined; // Error

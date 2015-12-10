@@ -142,7 +142,7 @@ sourceFile:properties.ts
 1->Emitted(14, 5) Source(13, 1) + SourceIndex(0)
 2 >Emitted(14, 19) Source(13, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

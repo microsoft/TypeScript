@@ -8,10 +8,10 @@ var A = (function () {
     }
     A.prototype.foo = function () { return B.NULL; };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     B.NOT_NULL = new B();
     return B;
-})();
+}());

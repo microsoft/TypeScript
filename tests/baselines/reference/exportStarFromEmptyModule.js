@@ -29,7 +29,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
 // empty
@@ -44,7 +44,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";

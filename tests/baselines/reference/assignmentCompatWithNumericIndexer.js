@@ -54,7 +54,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var a;
 var b;
 a = b;
@@ -68,14 +68,14 @@ var Generics;
         function A() {
         }
         return A;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
             _super.apply(this, arguments);
         }
         return B;
-    })(A);
+    }(A));
     function foo() {
         var a;
         var b;

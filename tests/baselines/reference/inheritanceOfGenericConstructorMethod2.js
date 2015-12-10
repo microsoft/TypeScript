@@ -26,13 +26,13 @@ var M;
         function C1() {
         }
         return C1;
-    })();
+    }());
     M.C1 = C1;
     var C2 = (function () {
         function C2() {
         }
         return C2;
-    })();
+    }());
     M.C2 = C2;
 })(M || (M = {}));
 var N;
@@ -43,7 +43,7 @@ var N;
             _super.apply(this, arguments);
         }
         return D1;
-    })(M.C1);
+    }(M.C1));
     N.D1 = D1;
     var D2 = (function (_super) {
         __extends(D2, _super);
@@ -51,7 +51,7 @@ var N;
             _super.apply(this, arguments);
         }
         return D2;
-    })(M.C2);
+    }(M.C2));
     N.D2 = D2;
 })(N || (N = {}));
 var c = new M.C2(); // no error

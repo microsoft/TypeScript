@@ -20,4 +20,4 @@ var d = (function () {
     function d() {
     }
     return d;
-})();
+}());

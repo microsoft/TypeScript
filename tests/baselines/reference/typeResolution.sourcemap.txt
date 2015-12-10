@@ -774,7 +774,7 @@ sourceFile:typeResolution.ts
 1->Emitted(36, 21) Source(23, 13) + SourceIndex(0)
 2 >Emitted(36, 34) Source(23, 14) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -1328,7 +1328,7 @@ sourceFile:typeResolution.ts
 1->Emitted(69, 21) Source(46, 13) + SourceIndex(0)
 2 >Emitted(69, 34) Source(46, 14) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -1605,7 +1605,7 @@ sourceFile:typeResolution.ts
 1->Emitted(86, 21) Source(58, 13) + SourceIndex(0)
 2 >Emitted(86, 45) Source(58, 14) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -1930,7 +1930,7 @@ sourceFile:typeResolution.ts
 1->Emitted(104, 17) Source(73, 9) + SourceIndex(0)
 2 >Emitted(104, 30) Source(73, 10) + SourceIndex(0)
 ---
->>>            })();
+>>>            }());
 1 >^^^^^^^^^^^^
 2 >            ^
 3 >             
@@ -2200,7 +2200,7 @@ sourceFile:typeResolution.ts
 1 >Emitted(116, 21) Source(79, 59) + SourceIndex(0)
 2 >Emitted(116, 34) Source(79, 60) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -2276,7 +2276,7 @@ sourceFile:typeResolution.ts
 1 >Emitted(123, 21) Source(80, 59) + SourceIndex(0)
 2 >Emitted(123, 34) Source(80, 60) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -2352,7 +2352,7 @@ sourceFile:typeResolution.ts
 1 >Emitted(130, 21) Source(81, 59) + SourceIndex(0)
 2 >Emitted(130, 34) Source(81, 60) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -2515,7 +2515,7 @@ sourceFile:typeResolution.ts
 1 >Emitted(139, 13) Source(91, 5) + SourceIndex(0)
 2 >Emitted(139, 26) Source(91, 6) + SourceIndex(0)
 ---
->>>        })();
+>>>        }());
 1 >^^^^^^^^
 2 >        ^
 3 >         
@@ -2603,7 +2603,7 @@ sourceFile:typeResolution.ts
 1->Emitted(146, 17) Source(98, 31) + SourceIndex(0)
 2 >Emitted(146, 30) Source(98, 32) + SourceIndex(0)
 ---
->>>            })();
+>>>            }());
 1 >^^^^^^^^^^^^
 2 >            ^
 3 >             
@@ -2917,7 +2917,7 @@ sourceFile:typeResolution.ts
 1 >Emitted(159, 17) Source(106, 9) + SourceIndex(0)
 2 >Emitted(159, 30) Source(106, 10) + SourceIndex(0)
 ---
->>>            })();
+>>>            }());
 1 >^^^^^^^^^^^^
 2 >            ^
 3 >             

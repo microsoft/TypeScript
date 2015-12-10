@@ -34,7 +34,7 @@ var C1 = (function () {
     }
     C1.prototype.p2 = function () { };
     return C1;
-})();
+}());
 exports.C1 = C1;
 var C2 = (function () {
     function C2() {
@@ -42,7 +42,7 @@ var C2 = (function () {
     }
     C2.prototype.p2 = function () { };
     return C2;
-})();
+}());
 (function (E1) {
     E1[E1["A"] = 0] = "A";
 })(exports.E1 || (exports.E1 = {}));

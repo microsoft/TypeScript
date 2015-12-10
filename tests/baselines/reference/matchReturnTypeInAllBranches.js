@@ -62,6 +62,6 @@ var IceCreamMonster = (function () {
         }
     };
     return IceCreamMonster;
-})();
+}());
 var cookieMonster;
 cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");

@@ -18,4 +18,4 @@ var C = (function () {
         this.callback(function () { _this.p1 + 1; });
     };
     return C;
-})();
+}());

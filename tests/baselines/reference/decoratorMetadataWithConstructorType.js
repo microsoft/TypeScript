@@ -24,7 +24,7 @@ var A = (function () {
         console.log('new A');
     }
     return A;
-})();
+}());
 function decorator(target, propertyKey) {
 }
 var B = (function () {
@@ -36,5 +36,5 @@ var B = (function () {
         __metadata('design:type', A)
     ], B.prototype, "x", void 0);
     return B;
-})();
+}());
 exports.B = B;

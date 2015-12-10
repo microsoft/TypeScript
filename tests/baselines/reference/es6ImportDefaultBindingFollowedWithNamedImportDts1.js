@@ -25,7 +25,7 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [client.js]

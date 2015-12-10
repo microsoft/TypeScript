@@ -32,7 +32,7 @@ var C = (function () {
     }
     C.prototype.foo = function (x, y) { };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -40,7 +40,7 @@ var D = (function (_super) {
     }
     D.prototype.foo = function (x) { }; // ok to drop parameters
     return D;
-})(C);
+}(C));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -48,7 +48,7 @@ var E = (function (_super) {
     }
     E.prototype.foo = function (x, y) { }; // ok to add optional parameters
     return E;
-})(D);
+}(D));
 var c;
 var d;
 var e;

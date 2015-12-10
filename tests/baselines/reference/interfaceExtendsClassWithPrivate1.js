@@ -39,7 +39,7 @@ var C = (function () {
     }
     C.prototype.foo = function (x) { return x; };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -49,7 +49,7 @@ var D = (function (_super) {
     D.prototype.other = function (x) { return x; };
     D.prototype.bar = function () { };
     return D;
-})(C);
+}(C));
 var c;
 var i;
 var d;

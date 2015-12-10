@@ -22,7 +22,7 @@ var SomeBase = (function () {
         return 2;
     };
     return SomeBase;
-})();
+}());
 var P = (function (_super) {
     __extends(P, _super);
     function P() {
@@ -30,4 +30,4 @@ var P = (function (_super) {
     }
     P.SomeNumber = P.GetNumber();
     return P;
-})(SomeBase);
+}(SomeBase));

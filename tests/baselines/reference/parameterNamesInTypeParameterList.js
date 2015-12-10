@@ -50,4 +50,4 @@ var A = (function () {
         a.b;
     };
     return A;
-})();
+}());

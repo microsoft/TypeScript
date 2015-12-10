@@ -81,22 +81,22 @@ var A1 = (function () {
     function A1() {
     }
     return A1;
-})();
+}());
 var B1 = (function () {
     function B1() {
     }
     return B1;
-})();
+}());
 var A2 = (function () {
     function A2() {
     }
     return A2;
-})();
+}());
 var B2 = (function () {
     function B2() {
     }
     return B2;
-})();
+}());
 var a1;
 var b1;
 var a2;

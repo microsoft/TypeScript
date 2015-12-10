@@ -548,7 +548,7 @@ var TypeScript;
             this.goNextSibling = !stop;
         };
         return AstWalkOptions;
-    })();
+    }());
     TypeScript.AstWalkOptions = AstWalkOptions;
     var AstWalker = (function () {
         function AstWalker(childrenWalkers, pre, post, options, state) {
@@ -586,7 +586,7 @@ var TypeScript;
             }
         };
         return AstWalker;
-    })();
+    }());
     var AstWalkerFactory = (function () {
         function AstWalkerFactory() {
             this.childrenWalkers = [];
@@ -720,7 +720,7 @@ var TypeScript;
             }
         };
         return AstWalkerFactory;
-    })();
+    }());
     TypeScript.AstWalkerFactory = AstWalkerFactory;
     var globalAstWalkerFactory;
     function getAstWalkerFactory() {

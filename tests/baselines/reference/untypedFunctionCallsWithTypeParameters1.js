@@ -64,7 +64,7 @@ var C = (function () {
         this.caller = function () { };
     }
     return C;
-})();
+}());
 var c2;
 var r4 = c2(); // should be an error
 var C2 = (function (_super) {
@@ -73,7 +73,7 @@ var C2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C2;
-})(Function); // error
+}(Function)); // error
 var c3;
 var r5 = c3(); // error
 var z;

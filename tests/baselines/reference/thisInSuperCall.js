@@ -32,14 +32,14 @@ var Base = (function () {
     function Base(x) {
     }
     return Base;
-})();
+}());
 var Foo = (function (_super) {
     __extends(Foo, _super);
     function Foo() {
         _super.call(this, this); // no error
     }
     return Foo;
-})(Base);
+}(Base));
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
@@ -47,7 +47,7 @@ var Foo2 = (function (_super) {
         this.p = 0;
     }
     return Foo2;
-})(Base);
+}(Base));
 var Foo3 = (function (_super) {
     __extends(Foo3, _super);
     function Foo3(p) {
@@ -55,4 +55,4 @@ var Foo3 = (function (_super) {
         this.p = p;
     }
     return Foo3;
-})(Base);
+}(Base));

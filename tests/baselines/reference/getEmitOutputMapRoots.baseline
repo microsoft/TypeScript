@@ -7,5 +7,5 @@ var M = (function () {
     function M() {
     }
     return M;
-})();
+}());
 //# sourceMappingURL=tests/cases/fourslash/mapRootDir/declSingleFile.js.map

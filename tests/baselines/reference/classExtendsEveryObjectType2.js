@@ -15,11 +15,11 @@ var C2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C2;
-})({ foo: string }); // error
+}({ foo: string })); // error
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
         _super.apply(this, arguments);
     }
     return C6;
-})([]); // error
+}([])); // error

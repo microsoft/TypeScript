@@ -60,7 +60,7 @@ sourceFile:../projects/outputdir_module_multifolder/ref/m1.ts
 1->Emitted(7, 9) Source(4, 1) + SourceIndex(0)
 2 >Emitted(7, 21) Source(4, 2) + SourceIndex(0)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
@@ -227,7 +227,7 @@ sourceFile:../projects/outputdir_module_multifolder_ref/m2.ts
 1->Emitted(22, 9) Source(4, 1) + SourceIndex(1)
 2 >Emitted(22, 21) Source(4, 2) + SourceIndex(1)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
@@ -396,7 +396,7 @@ sourceFile:../projects/outputdir_module_multifolder/test.ts
 1->Emitted(37, 9) Source(6, 1) + SourceIndex(2)
 2 >Emitted(37, 18) Source(6, 2) + SourceIndex(2)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     

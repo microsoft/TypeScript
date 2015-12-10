@@ -13,4 +13,4 @@ var C = (function () {
         _super.prototype..call(this, 0);
     };
     return C;
-})();
+}());

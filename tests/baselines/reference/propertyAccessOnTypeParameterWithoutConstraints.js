@@ -41,7 +41,7 @@ var C = (function () {
         return a + x.toString();
     };
     return C;
-})();
+}());
 var r = (new C()).f();
 var i;
 var r2 = i.foo.toString();

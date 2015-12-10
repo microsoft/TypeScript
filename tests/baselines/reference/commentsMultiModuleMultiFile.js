@@ -47,7 +47,7 @@ define(["require", "exports"], function (require, exports) {
             function b() {
             }
             return b;
-        })();
+        }());
         multiM.b = b;
     })(multiM = exports.multiM || (exports.multiM = {}));
     /** thi is multi module 2*/
@@ -58,14 +58,14 @@ define(["require", "exports"], function (require, exports) {
             function c() {
             }
             return c;
-        })();
+        }());
         multiM.c = c;
         // class e comment
         var e = (function () {
             function e() {
             }
             return e;
-        })();
+        }());
         multiM.e = e;
     })(multiM = exports.multiM || (exports.multiM = {}));
     new multiM.b();
@@ -82,14 +82,14 @@ define(["require", "exports"], function (require, exports) {
             function d() {
             }
             return d;
-        })();
+        }());
         multiM.d = d;
         /// class f comment
         var f = (function () {
             function f() {
             }
             return f;
-        })();
+        }());
         multiM.f = f;
     })(multiM = exports.multiM || (exports.multiM = {}));
     new multiM.d();

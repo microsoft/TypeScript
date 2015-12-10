@@ -23,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
             this.name = 'one';
         }
         return Widget1;
-    })();
+    }());
     return Widget1;
 });
 //// [exporter.js]
