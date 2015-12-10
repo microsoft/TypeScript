@@ -14576,7 +14576,7 @@ namespace ts {
             return false;
         }
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags, includeAllGlobalSymbols: boolean): Symbol[] {
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags, includeGlobalSymbols: boolean): Symbol[] {
             const symbols: SymbolTable = {};
             let memberFlags: NodeFlags = 0;
 
@@ -14639,7 +14639,7 @@ namespace ts {
                     location = location.parent;
                 }
 
-                if (includeAllGlobalSymbols) {
+                if (includeGlobalSymbols) {
                     copySymbols(globals, meaning);
                 }
             }

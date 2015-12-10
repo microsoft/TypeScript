@@ -3114,9 +3114,11 @@ namespace ts {
             }
             else if (isRightOfOpenTag) {
                 let tagSymbols = typeChecker.getJsxIntrinsicTagNames();
-                // If the currect cursor is inside JSX opening tag, the only meaningful completions are those of JSX.IntrinsicElements or users defined React.Component
-                // If the services can't find those symbols, then show nothing instead of including all the global symbols in the completion list.
-                if (tryGetGlobalSymbols(/*includeAllGlobalSymbols*/false)) {
+                // In this case, we are handling completion list inside JSX opening tag. For example:
+                //      <d/**/
+                // the completion list should only contain JSX.instrinsicElements or users-defined React.Component
+                // those symbols of JSX.instrinsi
+                if (tryGetGlobalSymbols(/*includeGlobalSymbols*/ false)) {
                     symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
                 }
                 else {
@@ -3140,7 +3142,7 @@ namespace ts {
                 // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
                 // global symbols in scope.  These results should be valid for either language as
                 // the set of symbols that can be referenced from this location.
-                if (!tryGetGlobalSymbols(/*includeAllGlobalSymbols*/true)) {
+                if (!tryGetGlobalSymbols(/*includeGlobalSymbols*/ true)) {
                     return undefined;
                 }
             }
@@ -3200,7 +3202,7 @@ namespace ts {
                 }
             }
 
-            function tryGetGlobalSymbols(includeAllGlobalSymbols: boolean): boolean {
+            function tryGetGlobalSymbols(includeGlobalSymbols: boolean): boolean {
                 let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
                 let namedImportsOrExports: NamedImportsOrExports;
                 let jsxContainer: JsxOpeningLikeElement;
@@ -3271,7 +3273,7 @@ namespace ts {
 
                 /// TODO filter meaning based on the current context
                 let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings, includeAllGlobalSymbols);
+                symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings, includeGlobalSymbols);
 
                 return true;
             }
