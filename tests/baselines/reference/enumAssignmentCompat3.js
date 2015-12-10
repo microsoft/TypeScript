@@ -27,6 +27,16 @@ namespace Cd {
         c, d,
     }
 }
+namespace Const {
+    export const enum E {
+        a, b, c,
+    }
+}
+namespace Decl {
+    export declare enum E {
+        a, b, c = 3,
+    }
+}
 
 var abc: First.E;
 var secondAbc: Abc.E;
@@ -34,16 +44,24 @@ var secondAbcd: Abcd.E;
 var secondAb: Ab.E;
 var secondCd: Cd.E;
 var nope: Abc.Nope;
+var k: Const.E;
+var decl: Decl.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
 abc = secondCd; // missing 'd'
 abc = nope; // nope!
+abc = decl; // ok
 secondAbc = abc; // ok
 secondAbcd = abc; // ok
 secondAb = abc; // missing 'c'
 secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
+decl = abc; // ok
+
+k = k; // const is only assignable to itself
+abc = k; // error
+k = abc;
 
 
 //// [enumAssignmentCompat3.js]
@@ -97,19 +115,29 @@ var Cd;
     })(Cd.E || (Cd.E = {}));
     var E = Cd.E;
 })(Cd || (Cd = {}));
+var Decl;
+(function (Decl) {
+})(Decl || (Decl = {}));
 var abc;
 var secondAbc;
 var secondAbcd;
 var secondAb;
 var secondCd;
 var nope;
+var k;
+var decl;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
 abc = secondCd; // missing 'd'
 abc = nope; // nope!
+abc = decl; // ok
 secondAbc = abc; // ok
 secondAbcd = abc; // ok
 secondAb = abc; // missing 'c'
 secondCd = abc; // missing 'a' and 'b'
 nope = abc; // nope!
+decl = abc; // ok
+k = k; // const is only assignable to itself
+abc = k; // error
+k = abc;
