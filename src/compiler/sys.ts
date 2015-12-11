@@ -293,49 +293,49 @@ namespace ts {
                     removeFile: removeFile
                 };
             }
-            
+
             function createWatchedFileSet() {
-                let watchedDirectories: { [path: string]: FileWatcher } = {};
-                let watchedFiles: { [fileName: string]: (fileName: string, removed?: boolean) => void; } = {};
-                
+                const watchedDirectories: { [path: string]: FileWatcher } = {};
+                const watchedFiles: { [fileName: string]: (fileName: string, removed?: boolean) => void; } = {};
+
                 function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
                     const file: WatchedFile = { fileName, callback };
-                    let watchedPaths = Object.keys(watchedDirectories);
+                    const watchedPaths = Object.keys(watchedDirectories);
                     // Try to find parent paths that are already watched. If found, don't add directory watchers
-                    let watchedParentPaths = watchedPaths.filter(path => fileName.indexOf(path) === 0);
+                    const watchedParentPaths = watchedPaths.filter(path => fileName.indexOf(path) === 0);
                     // If adding new watchers, try to find children paths that are already watched. If found, close them. 
                     if (watchedParentPaths.length === 0) {
-                        let pathToWatch = ts.getDirectoryPath(fileName);
-                        for (let watchedPath in watchedDirectories) {
+                        const pathToWatch = ts.getDirectoryPath(fileName);
+                        for (const watchedPath in watchedDirectories) {
                             if (watchedPath.indexOf(pathToWatch) === 0) {
                                 watchedDirectories[watchedPath].close();
                                 delete watchedDirectories[watchedPath];
                             }
                         }
                         watchedDirectories[pathToWatch] = _fs.watch(
-                            pathToWatch, 
+                            pathToWatch,
                             (eventName: string, relativeFileName: string) => fileEventHandler(eventName, ts.normalizePath(ts.combinePaths(pathToWatch, relativeFileName)))
                         );
                     }
                     watchedFiles[fileName] = callback;
-                    return { fileName, callback }
+                    return { fileName, callback };
                 }
-                
+
                 function removeFile(file: WatchedFile) {
                     delete watchedFiles[file.fileName];
                 }
-                
+
                 function fileEventHandler(eventName: string, fileName: string) {
                     if (watchedFiles[fileName]) {
-                        let callback = watchedFiles[fileName];
+                        const callback = watchedFiles[fileName];
                         callback(fileName);
                     }
                 }
-                
+
                 return {
                     addFile: addFile,
                     removeFile: removeFile
-                }
+                };
             }
 
             // REVIEW: for now this implementation uses polling.
@@ -456,11 +456,9 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    // let fileSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
-                    let fileSet = pollingWatchedFileSet;
-                    const watchedFile = fileSet.addFile(fileName, callback);
+                    const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
                     return {
-                        close: () => fileSet.removeFile(watchedFile)
+                        close: () => pollingWatchedFileSet.removeFile(watchedFile)
                     };
                 },
                 watchDirectory: (path, callback, recursive) => {
