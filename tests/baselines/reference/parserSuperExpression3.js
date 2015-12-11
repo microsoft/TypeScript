@@ -13,4 +13,4 @@ var C = (function () {
         this.super(0);
     };
     return C;
-})();
+}());

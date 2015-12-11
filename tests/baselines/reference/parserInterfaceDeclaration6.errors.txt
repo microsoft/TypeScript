@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration6.ts(1,8): error TS1030: 'export' modifier already seen.
-tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration6.ts(1,25): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration6.ts(1,25): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration6.ts (2 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterface
            ~~~~~~
 !!! error TS1030: 'export' modifier already seen.
                             ~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     }

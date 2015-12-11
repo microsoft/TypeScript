@@ -171,7 +171,7 @@ var _loop_1 = function(x) {
             return x_1 + 1;
         };
         return A;
-    })();
+    }());
 };
 for (var x = 0; x < 1; ++x) {
     _loop_1(x);
@@ -280,7 +280,7 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 function foo3() {
     var x = arguments.length;
     var _loop_6 = function(y) {

@@ -11,4 +11,4 @@ var C = (function () {
     C.prototype.foo = function (x) {
     };
     return C;
-})();
+}());

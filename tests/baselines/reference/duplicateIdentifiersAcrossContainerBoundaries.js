@@ -59,7 +59,7 @@ var M;
         function I() {
         }
         return I;
-    })();
+    }());
     M.I = I;
 })(M || (M = {}));
 var M;
@@ -73,7 +73,7 @@ var M;
         function f() {
         }
         return f;
-    })();
+    }());
     M.f = f; // error
 })(M || (M = {}));
 var M;
@@ -86,7 +86,7 @@ var M;
         function g() {
         }
         return g;
-    })();
+    }());
     M.g = g; // no error
 })(M || (M = {}));
 var M;
@@ -95,7 +95,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var M;
@@ -114,7 +114,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var Foo;
 (function (Foo) {
 })(Foo || (Foo = {}));

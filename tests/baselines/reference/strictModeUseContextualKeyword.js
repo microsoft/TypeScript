@@ -22,7 +22,7 @@ var C = (function () {
     }
     C.prototype.as = function () { };
     return C;
-})();
+}());
 function F() {
     function as() { }
 }

@@ -15,4 +15,4 @@ var C = (function () {
         var v = foo(public, blaz(), {});
     };
     return C;
-})();
+}());

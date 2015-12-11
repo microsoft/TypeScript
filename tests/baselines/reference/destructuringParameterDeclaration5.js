@@ -61,26 +61,26 @@ var Class = (function () {
     function Class() {
     }
     return Class;
-})();
+}());
 var SubClass = (function (_super) {
     __extends(SubClass, _super);
     function SubClass() {
         _super.call(this);
     }
     return SubClass;
-})(Class);
+}(Class));
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var SubD = (function (_super) {
     __extends(SubD, _super);
     function SubD() {
         _super.call(this);
     }
     return SubD;
-})(D);
+}(D));
 function d0(_a) {
     var x = (_a === void 0 ? { x: new Class() } : _a).x;
 }

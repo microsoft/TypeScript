@@ -12,6 +12,6 @@ var M;
         function ClassA() {
         }
         return ClassA;
-    })();
+    }());
 })(M || (M = {}));
 var t = new M.ClassA[];

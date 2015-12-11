@@ -12,6 +12,6 @@ var Foo = (function () {
         this.privProp = 0;
     }
     return Foo;
-})();
+}());
 var f = new Foo();
 f.privProp;

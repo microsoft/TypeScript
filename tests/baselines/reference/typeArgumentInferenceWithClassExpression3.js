@@ -11,7 +11,7 @@ function foo(x) {
         function class_1() {
         }
         return class_1;
-    })(); }
+    }()); }
     return undefined;
 }
 foo((function () {
@@ -19,4 +19,4 @@ foo((function () {
         this.prop = "hello";
     }
     return class_2;
-})()).length;
+}())).length;

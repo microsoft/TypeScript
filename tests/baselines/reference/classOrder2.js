@@ -32,12 +32,12 @@ var A = (function (_super) {
     }
     A.prototype.foo = function () { this.bar(); };
     return A;
-})(B);
+}(B));
 var B = (function () {
     function B() {
     }
     B.prototype.bar = function () { };
     return B;
-})();
+}());
 var a = new A();
 a.foo();

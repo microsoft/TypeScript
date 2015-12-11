@@ -20,6 +20,6 @@ var M;
             [1, 2, 3].map(function (x) { return _this.n * x; });
         };
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));

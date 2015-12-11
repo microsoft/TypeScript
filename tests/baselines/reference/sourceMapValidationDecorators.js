@@ -120,5 +120,5 @@ var Greeter = (function () {
         __param(1, ParameterDecorator2(30))
     ], Greeter);
     return Greeter;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationDecorators.js.map

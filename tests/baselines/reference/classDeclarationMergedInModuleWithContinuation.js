@@ -23,7 +23,7 @@ var M;
         function N() {
         }
         return N;
-    })();
+    }());
     M.N = N;
     var N;
     (function (N) {
@@ -38,6 +38,6 @@ var M;
             _super.apply(this, arguments);
         }
         return O;
-    })(M.N);
+    }(M.N));
     M.O = O;
 })(M || (M = {}));

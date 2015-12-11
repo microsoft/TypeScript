@@ -24,7 +24,7 @@ var __test2__;
             this.one = one;
         }
         return classWithPrivate;
-    })();
+    }());
     __test2__.classWithPrivate = classWithPrivate;
     var x5 = new classWithPrivate(1);
     ;

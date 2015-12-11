@@ -2381,7 +2381,7 @@ var TypeScript;
             this.limChar = -1; // -1 = "undefined" or "compiler generated"   
         }
         return ASTSpan;
-    })();
+    }());
     TypeScript.ASTSpan = ASTSpan;
     var AST = (function (_super) {
         __extends(AST, _super);
@@ -2537,7 +2537,7 @@ var TypeScript;
             return resolved;
         };
         return AST;
-    })(ASTSpan);
+    }(ASTSpan));
     TypeScript.AST = AST;
     var IncompleteAST = (function (_super) {
         __extends(IncompleteAST, _super);
@@ -2547,7 +2547,7 @@ var TypeScript;
             this.limChar = lim;
         }
         return IncompleteAST;
-    })(AST);
+    }(AST));
     TypeScript.IncompleteAST = IncompleteAST;
     var ASTList = (function (_super) {
         __extends(ASTList, _super);
@@ -2602,7 +2602,7 @@ var TypeScript;
             return this;
         };
         return ASTList;
-    })(AST);
+    }(AST));
     TypeScript.ASTList = ASTList;
     var Identifier = (function (_super) {
         __extends(Identifier, _super);
@@ -2658,7 +2658,7 @@ var TypeScript;
             return new Identifier(token.getText(), token.hasEscapeSequence);
         };
         return Identifier;
-    })(AST);
+    }(AST));
     TypeScript.Identifier = Identifier;
     var MissingIdentifier = (function (_super) {
         __extends(MissingIdentifier, _super);
@@ -2672,7 +2672,7 @@ var TypeScript;
             // Emit nothing for a missing ID
         };
         return MissingIdentifier;
-    })(Identifier);
+    }(Identifier));
     TypeScript.MissingIdentifier = MissingIdentifier;
     var Label = (function (_super) {
         __extends(Label, _super);
@@ -2696,7 +2696,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return Label;
-    })(AST);
+    }(AST));
     TypeScript.Label = Label;
     var Expression = (function (_super) {
         __extends(Expression, _super);
@@ -2706,7 +2706,7 @@ var TypeScript;
         Expression.prototype.isExpression = function () { return true; };
         Expression.prototype.isStatementOrExpression = function () { return true; };
         return Expression;
-    })(AST);
+    }(AST));
     TypeScript.Expression = Expression;
     var UnaryExpression = (function (_super) {
         __extends(UnaryExpression, _super);
@@ -2850,7 +2850,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return UnaryExpression;
-    })(Expression);
+    }(Expression));
     TypeScript.UnaryExpression = UnaryExpression;
     var CallExpression = (function (_super) {
         __extends(CallExpression, _super);
@@ -2882,7 +2882,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return CallExpression;
-    })(Expression);
+    }(Expression));
     TypeScript.CallExpression = CallExpression;
     var BinaryExpression = (function (_super) {
         __extends(BinaryExpression, _super);
@@ -3034,7 +3034,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return BinaryExpression;
-    })(Expression);
+    }(Expression));
     TypeScript.BinaryExpression = BinaryExpression;
     var ConditionalExpression = (function (_super) {
         __extends(ConditionalExpression, _super);
@@ -3059,7 +3059,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return ConditionalExpression;
-    })(Expression);
+    }(Expression));
     TypeScript.ConditionalExpression = ConditionalExpression;
     var NumberLiteral = (function (_super) {
         __extends(NumberLiteral, _super);
@@ -3100,7 +3100,7 @@ var TypeScript;
             }
         };
         return NumberLiteral;
-    })(Expression);
+    }(Expression));
     TypeScript.NumberLiteral = NumberLiteral;
     var RegexLiteral = (function (_super) {
         __extends(RegexLiteral, _super);
@@ -3120,7 +3120,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return RegexLiteral;
-    })(Expression);
+    }(Expression));
     TypeScript.RegexLiteral = RegexLiteral;
     var StringLiteral = (function (_super) {
         __extends(StringLiteral, _super);
@@ -3146,7 +3146,7 @@ var TypeScript;
             return this.text;
         };
         return StringLiteral;
-    })(Expression);
+    }(Expression));
     TypeScript.StringLiteral = StringLiteral;
     var ModuleElement = (function (_super) {
         __extends(ModuleElement, _super);
@@ -3154,7 +3154,7 @@ var TypeScript;
             _super.call(this, nodeType);
         }
         return ModuleElement;
-    })(AST);
+    }(AST));
     TypeScript.ModuleElement = ModuleElement;
     var ImportDeclaration = (function (_super) {
         __extends(ImportDeclaration, _super);
@@ -3213,7 +3213,7 @@ var TypeScript;
             }
         };
         return ImportDeclaration;
-    })(ModuleElement);
+    }(ModuleElement));
     TypeScript.ImportDeclaration = ImportDeclaration;
     var BoundDecl = (function (_super) {
         __extends(BoundDecl, _super);
@@ -3237,7 +3237,7 @@ var TypeScript;
             return this.treeViewLabel();
         };
         return BoundDecl;
-    })(AST);
+    }(AST));
     TypeScript.BoundDecl = BoundDecl;
     var VarDecl = (function (_super) {
         __extends(VarDecl, _super);
@@ -3254,7 +3254,7 @@ var TypeScript;
             return "var " + this.id.actualText;
         };
         return VarDecl;
-    })(BoundDecl);
+    }(BoundDecl));
     TypeScript.VarDecl = VarDecl;
     var ArgDecl = (function (_super) {
         __extends(ArgDecl, _super);
@@ -3275,7 +3275,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return ArgDecl;
-    })(BoundDecl);
+    }(BoundDecl));
     TypeScript.ArgDecl = ArgDecl;
     var internalId = 0;
     var FuncDecl = (function (_super) {
@@ -3406,7 +3406,7 @@ var TypeScript;
         FuncDecl.prototype.isSignature = function () { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; };
         FuncDecl.prototype.hasStaticDeclarations = function () { return (!this.isConstructor && (this.statics.members.length > 0 || this.innerStaticFuncs.length > 0)); };
         return FuncDecl;
-    })(AST);
+    }(AST));
     TypeScript.FuncDecl = FuncDecl;
     var LocationInfo = (function () {
         function LocationInfo(filename, lineMap, unitIndex) {
@@ -3415,7 +3415,7 @@ var TypeScript;
             this.unitIndex = unitIndex;
         }
         return LocationInfo;
-    })();
+    }());
     TypeScript.LocationInfo = LocationInfo;
     TypeScript.unknownLocationInfo = new LocationInfo("unknown", null, -1);
     var Script = (function (_super) {
@@ -3485,7 +3485,7 @@ var TypeScript;
             }
         };
         return Script;
-    })(FuncDecl);
+    }(FuncDecl));
     TypeScript.Script = Script;
     var NamedDeclaration = (function (_super) {
         __extends(NamedDeclaration, _super);
@@ -3497,7 +3497,7 @@ var TypeScript;
             this.rightCurlyCount = 0;
         }
         return NamedDeclaration;
-    })(ModuleElement);
+    }(ModuleElement));
     TypeScript.NamedDeclaration = NamedDeclaration;
     var ModuleDeclaration = (function (_super) {
         __extends(ModuleDeclaration, _super);
@@ -3532,7 +3532,7 @@ var TypeScript;
             }
         };
         return ModuleDeclaration;
-    })(NamedDeclaration);
+    }(NamedDeclaration));
     TypeScript.ModuleDeclaration = ModuleDeclaration;
     var TypeDeclaration = (function (_super) {
         __extends(TypeDeclaration, _super);
@@ -3549,7 +3549,7 @@ var TypeScript;
             return hasFlag(this.varFlags, VarFlags.Ambient);
         };
         return TypeDeclaration;
-    })(NamedDeclaration);
+    }(NamedDeclaration));
     TypeScript.TypeDeclaration = TypeDeclaration;
     var ClassDeclaration = (function (_super) {
         __extends(ClassDeclaration, _super);
@@ -3567,7 +3567,7 @@ var TypeScript;
             emitter.emitJavascriptClass(this);
         };
         return ClassDeclaration;
-    })(TypeDeclaration);
+    }(TypeDeclaration));
     TypeScript.ClassDeclaration = ClassDeclaration;
     var InterfaceDeclaration = (function (_super) {
         __extends(InterfaceDeclaration, _super);
@@ -3580,7 +3580,7 @@ var TypeScript;
         InterfaceDeclaration.prototype.emit = function (emitter, tokenId, startLine) {
         };
         return InterfaceDeclaration;
-    })(TypeDeclaration);
+    }(TypeDeclaration));
     TypeScript.InterfaceDeclaration = InterfaceDeclaration;
     var Statement = (function (_super) {
         __extends(Statement, _super);
@@ -3596,7 +3596,7 @@ var TypeScript;
             return this;
         };
         return Statement;
-    })(ModuleElement);
+    }(ModuleElement));
     TypeScript.Statement = Statement;
     var LabeledStatement = (function (_super) {
         __extends(LabeledStatement, _super);
@@ -3630,7 +3630,7 @@ var TypeScript;
             beforeBB.addSuccessor(bb);
         };
         return LabeledStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.LabeledStatement = LabeledStatement;
     var Block = (function (_super) {
         __extends(Block, _super);
@@ -3685,7 +3685,7 @@ var TypeScript;
             return this;
         };
         return Block;
-    })(Statement);
+    }(Statement));
     TypeScript.Block = Block;
     var Jump = (function (_super) {
         __extends(Jump, _super);
@@ -3736,7 +3736,7 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return Jump;
-    })(Statement);
+    }(Statement));
     TypeScript.Jump = Jump;
     var WhileStatement = (function (_super) {
         __extends(WhileStatement, _super);
@@ -3788,7 +3788,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return WhileStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.WhileStatement = WhileStatement;
     var DoWhileStatement = (function (_super) {
         __extends(DoWhileStatement, _super);
@@ -3844,7 +3844,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return DoWhileStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.DoWhileStatement = DoWhileStatement;
     var IfStatement = (function (_super) {
         __extends(IfStatement, _super);
@@ -3922,7 +3922,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return IfStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.IfStatement = IfStatement;
     var ReturnStatement = (function (_super) {
         __extends(ReturnStatement, _super);
@@ -3953,7 +3953,7 @@ var TypeScript;
             return typeFlow.typeCheckReturn(this);
         };
         return ReturnStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.ReturnStatement = ReturnStatement;
     var EndCode = (function (_super) {
         __extends(EndCode, _super);
@@ -3961,7 +3961,7 @@ var TypeScript;
             _super.call(this, NodeType.EndCode);
         }
         return EndCode;
-    })(AST);
+    }(AST));
     TypeScript.EndCode = EndCode;
     var ForInStatement = (function (_super) {
         __extends(ForInStatement, _super);
@@ -4076,7 +4076,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return ForInStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.ForInStatement = ForInStatement;
     var ForStatement = (function (_super) {
         __extends(ForStatement, _super);
@@ -4167,7 +4167,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return ForStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.ForStatement = ForStatement;
     var WithStatement = (function (_super) {
         __extends(WithStatement, _super);
@@ -4193,7 +4193,7 @@ var TypeScript;
             return typeFlow.typeCheckWith(this);
         };
         return WithStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.WithStatement = WithStatement;
     var SwitchStatement = (function (_super) {
         __extends(SwitchStatement, _super);
@@ -4265,7 +4265,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return SwitchStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.SwitchStatement = SwitchStatement;
     var CaseStatement = (function (_super) {
         __extends(CaseStatement, _super);
@@ -4318,7 +4318,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return CaseStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.CaseStatement = CaseStatement;
     var TypeReference = (function (_super) {
         __extends(TypeReference, _super);
@@ -4348,7 +4348,7 @@ var TypeScript;
             return this;
         };
         return TypeReference;
-    })(AST);
+    }(AST));
     TypeScript.TypeReference = TypeReference;
     var TryFinally = (function (_super) {
         __extends(TryFinally, _super);
@@ -4393,7 +4393,7 @@ var TypeScript;
             context.walker.options.goChildren = false;
         };
         return TryFinally;
-    })(Statement);
+    }(Statement));
     TypeScript.TryFinally = TryFinally;
     var TryCatch = (function (_super) {
         __extends(TryCatch, _super);
@@ -4443,7 +4443,7 @@ var TypeScript;
             return this;
         };
         return TryCatch;
-    })(Statement);
+    }(Statement));
     TypeScript.TryCatch = TryCatch;
     var Try = (function (_super) {
         __extends(Try, _super);
@@ -4471,7 +4471,7 @@ var TypeScript;
             context.noContinuation = false;
         };
         return Try;
-    })(Statement);
+    }(Statement));
     TypeScript.Try = Try;
     var Catch = (function (_super) {
         __extends(Catch, _super);
@@ -4544,7 +4544,7 @@ var TypeScript;
             return this;
         };
         return Catch;
-    })(Statement);
+    }(Statement));
     TypeScript.Catch = Catch;
     var Finally = (function (_super) {
         __extends(Finally, _super);
@@ -4572,7 +4572,7 @@ var TypeScript;
             return this;
         };
         return Finally;
-    })(Statement);
+    }(Statement));
     TypeScript.Finally = Finally;
     var Comment = (function (_super) {
         __extends(Comment, _super);
@@ -4598,7 +4598,7 @@ var TypeScript;
             return this.text;
         };
         return Comment;
-    })(AST);
+    }(AST));
     TypeScript.Comment = Comment;
     var DebuggerStatement = (function (_super) {
         __extends(DebuggerStatement, _super);
@@ -4613,6 +4613,6 @@ var TypeScript;
             emitter.emitParensAndCommentsInPlace(this, false);
         };
         return DebuggerStatement;
-    })(Statement);
+    }(Statement));
     TypeScript.DebuggerStatement = DebuggerStatement;
 })(TypeScript || (TypeScript = {}));

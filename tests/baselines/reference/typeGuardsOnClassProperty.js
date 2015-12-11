@@ -44,7 +44,7 @@ var D = (function () {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
     };
     return D;
-})();
+}());
 var o = {
     prop1: "string",
     prop2: true

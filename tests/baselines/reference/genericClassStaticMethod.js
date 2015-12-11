@@ -22,7 +22,7 @@ var Foo = (function () {
     Foo.getFoo = function () {
     };
     return Foo;
-})();
+}());
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
@@ -31,4 +31,4 @@ var Bar = (function (_super) {
     Bar.getFoo = function () {
     };
     return Bar;
-})(Foo);
+}(Foo));

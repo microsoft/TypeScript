@@ -13,4 +13,4 @@ var cls = (function () {
     }
     class_1.prototype.doThing = function () { };
     return class_1;
-})();
+}());

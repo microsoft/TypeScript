@@ -58,7 +58,7 @@ define(["require", "exports"], function (require, exports) {
         function c_public() {
         }
         return c_public;
-    })();
+    }());
     exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
@@ -68,7 +68,7 @@ define(["require", "exports"], function (require, exports) {
         function c_public() {
         }
         return c_public;
-    })();
+    }());
     exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]

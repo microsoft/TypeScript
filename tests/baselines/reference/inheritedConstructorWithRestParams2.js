@@ -44,26 +44,26 @@ var IBaseBase = (function () {
     function IBaseBase(x) {
     }
     return IBaseBase;
-})();
+}());
 var BaseBase2 = (function () {
     function BaseBase2(x) {
     }
     return BaseBase2;
-})();
+}());
 var Base = (function (_super) {
     __extends(Base, _super);
     function Base() {
         _super.apply(this, arguments);
     }
     return Base;
-})(BaseBase);
+}(BaseBase));
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));
 // Ok
 new Derived("", "");
 new Derived("", 3);

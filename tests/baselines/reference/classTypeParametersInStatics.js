@@ -60,6 +60,6 @@ var Editor;
             return entry;
         };
         return List;
-    })();
+    }());
     Editor.List = List;
 })(Editor || (Editor = {}));

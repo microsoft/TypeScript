@@ -39,19 +39,19 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 function f() { }
 var v = 3;
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var N;
 (function (N) {
     var F;
@@ -64,13 +64,13 @@ var I = (function () {
     function I() {
     }
     return I;
-})(); // error -- cannot merge interface with non-ambient class
+}()); // error -- cannot merge interface with non-ambient class
 function C2() { } // error -- cannot merge function with non-ambient class
 var f = (function () {
     function f() {
     }
     return f;
-})(); // error -- cannot merge function with non-ambient class
+}()); // error -- cannot merge function with non-ambient class
 var v = 3;
 var Foo;
 (function (Foo) {

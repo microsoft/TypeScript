@@ -13,4 +13,4 @@ var Bar = (function () {
         return new Bar(0);
     };
     return Bar;
-})();
+}());

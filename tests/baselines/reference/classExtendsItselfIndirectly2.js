@@ -34,7 +34,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(N.E); // error
+}(N.E)); // error
 var M;
 (function (M) {
     var D = (function (_super) {
@@ -43,7 +43,7 @@ var M;
             _super.apply(this, arguments);
         }
         return D;
-    })(C);
+    }(C));
     M.D = D;
 })(M || (M = {}));
 var N;
@@ -54,7 +54,7 @@ var N;
             _super.apply(this, arguments);
         }
         return E;
-    })(M.D);
+    }(M.D));
     N.E = E;
 })(N || (N = {}));
 var O;
@@ -65,7 +65,7 @@ var O;
             _super.apply(this, arguments);
         }
         return C2;
-    })(Q.E2); // error
+    }(Q.E2)); // error
     var P;
     (function (P) {
         var D2 = (function (_super) {
@@ -74,7 +74,7 @@ var O;
                 _super.apply(this, arguments);
             }
             return D2;
-        })(C2);
+        }(C2));
         P.D2 = D2;
     })(P || (P = {}));
     var Q;
@@ -85,7 +85,7 @@ var O;
                 _super.apply(this, arguments);
             }
             return E2;
-        })(P.D2);
+        }(P.D2));
         Q.E2 = E2;
     })(Q || (Q = {}));
 })(O || (O = {}));

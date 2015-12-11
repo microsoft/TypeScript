@@ -30,7 +30,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(E); // error
+}(E)); // error
 //// [classExtendsItselfIndirectly_file2.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -43,7 +43,7 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 //// [classExtendsItselfIndirectly_file3.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -56,7 +56,7 @@ var E = (function (_super) {
         _super.apply(this, arguments);
     }
     return E;
-})(D);
+}(D));
 //// [classExtendsItselfIndirectly_file4.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -69,7 +69,7 @@ var C2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C2;
-})(E2); // error
+}(E2)); // error
 //// [classExtendsItselfIndirectly_file5.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -82,7 +82,7 @@ var D2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return D2;
-})(C2);
+}(C2));
 //// [classExtendsItselfIndirectly_file6.js]
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -95,4 +95,4 @@ var E2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return E2;
-})(D2);
+}(D2));

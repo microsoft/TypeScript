@@ -17,7 +17,7 @@ var Promise = (function () {
     function Promise() {
     }
     return Promise;
-})();
+}());
 exports.Promise = Promise;
 //// [moduleInTypePosition1_1.js]
 "use strict";

@@ -61,19 +61,19 @@ var SomeBase = (function () {
     function SomeBase() {
     }
     return SomeBase;
-})();
+}());
 var SomeDerived = (function (_super) {
     __extends(SomeDerived, _super);
     function SomeDerived() {
         _super.apply(this, arguments);
     }
     return SomeDerived;
-})(SomeBase);
+}(SomeBase));
 var SomeOther = (function () {
     function SomeOther() {
     }
     return SomeOther;
-})();
+}());
 // Type assertion should check for assignability in either direction
 var someBase = new SomeBase();
 var someDerived = new SomeDerived();

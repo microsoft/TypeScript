@@ -12,7 +12,7 @@ function foo(x) {
         function class_1() {
         }
         return class_1;
-    })(); }
+    }()); }
     return undefined;
 }
 // Should not infer string because it is a static property
@@ -21,4 +21,4 @@ foo((function () {
     }
     class_2.prop = "hello";
     return class_2;
-})()).length;
+}())).length;

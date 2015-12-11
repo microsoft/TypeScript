@@ -16,7 +16,7 @@ var m;
         function c() {
         }
         return c;
-    })();
+    }());
     m.c = c;
 })(m = exports.m || (exports.m = {}));
 var a = m.c;

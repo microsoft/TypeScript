@@ -47,14 +47,14 @@ var Red = (function (_super) {
         return getHue() + " red";
     };
     return Red;
-})(Color);
+}(Color));
 var Color = (function () {
     function Color() {
     }
     Color.prototype.shade = function () { return "some shade"; };
     Color.prototype.hue = function () { return "some hue"; };
     return Color;
-})();
+}());
 var Blue = (function (_super) {
     __extends(Blue, _super);
     function Blue() {
@@ -66,7 +66,7 @@ var Blue = (function (_super) {
         return getHue() + " blue";
     };
     return Blue;
-})(Color);
+}(Color));
 var r = new Red();
 var b = new Blue();
 r.shade();

@@ -34,7 +34,7 @@ var Bar = (function () {
         return new Bar(this.size);
     };
     return Bar;
-})();
+}());
 var b;
 var b2 = b.clone();
 var b3;

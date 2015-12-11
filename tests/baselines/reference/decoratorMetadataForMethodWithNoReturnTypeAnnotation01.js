@@ -27,4 +27,4 @@ var MyClass = (function () {
         __metadata('design:returntype', void 0)
     ], MyClass.prototype, "doSomething", null);
     return MyClass;
-})();
+}());

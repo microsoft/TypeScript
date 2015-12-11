@@ -43,7 +43,7 @@ var CBase = (function () {
     CBase.prototype.foo = function (param) {
     };
     return CBase;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -63,4 +63,4 @@ var C = (function (_super) {
         });
     }
     return C;
-})(CBase);
+}(CBase));

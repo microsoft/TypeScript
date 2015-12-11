@@ -211,7 +211,7 @@ var Base = (function () {
     }
     Base.prototype.foo = function () { };
     return Base;
-})();
+}());
 var anyVar;
 //
 // Property signatures

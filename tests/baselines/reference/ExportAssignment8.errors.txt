@@ -1,4 +1,4 @@
-tests/cases/compiler/ExportAssignment8.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/ExportAssignment8.ts(1,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/ExportAssignment8.ts(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 tests/cases/compiler/ExportAssignment8.ts(1,10): error TS2304: Cannot find name 'B'.
 
@@ -6,7 +6,7 @@ tests/cases/compiler/ExportAssignment8.ts(1,10): error TS2304: Cannot find name 
 ==== tests/cases/compiler/ExportAssignment8.ts (3 errors) ====
     export = B;
     ~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     ~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
              ~
