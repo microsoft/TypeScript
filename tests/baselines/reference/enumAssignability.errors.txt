@@ -20,7 +20,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(43,9): error TS2322: Type 'E' is not assignable to type '<T>(x: T) => T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(45,9): error TS2322: Type 'E' is not assignable to type 'String'.
   Property 'charAt' is missing in type 'Number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(47,21): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(48,9): error TS2322: Type 'E' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(49,9): error TS2322: Type 'E' is not assignable to type 'U'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(50,9): error TS2322: Type 'E' is not assignable to type 'V'.
@@ -28,7 +27,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(52,13): error TS2322: Type 'E' is not assignable to type 'B'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (21 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (20 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     
     enum E { A }
@@ -113,8 +112,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
 !!! error TS2322:   Property 'charAt' is missing in type 'Number'.
     
         function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
-                        ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             x = e;
             ~
 !!! error TS2322: Type 'E' is not assignable to type 'T'.

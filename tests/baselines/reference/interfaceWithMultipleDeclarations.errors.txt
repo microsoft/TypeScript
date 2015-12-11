@@ -1,9 +1,7 @@
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(3,11): error TS2428: All declarations of an interface must have identical type parameters.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(5,11): error TS2428: All declarations of an interface must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(5,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(7,11): error TS2428: All declarations of an interface must have identical type parameters.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(9,11): error TS2428: All declarations of an interface must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(9,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(11,11): error TS2428: All declarations of an interface must have identical type parameters.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(16,11): error TS2428: All declarations of an interface must have identical type parameters.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(18,11): error TS2428: All declarations of an interface must have identical type parameters.
@@ -11,11 +9,9 @@ tests/cases/compiler/interfaceWithMultipleDeclarations.ts(20,11): error TS2428: 
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(22,11): error TS2428: All declarations of an interface must have identical type parameters.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(24,11): error TS2428: All declarations of an interface must have identical type parameters.
 tests/cases/compiler/interfaceWithMultipleDeclarations.ts(29,11): error TS2428: All declarations of an interface must have identical type parameters.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(34,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/interfaceWithMultipleDeclarations.ts(36,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/compiler/interfaceWithMultipleDeclarations.ts (15 errors) ====
+==== tests/cases/compiler/interfaceWithMultipleDeclarations.ts (11 errors) ====
     interface I1<V> {
     }
     interface I1<S> { // Name mismatch
@@ -25,8 +21,6 @@ tests/cases/compiler/interfaceWithMultipleDeclarations.ts(36,14): error TS2313: 
     interface I1<T, U extends T> { // Length mismatch
               ~~
 !!! error TS2428: All declarations of an interface must have identical type parameters.
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     interface I1<V extends string> { // constraint present
               ~~
@@ -35,8 +29,6 @@ tests/cases/compiler/interfaceWithMultipleDeclarations.ts(36,14): error TS2313: 
     interface I1<V, X extends V> { // Length mismatch
               ~~
 !!! error TS2428: All declarations of an interface must have identical type parameters.
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     interface I1 { // Length mismatch
               ~~
@@ -76,10 +68,6 @@ tests/cases/compiler/interfaceWithMultipleDeclarations.ts(36,14): error TS2313: 
     class Foo<T> {
     }
     interface I4<T extends Foo<T>> {
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     interface I4<T extends Foo<T>> { // Should not be error
-                 ~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
