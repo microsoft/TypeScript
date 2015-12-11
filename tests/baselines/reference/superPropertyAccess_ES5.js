@@ -45,7 +45,7 @@ var MyBase = (function () {
         configurable: true
     });
     return MyBase;
-})();
+}());
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
@@ -54,7 +54,7 @@ var MyDerived = (function (_super) {
         var f2 = _super.prototype.value;
     }
     return MyDerived;
-})(MyBase);
+}(MyBase));
 var d = new MyDerived();
 var f3 = d.value;
 var A = (function () {
@@ -67,7 +67,7 @@ var A = (function () {
         configurable: true
     });
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -81,4 +81,4 @@ var B = (function (_super) {
         configurable: true
     });
     return B;
-})(A);
+}(A));
