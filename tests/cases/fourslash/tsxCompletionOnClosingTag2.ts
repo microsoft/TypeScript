@@ -7,8 +7,14 @@
 ////         div: { ONE: string; TWO: number; }
 ////     }
 //// }
-//// var x1 = <div><//**/
+//// var x1 = <div>
+////    <h1> Hello world </ /*2*/>
+////    </ /*1*/>
 
-goTo.marker();
+goTo.marker("1");
 verify.memberListCount(1);
 verify.completionListContains('div');
+
+goTo.marker("2");
+verify.memberListCount(1);
+verify.completionListContains('h1')
