@@ -9,7 +9,7 @@
 //// }
 //// var x1 = <div>
 ////    <h1> Hello world </ /*2*/>
-////    </ /* 1 * />
+////    </ /*1*/>
 
 goTo.marker("1");
 verify.memberListCount(1);

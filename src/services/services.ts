@@ -3114,11 +3114,8 @@ namespace ts {
             }
             else if (isRightOfOpenTag) {
                 let tagSymbols = typeChecker.getJsxIntrinsicTagNames();
-                // In this case, we are handling completion list inside JSX opening tag. For example:
-                //      <d/**/
-                // the completion list should only contain JSX.instrinsicElements or users-defined React.Component
-                // those symbols of JSX.instrinsi
-                if (tryGetGlobalSymbols(/*includeGlobalSymbols*/ false)) {
+
+                if (tryGetGlobalSymbols()) {
                     symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
                 }
                 else {
@@ -3142,7 +3139,7 @@ namespace ts {
                 // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
                 // global symbols in scope.  These results should be valid for either language as
                 // the set of symbols that can be referenced from this location.
-                if (!tryGetGlobalSymbols(/*includeGlobalSymbols*/ true)) {
+                if (!tryGetGlobalSymbols()) {
                     return undefined;
                 }
             }
@@ -3202,7 +3199,7 @@ namespace ts {
                 }
             }
 
-            function tryGetGlobalSymbols(includeGlobalSymbols: boolean): boolean {
+            function tryGetGlobalSymbols(): boolean {
                 let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
                 let namedImportsOrExports: NamedImportsOrExports;
                 let jsxContainer: JsxOpeningLikeElement;
@@ -3273,7 +3270,7 @@ namespace ts {
 
                 /// TODO filter meaning based on the current context
                 let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-                symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings, includeGlobalSymbols);
+                symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
 
                 return true;
             }

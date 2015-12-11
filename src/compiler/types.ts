@@ -1717,7 +1717,7 @@ namespace ts {
         getBaseTypes(type: InterfaceType): ObjectType[];
         getReturnTypeOfSignature(signature: Signature): Type;
 
-        getSymbolsInScope(location: Node, meaning: SymbolFlags, includeGlobalSymbols: boolean): Symbol[];
+        getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;
