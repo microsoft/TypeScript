@@ -5775,7 +5775,7 @@ namespace ts {
             }
 
             function getEnumMembersOfEnumType(type: Type) {
-                return filter(resolveStructuredTypeMembers(getTypeOfSymbol(type.symbol)).properties, 
+                return filter(resolveStructuredTypeMembers(getTypeOfSymbol(type.symbol)).properties,
                               property => !!(property.flags & SymbolFlags.EnumMember));
             }
         }
