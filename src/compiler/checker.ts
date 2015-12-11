@@ -4987,7 +4987,8 @@ namespace ts {
 
             const sourceReturnType = getReturnTypeOfSignature(erasedSource);
             const targetReturnType = getReturnTypeOfSignature(erasedTarget);
-            if (checkTypeRelatedTo(sourceReturnType, targetReturnType, assignableRelation, /*errorNode*/ undefined)
+            if (targetReturnType === voidType
+                || checkTypeRelatedTo(sourceReturnType, targetReturnType, assignableRelation, /*errorNode*/ undefined)
                 || checkTypeRelatedTo(targetReturnType, sourceReturnType, assignableRelation, /*errorNode*/ undefined)) {
                 const anyReturningSource = cloneSignature(erasedSource);
                 const anyReturningTarget = cloneSignature(erasedTarget);
