@@ -1,0 +1,30 @@
+=== tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts ===
+interface Event {
+>Event : Symbol(Event, Decl(implementedPropertyContextualTyping1.ts, 0, 0))
+
+	time: number
+>time : Symbol(time, Decl(implementedPropertyContextualTyping1.ts, 0, 17))
+}
+interface Listener {
+>Listener : Symbol(Listener, Decl(implementedPropertyContextualTyping1.ts, 2, 1))
+
+	handle: (e: Event) => void;
+>handle : Symbol(handle, Decl(implementedPropertyContextualTyping1.ts, 3, 20))
+>e : Symbol(e, Decl(implementedPropertyContextualTyping1.ts, 4, 10))
+>Event : Symbol(Event, Decl(implementedPropertyContextualTyping1.ts, 0, 0))
+}
+
+class Foo implements Listener {
+>Foo : Symbol(Foo, Decl(implementedPropertyContextualTyping1.ts, 5, 1))
+>Listener : Symbol(Listener, Decl(implementedPropertyContextualTyping1.ts, 2, 1))
+
+	handle = e => { 
+>handle : Symbol(handle, Decl(implementedPropertyContextualTyping1.ts, 7, 31))
+>e : Symbol(e, Decl(implementedPropertyContextualTyping1.ts, 8, 9))
+
+		let n: number = e.time;
+>n : Symbol(n, Decl(implementedPropertyContextualTyping1.ts, 9, 5))
+>e : Symbol(e, Decl(implementedPropertyContextualTyping1.ts, 8, 9))
+	}
+}
+

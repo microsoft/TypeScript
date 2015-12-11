@@ -1,0 +1,33 @@
+=== tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping1.ts ===
+interface Event {
+>Event : Event
+
+	time: number
+>time : number
+}
+interface Listener {
+>Listener : Listener
+
+	handle: (e: Event) => void;
+>handle : (e: Event) => void
+>e : Event
+>Event : Event
+}
+
+class Foo implements Listener {
+>Foo : Foo
+>Listener : Listener
+
+	handle = e => { 
+>handle : (e: Event) => void
+>e => { 		let n: number = e.time;	} : (e: Event) => void
+>e : Event
+
+		let n: number = e.time;
+>n : number
+>e.time : number
+>e : Event
+>time : number
+	}
+}
+
