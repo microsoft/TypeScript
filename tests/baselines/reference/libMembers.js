@@ -27,7 +27,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
     var a = new C[];
     a.length;

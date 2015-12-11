@@ -23,7 +23,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var A;
 (function (A) {
 })(A || (A = {}));
@@ -36,5 +36,5 @@ var Foo;
             _super.apply(this, arguments);
         }
         return B;
-    })(A);
+    }(A));
 })(Foo || (Foo = {}));

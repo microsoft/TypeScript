@@ -27,28 +27,28 @@ var A = (function () {
     }
     A.prototype.foo = function () { };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(B);
+}(B));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(B);
+}(B));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -56,4 +56,4 @@ var E = (function (_super) {
     }
     E.prototype.bar = function () { };
     return E;
-})(B);
+}(B));

@@ -17,6 +17,6 @@ var M;
             _super.apply(this, arguments);
         }
         return C;
-    })(M.I);
+    }(M.I));
     M.C = C;
 })(M || (M = {}));

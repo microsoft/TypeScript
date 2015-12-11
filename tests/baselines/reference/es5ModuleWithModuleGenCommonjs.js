@@ -20,5 +20,5 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 exports.A = A;

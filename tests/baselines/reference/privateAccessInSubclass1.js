@@ -19,7 +19,7 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -29,4 +29,4 @@ var D = (function (_super) {
         this.options;
     };
     return D;
-})(Base);
+}(Base));

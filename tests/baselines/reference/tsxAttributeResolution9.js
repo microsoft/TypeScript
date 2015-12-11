@@ -36,7 +36,7 @@ define(["require", "exports"], function (require, exports) {
         MyComponent.prototype.render = function () {
         };
         return MyComponent;
-    })();
+    }());
     exports.MyComponent = MyComponent;
     <MyComponent foo="bar"/>; // ok  
     <MyComponent foo={0}/>; // should be an error

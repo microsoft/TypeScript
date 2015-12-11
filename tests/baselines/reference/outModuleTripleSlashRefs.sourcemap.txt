@@ -53,7 +53,7 @@ sourceFile:tests/cases/compiler/ref/b.ts
 1->Emitted(10, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(10, 15) Source(4, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -117,7 +117,7 @@ sourceFile:tests/cases/compiler/ref/a.ts
 1->Emitted(18, 9) Source(5, 1) + SourceIndex(1)
 2 >Emitted(18, 17) Source(5, 2) + SourceIndex(1)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
@@ -203,25 +203,25 @@ sourceFile:tests/cases/compiler/b.ts
 1->Emitted(29, 9) Source(2, 28) + SourceIndex(2)
 2 >Emitted(29, 17) Source(2, 29) + SourceIndex(2)
 ---
->>>    })(a_1.A);
+>>>    }(a_1.A));
 1 >^^^^
 2 >    ^
 3 >     
-4 >     ^^
-5 >       ^^^^^
-6 >            ^^
+4 >     ^
+5 >      ^^^^^
+6 >           ^^^
 7 >              ^^^^^->
 1 >
 2 >    }
 3 >     
 4 >     export class B extends 
-5 >       A
-6 >             { }
+5 >      A
+6 >            { }
 1 >Emitted(30, 5) Source(2, 28) + SourceIndex(2)
 2 >Emitted(30, 6) Source(2, 29) + SourceIndex(2)
 3 >Emitted(30, 6) Source(2, 1) + SourceIndex(2)
-4 >Emitted(30, 8) Source(2, 24) + SourceIndex(2)
-5 >Emitted(30, 13) Source(2, 25) + SourceIndex(2)
+4 >Emitted(30, 7) Source(2, 24) + SourceIndex(2)
+5 >Emitted(30, 12) Source(2, 25) + SourceIndex(2)
 6 >Emitted(30, 15) Source(2, 29) + SourceIndex(2)
 ---
 >>>    exports.B = B;

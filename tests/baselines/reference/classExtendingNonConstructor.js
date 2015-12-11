@@ -30,46 +30,46 @@ var C1 = (function (_super) {
         _super.apply(this, arguments);
     }
     return C1;
-})(undefined);
+}(undefined));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(true);
+}(true));
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
         _super.apply(this, arguments);
     }
     return C3;
-})(false);
+}(false));
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
         _super.apply(this, arguments);
     }
     return C4;
-})(42);
+}(42));
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
         _super.apply(this, arguments);
     }
     return C5;
-})("hello");
+}("hello"));
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
         _super.apply(this, arguments);
     }
     return C6;
-})(x);
+}(x));
 var C7 = (function (_super) {
     __extends(C7, _super);
     function C7() {
         _super.apply(this, arguments);
     }
     return C7;
-})(foo);
+}(foo));

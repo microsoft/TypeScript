@@ -10,6 +10,6 @@ define(["require", "exports"], function (require, exports) {
         function Foo() {
         }
         return Foo;
-    })();
+    }());
     exports.Foo = Foo;
 });

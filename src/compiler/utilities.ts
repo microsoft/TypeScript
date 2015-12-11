@@ -342,6 +342,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
         }
@@ -690,6 +691,10 @@ namespace ts {
 
     export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
+    }
+
+    export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
+        return predicate && predicate.kind === TypePredicateKind.Identifier;
     }
 
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {

@@ -1,11 +1,11 @@
-tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(1,14): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(1,24): error TS2313: Type parameter 'T' has a circular constraint.
 tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(2,12): error TS2322: Type 'T' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/typeParameterHasSelfAsConstraint.ts (2 errors) ====
     function foo<T extends T>(x: T): number {
-                 ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+                           ~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
         return x;
                ~
 !!! error TS2322: Type 'T' is not assignable to type 'number'.

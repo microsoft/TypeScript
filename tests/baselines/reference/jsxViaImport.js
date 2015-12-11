@@ -41,4 +41,4 @@ var TestComponent = (function (_super) {
         return <BaseComponent />;
     };
     return TestComponent;
-})(React.Component);
+}(React.Component));

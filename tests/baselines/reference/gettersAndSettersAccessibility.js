@@ -17,4 +17,4 @@ var C99 = (function () {
         configurable: true
     });
     return C99;
-})();
+}());

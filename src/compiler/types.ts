@@ -753,9 +753,13 @@ namespace ts {
     // @kind(SyntaxKind.StringKeyword)
     // @kind(SyntaxKind.SymbolKeyword)
     // @kind(SyntaxKind.VoidKeyword)
-    // @kind(SyntaxKind.ThisType)
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
+    }
+
+    // @kind(SyntaxKind.ThisType)
+    export interface ThisTypeNode extends TypeNode {
+        _thisTypeNodeBrand: any;
     }
 
     export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
@@ -776,7 +780,7 @@ namespace ts {
 
     // @kind(SyntaxKind.TypePredicate)
     export interface TypePredicateNode extends TypeNode {
-        parameterName: Identifier;
+        parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
 
@@ -1840,10 +1844,25 @@ namespace ts {
         CannotBeNamed
     }
 
+    export const enum TypePredicateKind {
+        This,
+        Identifier
+    }
+
     export interface TypePredicate {
+        kind: TypePredicateKind;
+        type: Type;
+    }
+
+    // @kind (TypePredicateKind.This)
+    export interface ThisTypePredicate extends TypePredicate {
+        _thisTypePredicateBrand: any;
+    }
+
+    // @kind (TypePredicateKind.Identifier)
+    export interface IdentifierTypePredicate extends TypePredicate {
         parameterName: string;
         parameterIndex: number;
-        type: Type;
     }
 
     /* @internal */
@@ -2067,7 +2086,6 @@ namespace ts {
         resolvedSymbol?: Symbol;          // Cached name resolution result
         flags?: NodeCheckFlags;           // Set of flags specific to Node
         enumMemberValue?: number;         // Constant value of enum member
-        isIllegalTypeReferenceInConstraint?: boolean; // Is type reference in constraint refers to the type parameter from the same list
         isVisible?: boolean;              // Is this node visible
         generatedName?: string;           // Generated name for module, enum, or import declaration
         generatedNames?: Map<string>;     // Generated names table for source file
@@ -2111,6 +2129,7 @@ namespace ts {
         ESSymbol                = 0x01000000,  // Type of symbol primitive introduced in ES6
         ThisType                = 0x02000000,  // This type
         ObjectLiteralPatternWithComputedProperties = 0x04000000,  // Object literal type implied by binding pattern has computed properties
+        PredicateType           = 0x08000000,  // Predicate types are also Boolean types, but should not be considered Intrinsics - there's no way to capture this with flags
 
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | ESSymbol | Void | Undefined | Null,
@@ -2122,7 +2141,7 @@ namespace ts {
         UnionOrIntersection = Union | Intersection,
         StructuredType = ObjectType | Union | Intersection,
         /* @internal */
-        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral,
+        RequiresWidening = ContainsUndefinedOrNull | ContainsObjectLiteral | PredicateType,
         /* @internal */
         PropagatingFlags = ContainsUndefinedOrNull | ContainsObjectLiteral | ContainsAnyFunctionType
     }
@@ -2141,6 +2160,11 @@ namespace ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;  // Name of intrinsic type
+    }
+
+    // Predicate types (TypeFlags.Predicate)
+    export interface PredicateType extends Type {
+        predicate: ThisTypePredicate | IdentifierTypePredicate;
     }
 
     // String literal types (TypeFlags.StringLiteral)
@@ -2259,7 +2283,6 @@ namespace ts {
         declaration: SignatureDeclaration;  // Originating declaration
         typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
-        typePredicate?: TypePredicate;      // Type predicate
         /* @internal */
         resolvedReturnType: Type;           // Resolved return type
         /* @internal */
@@ -2308,6 +2331,7 @@ namespace ts {
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
         inferences: TypeInferences[];       // Inferences made for each type parameter
         inferredTypes: Type[];              // Inferred type for each type parameter
+        mapper?: TypeMapper;                // Type mapper for this inference context
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
     }

@@ -9,4 +9,4 @@ var C = (function () {
     }
     C.try = function () { };
     return C;
-})();
+}());

@@ -17,4 +17,4 @@ var C1 = (function () {
         this.p3 = p3;
     } // OK
     return C1;
-})();
+}());

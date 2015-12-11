@@ -34,7 +34,7 @@ var CharField = (function () {
         return "Yup";
     };
     return CharField;
-})();
+}());
 var NumberField = (function () {
     function NumberField() {
     }
@@ -42,13 +42,13 @@ var NumberField = (function () {
         return 123;
     };
     return NumberField;
-})();
+}());
 var ObjectField = (function () {
     function ObjectField(fields) {
         this.fields = fields;
     }
     return ObjectField;
-})();
+}());
 var person = new ObjectField({
     id: new NumberField(),
     name: new CharField()

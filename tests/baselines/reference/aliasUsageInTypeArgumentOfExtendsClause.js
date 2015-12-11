@@ -30,7 +30,7 @@ var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 exports.Model = Model;
 //// [aliasUsageInTypeArgumentOfExtendsClause_moduleA.js]
 "use strict";
@@ -46,7 +46,7 @@ var VisualizationModel = (function (_super) {
         _super.apply(this, arguments);
     }
     return VisualizationModel;
-})(Backbone.Model);
+}(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInTypeArgumentOfExtendsClause_main.js]
 "use strict";
@@ -60,7 +60,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -68,4 +68,4 @@ var D = (function (_super) {
         this.x = moduleA;
     }
     return D;
-})(C);
+}(C));

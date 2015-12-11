@@ -21,7 +21,7 @@ var _Color = (function () {
     function _Color() {
     }
     return _Color;
-})();
+}());
 var Color;
 (function (Color) {
 })(Color || (Color = {}));

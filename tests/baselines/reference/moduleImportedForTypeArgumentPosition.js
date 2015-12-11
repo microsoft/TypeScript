@@ -27,12 +27,12 @@ define(["require", "exports"], function (require, exports) {
         function C1() {
         }
         return C1;
-    })();
+    }());
     var Test1 = (function (_super) {
         __extends(Test1, _super);
         function Test1() {
             _super.apply(this, arguments);
         }
         return Test1;
-    })(C1);
+    }(C1));
 });

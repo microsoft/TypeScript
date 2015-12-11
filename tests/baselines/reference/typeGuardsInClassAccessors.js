@@ -206,4 +206,4 @@ var ClassWithAccessors = (function () {
         configurable: true
     });
     return ClassWithAccessors;
-})();
+}());

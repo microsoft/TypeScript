@@ -11,4 +11,4 @@ var T = (function () {
     T.x = function () { };
     T.prototype.y = function () { };
     return T;
-})();
+}());

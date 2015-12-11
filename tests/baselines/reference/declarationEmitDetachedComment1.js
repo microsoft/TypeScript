@@ -41,7 +41,7 @@ var Hello = (function () {
     function Hello() {
     }
     return Hello;
-})();
+}());
 //// [test2.js]
 /* A comment at the top of the file. */
 /**
@@ -51,7 +51,7 @@ var Hi = (function () {
     function Hi() {
     }
     return Hi;
-})();
+}());
 //// [test3.js]
 // A one-line comment at the top of the file.
 /**
@@ -61,7 +61,7 @@ var Hola = (function () {
     function Hola() {
     }
     return Hola;
-})();
+}());
 
 
 //// [test1.d.ts]

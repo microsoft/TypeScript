@@ -10,4 +10,4 @@ var C = (function () {
     }
     C.prototype[1] = function () { };
     return C;
-})();
+}());

@@ -54,7 +54,7 @@ var b: B;
 
 // Basic
 if (isC(a)) {
->isC(a) : boolean
+>isC(a) : p1 is C
 >isC : (p1: any) => p1 is C
 >a : A
 
@@ -70,7 +70,7 @@ var subType: C;
 >C : C
 
 if(isA(subType)) {
->isA(subType) : boolean
+>isA(subType) : p1 is A
 >isA : (p1: any) => p1 is A
 >subType : C
 
@@ -87,7 +87,7 @@ var union: A | B;
 >B : B
 
 if(isA(union)) {
->isA(union) : boolean
+>isA(union) : p1 is A
 >isA : (p1: any) => p1 is A
 >union : A | B
 
@@ -118,7 +118,7 @@ declare function isC_multipleParams(p1, p2): p1 is C;
 >C : C
 
 if (isC_multipleParams(a, 0)) {
->isC_multipleParams(a, 0) : boolean
+>isC_multipleParams(a, 0) : p1 is C
 >isC_multipleParams : (p1: any, p2: any) => p1 is C
 >a : A
 >0 : number
@@ -197,7 +197,7 @@ declare function acceptingBoolean(a: boolean);
 acceptingBoolean(isA(a));
 >acceptingBoolean(isA(a)) : any
 >acceptingBoolean : (a: boolean) => any
->isA(a) : boolean
+>isA(a) : p1 is A
 >isA : (p1: any) => p1 is A
 >a : A
 
@@ -223,8 +223,8 @@ let union2: C | B;
 let union3: boolean | B = isA(union2) || union2;
 >union3 : boolean | B
 >B : B
->isA(union2) || union2 : boolean | B
->isA(union2) : boolean
+>isA(union2) || union2 : p1 is A | B
+>isA(union2) : p1 is A
 >isA : (p1: any) => p1 is A
 >union2 : C | B
 >union2 : B

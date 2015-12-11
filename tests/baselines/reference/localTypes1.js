@@ -158,7 +158,7 @@ function f1() {
         function C() {
         }
         return C;
-    })();
+    }());
     var a = [new C()];
     a[0].x = E.B;
     return a;
@@ -175,7 +175,7 @@ function f2() {
             function C() {
             }
             return C;
-        })();
+        }());
         var a = [new C()];
         a[0].x = E.B;
         return a;
@@ -195,7 +195,7 @@ function f3(b) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             var a = [new C()];
             a[0].x = E.B;
             return a;
@@ -205,7 +205,7 @@ function f3(b) {
                 function A_1() {
                 }
                 return A_1;
-            })();
+            }());
             var c = [new A_1()];
             c[0].x = E.B;
             return c;
@@ -224,7 +224,7 @@ function f5() {
             function C() {
             }
             return C;
-        })();
+        }());
         return new C();
     };
     var z2 = function () {
@@ -238,7 +238,7 @@ function f5() {
             function C() {
             }
             return C;
-        })();
+        }());
         return new C();
     };
 }
@@ -254,7 +254,7 @@ var A = (function () {
             function C() {
             }
             return C;
-        })();
+        }());
     }
     A.prototype.m = function () {
         var E;
@@ -267,7 +267,7 @@ var A = (function () {
             function C() {
             }
             return C;
-        })();
+        }());
         return new C();
     };
     Object.defineProperty(A.prototype, "p", {
@@ -282,20 +282,20 @@ var A = (function () {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             return new C();
         },
         enumerable: true,
         configurable: true
     });
     return A;
-})();
+}());
 function f6() {
     var A = (function () {
         function A() {
         }
         return A;
-    })();
+    }());
     function g() {
         var B = (function (_super) {
             __extends(B, _super);
@@ -303,7 +303,7 @@ function f6() {
                 _super.apply(this, arguments);
             }
             return B;
-        })(A);
+        }(A));
         function h() {
             var C = (function (_super) {
                 __extends(C, _super);
@@ -311,7 +311,7 @@ function f6() {
                     _super.apply(this, arguments);
                 }
                 return C;
-            })(B);
+            }(B));
             var x = new C();
             x.a = "a";
             x.b = "b";

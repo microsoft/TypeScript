@@ -135,7 +135,7 @@ var Errors;
         function ConnectionError /* extends Error */(request) {
         }
         return ConnectionError /* extends Error */;
-    })();
+    }());
     Errors.ConnectionError /* extends Error */ = ConnectionError /* extends Error */;
 })(Errors || (Errors = {}));
 var FileService = (function () {
@@ -160,4 +160,4 @@ var FileService = (function () {
         });
     };
     return FileService;
-})();
+}());

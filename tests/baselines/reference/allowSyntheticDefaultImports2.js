@@ -20,7 +20,7 @@ System.register([], function(exports_1) {
                 function Foo() {
                 }
                 return Foo;
-            })();
+            }());
             exports_1("Foo", Foo);
         }
     }

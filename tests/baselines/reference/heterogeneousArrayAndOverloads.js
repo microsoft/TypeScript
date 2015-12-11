@@ -23,4 +23,4 @@ var arrTest = (function () {
         this.test([1, 2, "hi", 5]); // Error
     };
     return arrTest;
-})();
+}());

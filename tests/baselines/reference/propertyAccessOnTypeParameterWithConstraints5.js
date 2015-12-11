@@ -55,7 +55,7 @@ var A = (function () {
     }
     A.prototype.foo = function () { return ''; };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -65,7 +65,7 @@ var B = (function (_super) {
         return '';
     };
     return B;
-})(A);
+}(A));
 var C = (function () {
     function C() {
     }
@@ -75,7 +75,7 @@ var C = (function () {
         return a + x.foo() + x.notHere();
     };
     return C;
-})();
+}());
 var r = (new C()).f();
 var i;
 var r2 = i.foo.notHere();

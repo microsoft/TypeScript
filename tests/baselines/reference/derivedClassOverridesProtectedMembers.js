@@ -62,7 +62,7 @@ var Base = (function () {
         configurable: true
     });
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(a) {
@@ -83,4 +83,4 @@ var Derived = (function (_super) {
         configurable: true
     });
     return Derived;
-})(Base);
+}(Base));

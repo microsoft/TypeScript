@@ -25,7 +25,7 @@ if (typeof x === "string") {
             var y = x;
         }
         return class_1;
-    })();
+    }());
 }
 else {
     var m = (function () {
@@ -33,5 +33,5 @@ else {
             var y = x;
         }
         return class_2;
-    })();
+    }());
 }

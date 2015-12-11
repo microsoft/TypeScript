@@ -57,7 +57,7 @@ var f;
         function c() {
         }
         return c;
-    })();
+    }());
     f.c = c;
 })(f || (f = {}));
 module.exports = f;
@@ -72,7 +72,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
     var N;
     (function (N) {
@@ -95,7 +95,7 @@ var M;
             function C() {
             }
             return C;
-        })();
+        }());
         P.C = C;
         var N;
         (function (N) {
@@ -121,7 +121,7 @@ var M;
             function C() {
             }
             return C;
-        })();
+        }());
         Q.C = C;
         var N;
         (function (N) {
