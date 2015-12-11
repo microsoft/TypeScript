@@ -1,0 +1,224 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardByEqualityCheck.ts ===
+interface Discriminator {
+>Discriminator : Discriminator
+
+	_discriminator: void;
+>_discriminator : void
+}
+
+interface FooDiscriminator extends Discriminator {
+>FooDiscriminator : FooDiscriminator
+>Discriminator : Discriminator
+
+	_foo: void;
+>_foo : void
+}
+
+interface BarDiscriminator extends Discriminator {
+>BarDiscriminator : BarDiscriminator
+>Discriminator : Discriminator
+
+	_bar: void;
+>_bar : void
+}
+
+interface BaseNode {
+>BaseNode : BaseNode
+
+	kind: Discriminator;
+>kind : Discriminator
+>Discriminator : Discriminator
+}
+
+interface FooNode extends BaseNode {
+>FooNode : FooNode
+>BaseNode : BaseNode
+
+	kind: FooDiscriminator;
+>kind : FooDiscriminator
+>FooDiscriminator : FooDiscriminator
+
+	foo: string;
+>foo : string
+}
+
+interface BarNode extends BaseNode {
+>BarNode : BarNode
+>BaseNode : BaseNode
+
+	kind: BarDiscriminator;
+>kind : BarDiscriminator
+>BarDiscriminator : BarDiscriminator
+
+	bar: string;
+>bar : string
+}
+
+let a: FooDiscriminator;
+>a : FooDiscriminator
+>FooDiscriminator : FooDiscriminator
+
+let x: FooNode | BarNode;
+>x : FooNode | BarNode
+>FooNode : FooNode
+>BarNode : BarNode
+
+if (x.kind === a) {
+>x.kind === a : boolean
+>x.kind : FooDiscriminator | BarDiscriminator
+>x : FooNode | BarNode
+>kind : FooDiscriminator | BarDiscriminator
+>a : FooDiscriminator
+
+	x.foo = "yay!";
+>x.foo = "yay!" : string
+>x.foo : string
+>x : FooNode
+>foo : string
+>"yay!" : string
+}
+else {
+	x; // Not narrowed at present
+>x : FooNode | BarNode
+}
+
+let z: {
+>z : { value: string; item: FooNode | BarNode; }
+
+	value: string;
+>value : string
+
+	item: FooNode | BarNode;
+>item : FooNode | BarNode
+>FooNode : FooNode
+>BarNode : BarNode
+}
+if (z.item.kind === a) {
+>z.item.kind === a : boolean
+>z.item.kind : FooDiscriminator | BarDiscriminator
+>z.item : FooNode | BarNode
+>z : { value: string; item: FooNode | BarNode; }
+>item : FooNode | BarNode
+>kind : FooDiscriminator | BarDiscriminator
+>a : FooDiscriminator
+
+	z.item.foo = "cool!";
+>z.item.foo = "cool!" : string
+>z.item.foo : string
+>z.item : FooNode
+>z : { value: string; item: FooNode; }
+>item : FooNode
+>foo : string
+>"cool!" : string
+
+	z.value = "yes";
+>z.value = "yes" : string
+>z.value : string
+>z : { value: string; item: FooNode; }
+>value : string
+>"yes" : string
+}
+
+let foo: "foo";
+>foo : "foo"
+
+let bar: "bar";
+>bar : "bar"
+
+let foobar: "foobar";
+>foobar : "foobar"
+
+interface Thing {
+>Thing : Thing
+
+	kind: string;
+>kind : string
+}
+interface FooThing extends Thing {
+>FooThing : FooThing
+>Thing : Thing
+
+	kind: "foo";
+>kind : "foo"
+
+	foo: string;
+>foo : string
+}
+interface BarThing extends Thing {
+>BarThing : BarThing
+>Thing : Thing
+
+	kind: "bar";
+>kind : "bar"
+
+	bar: string;
+>bar : string
+}
+interface FooBarThing extends Thing {
+>FooBarThing : FooBarThing
+>Thing : Thing
+
+	kind: "foobar";
+>kind : "foobar"
+
+	foo: string;
+>foo : string
+
+	bar: string;
+>bar : string
+}
+
+let gg: FooThing | BarThing | FooBarThing;
+>gg : FooThing | BarThing | FooBarThing
+>FooThing : FooThing
+>BarThing : BarThing
+>FooBarThing : FooBarThing
+
+if (gg.kind === foobar) {
+>gg.kind === foobar : boolean
+>gg.kind : "foo" | "bar" | "foobar"
+>gg : FooThing | BarThing | FooBarThing
+>kind : "foo" | "bar" | "foobar"
+>foobar : "foobar"
+
+	gg.bar = "bar";
+>gg.bar = "bar" : string
+>gg.bar : string
+>gg : FooBarThing
+>bar : string
+>"bar" : string
+
+	gg.foo = "foo";
+>gg.foo = "foo" : string
+>gg.foo : string
+>gg : FooBarThing
+>foo : string
+>"foo" : string
+}
+let holder = {
+>holder : { value: FooThing | BarThing | FooBarThing; }
+>{	value: gg} : { value: FooThing | BarThing | FooBarThing; }
+
+	value: gg
+>value : FooThing | BarThing | FooBarThing
+>gg : FooThing | BarThing | FooBarThing
+
+};
+if (holder.value.kind === foo) {
+>holder.value.kind === foo : boolean
+>holder.value.kind : "foo" | "bar" | "foobar"
+>holder.value : FooThing | BarThing | FooBarThing
+>holder : { value: FooThing | BarThing | FooBarThing; }
+>value : FooThing | BarThing | FooBarThing
+>kind : "foo" | "bar" | "foobar"
+>foo : "foo"
+
+	holder.value.foo = "foo";
+>holder.value.foo = "foo" : string
+>holder.value.foo : string
+>holder.value : FooThing
+>holder : { value: FooThing; }
+>value : FooThing
+>foo : string
+>"foo" : string
+}

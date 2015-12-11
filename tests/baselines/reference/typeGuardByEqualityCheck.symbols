@@ -1,0 +1,207 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardByEqualityCheck.ts ===
+interface Discriminator {
+>Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
+
+	_discriminator: void;
+>_discriminator : Symbol(_discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 25))
+}
+
+interface FooDiscriminator extends Discriminator {
+>FooDiscriminator : Symbol(FooDiscriminator, Decl(typeGuardByEqualityCheck.ts, 2, 1))
+>Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
+
+	_foo: void;
+>_foo : Symbol(_foo, Decl(typeGuardByEqualityCheck.ts, 4, 50))
+}
+
+interface BarDiscriminator extends Discriminator {
+>BarDiscriminator : Symbol(BarDiscriminator, Decl(typeGuardByEqualityCheck.ts, 6, 1))
+>Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
+
+	_bar: void;
+>_bar : Symbol(_bar, Decl(typeGuardByEqualityCheck.ts, 8, 50))
+}
+
+interface BaseNode {
+>BaseNode : Symbol(BaseNode, Decl(typeGuardByEqualityCheck.ts, 10, 1))
+
+	kind: Discriminator;
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 12, 20))
+>Discriminator : Symbol(Discriminator, Decl(typeGuardByEqualityCheck.ts, 0, 0))
+}
+
+interface FooNode extends BaseNode {
+>FooNode : Symbol(FooNode, Decl(typeGuardByEqualityCheck.ts, 14, 1))
+>BaseNode : Symbol(BaseNode, Decl(typeGuardByEqualityCheck.ts, 10, 1))
+
+	kind: FooDiscriminator;
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 16, 36))
+>FooDiscriminator : Symbol(FooDiscriminator, Decl(typeGuardByEqualityCheck.ts, 2, 1))
+
+	foo: string;
+>foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
+}
+
+interface BarNode extends BaseNode {
+>BarNode : Symbol(BarNode, Decl(typeGuardByEqualityCheck.ts, 19, 1))
+>BaseNode : Symbol(BaseNode, Decl(typeGuardByEqualityCheck.ts, 10, 1))
+
+	kind: BarDiscriminator;
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 21, 36))
+>BarDiscriminator : Symbol(BarDiscriminator, Decl(typeGuardByEqualityCheck.ts, 6, 1))
+
+	bar: string;
+>bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 22, 24))
+}
+
+let a: FooDiscriminator;
+>a : Symbol(a, Decl(typeGuardByEqualityCheck.ts, 26, 3))
+>FooDiscriminator : Symbol(FooDiscriminator, Decl(typeGuardByEqualityCheck.ts, 2, 1))
+
+let x: FooNode | BarNode;
+>x : Symbol(x, Decl(typeGuardByEqualityCheck.ts, 27, 3))
+>FooNode : Symbol(FooNode, Decl(typeGuardByEqualityCheck.ts, 14, 1))
+>BarNode : Symbol(BarNode, Decl(typeGuardByEqualityCheck.ts, 19, 1))
+
+if (x.kind === a) {
+>x.kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 16, 36), Decl(typeGuardByEqualityCheck.ts, 21, 36))
+>x : Symbol(x, Decl(typeGuardByEqualityCheck.ts, 27, 3))
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 16, 36), Decl(typeGuardByEqualityCheck.ts, 21, 36))
+>a : Symbol(a, Decl(typeGuardByEqualityCheck.ts, 26, 3))
+
+	x.foo = "yay!";
+>x.foo : Symbol(FooNode.foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
+>x : Symbol(x, Decl(typeGuardByEqualityCheck.ts, 27, 3))
+>foo : Symbol(FooNode.foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
+}
+else {
+	x; // Not narrowed at present
+>x : Symbol(x, Decl(typeGuardByEqualityCheck.ts, 27, 3))
+}
+
+let z: {
+>z : Symbol(z, Decl(typeGuardByEqualityCheck.ts, 36, 3))
+
+	value: string;
+>value : Symbol(value, Decl(typeGuardByEqualityCheck.ts, 36, 8))
+
+	item: FooNode | BarNode;
+>item : Symbol(item, Decl(typeGuardByEqualityCheck.ts, 37, 15))
+>FooNode : Symbol(FooNode, Decl(typeGuardByEqualityCheck.ts, 14, 1))
+>BarNode : Symbol(BarNode, Decl(typeGuardByEqualityCheck.ts, 19, 1))
+}
+if (z.item.kind === a) {
+>z.item.kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 16, 36), Decl(typeGuardByEqualityCheck.ts, 21, 36))
+>z.item : Symbol(item, Decl(typeGuardByEqualityCheck.ts, 37, 15))
+>z : Symbol(z, Decl(typeGuardByEqualityCheck.ts, 36, 3))
+>item : Symbol(item, Decl(typeGuardByEqualityCheck.ts, 37, 15))
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 16, 36), Decl(typeGuardByEqualityCheck.ts, 21, 36))
+>a : Symbol(a, Decl(typeGuardByEqualityCheck.ts, 26, 3))
+
+	z.item.foo = "cool!";
+>z.item.foo : Symbol(FooNode.foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
+>z.item : Symbol(item)
+>z : Symbol(z, Decl(typeGuardByEqualityCheck.ts, 36, 3))
+>item : Symbol(item)
+>foo : Symbol(FooNode.foo, Decl(typeGuardByEqualityCheck.ts, 17, 24))
+
+	z.value = "yes";
+>z.value : Symbol(value, Decl(typeGuardByEqualityCheck.ts, 36, 8))
+>z : Symbol(z, Decl(typeGuardByEqualityCheck.ts, 36, 3))
+>value : Symbol(value, Decl(typeGuardByEqualityCheck.ts, 36, 8))
+}
+
+let foo: "foo";
+>foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 45, 3))
+
+let bar: "bar";
+>bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 46, 3))
+
+let foobar: "foobar";
+>foobar : Symbol(foobar, Decl(typeGuardByEqualityCheck.ts, 47, 3))
+
+interface Thing {
+>Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
+
+	kind: string;
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 49, 17))
+}
+interface FooThing extends Thing {
+>FooThing : Symbol(FooThing, Decl(typeGuardByEqualityCheck.ts, 51, 1))
+>Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
+
+	kind: "foo";
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 52, 34))
+
+	foo: string;
+>foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 53, 13))
+}
+interface BarThing extends Thing {
+>BarThing : Symbol(BarThing, Decl(typeGuardByEqualityCheck.ts, 55, 1))
+>Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
+
+	kind: "bar";
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 56, 34))
+
+	bar: string;
+>bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 57, 13))
+}
+interface FooBarThing extends Thing {
+>FooBarThing : Symbol(FooBarThing, Decl(typeGuardByEqualityCheck.ts, 59, 1))
+>Thing : Symbol(Thing, Decl(typeGuardByEqualityCheck.ts, 47, 21))
+
+	kind: "foobar";
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 60, 37))
+
+	foo: string;
+>foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 61, 16))
+
+	bar: string;
+>bar : Symbol(bar, Decl(typeGuardByEqualityCheck.ts, 62, 13))
+}
+
+let gg: FooThing | BarThing | FooBarThing;
+>gg : Symbol(gg, Decl(typeGuardByEqualityCheck.ts, 66, 3))
+>FooThing : Symbol(FooThing, Decl(typeGuardByEqualityCheck.ts, 51, 1))
+>BarThing : Symbol(BarThing, Decl(typeGuardByEqualityCheck.ts, 55, 1))
+>FooBarThing : Symbol(FooBarThing, Decl(typeGuardByEqualityCheck.ts, 59, 1))
+
+if (gg.kind === foobar) {
+>gg.kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 52, 34), Decl(typeGuardByEqualityCheck.ts, 56, 34), Decl(typeGuardByEqualityCheck.ts, 60, 37))
+>gg : Symbol(gg, Decl(typeGuardByEqualityCheck.ts, 66, 3))
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 52, 34), Decl(typeGuardByEqualityCheck.ts, 56, 34), Decl(typeGuardByEqualityCheck.ts, 60, 37))
+>foobar : Symbol(foobar, Decl(typeGuardByEqualityCheck.ts, 47, 3))
+
+	gg.bar = "bar";
+>gg.bar : Symbol(FooBarThing.bar, Decl(typeGuardByEqualityCheck.ts, 62, 13))
+>gg : Symbol(gg, Decl(typeGuardByEqualityCheck.ts, 66, 3))
+>bar : Symbol(FooBarThing.bar, Decl(typeGuardByEqualityCheck.ts, 62, 13))
+
+	gg.foo = "foo";
+>gg.foo : Symbol(FooBarThing.foo, Decl(typeGuardByEqualityCheck.ts, 61, 16))
+>gg : Symbol(gg, Decl(typeGuardByEqualityCheck.ts, 66, 3))
+>foo : Symbol(FooBarThing.foo, Decl(typeGuardByEqualityCheck.ts, 61, 16))
+}
+let holder = {
+>holder : Symbol(holder, Decl(typeGuardByEqualityCheck.ts, 71, 3))
+
+	value: gg
+>value : Symbol(value, Decl(typeGuardByEqualityCheck.ts, 71, 14))
+>gg : Symbol(gg, Decl(typeGuardByEqualityCheck.ts, 66, 3))
+
+};
+if (holder.value.kind === foo) {
+>holder.value.kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 52, 34), Decl(typeGuardByEqualityCheck.ts, 56, 34), Decl(typeGuardByEqualityCheck.ts, 60, 37))
+>holder.value : Symbol(value, Decl(typeGuardByEqualityCheck.ts, 71, 14))
+>holder : Symbol(holder, Decl(typeGuardByEqualityCheck.ts, 71, 3))
+>value : Symbol(value, Decl(typeGuardByEqualityCheck.ts, 71, 14))
+>kind : Symbol(kind, Decl(typeGuardByEqualityCheck.ts, 52, 34), Decl(typeGuardByEqualityCheck.ts, 56, 34), Decl(typeGuardByEqualityCheck.ts, 60, 37))
+>foo : Symbol(foo, Decl(typeGuardByEqualityCheck.ts, 45, 3))
+
+	holder.value.foo = "foo";
+>holder.value.foo : Symbol(FooThing.foo, Decl(typeGuardByEqualityCheck.ts, 53, 13))
+>holder.value : Symbol(value)
+>holder : Symbol(holder, Decl(typeGuardByEqualityCheck.ts, 71, 3))
+>value : Symbol(value)
+>foo : Symbol(FooThing.foo, Decl(typeGuardByEqualityCheck.ts, 53, 13))
+}

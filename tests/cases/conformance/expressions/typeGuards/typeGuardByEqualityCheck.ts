@@ -42,3 +42,36 @@ if (z.item.kind === a) {
 	z.item.foo = "cool!";
 	z.value = "yes";
 }
+
+let foo: "foo";
+let bar: "bar";
+let foobar: "foobar";
+
+interface Thing {
+	kind: string;
+}
+interface FooThing extends Thing {
+	kind: "foo";
+	foo: string;
+}
+interface BarThing extends Thing {
+	kind: "bar";
+	bar: string;
+}
+interface FooBarThing extends Thing {
+	kind: "foobar";
+	foo: string;
+	bar: string;
+}
+
+let gg: FooThing | BarThing | FooBarThing;
+if (gg.kind === foobar) {
+	gg.bar = "bar";
+	gg.foo = "foo";
+}
+let holder = {
+	value: gg
+};
+if (holder.value.kind === foo) {
+	holder.value.foo = "foo";
+}
