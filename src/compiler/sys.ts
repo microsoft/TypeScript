@@ -352,7 +352,7 @@ namespace ts {
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
             const pollingWatchedFileSet = createPollingWatchedFileSet();
-            const watchedFileSet = createWatchedFileSet();
+            // const watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): Boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
@@ -456,7 +456,8 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    let fileSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
+                    // let fileSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
+                    let fileSet = pollingWatchedFileSet;
                     const watchedFile = fileSet.addFile(fileName, callback);
                     return {
                         close: () => fileSet.removeFile(watchedFile)
