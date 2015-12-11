@@ -5762,10 +5762,8 @@ namespace ts {
                     target.symbol.flags & SymbolFlags.ConstEnum) {
                     return Ternary.False;
                 }
-                const sourceMembers = resolveStructuredTypeMembers(getTypeOfSymbol(source.symbol)).properties;
-                const targetMembers = resolveStructuredTypeMembers(getTypeOfSymbol(target.symbol)).properties;
-                const targetNames = arrayToMap(targetMembers, member => member.name);
-                for (const member of sourceMembers) {
+                const targetNames = arrayToMap(getEnumMembersOfEnumType(target), member => member.name);
+                for (const member of getEnumMembersOfEnumType(source)) {
                     if (!hasProperty(targetNames, member.name)) {
                         reportError(Diagnostics.Property_0_is_missing_in_type_1,
                                     member.name,
@@ -5774,6 +5772,11 @@ namespace ts {
                     }
                 }
                 return Ternary.True;
+            }
+
+            function getEnumMembersOfEnumType(type: Type) {
+                return filter(resolveStructuredTypeMembers(getTypeOfSymbol(type.symbol)).properties, 
+                              property => !!(property.flags & SymbolFlags.EnumMember));
             }
         }
 
