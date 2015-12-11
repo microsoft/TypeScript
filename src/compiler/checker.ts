@@ -11170,7 +11170,7 @@ namespace ts {
             checkGrammarMethod(node) || checkGrammarComputedPropertyName(node.name);
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
-            checkFunctionLikeDeclaration(node);
+            checkFunctionOrMethodDeclaration(node);
 
             // Abstract methods cannot have an implementation.
             // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
@@ -12197,7 +12197,7 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                checkFunctionLikeDeclaration(node) || checkGrammarForGenerator(node);
+                checkFunctionOrMethodDeclaration(node) || checkGrammarForGenerator(node);
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
@@ -12205,7 +12205,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
+        function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const isAsync = isAsyncFunctionLike(node);
@@ -12252,7 +12252,7 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
-            if (!isAccessor(node.kind) && !node.asteriskToken) {
+            if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
