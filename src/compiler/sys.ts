@@ -392,11 +392,6 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    if (isNode4OrLater()) {
-                        // Note: in node the callback of fs.watch is given only the relative file name as a parameter
-                        return _fs.watch(fileName, (eventName: string, relativeFileName: string) => callback(fileName));
-                    }
-
                     let watchedFile = watchedFileSet.addFile(fileName, callback);
                     return {
                         close: () => watchedFileSet.removeFile(watchedFile)
