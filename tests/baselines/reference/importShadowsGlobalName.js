@@ -17,7 +17,7 @@ define(["require", "exports"], function (require, exports) {
         function Foo() {
         }
         return Foo;
-    })();
+    }());
     return Foo;
 });
 //// [Bar.js]
@@ -34,6 +34,6 @@ define(["require", "exports", 'Foo'], function (require, exports, Error) {
             _super.apply(this, arguments);
         }
         return Bar;
-    })(Error);
+    }(Error));
     return Bar;
 });

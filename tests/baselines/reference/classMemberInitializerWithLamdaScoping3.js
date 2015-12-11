@@ -31,5 +31,5 @@ var Test1 = (function () {
         };
     }
     return Test1;
-})();
+}());
 exports.Test1 = Test1;

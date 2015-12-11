@@ -16,4 +16,4 @@ var A = (function () {
     A.prototype.m1 = function (a) {
     };
     return A;
-})();
+}());

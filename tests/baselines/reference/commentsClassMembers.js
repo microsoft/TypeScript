@@ -413,7 +413,7 @@ var c1 = (function () {
         configurable: true
     });
     return c1;
-})();
+}());
 var i1 = new c1();
 var i1_p = i1.p1;
 var i1_f = i1.p2;
@@ -473,7 +473,7 @@ var cProperties = (function () {
         configurable: true
     });
     return cProperties;
-})();
+}());
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;
 cProperties_i.nc_p2 = cProperties_i.nc_p1;

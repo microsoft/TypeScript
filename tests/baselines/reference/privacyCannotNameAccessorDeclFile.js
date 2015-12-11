@@ -144,7 +144,7 @@ var Widget1 = (function () {
         this.name = 'one';
     }
     return Widget1;
-})();
+}());
 exports.Widget1 = Widget1;
 function createWidget1() {
     return new Widget1();
@@ -157,7 +157,7 @@ var SpecializedWidget;
             this.name = 'one';
         }
         return Widget2;
-    })();
+    }());
     SpecializedWidget.Widget2 = Widget2;
     function createWidget2() {
         return new Widget2();
@@ -248,7 +248,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithWithPrivateGetAccessorTypes;
-})();
+}());
 exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
 var privateClassWithWithPrivateGetAccessorTypes = (function () {
     function privateClassWithWithPrivateGetAccessorTypes() {
@@ -310,7 +310,7 @@ var privateClassWithWithPrivateGetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithWithPrivateGetAccessorTypes;
-})();
+}());
 var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
@@ -343,7 +343,7 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
         configurable: true
     });
     return publicClassWithPrivateModuleGetAccessorTypes;
-})();
+}());
 exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
 var privateClassWithPrivateModuleGetAccessorTypes = (function () {
     function privateClassWithPrivateModuleGetAccessorTypes() {
@@ -377,7 +377,7 @@ var privateClassWithPrivateModuleGetAccessorTypes = (function () {
         configurable: true
     });
     return privateClassWithPrivateModuleGetAccessorTypes;
-})();
+}());
 
 
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts]

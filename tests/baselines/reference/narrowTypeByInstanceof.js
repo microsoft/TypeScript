@@ -33,7 +33,7 @@ var Match = (function () {
         return undefined;
     };
     return Match;
-})();
+}());
 var FileMatch = (function () {
     function FileMatch() {
     }
@@ -41,7 +41,7 @@ var FileMatch = (function () {
         return undefined;
     };
     return FileMatch;
-})();
+}());
 var elementA, elementB;
 if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
     var a = elementA.resource().path;

@@ -42,28 +42,28 @@ var C = (function () {
         return 1;
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
         return 1; // error
     }
     return D;
-})();
+}());
 var E = (function () {
     function E() {
         return { x: 1 };
     }
     return E;
-})();
+}());
 var F = (function () {
     function F() {
         return { x: 1 }; // error
     }
     return F;
-})();
+}());
 var G = (function () {
     function G() {
         return { x: null };
     }
     return G;
-})();
+}());

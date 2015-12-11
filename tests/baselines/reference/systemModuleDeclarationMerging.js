@@ -26,7 +26,7 @@ System.register([], function(exports_1) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports_1("C", C);
             (function (C) {
                 var x;

@@ -43,17 +43,17 @@ var C0 = (function () {
     function C0() {
     }
     return C0;
-})();
+}());
 var C1 = (function () {
     function C1(n, s) {
     }
     return C1;
-})();
+}());
 var T = (function () {
     function T(n) {
     }
     return T;
-})();
+}());
 var anyCtor;
 var anyCtor1;
 var nestedCtor;

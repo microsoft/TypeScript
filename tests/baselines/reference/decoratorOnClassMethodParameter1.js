@@ -23,4 +23,4 @@ var C = (function () {
         __param(0, dec)
     ], C.prototype, "method", null);
     return C;
-})();
+}());

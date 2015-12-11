@@ -1,0 +1,51 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(29,2): error TS1226: Type predicate 'this is File' is not assignable to 'this is Networked & FileSystemObject'.
+  Type 'File' is not assignable to type 'Networked & FileSystemObject'.
+    Type 'File' is not assignable to type 'Networked'.
+      Property 'host' is missing in type 'File'.
+tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(31,2): error TS1226: Type predicate 'this is FileSystemObject' is not assignable to 'this is File'.
+  Type 'FileSystemObject' is not assignable to type 'File'.
+    Property 'content' is missing in type 'FileSystemObject'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (2 errors) ====
+    // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+    namespace Test {
+    	export class FileSystemObject {
+    		isFSO: this is FileSystemObject;
+    		get isFile(): this is File {
+    			return this instanceof File;
+    		}
+    		set isFile(param) {
+    			// noop
+    		}
+    		get isDirectory(): this is Directory {
+    			return this instanceof Directory;
+    		}
+    		isNetworked: this is (Networked & this);
+    		constructor(public path: string) {}
+    	}
+    
+    	export class File extends FileSystemObject {
+    		constructor(path: string, public content: string) { super(path); }
+    	}
+    	export class Directory extends FileSystemObject {
+    		children: FileSystemObject[];
+    	}
+    	export interface Networked {
+    		host: string;
+    	}
+    
+    	let file: FileSystemObject = new File("foo/bar.txt", "foo");
+    	file.isNetworked = file.isFile;
+    	~~~~~~~~~~~~~~~~
+!!! error TS1226: Type predicate 'this is File' is not assignable to 'this is Networked & FileSystemObject'.
+!!! error TS1226:   Type 'File' is not assignable to type 'Networked & FileSystemObject'.
+!!! error TS1226:     Type 'File' is not assignable to type 'Networked'.
+!!! error TS1226:       Property 'host' is missing in type 'File'.
+    	file.isFSO = file.isNetworked;
+    	file.isFile = file.isFSO;
+    	~~~~~~~~~~~
+!!! error TS1226: Type predicate 'this is FileSystemObject' is not assignable to 'this is File'.
+!!! error TS1226:   Type 'FileSystemObject' is not assignable to type 'File'.
+!!! error TS1226:     Property 'content' is missing in type 'FileSystemObject'.
+    }

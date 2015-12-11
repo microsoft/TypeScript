@@ -24,7 +24,7 @@ var C = (function () {
     }
     C.prototype.bar = function () { };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -32,7 +32,7 @@ var D = (function (_super) {
     }
     D.prototype.baz = function () { };
     return D;
-})(C);
+}(C));
 var c;
 var d = new D();
 d.bar();

@@ -45,7 +45,7 @@ var W;
         function D() {
         }
         return D;
-    })();
+    }());
     W.D = D;
 })(W || (W = {}));
 var W;

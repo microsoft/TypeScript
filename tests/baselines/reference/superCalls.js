@@ -41,7 +41,7 @@ var Base = (function () {
         this.x = 43;
     }
     return Base;
-})();
+}());
 function v() { }
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -54,12 +54,12 @@ var Derived = (function (_super) {
         var p = v();
     }
     return Derived;
-})(Base);
+}(Base));
 var OtherBase = (function () {
     function OtherBase() {
     }
     return OtherBase;
-})();
+}());
 var OtherDerived = (function (_super) {
     __extends(OtherDerived, _super);
     function OtherDerived() {
@@ -67,4 +67,4 @@ var OtherDerived = (function (_super) {
         _super.call(this);
     }
     return OtherDerived;
-})(OtherBase);
+}(OtherBase));

@@ -25,7 +25,7 @@ System.register([], function(exports_1) {
                 function TopLevelClass() {
                 }
                 return TopLevelClass;
-            })();
+            }());
             exports_1("TopLevelClass", TopLevelClass);
             (function (TopLevelModule) {
                 var v;
@@ -40,7 +40,7 @@ System.register([], function(exports_1) {
                     function NonTopLevelClass() {
                     }
                     return NonTopLevelClass;
-                })();
+                }());
                 TopLevelModule2.NonTopLevelClass = NonTopLevelClass;
                 var NonTopLevelModule;
                 (function (NonTopLevelModule) {

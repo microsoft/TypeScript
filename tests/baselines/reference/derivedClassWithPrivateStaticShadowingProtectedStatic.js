@@ -40,7 +40,7 @@ var Base = (function () {
         configurable: true
     });
     return Base;
-})();
+}());
 // should be error
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -57,4 +57,4 @@ var Derived = (function (_super) {
         configurable: true
     });
     return Derived;
-})(Base);
+}(Base));

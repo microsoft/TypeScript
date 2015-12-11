@@ -5260,11 +5260,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
                 emitStart(node);
-                write(")(");
+                write("(");
                 if (baseTypeNode) {
                     emit(baseTypeNode.expression);
                 }
-                write(")");
+                write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
                 }

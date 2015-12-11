@@ -23,7 +23,7 @@ var m1;
         function C() {
         }
         return C;
-    })();
+    }());
 })(m1 || (m1 = {}));
 __proto__ = 0; // Error, __proto__ not defined
 m1.__proto__ = 0;
@@ -31,5 +31,5 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var foo;

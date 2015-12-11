@@ -29,7 +29,7 @@ var A = (function () {
         this.x = x;
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B(x, data) {
@@ -37,14 +37,14 @@ var B = (function (_super) {
         this.data = data;
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C(x) {
         _super.call(this, x);
     }
     return C;
-})(A);
+}(A));
 var r1 = B; // error
 var r2 = B; // error
 var r3 = C; // ok

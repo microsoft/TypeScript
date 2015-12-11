@@ -42,6 +42,6 @@ var MyModule;
             configurable: true
         });
         return MyClass;
-    })();
+    }());
     MyModule.MyClass = MyClass;
 })(MyModule || (MyModule = {}));

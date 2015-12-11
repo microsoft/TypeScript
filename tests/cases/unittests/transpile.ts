@@ -256,7 +256,7 @@ var x = 0;`,
                 `    ], MyClass);\n` + 
                 `    return MyClass;\n` + 
                 `    var _a;\n` + 
-                `})();\n` + 
+                `}());\n` + 
                 `exports.MyClass = MyClass;\n`;
 
             test(input, 

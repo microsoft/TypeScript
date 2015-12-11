@@ -18,13 +18,13 @@ define(["require", "exports"], function (require, exports) {
             var child = new B(this);
         }
         return A;
-    })();
+    }());
     exports.A = A;
     var B = (function () {
         function B(parent) {
         }
         return B;
-    })();
+    }());
     exports.B = B;
 });
 

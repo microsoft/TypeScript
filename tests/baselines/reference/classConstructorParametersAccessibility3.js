@@ -24,7 +24,7 @@ var Base = (function () {
         this.p = p;
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(p) {
@@ -33,6 +33,6 @@ var Derived = (function (_super) {
         this.p; // OK
     }
     return Derived;
-})(Base);
+}(Base));
 var d;
 d.p; // public, OK

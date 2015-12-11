@@ -71,7 +71,7 @@ var D0 = (function (_super) {
         _super.apply(this, arguments);
     }
     return D0;
-})(Base);
+}(Base));
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
@@ -80,7 +80,7 @@ var D1 = (function (_super) {
         this.y = "y";
     }
     return D1;
-})(getBase());
+}(getBase()));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
@@ -90,7 +90,7 @@ var D2 = (function (_super) {
         this.y = 2;
     }
     return D2;
-})(getBase());
+}(getBase()));
 var D3 = (function (_super) {
     __extends(D3, _super);
     function D3() {
@@ -99,7 +99,7 @@ var D3 = (function (_super) {
         this.y = 2;
     }
     return D3;
-})(getBase());
+}(getBase()));
 // Error, no constructors with three type arguments
 var D4 = (function (_super) {
     __extends(D4, _super);
@@ -107,7 +107,7 @@ var D4 = (function (_super) {
         _super.apply(this, arguments);
     }
     return D4;
-})(getBase());
+}(getBase()));
 // Error, constructor return types differ
 var D5 = (function (_super) {
     __extends(D5, _super);
@@ -115,4 +115,4 @@ var D5 = (function (_super) {
         _super.apply(this, arguments);
     }
     return D5;
-})(getBadBase());
+}(getBadBase()));

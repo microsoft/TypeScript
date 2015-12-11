@@ -26,7 +26,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralType
     
     class C {
         foo(x: 'hi') { }
-        ~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     
@@ -50,7 +50,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/stringLiteralType
     
     var b = {
         foo(x: 'hi') { },
-        ~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2381: A signature with an implementation cannot use a string literal type.
         a: function foo(x: 'hi', y: 'hi') { },
                     ~~~

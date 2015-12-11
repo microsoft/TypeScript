@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             b.c = c;
         })(b = a.b || (a.b = {}));
     })(a = exports.a || (exports.a = {}));

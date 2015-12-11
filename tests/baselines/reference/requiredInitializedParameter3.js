@@ -15,7 +15,7 @@ var C1 = (function () {
         if (a === void 0) { a = 0; }
     };
     return C1;
-})();
+}());
 
 
 //// [requiredInitializedParameter3.d.ts]

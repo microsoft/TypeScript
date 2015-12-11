@@ -12,4 +12,4 @@ var foo = (function () {
     }
     foo.fnOverload = function (foo) { };
     return foo;
-})();
+}());

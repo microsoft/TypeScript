@@ -19,5 +19,5 @@ var Foo = (function () {
         console.log(_i); // This should result in error
     }
     return Foo;
-})();
+}());
 new Foo();

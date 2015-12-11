@@ -36,7 +36,7 @@ var A = (function () {
     }
     A.prototype.foo = function () { return ""; };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -44,7 +44,7 @@ var B = (function (_super) {
     }
     B.prototype.bar = function () { return 1; };
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -52,7 +52,7 @@ var C = (function (_super) {
     }
     C.prototype.baz = function () { return 1; };
     return C;
-})(A);
+}(A));
 var a;
 var b;
 var c;

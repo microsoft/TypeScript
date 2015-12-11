@@ -232,14 +232,14 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));
 var b;
 var b = function () {
     return new Base();
@@ -290,12 +290,12 @@ var Derived2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base);
+}(Base));
 var AnotherClass = (function () {
     function AnotherClass() {
     }
     return AnotherClass;
-})();
+}());
 // if f is a contextually typed function expression, the inferred return type is the union type
 // of the types of the return statement expressions in the function body, 
 // ignoring return statements with no expressions.

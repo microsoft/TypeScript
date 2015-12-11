@@ -68,7 +68,7 @@ var SomeClass = (function () {
         var rewrites6 = React.createElement("div", {a: { p: p }});
     };
     return SomeClass;
-})();
+}());
 var whitespace1 = React.createElement("div", null, "      ");
 var whitespace2 = React.createElement("div", null, "  ", p, "    ");
 var whitespace3 = React.createElement("div", null, p);

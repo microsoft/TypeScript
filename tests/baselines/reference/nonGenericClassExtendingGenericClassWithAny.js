@@ -15,11 +15,11 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
         _super.apply(this, arguments);
     }
     return Bar;
-})(Foo); // Valid
+}(Foo)); // Valid

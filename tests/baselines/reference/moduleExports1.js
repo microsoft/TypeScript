@@ -26,7 +26,7 @@ define(["require", "exports"], function (require, exports) {
                     function Rue() {
                     }
                     return Rue;
-                })();
+                }());
                 Street.Rue = Rue;
             })(Street = Strasse.Street || (Strasse.Street = {}));
         })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));

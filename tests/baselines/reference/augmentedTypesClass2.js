@@ -40,7 +40,7 @@ var c11 = (function () {
         return 1;
     };
     return c11;
-})();
+}());
 // class then class - covered
 // class then enum 
 var c33 = (function () {
@@ -50,7 +50,7 @@ var c33 = (function () {
         return 1;
     };
     return c33;
-})();
+}());
 var c33;
 (function (c33) {
     c33[c33["One"] = 0] = "One";
@@ -64,4 +64,4 @@ var c44 = (function () {
         return 1;
     };
     return c44;
-})();
+}());

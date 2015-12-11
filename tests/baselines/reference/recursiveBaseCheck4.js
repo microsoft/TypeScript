@@ -14,5 +14,5 @@ var M = (function (_super) {
         _super.apply(this, arguments);
     }
     return M;
-})(M);
+}(M));
 (new M).blah;
