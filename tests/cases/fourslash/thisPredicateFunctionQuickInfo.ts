@@ -61,31 +61,13 @@
 
 goTo.marker("1");
 verify.quickInfoIs("(method) RoyalGuard.isLeader(): this is LeadGuard");
-goTo.marker("2");
-verify.completionListContains("lead");
 goTo.marker("3");
 verify.quickInfoIs("(method) RoyalGuard.isFollower(): this is FollowerGuard");
-goTo.marker("4");
-verify.completionListContains("follow");
 
 goTo.marker("5");
 verify.quickInfoIs("(method) GuardInterface.isLeader(): this is LeadGuard");
-goTo.marker("6");
-verify.completionListContains("lead");
 goTo.marker("7");
 verify.quickInfoIs("(method) GuardInterface.isFollower(): this is FollowerGuard");
-goTo.marker("8");
-verify.completionListContains("follow");
-
-goTo.marker("9");
-verify.completionListContains("lead");
-goTo.marker("10");
-verify.completionListContains("follow");
-
-goTo.marker("11");
-verify.completionListContains("lead");
-goTo.marker("12");
-verify.completionListContains("follow");
 
 goTo.marker("13");
 verify.quickInfoIs("let leaderStatus: boolean");

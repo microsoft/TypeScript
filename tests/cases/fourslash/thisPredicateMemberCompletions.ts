@@ -73,65 +73,23 @@
 //// 	}
 //// }
 
-goTo.marker("1");
-verify.quickInfoIs("(property) FileSystemObject.isFile: this is Item");
-goTo.marker("2");
-verify.quickInfoIs("(property) FileSystemObject.isFile: this is Item");
-goTo.marker("3");
-verify.quickInfoIs("(property) FileSystemObject.isDirectory: this is Directory");
-goTo.marker("4");
-verify.quickInfoIs("(property) FileSystemObject.isNetworked: this is Networked & this");
-goTo.marker("5");
-verify.quickInfoIs("(property) Crate<T>.isSundries: this is Crate<Sundries>");
-goTo.marker("6");
-verify.quickInfoIs("(property) Crate<T>.isSupplies: this is Crate<Supplies>");
-goTo.marker("7");
-verify.quickInfoIs(`(property) Crate<T>.isPackedTight: this is this & {
-    extraContents: T;
-}`);
-goTo.marker("8");
-verify.quickInfoIs("(property) FileSystemObject.isFile: this is Item");
 goTo.marker("9");
 verify.completionListContains("content");
-goTo.marker("10");
-verify.quickInfoIs("(property) FileSystemObject.isNetworked: this is Networked & Item");
 goTo.marker("11");
 verify.completionListContains("host");
-goTo.marker("12");
-verify.quickInfoIs("(property) FileSystemObject.isDirectory: this is Directory");
 goTo.marker("13");
 verify.completionListContains("children");
-goTo.marker("14");
-verify.quickInfoIs("(property) FileSystemObject.isNetworked: this is Networked & Directory");
 goTo.marker("15");
 verify.completionListContains("host");
-goTo.marker("16");
-verify.quickInfoIs("(property) FileSystemObject.isNetworked: this is Networked & FileSystemObject");
 goTo.marker("17");
 verify.completionListContains("host");
-goTo.marker("18");
-verify.quickInfoIs(`(property) Crate<any>.isPackedTight: this is Crate<any> & {
-    extraContents: any;
-}`);
 goTo.marker("19");
 verify.completionListContains("extraContents");
-goTo.marker("20");
-verify.quickInfoIs("(property) Crate<any>.isSundries: this is Crate<Sundries>");
 goTo.marker("21");
 verify.completionListContains("broken");
-goTo.marker("22");
-verify.quickInfoIs(`(property) Crate<Sundries>.isPackedTight: this is Crate<Sundries> & {
-    extraContents: Sundries;
-}`);
 goTo.marker("23");
 verify.completionListContains("extraContents");
-goTo.marker("24");
-verify.quickInfoIs("(property) Crate<any>.isSupplies: this is Crate<Supplies>");
 goTo.marker("25");
 verify.completionListContains("spoiled");
-goTo.marker("26");
-verify.quickInfoIs(`(property) Crate<Supplies>.isPackedTight: this is Crate<Supplies> & {
-    extraContents: Supplies;
-}`);
 goTo.marker("27");
 verify.completionListContains("extraContents");
