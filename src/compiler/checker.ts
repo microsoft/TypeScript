@@ -7644,6 +7644,7 @@ namespace ts {
                 return type && narrowType(type, flow.expression, flow.assumeTrue);
             }
 
+<<<<<<< 6e29b517c1915580728739864d5d7f6743d7ae14
             function getTypeAtFlowNodeCached(flow: FlowNode) {
                 const cache = getFlowTypeCache(flow);
                 if (!key) {
@@ -7658,6 +7659,19 @@ namespace ts {
                     if (flowStackNodes[i] === flow && flowStackCacheKeys[i] === key) {
                         return undefined;
                     }
+=======
+                    return narrowBasedOnMatchingProperty(type, propName);
+                }
+
+                function isMemberSubtype(type: Type, check: Type, selectors: string[]): boolean {
+                    if (!selectors.length) {
+                        return isTypeSubtypeOf(type, check);
+                    }
+                    const name = selectors.pop();
+                    const childProp = getPropertyOfType(type, name);
+                    const propType = childProp && getTypeOfSymbol(childProp);
+                    return propType && isMemberSubtype(propType, check, selectors);
+>>>>>>> improve style/names
                 }
                 // Record node and key on stack of nodes being processed.
                 flowStackNodes[flowStackCount] = flow;
@@ -7670,6 +7684,7 @@ namespace ts {
                 return cache[key] || type && (cache[key] = type);
             }
 
+<<<<<<< 6e29b517c1915580728739864d5d7f6743d7ae14
             function getTypeAtFlowLabel(flow: FlowLabel) {
                 const antecedentTypes: Type[] = [];
                 for (const antecedent of flow.antecedents) {
@@ -7687,6 +7702,20 @@ namespace ts {
                         if (!contains(antecedentTypes, type)) {
                             antecedentTypes.push(type);
                         }
+=======
+                function narrowBasedOnMatchingProperty(type: Type, name: string): Type {
+                    const childProp = getPropertyOfType(type, name);
+                    const propType = childProp && getTypeOfSymbol(childProp);
+                    const narrowedType = propType && narrowIntrospectively(propType);
+
+                    if (narrowedType && !isTypeIdenticalTo(propType, narrowedType)) {
+                        const symbols = cloneSymbolTable(resolveStructuredTypeMembers(type as ObjectType).members);
+                        const temp = createSymbol(childProp.flags, name);
+                        getSymbolLinks(temp).type = narrowedType;
+                        symbols[name] = temp;
+                        return createAnonymousType(createSymbol(type.symbol.flags, type.symbol.name), symbols, getSignaturesOfType(type, SignatureKind.Call),
+                            getSignaturesOfType(type, SignatureKind.Construct), getIndexTypeOfType(type, IndexKind.String), getIndexTypeOfType(type, IndexKind.Number));
+>>>>>>> improve style/names
                     }
                 }
                 return antecedentTypes.length === 0 ? undefined :
