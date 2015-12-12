@@ -428,14 +428,14 @@ namespace ts {
             }
             // return undefined if we can't find a symbol.
         }
-        
+
         function getSymbolOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[] {
             const constructoDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
-            
+
             const parameterSymbol = getSymbol(constructoDeclaration.locals, parameterName, SymbolFlags.Value);
             const propertySymbol = getSymbol(classDeclaration.symbol.members, parameterName, SymbolFlags.Value);
-            
+
             return parameterSymbol && propertySymbol ? [parameterSymbol, propertySymbol] : undefined;
         }
 
