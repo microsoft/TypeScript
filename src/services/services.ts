@@ -5967,6 +5967,15 @@ namespace ts {
                     }
                 }
 
+                // If the symbol.valueDeclaration is a property parameter declaration,
+                // we should include both parameter declaration symbol and property declaration symbol
+                // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in contructor.locals.
+                // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
+                if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
+                    isPropertyParameterDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
+                    result = result.concat(typeChecker.getSymbolOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
+                }
+
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.
                 // If the symbol is an instantiation from a another symbol (e.g. widened symbol) , add the root the list
                 forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
@@ -6035,6 +6044,8 @@ namespace ts {
                         return forEach(typeChecker.getRootSymbols(contextualSymbol), s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     });
                 }
+
+                // If the reference
 
                 // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
                 // Or a union property, use its underlying unioned symbols

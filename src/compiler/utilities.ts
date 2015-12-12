@@ -2741,4 +2741,10 @@ namespace ts {
             }
         }
     }
+    
+    export function isPropertyParameterDeclaration(node: ParameterDeclaration): boolean {
+        // If this is a property-parameter, then also declare the property symbol into the
+        // containing class.
+        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    }
 }
