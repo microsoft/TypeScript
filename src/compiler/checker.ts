@@ -11255,7 +11255,7 @@ namespace ts {
             checkGrammarMethod(node) || checkGrammarComputedPropertyName(node.name);
 
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
-            checkFunctionLikeDeclaration(node);
+            checkFunctionOrMethodDeclaration(node);
 
             // Abstract methods cannot have an implementation.
             // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
@@ -11382,6 +11382,8 @@ namespace ts {
                 // Grammar checking accessors
                 checkGrammarFunctionLikeDeclaration(node) || checkGrammarAccessor(node) || checkGrammarComputedPropertyName(node.name);
 
+                checkDecorators(node);
+                checkSignatureDeclaration(node);
                 if (node.kind === SyntaxKind.GetAccessor) {
                     if (!isInAmbientContext(node) && nodeIsPresent(node.body) && (node.flags & NodeFlags.HasImplicitReturn)) {
                         if (node.flags & NodeFlags.HasExplicitReturn) {
@@ -11394,7 +11396,12 @@ namespace ts {
                         }
                     }
                 }
-
+                // Do not use hasDynamicName here, because that returns false for well known symbols.
+                // We want to perform checkComputedPropertyName for all computed properties, including
+                // well known symbols.
+                if (node.name.kind === SyntaxKind.ComputedPropertyName) {
+                    checkComputedPropertyName(<ComputedPropertyName>node.name);
+                }
                 if (!hasDynamicName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
@@ -11418,8 +11425,16 @@ namespace ts {
                 }
                 getTypeOfAccessors(getSymbolOfNode(node));
             }
+            if (node.parent.kind !== SyntaxKind.ObjectLiteralExpression) {
+                checkSourceElement(node.body);
+            }
+        }
 
-            checkFunctionLikeDeclaration(node);
+        function checkObjectLiteralAccessorBody(node: AccessorDeclaration) {
+            if (node.body) {
+                checkSourceElement(node.body);
+                checkFunctionAndClassExpressionBodies(node.body);
+            }
         }
 
         function checkMissingDeclaration(node: Node) {
@@ -12277,7 +12292,7 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                checkFunctionLikeDeclaration(node) || checkGrammarForGenerator(node);
+                checkFunctionOrMethodDeclaration(node) || checkGrammarForGenerator(node);
 
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
@@ -12285,7 +12300,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionLikeDeclaration(node: FunctionLikeDeclaration): void {
+        function checkFunctionOrMethodDeclaration(node: FunctionDeclaration | MethodDeclaration): void {
             checkDecorators(node);
             checkSignatureDeclaration(node);
             const isAsync = isAsyncFunctionLike(node);
@@ -12332,7 +12347,7 @@ namespace ts {
             }
 
             checkSourceElement(node.body);
-            if (!isAccessor(node.kind) && !node.asteriskToken) {
+            if (!node.asteriskToken) {
                 const returnOrPromisedType = node.type && (isAsync ? checkAsyncFunctionReturnType(node) : getTypeFromTypeNode(node.type));
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
@@ -14483,10 +14498,15 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionDeclaration:
                     forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
+                    break;
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    forEach((<FunctionLikeDeclaration>node).parameters, checkFunctionAndClassExpressionBodies);
+                    if (node.parent.kind === SyntaxKind.ObjectLiteralExpression) {
+                        checkObjectLiteralAccessorBody(<AccessorDeclaration>node);
+                    }
                     break;
                 case SyntaxKind.WithStatement:
                     checkFunctionAndClassExpressionBodies((<WithStatement>node).expression);
