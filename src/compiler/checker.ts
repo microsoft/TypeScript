@@ -4115,6 +4115,16 @@ namespace ts {
             return signature.erasedSignatureCache;
         }
 
+        function getAnyReturningErasedSignature(signature: Signature): Signature {
+            if (!signature.anyReturningErasedSignatureCache) {
+                const erasedSignature = getErasedSignature(signature);
+                const anyReturningErasedSignature = cloneSignature(erasedSignature);
+                anyReturningErasedSignature.resolvedReturnType = anyType;
+                signature.anyReturningErasedSignatureCache = anyReturningErasedSignature;
+            }
+            return signature.anyReturningErasedSignatureCache;
+        }
+
         function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
             // There are two ways to declare a construct signature, one is by declaring a class constructor
             // using the constructor keyword, and the other is declaring a bare construct signature in an
@@ -4985,16 +4995,19 @@ namespace ts {
             const erasedSource = getErasedSignature(implementation);
             const erasedTarget = getErasedSignature(overload);
 
+            // First see if the return types are compatible in either direction.
             const sourceReturnType = getReturnTypeOfSignature(erasedSource);
             const targetReturnType = getReturnTypeOfSignature(erasedTarget);
             if (targetReturnType === voidType
                 || checkTypeRelatedTo(targetReturnType, sourceReturnType, assignableRelation, /*errorNode*/ undefined)
                 || checkTypeRelatedTo(sourceReturnType, targetReturnType, assignableRelation, /*errorNode*/ undefined)) {
-                const anyReturningSource = cloneSignature(erasedSource);
-                const anyReturningTarget = cloneSignature(erasedTarget);
-                anyReturningSource.resolvedReturnType = anyType;
-                anyReturningTarget.resolvedReturnType = anyType;
 
+                // The return types are compatible, so create versions of the signature with 'any' as the return type.
+                // We need to do this so that we can check assignability while disregarding the return type.
+                const anyReturningSource = getAnyReturningErasedSignature(implementation);
+                const anyReturningTarget = getAnyReturningErasedSignature(overload);
+
+                // Create object types to actually perform relation checks.
                 const anyReturningSourceType = getOrCreateTypeFromSignature(anyReturningSource);
                 const anyReturningTargetType = getOrCreateTypeFromSignature(anyReturningTarget);
                 return checkTypeRelatedTo(anyReturningSourceType, anyReturningTargetType, assignableRelation, /*errorNode*/ undefined);

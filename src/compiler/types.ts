@@ -2280,6 +2280,8 @@ namespace ts {
         /* @internal */
         erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
         /* @internal */
+        anyReturningErasedSignatureCache?: Signature; // A version of the erased signature whose type returns 'any'
+        /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
     }
 
