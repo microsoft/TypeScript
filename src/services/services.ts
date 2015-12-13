@@ -6045,8 +6045,6 @@ namespace ts {
                     });
                 }
 
-                // If the reference
-
                 // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
                 // Or a union property, use its underlying unioned symbols
                 return forEach(typeChecker.getRootSymbols(referenceSymbol), rootSymbol => {

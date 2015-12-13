@@ -429,7 +429,13 @@ namespace ts {
             // return undefined if we can't find a symbol.
         }
 
-        function getSymbolOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[] {
+        /**
+         * Get symbols that represent parameter-property-declaration as parameter and as property declaration
+         * @param parameter a parameterDeclaration node
+         * @param parameterName a name of the parameter to get the symbols for.
+         * @return a tuple of two symbols 
+         */
+        function getSymbolOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
             const constructoDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
 
