@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES6.ts(9,6): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES6.ts(9,6): error TS2466: 'super' cannot be referenced in a computed property name.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES6.ts (1 errors) ====
@@ -12,5 +12,5 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames24_ES6.ts(9,
         // use of super in static properties initializers.
         [super.bar()]() { }
          ~~~~~
-!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+!!! error TS2466: 'super' cannot be referenced in a computed property name.
     }

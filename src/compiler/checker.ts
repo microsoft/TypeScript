@@ -7053,24 +7053,26 @@ namespace ts {
             let nodeCheckFlag: NodeCheckFlags = 0;
 
             if (!canUseSuperExpression) {
-                if (isCallExpression) {
+                // issue more specific error if super is used in computed property name
+                // class A { foo() { return "1" }}
+                // class B {
+                //     [super.foo()]() {}
+                // }
+                let current = node;
+                while (current && current !== container && current.kind !== SyntaxKind.ComputedPropertyName) {
+                    current = current.parent;
+                }
+                if (current && current.kind === SyntaxKind.ComputedPropertyName) {
+                    error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
+                }
+                else if (isCallExpression) {
                     error(node, Diagnostics.Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors);
                 }
                 else if (!container || !container.parent || !(isClassLike(container.parent) || container.parent.kind === SyntaxKind.ObjectLiteralExpression)) {
                     error(node, Diagnostics.super_can_only_be_referenced_in_members_of_derived_classes_or_object_literal_expressions);
                 }
                 else {
-                    // issue more specific error if super is used in computed property name
-                    let current = node;
-                    while (current && current !== container && current.kind !== SyntaxKind.ComputedPropertyName) {
-                        current = current.parent;
-                    }
-                    if (current && current.kind === SyntaxKind.ComputedPropertyName) {
-                        error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
-                    }
-                    else {
-                        error(node, Diagnostics.super_property_access_is_permitted_only_in_a_constructor_member_function_or_member_accessor_of_a_derived_class);
-                    }
+                    error(node, Diagnostics.super_property_access_is_permitted_only_in_a_constructor_member_function_or_member_accessor_of_a_derived_class);
                 }
                 return unknownType;
             }

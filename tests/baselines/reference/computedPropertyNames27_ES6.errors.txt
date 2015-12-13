@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts(4,7): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts(4,7): error TS2466: 'super' cannot be referenced in a computed property name.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames27_ES6.ts(4,
     class C extends Base {
         [(super(), "prop")]() { }
           ~~~~~
-!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+!!! error TS2466: 'super' cannot be referenced in a computed property name.
     }
