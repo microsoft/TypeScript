@@ -2743,9 +2743,13 @@ namespace ts {
                 if (declaration.kind === SyntaxKind.BinaryExpression) {
                     return links.type = checkExpression((<BinaryExpression>declaration).right);
                 }
-                // Handle exports.p = expr
                 if (declaration.kind === SyntaxKind.PropertyAccessExpression) {
-                    return checkExpressionCached((<BinaryExpression>declaration.parent).right);
+                    // Declarations only exist for property access expressions for certain
+                    // special assignment kinds
+                    if (declaration.parent.kind === SyntaxKind.BinaryExpression) {
+                        // Handle exports.p = expr or this.p = expr or className.prototype.method = expr
+                        return links.type = checkExpressionCached((<BinaryExpression>declaration.parent).right);
+                    }
                 }
                 // Handle variable, parameter or property
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -7021,6 +7025,23 @@ namespace ts {
                 const symbol = getSymbolOfNode(container.parent);
                 return container.flags & NodeFlags.Static ? getTypeOfSymbol(symbol) : (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
             }
+
+            // If this is a function in a JS file, it might be a class method. Check if it's the RHS
+            // of a x.prototype.y = function [name]() { .... }
+            if (isInJavaScriptFile(node) && container.kind === SyntaxKind.FunctionExpression) {
+                if (getSpecialPropertyAssignmentKind(container.parent) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                    // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
+                    const className = (((container.parent as BinaryExpression)   // x.protoype.y = f
+                                        .left as PropertyAccessExpression)       // x.prototype.y
+                                        .expression as PropertyAccessExpression) // x.prototype
+                                        .expression;                             // x
+                    const classSymbol = checkExpression(className).symbol;
+                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
+                        return getInferredClassType(classSymbol);
+                    }
+                }
+            }
+
             return anyType;
         }
 
@@ -9742,6 +9763,14 @@ namespace ts {
             return links.resolvedSignature;
         }
 
+        function getInferredClassType(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.inferredClassType) {
+                links.inferredClassType = createAnonymousType(undefined, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+            }
+            return links.inferredClassType;
+        }
+
         /**
          * Syntactically and semantically checks a call or new expression.
          * @param node The call/new expression to be checked.
@@ -9763,8 +9792,14 @@ namespace ts {
                     declaration.kind !== SyntaxKind.ConstructSignature &&
                     declaration.kind !== SyntaxKind.ConstructorType) {
 
-                    // When resolved signature is a call signature (and not a construct signature) the result type is any
-                    if (compilerOptions.noImplicitAny) {
+                    // When resolved signature is a call signature (and not a construct signature) the result type is any, unless
+                    // the declaring function had members created through 'x.prototype.y = expr' or 'this.y = expr' psuedodeclarations
+                    // in a JS file
+                    const funcSymbol = checkExpression(node.expression).symbol;
+                    if (funcSymbol && funcSymbol.members && (funcSymbol.flags & SymbolFlags.Function)) {
+                        return getInferredClassType(funcSymbol);
+                    }
+                    else if (compilerOptions.noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
