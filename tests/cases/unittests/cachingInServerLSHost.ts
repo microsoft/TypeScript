@@ -36,11 +36,9 @@ module ts {
             getCurrentDirectory: (): string => {
                 return "";
             },
-            readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
+            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
                 throw new Error("NYI");
             },
-            readDirectoryNames: (path: string): string[] => { throw new Error("NYI"); },
-            readFileNames: (path: string): string[] => { throw new Error("NYI"); },
             exit: (exitCode?: number) => {
             },
             watchFile: (path, callback) => {

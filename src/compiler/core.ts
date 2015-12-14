@@ -25,19 +25,13 @@ namespace ts {
             contains,
             remove,
             forEachValue: forEachValueInMap,
-            reduceProperties: reducePropertiesInMap,
             clear,
-            mergeFrom
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
             for (const key in files) {
                 f(<Path>key, files[key]);
             }
-        }
-
-        function reducePropertiesInMap<U>(callback: (memo: U, value: T, key: Path) => U, initial: U) {
-            return reduceProperties(files, callback, initial);
         }
 
         // path should already be well-formed so it does not need to be normalized
@@ -60,16 +54,6 @@ namespace ts {
 
         function clear() {
             files = {};
-        }
-
-        function mergeFrom(other: FileMap<T>) {
-            other.forEachValue(mergeFromOther);
-        }
-
-        function mergeFromOther(key: Path, value: T) {
-            if (!contains(key)) {
-                set(key, value);
-            }
         }
 
         function toKey(path: Path): string {
@@ -126,6 +110,15 @@ namespace ts {
                 if (array[i] === value) {
                     return i;
                 }
+            }
+        }
+        return -1;
+    }
+
+    export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
+        for (let i = start || 0, len = text.length; i < len; ++i) {
+            if (contains(charCodes, text.charCodeAt(i))) {
+                return i;
             }
         }
         return -1;
@@ -524,6 +517,10 @@ namespace ts {
         return a < b ? Comparison.LessThan : Comparison.GreaterThan;
     }
 
+    export function compareStringsCaseInsensitive(a: string, b: string) {
+        return compareStrings(a, b, /*ignoreCase*/ true);
+    }
+
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
         return diagnostic.file ? diagnostic.file.fileName : undefined;
     }
@@ -859,6 +856,180 @@ namespace ts {
         const pathLen = path.length;
         const extLen = extension.length;
         return pathLen > extLen && path.substr(pathLen - extLen, extLen) === extension;
+    }
+
+    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+        for (const extension of extensions) {
+            if (fileExtensionIs(path, extension)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    // Reserved characters, forces escaping of any non-word (or digit), non-whitespace character.
+    // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
+    // proof.
+    const reservedCharacterPattern = /[^\w\s\/]/g;
+    const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
+
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude", useCaseSensitiveFileNames: boolean) {
+        if (specs === undefined || specs.length === 0) {
+            return undefined;
+        }
+
+        let pattern = "";
+        let hasWrittenSubpattern = false;
+        spec: for (const spec of specs) {
+            if (!spec) {
+                continue;
+            }
+
+            let subpattern = "";
+            let hasRecursiveDirectoryWildcard = false;
+            let hasWrittenComponent = false;
+            const components = getNormalizedPathComponents(spec, basePath);
+            if (usage !== "exclude" && components[components.length - 1] === "**") {
+                continue spec;
+            }
+
+            // getNormalizedPathComponents includes the separator for the root component.
+            // We need to remove to create our regex correctly.
+            components[0] = removeTrailingDirectorySeparator(components[0]);
+
+            let optionalCount = 0;
+            for (const component of components) {
+                if (component === "**") {
+                    if (hasRecursiveDirectoryWildcard) {
+                        continue spec;
+                    }
+
+                    subpattern += "(/.+?)?";
+                    hasRecursiveDirectoryWildcard = true;
+                    hasWrittenComponent = true;
+                }
+                else {
+                    if (usage === "directories") {
+                        subpattern += "(";
+                        optionalCount++;
+                    }
+
+                    if (hasWrittenComponent) {
+                        subpattern += directorySeparator;
+                    }
+
+                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+                    hasWrittenComponent = true;
+                }
+            }
+
+            while (optionalCount > 0) {
+                subpattern += ")?";
+                optionalCount--;
+            }
+
+            if (hasWrittenSubpattern) {
+                pattern += "|";
+            }
+
+            pattern += "(" + subpattern + ")";
+            hasWrittenSubpattern = true;
+        }
+
+        if (!pattern) {
+            return undefined;
+        }
+
+        return new RegExp("^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$"), useCaseSensitiveFileNames ? "" : "i");
+    }
+
+    function replaceWildcardCharacter(match: string) {
+        return match === "*" ? "[^/]*" : match === "?" ? "[^/]" : "\\" + match;
+    }
+
+    export interface FileSystemEntries {
+        files: string[];
+        directories: string[];
+    }
+
+    export function matchFiles(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string, getFileSystemEntries: (path: string) => FileSystemEntries): string[] {
+        path = normalizePath(path);
+        currentDirectory = normalizePath(currentDirectory);
+        const absolutePath = combinePaths(currentDirectory, path);
+        const includeFileRegex = getRegularExpressionForWildcard(includes, absolutePath, "files", useCaseSensitiveFileNames);
+        const includeDirectoryRegex = getRegularExpressionForWildcard(includes, absolutePath, "directories", useCaseSensitiveFileNames);
+        const excludeRegex = getRegularExpressionForWildcard(excludes, absolutePath, "exclude", useCaseSensitiveFileNames);
+        const result: string[] = [];
+        for (const basePath of getBasePaths(path, includes, useCaseSensitiveFileNames)) {
+            visitDirectory(basePath, combinePaths(currentDirectory, basePath));
+        }
+        return result;
+
+        function visitDirectory(path: string, absolutePath: string) {
+            const { files, directories } = getFileSystemEntries(path);
+
+            for (const current of files) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if ((!extensions || fileExtensionIsAny(name, extensions)) &&
+                    (!includeFileRegex || includeFileRegex.test(absoluteName)) &&
+                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
+                    result.push(name);
+                }
+            }
+
+            for (const current of directories) {
+                const name = combinePaths(path, current);
+                const absoluteName = combinePaths(absolutePath, current);
+                if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
+                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
+                    visitDirectory(name, absoluteName);
+                }
+            }
+        }
+    }
+
+    /**
+     * Computes the unique non-wildcard base paths amongst the provided include patterns.
+     */
+    function getBasePaths(path: string, includes: string[], useCaseSensitiveFileNames: boolean) {
+        // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
+        const basePaths: string[] = [path];
+        if (includes) {
+            // Storage for literal base paths amongst the include patterns.
+            const includeBasePaths: string[] = [];
+            for (const include of includes) {
+                if (isRootedDiskPath(include)) {
+                    const wildcardOffset = indexOfAnyCharCode(include, wildcardCharCodes);
+                    const includeBasePath = wildcardOffset < 0
+                        ? removeTrailingDirectorySeparator(getDirectoryPath(include))
+                        : include.substring(0, include.lastIndexOf(directorySeparator, wildcardOffset));
+
+                    // Append the literal and canonical candidate base paths.
+                    includeBasePaths.push(includeBasePath);
+                }
+            }
+
+            // Sort the offsets array using either the literal or canonical path representations.
+            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
+
+            // Iterate over each include base path and include unique base paths that are not a
+            // subpath of an existing base path
+            include: for (let i = 0; i < includeBasePaths.length; ++i) {
+                const includeBasePath = includeBasePaths[i];
+                for (let j = 0; j < basePaths.length; ++j) {
+                    if (containsPath(basePaths[j], includeBasePath, path, !useCaseSensitiveFileNames)) {
+                        continue include;
+                    }
+                }
+
+                basePaths.push(includeBasePath);
+            }
+        }
+
+        return basePaths;
     }
 
     /**

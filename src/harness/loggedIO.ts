@@ -62,8 +62,9 @@ interface IOLog {
     }[];
     directoriesRead: {
         path: string,
-        extension: string,
+        extension: string[],
         exclude: string[],
+        include: string[],
         result: string[]
     }[];
 }
@@ -217,9 +218,9 @@ namespace Playback {
             memoize(path => findResultByPath(wrapper, replayLog.filesRead, path).contents));
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
-            (path, extension, exclude) => {
-                const result = (<ts.System>underlying).readDirectory(path, extension, exclude);
-                const logEntry = { path, extension, exclude, result };
+            (path, extension, exclude, include) => {
+                const result = (<ts.System>underlying).readDirectory(path, extension, exclude, include);
+                const logEntry = { path, extension, exclude, include, result };
                 recordLog.directoriesRead.push(logEntry);
                 return result;
             },

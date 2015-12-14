@@ -14,8 +14,6 @@ namespace ts {
         remove(fileName: Path): void;
 
         forEachValue(f: (key: Path, v: T) => void): void;
-        reduceProperties<U>(f: (memo: U, value: T, key: Path) => U, initial: U): U;
-        mergeFrom(other: FileMap<T>): void;
         clear(): void;
     }
 
@@ -1586,31 +1584,13 @@ namespace ts {
     export interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
 
-        readDirectory(rootDir: string, extension: string, exclude: string[]): string[];
+        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
 
         /**
           * Gets a value indicating whether the specified path exists and is a file.
           * @param path The path to test.
           */
         fileExists(path: string): boolean;
-
-        /**
-          * Gets a value indicating whether the specified path exists and is a directory.
-          * @param path The path to test.
-          */
-        directoryExists(path: string): boolean;
-
-        /**
-         * Reads the files names in the directory.
-         * @param rootDir The directory path.
-         */
-        readFileNames(rootDir: string): string[];
-
-        /**
-         * Reads the directory names in the directory.
-         * @param rootDir The directory path.
-         */
-        readDirectoryNames(rootDir: string): string[];
     }
 
     export interface WriteFileCallback {

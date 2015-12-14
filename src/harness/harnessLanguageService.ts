@@ -575,16 +575,8 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
-        readDirectory(path: string, extension?: string): string[] {
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[] {
             throw new Error("Not implemented Yet.");
-        }
-
-        readDirectoryNames(path: string): string[] {
-            throw new Error("Not implemented.");
-        }
-
-        readFileNames(path: string): string[] {
-            throw new Error("Not implemented.");
         }
 
         watchFile(fileName: string, callback: (fileName: string) => void): ts.FileWatcher {

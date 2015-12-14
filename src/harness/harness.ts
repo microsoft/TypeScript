@@ -23,6 +23,7 @@
 /// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
+/// <reference path="vfs.ts" />
 /* tslint:disable:no-null */
 
 // Block scoped definitions work poorly for global variables, temporarily enable var
@@ -435,9 +436,7 @@ namespace Harness {
         args(): string[];
         getExecutingFilePath(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
-        readDirectoryNames(path: string): string[];
-        readFileNames(path: string): string[];
+        readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]): string[];
     }
     export var IO: IO;
 
@@ -475,9 +474,7 @@ namespace Harness {
             export const directoryExists: typeof IO.directoryExists = fso.FolderExists;
             export const fileExists: typeof IO.fileExists = fso.FileExists;
             export const log: typeof IO.log = global.WScript && global.WScript.StdOut.WriteLine;
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
-            export const readDirectoryNames: typeof IO.readDirectoryNames = path => ts.sys.readDirectoryNames(path);
-            export const readFileNames: typeof IO.readFileNames = path => ts.sys.readFileNames(path);
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
 
             export function createDirectory(path: string) {
                 if (directoryExists(path)) {
@@ -547,9 +544,7 @@ namespace Harness {
             export const fileExists: typeof IO.fileExists = fs.existsSync;
             export const log: typeof IO.log = s => console.log(s);
 
-            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude) => ts.sys.readDirectory(path, extension, exclude);
-            export const readDirectoryNames: typeof IO.readDirectoryNames = path => ts.sys.readDirectoryNames(path);
-            export const readFileNames: typeof IO.readFileNames = path => ts.sys.readFileNames(path);
+            export const readDirectory: typeof IO.readDirectory = (path, extension, exclude, include) => ts.sys.readDirectory(path, extension, exclude, include);
 
             export function createDirectory(path: string) {
                 if (!directoryExists(path)) {
@@ -755,16 +750,22 @@ namespace Harness {
                 Http.writeToServerSync(serverRoot + path, "WRITE", contents);
             }
 
-            export function readDirectory(path: string, extension?: string, exclude?: string[]) {
-                return listFiles(path).filter(f => !extension || ts.fileExtensionIs(f, extension));
-            }
-
-            export function readDirectoryNames(path: string): string[] {
-                return [];
-            }
-
-            export function readFileNames(path: string) {
-                return readDirectory(path);
+            export function readDirectory(path: string, extension?: string[], exclude?: string[], include?: string[]) {
+                const fs = new Utils.VirtualFileSystem(path, useCaseSensitiveFileNames());
+                for (const file in listFiles(path)) {
+                    fs.addFile(file);
+                }
+                return ts.matchFiles(path, extension, exclude, include, useCaseSensitiveFileNames(), getCurrentDirectory(), path => {
+                    const entry = fs.traversePath(path);
+                    if (entry && entry.isDirectory()) {
+                        const directory = <Utils.VirtualDirectory>entry;
+                        return {
+                            files: ts.map(directory.getFiles(), f => f.name),
+                            directories: ts.map(directory.getDirectories(), d => d.name)
+                        };
+                    }
+                    return { files: [], directories: [] };
+                });
             }
         }
     }

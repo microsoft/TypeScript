@@ -16,9 +16,7 @@ namespace ts {
         createDirectory(path: string): void;
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
-        readFileNames(path: string): string[];
-        readDirectoryNames(path: string): string[];
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
     }
@@ -61,9 +59,7 @@ namespace ts {
         resolvePath(path: string): string;
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
-        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
-        readDirectoryNames(path: string): string[];
-        readFileNames(path: string): string[];
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
     };
 
     export var sys: System = (function () {
@@ -71,6 +67,7 @@ namespace ts {
         function getWScriptSystem(): System {
 
             const fso = new ActiveXObject("Scripting.FileSystemObject");
+            const shell = new ActiveXObject("WScript.Shell");
 
             const fileStream = new ActiveXObject("ADODB.Stream");
             fileStream.Type = 2 /*text*/;
@@ -150,38 +147,20 @@ namespace ts {
                 return result.sort();
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
-                return result;
-                function visitDirectory(path: string) {
+            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                try {
                     const folder = fso.GetFolder(path || ".");
                     const files = getNames(folder.files);
-                    for (const current of files) {
-                        const name = combinePaths(path, current);
-                        if ((!extension || fileExtensionIs(name, extension)) && !contains(exclude, getCanonicalPath(name))) {
-                            result.push(name);
-                        }
-                    }
-                    const subfolders = getNames(folder.subfolders);
-                    for (const current of subfolders) {
-                        const name = combinePaths(path, current);
-                        if (!contains(exclude, getCanonicalPath(name))) {
-                            visitDirectory(name);
-                        }
-                    }
+                    const directories = getNames(folder.subfolders);
+                    return { files, directories };
+                }
+                catch (e) {
+                    return { files: [], directories: [] };
                 }
             }
 
-            function readFileNames(path: string): string[] {
-                const folder = fso.GetFolder(path || ".");
-                return getNames(folder.files);
-            }
-
-            function readDirectoryNames(path: string): string[] {
-                const folder = fso.GetFolder(path || ".");
-                return getNames(folder.directories);
+            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
+                return matchFiles(path, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, shell.CurrentDirectory, getAccessibleFileSystemEntries);
             }
 
             return {
@@ -211,11 +190,9 @@ namespace ts {
                     return WScript.ScriptFullName;
                 },
                 getCurrentDirectory() {
-                    return new ActiveXObject("WScript.Shell").CurrentDirectory;
+                    return shell.CurrentDirectory;
                 },
                 readDirectory,
-                readFileNames,
-                readDirectoryNames,
                 exit(exitCode?: number): void {
                     try {
                         WScript.Quit(exitCode);
@@ -385,56 +362,30 @@ namespace ts {
                 return useCaseSensitiveFileNames ? path.toLowerCase() : path;
             }
 
-            function readDirectory(path: string, extension?: string, exclude?: string[]): string[] {
-                const result: string[] = [];
-                exclude = map(exclude, s => getCanonicalPath(combinePaths(path, s)));
-                visitDirectory(path);
-                return result;
-                function visitDirectory(path: string) {
-                    const files = _fs.readdirSync(path || ".").sort();
+            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                try {
+                    const entries = _fs.readdirSync(path || ".").sort();
+                    const files: string[] = [];
                     const directories: string[] = [];
-                    for (const current of files) {
-                        const name = combinePaths(path, current);
-                        if (!contains(exclude, getCanonicalPath(name))) {
-                            const stat = _fs.statSync(name);
-                            if (stat.isFile()) {
-                                if (!extension || fileExtensionIs(name, extension)) {
-                                    result.push(name);
-                                }
-                            }
-                            else if (stat.isDirectory()) {
-                                directories.push(name);
-                            }
+                    for (const entry of entries) {
+                        const name = combinePaths(path, entry);
+                        const stat = _fs.statSync(name);
+                        if (stat.isFile()) {
+                            files.push(entry);
+                        }
+                        else if (stat.isDirectory()) {
+                            directories.push(entry);
                         }
                     }
-                    for (const current of directories) {
-                        visitDirectory(current);
-                    }
+                    return { files, directories };
+                }
+                catch (e) {
+                    return { files: [], directories: [] };
                 }
             }
 
-            function readFileNames(path: string): string[] {
-                const entries = _fs.readdirSync(path || ".");
-                const files: string[] = [];
-                for (const entry of entries) {
-                    const stat = _fs.statSync(combinePaths(path, entry));
-                    if (stat.isFile()) {
-                        files.push(entry);
-                    }
-                }
-                return files.sort();
-            }
-
-            function readDirectoryNames(path: string): string[] {
-                const entries = _fs.readdirSync(path || ".");
-                const directories: string[] = [];
-                for (const entry of entries) {
-                    const stat = _fs.statSync(combinePaths(path, entry));
-                    if (stat.isDirectory()) {
-                        directories.push(entry);
-                    }
-                }
-                return directories.sort();
+            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), getAccessibleFileSystemEntries);
             }
 
             return {
@@ -482,7 +433,7 @@ namespace ts {
                     return _path.resolve(path);
                 },
                 fileExists(path: string): boolean {
-                    return _fs.existsSync(path) && _fs.statSync(path).isFile();
+                    return _fs.existsSync(path);
                 },
                 directoryExists(path: string) {
                     return _fs.existsSync(path) && _fs.statSync(path).isDirectory();
@@ -499,8 +450,6 @@ namespace ts {
                     return process.cwd();
                 },
                 readDirectory,
-                readFileNames,
-                readDirectoryNames,
                 getMemoryUsage() {
                     if (global.gc) {
                         global.gc();
@@ -539,8 +488,6 @@ namespace ts {
                 getExecutingFilePath: () => ChakraHost.executingFile,
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 readDirectory: ChakraHost.readDirectory,
-                readFileNames: ChakraHost.readFileNames,
-                readDirectoryNames: ChakraHost.readDirectoryNames,
                 exit: ChakraHost.quit,
             };
         }
@@ -561,5 +508,3 @@ namespace ts {
         }
     })();
 }
-
-

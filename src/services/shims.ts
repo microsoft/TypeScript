@@ -72,10 +72,7 @@ namespace ts {
          * @param exclude A JSON encoded string[] containing the paths to exclude
          *  when enumerating the directory.
          */
-        readDirectory(rootDir: string, extension: string, exclude?: string): string;
-        readDirectoryNames?(rootDir: string): string;
-        readFileNames?(rootDir: string): string;
-        directoryExists?(path: string): boolean;
+        readDirectory(rootDir: string, extension: string, exclude?: string, include?: string): string;
         useCaseSensitiveFileNames?: boolean;
     }
 
@@ -425,69 +422,42 @@ namespace ts {
             }
         }
 
-        public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            // Wrap the API changes for 1.5 release. This try/catch
-            // should be removed once TypeScript 1.5 has shipped.
+        public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[]): string[] {
+            // Wrap the API changes for 1.8 release. This try/catch
+            // should be removed once TypeScript 1.8 has shipped.
             // Also consider removing the optional designation for
             // the exclude param at this time.
-            var encoded: string;
             try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+                return JSON.parse(this.shimHost.readDirectory(
+                    rootDir,
+                    JSON.stringify(extensions),
+                    JSON.stringify(exclude),
+                    JSON.stringify(include)));
             }
             catch (e) {
-                encoded = this.shimHost.readDirectory(rootDir, extension);
+                let results: string[] = [];
+                for (const extension of extensions) {
+                    for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
+                    {
+                        if (!contains(results, file)) {
+                            results.push(file);
+                        }
+                    }
+                }
+                return results;
             }
-            return JSON.parse(encoded);
-        }
-
-        public readDirectoryNames(path: string): string[] {
-            if (this.shimHost.readDirectory) {
-                const encoded = this.shimHost.readDirectoryNames(path);
-                return JSON.parse(encoded);
-            }
-
-            if (sys) {
-                path = normalizePath(path);
-                path = ensureTrailingDirectorySeparator(path);
-                return sys.readDirectoryNames(path);
-            }
-
-            return [];
-        }
-
-        public readFileNames(path: string): string[] {
-            if (this.shimHost.readFileNames) {
-                const encoded = this.shimHost.readFileNames(path);
-                return JSON.parse(encoded);
-            }
-
-            if (sys) {
-                path = normalizePath(path);
-                path = ensureTrailingDirectorySeparator(path);
-                return sys.readFileNames(path);
-            }
-
-            return [];
         }
 
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
         }
 
-        public directoryExists(directoryName: string): boolean {
-            if (this.shimHost.directoryExists) {
-                return this.shimHost.directoryExists(directoryName);
-            }
-
-            if (sys) {
-                return sys.directoryExists(directoryName);
-            }
-
-            return false;
-        }
-
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
+        }
+
+        private readDirectoryFallback(rootDir: string, extension: string, exclude: string[]) {
+            return JSON.parse(this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude)));
         }
     }
 

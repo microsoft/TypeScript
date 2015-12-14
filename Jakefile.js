@@ -131,6 +131,7 @@ var languageServiceLibrarySources = [
 
 var harnessCoreSources = [
     "harness.ts",
+    "vfs.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
