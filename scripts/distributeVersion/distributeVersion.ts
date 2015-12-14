@@ -5,8 +5,6 @@
 import * as fs from "fs";
 import * as path from "path";
 
-let versionFilePath: string;
-
 interface FileInformation {
     filePath: string;
     ext: string;
@@ -59,12 +57,17 @@ function getFileInformationSync(filePath: string): FileInformation {
 
 }
 
-function getVersionSync(): string {
+function getVersionSync(versionFilePath: string): string {
     try {
         const packageJson: VersionJson = JSON.parse(fs.readFileSync(versionFilePath, "utf8"));
-        // The version has 4 digits, we only need 3
-        const version = packageJson.version;
-        return version.slice(0, 3).join(".");
+        if (packageJson.version && Array.isArray(packageJson.version)) {
+            const version = packageJson.version;
+
+            // The version has 4 digits, we only need 3
+            return version.slice(0, 3).join(".");
+        } else {
+            throw new Error("Invalid version format specified in version file");
+        }
     }
     catch (error) {
         throw new Error("Error in getVersionSync: " + error);
@@ -89,11 +92,11 @@ function distributeVersion(version: string) {
     }
 }
 
-function distributeReleaseVersion() {
-    distributeVersion(getVersionSync());
+function distributeReleaseVersion(versionFilePath: string) {
+    distributeVersion(getVersionSync(versionFilePath));
 }
 
-function distributeNightlyVersion() {
+function distributeNightlyVersion(versionFilePath: string) {
     function computeNightlyVersion(versionString: string): string {
         // If the version string already contains "-nightly",
         // then get the base string and update based on that.
@@ -112,7 +115,7 @@ function distributeNightlyVersion() {
         return `${versionString}-dev.${timeStr}`;
     }
 
-    const nightlyVersion = computeNightlyVersion(getVersionSync());
+    const nightlyVersion = computeNightlyVersion(getVersionSync(versionFilePath));
     distributeVersion(nightlyVersion);
 }
 
@@ -128,12 +131,12 @@ Usage: node distributeVersion.js [options]
 Options:
     -n, --nightly: distribute nightly version (e.g. 1.8.0-dev.20151022)
     -r, --release: distribute release version (e.g. 1.8.0)
-    -v, --versionFile: a path to the version file (see version.json)
-            `);
+    -v, --versionFile: a path to the version file (see version.json)`);
 }
 
 function main() {
     let distributionType: DistributionType = DistributionType.invalid;
+    let versionFilePath: string;
 
     // Parse command line input checking if the users specify whether to configure version for nightly publishing
     if (process.argv.length > 3) {
@@ -159,11 +162,11 @@ function main() {
     switch (distributionType) {
         case DistributionType.nightly:
             console.log("Distributing nightly version using version from version file");
-            distributeNightlyVersion();
+            distributeNightlyVersion(versionFilePath);
             break;
         case DistributionType.release:
             console.log("Distributing release version using version from version file");
-            distributeReleaseVersion();
+            distributeReleaseVersion(versionFilePath);
             break;
         default:
             displayUsage();
