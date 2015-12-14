@@ -5972,8 +5972,8 @@ namespace ts {
                 // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in contructor.locals.
                 // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
                 if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
-                    isPropertyParameterDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
-                    result = result.concat(typeChecker.getSymbolOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
+                    isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
+                    result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
                 }
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.

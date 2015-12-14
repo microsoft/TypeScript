@@ -67,7 +67,7 @@ namespace ts {
             // The language service will always care about the narrowed type of a symbol, because that is
             // the type the language says the symbol should have.
             getTypeOfSymbolAtLocation: getNarrowedTypeOfSymbol,
-            getSymbolOfParameterPropertyDeclaration,
+            getSymbolsOfParameterPropertyDeclaration,
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType,
@@ -435,7 +435,7 @@ namespace ts {
          * @param parameterName a name of the parameter to get the symbols for.
          * @return a tuple of two symbols 
          */
-        function getSymbolOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
+        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
             const constructoDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
 

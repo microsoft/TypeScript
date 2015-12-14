@@ -20,5 +20,5 @@
 let markers = test.markers()
 for (let marker of markers) {
     goTo.position(marker.position);
-    verify.documentHighlightsAtPositionCount(3, ["file1.ts"]);
+    verify.documentHighlightsAtPositionCount(2, ["file1.ts"]);
 }
