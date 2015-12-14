@@ -31,7 +31,7 @@ export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
 for ([x] of [[1]]) {}
 
 //// [systemModule8.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var x, y, z0, z1;
     function foo() {

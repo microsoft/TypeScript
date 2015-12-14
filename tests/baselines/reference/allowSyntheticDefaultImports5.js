@@ -12,7 +12,7 @@ export var x = new Foo();
 
 
 //// [a.js]
-System.register(["./b"], function(exports_1) {
+System.register(["./b"], function(exports_1, __moduleName) {
     "use strict";
     var b_1;
     var x;
