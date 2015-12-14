@@ -31,7 +31,7 @@ var C = (function () {
     }
     C.prototype.toString = function () { };
     return C;
-})();
+}());
 var c;
 o = c; // error
 c = o; // ok

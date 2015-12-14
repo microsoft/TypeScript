@@ -16,7 +16,7 @@ define("a", ["require", "exports"], function (require, exports) {
         function c() {
         }
         return c;
-    })();
+    }());
     exports.c = c;
 });
 function foo() {

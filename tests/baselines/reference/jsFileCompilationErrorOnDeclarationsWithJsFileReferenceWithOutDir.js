@@ -19,7 +19,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 //// [c.js]
 function bar() {
 }

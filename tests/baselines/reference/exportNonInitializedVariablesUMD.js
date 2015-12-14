@@ -51,7 +51,7 @@ export let h1: D = new D;
         function A() {
         }
         return A;
-    })();
+    }());
     var B;
     (function (B) {
         B.a = 1, B.c = 2;
@@ -69,7 +69,7 @@ export let h1: D = new D;
         function D() {
         }
         return D;
-    })();
+    }());
     exports.e1 = new D;
     exports.f1 = new D;
     exports.g1 = new D;

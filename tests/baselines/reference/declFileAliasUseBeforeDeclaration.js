@@ -14,7 +14,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 exports.Foo = Foo;
 //// [declFileAliasUseBeforeDeclaration_test.js]
 "use strict";

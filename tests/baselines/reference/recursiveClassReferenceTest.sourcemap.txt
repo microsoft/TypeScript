@@ -331,7 +331,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->Emitted(23, 21) Source(41, 2) + SourceIndex(0)
 2 >Emitted(23, 43) Source(41, 3) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -952,7 +952,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->Emitted(51, 17) Source(63, 2) + SourceIndex(0)
 2 >Emitted(51, 34) Source(63, 3) + SourceIndex(0)
 ---
->>>            })();
+>>>            }());
 1 >^^^^^^^^^^^^
 2 >            ^
 3 >             
@@ -1225,7 +1225,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1 >Emitted(61, 5) Source(67, 88) + SourceIndex(0)
 2 >Emitted(61, 24) Source(67, 89) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -1640,7 +1640,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1 >Emitted(82, 21) Source(89, 2) + SourceIndex(0)
 2 >Emitted(82, 33) Source(89, 3) + SourceIndex(0)
 ---
->>>                })();
+>>>                }());
 1 >^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
@@ -1812,33 +1812,33 @@ sourceFile:recursiveClassReferenceTest.ts
 1->Emitted(94, 21) Source(99, 2) + SourceIndex(0)
 2 >Emitted(94, 32) Source(99, 3) + SourceIndex(0)
 ---
->>>                })(AbstractMode);
+>>>                }(AbstractMode));
 1->^^^^^^^^^^^^^^^^
 2 >                ^
 3 >                 
-4 >                 ^^
-5 >                   ^^^^^^^^^^^^
-6 >                               ^^
+4 >                 ^
+5 >                  ^^^^^^^^^^^^
+6 >                              ^^^
 7 >                                 ^^^^^^->
 1->
 2 >                }
 3 >                 
 4 >                 export class Mode extends 
-5 >                   AbstractMode
-6 >                                {
-  >                               
-  >                               		// scenario 2
-  >                               		public getInitialState(): IState {
-  >                               			return new State(self);
-  >                               		}
-  >                               
-  >                               
-  >                               	}
+5 >                  AbstractMode
+6 >                               {
+  >                              
+  >                              		// scenario 2
+  >                              		public getInitialState(): IState {
+  >                              			return new State(self);
+  >                              		}
+  >                              
+  >                              
+  >                              	}
 1->Emitted(95, 17) Source(99, 2) + SourceIndex(0)
 2 >Emitted(95, 18) Source(99, 3) + SourceIndex(0)
 3 >Emitted(95, 18) Source(91, 2) + SourceIndex(0)
-4 >Emitted(95, 20) Source(91, 28) + SourceIndex(0)
-5 >Emitted(95, 32) Source(91, 40) + SourceIndex(0)
+4 >Emitted(95, 19) Source(91, 28) + SourceIndex(0)
+5 >Emitted(95, 31) Source(91, 40) + SourceIndex(0)
 6 >Emitted(95, 34) Source(99, 3) + SourceIndex(0)
 ---
 >>>                PlainText.Mode = Mode;

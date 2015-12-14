@@ -53,7 +53,7 @@ var F = (function () {
     }
     F.prototype.test = function () { return ""; };
     return F;
-})();
+}());
 var SuperObjectTest = (function (_super) {
     __extends(SuperObjectTest, _super);
     function SuperObjectTest() {
@@ -67,4 +67,4 @@ var SuperObjectTest = (function (_super) {
         };
     };
     return SuperObjectTest;
-})(F);
+}(F));

@@ -17,7 +17,7 @@ var Greeter = (function () {
     }
     Greeter.prototype.greet = function () { return 'greet'; };
     return Greeter;
-})();
+}());
 exports.Greeter = Greeter;
 //// [importAsBaseClass_1.js]
 "use strict";
@@ -33,4 +33,4 @@ var Hello = (function (_super) {
         _super.apply(this, arguments);
     }
     return Hello;
-})(Greeter);
+}(Greeter));

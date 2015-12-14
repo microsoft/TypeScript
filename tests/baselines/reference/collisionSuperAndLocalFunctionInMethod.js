@@ -46,7 +46,7 @@ var Foo = (function () {
     Foo.prototype._super = function () {
     };
     return Foo;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
@@ -59,7 +59,7 @@ var b = (function (_super) {
     b.prototype._super = function () {
     };
     return b;
-})(Foo);
+}(Foo));
 var c = (function (_super) {
     __extends(c, _super);
     function c() {
@@ -74,4 +74,4 @@ var c = (function (_super) {
     c.prototype._super = function () {
     };
     return c;
-})(Foo);
+}(Foo));

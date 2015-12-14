@@ -54,17 +54,17 @@ var C1 = (function () {
     }
     C1.prototype.f = function (x) { return undefined; };
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var C4 = (function () {
     function C4() {
         var _this = this;
@@ -87,4 +87,4 @@ var C4 = (function () {
         return function () { return _this; };
     };
     return C4;
-})();
+}());

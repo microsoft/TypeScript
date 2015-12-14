@@ -20,5 +20,5 @@ var M2;
         }
         C.prototype.foo = function () { };
         return C;
-    })();
+    }());
 })(M2 || (M2 = {}));

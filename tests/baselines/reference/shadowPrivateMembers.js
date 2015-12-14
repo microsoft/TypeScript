@@ -14,7 +14,7 @@ var base = (function () {
     }
     base.prototype.n = function () { };
     return base;
-})();
+}());
 var derived = (function (_super) {
     __extends(derived, _super);
     function derived() {
@@ -22,4 +22,4 @@ var derived = (function (_super) {
     }
     derived.prototype.n = function () { };
     return derived;
-})(base);
+}(base));

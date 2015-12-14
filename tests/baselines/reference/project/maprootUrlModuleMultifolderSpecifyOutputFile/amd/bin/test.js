@@ -5,7 +5,7 @@ define("outputdir_module_multifolder/ref/m1", ["require", "exports"], function (
         function m1_c1() {
         }
         return m1_c1;
-    })();
+    }());
     exports.m1_c1 = m1_c1;
     exports.m1_instance1 = new m1_c1();
     function m1_f1() {
@@ -20,7 +20,7 @@ define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (
         function m2_c1() {
         }
         return m2_c1;
-    })();
+    }());
     exports.m2_c1 = m2_c1;
     exports.m2_instance1 = new m2_c1();
     function m2_f1() {
@@ -35,7 +35,7 @@ define("outputdir_module_multifolder/test", ["require", "exports", "outputdir_mo
         function c1() {
         }
         return c1;
-    })();
+    }());
     exports.c1 = c1;
     exports.instance1 = new c1();
     function f1() {

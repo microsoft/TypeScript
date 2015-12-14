@@ -16,4 +16,4 @@ var CacheService = (function () {
         return undefined;
     };
     return CacheService;
-})();
+}());

@@ -49,7 +49,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c;
 var a;
 var b;
@@ -63,14 +63,14 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 var M;
 (function (M) {
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     M.E = E;
 })(M || (M = {}));
 var D2 = (function (_super) {
@@ -79,12 +79,12 @@ var D2 = (function (_super) {
         _super.apply(this, arguments);
     }
     return D2;
-})(M.E);
+}(M.E));
 var D3 = (function () {
     function D3() {
     }
     return D3;
-})();
+}());
 function h(x) { }
 function i(x) { }
 var j = null;

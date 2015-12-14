@@ -22,4 +22,4 @@ var Beta = (function (_super) {
         _super.apply(this, arguments);
     }
     return Beta;
-})(Alpha.x);
+}(Alpha.x));

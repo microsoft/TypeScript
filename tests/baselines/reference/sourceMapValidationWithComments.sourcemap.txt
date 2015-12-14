@@ -284,7 +284,7 @@ sourceFile:sourceMapValidationWithComments.ts
 1->Emitted(19, 5) Source(21, 1) + SourceIndex(0)
 2 >Emitted(19, 22) Source(21, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

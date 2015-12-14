@@ -644,7 +644,7 @@ var TypeScript;
             this.ers = ers;
         }
         return TokenInfo;
-    })();
+    }());
     TypeScript.TokenInfo = TokenInfo;
     function setTokenInfo(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers) {
         if (tokenId !== undefined) {
@@ -790,7 +790,7 @@ var TypeScript;
             this.limChar = limChar;
         }
         return SavedToken;
-    })();
+    }());
     TypeScript.SavedToken = SavedToken;
     var Token = (function () {
         function Token(tokenId) {
@@ -821,7 +821,7 @@ var TypeScript;
             return TokenClass.Punctuation;
         };
         return Token;
-    })();
+    }());
     TypeScript.Token = Token;
     var NumberLiteralToken = (function (_super) {
         __extends(NumberLiteralToken, _super);
@@ -837,7 +837,7 @@ var TypeScript;
             return TokenClass.Literal;
         };
         return NumberLiteralToken;
-    })(Token);
+    }(Token));
     TypeScript.NumberLiteralToken = NumberLiteralToken;
     var StringLiteralToken = (function (_super) {
         __extends(StringLiteralToken, _super);
@@ -852,7 +852,7 @@ var TypeScript;
             return TokenClass.Literal;
         };
         return StringLiteralToken;
-    })(Token);
+    }(Token));
     TypeScript.StringLiteralToken = StringLiteralToken;
     var IdentifierToken = (function (_super) {
         __extends(IdentifierToken, _super);
@@ -868,7 +868,7 @@ var TypeScript;
             return TokenClass.Identifier;
         };
         return IdentifierToken;
-    })(Token);
+    }(Token));
     TypeScript.IdentifierToken = IdentifierToken;
     var WhitespaceToken = (function (_super) {
         __extends(WhitespaceToken, _super);
@@ -883,7 +883,7 @@ var TypeScript;
             return TokenClass.Whitespace;
         };
         return WhitespaceToken;
-    })(Token);
+    }(Token));
     TypeScript.WhitespaceToken = WhitespaceToken;
     var CommentToken = (function (_super) {
         __extends(CommentToken, _super);
@@ -902,7 +902,7 @@ var TypeScript;
             return TokenClass.Comment;
         };
         return CommentToken;
-    })(Token);
+    }(Token));
     TypeScript.CommentToken = CommentToken;
     var RegularExpressionLiteralToken = (function (_super) {
         __extends(RegularExpressionLiteralToken, _super);
@@ -917,7 +917,7 @@ var TypeScript;
             return TokenClass.Literal;
         };
         return RegularExpressionLiteralToken;
-    })(Token);
+    }(Token));
     TypeScript.RegularExpressionLiteralToken = RegularExpressionLiteralToken;
     // TODO: new with length TokenID.LimFixed
     TypeScript.staticTokens = new Token[];

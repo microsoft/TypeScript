@@ -42,7 +42,7 @@ var Point = (function () {
         return ("(" + this.x + "," + this.y + ")");
     };
     return Point;
-})();
+}());
 var result = "";
 result += (new Point(3, 4).move(2, 2));
 var M;

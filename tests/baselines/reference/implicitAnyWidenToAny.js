@@ -38,7 +38,7 @@ var AnimalObj = (function () {
     function AnimalObj() {
     }
     return AnimalObj;
-})();
+}());
 var foo = 5;
 var bar = "Hello World";
 var foo1 = null;

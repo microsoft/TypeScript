@@ -44,7 +44,7 @@ define(["require", "exports"], function (require, exports) {
             function M_C() {
             }
             return M_C;
-        })();
+        }());
         M.M_C = M_C;
         // instantiated module
         var M_M;

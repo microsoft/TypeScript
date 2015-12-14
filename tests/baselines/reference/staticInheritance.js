@@ -23,7 +23,7 @@ var A = (function () {
         this.p = doThing(A); // OK
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -32,5 +32,5 @@ var B = (function (_super) {
         this.p2 = doThing(B); // OK
     }
     return B;
-})(A);
+}(A));
 doThing(B); //OK

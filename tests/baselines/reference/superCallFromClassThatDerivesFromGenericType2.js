@@ -22,4 +22,4 @@ var D = (function (_super) {
         _super.call(this);
     }
     return D;
-})(B);
+}(B));

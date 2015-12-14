@@ -48,7 +48,7 @@ sourceFile:tests/cases/compiler/a.ts
 1->Emitted(5, 5) Source(4, 11) + SourceIndex(0)
 2 >Emitted(5, 13) Source(4, 12) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -96,7 +96,7 @@ sourceFile:tests/cases/compiler/b.ts
 1->Emitted(10, 5) Source(1, 11) + SourceIndex(1)
 2 >Emitted(10, 13) Source(1, 12) + SourceIndex(1)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

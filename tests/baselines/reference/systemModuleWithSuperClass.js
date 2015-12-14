@@ -23,7 +23,7 @@ System.register([], function(exports_1) {
                 function Foo() {
                 }
                 return Foo;
-            })();
+            }());
             exports_1("Foo", Foo);
         }
     }
@@ -50,7 +50,7 @@ System.register(['./foo'], function(exports_1) {
                     _super.apply(this, arguments);
                 }
                 return Bar;
-            })(foo_1.Foo);
+            }(foo_1.Foo));
             exports_1("Bar", Bar);
         }
     }

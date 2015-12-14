@@ -112,34 +112,34 @@ var publicModule;
         publicClassInPublicModule.prototype.f1 = function () {
         };
         return publicClassInPublicModule;
-    })();
+    }());
     publicModule.publicClassInPublicModule = publicClassInPublicModule;
     var privateClassInPublicModule = (function () {
         function privateClassInPublicModule() {
         }
         return privateClassInPublicModule;
-    })();
+    }());
     var privateClassExtendingPublicClassInModule = (function (_super) {
         __extends(privateClassExtendingPublicClassInModule, _super);
         function privateClassExtendingPublicClassInModule() {
             _super.apply(this, arguments);
         }
         return privateClassExtendingPublicClassInModule;
-    })(publicClassInPublicModule);
+    }(publicClassInPublicModule));
     var privateClassExtendingPrivateClassInModule = (function (_super) {
         __extends(privateClassExtendingPrivateClassInModule, _super);
         function privateClassExtendingPrivateClassInModule() {
             _super.apply(this, arguments);
         }
         return privateClassExtendingPrivateClassInModule;
-    })(privateClassInPublicModule);
+    }(privateClassInPublicModule));
     var publicClassExtendingPublicClassInModule = (function (_super) {
         __extends(publicClassExtendingPublicClassInModule, _super);
         function publicClassExtendingPublicClassInModule() {
             _super.apply(this, arguments);
         }
         return publicClassExtendingPublicClassInModule;
-    })(publicClassInPublicModule);
+    }(publicClassInPublicModule));
     publicModule.publicClassExtendingPublicClassInModule = publicClassExtendingPublicClassInModule;
     var publicClassExtendingPrivateClassInModule = (function (_super) {
         __extends(publicClassExtendingPrivateClassInModule, _super);
@@ -147,7 +147,7 @@ var publicModule;
             _super.apply(this, arguments);
         }
         return publicClassExtendingPrivateClassInModule;
-    })(privateClassInPublicModule);
+    }(privateClassInPublicModule));
     publicModule.publicClassExtendingPrivateClassInModule = publicClassExtendingPrivateClassInModule;
     var privateClassExtendingFromPrivateModuleClass = (function (_super) {
         __extends(privateClassExtendingFromPrivateModuleClass, _super);
@@ -155,14 +155,14 @@ var publicModule;
             _super.apply(this, arguments);
         }
         return privateClassExtendingFromPrivateModuleClass;
-    })(privateModule.publicClassInPrivateModule);
+    }(privateModule.publicClassInPrivateModule));
     var publicClassExtendingFromPrivateModuleClass = (function (_super) {
         __extends(publicClassExtendingFromPrivateModuleClass, _super);
         function publicClassExtendingFromPrivateModuleClass() {
             _super.apply(this, arguments);
         }
         return publicClassExtendingFromPrivateModuleClass;
-    })(privateModule.publicClassInPrivateModule);
+    }(privateModule.publicClassInPrivateModule));
     publicModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
@@ -173,34 +173,34 @@ var privateModule;
         publicClassInPrivateModule.prototype.f1 = function () {
         };
         return publicClassInPrivateModule;
-    })();
+    }());
     privateModule.publicClassInPrivateModule = publicClassInPrivateModule;
     var privateClassInPrivateModule = (function () {
         function privateClassInPrivateModule() {
         }
         return privateClassInPrivateModule;
-    })();
+    }());
     var privateClassExtendingPublicClassInModule = (function (_super) {
         __extends(privateClassExtendingPublicClassInModule, _super);
         function privateClassExtendingPublicClassInModule() {
             _super.apply(this, arguments);
         }
         return privateClassExtendingPublicClassInModule;
-    })(publicClassInPrivateModule);
+    }(publicClassInPrivateModule));
     var privateClassExtendingPrivateClassInModule = (function (_super) {
         __extends(privateClassExtendingPrivateClassInModule, _super);
         function privateClassExtendingPrivateClassInModule() {
             _super.apply(this, arguments);
         }
         return privateClassExtendingPrivateClassInModule;
-    })(privateClassInPrivateModule);
+    }(privateClassInPrivateModule));
     var publicClassExtendingPublicClassInModule = (function (_super) {
         __extends(publicClassExtendingPublicClassInModule, _super);
         function publicClassExtendingPublicClassInModule() {
             _super.apply(this, arguments);
         }
         return publicClassExtendingPublicClassInModule;
-    })(publicClassInPrivateModule);
+    }(publicClassInPrivateModule));
     privateModule.publicClassExtendingPublicClassInModule = publicClassExtendingPublicClassInModule;
     var publicClassExtendingPrivateClassInModule = (function (_super) {
         __extends(publicClassExtendingPrivateClassInModule, _super);
@@ -208,7 +208,7 @@ var privateModule;
             _super.apply(this, arguments);
         }
         return publicClassExtendingPrivateClassInModule;
-    })(privateClassInPrivateModule);
+    }(privateClassInPrivateModule));
     privateModule.publicClassExtendingPrivateClassInModule = publicClassExtendingPrivateClassInModule;
     var privateClassExtendingFromPrivateModuleClass = (function (_super) {
         __extends(privateClassExtendingFromPrivateModuleClass, _super);
@@ -216,14 +216,14 @@ var privateModule;
             _super.apply(this, arguments);
         }
         return privateClassExtendingFromPrivateModuleClass;
-    })(privateModule.publicClassInPrivateModule);
+    }(privateModule.publicClassInPrivateModule));
     var publicClassExtendingFromPrivateModuleClass = (function (_super) {
         __extends(publicClassExtendingFromPrivateModuleClass, _super);
         function publicClassExtendingFromPrivateModuleClass() {
             _super.apply(this, arguments);
         }
         return publicClassExtendingFromPrivateModuleClass;
-    })(privateModule.publicClassInPrivateModule);
+    }(privateModule.publicClassInPrivateModule));
     privateModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 })(privateModule || (privateModule = {}));
 var publicClass = (function () {
@@ -232,34 +232,34 @@ var publicClass = (function () {
     publicClass.prototype.f1 = function () {
     };
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var privateClassExtendingPublicClass = (function (_super) {
     __extends(privateClassExtendingPublicClass, _super);
     function privateClassExtendingPublicClass() {
         _super.apply(this, arguments);
     }
     return privateClassExtendingPublicClass;
-})(publicClass);
+}(publicClass));
 var privateClassExtendingPrivateClassInModule = (function (_super) {
     __extends(privateClassExtendingPrivateClassInModule, _super);
     function privateClassExtendingPrivateClassInModule() {
         _super.apply(this, arguments);
     }
     return privateClassExtendingPrivateClassInModule;
-})(privateClass);
+}(privateClass));
 var publicClassExtendingPublicClass = (function (_super) {
     __extends(publicClassExtendingPublicClass, _super);
     function publicClassExtendingPublicClass() {
         _super.apply(this, arguments);
     }
     return publicClassExtendingPublicClass;
-})(publicClass);
+}(publicClass));
 exports.publicClassExtendingPublicClass = publicClassExtendingPublicClass;
 var publicClassExtendingPrivateClass = (function (_super) {
     __extends(publicClassExtendingPrivateClass, _super);
@@ -267,7 +267,7 @@ var publicClassExtendingPrivateClass = (function (_super) {
         _super.apply(this, arguments);
     }
     return publicClassExtendingPrivateClass;
-})(privateClass);
+}(privateClass));
 exports.publicClassExtendingPrivateClass = publicClassExtendingPrivateClass;
 var privateClassExtendingFromPrivateModuleClass = (function (_super) {
     __extends(privateClassExtendingFromPrivateModuleClass, _super);
@@ -275,14 +275,14 @@ var privateClassExtendingFromPrivateModuleClass = (function (_super) {
         _super.apply(this, arguments);
     }
     return privateClassExtendingFromPrivateModuleClass;
-})(privateModule.publicClassInPrivateModule);
+}(privateModule.publicClassInPrivateModule));
 var publicClassExtendingFromPrivateModuleClass = (function (_super) {
     __extends(publicClassExtendingFromPrivateModuleClass, _super);
     function publicClassExtendingFromPrivateModuleClass() {
         _super.apply(this, arguments);
     }
     return publicClassExtendingFromPrivateModuleClass;
-})(privateModule.publicClassInPrivateModule);
+}(privateModule.publicClassInPrivateModule));
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
 var __extends = (this && this.__extends) || function (d, b) {
@@ -298,34 +298,34 @@ var publicModuleInGlobal;
         publicClassInPublicModule.prototype.f1 = function () {
         };
         return publicClassInPublicModule;
-    })();
+    }());
     publicModuleInGlobal.publicClassInPublicModule = publicClassInPublicModule;
     var privateClassInPublicModule = (function () {
         function privateClassInPublicModule() {
         }
         return privateClassInPublicModule;
-    })();
+    }());
     var privateClassExtendingPublicClassInModule = (function (_super) {
         __extends(privateClassExtendingPublicClassInModule, _super);
         function privateClassExtendingPublicClassInModule() {
             _super.apply(this, arguments);
         }
         return privateClassExtendingPublicClassInModule;
-    })(publicClassInPublicModule);
+    }(publicClassInPublicModule));
     var privateClassExtendingPrivateClassInModule = (function (_super) {
         __extends(privateClassExtendingPrivateClassInModule, _super);
         function privateClassExtendingPrivateClassInModule() {
             _super.apply(this, arguments);
         }
         return privateClassExtendingPrivateClassInModule;
-    })(privateClassInPublicModule);
+    }(privateClassInPublicModule));
     var publicClassExtendingPublicClassInModule = (function (_super) {
         __extends(publicClassExtendingPublicClassInModule, _super);
         function publicClassExtendingPublicClassInModule() {
             _super.apply(this, arguments);
         }
         return publicClassExtendingPublicClassInModule;
-    })(publicClassInPublicModule);
+    }(publicClassInPublicModule));
     publicModuleInGlobal.publicClassExtendingPublicClassInModule = publicClassExtendingPublicClassInModule;
     var publicClassExtendingPrivateClassInModule = (function (_super) {
         __extends(publicClassExtendingPrivateClassInModule, _super);
@@ -333,18 +333,18 @@ var publicModuleInGlobal;
             _super.apply(this, arguments);
         }
         return publicClassExtendingPrivateClassInModule;
-    })(privateClassInPublicModule);
+    }(privateClassInPublicModule));
     publicModuleInGlobal.publicClassExtendingPrivateClassInModule = publicClassExtendingPrivateClassInModule;
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
 var publicClassInGlobal = (function () {
     function publicClassInGlobal() {
     }
     return publicClassInGlobal;
-})();
+}());
 var publicClassExtendingPublicClassInGlobal = (function (_super) {
     __extends(publicClassExtendingPublicClassInGlobal, _super);
     function publicClassExtendingPublicClassInGlobal() {
         _super.apply(this, arguments);
     }
     return publicClassExtendingPublicClassInGlobal;
-})(publicClassInGlobal);
+}(publicClassInGlobal));

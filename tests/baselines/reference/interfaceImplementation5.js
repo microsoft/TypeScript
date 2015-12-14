@@ -41,7 +41,7 @@ var C1 = (function () {
         configurable: true
     });
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
@@ -51,7 +51,7 @@ var C2 = (function () {
         configurable: true
     });
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3() {
     }
@@ -62,7 +62,7 @@ var C3 = (function () {
         configurable: true
     });
     return C3;
-})();
+}());
 var C4 = (function () {
     function C4() {
     }
@@ -72,7 +72,7 @@ var C4 = (function () {
         configurable: true
     });
     return C4;
-})();
+}());
 var C5 = (function () {
     function C5() {
     }
@@ -82,7 +82,7 @@ var C5 = (function () {
         configurable: true
     });
     return C5;
-})();
+}());
 var C6 = (function () {
     function C6() {
     }
@@ -93,4 +93,4 @@ var C6 = (function () {
         configurable: true
     });
     return C6;
-})();
+}());

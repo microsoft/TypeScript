@@ -165,7 +165,7 @@ var ts;
         function Symbol() {
         }
         return Symbol;
-    })();
+    }());
     var Type = (function (_super) {
         __extends(Type, _super);
         function Type() {
@@ -229,7 +229,7 @@ var ts;
         Type.prototype.isSubTypeOf = function (type) {
         };
         return Type;
-    })(Symbol);
+    }(Symbol));
     var Property = (function (_super) {
         __extends(Property, _super);
         function Property(name, type, flags) {
@@ -244,7 +244,7 @@ var ts;
                 this.type.equals(other.type);
         };
         return Property;
-    })(Symbol);
+    }(Symbol));
     var PropertyFlags;
     (function (PropertyFlags) {
         PropertyFlags[PropertyFlags["Optional"] = 1] = "Optional";
@@ -269,7 +269,7 @@ var ts;
                 this.returnType.equals(other.returnType);
         };
         return Signature;
-    })(Symbol);
+    }(Symbol));
     var Parameter = (function (_super) {
         __extends(Parameter, _super);
         function Parameter(name, type, flags) {
@@ -284,7 +284,7 @@ var ts;
                 this.type.equals(other.type);
         };
         return Parameter;
-    })(Symbol);
+    }(Symbol));
     var ParameterFlags;
     (function (ParameterFlags) {
         ParameterFlags[ParameterFlags["Optional"] = 1] = "Optional";

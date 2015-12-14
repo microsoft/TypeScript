@@ -61,7 +61,7 @@ sourceFile:../outputdir_mixed_subfolder/ref/m1.ts
 1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -217,7 +217,7 @@ sourceFile:../outputdir_mixed_subfolder/test.ts
 1->Emitted(17, 5) Source(6, 1) + SourceIndex(2)
 2 >Emitted(17, 14) Source(6, 2) + SourceIndex(2)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

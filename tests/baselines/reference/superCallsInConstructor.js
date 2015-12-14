@@ -32,12 +32,12 @@ var C = (function () {
     C.prototype.foo = function () { };
     C.prototype.bar = function () { };
     return C;
-})();
+}());
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -52,4 +52,4 @@ var Derived = (function (_super) {
         }
     }
     return Derived;
-})(Base);
+}(Base));

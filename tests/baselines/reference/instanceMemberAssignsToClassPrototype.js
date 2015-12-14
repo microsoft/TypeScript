@@ -26,4 +26,4 @@ var C = (function () {
         return 1;
     };
     return C;
-})();
+}());

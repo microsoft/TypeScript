@@ -57,7 +57,7 @@ sourceFile:../testFiles/app.ts
 1->Emitted(6, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(6, 13) Source(4, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -107,7 +107,7 @@ sourceFile:../testFiles/app2.ts
 1->Emitted(11, 5) Source(2, 1) + SourceIndex(1)
 2 >Emitted(11, 13) Source(2, 2) + SourceIndex(1)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

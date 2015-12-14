@@ -23,7 +23,7 @@ var Base = (function () {
     }
     Base.prototype.foo = function () { };
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
@@ -31,7 +31,7 @@ var Derived1 = (function (_super) {
     }
     Derived1.prototype.bar = function () { };
     return Derived1;
-})(Base);
+}(Base));
 function f(tagName) {
     return null;
 }
