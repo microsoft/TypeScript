@@ -290,7 +290,7 @@ namespace ts {
             // changes for large reference sets? If so, do we want
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
-            let watchedFileSet = createWatchedFileSet(1500, 100);
+            let watchedFileSet = createWatchedFileSet(/*interval*/ 1500,/*chunkSize*/ 100);
 
             function isNode4OrLater(): Boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
