@@ -6903,7 +6903,7 @@ namespace ts {
                                         .expression as PropertyAccessExpression) // x.prototype
                                         .expression;                             // x
                     const classSymbol = checkExpression(className).symbol;
-                    if (classSymbol && classSymbol.members) {
+                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
                         return getInferredClassType(classSymbol);
                     }
                 }
