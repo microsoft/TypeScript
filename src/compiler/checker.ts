@@ -3608,36 +3608,28 @@ namespace ts {
 
         function resolveAnonymousTypeMembers(type: AnonymousType) {
             const symbol = type.symbol;
-            let members: SymbolTable;
-            let callSignatures: Signature[];
-            let constructSignatures: Signature[];
-            let stringIndexType: Type;
-            let numberIndexType: Type;
-
             if (type.target) {
-                members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper, /*mappingThisOnly*/ false);
-                callSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper, instantiateSignature);
-                constructSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper, instantiateSignature);
-                stringIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.String), type.mapper);
-                numberIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.Number), type.mapper);
+                const members = createInstantiatedSymbolTable(getPropertiesOfObjectType(type.target), type.mapper, /*mappingThisOnly*/ false);
+                const callSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Call), type.mapper, instantiateSignature);
+                const constructSignatures = instantiateList(getSignaturesOfType(type.target, SignatureKind.Construct), type.mapper, instantiateSignature);
+                const stringIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.String), type.mapper);
+                const numberIndexType = instantiateType(getIndexTypeOfType(type.target, IndexKind.Number), type.mapper);
+                setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
-                members = symbol.members;
-                callSignatures = getSignaturesOfSymbol(members["__call"]);
-                constructSignatures = getSignaturesOfSymbol(members["__new"]);
-                stringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
-                numberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
+                const members = symbol.members;
+                const callSignatures = getSignaturesOfSymbol(members["__call"]);
+                const constructSignatures = getSignaturesOfSymbol(members["__new"]);
+                const stringIndexType = getIndexTypeOfSymbol(symbol, IndexKind.String);
+                const numberIndexType = getIndexTypeOfSymbol(symbol, IndexKind.Number);
+                setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
             }
             else {
                 // Combinations of function, class, enum and module
-                members = emptySymbols;
-                callSignatures = emptyArray;
-                constructSignatures = emptyArray;
+                let members = emptySymbols;
+                let constructSignatures: Signature[] = emptyArray;
                 if (symbol.flags & SymbolFlags.HasExports) {
                     members = getExportsOfSymbol(symbol);
-                }
-                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
-                    callSignatures = getSignaturesOfSymbol(symbol);
                 }
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
@@ -3651,10 +3643,16 @@ namespace ts {
                         addInheritedMembers(members, getPropertiesOfObjectType(baseConstructorType));
                     }
                 }
-                stringIndexType = undefined;
-                numberIndexType = (symbol.flags & SymbolFlags.Enum) ? stringType : undefined;
+                const numberIndexType = (symbol.flags & SymbolFlags.Enum) ? stringType : undefined;
+                setObjectTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexType);
+                // We resolve the members before computing the signatures because a signature may use
+                // typeof with a qualified name expression that circularly references the type we are
+                // in the process of resolving (see issue #6072). The temporarily empty signature list
+                // will never be observed because a qualified name can't reference signatures.
+                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method)) {
+                    (<ResolvedType>type).callSignatures = getSignaturesOfSymbol(symbol);
+                }
             }
-            setObjectTypeMembers(type, members, callSignatures, constructSignatures, stringIndexType, numberIndexType);
         }
 
         function resolveStructuredTypeMembers(type: ObjectType): ResolvedType {
