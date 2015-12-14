@@ -1948,7 +1948,7 @@ namespace ts {
         return sourceFile;
     }
 
-    export let disableIncrementalParsing = false;
+    export const disableIncrementalParsing = false;
 
     export function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
         // If we were given a text change range, and our version or open-ness changed, then
