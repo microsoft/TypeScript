@@ -1,8 +1,7 @@
 ﻿/// <reference path='fourslash.ts' />
 
 //@Filename: file.tsx
-//// var x = <div/**/;
+//// var x = </**/;
 
 goTo.marker();
-verify.memberListCount(1)
-verify.completionListContains("HTMLDivElement");
+verify.memberListCount(41);
