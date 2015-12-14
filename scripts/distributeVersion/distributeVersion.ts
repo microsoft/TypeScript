@@ -65,7 +65,8 @@ function getVersionSync(versionFilePath: string): string {
 
             // The version has 4 digits, we only need 3
             return version.slice(0, 3).join(".");
-        } else {
+        }
+        else {
             throw new Error("Invalid version format specified in version file");
         }
     }
