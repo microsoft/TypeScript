@@ -6992,7 +6992,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     write(text);
                 }
-                write(`], function(${exportFunctionForFile}) {`);
+                write(`], function(${exportFunctionForFile}, __moduleName) {`);
                 writeLine();
                 increaseIndent();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);
