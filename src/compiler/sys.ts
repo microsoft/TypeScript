@@ -295,47 +295,52 @@ namespace ts {
             }
 
             function createWatchedFileSet() {
-                const watchedDirectories: { [path: string]: FileWatcher } = {};
-                const watchedFiles: { [fileName: string]: (fileName: string, removed?: boolean) => void; } = {};
+                const watchedDirectories = createFileMap<FileWatcher>();
+                const watchedFiles = createFileMap<(fileName: string, removed?: boolean) => void>();
+                const currentDirectory = process.cwd();
+
+                return { addFile, removeFile };
 
                 function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
-                    const file: WatchedFile = { fileName, callback };
-                    const watchedPaths = Object.keys(watchedDirectories);
-                    // Try to find parent paths that are already watched. If found, don't add directory watchers
-                    const watchedParentPaths = watchedPaths.filter(path => fileName.indexOf(path) === 0);
-                    // If adding new watchers, try to find children paths that are already watched. If found, close them. 
-                    if (watchedParentPaths.length === 0) {
-                        const pathToWatch = ts.getDirectoryPath(fileName);
-                        for (const watchedPath in watchedDirectories) {
-                            if (watchedPath.indexOf(pathToWatch) === 0) {
-                                watchedDirectories[watchedPath].close();
-                                delete watchedDirectories[watchedPath];
-                            }
-                        }
-                        watchedDirectories[pathToWatch] = _fs.watch(
-                            pathToWatch,
-                            (eventName: string, relativeFileName: string) => fileEventHandler(eventName, ts.normalizePath(ts.combinePaths(pathToWatch, relativeFileName)))
-                        );
+                    const path = toPath(fileName, currentDirectory, getCanonicalPath);
+                    const parentDirPath = toPath(ts.getDirectoryPath(fileName), currentDirectory, getCanonicalPath);
+
+                    if (!watchedDirectories.contains(parentDirPath)) {
+                        watchedDirectories.set(parentDirPath, _fs.watch(
+                            parentDirPath,
+                            (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, parentDirPath)
+                        ));
                     }
-                    watchedFiles[fileName] = callback;
+                    watchedFiles.set(path, callback);
                     return { fileName, callback };
                 }
 
                 function removeFile(file: WatchedFile) {
-                    delete watchedFiles[file.fileName];
-                }
+                    const path = toPath(file.fileName, currentDirectory, getCanonicalPath);
+                    watchedFiles.remove(path);
 
-                function fileEventHandler(eventName: string, fileName: string) {
-                    if (watchedFiles[fileName]) {
-                        const callback = watchedFiles[fileName];
-                        callback(fileName);
+                    const parentDirPath = toPath(ts.getDirectoryPath(path), currentDirectory, getCanonicalPath);
+                    if (watchedDirectories.contains(parentDirPath)) {
+                        let hasWatchedChildren = false;
+                        watchedFiles.forEachValue((key, _) => {
+                            if (ts.getDirectoryPath(key) === parentDirPath) {
+                                hasWatchedChildren = true;
+                            }
+                        });
+                        if (!hasWatchedChildren) {
+                            watchedDirectories.get(parentDirPath).close();
+                            watchedDirectories.remove(parentDirPath);
+                        }
                     }
                 }
 
-                return {
-                    addFile: addFile,
-                    removeFile: removeFile
-                };
+                function fileEventHandler(eventName: string, fileName: string, basePath: string) {
+                    const path = ts.toPath(fileName, basePath, getCanonicalPath);
+                    if (watchedFiles.contains(path)) {
+                        const callback = watchedFiles.get(path);
+                        callback(fileName);
+                    }
+                }
             }
 
             // REVIEW: for now this implementation uses polling.
@@ -352,7 +357,7 @@ namespace ts {
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
             const pollingWatchedFileSet = createPollingWatchedFileSet();
-            // const watchedFileSet = createWatchedFileSet();
+            const watchedFileSet = createWatchedFileSet();
 
             function isNode4OrLater(): Boolean {
                 return parseInt(process.version.charAt(1)) >= 4;
@@ -456,9 +461,10 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
+                    const watchSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
+                    const watchedFile =  watchSet.addFile(fileName, callback);
                     return {
-                        close: () => pollingWatchedFileSet.removeFile(watchedFile)
+                        close: () => watchSet.removeFile(watchedFile)
                     };
                 },
                 watchDirectory: (path, callback, recursive) => {
