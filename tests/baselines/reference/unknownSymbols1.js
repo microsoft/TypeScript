@@ -49,28 +49,28 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3(x) {
     }
     return C3;
-})();
+}());
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
         _super.call(this, asdf);
     }
     return C4;
-})(C3);
+}(C3));
 var x2 = this.asdf; // no error, this is any
 var C5 = (function () {
     function C5() {
         this.asdf = asdf;
     }
     return C5;
-})();
+}());

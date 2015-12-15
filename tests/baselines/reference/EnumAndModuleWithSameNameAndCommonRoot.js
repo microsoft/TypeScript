@@ -30,7 +30,7 @@ var enumdule;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     enumdule.Point = Point;
 })(enumdule || (enumdule = {}));
 var x;

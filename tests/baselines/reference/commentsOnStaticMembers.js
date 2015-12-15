@@ -33,4 +33,4 @@ var test = (function () {
      */
     test.p3 = "";
     return test;
-})();
+}());

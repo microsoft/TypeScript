@@ -53,7 +53,7 @@ var Foo = (function () {
         return this.method(0);
     };
     return Foo;
-})();
+}());
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
@@ -63,7 +63,7 @@ var Bar = (function (_super) {
         return this.optionalProperty;
     };
     return Bar;
-})(Foo);
+}(Foo));
 var bar = new Bar();
 bar.method(0);
 bar.optionalMethod(1);

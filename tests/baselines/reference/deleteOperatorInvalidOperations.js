@@ -30,4 +30,4 @@ var testADelx = (function () {
         delete s; //expect error
     }
     return testADelx;
-})();
+}());

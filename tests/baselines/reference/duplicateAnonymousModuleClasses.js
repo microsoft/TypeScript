@@ -63,7 +63,7 @@ var F;
         function Helper() {
         }
         return Helper;
-    })();
+    }());
 })(F || (F = {}));
 var F;
 (function (F) {
@@ -72,7 +72,7 @@ var F;
         function Helper() {
         }
         return Helper;
-    })();
+    }());
 })(F || (F = {}));
 var Foo;
 (function (Foo) {
@@ -80,7 +80,7 @@ var Foo;
         function Helper() {
         }
         return Helper;
-    })();
+    }());
 })(Foo || (Foo = {}));
 var Foo;
 (function (Foo) {
@@ -89,7 +89,7 @@ var Foo;
         function Helper() {
         }
         return Helper;
-    })();
+    }());
 })(Foo || (Foo = {}));
 var Gar;
 (function (Gar) {
@@ -99,7 +99,7 @@ var Gar;
             function Helper() {
             }
             return Helper;
-        })();
+        }());
     })(Foo || (Foo = {}));
     var Foo;
     (function (Foo) {
@@ -108,6 +108,6 @@ var Gar;
             function Helper() {
             }
             return Helper;
-        })();
+        }());
     })(Foo || (Foo = {}));
 })(Gar || (Gar = {}));

@@ -26,7 +26,7 @@ var x;
             return a;
         };
         return c;
-    })();
+    }());
     x.c = c;
 })(x = exports.x || (exports.x = {}));
 var m2;

@@ -40,19 +40,19 @@ var C = (function () {
         this.x = x;
     }
     return C;
-})();
+}());
 var D = (function () {
     function D(x) {
         this.x = x;
     } // error
     return D;
-})();
+}());
 var E = (function () {
     function E(x) {
         this.x = x;
     } // error
     return E;
-})();
+}());
 var c = new C(1);
 var d = new D(1);
 var e = new E(1);
@@ -63,19 +63,19 @@ var Generic;
             this.x = x;
         }
         return C;
-    })();
+    }());
     var D = (function () {
         function D(x) {
             this.x = x;
         } // error
         return D;
-    })();
+    }());
     var E = (function () {
         function E(x) {
             this.x = x;
         } // error
         return E;
-    })();
+    }());
     var c = new C(1);
     var d = new D(1);
     var e = new E(1);

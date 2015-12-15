@@ -23,7 +23,7 @@ var bar = (function () {
         x++;
     };
     return bar;
-})();
+}());
 
 
 //// [declInput.d.ts]

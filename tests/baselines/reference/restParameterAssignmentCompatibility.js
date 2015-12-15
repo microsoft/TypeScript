@@ -37,14 +37,14 @@ var T = (function () {
         }
     };
     return T;
-})();
+}());
 var S = (function () {
     function S() {
     }
     S.prototype.m = function (p1, p2) {
     };
     return S;
-})();
+}());
 var t;
 var s;
 // M is a non - specialized call or construct signature and S' contains a call or construct signature N where,
@@ -56,7 +56,7 @@ var T1 = (function () {
     T1.prototype.m = function (p1, p2) {
     };
     return T1;
-})();
+}());
 var t1;
 // When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 t1 = s; // Similar to above, but optionality does not matter here.

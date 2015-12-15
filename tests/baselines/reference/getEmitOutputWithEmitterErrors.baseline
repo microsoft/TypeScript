@@ -8,7 +8,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.foo = new C();
 })(M || (M = {}));
 

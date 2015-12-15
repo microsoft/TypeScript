@@ -35,27 +35,27 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(C1);
+}(C1));
 var c1;
 c1; // Should succeed (private x originates in the same declaration)
 var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
         _super.apply(this, arguments);
     }
     return C4;
-})(C3);
+}(C3));
 var c3;
 c3; // Should fail (private x originates in the same declaration, but different types)

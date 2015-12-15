@@ -162,7 +162,7 @@ define(["require", "exports"], function (require, exports) {
             function c_private() {
             }
             return c_private;
-        })();
+        }());
         m_private.c_private = c_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
@@ -180,7 +180,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             mi_private.c = c;
         })(mi_private = m_private.mi_private || (m_private.mi_private = {}));
     })(m_private || (m_private = {}));
@@ -191,7 +191,7 @@ define(["require", "exports"], function (require, exports) {
             function c_public() {
             }
             return c_public;
-        })();
+        }());
         m_public.c_public = c_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
@@ -209,7 +209,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             mi_public.c = c;
         })(mi_public = m_public.mi_public || (m_public.mi_public = {}));
     })(m_public = exports.m_public || (exports.m_public = {}));

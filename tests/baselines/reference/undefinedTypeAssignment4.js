@@ -17,7 +17,7 @@ var undefined = (function () {
     function undefined() {
     }
     return undefined;
-})();
+}());
 var undefined;
 (function (undefined) {
     undefined.x = 42;

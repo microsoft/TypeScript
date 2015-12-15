@@ -64,7 +64,7 @@ var C = (function () {
         return x;
     };
     return C;
-})();
+}());
 function foo(x, y) {
     function bar() {
         function baz(a, b) {

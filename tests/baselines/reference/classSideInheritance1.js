@@ -29,14 +29,14 @@ var A = (function () {
     };
     A.prototype.foo = function () { return 1; };
     return A;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(A);
+}(A));
 var a;
 var c;
 a.bar(); // static off an instance - should be an error

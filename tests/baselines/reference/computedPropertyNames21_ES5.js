@@ -15,4 +15,4 @@ var C = (function () {
     };
     C.prototype[this.bar()] = function () { };
     return C;
-})();
+}());

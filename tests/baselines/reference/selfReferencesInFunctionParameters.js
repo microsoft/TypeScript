@@ -31,4 +31,4 @@ var C = (function () {
         if (b === void 0) { b = b.toString(); }
     };
     return C;
-})();
+}());

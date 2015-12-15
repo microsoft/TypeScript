@@ -19,4 +19,4 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(foo); // error, cannot extend it though
+}(foo)); // error, cannot extend it though

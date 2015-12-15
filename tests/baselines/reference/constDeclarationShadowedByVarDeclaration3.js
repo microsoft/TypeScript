@@ -18,4 +18,4 @@ var Rule = (function () {
         this.name = name;
     }
     return Rule;
-})();
+}());

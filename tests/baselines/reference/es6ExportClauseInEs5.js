@@ -22,7 +22,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 exports.c = c;
 exports.c2 = c;
 var m;

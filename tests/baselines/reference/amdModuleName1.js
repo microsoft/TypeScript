@@ -18,6 +18,6 @@ define("NamedModule", ["require", "exports"], function (require, exports) {
             this.x = 5;
         }
         return Foo;
-    })();
+    }());
     return Foo;
 });

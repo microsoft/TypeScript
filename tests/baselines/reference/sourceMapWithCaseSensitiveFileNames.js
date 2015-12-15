@@ -17,10 +17,10 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 //# sourceMappingURL=fooResult.js.map

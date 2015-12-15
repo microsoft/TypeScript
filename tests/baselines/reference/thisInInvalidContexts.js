@@ -60,12 +60,12 @@ var ErrClass1 = (function () {
     }
     ErrClass1.t = this; // Error
     return ErrClass1;
-})();
+}());
 var BaseErrClass = (function () {
     function BaseErrClass(t) {
     }
     return BaseErrClass;
-})();
+}());
 var ClassWithNoInitializer = (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
@@ -73,7 +73,7 @@ var ClassWithNoInitializer = (function (_super) {
         _super.call(this, this); // OK
     }
     return ClassWithNoInitializer;
-})(BaseErrClass);
+}(BaseErrClass));
 var ClassWithInitializer = (function (_super) {
     __extends(ClassWithInitializer, _super);
     //'this' in required super call
@@ -82,7 +82,7 @@ var ClassWithInitializer = (function (_super) {
         this.t = 4;
     }
     return ClassWithInitializer;
-})(BaseErrClass);
+}(BaseErrClass));
 var M;
 (function (M) {
     //'this' in module variable
@@ -99,7 +99,7 @@ var ErrClass3 = (function (_super) {
         _super.apply(this, arguments);
     }
     return ErrClass3;
-})(this);
+}(this));
 //'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {

@@ -33,7 +33,7 @@ var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 exports.Model = Model;
 //// [aliasUsage1_moduleA.js]
 "use strict";
@@ -49,7 +49,7 @@ var VisualizationModel = (function (_super) {
         _super.apply(this, arguments);
     }
     return VisualizationModel;
-})(Backbone.Model);
+}(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsage1_main.js]
 "use strict";
@@ -68,4 +68,4 @@ var C2 = (function () {
         configurable: true
     });
     return C2;
-})();
+}());

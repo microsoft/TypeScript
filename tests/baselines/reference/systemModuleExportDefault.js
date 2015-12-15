@@ -48,7 +48,7 @@ System.register([], function(exports_1) {
                 function default_1() {
                 }
                 return default_1;
-            })();
+            }());
             exports_1("default", default_1);
         }
     }
@@ -64,7 +64,7 @@ System.register([], function(exports_1) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports_1("default", C);
         }
     }

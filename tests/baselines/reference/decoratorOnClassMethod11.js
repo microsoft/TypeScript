@@ -26,5 +26,5 @@ var M;
             this.decorator
         ], C.prototype, "method", null);
         return C;
-    })();
+    }());
 })(M || (M = {}));

@@ -4,7 +4,7 @@ define(["require", "exports"], function (require, exports) {
         function d() {
         }
         return d;
-    })();
+    }());
     exports.d = d;
     ;
     function foo() {

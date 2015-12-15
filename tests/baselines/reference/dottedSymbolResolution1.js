@@ -31,7 +31,7 @@ var Base = (function () {
     }
     Base.prototype.foo = function () { };
     return Base;
-})();
+}());
 function each(collection, callback) {
     return null;
 }

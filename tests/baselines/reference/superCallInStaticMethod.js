@@ -58,7 +58,7 @@ var Doing = (function () {
     Doing.staticMethod = function () {
     };
     return Doing;
-})();
+}());
 var Other = (function (_super) {
     __extends(Other, _super);
     function Other() {
@@ -104,4 +104,4 @@ var Other = (function (_super) {
         _super.staticMethod.call(this);
     };
     return Other;
-})(Doing);
+}(Doing));

@@ -26,7 +26,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 exports.c = c;
 var m;
 (function (m) {
