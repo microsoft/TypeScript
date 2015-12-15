@@ -12,7 +12,7 @@
 
 namespace ts {
     /** The version of the language service API */
-    export const servicesVersion = "0.4";
+    export let servicesVersion = "0.4"
 
     export interface Node {
         getSourceFile(): SourceFile;
@@ -48,7 +48,7 @@ namespace ts {
         getConstructSignatures(): Signature[];
         getStringIndexType(): Type;
         getNumberIndexType(): Type;
-        getBaseTypes(): ObjectType[];
+        getBaseTypes(): ObjectType[]
     }
 
     export interface Signature {
@@ -97,7 +97,7 @@ namespace ts {
         dispose?(): void;
     }
 
-    export namespace ScriptSnapshot {
+    export module ScriptSnapshot {
         class StringScriptSnapshot implements IScriptSnapshot {
 
             constructor(private text: string) {
@@ -126,12 +126,12 @@ namespace ts {
         referencedFiles: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules: string[];
-        isLibFile: boolean;
+        isLibFile: boolean
     }
 
-    const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
+    let scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
-    const emptyArray: any[] = [];
+    let emptyArray: any[] = [];
 
     const jsDocTagNames = [
         "augments",
@@ -174,7 +174,7 @@ namespace ts {
     let jsDocCompletionEntries: CompletionEntry[];
 
     function createNode(kind: SyntaxKind, pos: number, end: number, flags: NodeFlags, parent?: Node): NodeObject {
-        const node = new NodeObject(kind, pos, end);
+        let node = new NodeObject(kind, pos, end);
         node.flags = flags;
         node.parent = parent;
         return node;
@@ -235,8 +235,8 @@ namespace ts {
         private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {
-                const token = scanner.scan();
-                const textPos = scanner.getTextPos();
+                let token = scanner.scan();
+                let textPos = scanner.getTextPos();
                 nodes.push(createNode(token, pos, textPos, NodeFlags.Synthetic, this));
                 pos = textPos;
             }
@@ -244,11 +244,13 @@ namespace ts {
         }
 
         private createSyntaxList(nodes: NodeArray<Node>): Node {
-            const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
+            let list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, NodeFlags.Synthetic, this);
             list._children = [];
             let pos = nodes.pos;
 
-            for (const node of nodes) {
+
+
+            for (let node of nodes) {
                 if (pos < node.pos) {
                     pos = this.addSyntheticNodes(list._children, pos, node.pos);
                 }
@@ -267,14 +269,14 @@ namespace ts {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 children = [];
                 let pos = this.pos;
-                const processNode = (node: Node) => {
+                let processNode = (node: Node) => {
                     if (pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos);
                     }
                     children.push(node);
                     pos = node.end;
                 };
-                const processNodes = (nodes: NodeArray<Node>) => {
+                let processNodes = (nodes: NodeArray<Node>) => {
                     if (pos < nodes.pos) {
                         pos = this.addSyntheticNodes(children, pos, nodes.pos);
                     }
@@ -306,20 +308,20 @@ namespace ts {
         }
 
         public getFirstToken(sourceFile?: SourceFile): Node {
-            const children = this.getChildren(sourceFile);
+            let children = this.getChildren(sourceFile);
             if (!children.length) {
                 return undefined;
             }
 
-            const child = children[0];
+            let child = children[0];
 
             return child.kind < SyntaxKind.FirstNode ? child : child.getFirstToken(sourceFile);
         }
 
         public getLastToken(sourceFile?: SourceFile): Node {
-            const children = this.getChildren(sourceFile);
+            let children = this.getChildren(sourceFile);
 
-            const child = lastOrUndefined(children);
+            let child = lastOrUndefined(children);
             if (!child) {
                 return undefined;
             }
@@ -364,8 +366,8 @@ namespace ts {
     }
 
     function getJsDocCommentsFromDeclarations(declarations: Declaration[], name: string, canUseParsedParamTagComments: boolean) {
-        const documentationComment = <SymbolDisplayPart[]>[];
-        const docComments = getJsDocCommentsSeparatedByNewLines();
+        let documentationComment = <SymbolDisplayPart[]>[];
+        let docComments = getJsDocCommentsSeparatedByNewLines();
         ts.forEach(docComments, docComment => {
             if (documentationComment.length) {
                 documentationComment.push(lineBreakPart());
@@ -376,22 +378,22 @@ namespace ts {
         return documentationComment;
 
         function getJsDocCommentsSeparatedByNewLines() {
-            const paramTag = "@param";
-            const jsDocCommentParts: SymbolDisplayPart[] = [];
+            let paramTag = "@param";
+            let jsDocCommentParts: SymbolDisplayPart[] = [];
 
             ts.forEach(declarations, (declaration, indexOfDeclaration) => {
                 // Make sure we are collecting doc comment from declaration once,
                 // In case of union property there might be same declaration multiple times
                 // which only varies in type parameter
-                // Eg. const a: Array<string> | Array<number>; a.length
+                // Eg. let a: Array<string> | Array<number>; a.length
                 // The property length will have two declarations of property length coming
                 // from Array<T> - Array<string> and Array<number>
                 if (indexOf(declarations, declaration) === indexOfDeclaration) {
-                    const sourceFileOfDeclaration = getSourceFileOfNode(declaration);
+                    let sourceFileOfDeclaration = getSourceFileOfNode(declaration);
                     // If it is parameter - try and get the jsDoc comment with @param tag from function declaration's jsDoc comments
                     if (canUseParsedParamTagComments && declaration.kind === SyntaxKind.Parameter) {
                         ts.forEach(getJsDocCommentTextRange(declaration.parent, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                            let cleanedParamJsDocComment = getCleanedParamJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedParamJsDocComment) {
                                 addRange(jsDocCommentParts, cleanedParamJsDocComment);
                             }
@@ -411,7 +413,7 @@ namespace ts {
                     // Get the cleaned js doc comment text from the declaration
                     ts.forEach(getJsDocCommentTextRange(
                         declaration.kind === SyntaxKind.VariableDeclaration ? declaration.parent.parent : declaration, sourceFileOfDeclaration), jsDocCommentTextRange => {
-                            const cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
+                            let cleanedJsDocComment = getCleanedJsDocComment(jsDocCommentTextRange.pos, jsDocCommentTextRange.end, sourceFileOfDeclaration);
                             if (cleanedJsDocComment) {
                                 addRange(jsDocCommentParts, cleanedJsDocComment);
                             }
@@ -437,7 +439,7 @@ namespace ts {
                 }
 
                 for (; pos < end; pos++) {
-                    const ch = sourceFile.text.charCodeAt(pos);
+                    let ch = sourceFile.text.charCodeAt(pos);
                     if (!isWhiteSpace(ch) || isLineBreak(ch)) {
                         // Either found lineBreak or non whiteSpace
                         return pos;
@@ -478,7 +480,7 @@ namespace ts {
 
             function getCleanedJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
                 let spacesToRemoveAfterAsterisk: number;
-                const docComments: SymbolDisplayPart[] = [];
+                let docComments: SymbolDisplayPart[] = [];
                 let blankLineCount = 0;
                 let isInParamTag = false;
 
@@ -489,7 +491,7 @@ namespace ts {
 
                     // If the comment starts with '*' consume the spaces on this line
                     if (pos < end && sourceFile.text.charCodeAt(pos) === CharacterCodes.asterisk) {
-                        const lineStartPos = pos + 1;
+                        let lineStartPos = pos + 1;
                         pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, spacesToRemoveAfterAsterisk);
 
                         // Set the spaces to remove after asterisk as margin if not already set
@@ -503,7 +505,7 @@ namespace ts {
 
                     // Analyse text on this line
                     while (pos < end && !isLineBreak(sourceFile.text.charCodeAt(pos))) {
-                        const ch = sourceFile.text.charAt(pos);
+                        let ch = sourceFile.text.charAt(pos);
                         if (ch === "@") {
                             // If it is @param tag
                             if (isParamTag(pos, end, sourceFile)) {
@@ -542,7 +544,7 @@ namespace ts {
 
             function getCleanedParamJsDocComment(pos: number, end: number, sourceFile: SourceFile) {
                 let paramHelpStringMargin: number;
-                const paramDocComments: SymbolDisplayPart[] = [];
+                let paramDocComments: SymbolDisplayPart[] = [];
                 while (pos < end) {
                     if (isParamTag(pos, end, sourceFile)) {
                         let blankLineCount = 0;
@@ -557,7 +559,7 @@ namespace ts {
                         if (sourceFile.text.charCodeAt(pos) === CharacterCodes.openBrace) {
                             pos++;
                             for (let curlies = 1; pos < end; pos++) {
-                                const charCode = sourceFile.text.charCodeAt(pos);
+                                let charCode = sourceFile.text.charCodeAt(pos);
 
                                 // { character means we need to find another } to match the found one
                                 if (charCode === CharacterCodes.openBrace) {
@@ -601,9 +603,9 @@ namespace ts {
                             }
 
                             let paramHelpString = "";
-                            const firstLineParamHelpStringPos = pos;
+                            let firstLineParamHelpStringPos = pos;
                             while (pos < end) {
-                                const ch = sourceFile.text.charCodeAt(pos);
+                                let ch = sourceFile.text.charCodeAt(pos);
 
                                 // at line break, set this comment line text and go to next line
                                 if (isLineBreak(ch)) {
@@ -672,15 +674,15 @@ namespace ts {
                     }
 
                     // Now consume white spaces max
-                    const startOfLinePos = pos;
+                    let startOfLinePos = pos;
                     pos = consumeWhiteSpacesOnTheLine(pos, end, sourceFile, paramHelpStringMargin);
                     if (pos >= end) {
                         return;
                     }
 
-                    const consumedSpaces = pos - startOfLinePos;
+                    let consumedSpaces = pos - startOfLinePos;
                     if (consumedSpaces < paramHelpStringMargin) {
-                        const ch = sourceFile.text.charCodeAt(pos);
+                        let ch = sourceFile.text.charCodeAt(pos);
                         if (ch === CharacterCodes.asterisk) {
                             // Consume more spaces after asterisk
                             pos = consumeWhiteSpacesOnTheLine(pos + 1, end, sourceFile, paramHelpStringMargin - consumedSpaces - 1);
@@ -813,7 +815,7 @@ namespace ts {
         private namedDeclarations: Map<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
-            super(kind, pos, end);
+            super(kind, pos, end)
         }
 
         public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
@@ -841,16 +843,16 @@ namespace ts {
         }
 
         private computeNamedDeclarations(): Map<Declaration[]> {
-            const result: Map<Declaration[]> = {};
+            let result: Map<Declaration[]> = {};
 
             forEachChild(this, visit);
 
             return result;
 
             function addDeclaration(declaration: Declaration) {
-                const name = getDeclarationName(declaration);
+                let name = getDeclarationName(declaration);
                 if (name) {
-                    const declarations = getDeclarations(name);
+                    let declarations = getDeclarations(name);
                     declarations.push(declaration);
                 }
             }
@@ -861,13 +863,13 @@ namespace ts {
 
             function getDeclarationName(declaration: Declaration) {
                 if (declaration.name) {
-                    const result = getTextOfIdentifierOrLiteral(declaration.name);
+                    let result = getTextOfIdentifierOrLiteral(declaration.name);
                     if (result !== undefined) {
                         return result;
                     }
 
                     if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                        const expr = (<ComputedPropertyName>declaration.name).expression;
+                        let expr = (<ComputedPropertyName>declaration.name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                             return (<PropertyAccessExpression>expr).name.text;
                         }
@@ -897,12 +899,12 @@ namespace ts {
                     case SyntaxKind.FunctionDeclaration:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        const functionDeclaration = <FunctionLikeDeclaration>node;
-                        const declarationName = getDeclarationName(functionDeclaration);
+                        let functionDeclaration = <FunctionLikeDeclaration>node;
+                        let declarationName = getDeclarationName(functionDeclaration);
 
                         if (declarationName) {
-                            const declarations = getDeclarations(declarationName);
-                            const lastDeclaration = lastOrUndefined(declarations);
+                            let declarations = getDeclarations(declarationName);
+                            let lastDeclaration = lastOrUndefined(declarations);
 
                             // Check whether this declaration belongs to an "overload group".
                             if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
@@ -978,7 +980,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.ImportDeclaration:
-                        const importClause = (<ImportDeclaration>node).importClause;
+                        let importClause = (<ImportDeclaration>node).importClause;
                         if (importClause) {
                             // Handle default import case e.g.:
                             //    import d from "mod";
@@ -1111,8 +1113,8 @@ namespace ts {
     }
 
     export interface Classifications {
-        spans: number[];
-        endOfLineState: EndOfLineState;
+        spans: number[],
+        endOfLineState: EndOfLineState
     }
 
     export interface ClassifiedSpan {
@@ -1169,7 +1171,7 @@ namespace ts {
         highlightSpans: HighlightSpan[];
     }
 
-    export namespace HighlightSpanKind {
+    export module HighlightSpanKind {
         export const none = "none";
         export const definition = "definition";
         export const reference = "reference";
@@ -1218,7 +1220,7 @@ namespace ts {
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number| string;
     }
 
     export interface DefinitionInfo {
@@ -1498,7 +1500,7 @@ namespace ts {
     }
 
     // TODO: move these to enums
-    export namespace ScriptElementKind {
+    export module ScriptElementKind {
         export const unknown = "";
         export const warning = "warning";
 
@@ -1527,7 +1529,7 @@ namespace ts {
         export const enumElement = "enum";
 
         // Inside module and script only
-        // const v = ..
+        // let v = ..
         export const variableElement = "var";
 
         // Inside function
@@ -1579,7 +1581,7 @@ namespace ts {
         export const letElement = "let";
     }
 
-    export namespace ScriptElementKindModifier {
+    export module ScriptElementKindModifier {
         export const none = "";
         export const publicMemberModifier = "public";
         export const privateMemberModifier = "private";
@@ -1721,8 +1723,8 @@ namespace ts {
             this.fileNameToEntry = createFileMap<HostFileInformation>();
 
             // Initialize the list with the root file names
-            const rootFileNames = host.getScriptFileNames();
-            for (const fileName of rootFileNames) {
+            let rootFileNames = host.getScriptFileNames();
+            for (let fileName of rootFileNames) {
                 this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
             }
 
@@ -1736,7 +1738,7 @@ namespace ts {
 
         private createEntry(fileName: string, path: Path) {
             let entry: HostFileInformation;
-            const scriptSnapshot = this.host.getScriptSnapshot(fileName);
+            let scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
                 entry = {
                     hostFileName: fileName,
@@ -1758,7 +1760,7 @@ namespace ts {
         }
 
         public getOrCreateEntry(fileName: string): HostFileInformation {
-            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
+            let path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName)
             if (this.contains(path)) {
                 return this.getEntry(path);
             }
@@ -1767,7 +1769,7 @@ namespace ts {
         }
 
         public getRootFileNames(): string[] {
-            const fileNames: string[] = [];
+            let fileNames: string[] = [];
 
             this.fileNameToEntry.forEachValue((path, value) => {
                 if (value) {
@@ -1779,12 +1781,12 @@ namespace ts {
         }
 
         public getVersion(path: Path): string {
-            const file = this.getEntry(path);
+            let file = this.getEntry(path);
             return file && file.version;
         }
 
         public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getEntry(path);
+            let file = this.getEntry(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1801,22 +1803,22 @@ namespace ts {
         }
 
         public getCurrentSourceFile(fileName: string): SourceFile {
-            const scriptSnapshot = this.host.getScriptSnapshot(fileName);
+            let scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (!scriptSnapshot) {
                 // The host does not know about this file.
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
 
-            const version = this.host.getScriptVersion(fileName);
+            let version = this.host.getScriptVersion(fileName);
             let sourceFile: SourceFile;
 
             if (this.currentFileName !== fileName) {
                 // This is a new file, just parse it
-                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents*/ true);
+                sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, ScriptTarget.Latest, version, /*setNodeParents:*/ true);
             }
             else if (this.currentFileVersion !== version) {
                 // This is the same file, just a newer version. Incrementally parse the file.
-                const editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
+                let editRange = scriptSnapshot.getChangeRange(this.currentFileScriptSnapshot);
                 sourceFile = updateLanguageServiceSourceFile(this.currentSourceFile, scriptSnapshot, version, editRange);
             }
 
@@ -1861,7 +1863,7 @@ namespace ts {
      * - noResolve = true
      */
     export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
-        const options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
+        let options = transpileOptions.compilerOptions ? clone(transpileOptions.compilerOptions) : getDefaultCompilerOptions();
 
         options.isolatedModules = true;
 
@@ -1877,22 +1879,21 @@ namespace ts {
         options.noResolve = true;
 
         // if jsx is specified then treat file as .tsx
-        const inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
-        const sourceFile = createSourceFile(inputFileName, input, options.target);
+        let inputFileName = transpileOptions.fileName || (options.jsx ? "module.tsx" : "module.ts");
+        let sourceFile = createSourceFile(inputFileName, input, options.target);
         if (transpileOptions.moduleName) {
             sourceFile.moduleName = transpileOptions.moduleName;
         }
 
         sourceFile.renamedDependencies = transpileOptions.renamedDependencies;
 
-        const newLine = getNewLineCharacter(options);
+        let newLine = getNewLineCharacter(options);
 
         // Output
         let outputText: string;
         let sourceMapText: string;
-
         // Create a compilerHost object to allow the compiler to read and write files
-        const compilerHost: CompilerHost = {
+        let compilerHost: CompilerHost = {
             getSourceFile: (fileName, target) => fileName === normalizeSlashes(inputFileName) ? sourceFile : undefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 if (fileExtensionIs(name, ".map")) {
@@ -1913,7 +1914,7 @@ namespace ts {
             readFile: (fileName): string => ""
         };
 
-        const program = createProgram([inputFileName], options, compilerHost);
+        let program = createProgram([inputFileName], options, compilerHost);
 
         let diagnostics: Diagnostic[];
         if (transpileOptions.reportDiagnostics) {
@@ -1933,15 +1934,15 @@ namespace ts {
      * This is a shortcut function for transpileModule - it accepts transpileOptions as parameters and returns only outputText part of the result.
      */
     export function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string {
-        const output = transpileModule(input, { compilerOptions, fileName, reportDiagnostics: !!diagnostics, moduleName });
+        let output = transpileModule(input, { compilerOptions, fileName, reportDiagnostics: !!diagnostics, moduleName });
         // addRange correctly handles cases when wither 'from' or 'to' argument is missing
         addRange(diagnostics, output.diagnostics);
         return output.outputText;
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean): SourceFile {
-        const text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
-        const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents);
+        let text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
+        let sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         // after full parsing we can use table with interned strings as name table
         sourceFile.nameTable = sourceFile.identifiers;
@@ -1960,12 +1961,12 @@ namespace ts {
                     let newText: string;
 
                     // grab the fragment from the beginning of the original text to the beginning of the span
-                    const prefix = textChangeRange.span.start !== 0
+                    let prefix = textChangeRange.span.start !== 0
                         ? sourceFile.text.substr(0, textChangeRange.span.start)
                         : "";
 
                     // grab the fragment from the end of the span till the end of the original text
-                    const suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
+                    let suffix = textSpanEnd(textChangeRange.span) !== sourceFile.text.length
                         ? sourceFile.text.substr(textSpanEnd(textChangeRange.span))
                         : "";
 
@@ -1975,7 +1976,7 @@ namespace ts {
                     }
                     else {
                         // it was actual edit, fetch the fragment of new text that correspond to new span
-                        const changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
+                        let changedText = scriptSnapshot.getText(textChangeRange.span.start, textChangeRange.span.start + textChangeRange.newLength);
                         // combine prefix, changed text and suffix
                         newText = prefix && suffix
                             ? prefix + changedText + suffix
@@ -1984,7 +1985,7 @@ namespace ts {
                                 : (changedText + suffix);
                     }
 
-                    const newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+                    let newSourceFile = updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
                     setSourceFileFields(newSourceFile, scriptSnapshot, version);
                     // after incremental parsing nameTable might not be up-to-date
                     // drop it so it can be lazily recreated later
@@ -2005,7 +2006,7 @@ namespace ts {
         }
 
         // Otherwise, just create a new source file.
-        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true);
+        return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents:*/ true);
     }
 
     export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
@@ -2018,15 +2019,15 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets: Map<FileMap<DocumentRegistryEntry>> = {};
-        const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
+        let buckets: Map<FileMap<DocumentRegistryEntry>> = {};
+        let getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyFromCompilationSettings(settings: CompilerOptions): string {
             return "_" + settings.target + "|" + settings.module + "|" + settings.noResolve + "|" + settings.jsx + +"|" + settings.allowJs;
         }
 
         function getBucketForCompilationSettings(settings: CompilerOptions, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
-            const key = getKeyFromCompilationSettings(settings);
+            let key = getKeyFromCompilationSettings(settings);
             let bucket = lookUp(buckets, key);
             if (!bucket && createIfMissing) {
                 buckets[key] = bucket = createFileMap<DocumentRegistryEntry>();
@@ -2035,9 +2036,9 @@ namespace ts {
         }
 
         function reportStats() {
-            const bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = lookUp(buckets, name);
-                const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
+            let bucketInfoArray = Object.keys(buckets).filter(name => name && name.charAt(0) === '_').map(name => {
+                let entries = lookUp(buckets, name);
+                let sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
                 entries.forEachValue((key, entry) => {
                     sourceFiles.push({
                         name: key,
@@ -2051,15 +2052,15 @@ namespace ts {
                     sourceFiles
                 };
             });
-            return JSON.stringify(bucketInfoArray, undefined, 2);
+            return JSON.stringify(bucketInfoArray, null, 2);
         }
 
         function acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ true);
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ true);
         }
 
         function updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string): SourceFile {
-            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring*/ false);
+            return acquireOrUpdateDocument(fileName, compilationSettings, scriptSnapshot, version, /*acquiring:*/ false);
         }
 
         function acquireOrUpdateDocument(
@@ -2069,14 +2070,14 @@ namespace ts {
             version: string,
             acquiring: boolean): SourceFile {
 
-            const bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            let bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/ true);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
             let entry = bucket.get(path);
             if (!entry) {
                 Debug.assert(acquiring, "How could we be trying to update a document that the registry doesn't have?");
 
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false);
+                let sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents:*/ false);
 
                 entry = {
                     sourceFile: sourceFile,
@@ -2108,12 +2109,12 @@ namespace ts {
         }
 
         function releaseDocument(fileName: string, compilationSettings: CompilerOptions): void {
-            const bucket = getBucketForCompilationSettings(compilationSettings, /*createIfMissing*/false);
+            let bucket = getBucketForCompilationSettings(compilationSettings, false);
             Debug.assert(bucket !== undefined);
 
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+            let path = toPath(fileName, currentDirectory, getCanonicalFileName);
 
-            const entry = bucket.get(path);
+            let entry = bucket.get(path);
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
@@ -2131,19 +2132,19 @@ namespace ts {
     }
 
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
-        const referencedFiles: FileReference[] = [];
-        const importedFiles: FileReference[] = [];
+        let referencedFiles: FileReference[] = [];
+        let importedFiles: FileReference[] = [];
         let ambientExternalModules: string[];
         let isNoDefaultLib = false;
 
         function processTripleSlashDirectives(): void {
-            const commentRanges = getLeadingCommentRanges(sourceText, 0);
+            let commentRanges = getLeadingCommentRanges(sourceText, 0);
             forEach(commentRanges, commentRange => {
-                const comment = sourceText.substring(commentRange.pos, commentRange.end);
-                const referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
+                let comment = sourceText.substring(commentRange.pos, commentRange.end);
+                let referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
                 if (referencePathMatchResult) {
                     isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
-                    const fileReference = referencePathMatchResult.fileReference;
+                    let fileReference = referencePathMatchResult.fileReference;
                     if (fileReference) {
                         referencedFiles.push(fileReference);
                     }
@@ -2159,8 +2160,8 @@ namespace ts {
         }
 
         function recordModuleName() {
-            const importPath = scanner.getTokenValue();
-            const pos = scanner.getTokenPos();
+            let importPath = scanner.getTokenValue();
+            let pos = scanner.getTokenPos();
             importedFiles.push({
                 fileName: importPath,
                 pos: pos,
@@ -2212,7 +2213,7 @@ namespace ts {
                             }
                         }
                         else if (token === SyntaxKind.EqualsToken) {
-                            if (tryConsumeRequireCall(/*skipCurrentToken*/ true)) {
+                            if (tryConsumeRequireCall(/* skipCurrentToken */ true)) {
                                 return true;
                             }
                         }
@@ -2310,7 +2311,7 @@ namespace ts {
                     if (token === SyntaxKind.Identifier || isKeyword(token)) {
                         token = scanner.scan();
                         if (token === SyntaxKind.EqualsToken) {
-                            if (tryConsumeRequireCall(/*skipCurrentToken*/ true)) {
+                            if (tryConsumeRequireCall(/* skipCurrentToken */ true)) {
                                 return true;
                             }
                         }
@@ -2409,7 +2410,7 @@ namespace ts {
                 if (tryConsumeDeclare() ||
                     tryConsumeImport() ||
                     tryConsumeExport() ||
-                    (detectJavaScriptImports && (tryConsumeRequireCall(/*skipCurrentToken*/ false) || tryConsumeDefine()))) {
+                    (detectJavaScriptImports && (tryConsumeRequireCall(/* skipCurrentToken */ false) || tryConsumeDefine()))) {
                     continue;
                 }
                 else {
@@ -2549,8 +2550,8 @@ namespace ts {
                     return true;
                 }
                 else if (position === comment.end) {
-                    const text = sourceFile.text;
-                    const width = comment.end - comment.pos;
+                    let text = sourceFile.text;
+                    let width = comment.end - comment.pos;
                     // is single line comment or just /*
                     if (width <= 2 || text.charCodeAt(comment.pos + 1) === CharacterCodes.slash) {
                         return true;
@@ -2582,7 +2583,7 @@ namespace ts {
     }
 
     // A cache of completion entries for keywords, these do not change between sessions
-    const keywordCompletions: CompletionEntry[] = [];
+    let keywordCompletions: CompletionEntry[] = [];
     for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
         keywordCompletions.push({
             name: tokenToString(i),
@@ -2672,15 +2673,15 @@ namespace ts {
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
-        const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        let syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
 
-        const useCaseSensitivefileNames = false;
-        const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
+        let useCaseSensitivefileNames = false;
+        let cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
 
-        const currentDirectory = host.getCurrentDirectory();
+        let currentDirectory = host.getCurrentDirectory();
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
@@ -2692,10 +2693,10 @@ namespace ts {
             }
         }
 
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
+        let getCanonicalFileName = createGetCanonicalFileName(useCaseSensitivefileNames);
 
         function getValidSourceFile(fileName: string): SourceFile {
-            const sourceFile = program.getSourceFile(fileName);
+            let sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
                 throw new Error("Could not find file: '" + fileName + "'.");
             }
@@ -2715,7 +2716,7 @@ namespace ts {
         function synchronizeHostData(): void {
             // perform fast check if host supports it
             if (host.getProjectVersion) {
-                const hostProjectVersion = host.getProjectVersion();
+                let hostProjectVersion = host.getProjectVersion();
                 if (hostProjectVersion) {
                     if (lastProjectVersion === hostProjectVersion) {
                         return;
@@ -2739,17 +2740,17 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const oldSettings = program && program.getCompilerOptions();
-            const newSettings = hostCache.compilationSettings();
-            const changesInCompilationSettingsAffectSyntax = oldSettings &&
+            let oldSettings = program && program.getCompilerOptions();
+            let newSettings = hostCache.compilationSettings();
+            let changesInCompilationSettingsAffectSyntax = oldSettings &&
                 (oldSettings.target !== newSettings.target ||
                  oldSettings.module !== newSettings.module ||
                  oldSettings.noResolve !== newSettings.noResolve ||
-                 oldSettings.jsx !== newSettings.jsx ||
+                 oldSettings.jsx !== newSettings.jsx || 
                  oldSettings.allowJs !== newSettings.allowJs);
 
             // Now create a new compiler
-            const compilerHost: CompilerHost = {
+            let compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
                 getCancellationToken: () => cancellationToken,
                 getCanonicalFileName,
@@ -2765,22 +2766,22 @@ namespace ts {
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
-                    const entry = hostCache.getOrCreateEntry(fileName);
+                    let entry = hostCache.getOrCreateEntry(fileName);
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                 }
             };
 
             if (host.resolveModuleNames) {
-                compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile);
+                compilerHost.resolveModuleNames = (moduleNames, containingFile) => host.resolveModuleNames(moduleNames, containingFile)
             }
 
-            const newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
+            let newProgram = createProgram(hostCache.getRootFileNames(), newSettings, compilerHost, program);
 
             // Release any files we have acquired in the old program but are
             // not part of the new program.
             if (program) {
-                const oldSourceFiles = program.getSourceFiles();
-                for (const oldSourceFile of oldSourceFiles) {
+                let oldSourceFiles = program.getSourceFiles();
+                for (let oldSourceFile of oldSourceFiles) {
                     if (!newProgram.getSourceFile(oldSourceFile.fileName) || changesInCompilationSettingsAffectSyntax) {
                         documentRegistry.releaseDocument(oldSourceFile.fileName, oldSettings);
                     }
@@ -2803,7 +2804,7 @@ namespace ts {
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                const hostFileInformation = hostCache.getOrCreateEntry(fileName);
+                let hostFileInformation = hostCache.getOrCreateEntry(fileName);
                 if (!hostFileInformation) {
                     return undefined;
                 }
@@ -2813,7 +2814,7 @@ namespace ts {
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!changesInCompilationSettingsAffectSyntax) {
                     // Check if the old program had this file already
-                    const oldSourceFile = program && program.getSourceFile(fileName);
+                    let oldSourceFile = program && program.getSourceFile(fileName);
                     if (oldSourceFile) {
                         // We already had a source file for this file name.  Go to the registry to
                         // ensure that we get the right up to date version of it.  We need this to
@@ -2850,7 +2851,7 @@ namespace ts {
                 if (!sourceFile) {
                     return false;
                 }
-                const path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
+                let path = sourceFile.path || toPath(sourceFile.fileName, currentDirectory, getCanonicalFileName);
                 return sourceFile.version === hostCache.getVersion(path);
             }
 
@@ -2861,13 +2862,13 @@ namespace ts {
                 }
 
                 // If number of files in the program do not match, it is not up-to-date
-                const rootFileNames = hostCache.getRootFileNames();
+                let rootFileNames = hostCache.getRootFileNames();
                 if (program.getSourceFiles().length !== rootFileNames.length) {
                     return false;
                 }
 
                 // If any file is not up-to-date, then the whole program is not up-to-date
-                for (const fileName of rootFileNames) {
+                for (let fileName of rootFileNames) {
                     if (!sourceFileUpToDate(program.getSourceFile(fileName))) {
                         return false;
                     }
@@ -2909,18 +2910,18 @@ namespace ts {
         function getSemanticDiagnostics(fileName: string): Diagnostic[] {
             synchronizeHostData();
 
-            const targetSourceFile = getValidSourceFile(fileName);
+            let targetSourceFile = getValidSourceFile(fileName);
 
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
+            let semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
             if (!program.getCompilerOptions().declaration) {
                 return semanticDiagnostics;
             }
 
             // If '-d' is enabled, check for emitter error. One example of emitter error is export class implements non-export interface
-            const declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
+            let declarationDiagnostics = program.getDeclarationDiagnostics(targetSourceFile, cancellationToken);
             return concatenate(semanticDiagnostics, declarationDiagnostics);
         }
 
@@ -2936,14 +2937,14 @@ namespace ts {
          * @return undefined if the name is of external module otherwise a name with striped of any quote
          */
         function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
-            const displayName: string = getDeclaredName(program.getTypeChecker(), symbol, location);
+            let displayName: string = getDeclaredName(program.getTypeChecker(), symbol, location);
 
             if (displayName) {
-                const firstCharCode = displayName.charCodeAt(0);
+                let firstCharCode = displayName.charCodeAt(0);
                 // First check of the displayName is not external module; if it is an external module, it is not valid entry
                 if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
                     // If the symbol is external module, don't show it in the completion list
-                    // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+                    // (i.e declare module "http" { let x; } | // <= request completion here, "http" should not be there)
                     return undefined;
                 }
             }
@@ -2986,20 +2987,20 @@ namespace ts {
         }
 
         function getCompletionData(fileName: string, position: number) {
-            const typeChecker = program.getTypeChecker();
-            const syntacticStart = new Date().getTime();
-            const sourceFile = getValidSourceFile(fileName);
-            const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
+            let typeChecker = program.getTypeChecker();
+            let syntacticStart = new Date().getTime();
+            let sourceFile = getValidSourceFile(fileName);
+            let isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
             let isJsDocTagName = false;
 
             let start = new Date().getTime();
-            const currentToken = getTokenAtPosition(sourceFile, position);
+            let currentToken = getTokenAtPosition(sourceFile, position);
             log("getCompletionData: Get current token: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
             // Completion not allowed inside comments, bail out if this is the case
-            const insideComment = isInsideComment(sourceFile, currentToken, position);
+            let insideComment = isInsideComment(sourceFile, currentToken, position);
             log("getCompletionData: Is inside comment: " + (new Date().getTime() - start));
 
             if (insideComment) {
@@ -3013,7 +3014,7 @@ namespace ts {
                 //     /** @type {number | string} */
                 // Completion should work in the brackets
                 let insideJsDocTagExpression = false;
-                const tag = getJsDocTagAtPosition(sourceFile, position);
+                let tag = getJsDocTagAtPosition(sourceFile, position);
                 if (tag) {
                     if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                         isJsDocTagName = true;
@@ -3023,7 +3024,7 @@ namespace ts {
                         case SyntaxKind.JSDocTypeTag:
                         case SyntaxKind.JSDocParameterTag:
                         case SyntaxKind.JSDocReturnTag:
-                            const tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
+                            let tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
                             if (tagWithExpression.typeExpression) {
                                 insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
                             }
@@ -3044,7 +3045,7 @@ namespace ts {
             }
 
             start = new Date().getTime();
-            const previousToken = findPrecedingToken(position, sourceFile);
+            let previousToken = findPrecedingToken(position, sourceFile);
             log("getCompletionData: Get previous token 1: " + (new Date().getTime() - start));
 
             // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
@@ -3054,7 +3055,7 @@ namespace ts {
             // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
             // Skip this partial identifier and adjust the contextToken to the token that precedes it.
             if (contextToken && position <= contextToken.end && isWord(contextToken.kind)) {
-                const start = new Date().getTime();
+                let start = new Date().getTime();
                 contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile);
                 log("getCompletionData: Get previous token 2: " + (new Date().getTime() - start));
             }
@@ -3075,7 +3076,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const { parent, kind } = contextToken;
+                let { parent, kind } = contextToken;
                 if (kind === SyntaxKind.DotToken) {
                     if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                         node = (<PropertyAccessExpression>contextToken.parent).expression;
@@ -3102,7 +3103,7 @@ namespace ts {
                 }
             }
 
-            const semanticStart = new Date().getTime();
+            let semanticStart = new Date().getTime();
             let isMemberCompletion: boolean;
             let isNewIdentifierLocation: boolean;
             let symbols: Symbol[] = [];
@@ -3111,7 +3112,7 @@ namespace ts {
                 getTypeScriptMemberSymbols();
             }
             else if (isRightOfOpenTag) {
-                const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
+                let tagSymbols = typeChecker.getJsxIntrinsicTagNames();
                 if (tryGetGlobalSymbols()) {
                     symbols = tagSymbols.concat(symbols.filter(s => !!(s.flags & SymbolFlags.Value)));
                 }
@@ -3122,7 +3123,7 @@ namespace ts {
                 isNewIdentifierLocation = false;
             }
             else if (isStartingCloseTag) {
-                const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
+                let tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
                 symbols = [typeChecker.getSymbolAtLocation(tagName)];
 
                 isMemberCompletion = true;
@@ -3156,7 +3157,7 @@ namespace ts {
 
                     if (symbol && symbol.flags & SymbolFlags.HasExports) {
                         // Extract module or enum members
-                        const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                        let exportedSymbols = typeChecker.getExportsOfModule(symbol);
                         forEach(exportedSymbols, symbol => {
                             if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                                 symbols.push(symbol);
@@ -3165,14 +3166,14 @@ namespace ts {
                     }
                 }
 
-                const type = typeChecker.getTypeAtLocation(node);
+                let type = typeChecker.getTypeAtLocation(node);
                 addTypeProperties(type);
             }
 
             function addTypeProperties(type: Type) {
                 if (type) {
                     // Filter private properties
-                    for (const symbol of type.getApparentProperties()) {
+                    for (let symbol of type.getApparentProperties()) {
                         if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
                             symbols.push(symbol);
                         }
@@ -3184,8 +3185,8 @@ namespace ts {
                         // each individual type has.  This is because we're going to add all identifiers
                         // anyways.  So we might as well elevate the members that were at least part
                         // of the individual types to a higher status since we know what they are.
-                        const unionType = <UnionType>type;
-                        for (const elementType of unionType.types) {
+                        let unionType = <UnionType>type;
+                        for (let elementType of unionType.types) {
                             addTypeProperties(elementType);
                         }
                     }
@@ -3255,14 +3256,14 @@ namespace ts {
                 //   - 'contextToken' was adjusted to the token prior to 'previousToken'
                 //      because we were at the end of an identifier.
                 //   - 'previousToken' is defined.
-                const adjustedPosition = previousToken !== contextToken ?
+                let adjustedPosition = previousToken !== contextToken ?
                     previousToken.getStart() :
                     position;
 
-                const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
+                let scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
 
                 /// TODO filter meaning based on the current context
-                const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
+                let symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
                 symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
 
                 return true;
@@ -3281,8 +3282,8 @@ namespace ts {
             }
 
             function isCompletionListBlocker(contextToken: Node): boolean {
-                const start = new Date().getTime();
-                const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
+                let start = new Date().getTime();
+                let result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                     isSolelyIdentifierDefinitionLocation(contextToken) ||
                     isDotOfNumericLiteral(contextToken) ||
                     isInJsxText(contextToken);
@@ -3309,27 +3310,27 @@ namespace ts {
 
             function isNewIdentifierDefinitionLocation(previousToken: Node): boolean {
                 if (previousToken) {
-                    const containingNodeKind = previousToken.parent.kind;
+                    let containingNodeKind = previousToken.parent.kind;
                     switch (previousToken.kind) {
                         case SyntaxKind.CommaToken:
                             return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
                                 || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
-                                || containingNodeKind === SyntaxKind.BinaryExpression             // const x = (a, |
+                                || containingNodeKind === SyntaxKind.BinaryExpression             // let x = (a, |
                                 || containingNodeKind === SyntaxKind.FunctionType;                // var x: (s: string, list|
 
                         case SyntaxKind.OpenParenToken:
                             return containingNodeKind === SyntaxKind.CallExpression               // func( |
                                 || containingNodeKind === SyntaxKind.Constructor                  // constructor( |
                                 || containingNodeKind === SyntaxKind.NewExpression                // new C(a|
-                                || containingNodeKind === SyntaxKind.ParenthesizedExpression      // const x = (a|
+                                || containingNodeKind === SyntaxKind.ParenthesizedExpression      // let x = (a|
                                 || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
 
                         case SyntaxKind.OpenBracketToken:
                             return containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [ |
                                 || containingNodeKind === SyntaxKind.IndexSignature               // [ | : string ]
-                                || containingNodeKind === SyntaxKind.ComputedPropertyName;         // [ |    /* this can become an index signature */
+                                || containingNodeKind === SyntaxKind.ComputedPropertyName         // [ |    /* this can become an index signature */
 
                         case SyntaxKind.ModuleKeyword:                                            // module |
                         case SyntaxKind.NamespaceKeyword:                                         // namespace |
@@ -3342,7 +3343,7 @@ namespace ts {
                             return containingNodeKind === SyntaxKind.ClassDeclaration;            // class A{ |
 
                         case SyntaxKind.EqualsToken:
-                            return containingNodeKind === SyntaxKind.VariableDeclaration          // const x = a|
+                            return containingNodeKind === SyntaxKind.VariableDeclaration          // let x = a|
                                 || containingNodeKind === SyntaxKind.BinaryExpression;            // x = a|
 
                         case SyntaxKind.TemplateHead:
@@ -3374,8 +3375,8 @@ namespace ts {
                     || contextToken.kind === SyntaxKind.StringLiteralType
                     || contextToken.kind === SyntaxKind.RegularExpressionLiteral
                     || isTemplateLiteralKind(contextToken.kind)) {
-                    const start = contextToken.getStart();
-                    const end = contextToken.getEnd();
+                    let start = contextToken.getStart();
+                    let end = contextToken.getEnd();
 
                     // To be "in" one of these literals, the position has to be:
                     //   1. entirely within the token text.
@@ -3419,7 +3420,7 @@ namespace ts {
                     // We are *only* completing on properties from the type being destructured.
                     isNewIdentifierLocation = false;
 
-                    const rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
+                    let rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
                     if (isVariableLike(rootDeclaration)) {
                         // We don't want to complete using the type acquired by the shape
                         // of the binding pattern; we are only interested in types acquired
@@ -3430,7 +3431,7 @@ namespace ts {
                         }
                     }
                     else {
-                        Debug.fail("Root declaration is not variable-like.");
+                        Debug.fail("Root declaration is not variable-like.")
                     }
                 }
                 else {
@@ -3441,7 +3442,7 @@ namespace ts {
                     return false;
                 }
 
-                const typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                let typeMembers = typeChecker.getPropertiesOfType(typeForObject);
                 if (typeMembers && typeMembers.length > 0) {
                     // Add filtered items to the completion list
                     symbols = filterObjectMembersList(typeMembers, existingMembers);
@@ -3465,11 +3466,11 @@ namespace ts {
              * @returns true if 'symbols' was successfully populated; false otherwise.
              */
             function tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports: NamedImportsOrExports): boolean {
-                const declarationKind = namedImportsOrExports.kind === SyntaxKind.NamedImports ?
+                let declarationKind = namedImportsOrExports.kind === SyntaxKind.NamedImports ?
                     SyntaxKind.ImportDeclaration :
                     SyntaxKind.ExportDeclaration;
-                const importOrExportDeclaration = <ImportDeclaration | ExportDeclaration>getAncestor(namedImportsOrExports, declarationKind);
-                const moduleSpecifier = importOrExportDeclaration.moduleSpecifier;
+                let importOrExportDeclaration = <ImportDeclaration | ExportDeclaration>getAncestor(namedImportsOrExports, declarationKind);
+                let moduleSpecifier = importOrExportDeclaration.moduleSpecifier;
 
                 if (!moduleSpecifier) {
                     return false;
@@ -3479,7 +3480,7 @@ namespace ts {
                 isNewIdentifierLocation = false;
 
                 let exports: Symbol[];
-                const moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
+                let moduleSpecifierSymbol = typeChecker.getSymbolAtLocation(importOrExportDeclaration.moduleSpecifier);
                 if (moduleSpecifierSymbol) {
                     exports = typeChecker.getExportsOfModule(moduleSpecifierSymbol);
                 }
@@ -3496,9 +3497,9 @@ namespace ts {
             function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | BindingPattern {
                 if (contextToken) {
                     switch (contextToken.kind) {
-                        case SyntaxKind.OpenBraceToken:  // const x = { |
-                        case SyntaxKind.CommaToken:      // const x = { a: 0, |
-                            const parent = contextToken.parent;
+                        case SyntaxKind.OpenBraceToken:  // let x = { |
+                        case SyntaxKind.CommaToken:      // let x = { a: 0, |
+                            let parent = contextToken.parent;
                             if (parent && (parent.kind === SyntaxKind.ObjectLiteralExpression || parent.kind === SyntaxKind.ObjectBindingPattern)) {
                                 return <ObjectLiteralExpression | BindingPattern>parent;
                             }
@@ -3531,8 +3532,8 @@ namespace ts {
 
             function tryGetContainingJsxElement(contextToken: Node): JsxOpeningLikeElement {
                 if (contextToken) {
-                    const parent = contextToken.parent;
-                    switch (contextToken.kind) {
+                    let parent = contextToken.parent;
+                    switch(contextToken.kind) {
                         case SyntaxKind.LessThanSlashToken:
                         case SyntaxKind.SlashToken:
                         case SyntaxKind.Identifier:
@@ -3595,7 +3596,7 @@ namespace ts {
              * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
              */
             function isSolelyIdentifierDefinitionLocation(contextToken: Node): boolean {
-                const containingNodeKind = contextToken.parent.kind;
+                let containingNodeKind = contextToken.parent.kind;
                 switch (contextToken.kind) {
                     case SyntaxKind.CommaToken:
                         return containingNodeKind === SyntaxKind.VariableDeclaration ||
@@ -3625,13 +3626,13 @@ namespace ts {
                     case SyntaxKind.OpenBraceToken:
                         return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
                             containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface a { |
-                            containingNodeKind === SyntaxKind.TypeLiteral;                              // const x : { |
+                            containingNodeKind === SyntaxKind.TypeLiteral;                              // let x : { |
 
                     case SyntaxKind.SemicolonToken:
                         return containingNodeKind === SyntaxKind.PropertySignature &&
                             contextToken.parent && contextToken.parent.parent &&
                             (contextToken.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||    // interface a { f; |
-                                contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // const x : { a; |
+                                contextToken.parent.parent.kind === SyntaxKind.TypeLiteral);           // let x : { a; |
 
                     case SyntaxKind.LessThanToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration ||                    // class A< |
@@ -3698,7 +3699,7 @@ namespace ts {
 
             function isDotOfNumericLiteral(contextToken: Node): boolean {
                 if (contextToken.kind === SyntaxKind.NumericLiteral) {
-                    const text = contextToken.getFullText();
+                    let text = contextToken.getFullText();
                     return text.charAt(text.length - 1) === ".";
                 }
 
@@ -3715,15 +3716,15 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-                const exisingImportsOrExports: Map<boolean> = {};
+                let exisingImportsOrExports: Map<boolean> = {};
 
-                for (const element of namedImportsOrExports) {
+                for (let element of namedImportsOrExports) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (element.getStart() <= position && position <= element.getEnd()) {
                         continue;
                     }
 
-                    const name = element.propertyName || element.name;
+                    let name = element.propertyName || element.name;
                     exisingImportsOrExports[name.text] = true;
                 }
 
@@ -3745,8 +3746,8 @@ namespace ts {
                     return contextualMemberSymbols;
                 }
 
-                const existingMemberNames: Map<boolean> = {};
-                for (const m of existingMembers) {
+                let existingMemberNames: Map<boolean> = {};
+                for (let m of existingMembers) {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
                         m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
@@ -3765,7 +3766,7 @@ namespace ts {
                     if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                         // include only identifiers in completion list
                         if ((<BindingElement>m).propertyName.kind === SyntaxKind.Identifier) {
-                            existingName = (<Identifier>(<BindingElement>m).propertyName).text;
+                            existingName = (<Identifier>(<BindingElement>m).propertyName).text
                         }
                     }
                     else {
@@ -3788,8 +3789,8 @@ namespace ts {
              *          do not occur at the current position and have not otherwise been typed.
              */
             function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-                const seenNames: Map<boolean> = {};
-                for (const attr of attributes) {
+                let seenNames: Map<boolean> = {};
+                for (let attr of attributes) {
                     // If this is the current item we are editing right now, do not filter it out
                     if (attr.getStart() <= position && position <= attr.getEnd()) {
                         continue;
@@ -3808,21 +3809,21 @@ namespace ts {
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
 
-            const completionData = getCompletionData(fileName, position);
+            let completionData = getCompletionData(fileName, position);
             if (!completionData) {
                 return undefined;
             }
 
-            const { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
+            let { symbols, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot, isJsDocTagName } = completionData;
 
             if (isJsDocTagName) {
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return { isMemberCompletion: false, isNewIdentifierLocation: false, entries: getAllJsDocCompletionEntries() };
             }
 
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFile = getValidSourceFile(fileName);
 
-            const entries: CompletionEntry[] = [];
+            let entries: CompletionEntry[] = [];
 
             if (isRightOfDot && isSourceFileJavaScript(sourceFile)) {
                 const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries);
@@ -3844,16 +3845,16 @@ namespace ts {
             return { isMemberCompletion, isNewIdentifierLocation, entries };
 
             function getJavaScriptCompletionEntries(sourceFile: SourceFile, uniqueNames: Map<string>): CompletionEntry[] {
-                const entries: CompletionEntry[] = [];
-                const target = program.getCompilerOptions().target;
+                let entries: CompletionEntry[] = [];
+                let target = program.getCompilerOptions().target;
 
-                const nameTable = getNameTable(sourceFile);
-                for (const name in nameTable) {
+                let nameTable = getNameTable(sourceFile);
+                for (let name in nameTable) {
                     if (!uniqueNames[name]) {
                         uniqueNames[name] = name;
-                        const displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks*/ true);
+                        let displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks:*/ true);
                         if (displayName) {
-                            const entry = {
+                            let entry = {
                                 name: displayName,
                                 kind: ScriptElementKind.warning,
                                 kindModifiers: "",
@@ -3874,7 +3875,7 @@ namespace ts {
                         kind: ScriptElementKind.keyword,
                         kindModifiers: "",
                         sortText: "0",
-                    };
+                    }
                 }));
             }
 
@@ -3882,7 +3883,7 @@ namespace ts {
                 // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
                 // We would like to only show things that can be added after a dot, so for instance numeric properties can
                 // not be accessed with a dot (a.1 <- invalid)
-                const displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks*/ true, location);
+                let displayName = getCompletionEntryDisplayNameForSymbol(symbol, program.getCompilerOptions().target, /*performCharacterChecks:*/ true, location);
                 if (!displayName) {
                     return undefined;
                 }
@@ -3904,13 +3905,13 @@ namespace ts {
             }
 
             function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: CompletionEntry[]): Map<string> {
-                const start = new Date().getTime();
-                const uniqueNames: Map<string> = {};
+                let start = new Date().getTime();
+                let uniqueNames: Map<string> = {};
                 if (symbols) {
-                    for (const symbol of symbols) {
-                        const entry = createCompletionEntry(symbol, location);
+                    for (let symbol of symbols) {
+                        let entry = createCompletionEntry(symbol, location);
                         if (entry) {
-                            const id = escapeIdentifier(entry.name);
+                            let id = escapeIdentifier(entry.name);
                             if (!lookUp(uniqueNames, id)) {
                                 entries.push(entry);
                                 uniqueNames[id] = id;
@@ -3928,19 +3929,19 @@ namespace ts {
             synchronizeHostData();
 
             // Compute all the completion symbols again.
-            const completionData = getCompletionData(fileName, position);
+            let completionData = getCompletionData(fileName, position);
             if (completionData) {
-                const { symbols, location } = completionData;
+                let { symbols, location } = completionData;
 
                 // Find the symbol with the matching entry name.
-                const target = program.getCompilerOptions().target;
+                let target = program.getCompilerOptions().target;
                 // We don't need to perform character checks here because we're only comparing the
                 // name against 'entryName' (which is known to be good), not building a new
                 // completion entry.
-                const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
+                let symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, target, /*performCharacterChecks:*/ false, location) === entryName ? s : undefined);
 
                 if (symbol) {
-                    const { displayParts, documentation, symbolKind } = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
+                    let { displayParts, documentation, symbolKind } = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, getValidSourceFile(fileName), location, location, SemanticMeaning.All);
                     return {
                         name: entryName,
                         kindModifiers: getSymbolModifiers(symbol),
@@ -3952,7 +3953,7 @@ namespace ts {
             }
 
             // Didn't find a symbol with this name.  See if we can find a keyword instead.
-            const keywordCompletion = forEach(keywordCompletions, c => c.name === entryName);
+            let keywordCompletion = forEach(keywordCompletions, c => c.name === entryName);
             if (keywordCompletion) {
                 return {
                     name: entryName,
@@ -3968,7 +3969,7 @@ namespace ts {
 
         // TODO(drosen): use contextual SemanticMeaning.
         function getSymbolKind(symbol: Symbol, location: Node): string {
-            const flags = symbol.getFlags();
+            let flags = symbol.getFlags();
 
             if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
                 ScriptElementKind.localClassElement : ScriptElementKind.classElement;
@@ -3977,7 +3978,7 @@ namespace ts {
             if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
             if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
 
-            const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, location);
+            let result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, flags, location);
             if (result === ScriptElementKind.unknown) {
                 if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
                 if (flags & SymbolFlags.EnumMember) return ScriptElementKind.variableElement;
@@ -3989,7 +3990,7 @@ namespace ts {
         }
 
         function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol: Symbol, flags: SymbolFlags, location: Node) {
-            const typeChecker = program.getTypeChecker();
+            let typeChecker = program.getTypeChecker();
 
             if (typeChecker.isUndefinedSymbol(symbol)) {
                 return ScriptElementKind.variableElement;
@@ -4018,8 +4019,8 @@ namespace ts {
             if (flags & SymbolFlags.Property) {
                 if (flags & SymbolFlags.SyntheticProperty) {
                     // If union property is result of union of non method (property/accessors/variables), it is labeled as property
-                    const unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
-                        const rootSymbolFlags = rootSymbol.getFlags();
+                    let unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
+                        let rootSymbolFlags = rootSymbol.getFlags();
                         if (rootSymbolFlags & (SymbolFlags.PropertyOrAccessor | SymbolFlags.Variable)) {
                             return ScriptElementKind.memberVariableElement;
                         }
@@ -4027,8 +4028,8 @@ namespace ts {
                     });
                     if (!unionPropertyKind) {
                         // If this was union of all methods,
-                        // make sure it has call signatures before we can label it as method
-                        const typeOfUnionProperty = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+                        //make sure it has call signatures before we can label it as method
+                        let typeOfUnionProperty = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
                         if (typeOfUnionProperty.getCallSignatures().length) {
                             return ScriptElementKind.memberFunctionElement;
                         }
@@ -4052,11 +4053,11 @@ namespace ts {
         function getSymbolDisplayPartsDocumentationAndSymbolKind(symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
             location: Node, semanticMeaning = getMeaningFromLocation(location)) {
 
-            const typeChecker = program.getTypeChecker();
+            let typeChecker = program.getTypeChecker();
 
-            const displayParts: SymbolDisplayPart[] = [];
+            let displayParts: SymbolDisplayPart[] = [];
             let documentation: SymbolDisplayPart[];
-            const symbolFlags = symbol.flags;
+            let symbolFlags = symbol.flags;
             let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(symbol, symbolFlags, location);
             let hasAddedSymbolInfo: boolean;
             let type: Type;
@@ -4072,7 +4073,7 @@ namespace ts {
                 type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
                 if (type) {
                     if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                        const right = (<PropertyAccessExpression>location.parent).name;
+                        let right = (<PropertyAccessExpression>location.parent).name;
                         // Either the location is on the right of a property access, or on the left and the right is missing
                         if (right === location || (right && right.getFullWidth() === 0)) {
                             location = location.parent;
@@ -4089,15 +4090,15 @@ namespace ts {
                     }
 
                     if (callExpression) {
-                        const candidateSignatures: Signature[] = [];
+                        let candidateSignatures: Signature[] = [];
                         signature = typeChecker.getResolvedSignature(callExpression, candidateSignatures);
                         if (!signature && candidateSignatures.length) {
                             // Use the first candidate:
                             signature = candidateSignatures[0];
                         }
 
-                        const useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
-                        const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
+                        let useConstructSignatures = callExpression.kind === SyntaxKind.NewExpression || callExpression.expression.kind === SyntaxKind.SuperKeyword;
+                        let allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                         if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
                             // Get the first signature if there is one -- allSignatures may contain
@@ -4155,8 +4156,8 @@ namespace ts {
                     else if ((isNameOfFunctionDeclaration(location) && !(symbol.flags & SymbolFlags.Accessor)) || // name of function declaration
                         (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                         // get the signature from the declaration and write it
-                        const functionDeclaration = <FunctionLikeDeclaration>location.parent;
-                        const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
+                        let functionDeclaration = <FunctionLikeDeclaration>location.parent;
+                        let allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getConstructSignatures() : type.getCallSignatures();
                         if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
                             signature = typeChecker.getSignatureFromDeclaration(functionDeclaration);
                         }
@@ -4225,8 +4226,8 @@ namespace ts {
             }
             if (symbolFlags & SymbolFlags.Module) {
                 addNewLineIfDisplayPartsExist();
-                const declaration = <ModuleDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ModuleDeclaration);
-                const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
+                let declaration = <ModuleDeclaration>getDeclarationOfKind(symbol, SyntaxKind.ModuleDeclaration);
+                let isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
                 displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
                 displayParts.push(spacePart());
                 addFullSymbolName(symbol);
@@ -4278,9 +4279,9 @@ namespace ts {
             }
             if (symbolFlags & SymbolFlags.EnumMember) {
                 addPrefixForAnyFunctionOrVar(symbol, "enum member");
-                const declaration = symbol.declarations[0];
+                let declaration = symbol.declarations[0];
                 if (declaration.kind === SyntaxKind.EnumMember) {
-                    const constantValue = typeChecker.getConstantValue(<EnumMember>declaration);
+                    let constantValue = typeChecker.getConstantValue(<EnumMember>declaration);
                     if (constantValue !== undefined) {
                         displayParts.push(spacePart());
                         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -4296,7 +4297,7 @@ namespace ts {
                 addFullSymbolName(symbol);
                 ts.forEach(symbol.declarations, declaration => {
                     if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
-                        const importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
+                        let importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
                         if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
                             displayParts.push(spacePart());
                             displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -4307,7 +4308,7 @@ namespace ts {
                             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                         else {
-                            const internalAliasSymbol = typeChecker.getSymbolAtLocation(importEqualsDeclaration.moduleReference);
+                            let internalAliasSymbol = typeChecker.getSymbolAtLocation(importEqualsDeclaration.moduleReference);
                             if (internalAliasSymbol) {
                                 displayParts.push(spacePart());
                                 displayParts.push(operatorPart(SyntaxKind.EqualsToken));
@@ -4331,7 +4332,7 @@ namespace ts {
                             displayParts.push(spacePart());
                             // If the type is type parameter, format it specially
                             if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
-                                const typeParameterParts = mapToDisplayParts(writer => {
+                                let typeParameterParts = mapToDisplayParts(writer => {
                                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
                                 });
                                 addRange(displayParts, typeParameterParts);
@@ -4346,7 +4347,7 @@ namespace ts {
                             symbolFlags & SymbolFlags.Signature ||
                             symbolFlags & SymbolFlags.Accessor ||
                             symbolKind === ScriptElementKind.memberFunctionElement) {
-                            const allSignatures = type.getCallSignatures();
+                            let allSignatures = type.getCallSignatures();
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
                         }
                     }
@@ -4369,7 +4370,7 @@ namespace ts {
             }
 
             function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
-                const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+                let fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
                     SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
                 addRange(displayParts, fullSymbolDisplayParts);
             }
@@ -4415,7 +4416,7 @@ namespace ts {
             }
 
             function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
-                const typeParameterParts = mapToDisplayParts(writer => {
+                let typeParameterParts = mapToDisplayParts(writer => {
                     typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
                 });
                 addRange(displayParts, typeParameterParts);
@@ -4425,8 +4426,8 @@ namespace ts {
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position);
+            let sourceFile = getValidSourceFile(fileName);
+            let node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -4435,8 +4436,8 @@ namespace ts {
                 return undefined;
             }
 
-            const typeChecker = program.getTypeChecker();
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            let typeChecker = program.getTypeChecker();
+            let symbol = typeChecker.getSymbolAtLocation(node);
 
             if (!symbol) {
                 // Try getting just type at this position and show
@@ -4448,7 +4449,7 @@ namespace ts {
                     case SyntaxKind.ThisType:
                     case SyntaxKind.SuperKeyword:
                         // For the identifiers/this/super etc get the type at position
-                        const type = typeChecker.getTypeAtLocation(node);
+                        let type = typeChecker.getTypeAtLocation(node);
                         if (type) {
                             return {
                                 kind: ScriptElementKind.unknown,
@@ -4463,7 +4464,7 @@ namespace ts {
                 return undefined;
             }
 
-            const displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), node);
+            let displayPartsDocumentationsAndKind = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, sourceFile, getContainerNode(node), node);
             return {
                 kind: displayPartsDocumentationsAndKind.symbolKind,
                 kindModifiers: getSymbolModifiers(symbol),
@@ -4485,13 +4486,13 @@ namespace ts {
         }
 
         function getDefinitionFromSymbol(symbol: Symbol, node: Node): DefinitionInfo[] {
-            const typeChecker = program.getTypeChecker();
-            const result: DefinitionInfo[] = [];
-            const declarations = symbol.getDeclarations();
-            const symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-            const symbolKind = getSymbolKind(symbol, node);
-            const containerSymbol = symbol.parent;
-            const containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
+            let typeChecker = program.getTypeChecker();
+            let result: DefinitionInfo[] = [];
+            let declarations = symbol.getDeclarations();
+            let symbolName = typeChecker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
+            let symbolKind = getSymbolKind(symbol, node);
+            let containerSymbol = symbol.parent;
+            let containerName = containerSymbol ? typeChecker.symbolToString(containerSymbol, node) : "";
 
             if (!tryAddConstructSignature(symbol, node, symbolKind, symbolName, containerName, result) &&
                 !tryAddCallSignature(symbol, node, symbolKind, symbolName, containerName, result)) {
@@ -4509,7 +4510,7 @@ namespace ts {
                 if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
                     if (symbol.flags & SymbolFlags.Class) {
                         // Find the first class-like declaration and try to get the construct signature.
-                        for (const declaration of symbol.getDeclarations()) {
+                        for (let declaration of symbol.getDeclarations()) {
                             if (isClassLike(declaration)) {
                                 return tryAddSignature(declaration.members,
                                                        /*selectConstructors*/ true,
@@ -4534,7 +4535,7 @@ namespace ts {
             }
 
             function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
-                const declarations: Declaration[] = [];
+                let declarations: Declaration[] = [];
                 let definition: Declaration;
 
                 forEach(signatureDeclarations, d => {
@@ -4562,24 +4563,24 @@ namespace ts {
         function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFile = getValidSourceFile(fileName);
 
-            const node = getTouchingPropertyName(sourceFile, position);
+            let node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
 
             // Labels
             if (isJumpStatementTarget(node)) {
-                const labelName = (<Identifier>node).text;
-                const label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                let labelName = (<Identifier>node).text;
+                let label = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                 return label ? [createDefinitionInfo(label, ScriptElementKind.label, labelName, /*containerName*/ undefined)] : undefined;
             }
 
             /// Triple slash reference comments
-            const comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
+            let comment = forEach(sourceFile.referencedFiles, r => (r.pos <= position && position < r.end) ? r : undefined);
             if (comment) {
-                const referenceFile = tryResolveScriptReference(program, sourceFile, comment);
+                let referenceFile = tryResolveScriptReference(program, sourceFile, comment);
                 if (referenceFile) {
                     return [{
                         fileName: referenceFile.fileName,
@@ -4593,7 +4594,7 @@ namespace ts {
                 return undefined;
             }
 
-            const typeChecker = program.getTypeChecker();
+            let typeChecker = program.getTypeChecker();
             let symbol = typeChecker.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. node is string or number keyword,
@@ -4607,7 +4608,7 @@ namespace ts {
             //   import {A, B} from "mod";
             // to jump to the implementation directly.
             if (symbol.flags & SymbolFlags.Alias) {
-                const declaration = symbol.declarations[0];
+                let declaration = symbol.declarations[0];
                 if (node.kind === SyntaxKind.Identifier && node.parent === declaration) {
                     symbol = typeChecker.getAliasedSymbol(symbol);
                 }
@@ -4619,15 +4620,15 @@ namespace ts {
             // is performed at the location of property access, we would like to go to definition of the property in the short-hand
             // assignment. This case and others are handled by the following code.
             if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+                let shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
                 if (!shorthandSymbol) {
                     return [];
                 }
 
-                const shorthandDeclarations = shorthandSymbol.getDeclarations();
-                const shorthandSymbolKind = getSymbolKind(shorthandSymbol, node);
-                const shorthandSymbolName = typeChecker.symbolToString(shorthandSymbol);
-                const shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
+                let shorthandDeclarations = shorthandSymbol.getDeclarations();
+                let shorthandSymbolKind = getSymbolKind(shorthandSymbol, node);
+                let shorthandSymbolName = typeChecker.symbolToString(shorthandSymbol);
+                let shorthandContainerName = typeChecker.symbolToString(symbol.parent, node);
                 return map(shorthandDeclarations,
                     declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
             }
@@ -4639,27 +4640,27 @@ namespace ts {
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFile = getValidSourceFile(fileName);
 
-            const node = getTouchingPropertyName(sourceFile, position);
+            let node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
 
-            const typeChecker = program.getTypeChecker();
+            let typeChecker = program.getTypeChecker();
 
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            let symbol = typeChecker.getSymbolAtLocation(node);
             if (!symbol) {
                 return undefined;
             }
 
-            const type = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+            let type = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
             if (!type) {
                 return undefined;
             }
 
             if (type.flags & TypeFlags.Union) {
-                const result: DefinitionInfo[] = [];
+                let result: DefinitionInfo[] = [];
                 forEach((<UnionType>type).types, t => {
                     if (t.symbol) {
                         addRange(/*to*/ result, /*from*/ getDefinitionFromSymbol(t.symbol, node));
@@ -4679,7 +4680,7 @@ namespace ts {
             let results = getOccurrencesAtPositionCore(fileName, position);
 
             if (results) {
-                const sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
+                let sourceFile = getCanonicalFileName(normalizeSlashes(fileName));
 
                 // Get occurrences only supports reporting occurrences for the file queried.  So
                 // filter down to that list.
@@ -4693,10 +4694,10 @@ namespace ts {
             synchronizeHostData();
 
             filesToSearch = map(filesToSearch, normalizeSlashes);
-            const sourceFilesToSearch = filter(program.getSourceFiles(), f => contains(filesToSearch, f.fileName));
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFilesToSearch = filter(program.getSourceFiles(), f => contains(filesToSearch, f.fileName));
+            let sourceFile = getValidSourceFile(fileName);
 
-            const node = getTouchingWord(sourceFile, position);
+            let node = getTouchingWord(sourceFile, position);
             if (!node) {
                 return undefined;
             }
@@ -4704,8 +4705,8 @@ namespace ts {
             return getSemanticDocumentHighlights(node) || getSyntacticDocumentHighlights(node);
 
             function getHighlightSpanForNode(node: Node): HighlightSpan {
-                const start = node.getStart();
-                const end = node.getEnd();
+                let start = node.getStart();
+                let end = node.getEnd();
 
                 return {
                     fileName: sourceFile.fileName,
@@ -4722,7 +4723,7 @@ namespace ts {
                     isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
                     isNameOfExternalModuleImportOrDeclaration(node)) {
 
-                    const referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings*/ false, /*findInComments*/ false);
+                    let referencedSymbols = getReferencedSymbolsForNode(node, sourceFilesToSearch, /*findInStrings:*/ false, /*findInComments:*/ false);
                     return convertReferencedSymbols(referencedSymbols);
                 }
 
@@ -4733,11 +4734,11 @@ namespace ts {
                         return undefined;
                     }
 
-                    const fileNameToDocumentHighlights: Map<DocumentHighlights> = {};
-                    const result: DocumentHighlights[] = [];
-                    for (const referencedSymbol of referencedSymbols) {
-                        for (const referenceEntry of referencedSymbol.references) {
-                            const fileName = referenceEntry.fileName;
+                    let fileNameToDocumentHighlights: Map<DocumentHighlights> = {};
+                    let result: DocumentHighlights[] = [];
+                    for (let referencedSymbol of referencedSymbols) {
+                        for (let referenceEntry of referencedSymbol.references) {
+                            let fileName = referenceEntry.fileName;
                             let documentHighlights = getProperty(fileNameToDocumentHighlights, fileName);
                             if (!documentHighlights) {
                                 documentHighlights = { fileName, highlightSpans: [] };
@@ -4758,9 +4759,9 @@ namespace ts {
             }
 
             function getSyntacticDocumentHighlights(node: Node): DocumentHighlights[] {
-                const fileName = sourceFile.fileName;
+                let fileName = sourceFile.fileName;
 
-                const highlightSpans = getHighlightSpans(node);
+                let highlightSpans = getHighlightSpans(node);
                 if (!highlightSpans || highlightSpans.length === 0) {
                     return undefined;
                 }
@@ -4864,7 +4865,7 @@ namespace ts {
                  * into function boundaries and try-blocks with catch-clauses.
                  */
                 function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
-                    const statementAccumulator: ThrowStatement[] = [];
+                    let statementAccumulator: ThrowStatement[] = []
                     aggregate(node);
                     return statementAccumulator;
 
@@ -4873,7 +4874,7 @@ namespace ts {
                             statementAccumulator.push(<ThrowStatement>node);
                         }
                         else if (node.kind === SyntaxKind.TryStatement) {
-                            const tryStatement = <TryStatement>node;
+                            let tryStatement = <TryStatement>node;
 
                             if (tryStatement.catchClause) {
                                 aggregate(tryStatement.catchClause);
@@ -4904,7 +4905,7 @@ namespace ts {
                     let child: Node = throwStatement;
 
                     while (child.parent) {
-                        const parent = child.parent;
+                        let parent = child.parent;
 
                         if (isFunctionBlock(parent) || parent.kind === SyntaxKind.SourceFile) {
                             return parent;
@@ -4913,7 +4914,7 @@ namespace ts {
                         // A throw-statement is only owned by a try-statement if the try-statement has
                         // a catch clause, and if the throw-statement occurs within the try block.
                         if (parent.kind === SyntaxKind.TryStatement) {
-                            const tryStatement = <TryStatement>parent;
+                            let tryStatement = <TryStatement>parent;
 
                             if (tryStatement.tryBlock === child && tryStatement.catchClause) {
                                 return child;
@@ -4927,7 +4928,7 @@ namespace ts {
                 }
 
                 function aggregateAllBreakAndContinueStatements(node: Node): BreakOrContinueStatement[] {
-                    const statementAccumulator: BreakOrContinueStatement[] = [];
+                    let statementAccumulator: BreakOrContinueStatement[] = []
                     aggregate(node);
                     return statementAccumulator;
 
@@ -4943,7 +4944,7 @@ namespace ts {
                 }
 
                 function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
-                    const actualOwner = getBreakOrContinueOwner(statement);
+                    let actualOwner = getBreakOrContinueOwner(statement);
 
                     return actualOwner && actualOwner === owner;
                 }
@@ -4978,7 +4979,7 @@ namespace ts {
                 }
 
                 function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): HighlightSpan[] {
-                    const container = declaration.parent;
+                    let container = declaration.parent;
 
                     // Make sure we only highlight the keyword when it makes sense to do so.
                     if (isAccessibilityModifier(modifier)) {
@@ -5008,8 +5009,8 @@ namespace ts {
                         return undefined;
                     }
 
-                    const keywords: Node[] = [];
-                    const modifierFlag: NodeFlags = getFlagFromModifier(modifier);
+                    let keywords: Node[] = [];
+                    let modifierFlag: NodeFlags = getFlagFromModifier(modifier);
 
                     let nodes: Node[];
                     switch (container.kind) {
@@ -5034,7 +5035,7 @@ namespace ts {
                             // If we're an accessibility modifier, we're in an instance member and should search
                             // the constructor's parameter list for instance members as well.
                             if (modifierFlag & NodeFlags.AccessibilityModifier) {
-                                const constructor = forEach((<ClassLikeDeclaration>container).members, member => {
+                                let constructor = forEach((<ClassLikeDeclaration>container).members, member => {
                                     return member.kind === SyntaxKind.Constructor && <ConstructorDeclaration>member;
                                 });
 
@@ -5047,7 +5048,7 @@ namespace ts {
                             }
                             break;
                         default:
-                            Debug.fail("Invalid container kind.");
+                            Debug.fail("Invalid container kind.")
                     }
 
                     forEach(nodes, node => {
@@ -5090,7 +5091,7 @@ namespace ts {
                 }
 
                 function getGetAndSetOccurrences(accessorDeclaration: AccessorDeclaration): HighlightSpan[] {
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.GetAccessor);
                     tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.SetAccessor);
@@ -5098,7 +5099,7 @@ namespace ts {
                     return map(keywords, getHighlightSpanForNode);
 
                     function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
-                        const accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
+                        let accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
 
                         if (accessor) {
                             forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
@@ -5107,9 +5108,9 @@ namespace ts {
                 }
 
                 function getConstructorOccurrences(constructorDeclaration: ConstructorDeclaration): HighlightSpan[] {
-                    const declarations = constructorDeclaration.symbol.getDeclarations();
+                    let declarations = constructorDeclaration.symbol.getDeclarations()
 
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     forEach(declarations, declaration => {
                         forEach(declaration.getChildren(), token => {
@@ -5121,12 +5122,12 @@ namespace ts {
                 }
 
                 function getLoopBreakContinueOccurrences(loopNode: IterationStatement): HighlightSpan[] {
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
                         // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
                         if (loopNode.kind === SyntaxKind.DoStatement) {
-                            const loopTokens = loopNode.getChildren();
+                            let loopTokens = loopNode.getChildren();
 
                             for (let i = loopTokens.length - 1; i >= 0; i--) {
                                 if (pushKeywordIf(keywords, loopTokens[i], SyntaxKind.WhileKeyword)) {
@@ -5136,7 +5137,7 @@ namespace ts {
                         }
                     }
 
-                    const breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
+                    let breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
 
                     forEach(breaksAndContinues, statement => {
                         if (ownsBreakOrContinueStatement(loopNode, statement)) {
@@ -5148,7 +5149,7 @@ namespace ts {
                 }
 
                 function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): HighlightSpan[] {
-                    const owner = getBreakOrContinueOwner(breakOrContinueStatement);
+                    let owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
                     if (owner) {
                         switch (owner.kind) {
@@ -5157,7 +5158,7 @@ namespace ts {
                             case SyntaxKind.ForOfStatement:
                             case SyntaxKind.DoStatement:
                             case SyntaxKind.WhileStatement:
-                                return getLoopBreakContinueOccurrences(<IterationStatement>owner);
+                                return getLoopBreakContinueOccurrences(<IterationStatement>owner)
                             case SyntaxKind.SwitchStatement:
                                 return getSwitchCaseDefaultOccurrences(<SwitchStatement>owner);
 
@@ -5168,7 +5169,7 @@ namespace ts {
                 }
 
                 function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): HighlightSpan[] {
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
 
@@ -5176,7 +5177,7 @@ namespace ts {
                     forEach(switchStatement.caseBlock.clauses, clause => {
                         pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
-                        const breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
+                        let breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
 
                         forEach(breaksAndContinues, statement => {
                             if (ownsBreakOrContinueStatement(switchStatement, statement)) {
@@ -5189,7 +5190,7 @@ namespace ts {
                 }
 
                 function getTryCatchFinallyOccurrences(tryStatement: TryStatement): HighlightSpan[] {
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
 
@@ -5198,7 +5199,7 @@ namespace ts {
                     }
 
                     if (tryStatement.finallyBlock) {
-                        const finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                        let finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
                         pushKeywordIf(keywords, finallyKeyword, SyntaxKind.FinallyKeyword);
                     }
 
@@ -5206,13 +5207,13 @@ namespace ts {
                 }
 
                 function getThrowOccurrences(throwStatement: ThrowStatement): HighlightSpan[] {
-                    const owner = getThrowStatementOwner(throwStatement);
+                    let owner = getThrowStatementOwner(throwStatement);
 
                     if (!owner) {
                         return undefined;
                     }
 
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
                         pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
@@ -5230,14 +5231,14 @@ namespace ts {
                 }
 
                 function getReturnOccurrences(returnStatement: ReturnStatement): HighlightSpan[] {
-                    const func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
+                    let func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
 
                     // If we didn't find a containing function with a block body, bail out.
                     if (!(func && hasKind(func.body, SyntaxKind.Block))) {
                         return undefined;
                     }
 
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = []
                     forEachReturnStatement(<Block>func.body, returnStatement => {
                         pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
                     });
@@ -5251,7 +5252,7 @@ namespace ts {
                 }
 
                 function getIfElseOccurrences(ifStatement: IfStatement): HighlightSpan[] {
-                    const keywords: Node[] = [];
+                    let keywords: Node[] = [];
 
                     // Traverse upwards through all parent if-statements linked by their else-branches.
                     while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
@@ -5260,7 +5261,7 @@ namespace ts {
 
                     // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
                     while (ifStatement) {
-                        const children = ifStatement.getChildren();
+                        let children = ifStatement.getChildren();
                         pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
 
                         // Generally the 'else' keyword is second-to-last, so we traverse backwards.
@@ -5271,20 +5272,20 @@ namespace ts {
                         }
 
                         if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
-                            break;
+                            break
                         }
 
                         ifStatement = <IfStatement>ifStatement.elseStatement;
                     }
 
-                    const result: HighlightSpan[] = [];
+                    let result: HighlightSpan[] = [];
 
                     // We'd like to highlight else/ifs together if they are only separated by whitespace
                     // (i.e. the keywords are separated by no comments, no newlines).
                     for (let i = 0; i < keywords.length; i++) {
                         if (keywords[i].kind === SyntaxKind.ElseKeyword && i < keywords.length - 1) {
-                            const elseKeyword = keywords[i];
-                            const ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
+                            let elseKeyword = keywords[i];
+                            let ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
 
                             let shouldCombindElseAndIf = true;
 
@@ -5327,9 +5328,9 @@ namespace ts {
                     return undefined;
                 }
 
-                const result: ReferenceEntry[] = [];
-                for (const entry of documentHighlights) {
-                    for (const highlightSpan of entry.highlightSpans) {
+                let result: ReferenceEntry[] = [];
+                for (let entry of documentHighlights) {
+                    for (let highlightSpan of entry.highlightSpans) {
                         result.push({
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
@@ -5347,9 +5348,9 @@ namespace ts {
                 return undefined;
             }
 
-            const referenceEntries: ReferenceEntry[] = [];
+            let referenceEntries: ReferenceEntry[] = [];
 
-            for (const referenceSymbol of referenceSymbols) {
+            for (let referenceSymbol of referenceSymbols) {
                 addRange(referenceEntries, referenceSymbol.references);
             }
 
@@ -5357,17 +5358,17 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
+            let referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments);
             return convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false);
+            let referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
             return convertReferences(referencedSymbols);
         }
 
-        function findReferences(fileName: string, position: number): ReferencedSymbol[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false);
+        function findReferences(fileName: string, position: number): ReferencedSymbol[]{
+            let referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings:*/ false, /*findInComments:*/ false);
 
             // Only include referenced symbols that have a valid definition.
             return filter(referencedSymbols, rs => !!rs.definition);
@@ -5376,17 +5377,17 @@ namespace ts {
         function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFile = getValidSourceFile(fileName);
 
-            const node = getTouchingPropertyName(sourceFile, position);
+            let node = getTouchingPropertyName(sourceFile, position);
             if (!node) {
                 return undefined;
             }
 
             if (node.kind !== SyntaxKind.Identifier &&
                 // TODO (drosen): This should be enabled in a later release - currently breaks rename.
-                // node.kind !== SyntaxKind.ThisKeyword &&
-                // node.kind !== SyntaxKind.SuperKeyword &&
+                //node.kind !== SyntaxKind.ThisKeyword &&
+                //node.kind !== SyntaxKind.SuperKeyword &&
                 !isLiteralNameOfPropertyDeclarationOrIndexAccess(node) &&
                 !isNameOfExternalModuleImportOrDeclaration(node)) {
                 return undefined;
@@ -5397,12 +5398,12 @@ namespace ts {
         }
 
         function getReferencedSymbolsForNode(node: Node, sourceFiles: SourceFile[], findInStrings: boolean, findInComments: boolean): ReferencedSymbol[] {
-            const typeChecker = program.getTypeChecker();
+            let typeChecker = program.getTypeChecker();
 
             // Labels
             if (isLabelName(node)) {
                 if (isJumpStatementTarget(node)) {
-                    const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
+                    let labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                     // if we have a label definition, look within its statement for references, if not, then
                     // the label is undefined and we have no results..
                     return labelDefinition ? getLabelReferencesInNode(labelDefinition.parent, labelDefinition) : undefined;
@@ -5421,7 +5422,7 @@ namespace ts {
                 return getReferencesForSuperKeyword(node);
             }
 
-            const symbol = typeChecker.getSymbolAtLocation(node);
+            let symbol = typeChecker.getSymbolAtLocation(node);
 
             // Could not find a symbol e.g. unknown identifier
             if (!symbol) {
@@ -5429,7 +5430,7 @@ namespace ts {
                 return undefined;
             }
 
-            const declarations = symbol.declarations;
+            let declarations = symbol.declarations;
 
             // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
             if (!declarations || !declarations.length) {
@@ -5439,29 +5440,29 @@ namespace ts {
             let result: ReferencedSymbol[];
 
             // Compute the meaning from the location and the symbol it references
-            const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
+            let searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), declarations);
 
             // Get the text to search for.
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            const declaredName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
+            let declaredName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
-            const scope = getSymbolScope(symbol);
+            let scope = getSymbolScope(symbol);
 
             // Maps from a symbol ID to the ReferencedSymbol entry in 'result'.
-            const symbolToIndex: number[] = [];
+            let symbolToIndex: number[] = [];
 
             if (scope) {
                 result = [];
                 getReferencesInNode(scope, symbol, declaredName, node, searchMeaning, findInStrings, findInComments, result, symbolToIndex);
             }
             else {
-                const internedName = getInternedName(symbol, node, declarations);
-                for (const sourceFile of sourceFiles) {
+                let internedName = getInternedName(symbol, node, declarations)
+                for (let sourceFile of sourceFiles) {
                     cancellationToken.throwIfCancellationRequested();
 
-                    const nameTable = getNameTable(sourceFile);
+                    let nameTable = getNameTable(sourceFile);
 
                     if (lookUp(nameTable, internedName)) {
                         result = result || [];
@@ -5473,9 +5474,9 @@ namespace ts {
             return result;
 
             function getDefinition(symbol: Symbol): DefinitionInfo {
-                const info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
-                const name = map(info.displayParts, p => p.text).join("");
-                const declarations = symbol.declarations;
+                let info = getSymbolDisplayPartsDocumentationAndSymbolKind(symbol, node.getSourceFile(), getContainerNode(node), node);
+                let name = map(info.displayParts, p => p.text).join("");
+                let declarations = symbol.declarations;
                 if (!declarations || declarations.length === 0) {
                     return undefined;
                 }
@@ -5505,7 +5506,7 @@ namespace ts {
 
                 // Try to get the local symbol if we're dealing with an 'export default'
                 // since that symbol has the "true" name.
-                const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
+                let localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
                 symbol = localExportDefaultSymbol || symbol;
 
                 return stripQuotes(symbol.name);
@@ -5522,14 +5523,14 @@ namespace ts {
             function getSymbolScope(symbol: Symbol): Node {
                 // If this is the symbol of a named function expression or named class expression,
                 // then named references are limited to its own scope.
-                const valueDeclaration = symbol.valueDeclaration;
+                let valueDeclaration = symbol.valueDeclaration;
                 if (valueDeclaration && (valueDeclaration.kind === SyntaxKind.FunctionExpression || valueDeclaration.kind === SyntaxKind.ClassExpression)) {
                     return valueDeclaration;
                 }
 
                 // If this is private property or method, the scope is the containing class
                 if (symbol.flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                    const privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
+                    let privateDeclaration = forEach(symbol.getDeclarations(), d => (d.flags & NodeFlags.Private) ? d : undefined);
                     if (privateDeclaration) {
                         return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                     }
@@ -5547,12 +5548,12 @@ namespace ts {
                     return undefined;
                 }
 
-                let scope: Node;
+                let scope: Node = undefined;
 
-                const declarations = symbol.getDeclarations();
+                let declarations = symbol.getDeclarations();
                 if (declarations) {
-                    for (const declaration of declarations) {
-                        const container = getContainerNode(declaration);
+                    for (let declaration of declarations) {
+                        let container = getContainerNode(declaration);
 
                         if (!container) {
                             return undefined;
@@ -5578,7 +5579,7 @@ namespace ts {
             }
 
             function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, start: number, end: number): number[] {
-                const positions: number[] = [];
+                let positions: number[] = [];
 
                 /// TODO: Cache symbol existence for files to save text search
                 // Also, need to make this work for unicode escapes.
@@ -5588,9 +5589,9 @@ namespace ts {
                     return positions;
                 }
 
-                const text = sourceFile.text;
-                const sourceLength = text.length;
-                const symbolNameLength = symbolName.length;
+                let text = sourceFile.text;
+                let sourceLength = text.length;
+                let symbolNameLength = symbolName.length;
 
                 let position = text.indexOf(symbolName, start);
                 while (position >= 0) {
@@ -5601,7 +5602,7 @@ namespace ts {
 
                     // We found a match.  Make sure it's not part of a larger word (i.e. the char
                     // before and after it have to be a non-identifier char).
-                    const endPosition = position + symbolNameLength;
+                    let endPosition = position + symbolNameLength;
 
                     if ((position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
                         (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))) {
@@ -5615,14 +5616,14 @@ namespace ts {
             }
 
             function getLabelReferencesInNode(container: Node, targetLabel: Identifier): ReferencedSymbol[] {
-                const references: ReferenceEntry[] = [];
-                const sourceFile = container.getSourceFile();
-                const labelName = targetLabel.text;
-                const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
+                let references: ReferenceEntry[] = [];
+                let sourceFile = container.getSourceFile();
+                let labelName = targetLabel.text;
+                let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    const node = getTouchingWord(sourceFile, position);
+                    let node = getTouchingWord(sourceFile, position);
                     if (!node || node.getWidth() !== labelName.length) {
                         return;
                     }
@@ -5634,14 +5635,14 @@ namespace ts {
                     }
                 });
 
-                const definition: DefinitionInfo = {
+                let definition: DefinitionInfo = {
                     containerKind: "",
                     containerName: "",
                     fileName: targetLabel.getSourceFile().fileName,
                     kind: ScriptElementKind.label,
                     name: labelName,
                     textSpan: createTextSpanFromBounds(targetLabel.getStart(), targetLabel.getEnd())
-                };
+                }
 
                 return [{ definition, references }];
             }
@@ -5686,19 +5687,19 @@ namespace ts {
                 result: ReferencedSymbol[],
                 symbolToIndex: number[]): void {
 
-                const sourceFile = container.getSourceFile();
-                const tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
+                let sourceFile = container.getSourceFile();
+                let tripleSlashDirectivePrefixRegex = /^\/\/\/\s*</;
 
-                const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
+                let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, container.getStart(), container.getEnd());
 
                 if (possiblePositions.length) {
                     // Build the set of symbols to search for, initially it has only the current symbol
-                    const searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation);
+                    let searchSymbols = populateSearchSymbolSet(searchSymbol, searchLocation);
 
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        const referenceLocation = getTouchingPropertyName(sourceFile, position);
+                        let referenceLocation = getTouchingPropertyName(sourceFile, position);
                         if (!isValidReferencePosition(referenceLocation, searchText)) {
                             // This wasn't the start of a token.  Check to see if it might be a
                             // match in a comment or string if that's what the caller is asking
@@ -5726,14 +5727,14 @@ namespace ts {
                             return;
                         }
 
-                        const referenceSymbol = typeChecker.getSymbolAtLocation(referenceLocation);
+                        let referenceSymbol = typeChecker.getSymbolAtLocation(referenceLocation);
                         if (referenceSymbol) {
-                            const referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
-                            const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
-                            const relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
+                            let referenceSymbolDeclaration = referenceSymbol.valueDeclaration;
+                            let shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(referenceSymbolDeclaration);
+                            let relatedSymbol = getRelatedSymbol(searchSymbols, referenceSymbol, referenceLocation);
 
                             if (relatedSymbol) {
-                                const referencedSymbol = getReferencedSymbol(relatedSymbol);
+                                let referencedSymbol = getReferencedSymbol(relatedSymbol);
                                 referencedSymbol.references.push(getReferenceEntryFromNode(referenceLocation));
                             }
                             /* Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
@@ -5743,7 +5744,7 @@ namespace ts {
                              * position of property accessing, the referenceEntry of such position will be handled in the first case.
                              */
                             else if (!(referenceSymbol.flags & SymbolFlags.Transient) && searchSymbols.indexOf(shorthandValueSymbol) >= 0) {
-                                const referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
+                                let referencedSymbol = getReferencedSymbol(shorthandValueSymbol);
                                 referencedSymbol.references.push(getReferenceEntryFromNode(referenceSymbolDeclaration.name));
                             }
                         }
@@ -5753,7 +5754,7 @@ namespace ts {
                 return;
 
                 function getReferencedSymbol(symbol: Symbol): ReferencedSymbol {
-                    const symbolId = getSymbolId(symbol);
+                    let symbolId = getSymbolId(symbol);
                     let index = symbolToIndex[symbolId];
                     if (index === undefined) {
                         index = result.length;
@@ -5772,7 +5773,7 @@ namespace ts {
                     return isInCommentHelper(sourceFile, position, isNonReferenceComment);
 
                     function isNonReferenceComment(c: CommentRange): boolean {
-                        const commentText = sourceFile.text.substring(c.pos, c.end);
+                        let commentText = sourceFile.text.substring(c.pos, c.end);
                         return !tripleSlashDirectivePrefixRegex.test(commentText);
                     }
                 }
@@ -5801,20 +5802,20 @@ namespace ts {
                         return undefined;
                 }
 
-                const references: ReferenceEntry[] = [];
+                let references: ReferenceEntry[] = [];
 
-                const sourceFile = searchSpaceNode.getSourceFile();
-                const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+                let sourceFile = searchSpaceNode.getSourceFile();
+                let possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
                 forEach(possiblePositions, position => {
                     cancellationToken.throwIfCancellationRequested();
 
-                    const node = getTouchingWord(sourceFile, position);
+                    let node = getTouchingWord(sourceFile, position);
 
                     if (!node || node.kind !== SyntaxKind.SuperKeyword) {
                         return;
                     }
 
-                    const container = getSuperContainer(node, /*includeFunctions*/ false);
+                    let container = getSuperContainer(node, /*includeFunctions*/ false);
 
                     // If we have a 'super' container, we must have an enclosing class.
                     // Now make sure the owning class is the same as the search-space
@@ -5824,7 +5825,7 @@ namespace ts {
                     }
                 });
 
-                const definition = getDefinition(searchSpaceNode.symbol);
+                let definition = getDefinition(searchSpaceNode.symbol);
                 return [{ definition, references }];
             }
 
@@ -5846,7 +5847,7 @@ namespace ts {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        staticFlag &= searchSpaceNode.flags;
+                        staticFlag &= searchSpaceNode.flags
                         searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                         break;
                     case SyntaxKind.SourceFile:
@@ -5863,7 +5864,7 @@ namespace ts {
                         return undefined;
                 }
 
-                const references: ReferenceEntry[] = [];
+                let references: ReferenceEntry[] = [];
 
                 let possiblePositions: number[];
                 if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
@@ -5873,7 +5874,7 @@ namespace ts {
                     });
                 }
                 else {
-                    const sourceFile = searchSpaceNode.getSourceFile();
+                    let sourceFile = searchSpaceNode.getSourceFile();
                     possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
                     getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
                 }
@@ -5894,12 +5895,12 @@ namespace ts {
                     forEach(possiblePositions, position => {
                         cancellationToken.throwIfCancellationRequested();
 
-                        const node = getTouchingWord(sourceFile, position);
+                        let node = getTouchingWord(sourceFile, position);
                         if (!node || (node.kind !== SyntaxKind.ThisKeyword && node.kind !== SyntaxKind.ThisType)) {
                             return;
                         }
 
-                        const container = getThisContainer(node, /* includeArrowFunctions */ false);
+                        let container = getThisContainer(node, /* includeArrowFunctions */ false);
 
                         switch (searchSpaceNode.kind) {
                             case SyntaxKind.FunctionExpression:
@@ -5954,13 +5955,13 @@ namespace ts {
                      * property name and variable declaration of the identifier.
                      * Like in below example, when querying for all references for an identifier 'name', of the property assignment, the language service
                      * should show both 'name' in 'obj' and 'name' in variable declaration
-                     *      const name = "Foo";
-                     *      const obj = { name };
+                     *      let name = "Foo";
+                     *      let obj = { name };
                      * In order to do that, we will populate the search set with the value symbol of the identifier as a value of the property assignment
                      * so that when matching with potential reference symbol, both symbols from property declaration and variable declaration
                      * will be included correctly.
                      */
-                    const shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(location.parent);
+                    let shorthandValueSymbol = typeChecker.getShorthandAssignmentValueSymbol(location.parent);
                     if (shorthandValueSymbol) {
                         result.push(shorthandValueSymbol);
                     }
@@ -6007,9 +6008,9 @@ namespace ts {
 
                 function getPropertySymbolFromTypeReference(typeReference: ExpressionWithTypeArguments) {
                     if (typeReference) {
-                        const type = typeChecker.getTypeAtLocation(typeReference);
+                        let type = typeChecker.getTypeAtLocation(typeReference);
                         if (type) {
-                            const propertySymbol = typeChecker.getPropertyOfType(type, propertyName);
+                            let propertySymbol = typeChecker.getPropertyOfType(type, propertyName);
                             if (propertySymbol) {
                                 result.push(propertySymbol);
                             }
@@ -6029,7 +6030,7 @@ namespace ts {
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
                 if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
-                    const aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
+                    let aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
                     if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
                         return aliasedSymbol;
                     }
@@ -6055,7 +6056,7 @@ namespace ts {
                     // Finally, try all properties with the same name in any type the containing type extended or implemented, and
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        const result: Symbol[] = [];
+                        let result: Symbol[] = [];
                         getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
@@ -6066,21 +6067,21 @@ namespace ts {
 
             function getPropertySymbolsFromContextualType(node: Node): Symbol[] {
                 if (isNameOfPropertyAssignment(node)) {
-                    const objectLiteral = <ObjectLiteralExpression>node.parent.parent;
-                    const contextualType = typeChecker.getContextualType(objectLiteral);
-                    const name = (<Identifier>node).text;
+                    let objectLiteral = <ObjectLiteralExpression>node.parent.parent;
+                    let contextualType = typeChecker.getContextualType(objectLiteral);
+                    let name = (<Identifier>node).text;
                     if (contextualType) {
                         if (contextualType.flags & TypeFlags.Union) {
                             // This is a union type, first see if the property we are looking for is a union property (i.e. exists in all types)
                             // if not, search the constituent types for the property
-                            const unionProperty = contextualType.getProperty(name);
+                            let unionProperty = contextualType.getProperty(name)
                             if (unionProperty) {
                                 return [unionProperty];
                             }
                             else {
-                                const result: Symbol[] = [];
+                                let result: Symbol[] = [];
                                 forEach((<UnionType>contextualType).types, t => {
-                                    const symbol = t.getProperty(name);
+                                    let symbol = t.getProperty(name);
                                     if (symbol) {
                                         result.push(symbol);
                                     }
@@ -6089,7 +6090,7 @@ namespace ts {
                             }
                         }
                         else {
-                            const symbol = contextualType.getProperty(name);
+                            let symbol = contextualType.getProperty(name);
                             if (symbol) {
                                 return [symbol];
                             }
@@ -6118,8 +6119,8 @@ namespace ts {
                         // Remember the last meaning
                         lastIterationMeaning = meaning;
 
-                        for (const declaration of declarations) {
-                            const declarationMeaning = getMeaningFromDeclaration(declaration);
+                        for (let declaration of declarations) {
+                            let declarationMeaning = getMeaningFromDeclaration(declaration);
 
                             if (declarationMeaning & meaning) {
                                 meaning |= declarationMeaning;
@@ -6154,13 +6155,13 @@ namespace ts {
                 return true;
             }
 
-            const parent = node.parent;
+            let parent = node.parent;
             if (parent) {
                 if (parent.kind === SyntaxKind.PostfixUnaryExpression || parent.kind === SyntaxKind.PrefixUnaryExpression) {
                     return true;
                 }
                 else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                    const operator = (<BinaryExpression>parent).operatorToken.kind;
+                    let operator = (<BinaryExpression>parent).operatorToken.kind;
                     return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
                 }
             }
@@ -6182,8 +6183,8 @@ namespace ts {
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
-            const outputFiles: OutputFile[] = [];
+            let sourceFile = getValidSourceFile(fileName);
+            let outputFiles: OutputFile[] = [];
 
             function writeFile(fileName: string, data: string, writeByteOrderMark: boolean) {
                 outputFiles.push({
@@ -6193,7 +6194,7 @@ namespace ts {
                 });
             }
 
-            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
+            let emitOutput = program.emit(sourceFile, writeFile, cancellationToken);
 
             return {
                 outputFiles,
@@ -6286,7 +6287,7 @@ namespace ts {
             }
 
             if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
-                const decl = root.parent.parent.parent;
+                let decl = root.parent.parent.parent;
                 return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
                     (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
             }
@@ -6358,7 +6359,7 @@ namespace ts {
         function getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFile = getValidSourceFile(fileName);
 
             return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, cancellationToken);
         }
@@ -6369,10 +6370,10 @@ namespace ts {
         }
 
         function getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
-            const node = getTouchingPropertyName(sourceFile, startPos);
+            let node = getTouchingPropertyName(sourceFile, startPos);
 
             if (!node) {
                 return;
@@ -6428,13 +6429,13 @@ namespace ts {
 
         function getBreakpointStatementAtPosition(fileName: string, position: number) {
             // doesn't use compiler - no need to synchronize with host
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             return NavigationBar.getNavigationBarItems(sourceFile, host.getCompilationSettings());
         }
@@ -6466,11 +6467,11 @@ namespace ts {
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
-            const typeChecker = program.getTypeChecker();
+            let sourceFile = getValidSourceFile(fileName);
+            let typeChecker = program.getTypeChecker();
 
-            const result: number[] = [];
-            const classifiableNames = program.getClassifiableNames();
+            let result: number[] = [];
+            let classifiableNames = program.getClassifiableNames();
             processNode(sourceFile);
 
             return { spans: result, endOfLineState: EndOfLineState.None };
@@ -6482,7 +6483,7 @@ namespace ts {
             }
 
             function classifySymbol(symbol: Symbol, meaningAtPosition: SemanticMeaning): ClassificationType {
-                const flags = symbol.getFlags();
+                let flags = symbol.getFlags();
                 if ((flags & SymbolFlags.Classifiable) === SymbolFlags.None) {
                     return;
                 }
@@ -6530,19 +6531,19 @@ namespace ts {
             function processNode(node: Node) {
                 // Only walk into nodes that intersect the requested span.
                 if (node && textSpanIntersectsWith(span, node.getFullStart(), node.getFullWidth())) {
-                    const kind = node.kind;
+                    let kind = node.kind;
                     checkForClassificationCancellation(kind);
 
                     if (kind === SyntaxKind.Identifier && !nodeIsMissing(node)) {
-                        const identifier = <Identifier>node;
+                        let identifier = <Identifier>node;
 
                         // Only bother calling into the typechecker if this is an identifier that
                         // could possibly resolve to a type name.  This makes classification run
                         // in a third of the time it would normally take.
                         if (classifiableNames[identifier.text]) {
-                            const symbol = typeChecker.getSymbolAtLocation(node);
+                            let symbol = typeChecker.getSymbolAtLocation(node);
                             if (symbol) {
-                                const type = classifySymbol(symbol, getMeaningFromLocation(node));
+                                let type = classifySymbol(symbol, getMeaningFromLocation(node));
                                 if (type) {
                                     pushClassification(node.getStart(), node.getWidth(), type);
                                 }
@@ -6582,8 +6583,8 @@ namespace ts {
 
         function convertClassifications(classifications: Classifications): ClassifiedSpan[] {
             Debug.assert(classifications.spans.length % 3 === 0);
-            const dense = classifications.spans;
-            const result: ClassifiedSpan[] = [];
+            let dense = classifications.spans;
+            let result: ClassifiedSpan[] = [];
             for (let i = 0, n = dense.length; i < n; i += 3) {
                 result.push({
                     textSpan: createTextSpan(dense[i], dense[i + 1]),
@@ -6600,15 +6601,15 @@ namespace ts {
 
         function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const spanStart = span.start;
-            const spanLength = span.length;
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let spanStart = span.start;
+            let spanLength = span.length;
 
             // Make a scanner we can get trivia from.
-            const triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
-            const mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, sourceFile.languageVariant, sourceFile.text);
+            let triviaScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.languageVariant, sourceFile.text);
+            let mergeConflictScanner = createScanner(ScriptTarget.Latest, /*skipTrivia:*/ false, sourceFile.languageVariant, sourceFile.text);
 
-            const result: number[] = [];
+            let result: number[] = [];
             processElement(sourceFile);
 
             return { spans: result, endOfLineState: EndOfLineState.None };
@@ -6622,15 +6623,15 @@ namespace ts {
             function classifyLeadingTriviaAndGetTokenStart(token: Node): number {
                 triviaScanner.setTextPos(token.pos);
                 while (true) {
-                    const start = triviaScanner.getTextPos();
+                    let start = triviaScanner.getTextPos();
                     // only bother scanning if we have something that could be trivia.
                     if (!couldStartTrivia(sourceFile.text, start)) {
                         return start;
                     }
 
-                    const kind = triviaScanner.scan();
-                    const end = triviaScanner.getTextPos();
-                    const width = end - start;
+                    let kind = triviaScanner.scan();
+                    let end = triviaScanner.getTextPos();
+                    let width = end - start;
 
                     // The moment we get something that isn't trivia, then stop processing.
                     if (!isTrivia(kind)) {
@@ -6654,8 +6655,8 @@ namespace ts {
                     }
 
                     if (kind === SyntaxKind.ConflictMarkerTrivia) {
-                        const text = sourceFile.text;
-                        const ch = text.charCodeAt(start);
+                        let text = sourceFile.text;
+                        let ch = text.charCodeAt(start);
 
                         // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
                         // in the classification stream.
@@ -6676,7 +6677,7 @@ namespace ts {
                 if (kind === SyntaxKind.MultiLineCommentTrivia) {
                     // See if this is a doc comment.  If so, we'll classify certain portions of it
                     // specially.
-                    const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
+                    let docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
                     if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDocComment) {
                         docCommentAndDiagnostics.jsDocComment.parent = token;
                         classifyJSDocComment(docCommentAndDiagnostics.jsDocComment);
@@ -6695,7 +6696,7 @@ namespace ts {
             function classifyJSDocComment(docComment: JSDocComment) {
                 let pos = docComment.pos;
 
-                for (const tag of docComment.tags) {
+                for (let tag of docComment.tags) {
                     // As we walk through each tag, classify the portion of text from the end of
                     // the last tag (or the start of the entire doc comment) as 'comment'.
                     if (tag.pos !== pos) {
@@ -6753,7 +6754,7 @@ namespace ts {
             }
 
             function processJSDocTemplateTag(tag: JSDocTemplateTag) {
-                for (const child of tag.getChildren()) {
+                for (let child of tag.getChildren()) {
                     processElement(child);
                 }
             }
@@ -6775,11 +6776,11 @@ namespace ts {
             }
 
             function classifyDisabledCodeToken() {
-                const start = mergeConflictScanner.getTextPos();
-                const tokenKind = mergeConflictScanner.scan();
-                const end = mergeConflictScanner.getTextPos();
+                let start = mergeConflictScanner.getTextPos();
+                let tokenKind = mergeConflictScanner.scan();
+                let end = mergeConflictScanner.getTextPos();
 
-                const type = classifyTokenType(tokenKind);
+                let type = classifyTokenType(tokenKind);
                 if (type) {
                     pushClassification(start, end - start, type);
                 }
@@ -6790,12 +6791,12 @@ namespace ts {
                     return;
                 }
 
-                const tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
+                let tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
 
-                const tokenWidth = token.end - tokenStart;
+                let tokenWidth = token.end - tokenStart;
                 Debug.assert(tokenWidth >= 0);
                 if (tokenWidth > 0) {
-                    const type = classifyTokenType(token.kind, token);
+                    let type = classifyTokenType(token.kind, token);
                     if (type) {
                         pushClassification(tokenStart, tokenWidth, type);
                     }
@@ -6922,9 +6923,9 @@ namespace ts {
                 if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                     checkForClassificationCancellation(element.kind);
 
-                    const children = element.getChildren(sourceFile);
+                    let children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
-                        const child = children[i];
+                        let child = children[i];
                         if (isToken(child)) {
                             classifyToken(child);
                         }
@@ -6939,28 +6940,28 @@ namespace ts {
 
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return OutliningElementsCollector.collectElements(sourceFile);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            const result: TextSpan[] = [];
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let result: TextSpan[] = [];
 
-            const token = getTouchingToken(sourceFile, position);
+            let token = getTouchingToken(sourceFile, position);
 
             if (token.getStart(sourceFile) === position) {
-                const matchKind = getMatchingTokenKind(token);
+                let matchKind = getMatchingTokenKind(token);
 
                 // Ensure that there is a corresponding token to match ours.
                 if (matchKind) {
-                    const parentElement = token.parent;
+                    let parentElement = token.parent;
 
-                    const childNodes = parentElement.getChildren(sourceFile);
-                    for (const current of childNodes) {
+                    let childNodes = parentElement.getChildren(sourceFile);
+                    for (let current of childNodes) {
                         if (current.kind === matchKind) {
-                            const range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
-                            const range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
+                            let range1 = createTextSpan(token.getStart(sourceFile), token.getWidth(sourceFile));
+                            let range2 = createTextSpan(current.getStart(sourceFile), current.getWidth(sourceFile));
 
                             // We want to order the braces when we return the result.
                             if (range1.start < range2.start) {
@@ -6980,11 +6981,11 @@ namespace ts {
 
             function getMatchingTokenKind(token: Node): ts.SyntaxKind {
                 switch (token.kind) {
-                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken;
+                    case ts.SyntaxKind.OpenBraceToken: return ts.SyntaxKind.CloseBraceToken
                     case ts.SyntaxKind.OpenParenToken: return ts.SyntaxKind.CloseParenToken;
                     case ts.SyntaxKind.OpenBracketToken: return ts.SyntaxKind.CloseBracketToken;
                     case ts.SyntaxKind.LessThanToken: return ts.SyntaxKind.GreaterThanToken;
-                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken;
+                    case ts.SyntaxKind.CloseBraceToken: return ts.SyntaxKind.OpenBraceToken
                     case ts.SyntaxKind.CloseParenToken: return ts.SyntaxKind.OpenParenToken;
                     case ts.SyntaxKind.CloseBracketToken: return ts.SyntaxKind.OpenBracketToken;
                     case ts.SyntaxKind.GreaterThanToken: return ts.SyntaxKind.LessThanToken;
@@ -6996,29 +6997,29 @@ namespace ts {
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions) {
             let start = new Date().getTime();
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             log("getIndentationAtPosition: getCurrentSourceFile: " + (new Date().getTime() - start));
 
             start = new Date().getTime();
 
-            const result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
+            let result = formatting.SmartIndenter.getIndentation(position, sourceFile, editorOptions);
             log("getIndentationAtPosition: computeIndentation  : " + (new Date().getTime() - start));
 
             return result;
         }
 
         function getFormattingEditsForRange(fileName: string, start: number, end: number, options: FormatCodeOptions): TextChange[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatSelection(start, end, sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             return formatting.formatDocument(sourceFile, getRuleProvider(options), options);
         }
 
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions): TextChange[] {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(options), options);
@@ -7054,16 +7055,16 @@ namespace ts {
          * be performed.
          */
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
-            const start = new Date().getTime();
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            let start = new Date().getTime();
+            let sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Check if in a context where we don't want to perform any insertion
             if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
                 return undefined;
             }
 
-            const tokenAtPos = getTokenAtPosition(sourceFile, position);
-            const tokenStart = tokenAtPos.getStart();
+            let tokenAtPos = getTokenAtPosition(sourceFile, position);
+            let tokenStart = tokenAtPos.getStart()
             if (!tokenAtPos || tokenStart < position) {
                 return undefined;
             }
@@ -7099,11 +7100,11 @@ namespace ts {
                 return undefined;
             }
 
-            const parameters = getParametersForJsDocOwningNode(commentOwner);
-            const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
-            const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
+            let parameters = getParametersForJsDocOwningNode(commentOwner);
+            let posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
+            let lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
-            const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
+            let indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
 
             // TODO: call a helper method instead once PR #4133 gets merged in.
             const newLine = host.getNewLine ? host.getNewLine() : "\r\n";
@@ -7127,7 +7128,7 @@ namespace ts {
             // * if the caret was directly in front of the object, then we add an extra line and indentation.
             const preamble = "/**" + newLine +
                 indentationStr + " * ";
-            const result =
+            let result =
                 preamble + newLine +
                 docParams +
                 indentationStr + " */" +
@@ -7171,7 +7172,7 @@ namespace ts {
                 case SyntaxKind.ArrowFunction:
                     return (<FunctionExpression>rightHandSide).parameters;
                 case SyntaxKind.ClassExpression:
-                    for (const member of (<ClassExpression>rightHandSide).members) {
+                    for (let member of (<ClassExpression>rightHandSide).members) {
                         if (member.kind === SyntaxKind.Constructor) {
                             return (<ConstructorDeclaration>member).parameters;
                         }
@@ -7191,15 +7192,15 @@ namespace ts {
             // anything away.
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
+            let sourceFile = getValidSourceFile(fileName);
 
             cancellationToken.throwIfCancellationRequested();
 
-            const fileContents = sourceFile.text;
-            const result: TodoComment[] = [];
+            let fileContents = sourceFile.text;
+            let result: TodoComment[] = [];
 
             if (descriptors.length > 0) {
-                const regExp = getTodoCommentsRegExp();
+                let regExp = getTodoCommentsRegExp();
 
                 let matchArray: RegExpExecArray;
                 while (matchArray = regExp.exec(fileContents)) {
@@ -7222,15 +7223,15 @@ namespace ts {
                     //
                     //  i.e. 'undefined' in position 3 above means TODO(jason) didn't match.
                     //       "hack"      in position 4 means HACK did match.
-                    const firstDescriptorCaptureIndex = 3;
+                    let firstDescriptorCaptureIndex = 3;
                     Debug.assert(matchArray.length === descriptors.length + firstDescriptorCaptureIndex);
 
-                    const preamble = matchArray[1];
-                    const matchPosition = matchArray.index + preamble.length;
+                    let preamble = matchArray[1];
+                    let matchPosition = matchArray.index + preamble.length;
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    const token = getTokenAtPosition(sourceFile, matchPosition);
+                    let token = getTokenAtPosition(sourceFile, matchPosition);
                     if (!isInsideComment(sourceFile, token, matchPosition)) {
                         continue;
                     }
@@ -7249,7 +7250,7 @@ namespace ts {
                         continue;
                     }
 
-                    const message = matchArray[2];
+                    let message = matchArray[2];
                     result.push({
                         descriptor: descriptor,
                         message: message,
@@ -7280,14 +7281,14 @@ namespace ts {
                 //
                 // The following three regexps are used to match the start of the text up to the TODO
                 // comment portion.
-                const singleLineCommentStart = /(?:\/\/+\s*)/.source;
-                const multiLineCommentStart = /(?:\/\*+\s*)/.source;
-                const anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
+                let singleLineCommentStart = /(?:\/\/+\s*)/.source;
+                let multiLineCommentStart = /(?:\/\*+\s*)/.source;
+                let anyNumberOfSpacesAndAsterixesAtStartOfLine = /(?:^(?:\s|\*)*)/.source;
 
                 // Match any of the above three TODO comment start regexps.
                 // Note that the outermost group *is* a capture group.  We want to capture the preamble
                 // so that we can determine the starting position of the TODO comment match.
-                const preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
+                let preamble = "(" + anyNumberOfSpacesAndAsterixesAtStartOfLine + "|" + singleLineCommentStart + "|" + multiLineCommentStart + ")";
 
                 // Takes the descriptors and forms a regexp that matches them as if they were literals.
                 // For example, if the descriptors are "TODO(jason)" and "HACK", then this will be:
@@ -7297,17 +7298,17 @@ namespace ts {
                 // Note that the outermost group is *not* a capture group, but the innermost groups
                 // *are* capture groups.  By capturing the inner literals we can determine after
                 // matching which descriptor we are dealing with.
-                const literals = "(?:" + map(descriptors, d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
+                let literals = "(?:" + map(descriptors, d => "(" + escapeRegExp(d.text) + ")").join("|") + ")";
 
                 // After matching a descriptor literal, the following regexp matches the rest of the
                 // text up to the end of the line (or */).
-                const endOfLineOrEndOfComment = /(?:$|\*\/)/.source;
-                const messageRemainder = /(?:.*?)/.source;
+                let endOfLineOrEndOfComment = /(?:$|\*\/)/.source
+                let messageRemainder = /(?:.*?)/.source
 
                 // This is the portion of the match we'll return as part of the TODO comment result. We
                 // match the literal portion up to the end of the line or end of comment.
-                const messagePortion = "(" + literals + messageRemainder + ")";
-                const regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
+                let messagePortion = "(" + literals + messageRemainder + ")";
+                let regExpString = preamble + messagePortion + endOfLineOrEndOfComment;
 
                 // The final regexp will look like this:
                 // /((?:\/\/+\s*)|(?:\/\*+\s*)|(?:^(?:\s|\*)*))((?:(TODO\(jason\))|(HACK))(?:.*?))(?:$|\*\/)/gim
@@ -7333,40 +7334,40 @@ namespace ts {
         function getRenameInfo(fileName: string, position: number): RenameInfo {
             synchronizeHostData();
 
-            const sourceFile = getValidSourceFile(fileName);
-            const typeChecker = program.getTypeChecker();
+            let sourceFile = getValidSourceFile(fileName);
+            let typeChecker = program.getTypeChecker();
 
-            const node = getTouchingWord(sourceFile, position);
+            let node = getTouchingWord(sourceFile, position);
 
             // Can only rename an identifier.
             if (node && node.kind === SyntaxKind.Identifier) {
-                const symbol = typeChecker.getSymbolAtLocation(node);
+                let symbol = typeChecker.getSymbolAtLocation(node);
 
                 // Only allow a symbol to be renamed if it actually has at least one declaration.
                 if (symbol) {
-                    const declarations = symbol.getDeclarations();
+                    let declarations = symbol.getDeclarations();
                     if (declarations && declarations.length > 0) {
                         // Disallow rename for elements that are defined in the standard TypeScript library.
-                        const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
+                        let defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
                         if (defaultLibFileName) {
-                            for (const current of declarations) {
-                                const sourceFile = current.getSourceFile();
-                                const canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
+                            for (let current of declarations) {
+                                let sourceFile = current.getSourceFile();
+                                var canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
                                 if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
                                     return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
                                 }
                             }
                         }
 
-                        const displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
-                        const kind = getSymbolKind(symbol, node);
+                        let displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
+                        let kind = getSymbolKind(symbol, node);
                         if (kind) {
                             return {
                                 canRename: true,
-                                kind,
-                                displayName,
                                 localizedErrorMessage: undefined,
+                                displayName,
                                 fullDisplayName: typeChecker.getFullyQualifiedName(symbol),
+                                kind: kind,
                                 kindModifiers: getSymbolModifiers(symbol),
                                 triggerSpan: createTextSpan(node.getStart(), node.getWidth())
                             };
@@ -7433,14 +7434,14 @@ namespace ts {
     /* @internal */
     export function getNameTable(sourceFile: SourceFile): Map<string> {
         if (!sourceFile.nameTable) {
-            initializeNameTable(sourceFile);
+            initializeNameTable(sourceFile)
         }
 
         return sourceFile.nameTable;
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable: Map<string> = {};
+        let nameTable: Map<string> = {};
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;
@@ -7478,13 +7479,13 @@ namespace ts {
 
     /// Classifier
     export function createClassifier(): Classifier {
-        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
+        let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
 
         /// We do not have a full parser support to know when we should parse a regex or not
         /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
         /// we have a series of divide operator. this list allows us to be more accurate by ruling out
         /// locations where a regexp cannot exist.
-        const noRegexTable: boolean[] = [];
+        let noRegexTable: boolean[] = [];
         noRegexTable[SyntaxKind.Identifier] = true;
         noRegexTable[SyntaxKind.StringLiteral] = true;
         noRegexTable[SyntaxKind.NumericLiteral] = true;
@@ -7518,7 +7519,7 @@ namespace ts {
         //
         //     Where on the second line, you will get the 'return' keyword,
         //     a string literal, and a template end consisting of '} } `'.
-        const templateStack: SyntaxKind[] = [];
+        let templateStack: SyntaxKind[] = [];
 
         /** Returns true if 'keyword2' can legally follow 'keyword1' in any language construct. */
         function canFollow(keyword1: SyntaxKind, keyword2: SyntaxKind) {
@@ -7544,18 +7545,18 @@ namespace ts {
         }
 
         function convertClassifications(classifications: Classifications, text: string): ClassificationResult {
-            const entries: ClassificationInfo[] = [];
-            const dense = classifications.spans;
+            let entries: ClassificationInfo[] = [];
+            let dense = classifications.spans;
             let lastEnd = 0;
 
             for (let i = 0, n = dense.length; i < n; i += 3) {
-                const start = dense[i];
-                const length = dense[i + 1];
-                const type = <ClassificationType>dense[i + 2];
+                let start = dense[i];
+                let length = dense[i + 1];
+                let type = <ClassificationType>dense[i + 2];
 
                 // Make a whitespace entry between the last item and this one.
                 if (lastEnd >= 0) {
-                    const whitespaceLength = start - lastEnd;
+                    let whitespaceLength = start - lastEnd;
                     if (whitespaceLength > 0) {
                         entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
                     }
@@ -7565,7 +7566,7 @@ namespace ts {
                 lastEnd = start + length;
             }
 
-            const whitespaceLength = text.length - lastEnd;
+            let whitespaceLength = text.length - lastEnd;
             if (whitespaceLength > 0) {
                 entries.push({ length: whitespaceLength, classification: TokenClass.Whitespace });
             }
@@ -7619,7 +7620,7 @@ namespace ts {
             // (and a newline).  That way when we lex we'll think we're still in a multiline comment.
             switch (lexState) {
                 case EndOfLineState.InDoubleQuoteStringLiteral:
-                    text = "\"\\\n" + text;
+                    text = '"\\\n' + text;
                     offset = 3;
                     break;
                 case EndOfLineState.InSingleQuoteStringLiteral:
@@ -7645,7 +7646,7 @@ namespace ts {
 
             scanner.setText(text);
 
-            const result: Classifications = {
+            let result: Classifications = {
                 endOfLineState: EndOfLineState.None,
                 spans: []
             };
@@ -7727,7 +7728,7 @@ namespace ts {
                         // If we don't have anything on the template stack,
                         // then we aren't trying to keep track of a previously scanned template head.
                         if (templateStack.length > 0) {
-                            const lastTemplateStackToken = lastOrUndefined(templateStack);
+                            let lastTemplateStackToken = lastOrUndefined(templateStack);
 
                             if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
                                 token = scanner.reScanTemplateToken();
@@ -7757,17 +7758,17 @@ namespace ts {
             return result;
 
             function processToken(): void {
-                const start = scanner.getTokenPos();
-                const end = scanner.getTextPos();
+                let start = scanner.getTokenPos();
+                let end = scanner.getTextPos();
 
                 addResult(start, end, classFromKind(token));
 
                 if (end >= text.length) {
                     if (token === SyntaxKind.StringLiteral || token === SyntaxKind.StringLiteralType) {
                         // Check to see if we finished up on a multiline string literal.
-                        const tokenText = scanner.getTokenText();
+                        let tokenText = scanner.getTokenText();
                         if (scanner.isUnterminated()) {
-                            const lastCharIndex = tokenText.length - 1;
+                            let lastCharIndex = tokenText.length - 1;
 
                             let numBackslashes = 0;
                             while (tokenText.charCodeAt(lastCharIndex - numBackslashes) === CharacterCodes.backslash) {
@@ -7776,7 +7777,7 @@ namespace ts {
 
                             // If we have an odd number of backslashes, then the multiline string is unclosed
                             if (numBackslashes & 1) {
-                                const quoteChar = tokenText.charCodeAt(0);
+                                let quoteChar = tokenText.charCodeAt(0);
                                 result.endOfLineState = quoteChar === CharacterCodes.doubleQuote
                                     ? EndOfLineState.InDoubleQuoteStringLiteral
                                     : EndOfLineState.InSingleQuoteStringLiteral;
@@ -7825,7 +7826,7 @@ namespace ts {
                 // relative to the original text.
                 start -= offset;
                 end -= offset;
-                const length = end - start;
+                let length = end - start;
 
                 if (length > 0) {
                     result.spans.push(start);
@@ -7940,7 +7941,7 @@ namespace ts {
     }
 
     /// getDefaultLibraryFilePath
-    declare const __dirname: string;
+    declare let __dirname: string;
 
     /**
       * Get the path of the default library files (lib.d.ts) as distributed with the typescript
