@@ -3766,11 +3766,13 @@ namespace ts {
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
             const types = containingType.types;
             let props: Symbol[];
+            let isOptional = !!(containingType.flags & TypeFlags.Intersection);
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
                     const prop = getPropertyOfType(type, name);
                     if (prop && !(getDeclarationFlagsFromSymbol(prop) & (NodeFlags.Private | NodeFlags.Protected))) {
+                        isOptional = isOptional && !!(prop.flags & SymbolFlags.Optional);
                         if (!props) {
                             props = [prop];
                         }
@@ -3798,7 +3800,12 @@ namespace ts {
                 }
                 propTypes.push(getTypeOfSymbol(prop));
             }
-            const result = <TransientSymbol>createSymbol(SymbolFlags.Property | SymbolFlags.Transient | SymbolFlags.SyntheticProperty, name);
+            const result = <TransientSymbol>createSymbol(
+                SymbolFlags.Property |
+                SymbolFlags.Transient |
+                SymbolFlags.SyntheticProperty |
+                (isOptional ? SymbolFlags.Optional : SymbolFlags.None),
+                name);
             result.containingType = containingType;
             result.declarations = declarations;
             result.type = containingType.flags & TypeFlags.Union ? getUnionType(propTypes) : getIntersectionType(propTypes);
@@ -8232,9 +8239,9 @@ namespace ts {
                             // Props is of type 'any' or unknown
                             return links.resolvedJsxType = attributesType;
                         }
-                        else if (!(attributesType.flags & TypeFlags.ObjectType)) {
-                            // Props is not an object type
-                            error(node.tagName, Diagnostics.JSX_element_attributes_type_0_must_be_an_object_type, typeToString(attributesType));
+                        else if (attributesType.flags & TypeFlags.Union) {
+                            // Props cannot be a union type
+                            error(node.tagName, Diagnostics.JSX_element_attributes_type_0_may_not_be_a_union_type, typeToString(attributesType));
                             return links.resolvedJsxType = anyType;
                         }
                         else {
