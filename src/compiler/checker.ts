@@ -3766,13 +3766,14 @@ namespace ts {
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
             const types = containingType.types;
             let props: Symbol[];
-            let isOptional = !!(containingType.flags & TypeFlags.Intersection);
+            // Flags we want to propagate to the result if they exist in all source symbols
+            let commonFlags = (containingType.flags & TypeFlags.Intersection) ? SymbolFlags.Optional : SymbolFlags.None;
             for (const current of types) {
                 const type = getApparentType(current);
                 if (type !== unknownType) {
                     const prop = getPropertyOfType(type, name);
                     if (prop && !(getDeclarationFlagsFromSymbol(prop) & (NodeFlags.Private | NodeFlags.Protected))) {
-                        isOptional = isOptional && !!(prop.flags & SymbolFlags.Optional);
+                        commonFlags &= prop.flags;
                         if (!props) {
                             props = [prop];
                         }
@@ -3804,7 +3805,7 @@ namespace ts {
                 SymbolFlags.Property |
                 SymbolFlags.Transient |
                 SymbolFlags.SyntheticProperty |
-                (isOptional ? SymbolFlags.Optional : SymbolFlags.None),
+                commonFlags,
                 name);
             result.containingType = containingType;
             result.declarations = declarations;
