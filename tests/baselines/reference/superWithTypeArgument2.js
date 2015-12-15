@@ -19,11 +19,11 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D(x) {
         _super.prototype..call(this, x);
     }
     return D;
-})(C);
+}(C));

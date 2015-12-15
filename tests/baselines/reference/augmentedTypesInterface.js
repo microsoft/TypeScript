@@ -42,7 +42,7 @@ var i2 = (function () {
         return 1;
     };
     return i2;
-})();
+}());
 var i3;
 (function (i3) {
     i3[i3["One"] = 0] = "One";

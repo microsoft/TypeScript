@@ -55,7 +55,7 @@ var NonGeneric;
             configurable: true
         });
         return C;
-    })();
+    }());
     var C;
     (function (C) {
         C.bar = ''; // not reflected in class type
@@ -81,7 +81,7 @@ var Generic;
             configurable: true
         });
         return C;
-    })();
+    }());
     var C;
     (function (C) {
         C.bar = ''; // not reflected in class type

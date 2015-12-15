@@ -68,7 +68,7 @@ var C = (function () {
         return b ? this.c : this.self; // Should be C
     };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -91,4 +91,4 @@ var D = (function (_super) {
         this.c = this.d;
     };
     return D;
-})(C);
+}(C));

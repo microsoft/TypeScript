@@ -44,7 +44,7 @@ var Foo2 = (function () {
         };
     }
     return Foo2;
-})();
+}());
 var Foo3 = (function () {
     function Foo3(_this) {
         var _this = this;
@@ -54,7 +54,7 @@ var Foo3 = (function () {
         };
     }
     return Foo3;
-})();
+}());
 var Foo4 = (function () {
     function Foo4(_this) {
         var _this = this;
@@ -63,7 +63,7 @@ var Foo4 = (function () {
         };
     }
     return Foo4;
-})();
+}());
 var Foo5 = (function () {
     function Foo5(_this) {
         var _this = this;
@@ -73,4 +73,4 @@ var Foo5 = (function () {
         };
     }
     return Foo5;
-})();
+}());

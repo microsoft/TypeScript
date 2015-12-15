@@ -357,7 +357,7 @@ var TestCase = (function () {
         this.errorMessageRegEx = errorMessageRegEx;
     }
     return TestCase;
-})();
+}());
 exports.TestCase = TestCase;
 var TestRunner = (function () {
     function TestRunner() {
@@ -406,7 +406,7 @@ var TestRunner = (function () {
         }
     };
     return TestRunner;
-})();
+}());
 exports.TestRunner = TestRunner;
 exports.tests = (function () {
     var testRunner = new TestRunner();

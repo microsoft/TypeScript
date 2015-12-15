@@ -58,14 +58,14 @@ var D = (function (_super) {
         _super.apply(this, arguments);
     }
     return D;
-})(I);
+}(I));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
         _super.apply(this, arguments);
     }
     return D2;
-})(M.C);
+}(M.C));
 function h(x) { }
 function i(x) { }
 var j = null;

@@ -435,7 +435,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided.": {
+    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -867,7 +867,7 @@
         "category": "Error",
         "code": 2312
     },
-    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
+    "Type parameter '{0}' has a circular constraint.": {
         "category": "Error",
         "code": 2313
     },
@@ -1646,6 +1646,14 @@
     "Cannot assign an abstract constructor type to a non-abstract constructor type.": {
         "category": "Error",
         "code": 2517
+    },
+    "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
+        "category": "Error",
+        "code": 2518
+    },
+    "A 'this'-based type predicate is only allowed within a class or interface's members, get accessors, or return type positions for functions and methods.": {
+        "category": "Error",
+        "code": 2519
     },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",

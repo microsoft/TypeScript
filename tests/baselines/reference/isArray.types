@@ -4,7 +4,7 @@ var maybeArray: number | number[];
 
 
 if (Array.isArray(maybeArray)) {
->Array.isArray(maybeArray) : boolean
+>Array.isArray(maybeArray) : arg is any[]
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]

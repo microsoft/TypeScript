@@ -18,5 +18,5 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0E7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==

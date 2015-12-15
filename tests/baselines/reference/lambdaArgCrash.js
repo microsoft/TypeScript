@@ -52,7 +52,7 @@ var Event = (function () {
         this._listeners.push(listener);
     };
     return Event;
-})();
+}());
 var ItemSetEvent = (function (_super) {
     __extends(ItemSetEvent, _super);
     function ItemSetEvent() {
@@ -62,4 +62,4 @@ var ItemSetEvent = (function (_super) {
         _super.prototype.add.call(this, listener);
     };
     return ItemSetEvent;
-})(Event);
+}(Event));

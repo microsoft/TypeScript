@@ -11,4 +11,4 @@ var baz = (function () {
     }
     baz.prototype.foo = function (bar) { };
     return baz;
-})();
+}());

@@ -13,6 +13,6 @@ var _this;
         function c() {
         }
         return c;
-    })();
+    }());
 })(_this || (_this = {}));
 var f = function () { return _this; };

@@ -47,23 +47,23 @@ var Class1 = (function () {
     function Class1() {
     }
     return Class1;
-})();
+}());
 var Class2 = (function (_super) {
     __extends(Class2, _super);
     function Class2() {
         _super.apply(this, arguments);
     }
     return Class2;
-})(Class1);
+}(Class1));
 var Class3 = (function () {
     function Class3() {
     }
     return Class3;
-})();
+}());
 var Class4 = (function (_super) {
     __extends(Class4, _super);
     function Class4() {
         _super.apply(this, arguments);
     }
     return Class4;
-})(Class3);
+}(Class3));

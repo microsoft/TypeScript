@@ -50,7 +50,7 @@ define(["require", "exports"], function (require, exports) {
         function A() {
         }
         return A;
-    })();
+    }());
     exports.A = A;
 });
 //// [withImportDecl_1.js]

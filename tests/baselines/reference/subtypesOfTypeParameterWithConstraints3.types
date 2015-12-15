@@ -1,0 +1,61 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints3.ts ===
+// checking whether other types are subtypes of type parameters with constraints
+
+function f<T extends U, U, V>(t: T, u: U, v: V) {
+>f : <T extends U, U, V>(t: T, u: U, v: V) => void
+>T : T
+>U : U
+>U : U
+>V : V
+>t : T
+>T : T
+>u : U
+>U : U
+>v : V
+>V : V
+
+    // ok
+    var r = true ? t : u;
+>r : U
+>true ? t : u : U
+>true : boolean
+>t : T
+>u : U
+
+    var r = true ? u : t;
+>r : U
+>true ? u : t : U
+>true : boolean
+>u : U
+>t : T
+
+    // ok
+    var r2 = true ? t : v;
+>r2 : T | V
+>true ? t : v : T | V
+>true : boolean
+>t : T
+>v : V
+
+    var r2 = true ? v : t;
+>r2 : T | V
+>true ? v : t : V | T
+>true : boolean
+>v : V
+>t : T
+
+    // ok
+    var r3 = true ? v : u;
+>r3 : V | U
+>true ? v : u : V | U
+>true : boolean
+>v : V
+>u : U
+
+    var r3 = true ? u : v;
+>r3 : V | U
+>true ? u : v : U | V
+>true : boolean
+>u : U
+>v : V
+}

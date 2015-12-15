@@ -24,7 +24,7 @@ var X;
                     function W() {
                     }
                     return W;
-                })();
+                }());
                 C.W = W;
             })(C = B.C || (B.C = {}));
         })(B = A.B || (A.B = {}));

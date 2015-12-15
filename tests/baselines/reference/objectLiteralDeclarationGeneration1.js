@@ -6,7 +6,7 @@ var y = (function () {
     function y() {
     }
     return y;
-})();
+}());
 
 
 //// [objectLiteralDeclarationGeneration1.d.ts]

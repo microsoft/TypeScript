@@ -13,10 +13,10 @@ var C = (function () {
     }
     C.foo = this; // error
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     C2.foo = this; // error
     return C2;
-})();
+}());

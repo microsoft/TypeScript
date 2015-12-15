@@ -90,7 +90,7 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2(_super) {
@@ -119,7 +119,7 @@ var Foo2 = (function (_super) {
         configurable: true
     });
     return Foo2;
-})(Foo);
+}(Foo));
 var Foo4 = (function (_super) {
     __extends(Foo4, _super);
     function Foo4(_super) {
@@ -132,4 +132,4 @@ var Foo4 = (function (_super) {
         };
     };
     return Foo4;
-})(Foo);
+}(Foo));

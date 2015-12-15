@@ -1,7 +1,7 @@
 tests/cases/compiler/duplicateLocalVariable1.ts(2,4): error TS1005: ';' expected.
 tests/cases/compiler/duplicateLocalVariable1.ts(2,11): error TS1146: Declaration expected.
 tests/cases/compiler/duplicateLocalVariable1.ts(2,13): error TS2304: Cannot find name 'commonjs'.
-tests/cases/compiler/duplicateLocalVariable1.ts(12,14): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/duplicateLocalVariable1.ts(12,14): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/duplicateLocalVariable1.ts(187,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 
 
@@ -25,7 +25,7 @@ tests/cases/compiler/duplicateLocalVariable1.ts(187,22): error TS2403: Subsequen
     
     export class TestCase {
                  ~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
         constructor (public name: string, public test: ()=>boolean, public errorMessageRegEx?: string) {
         }
     }

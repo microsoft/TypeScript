@@ -24,4 +24,4 @@ var C = (function () {
         dec
     ], C.prototype, "accessor", null);
     return C;
-})();
+}());

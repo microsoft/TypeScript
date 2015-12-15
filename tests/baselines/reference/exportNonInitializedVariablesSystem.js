@@ -46,7 +46,7 @@ System.register([], function(exports_1) {
                 function A() {
                 }
                 return A;
-            })();
+            }());
             (function (B) {
                 B.a = 1, B.c = 2;
             })(B || (B = {}));
@@ -62,7 +62,7 @@ System.register([], function(exports_1) {
                 function D() {
                 }
                 return D;
-            })();
+            }());
             exports_1("e1", e1 = new D);
             exports_1("f1", f1 = new D);
             exports_1("g1", g1 = new D);

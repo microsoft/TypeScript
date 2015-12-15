@@ -11,4 +11,4 @@ var C = (function () {
     }
     C.prototype.x1 = function (a) { };
     return C;
-})();
+}());

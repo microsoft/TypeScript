@@ -52,85 +52,85 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 exports.a = a;
 var a11 = (function () {
     function a11() {
     }
     return a11;
-})();
+}());
 exports.a11 = a11;
 var a12 = (function () {
     function a12() {
     }
     return a12;
-})();
+}());
 exports.a12 = a12;
 var x = (function () {
     function x() {
     }
     return x;
-})();
+}());
 exports.x = x;
 var x11 = (function () {
     function x11() {
     }
     return x11;
-})();
+}());
 exports.x11 = x11;
 var m = (function () {
     function m() {
     }
     return m;
-})();
+}());
 exports.m = m;
 var a1 = (function () {
     function a1() {
     }
     return a1;
-})();
+}());
 exports.a1 = a1;
 var x1 = (function () {
     function x1() {
     }
     return x1;
-})();
+}());
 exports.x1 = x1;
 var a111 = (function () {
     function a111() {
     }
     return a111;
-})();
+}());
 exports.a111 = a111;
 var x111 = (function () {
     function x111() {
     }
     return x111;
-})();
+}());
 exports.x111 = x111;
 var z1 = (function () {
     function z1() {
     }
     return z1;
-})();
+}());
 exports.z1 = z1;
 var z2 = (function () {
     function z2() {
     }
     return z2;
-})();
+}());
 exports.z2 = z2;
 var aaaa = (function () {
     function aaaa() {
     }
     return aaaa;
-})();
+}());
 exports.aaaa = aaaa;
 var aaaa1 = (function () {
     function aaaa1() {
     }
     return aaaa1;
-})();
+}());
 exports.aaaa1 = aaaa1;
 //// [client.js]
 "use strict";

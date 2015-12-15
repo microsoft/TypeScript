@@ -141,7 +141,7 @@ var C = (function () {
     C.prototype.substr = function (from, length) { return null; };
     C.prototype.valueOf = function () { return null; };
     return C;
-})();
+}());
 function f10(x) { }
 function f11(x) { }
 function f12(x) { }

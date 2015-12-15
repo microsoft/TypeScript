@@ -1,11 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint6.ts(1,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint6.ts(1,19): error TS2304: Cannot find name 'List'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint6.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericConstraint6.ts (1 errors) ====
     class C<T extends List<List<T> >> {
-            ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
                       ~~~~
 !!! error TS2304: Cannot find name 'List'.
     }

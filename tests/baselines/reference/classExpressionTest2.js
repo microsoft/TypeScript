@@ -23,7 +23,7 @@ function M() {
             return { t: t, x: x };
         };
         return C;
-    })();
+    }());
     var v = new m();
     return v.f();
 }

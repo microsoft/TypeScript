@@ -59,12 +59,12 @@ var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var C4 = (function () {
     function C4() {
     }
     return C4;
-})();
+}());
 // checks if properties actually were merged
 var c5;
 c5.x1;

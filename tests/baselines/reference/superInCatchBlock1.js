@@ -24,7 +24,7 @@ var A = (function () {
     }
     A.prototype.m = function () { };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -38,4 +38,4 @@ var B = (function (_super) {
         }
     };
     return B;
-})(A);
+}(A));

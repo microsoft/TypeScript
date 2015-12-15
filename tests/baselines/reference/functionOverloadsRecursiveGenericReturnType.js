@@ -19,12 +19,12 @@ var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 function Choice() {
     var v_args = [];
     for (var _i = 0; _i < arguments.length; _i++) {

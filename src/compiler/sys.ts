@@ -51,6 +51,8 @@ namespace ts {
         args: string[];
         currentDirectory: string;
         executingFile: string;
+        newLine?: string;
+        useCaseSensitiveFileNames?: boolean;
         echo(s: string): void;
         quit(exitCode?: number): void;
         fileExists(path: string): boolean;
@@ -60,6 +62,8 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
+        watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
     };
 
     export var sys: System = (function () {
@@ -402,11 +406,6 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    if (isNode4OrLater()) {
-                        // Note: in node the callback of fs.watch is given only the relative file name as a parameter
-                        return _fs.watch(fileName, (eventName: string, relativeFileName: string) => callback(fileName));
-                    }
-
                     const watchedFile = watchedFileSet.addFile(fileName, callback);
                     return {
                         close: () => watchedFileSet.removeFile(watchedFile)
@@ -465,9 +464,9 @@ namespace ts {
         function getChakraSystem(): System {
 
             return {
-                newLine: "\r\n",
+                newLine: ChakraHost.newLine || "\r\n",
                 args: ChakraHost.args,
-                useCaseSensitiveFileNames: false,
+                useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
                 write: ChakraHost.echo,
                 readFile(path: string, encoding?: string) {
                     // encoding is automatically handled by the implementation in ChakraHost

@@ -17,7 +17,7 @@ define(["require", "exports"], function (require, exports) {
         function Host() {
         }
         return Host;
-    })();
+    }());
     exports.Host = Host;
 });
 //// [consumer.js]

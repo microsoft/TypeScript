@@ -130,7 +130,7 @@ function f2() {
         function A() {
         }
         return A;
-    })();
+    }());
 }
 var B;
 (function (B) {

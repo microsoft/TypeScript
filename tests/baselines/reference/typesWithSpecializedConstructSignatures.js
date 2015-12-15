@@ -50,27 +50,27 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         _super.apply(this, arguments);
     }
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base);
+}(Base));
 var C = (function () {
     function C(x) {
         return x;
     }
     return C;
-})();
+}());
 var c = new C('a');
 var i;
 var a;

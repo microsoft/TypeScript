@@ -28,21 +28,21 @@ var Bbb = (function () {
     function Bbb() {
     }
     return Bbb;
-})();
+}());
 var Aaa = (function (_super) {
     __extends(Aaa, _super);
     function Aaa() {
         _super.apply(this, arguments);
     }
     return Aaa;
-})(Bbb);
+}(Bbb));
 var Aaa;
 (function (Aaa) {
     var SomeType = (function () {
         function SomeType() {
         }
         return SomeType;
-    })();
+    }());
     Aaa.SomeType = SomeType;
 })(Aaa || (Aaa = {}));
 var Bbb;
@@ -51,9 +51,9 @@ var Bbb;
         function SomeType() {
         }
         return SomeType;
-    })();
+    }());
     Bbb.SomeType = SomeType;
-    __export(require()); // this line causes the nullref
+     // this line causes the nullref
 })(Bbb || (Bbb = {}));
 var a;
 

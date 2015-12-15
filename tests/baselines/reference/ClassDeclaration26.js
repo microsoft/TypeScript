@@ -11,5 +11,5 @@ var C = (function () {
         this.foo = 10;
     }
     return C;
-})();
+}());
 var constructor = function () { };

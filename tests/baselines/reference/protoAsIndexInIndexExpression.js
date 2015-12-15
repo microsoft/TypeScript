@@ -37,4 +37,4 @@ var C = (function () {
         this["__proto__"] = 0;
     }
     return C;
-})();
+}());

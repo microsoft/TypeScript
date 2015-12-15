@@ -19,6 +19,6 @@ var m;
         function n() {
         }
         return n;
-    })();
+    }());
     m.n = n;
 })(m || (m = {}));

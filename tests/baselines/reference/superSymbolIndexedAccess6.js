@@ -27,7 +27,7 @@ var Foo = (function () {
         return 0;
     };
     return Foo;
-})();
+}());
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
@@ -37,4 +37,4 @@ var Bar = (function (_super) {
         return _super[symbol]();
     };
     return Bar;
-})(Foo);
+}(Foo));

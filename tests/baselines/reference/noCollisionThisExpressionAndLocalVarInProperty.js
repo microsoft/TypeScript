@@ -30,7 +30,7 @@ var class1 = (function () {
         };
     }
     return class1;
-})();
+}());
 var class2 = (function () {
     function class2() {
         this.prop1 = {
@@ -41,4 +41,4 @@ var class2 = (function () {
         var _this = 2;
     }
     return class2;
-})();
+}());

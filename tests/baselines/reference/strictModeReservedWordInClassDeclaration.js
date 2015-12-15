@@ -40,7 +40,7 @@ var Foo = (function () {
     }
     Foo.prototype.banana = function (x) { };
     return Foo;
-})();
+}());
 var C = (function () {
     function C(public, let) {
         this.public = public;
@@ -51,38 +51,38 @@ var C = (function () {
     };
     C.prototype.pulbic = function () { }; // No Error;
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var E = (function () {
     function E() {
     }
     return E;
-})();
+}());
 var F = (function () {
     function F() {
     }
     return F;
-})();
+}());
 var F1 = (function () {
     function F1() {
     }
     return F1;
-})();
+}());
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
         _super.apply(this, arguments);
     }
     return G;
-})(package);
+}(package));
 var H = (function (_super) {
     __extends(H, _super);
     function H() {
         _super.apply(this, arguments);
     }
     return H;
-})(package.A);
+}(package.A));

@@ -83,7 +83,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -91,7 +91,7 @@ var D = (function (_super) {
     }
     D.prototype.foo1 = function () { };
     return D;
-})(C);
+}(C));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -99,7 +99,7 @@ var E = (function (_super) {
     }
     E.prototype.foo2 = function () { };
     return E;
-})(C);
+}(C));
 var unionDE;
 var num;
 var str;

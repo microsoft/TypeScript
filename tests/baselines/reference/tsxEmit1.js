@@ -67,7 +67,7 @@ var SomeClass = (function () {
         var rewrites6 = <div a={{ p: p }}></div>;
     };
     return SomeClass;
-})();
+}());
 var whitespace1 = <div>      </div>;
 var whitespace2 = <div>  {p}    </div>;
 var whitespace3 = <div>  

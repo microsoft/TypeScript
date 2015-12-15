@@ -61,7 +61,7 @@ sourceFile:file:///tests/cases/projects/outputdir_singleFile/test.ts
 1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(5, 14) Source(4, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

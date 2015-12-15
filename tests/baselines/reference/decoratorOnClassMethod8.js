@@ -20,4 +20,4 @@ var C = (function () {
         dec
     ], C.prototype, "method", null);
     return C;
-})();
+}());
