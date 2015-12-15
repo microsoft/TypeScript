@@ -33,7 +33,7 @@ define(["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    })();
+    }());
     exports.C = C;
 });
 //// [externalModuleAssignToVar_core_require2.js]
@@ -43,7 +43,7 @@ define(["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    })();
+    }());
     return C;
 });
 //// [externalModuleAssignToVar_ext.js]
@@ -53,7 +53,7 @@ define(["require", "exports"], function (require, exports) {
         function D() {
         }
         return D;
-    })();
+    }());
     return D;
 });
 //// [externalModuleAssignToVar_core.js]

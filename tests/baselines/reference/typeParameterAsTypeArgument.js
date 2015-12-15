@@ -38,7 +38,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 //function foo<T, U extends T>(x: T, y: U) {
 //    foo<U, U>(y, y);
 //    return new C<U, T>();

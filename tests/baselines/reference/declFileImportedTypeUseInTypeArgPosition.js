@@ -18,7 +18,7 @@ var List = (function () {
     function List() {
     }
     return List;
-})();
+}());
 
 
 //// [declFileImportedTypeUseInTypeArgPosition.d.ts]

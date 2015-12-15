@@ -44,6 +44,6 @@ var C = (function () {
     function C(x) {
     }
     return C;
-})();
+}());
 var d;
 d = C; // Error

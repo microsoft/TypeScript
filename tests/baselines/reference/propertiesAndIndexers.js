@@ -61,12 +61,12 @@ var P = (function () {
     function P() {
     }
     return P;
-})();
+}());
 var Q = (function (_super) {
     __extends(Q, _super);
     function Q() {
         _super.apply(this, arguments);
     }
     return Q;
-})(P);
+}(P));
 var c;

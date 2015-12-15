@@ -63,7 +63,7 @@ var c1 = (function () {
         var _i; // no error
     };
     return c1;
-})();
+}());
 var c3 = (function () {
     function c3() {
     }
@@ -78,4 +78,4 @@ var c3 = (function () {
         var _i = 10; // no error
     };
     return c3;
-})();
+}());

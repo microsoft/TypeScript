@@ -15,10 +15,10 @@ var derived = (function (_super) {
         _super.apply(this, arguments);
     }
     return derived;
-})(base);
+}(base));
 var base = (function () {
     function base(n) {
         this.n = n;
     }
     return base;
-})();
+}());

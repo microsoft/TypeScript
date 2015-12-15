@@ -440,7 +440,7 @@ var bigClass = (function () {
         this.with = 0;
     }
     return bigClass;
-})();
+}());
 var bigEnum;
 (function (bigEnum) {
     bigEnum[bigEnum["constructor"] = 0] = "constructor";
@@ -504,70 +504,70 @@ var bigModule;
         function constructor() {
         }
         return constructor;
-    })();
+    }());
     var implements = (function () {
         function implements() {
         }
         return implements;
-    })();
+    }());
     var interface = (function () {
         function interface() {
         }
         return interface;
-    })();
+    }());
     var let = (function () {
         function let() {
         }
         return let;
-    })();
+    }());
     var module = (function () {
         function module() {
         }
         return module;
-    })();
+    }());
     var package = (function () {
         function package() {
         }
         return package;
-    })();
+    }());
     var private = (function () {
         function private() {
         }
         return private;
-    })();
+    }());
     var protected = (function () {
         function protected() {
         }
         return protected;
-    })();
+    }());
     var public = (function () {
         function public() {
         }
         return public;
-    })();
+    }());
     var set = (function () {
         function set() {
         }
         return set;
-    })();
+    }());
     var static = (function () {
         function static() {
         }
         return static;
-    })();
+    }());
     var get = (function () {
         function get() {
         }
         return get;
-    })();
+    }());
     var yield = (function () {
         function yield() {
         }
         return yield;
-    })();
+    }());
     var declare = (function () {
         function declare() {
         }
         return declare;
-    })();
+    }());
 })(bigModule || (bigModule = {}));

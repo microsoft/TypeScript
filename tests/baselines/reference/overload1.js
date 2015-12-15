@@ -51,7 +51,7 @@ var O;
         function A() {
         }
         return A;
-    })();
+    }());
     O.A = A;
     var B = (function (_super) {
         __extends(B, _super);
@@ -59,7 +59,7 @@ var O;
             _super.apply(this, arguments);
         }
         return B;
-    })(A);
+    }(A));
     O.B = B;
     var C = (function (_super) {
         __extends(C, _super);
@@ -67,7 +67,7 @@ var O;
             _super.apply(this, arguments);
         }
         return C;
-    })(B);
+    }(B));
     O.C = C;
 })(O || (O = {}));
 var e = x.g(new O.A()); // matches overload but bad assignment

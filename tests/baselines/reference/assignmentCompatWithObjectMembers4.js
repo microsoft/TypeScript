@@ -104,31 +104,31 @@ var OnlyDerived;
         function Base() {
         }
         return Base;
-    })();
+    }());
     var Derived = (function (_super) {
         __extends(Derived, _super);
         function Derived() {
             _super.apply(this, arguments);
         }
         return Derived;
-    })(Base);
+    }(Base));
     var Derived2 = (function (_super) {
         __extends(Derived2, _super);
         function Derived2() {
             _super.apply(this, arguments);
         }
         return Derived2;
-    })(Base);
+    }(Base));
     var S = (function () {
         function S() {
         }
         return S;
-    })();
+    }());
     var T = (function () {
         function T() {
         }
         return T;
-    })();
+    }());
     var s;
     var t;
     var s2;
@@ -163,31 +163,31 @@ var WithBase;
         function Base() {
         }
         return Base;
-    })();
+    }());
     var Derived = (function (_super) {
         __extends(Derived, _super);
         function Derived() {
             _super.apply(this, arguments);
         }
         return Derived;
-    })(Base);
+    }(Base));
     var Derived2 = (function (_super) {
         __extends(Derived2, _super);
         function Derived2() {
             _super.apply(this, arguments);
         }
         return Derived2;
-    })(Base);
+    }(Base));
     var S = (function () {
         function S() {
         }
         return S;
-    })();
+    }());
     var T = (function () {
         function T() {
         }
         return T;
-    })();
+    }());
     var s;
     var t;
     var s2;

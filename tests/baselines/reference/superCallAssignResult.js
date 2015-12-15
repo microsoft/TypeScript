@@ -20,7 +20,7 @@ var E = (function () {
     function E(arg) {
     }
     return E;
-})();
+}());
 var H = (function (_super) {
     __extends(H, _super);
     function H() {
@@ -28,4 +28,4 @@ var H = (function (_super) {
         x = 5;
     }
     return H;
-})(E);
+}(E));

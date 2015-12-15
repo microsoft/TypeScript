@@ -38,7 +38,7 @@ var M;
         function c() {
         }
         return c;
-    })();
+    }());
     M.c = c;
     var m;
     (function (m) {
@@ -46,7 +46,7 @@ var M;
             function c() {
             }
             return c;
-        })();
+        }());
         m.c = c;
     })(m = M.m || (M.m = {}));
 })(M || (M = {}));
@@ -58,7 +58,7 @@ var M;
             function Window() {
             }
             return Window;
-        })();
+        }());
         N.Window = Window;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));

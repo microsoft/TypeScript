@@ -14,4 +14,4 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());

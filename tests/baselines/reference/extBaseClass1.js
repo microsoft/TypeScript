@@ -32,7 +32,7 @@ var M;
             this.x = 10;
         }
         return B;
-    })();
+    }());
     M.B = B;
     var C = (function (_super) {
         __extends(C, _super);
@@ -40,7 +40,7 @@ var M;
             _super.apply(this, arguments);
         }
         return C;
-    })(B);
+    }(B));
     M.C = C;
 })(M || (M = {}));
 var M;
@@ -51,7 +51,7 @@ var M;
             _super.apply(this, arguments);
         }
         return C2;
-    })(M.B);
+    }(M.B));
     M.C2 = C2;
 })(M || (M = {}));
 var N;
@@ -62,6 +62,6 @@ var N;
             _super.apply(this, arguments);
         }
         return C3;
-    })(M.B);
+    }(M.B));
     N.C3 = C3;
 })(N || (N = {}));

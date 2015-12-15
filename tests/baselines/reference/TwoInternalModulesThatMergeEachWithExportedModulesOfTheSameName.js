@@ -60,7 +60,7 @@ var X;
                 function Line() {
                 }
                 return Line;
-            })();
+            }());
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
@@ -75,7 +75,7 @@ var X;
                 function Line() {
                 }
                 return Line;
-            })();
+            }());
             Z.Line = Line;
         })(Z || (Z = {}));
     })(Y = X.Y || (X.Y = {}));

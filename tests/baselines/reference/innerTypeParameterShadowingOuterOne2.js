@@ -52,7 +52,7 @@ var C = (function () {
         x.getDate();
     };
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
@@ -65,7 +65,7 @@ var C2 = (function () {
         x.getDate();
     };
     return C2;
-})();
+}());
 //class C2<T extends Date, U extends T> {
 //    g<T extends Number, U extends T>() {
 //        var x: U;

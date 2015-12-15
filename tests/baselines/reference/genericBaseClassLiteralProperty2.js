@@ -25,13 +25,13 @@ var CollectionItem2 = (function () {
     function CollectionItem2() {
     }
     return CollectionItem2;
-})();
+}());
 var BaseCollection2 = (function () {
     function BaseCollection2() {
         this._itemsByKey = {};
     }
     return BaseCollection2;
-})();
+}());
 var DataView2 = (function (_super) {
     __extends(DataView2, _super);
     function DataView2() {
@@ -41,4 +41,4 @@ var DataView2 = (function (_super) {
         this._itemsByKey['dummy'] = item;
     };
     return DataView2;
-})(BaseCollection2);
+}(BaseCollection2));

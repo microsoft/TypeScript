@@ -25,6 +25,6 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return Foo;
-    })();
+    }());
     exports.x = 5;
 });

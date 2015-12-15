@@ -24,7 +24,7 @@ var foo = (function () {
     function foo() {
     }
     return foo;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = foo;
 function bar() {

@@ -12,6 +12,24 @@ async function f2(): Promise<void> {
     
 }
 
+async function f3(x) {
+    if (x) return 10;
+}
+
+async function f4(): Promise<number> {
+    
+}
+
+function voidFunc(): void {
+}
+
+function calltoVoidFunc(x) {
+    if (x) return voidFunc();
+}
+
+declare function use(s: string): void;
+let x1 = () => { use("Test"); }
+
 //// [reachabilityChecks7.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promise, generator) {
     return new Promise(function (resolve, reject) {
@@ -40,3 +58,20 @@ function f2() {
     return __awaiter(this, void 0, Promise, function* () {
     });
 }
+function f3(x) {
+    return __awaiter(this, void 0, Promise, function* () {
+        if (x)
+            return 10;
+    });
+}
+function f4() {
+    return __awaiter(this, void 0, Promise, function* () {
+    });
+}
+function voidFunc() {
+}
+function calltoVoidFunc(x) {
+    if (x)
+        return voidFunc();
+}
+let x1 = () => { use("Test"); };

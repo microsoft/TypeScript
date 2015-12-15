@@ -20,7 +20,7 @@ var a;
         function c() {
         }
         return c;
-    })();
+    }());
     a.c = c;
 })(a = exports.a || (exports.a = {}));
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]

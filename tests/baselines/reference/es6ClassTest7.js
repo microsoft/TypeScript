@@ -20,4 +20,4 @@ var Bar = (function (_super) {
         _super.apply(this, arguments);
     }
     return Bar;
-})(M.Foo);
+}(M.Foo));

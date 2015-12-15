@@ -10,4 +10,4 @@ var ClassC = (function (_super) {
         _super.apply(this, arguments);
     }
     return ClassC;
-})(test.ClassA);
+}(test.ClassA));

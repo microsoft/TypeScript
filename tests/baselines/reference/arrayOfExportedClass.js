@@ -30,7 +30,7 @@ var Car = (function () {
     function Car() {
     }
     return Car;
-})();
+}());
 module.exports = Car;
 //// [arrayOfExportedClass_1.js]
 "use strict";
@@ -41,5 +41,5 @@ var Road = (function () {
         this.cars = cars;
     };
     return Road;
-})();
+}());
 module.exports = Road;

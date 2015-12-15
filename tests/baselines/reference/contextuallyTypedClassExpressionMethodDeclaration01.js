@@ -58,7 +58,7 @@ function getFoo1() {
             arg.strProp = "hello";
         };
         return class_1;
-    })();
+    }());
 }
 function getFoo2() {
     return (function () {
@@ -71,7 +71,7 @@ function getFoo2() {
             arg.strProp = "hello";
         };
         return class_2;
-    })();
+    }());
 }
 function getFoo3() {
     return (function () {
@@ -84,5 +84,5 @@ function getFoo3() {
             arg.strProp = "hello";
         };
         return class_3;
-    })();
+    }());
 }

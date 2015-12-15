@@ -24,21 +24,21 @@ var Foo = (function () {
     }
     Foo.prototype.fooMethod = function () { };
     return Foo;
-})();
+}());
 var FooExtended = (function () {
     function FooExtended() {
     }
     return FooExtended;
-})();
+}());
 var Bar = (function () {
     function Bar() {
     }
     return Bar;
-})();
+}());
 var BarExtended = (function (_super) {
     __extends(BarExtended, _super);
     function BarExtended() {
         _super.call(this);
     }
     return BarExtended;
-})(Bar);
+}(Bar));

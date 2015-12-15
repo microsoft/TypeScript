@@ -1,0 +1,19 @@
+tests/cases/compiler/moduleA/a.js(2,17): error TS2656: Exported external package typings file 'tests/cases/compiler/node_modules/b.ts' is not a module. Please contact the package author to update the package definition.
+
+
+==== tests/cases/compiler/moduleA/a.js (1 errors) ====
+    
+    import {a} from "b";
+                    ~~~
+!!! error TS2656: Exported external package typings file 'b.ts' is not a module. Please contact the package author to update the package definition.
+    a++;
+    import {c} from "c";
+    c++;
+    
+==== tests/cases/compiler/node_modules/b.ts (0 errors) ====
+    var a = 10;
+    
+==== tests/cases/compiler/node_modules/c.js (0 errors) ====
+    exports.a = 10;
+    c = 10;
+    

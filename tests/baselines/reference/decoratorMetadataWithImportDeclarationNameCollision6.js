@@ -31,7 +31,7 @@ var db = (function () {
     db.prototype.doSomething = function () {
     };
     return db;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = db;
 //// [service.js]
@@ -50,5 +50,5 @@ var MyClass = (function () {
         __metadata('design:paramtypes', [db_1.default])
     ], MyClass);
     return MyClass;
-})();
+}());
 exports.MyClass = MyClass;

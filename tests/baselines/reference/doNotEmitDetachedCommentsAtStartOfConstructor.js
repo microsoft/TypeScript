@@ -43,22 +43,22 @@ var A = (function () {
         var x = 10;
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
         var y = 10;
     }
     return B;
-})();
+}());
 var C = (function () {
     function C() {
         var x = 10;
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
         var y = 10;
     }
     return D;
-})();
+}());

@@ -43,13 +43,13 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 var D = (function () {
     function D(y) {
         if (y === void 0) { y = "hello"; }
     }
     return D;
-})();
+}());
 var E = (function () {
     function E(y) {
         if (y === void 0) { y = "hello"; }
@@ -59,4 +59,4 @@ var E = (function () {
         }
     }
     return E;
-})();
+}());
