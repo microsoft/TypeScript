@@ -7095,7 +7095,7 @@ namespace ts {
 
             if (container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
                 if (languageVersion < ScriptTarget.ES6) {
-                    error(node, Diagnostics.super_in_members_of_object_literal_expressions_is_only_allowed_when_option_target_is_ES2015_or_higher);
+                    error(node, Diagnostics.super_is_only_allowed_in_members_of_object_literal_expressions_when_option_target_is_ES2015_or_higher);
                     return unknownType;
                 }
                 else {

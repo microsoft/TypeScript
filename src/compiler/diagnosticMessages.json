@@ -1759,7 +1759,7 @@
         "category": "Error",
         "code": 2658
     },
-    "'super' in members of object literal expressions is only allowed when option 'target' is 'ES2015' or higher.": {
+    "'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 2659
     },
