@@ -45,6 +45,15 @@ namespace Merged {
     }
 }
 
+namespace Merged2 {
+    export enum E {
+        a, b, c
+    }
+    export module E {
+        export let d = 5;
+    }
+}
+
 var abc: First.E;
 var secondAbc: Abc.E;
 var secondAbcd: Abcd.E;
@@ -54,6 +63,7 @@ var nope: Abc.Nope;
 var k: Const.E;
 var decl: Decl.E;
 var merged: Merged.E;
+var merged2: Merged2.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -75,3 +85,5 @@ k = abc;
 // merged enums compare all their members
 abc = merged; // missing 'd'
 merged = abc; // ok
+abc = merged2; // ok
+merged2 = abc; // ok

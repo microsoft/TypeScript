@@ -46,6 +46,15 @@ namespace Merged {
     }
 }
 
+namespace Merged2 {
+    export enum E {
+        a, b, c
+    }
+    export module E {
+        export let d = 5;
+    }
+}
+
 var abc: First.E;
 var secondAbc: Abc.E;
 var secondAbcd: Abcd.E;
@@ -55,6 +64,7 @@ var nope: Abc.Nope;
 var k: Const.E;
 var decl: Decl.E;
 var merged: Merged.E;
+var merged2: Merged2.E;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -76,6 +86,8 @@ k = abc;
 // merged enums compare all their members
 abc = merged; // missing 'd'
 merged = abc; // ok
+abc = merged2; // ok
+merged2 = abc; // ok
 
 //// [enumAssignmentCompat3.js]
 var First;
@@ -144,6 +156,19 @@ var Merged;
     })(Merged.E || (Merged.E = {}));
     var E = Merged.E;
 })(Merged || (Merged = {}));
+var Merged2;
+(function (Merged2) {
+    (function (E) {
+        E[E["a"] = 0] = "a";
+        E[E["b"] = 1] = "b";
+        E[E["c"] = 2] = "c";
+    })(Merged2.E || (Merged2.E = {}));
+    var E = Merged2.E;
+    var E;
+    (function (E) {
+        E.d = 5;
+    })(E = Merged2.E || (Merged2.E = {}));
+})(Merged2 || (Merged2 = {}));
 var abc;
 var secondAbc;
 var secondAbcd;
@@ -153,6 +178,7 @@ var nope;
 var k;
 var decl;
 var merged;
+var merged2;
 abc = secondAbc; // ok
 abc = secondAbcd; // missing 'd'
 abc = secondAb; // ok
@@ -172,3 +198,5 @@ k = abc;
 // merged enums compare all their members
 abc = merged; // missing 'd'
 merged = abc; // ok
+abc = merged2; // ok
+merged2 = abc; // ok
