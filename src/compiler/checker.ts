@@ -4963,6 +4963,10 @@ namespace ts {
             return checkTypeRelatedTo(source, target, identityRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
         }
 
+        function compareTypesAssignable(source: Type, target: Type): Ternary {
+            return checkTypeRelatedTo(source, target, assignableRelation, /*errorNode*/ undefined) ? Ternary.True : Ternary.False;
+        }
+
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
             return checkTypeSubtypeOf(source, target, /*errorNode*/ undefined);
         }
@@ -4979,16 +4983,26 @@ namespace ts {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
 
+        function isSignatureAssignableTo(source: Signature,
+                                         target: Signature,
+                                         ignoreReturnTypes: boolean): boolean {
+            return compareSignaturesRelated(source, target, ignoreReturnTypes, /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
+        }
+
         /**
          * See signatureRelatedTo, compareSignaturesIdentical
          */
-        function isSignatureAssignableTo(source: Signature, target: Signature, ignoreReturnTypes: boolean): boolean {
+        function compareSignaturesRelated(source: Signature,
+                                          target: Signature,
+                                          ignoreReturnTypes: boolean,
+                                          errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
+                                          compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
-                return true;
+                return Ternary.True;
             }
             if (!target.hasRestParameter && source.minArgumentCount > target.parameters.length) {
-                return false;
+                return Ternary.False;
             }
 
             // Spec 1.0 Section 3.8.3 & 3.8.4:
@@ -4996,36 +5010,49 @@ namespace ts {
             source = getErasedSignature(source);
             target = getErasedSignature(target);
 
+            let result = Ternary.True;
+
             const sourceMax = getNumNonRestParameters(source);
             const targetMax = getNumNonRestParameters(target);
             const checkCount = getNumParametersToCheckForSignatureRelatability(source, sourceMax, target, targetMax);
+            const sourceParams = source.parameters;
+            const targetParams = target.parameters;
             for (let i = 0; i < checkCount; i++) {
-                const s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
-                const t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
-                const related = isTypeAssignableTo(t, s) || isTypeAssignableTo(s, t);
+                const s = i < sourceMax ? getTypeOfSymbol(sourceParams[i]) : getRestTypeOfSignature(source);
+                const t = i < targetMax ? getTypeOfSymbol(targetParams[i]) : getRestTypeOfSignature(target);
+                const related = compareTypes(t, s, /*reportErrors*/ false) || compareTypes(s, t, !!errorReporter);
                 if (!related) {
-                    return false;
+                    if (errorReporter) {
+                        errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
+                            sourceParams[i < sourceMax ? i : sourceMax].name,
+                            targetParams[i < targetMax ? i : targetMax].name);
+                    }
+                    return Ternary.False;
                 }
+                result &= related;
             }
 
             if (!ignoreReturnTypes) {
                 const targetReturnType = getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) {
-                    return true;
+                    return result;
                 }
                 const sourceReturnType = getReturnTypeOfSignature(source);
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 if (targetReturnType.flags & TypeFlags.PredicateType && (targetReturnType as PredicateType).predicate.kind === TypePredicateKind.Identifier) {
                     if (!(sourceReturnType.flags & TypeFlags.PredicateType)) {
-                        return false;
+                        if (errorReporter) {
+                            errorReporter(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
+                        }
+                        return Ternary.False;
                     }
                 }
 
-                return isTypeAssignableTo(sourceReturnType, targetReturnType);
+                result &= compareTypes(sourceReturnType, targetReturnType, !!errorReporter);
             }
 
-            return true;
+            return result;
         }
 
         function isImplementationCompatibleWithOverload(implementation: Signature, overload: Signature): boolean {
