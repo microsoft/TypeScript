@@ -1,0 +1,15 @@
+tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping2.ts(9,1): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/expressions/contextualTyping/implementedPropertyContextualTyping2.ts (1 errors) ====
+    interface Long {
+        length: number;
+    }
+    
+    class Cat implements Long {
+        length = undefined;
+    }
+    const longCat = new Cat();
+    longCat.length = "wat";
+    ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.

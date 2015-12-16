@@ -5,18 +5,35 @@ interface Event {
 	time: number
 >time : number
 }
-interface Listener {
+interface Base {
+>Base : Base
+
+	superHandle: (e: Event) => number;
+>superHandle : (e: Event) => number
+>e : Event
+>Event : Event
+}
+interface Listener extends Base {
 >Listener : Listener
+>Base : Base
 
 	handle: (e: Event) => void;
 >handle : (e: Event) => void
 >e : Event
 >Event : Event
 }
+interface Ringer {
+>Ringer : Ringer
 
-class Foo implements Listener {
->Foo : Foo
+	ring: (times: number) => void;
+>ring : (times: number) => void
+>times : number
+}
+
+class Alarm implements Listener, Ringer {
+>Alarm : Alarm
 >Listener : Listener
+>Ringer : Ringer
 
 	handle = e => { 
 >handle : (e: Event) => void
@@ -29,5 +46,25 @@ class Foo implements Listener {
 >e : Event
 >time : number
 	}
-}
+	superHandle = e => {
+>superHandle : (e: Event) => number
+>e => {		return e.time;	} : (e: Event) => number
+>e : Event
 
+		return e.time;
+>e.time : number
+>e : Event
+>time : number
+	}
+	ring = times => {
+>ring : (times: number) => void
+>times => {		let m: number = times + 1;	} : (times: number) => void
+>times : number
+
+		let m: number = times + 1;
+>m : number
+>times + 1 : number
+>times : number
+>1 : number
+	}
+}
