@@ -1,5 +1,6 @@
 /// <reference path="..\..\..\src\harness\external\mocha.d.ts" />
 /// <reference path="..\..\..\src\harness\harness.ts" />
+/// <reference path="..\..\..\src\harness\virtualFileSystem.ts" />
 
 namespace ts {
     class MockParseConfigHost extends Utils.VirtualFileSystem implements ParseConfigHost {
@@ -89,7 +90,7 @@ namespace ts {
         "c:/dev/f.other"
     ]);
 
-    describe("expandFiles", () => {
+    describe("matchFiles", () => {
         describe("with literal file list", () => {
             it("without exclusions", () => {
                 const json = {

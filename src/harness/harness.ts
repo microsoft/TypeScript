@@ -23,7 +23,7 @@
 /// <reference path="external\chai.d.ts"/>
 /// <reference path="sourceMapRecorder.ts"/>
 /// <reference path="runnerbase.ts"/>
-/// <reference path="vfs.ts" />
+/// <reference path="virtualFileSystem.ts" />
 /* tslint:disable:no-null */
 
 // Block scoped definitions work poorly for global variables, temporarily enable var

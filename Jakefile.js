@@ -131,7 +131,7 @@ var languageServiceLibrarySources = [
 
 var harnessCoreSources = [
     "harness.ts",
-    "vfs.ts",
+    "virtualFileSystem.ts",
     "sourceMapRecorder.ts",
     "harnessLanguageService.ts",
     "fourslash.ts",
@@ -163,7 +163,7 @@ var harnessSources = harnessCoreSources.concat([
     "cachingInServerLSHost.ts",
     "moduleResolution.ts",
     "tsconfigParsing.ts",
-    "expandFiles.ts"
+    "matchFiles.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([

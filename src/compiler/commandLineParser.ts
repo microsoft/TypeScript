@@ -582,8 +582,60 @@ namespace ts {
         return { options, errors };
     }
 
+    /**
+     * Tests for a path that ends in a recursive directory wildcard.
+     * Matches **, /**, /**\/, and /**\/, but not a**b.
+     *
+     * NOTE: used \/ in place of / above to avoid ending the comment.
+     *
+     * Breakdown:
+     *  (^|\/)      # matches either the beginning of the string or a directory separator.
+     *  \*\*        # matches the recursive directory wildcard "**".
+     *  \/?$        # matches an optional trailing directory separator at the end of the string.
+     */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
+
+    /**
+     * Tests for a path with multiple recursive directory wildcards.
+     * Matches **\/** and **\/a/**, but not **\/a**b.
+     *
+     * NOTE: used \/ in place of / above to avoid ending the comment.
+     *
+     * Breakdown:
+     *  (^|\/)      # matches either the beginning of the string or a directory separator.
+     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
+     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
+     *  \*\*        # matches a recursive directory wildcard "**"
+     *  ($|\/)      # matches either the end of the string or a directory separator.
+     */
     const invalidMultipleRecursionPatterns = /(^|\/)\*\*\/(.*\/)?\*\*($|\/)/;
+
+    /**
+     * Tests for a path containing a wildcard character in a directory component of the path.
+     * Matches /*\/, /?/, and /a*b/, but not /a/ or /a/*.
+     *
+     * NOTE: used \/ in place of / above to avoid ending the comment.
+     *
+     * Breakdown:
+     *  \/          # matches a directory separator.
+     *  [^/]*?      # matches any number of characters excluding directory separators (non-greedy).
+     *  [*?]        # matches either a wildcard character (* or ?)
+     *  [^/]*       # matches any number of characters excluding directory separators (greedy).
+     *  \/          # matches a directory separator.
+     */
+    const watchRecursivePattern = /\/[^/]*?[*?][^/]*\//;
+
+    /**
+     * Matches the portion of a wildcard path that does not contain wildcards.
+     * Matches /a of /a/*, or /a/b/c of /a/b/c/?/d.
+     *
+     * Breakdown:
+     *  ^                   # matches the beginning of the string
+     *  [^*?]*              # matches any number of non-wildcard characters
+     *  (?=\/[^/]*[*?])     # lookahead that matches a directory separator followed by
+     *                      # a path component that contains at least one wildcard character (* or ?).
+     */
+    const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
 
     /**
      * Expands an array of file specifications.
@@ -692,9 +744,6 @@ namespace ts {
 
         return validSpecs;
     }
-
-    const watchRecursivePattern = /\/[^/]*?[*?][^/]*\//;
-    const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
 
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
