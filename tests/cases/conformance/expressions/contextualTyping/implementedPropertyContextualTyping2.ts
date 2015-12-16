@@ -1,9 +1,9 @@
 interface Long {
-	length: number;
+    length: number;
 }
 
 class Cat implements Long {
-	length = undefined;
+    length = undefined;
 }
 const longCat = new Cat();
 longCat.length = "wat";
