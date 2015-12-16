@@ -73,7 +73,7 @@ namespace ts {
          *  when enumerating the directory.
          */
         readDirectory(rootDir: string, extension: string, exclude?: string, include?: string): string;
-        useCaseSensitiveFileNames?: boolean;
+        useCaseSensitiveFileNames?(): boolean;
     }
 
     ///
@@ -411,15 +411,7 @@ namespace ts {
         public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
-            if (typeof shimHost.useCaseSensitiveFileNames === "boolean") {
-                this.useCaseSensitiveFileNames = shimHost.useCaseSensitiveFileNames;
-            }
-            else if (sys) {
-                this.useCaseSensitiveFileNames = sys.useCaseSensitiveFileNames;
-            }
-            else {
-                this.useCaseSensitiveFileNames = true;
-            }
+            this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
         }
 
         public readDirectory(rootDir: string, extensions: string[], exclude: string[], include: string[]): string[] {
@@ -435,7 +427,7 @@ namespace ts {
                     JSON.stringify(include)));
             }
             catch (e) {
-                let results: string[] = [];
+                const results: string[] = [];
                 for (const extension of extensions) {
                     for (const file of this.readDirectoryFallback(rootDir, extension, exclude))
                     {
