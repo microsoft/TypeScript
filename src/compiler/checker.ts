@@ -5735,77 +5735,10 @@ namespace ts {
             }
 
             /**
-             * See signatureAssignableTo, signatureAssignableTo
+             * See signatureAssignableTo, compareSignaturesIdentical
              */
             function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
-                // TODO (drosen): De-duplicate code between related functions.
-                if (source === target) {
-                    return Ternary.True;
-                }
-                if (!target.hasRestParameter && source.minArgumentCount > target.parameters.length) {
-                    return Ternary.False;
-                }
-                let sourceMax = source.parameters.length;
-                let targetMax = target.parameters.length;
-                let checkCount: number;
-                if (source.hasRestParameter && target.hasRestParameter) {
-                    checkCount = sourceMax > targetMax ? sourceMax : targetMax;
-                    sourceMax--;
-                    targetMax--;
-                }
-                else if (source.hasRestParameter) {
-                    sourceMax--;
-                    checkCount = targetMax;
-                }
-                else if (target.hasRestParameter) {
-                    targetMax--;
-                    checkCount = sourceMax;
-                }
-                else {
-                    checkCount = sourceMax < targetMax ? sourceMax : targetMax;
-                }
-                // Spec 1.0 Section 3.8.3 & 3.8.4:
-                // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
-                source = getErasedSignature(source);
-                target = getErasedSignature(target);
-                let result = Ternary.True;
-                for (let i = 0; i < checkCount; i++) {
-                    const s = i < sourceMax ? getTypeOfSymbol(source.parameters[i]) : getRestTypeOfSignature(source);
-                    const t = i < targetMax ? getTypeOfSymbol(target.parameters[i]) : getRestTypeOfSignature(target);
-                    const saveErrorInfo = errorInfo;
-                    let related = isRelatedTo(s, t, reportErrors);
-                    if (!related) {
-                        related = isRelatedTo(t, s, /*reportErrors*/ false);
-                        if (!related) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
-                                    source.parameters[i < sourceMax ? i : sourceMax].name,
-                                    target.parameters[i < targetMax ? i : targetMax].name);
-                            }
-                            return Ternary.False;
-                        }
-                        errorInfo = saveErrorInfo;
-                    }
-                    result &= related;
-                }
-
-                const targetReturnType = getReturnTypeOfSignature(target);
-                if (targetReturnType === voidType) {
-                    return result;
-                }
-                const sourceReturnType = getReturnTypeOfSignature(source);
-
-                // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
-                if (targetReturnType.flags & TypeFlags.PredicateType && (targetReturnType as PredicateType).predicate.kind === TypePredicateKind.Identifier) {
-                    if (!(sourceReturnType.flags & TypeFlags.PredicateType)) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
-                        }
-                        return Ternary.False;
-                    }
-                }
-
-                return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
+                return compareSignaturesRelated(source, target, /*ignoreReturnTypes*/ false, reportErrors && reportError, isRelatedTo);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
