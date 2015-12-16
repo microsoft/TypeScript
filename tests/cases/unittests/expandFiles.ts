@@ -92,189 +92,376 @@ namespace ts {
     describe("expandFiles", () => {
         describe("with literal file list", () => {
             it("without exclusions", () => {
-                const fileNames = ["a.ts", "b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/b.ts"],
+                const json = {
+                    files: [
+                        "a.ts",
+                        "b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(fileNames, /*includeSpecs*/ undefined, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("missing files are still present", () => {
-                const fileNames = ["z.ts", "x.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/z.ts", "c:/dev/x.ts"],
+                const json = {
+                    files: [
+                        "z.ts",
+                        "x.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/z.ts",
+                        "c:/dev/x.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(fileNames, /*includeSpecs*/ undefined, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("are not removed due to excludes", () => {
-                const fileNames = ["a.ts", "b.ts"];
-                const excludeSpecs = ["b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/b.ts"],
+                const json = {
+                    files: [
+                        "a.ts",
+                        "b.ts"
+                    ],
+                    exclude: [
+                        "b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(fileNames, /*includeSpecs*/ undefined, excludeSpecs, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
         });
 
         describe("with literal include list", () => {
             it("without exclusions", () => {
-                const includeSpecs = ["a.ts", "b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/b.ts"],
+                const json = {
+                    include: [
+                        "a.ts",
+                        "b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with non .ts file extensions are excluded", () => {
-                const includeSpecs = ["a.js", "b.js"];
-                const expected: ts.ExpandResult = {
+                const json = {
+                    include: [
+                        "a.js",
+                        "b.js"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
                     fileNames: [],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with missing files are excluded", () => {
-                const includeSpecs = ["z.ts", "x.ts"];
-                const expected: ts.ExpandResult = {
+                const json = {
+                    include: [
+                        "z.ts",
+                        "x.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
                     fileNames: [],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with literal excludes", () => {
-                const includeSpecs = ["a.ts", "b.ts"];
-                const excludeSpecs = ["b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts"],
+                const json = {
+                    include: [
+                        "a.ts",
+                        "b.ts"
+                    ],
+                    exclude: [
+                        "b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, excludeSpecs, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with wildcard excludes", () => {
-                const includeSpecs = ["a.ts", "b.ts", "z/a.ts", "z/abz.ts", "z/aba.ts", "x/b.ts"];
-                const excludeSpecs = ["*.ts", "z/??z.ts", "*/b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/z/a.ts", "c:/dev/z/aba.ts"],
+                const json = {
+                    include: [
+                        "a.ts",
+                        "b.ts",
+                        "z/a.ts",
+                        "z/abz.ts",
+                        "z/aba.ts",
+                        "x/b.ts"
+                    ],
+                    exclude: [
+                        "*.ts",
+                        "z/??z.ts",
+                        "*/b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/z/a.ts",
+                        "c:/dev/z/aba.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, excludeSpecs, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with recursive excludes", () => {
-                const includeSpecs = ["a.ts", "b.ts", "x/a.ts", "x/b.ts", "x/y/a.ts", "x/y/b.ts"];
-                const excludeSpecs = ["**/b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/x/a.ts", "c:/dev/x/y/a.ts"],
+                const json = {
+                    include: [
+                        "a.ts",
+                        "b.ts",
+                        "x/a.ts",
+                        "x/b.ts",
+                        "x/y/a.ts",
+                        "x/y/b.ts"
+                    ],
+                    exclude: [
+                        "**/b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/x/a.ts",
+                        "c:/dev/x/y/a.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, excludeSpecs, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with case sensitive exclude", () => {
-                const includeSpecs = ["B.ts"];
-                const excludeSpecs = ["**/b.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["/dev/B.ts"],
+                const json = {
+                    include: [
+                        "B.ts"
+                    ],
+                    exclude: [
+                        "**/b.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "/dev/B.ts"
+                    ],
                     wildcardDirectories: {},
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, excludeSpecs, caseSensitiveBasePath, {}, caseSensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseSensitiveHost, caseSensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
         });
 
         describe("with wildcard include list", () => {
             it("same named declarations are excluded", () => {
-                const includeSpecs = ["*.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/b.ts", "c:/dev/c.d.ts"],
+                const json = {
+                    include: [
+                        "*.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts",
+                        "c:/dev/c.d.ts"
+                    ],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.None
                     },
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("`*` matches only ts files", () => {
-                const includeSpecs = ["*"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/b.ts", "c:/dev/c.d.ts"],
+                const json = {
+                    include: [
+                        "*"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.ts",
+                        "c:/dev/c.d.ts"
+                    ],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.None
                     },
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("`?` matches only a single character", () => {
-                const includeSpecs = ["x/?.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/x/a.ts", "c:/dev/x/b.ts"],
+                const json = {
+                    include: [
+                        "x/?.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/x/a.ts",
+                        "c:/dev/x/b.ts"
+                    ],
                     wildcardDirectories: {
                         "c:/dev/x": ts.WatchDirectoryFlags.None
                     },
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with recursive directory", () => {
-                const includeSpecs = ["**/a.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts", "c:/dev/x/a.ts", "c:/dev/x/y/a.ts", "c:/dev/z/a.ts"],
+                const json = {
+                    include: [
+                        "**/a.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/x/a.ts",
+                        "c:/dev/x/y/a.ts",
+                        "c:/dev/z/a.ts"
+                    ],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     },
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("case sensitive", () => {
-                const includeSpecs = ["**/A.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["/dev/A.ts"],
+                const json = {
+                    include: [
+                        "**/A.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "/dev/A.ts"
+                    ],
                     wildcardDirectories: {
                         "/dev": ts.WatchDirectoryFlags.Recursive
                     },
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseSensitiveBasePath, {}, caseSensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseSensitiveHost, caseSensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("with missing files are excluded", () => {
-                const includeSpecs = ["*/z.ts"];
-                const expected: ts.ExpandResult = {
+                const json = {
+                    include: [
+                        "*/z.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
                     fileNames: [],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     },
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("always include literal files", () => {
-                const fileNames = ["a.ts"];
-                const includeSpecs = ["*/z.ts"];
-                const excludeSpecs = ["**/a.ts"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/a.ts"],
+                const json = {
+                    files: [
+                        "a.ts"
+                    ],
+                    include: [
+                        "*/z.ts"
+                    ],
+                    exclude: [
+                        "**/a.ts"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts"
+                    ],
                     wildcardDirectories: {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     },
                 };
-                const actual = ts.expandFiles(fileNames, includeSpecs, excludeSpecs, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("exclude folders", () => {
-                const includeSpecs = ["**/*"];
-                const excludeSpecs = ["z", "x"];
-                const expected: ts.ExpandResult = {
+                const json = {
+                    include: [
+                        "**/*"
+                    ],
+                    exclude: [
+                        "z",
+                        "x"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.ts",
@@ -284,34 +471,66 @@ namespace ts {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     }
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, excludeSpecs, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("exclude .js files when allowJs=false", () => {
-                const includeSpecs = ["js/*"];
-                const expected: ts.ExpandResult = {
+                const json = {
+                    compilerOptions: {
+                        allowJs: false
+                    },
+                    include: [
+                        "js/*"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        allowJs: false
+                    },
+                    errors: [],
                     fileNames: [],
                     wildcardDirectories: {
                         "c:/dev/js": ts.WatchDirectoryFlags.None
                     }
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("include .js files when allowJs=true", () => {
-                const includeSpecs = ["js/*"];
-                const expected: ts.ExpandResult = {
-                    fileNames: ["c:/dev/js/a.js", "c:/dev/js/b.js"],
+                const json = {
+                    compilerOptions: {
+                        allowJs: true
+                    },
+                    include: [
+                        "js/*"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        allowJs: true
+                    },
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/js/a.js",
+                        "c:/dev/js/b.js"
+                    ],
                     wildcardDirectories: {
                         "c:/dev/js": ts.WatchDirectoryFlags.None
                     }
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, { allowJs: true }, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
             it("include paths outside of the project", () => {
-                const includeSpecs = ["*", "c:/ext/*"];
-                const expected: ts.ExpandResult = {
+                const json = {
+                    include: [
+                        "*",
+                        "c:/ext/*"
+                    ]
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {},
+                    errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.ts",
@@ -323,20 +542,20 @@ namespace ts {
                         "c:/ext": ts.WatchDirectoryFlags.None
                     }
                 };
-                const actual = ts.expandFiles(/*fileNames*/ undefined, includeSpecs, /*excludeSpecs*/ undefined, caseInsensitiveBasePath, {}, caseInsensitiveHost);
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
                 assert.deepEqual(actual, expected);
             });
-        });
-
-        describe("when called from parseJsonConfigFileContent", () => {
             it("with jsx=none, allowJs=false", () => {
-                const json: any = {
-                    "compilerOptions": {
-                        "jsx": "none",
-                        "allowJs": false
+                const json = {
+                    compilerOptions: {
+                        allowJs: false
                     }
                 };
-                const expected: ts.ExpandResult = {
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        allowJs: false
+                    },
+                    errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.tsx",
@@ -347,17 +566,21 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual, expected);
             });
             it("with jsx=preserve, allowJs=false", () => {
-                const json: any = {
-                    "compilerOptions": {
-                        "jsx": "preserve",
-                        "allowJs": false
+                const json = {
+                    compilerOptions: {
+                        jsx: "preserve",
+                        allowJs: false
                     }
                 };
-                const expected: ts.ExpandResult = {
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        jsx: ts.JsxEmit.Preserve,
+                        allowJs: false
+                    },
+                    errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.tsx",
@@ -368,17 +591,19 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual, expected);
             });
             it("with jsx=none, allowJs=true", () => {
-                const json: any = {
-                    "compilerOptions": {
-                        "jsx": "none",
-                        "allowJs": true
+                const json = {
+                    compilerOptions: {
+                        allowJs: true
                     }
                 };
-                const expected: ts.ExpandResult = {
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        allowJs: true
+                    },
+                    errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.tsx",
@@ -391,17 +616,21 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual, expected);
             });
             it("with jsx=preserve, allowJs=true", () => {
-                const json: any = {
-                    "compilerOptions": {
-                        "jsx": "preserve",
-                        "allowJs": true
+                const json = {
+                    compilerOptions: {
+                        jsx: "preserve",
+                        allowJs: true
                     }
                 };
-                const expected: ts.ExpandResult = {
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        jsx: ts.JsxEmit.Preserve,
+                        allowJs: true
+                    },
+                    errors: [],
                     fileNames: [
                         "c:/dev/a.ts",
                         "c:/dev/b.tsx",
@@ -414,8 +643,90 @@ namespace ts {
                     }
                 };
                 const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assert.deepEqual(actual.fileNames, expected.fileNames);
-                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual, expected);
+            });
+            describe("with trailing recursive directory", () => {
+                it("in includes", () => {
+                    const json = {
+                        include: [
+                            "**"
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**")
+                        ],
+                        fileNames: [],
+                        wildcardDirectories: {}
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual, expected);
+                });
+                it("in excludes", () => {
+                    const json = {
+                        include: [
+                            "**/*"
+                        ],
+                        exclude: [
+                            "**"
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [],
+                        fileNames: [],
+                        wildcardDirectories: {}
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual, expected);
+                });
+            });
+            describe("with multiple recursive directory patterns", () => {
+                it("in includes", () => {
+                    const json = {
+                        include: [
+                            "**/x/**/*"
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**/*")
+                        ],
+                        fileNames: [],
+                        wildcardDirectories: {}
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual, expected);
+                });
+                it("in excludes", () => {
+                    const json = {
+                        include: [
+                            "**/a.ts"
+                        ],
+                        exclude: [
+                            "**/x/**"
+                        ]
+                    };
+                    const expected: ts.ParsedCommandLine = {
+                        options: {},
+                        errors: [
+                            ts.createCompilerDiagnostic(ts.Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, "**/x/**")
+                        ],
+                        fileNames: [
+                            "c:/dev/a.ts",
+                            "c:/dev/x/a.ts",
+                            "c:/dev/x/y/a.ts",
+                            "c:/dev/z/a.ts"
+                        ],
+                        wildcardDirectories: {
+                            "c:/dev": ts.WatchDirectoryFlags.Recursive
+                        }
+                    };
+                    const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
+                    assert.deepEqual(actual, expected);
+                });
             });
         });
     });

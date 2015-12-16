@@ -531,7 +531,7 @@ namespace ts {
                 includeSpecs = ["**/*"];
             }
 
-            return expandFiles(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
+            return matchFileNames(fileNames, includeSpecs, excludeSpecs, basePath, options, host, errors);
         }
     }
 
@@ -589,14 +589,14 @@ namespace ts {
      * Expands an array of file specifications.
      *
      * @param fileNames The literal file names to include.
-     * @param includeSpecs The file specifications to expand.
-     * @param excludeSpecs The file specifications to exclude.
+     * @param include The wildcard file specifications to include.
+     * @param exclude The wildcard file specifications to exclude.
      * @param basePath The base path for any relative file specifications.
      * @param options Compiler options.
      * @param host The host used to resolve files and directories.
      * @param errors An array for diagnostic reporting.
      */
-    export function expandFiles(fileNames: string[], includeSpecs: string[], excludeSpecs: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors?: Diagnostic[]): ExpandResult {
+    function matchFileNames(fileNames: string[], include: string[], exclude: string[], basePath: string, options: CompilerOptions, host: ParseConfigHost, errors: Diagnostic[]): ExpandResult {
         basePath = normalizePath(basePath);
         basePath = removeTrailingDirectorySeparator(basePath);
 
@@ -615,11 +615,19 @@ namespace ts {
         // via wildcard, and to handle extension priority.
         const wildcardFileMap: Map<string> = {};
 
+        if (include) {
+            include = validateSpecs(include, errors, /*allowTrailingRecursion*/ false);
+        }
+
+        if (exclude) {
+            exclude = validateSpecs(exclude, errors, /*allowTrailingRecursion*/ true);
+        }
+
         // Wildcard directories (provided as part of a wildcard path) are stored in a
         // file map that marks whether it was a regular wildcard match (with a `*` or `?` token),
         // or a recursive directory. This information is used by filesystem watchers to monitor for
         // new entries in these paths.
-        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(includeSpecs, basePath, host.useCaseSensitiveFileNames);
+        const wildcardDirectories: Map<WatchDirectoryFlags> = getWildcardDirectories(include, exclude, basePath, host.useCaseSensitiveFileNames);
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -634,13 +642,8 @@ namespace ts {
             }
         }
 
-        if (includeSpecs) {
-            includeSpecs = validateSpecs(includeSpecs, errors, /*allowTrailingRecursion*/ false);
-            if (excludeSpecs) {
-                excludeSpecs = validateSpecs(excludeSpecs, errors, /*allowTrailingRecursion*/ true);
-            }
-
-            for (const file of host.readDirectory(basePath, supportedExtensions, excludeSpecs, includeSpecs)) {
+        if (include && include.length > 0) {
+            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include)) {
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
@@ -677,10 +680,10 @@ namespace ts {
         const validSpecs: string[] = [];
         for (const spec of specs) {
             if (!allowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
-                errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, spec));
+                errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
             }
             else if (invalidMultipleRecursionPatterns.test(spec)) {
-                errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec));
+                errors.push(createCompilerDiagnostic(Diagnostics.File_specification_cannot_contain_multiple_recursive_directory_wildcards_Asterisk_Asterisk_Colon_0, spec));
             }
             else {
                 validSpecs.push(spec);
@@ -696,7 +699,7 @@ namespace ts {
     /**
      * Gets directories in a set of include patterns that should be watched for changes.
      */
-    function getWildcardDirectories(includes: string[], path: string, useCaseSensitiveFileNames: boolean) {
+    function getWildcardDirectories(include: string[], exclude: string[], path: string, useCaseSensitiveFileNames: boolean) {
         // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
         // of the pattern:
         //
@@ -708,11 +711,16 @@ namespace ts {
         //
         //  /a/b/*      - Watch /a/b directly to catch any new file
         //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
+        const excludeRegExp = getRegularExpressionForWildcard(exclude, path, "exclude", useCaseSensitiveFileNames);
         const wildcardDirectories: Map<WatchDirectoryFlags> = {};
-        if (includes !== undefined) {
+        if (include !== undefined) {
             const recursiveKeys: string[] = [];
-            for (const include of includes) {
-                const name = combinePaths(path, include);
+            for (const file of include) {
+                const name = combinePaths(path, file);
+                if (excludeRegExp && excludeRegExp.test(name)) {
+                    continue;
+                }
+
                 const match = wildcardDirectoryPattern.exec(name);
                 if (match) {
                     const key = useCaseSensitiveFileNames ? match[0] : match[0].toLowerCase();
