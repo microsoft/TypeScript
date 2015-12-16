@@ -2593,6 +2593,13 @@ namespace ts {
                 }
             }
 
+            if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                const type = getTypeOfBasePropertyDeclaration(declaration);
+                if (type) {
+                    return type;
+                }
+            }
+
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 return checkExpressionCached(declaration.initializer);
@@ -2893,6 +2900,34 @@ namespace ts {
                 return getTypeOfAlias(symbol);
             }
             return unknownType;
+        }
+
+        function getTypeOfBasePropertyDeclaration(declaration: VariableLikeDeclaration) {
+            if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
+                const property = getPropertyFromBaseInterfaces(<ClassLikeDeclaration>declaration.parent, declaration.symbol.name);
+                if (property) {
+                    return getTypeOfSymbol(property);
+                }
+            }
+        }
+
+        function getPropertyFromBaseInterfaces(declaration: ClassLikeDeclaration, propertyName: string): Symbol {
+            const implementedTypeNodes = getClassImplementsHeritageClauseElements(declaration);
+            if (implementedTypeNodes) {
+                for (const typeRefNode of implementedTypeNodes) {
+                    const t = getTypeFromTypeReference(typeRefNode);
+                    if (t !== unknownType) {
+                        for (const property of getPropertiesOfType(t)) {
+                            if (property.valueDeclaration.flags & NodeFlags.Private) {
+                                continue;
+                            }
+                            if (property.name === propertyName) {
+                                return property;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         function getTargetType(type: ObjectType): Type {
@@ -7210,6 +7245,12 @@ namespace ts {
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                    if (type) {
+                        return type;
+                    }
+                }
+                if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                    const type = getTypeOfBasePropertyDeclaration(declaration);
                     if (type) {
                         return type;
                     }
