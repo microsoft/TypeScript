@@ -5533,8 +5533,6 @@ namespace ts {
                 let result = Ternary.True;
                 const saveErrorInfo = errorInfo;
 
-
-
                 if (kind === SignatureKind.Construct) {
                     // Only want to compare the construct signatures for abstractness guarantees.
 
@@ -8209,7 +8207,6 @@ namespace ts {
                         checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
                     }
 
-
                     if (isTypeAny(elemInstanceType)) {
                         return links.resolvedJsxType = elemInstanceType;
                     }
@@ -9029,7 +9026,6 @@ namespace ts {
 
             return args;
         }
-
 
         /**
           * Returns the effective argument count for a node that works like a function invocation.
@@ -15037,7 +15033,6 @@ namespace ts {
 
             return unknownType;
         }
-
 
         function getTypeOfExpression(expr: Expression): Type {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {

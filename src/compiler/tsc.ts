@@ -108,7 +108,6 @@ namespace ts {
         sys.write(output);
     }
 
-
     const redForegroundEscapeSequence = "\u001b[91m";
     const yellowForegroundEscapeSequence = "\u001b[93m";
     const blueForegroundEscapeSequence = "\u001b[93m";

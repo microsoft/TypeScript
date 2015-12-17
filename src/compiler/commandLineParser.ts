@@ -289,6 +289,10 @@ namespace ts {
             name: "allowJs",
             type: "boolean",
             description: Diagnostics.Allow_javascript_files_to_be_compiled
+        },
+        {
+            name: "listEmit",
+            type: "boolean"
         }
     ];
 
@@ -450,7 +454,6 @@ namespace ts {
         }
     }
 
-
     /**
      * Remove the comments from a json like text.
      * Comments can be single line comments (starting with # or //) or multiline comments using / * * /
@@ -475,7 +478,6 @@ namespace ts {
         }
         return output;
     }
-
 
     /**
       * Parse the contents of a config file (tsconfig.json).

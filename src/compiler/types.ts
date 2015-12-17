@@ -451,7 +451,6 @@ namespace ts {
         IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
     }
 
-
     /* @internal */
     export const enum RelationComparisonResult {
         Succeeded = 1, // Should be truthy
@@ -2419,6 +2418,7 @@ namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
+        listEmit?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

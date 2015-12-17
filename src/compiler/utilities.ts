@@ -684,7 +684,6 @@ namespace ts {
         return false;
     }
 
-
     export function isFunctionBlock(node: Node) {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
@@ -1755,7 +1754,6 @@ namespace ts {
         "\u2029": "\\u2029", // paragraphSeparator
         "\u0085": "\\u0085"  // nextLine
     };
-
 
     /**
      * Based heavily on the abstract 'Quote'/'QuoteJSONString' operation from ECMA-262 (24.3.2.2),

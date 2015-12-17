@@ -3799,7 +3799,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     emitBindingElement(<BindingElement>root, value);
                 }
 
-
                 /**
                  * Ensures that there exists a declared identifier whose value holds the given expression.
                  * This function is useful to ensure that the expression's value can be read from in subsequent expressions.
@@ -5737,7 +5736,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("void 0");
             }
 
-
             function emitSerializedTypeMetadata(node: Declaration, writeComma: boolean): number {
                 // This method emits the serialized type metadata for a decorator target.
                 // The caller should have already tested whether the node has decorators.
@@ -6174,7 +6172,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write("var ");
                         }
                     }
-
 
                     if (isExported) {
                         write(`${exportFunctionForFile}("`);
