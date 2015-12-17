@@ -13,6 +13,7 @@ namespace ts.server {
         fileExists: () => false,
         directoryExists: () => false,
         createDirectory(): void {},
+        getTempDir(): string { return void 0; },
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         readDirectory(): string[] { return []; },

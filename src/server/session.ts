@@ -56,7 +56,7 @@ namespace ts.server {
         if (a.file < b.file) {
             return -1;
         }
-        else if (a.file == b.file) {
+        else if (a.file === b.file) {
             const n = compareNumber(a.start.line, b.start.line);
             if (n === 0) {
                 return compareNumber(a.start.offset, b.start.offset);
@@ -120,12 +120,133 @@ namespace ts.server {
         export const Unknown = "unknown";
     }
 
+    namespace Metrics {
+        let eventCounts: Map<number> = {};
+        let properties: Map<string> = {};
+        let dtsCount = 0;
+
+        const sendInterval = 1000 * 60 * 5; // 5 minutes
+        let nextSendTimeMs = Date.now() + sendInterval;
+
+        const settingNames = [
+            "allowNonTsExtensions",
+            "declaration",
+            "emitBOM",
+            "emitDecoratorMetadata",
+            "experimentalAsyncFunctions",
+            "jsx",
+            "isolatedModules",
+            "module",
+            "moduleResolution",
+            "noEmit",
+            "noEmitOnError",
+            "noImplicitAny",
+            "noLib",
+            "noResolve",
+            "out",
+            "outFile",
+            "preserveConstEnums",
+            "removeComments",
+            "suppressImplicitAnyIndexErrors",
+            "target"
+        ];
+
+        // Keeps a count of total invocations of various language service operations (rename, gotodef, etc)
+        export function countEvent(eventName: string, projectSvc: ProjectService, host: ts.System) {
+            const opts = projectSvc.getFormatCodeOptions();
+            if (opts.SendMetrics) {
+                eventCounts[eventName] = (eventCounts[eventName] || 0) + 1;
+
+                if (Date.now() > nextSendTimeMs) {
+                    registerSettings(projectSvc);
+                    send(host, opts.TelemetryUserID);
+                }
+            }
+        }
+
+        // Keeps track of any .d.ts files used which correspond to known versions from DefinitelyTyped
+        export function countDts(file: string) {
+            for (const p in properties) {
+                if (properties[p] === file) {
+                    return;
+                }
+            }
+            dtsCount++;
+            properties["dtf" + dtsCount] = file;
+        }
+
+        function registerSettings(svc: ProjectService) {
+            properties["host"] = svc.hostConfiguration.hostInfo;
+            properties["inferredProjects"] = svc.inferredProjects.length.toString();
+            properties["configuredProjects"] = svc.configuredProjects.length.toString();
+
+            let someProject: Project = undefined;
+            if (svc.configuredProjects.length > 0) {
+                someProject = svc.configuredProjects[0];
+            }
+            else if (svc.inferredProjects.length > 0) {
+                someProject = svc.inferredProjects[0];
+            }
+
+            const src = someProject && someProject.projectOptions && someProject.projectOptions.compilerOptions;
+            if (src) {
+                for (let i = 0, n = settingNames.length; i < n; i++) {
+                    const setting = settingNames[i];
+                    let value: any = src[settingNames[i]];
+                    // actual value of out or outFile is PII, don't record it, just record the flag was used
+                    if ((setting === "out" || setting === "outFile") && value !== undefined && value !== "") {
+                        value = 1;
+                    }
+                    properties["project." + settingNames[i]] = value;
+                }
+            }
+        }
+
+        function send(host: ts.System, userID: string) {
+            const data = [{
+                iKey: "78e2d1f3-b56d-47d8-9b9a-fa4c056a0f21",
+                name: "Microsoft.ApplicationInsights.Event",
+                time: new Date().toUTCString(),
+                data: {
+                    baseType: "EventData",
+                    baseData: {
+                        ver: 2,
+                        name: "TypeScriptLanguageServiceEvent",
+                        measurements: eventCounts,
+                        properties: properties
+                    }
+                },
+                tags: {
+                    "ai.user.id": userID
+                }
+            }];
+            const payload = JSON.stringify(data);
+
+            host.httpsPost("https://dc.services.visualstudio.com/v2/track", payload, "application/json");
+
+            eventCounts = {};
+            properties = {};
+            dtsCount = 0;
+            nextSendTimeMs = Date.now() + sendInterval;
+        }
+    }
+
     namespace Errors {
         export const NoProject = new Error("No Project.");
     }
 
     export interface ServerHost extends ts.System {
     }
+
+    interface DtsHistoryRecord {
+        /// Filename
+        n: string;
+        /// Path (the parent folder of this file)
+        p: string;
+        /// History (list of dtsHash values; newest in index 0)
+        h: string[];
+    }
+    type DtsHistory = DtsHistoryRecord[];
 
     export class Session {
         protected projectService: ProjectService;
@@ -135,6 +256,7 @@ namespace ts.server {
         private errorTimer: any; /*NodeJS.Timer | number*/
         private immediateId: any;
         private changeSeq = 0;
+        private dtsVersionHistory: DtsHistory = undefined;
 
         constructor(
             private host: ServerHost,
@@ -149,7 +271,7 @@ namespace ts.server {
         }
 
         private handleEvent(eventName: string, project: Project, fileName: string) {
-            if (eventName == "context") {
+            if (eventName === "context") {
                 this.projectService.log("got context event, updating diagnostics for" + fileName, "Info");
                 this.updateErrorCheck([{ fileName, project }], this.changeSeq,
                     (n) => n === this.changeSeq, 100);
@@ -239,9 +361,98 @@ namespace ts.server {
             }
         }
 
+        static matchFileName(file: string, index: DtsHistory): { fileName: string; path: string; commitsBehind: number; } {
+            // See if a file with this name is in the index
+            const lastSlash = Math.max(file.lastIndexOf("/"), file.lastIndexOf("\\"), -1);
+            const filenameOnly = file.substr(lastSlash + 1);
+            for (let i = 0; i < index.length; i++) {
+                if (index[i].n === filenameOnly) {
+                    // Just check for a filename match, ignore commit history
+                    return { fileName: filenameOnly, path: index[i].p, commitsBehind: -1 };
+                }
+            }
+            return undefined;
+        }
+
+        private fetchingDts = false;
+        upToDateCheck(file: string, project: Project) {
+            if (this.projectService.getFormatCodeOptions(ts.normalizePath(file)).CheckForDtsUpdates === false) return;
+
+            const doUpToDateCheck = () => {
+                try {
+                    const info = Session.matchFileName(file, this.dtsVersionHistory);
+                    if (info) {
+                        Metrics.countDts(info.fileName);
+
+                        // We could consider reporting errors here if the DTS is out of date
+                        /*if(info.commitsBehind > 0) {
+                            // Not up to date
+                            this.event({
+                                file: file, diagnostics: [{
+                                    start: { line: 1, offset: 0 },
+                                    end: { line: 2, offset: 0 },
+                                    text: "File " + file + " is " + info.commitsBehind + " commits out-of-date"
+                                }]
+                            }, "semanticDiag");
+                        }*/
+                    }
+                }
+                catch (err) {
+                    this.logError(err, "up-to-date check");
+                }
+            };
+
+            try {
+                if (this.host.https && /\.d\.ts$/i.test(file)) { // Is this a .d.ts file?
+                    // only download once per session and if we're not in the process of downloading already
+                    if (this.dtsVersionHistory === undefined && !this.fetchingDts) {
+                        const filename = this.host.getTempDir() + "/dts-versions.json";
+                        let indexUrl = "https://typescript-dts-service.azurewebsites.net/api/index/";
+                        let fileWriteTime: number = undefined;
+                        if (this.host.fileExists(filename)) {
+                            if (this.host.getFileWriteTime) {
+                                // Use file timestamp to avoid re-downloading entire index our copy is up-to-date
+                                fileWriteTime = this.host.getFileWriteTime(filename);
+                                indexUrl = indexUrl + fileWriteTime;
+                            }
+
+                            // Read index from disk
+                            this.dtsVersionHistory = JSON.parse(this.host.readFile(filename, "utf-8"));
+                            doUpToDateCheck();
+                        }
+
+                        // Fetch from web
+                        this.fetchingDts = true;
+
+                        this.host.https(indexUrl, (err, data) => {
+                            this.fetchingDts = false;
+                            if (err) {
+                                // Define this so we don't retry continuously
+                                this.dtsVersionHistory = [];
+                            }
+                            else {
+                                if (data && data !== "null") { // server returns null string if we already have the latest index
+                                    this.host.writeFile(filename, data);
+                                    this.dtsVersionHistory = JSON.parse(data);
+                                    doUpToDateCheck();
+                                }
+                            }
+                        });
+                    }
+                    else if (this.dtsVersionHistory) {
+                        doUpToDateCheck();
+                    }
+                }
+            }
+            catch (err) {
+                this.logError(err, "up-to-date check");
+            }
+        }
+
         private errorCheck(file: string, project: Project) {
             this.syntacticCheck(file, project);
             this.semanticCheck(file, project);
+            this.upToDateCheck(file, project);
         }
 
         private reloadProjects() {
@@ -276,6 +487,7 @@ namespace ts.server {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
+                            this.upToDateCheck(checkSpec.fileName, checkSpec.project);
                             this.immediateId = undefined;
                             if (checkList.length > index) {
                                 this.errorTimer = setTimeout(checkOne, followMs);
@@ -470,7 +682,7 @@ namespace ts.server {
                 let curFileAccum: protocol.SpanGroup;
                 if (accum.length > 0) {
                     curFileAccum = accum[accum.length - 1];
-                    if (curFileAccum.file != cur.file) {
+                    if (curFileAccum.file !== cur.file) {
                         curFileAccum = undefined;
                     }
                 }
@@ -613,7 +825,7 @@ namespace ts.server {
             // getFormattingEditsAfterKeytroke either empty or pertaining
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
-            if ((key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
+            if ((key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
                 const scriptInfo = compilerService.host.getScriptInfo(file);
                 if (scriptInfo) {
                     const lineInfo = scriptInfo.getLineInfo(line);
@@ -627,15 +839,18 @@ namespace ts.server {
                                 NewLineCharacter: "\n",
                                 ConvertTabsToSpaces: formatOptions.ConvertTabsToSpaces,
                                 IndentStyle: ts.IndentStyle.Smart,
+                                SendMetrics: formatOptions.SendMetrics,
+                                TelemetryUserID: formatOptions.TelemetryUserID,
+                                CheckForDtsUpdates: formatOptions.CheckForDtsUpdates
                             };
                             const preferredIndent = compilerService.languageService.getIndentationAtPosition(file, position, editorOptions);
                             let hasIndent = 0;
                             let i: number, len: number;
                             for (i = 0, len = lineText.length; i < len; i++) {
-                                if (lineText.charAt(i) == " ") {
+                                if (lineText.charAt(i) === " ") {
                                     hasIndent++;
                                 }
-                                else if (lineText.charAt(i) == "\t") {
+                                else if (lineText.charAt(i) === "\t") {
                                     hasIndent += editorOptions.TabSize;
                                 }
                                 else {
@@ -726,6 +941,7 @@ namespace ts.server {
             const compilerService = project.compilerService;
             const position = compilerService.host.lineOffsetToPosition(file, line, offset);
             const helpItems = compilerService.languageService.getSignatureHelpItems(file, position);
+
             if (!helpItems) {
                 return undefined;
             }
@@ -862,7 +1078,7 @@ namespace ts.server {
                     start: start,
                     end: end,
                 };
-                if (navItem.kindModifiers && (navItem.kindModifiers != "")) {
+                if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                     bakedItem.kindModifiers = navItem.kindModifiers;
                 }
                 if (navItem.matchKind !== "none") {
@@ -913,7 +1129,7 @@ namespace ts.server {
             const normalizedFileName = ts.normalizePath(fileName);
             const project = this.projectService.getProjectForFile(normalizedFileName);
             for (const fileNameInProject of fileNamesInProject) {
-                if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
+                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName))
                     highPriorityFiles.push(fileNameInProject);
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
@@ -937,7 +1153,7 @@ namespace ts.server {
                 });
                 // Project level error analysis runs on background files too, therefore
                 // doesn't require the file to be opened
-                this.updateErrorCheck(checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
+                this.updateErrorCheck(checkList, this.changeSeq, (n) => n === this.changeSeq, delay, 200, /*requireOpen*/ false);
             }
         }
 
@@ -1122,3 +1338,4 @@ namespace ts.server {
         }
     }
 }
+

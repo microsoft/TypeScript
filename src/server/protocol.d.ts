@@ -422,7 +422,6 @@ declare namespace ts.server.protocol {
      * Editor options
      */
     export interface EditorOptions {
-
         /** Number of spaces for each tab. Default value is 4. */
         tabSize?: number;
 
@@ -434,6 +433,12 @@ declare namespace ts.server.protocol {
 
         /** Whether tabs should be converted to spaces. Default value is true. */
         convertTabsToSpaces?: boolean;
+
+        /** Whether we send anonymous usage metrics. */
+        sendMetrics?: boolean;
+
+        /** Whether to automatically check for .d.ts updates. */
+        checkForDtsUpdates?: boolean;
     }
 
     /**
@@ -624,6 +629,13 @@ declare namespace ts.server.protocol {
       */
     export interface FormatRequest extends FileLocationRequest {
         arguments: FormatRequestArgs;
+    }
+
+    /**
+      * Update .d.ts request; value of command field is "updatedts".
+      * Return response is asynchronous and indicates success/failure
+    */
+    export interface UpdateDtsArgs extends FileLocationRequestArgs {
     }
 
     /**

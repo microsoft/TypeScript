@@ -36,6 +36,9 @@ module ts {
             getCurrentDirectory: (): string => {
                 return "";
             },
+            getTempDir: (): string => {
+                throw new Error("NYI");
+            },
             readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
                 throw new Error("NYI");
             },

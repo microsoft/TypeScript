@@ -1202,6 +1202,10 @@ namespace ts {
         NewLineCharacter: string;
         ConvertTabsToSpaces: boolean;
         IndentStyle: IndentStyle;
+        SendMetrics?: boolean;
+        TelemetryUserID?: string;
+        CheckForDtsUpdates?: boolean;
+
     }
 
     export enum IndentStyle {

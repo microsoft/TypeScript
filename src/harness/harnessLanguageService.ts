@@ -568,6 +568,10 @@ namespace Harness.LanguageService {
             return this.host.getCurrentDirectory();
         }
 
+        getTempDir(): string {
+            throw new Error("Not Implemented Yet");
+        }
+
         readDirectory(path: string, extension?: string): string[] {
             throw new Error("Not implemented Yet.");
         }

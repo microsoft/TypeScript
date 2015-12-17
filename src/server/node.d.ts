@@ -680,3 +680,243 @@ declare namespace NodeJS {
         }
     }
 }
+
+declare namespace NodeJS {
+    namespace net {
+        import stream = NodeJS.stream;
+
+        export interface Socket extends stream.Duplex {
+            // Extended base methods
+            write(buffer: Buffer): boolean;
+            write(buffer: Buffer, cb?: Function): boolean;
+            write(str: string, cb?: Function): boolean;
+            write(str: string, encoding?: string, cb?: Function): boolean;
+            write(str: string, encoding?: string, fd?: string): boolean;
+
+            connect(port: number, host?: string, connectionListener?: Function): void;
+            connect(path: string, connectionListener?: Function): void;
+            bufferSize: number;
+            setEncoding(encoding?: string): void;
+            write(data: any, encoding?: string, callback?: Function): void;
+            destroy(): void;
+            pause(): void;
+            resume(): void;
+            setTimeout(timeout: number, callback?: Function): void;
+            setNoDelay(noDelay?: boolean): void;
+            setKeepAlive(enable?: boolean, initialDelay?: number): void;
+            address(): { port: number; family: string; address: string; };
+            unref(): void;
+            ref(): void;
+
+            remoteAddress: string;
+            remotePort: number;
+            bytesRead: number;
+            bytesWritten: number;
+
+            // Extended base methods
+            end(): void;
+            end(buffer: Buffer, cb?: Function): void;
+            end(str: string, cb?: Function): void;
+            end(str: string, encoding?: string, cb?: Function): void;
+            end(data?: any, encoding?: string): void;
+        }
+
+        export var Socket: {
+            new (options?: { fd?: string; type?: string; allowHalfOpen?: boolean; }): Socket;
+        };
+
+        export interface Server extends Socket {
+            listen(port: number, host?: string, backlog?: number, listeningListener?: Function): Server;
+            listen(path: string, listeningListener?: Function): Server;
+            listen(handle: any, listeningListener?: Function): Server;
+            close(callback?: Function): Server;
+            address(): { port: number; family: string; address: string; };
+            maxConnections: number;
+            connections: number;
+        }
+        export function createServer(connectionListener?: (socket: Socket) => void): Server;
+        export function createServer(options?: { allowHalfOpen?: boolean; }, connectionListener?: (socket: Socket) => void): Server;
+        export function connect(options: { allowHalfOpen?: boolean; }, connectionListener?: Function): Socket;
+        export function connect(port: number, host?: string, connectionListener?: Function): Socket;
+        export function connect(path: string, connectionListener?: Function): Socket;
+        export function createConnection(options: { allowHalfOpen?: boolean; }, connectionListener?: Function): Socket;
+        export function createConnection(port: number, host?: string, connectionListener?: Function): Socket;
+        export function createConnection(path: string, connectionListener?: Function): Socket;
+        export function isIP(input: string): number;
+        export function isIPv4(input: string): boolean;
+        export function isIPv6(input: string): boolean;
+    }
+}
+
+declare namespace NodeJS {
+    namespace http {
+        import events = NodeJS.events;
+        import net = NodeJS.net;
+        import stream = NodeJS.stream;
+
+        export interface Server extends events.EventEmitter {
+            listen(port: number, hostname?: string, backlog?: number, callback?: Function): Server;
+            listen(path: string, callback?: Function): Server;
+            listen(handle: any, listeningListener?: Function): Server;
+            close(cb?: any): Server;
+            address(): { port: number; family: string; address: string; };
+            maxHeadersCount: number;
+        }
+        export interface ServerRequest extends events.EventEmitter, stream.Readable {
+            method: string;
+            url: string;
+            headers: any;
+            trailers: string;
+            httpVersion: string;
+            setEncoding(encoding?: string): void;
+            pause(): void;
+            resume(): void;
+            connection: net.Socket;
+        }
+        export interface ServerResponse extends events.EventEmitter, stream.Writable {
+            // Extended base methods
+            write(buffer: Buffer): boolean;
+            write(buffer: Buffer, cb?: Function): boolean;
+            write(str: string, cb?: Function): boolean;
+            write(str: string, encoding?: string, cb?: Function): boolean;
+            write(str: string, encoding?: string, fd?: string): boolean;
+
+            writeContinue(): void;
+            writeHead(statusCode: number, reasonPhrase?: string, headers?: any): void;
+            writeHead(statusCode: number, headers?: any): void;
+            statusCode: number;
+            setHeader(name: string, value: string): void;
+            sendDate: boolean;
+            getHeader(name: string): string;
+            removeHeader(name: string): void;
+            write(chunk: any, encoding?: string): any;
+            addTrailers(headers: any): void;
+
+            // Extended base methods
+            end(): void;
+            end(buffer: Buffer, cb?: Function): void;
+            end(str: string, cb?: Function): void;
+            end(str: string, encoding?: string, cb?: Function): void;
+            end(data?: any, encoding?: string): void;
+        }
+
+        /**
+         * Object returned by http.request()
+         */
+        export interface ClientRequest extends events.EventEmitter, NodeJS.WritableStream {
+            abort(): void;
+            setTimeout(timeout: number, callback?: Function): void;
+            setNoDelay(noDelay?: boolean): void;
+            setSocketKeepAlive(enable?: boolean, initialDelay?: number): void;
+        }
+
+        /**
+         * The client version of http.IncomingMessage
+         */
+        export interface ClientResponse extends events.EventEmitter, NodeJS.ReadableStream {
+            statusCode: number;
+            httpVersion: string;
+            headers: any;
+            trailers: any;
+            socket: net.Socket;
+            setEncoding(encoding?: string): void;
+            pause(): void;
+            resume(): void;
+        }
+
+        export interface AgentOptions {
+            /**
+             * Keep sockets around in a pool to be used by other requests in the future. Default = false
+             */
+            keepAlive?: boolean;
+            /**
+             * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+             * Only relevant if keepAlive is set to true.
+             */
+            keepAliveMsecs?: number;
+            /**
+             * Maximum number of sockets to allow per host. Default for Node 0.10 is 5, default for Node 0.12 is Infinity
+             */
+            maxSockets?: number;
+            /**
+             * Maximum number of sockets to leave open in a free state. Only relevant if keepAlive is set to true. Default = 256.
+             */
+            maxFreeSockets?: number;
+        }
+
+        export class Agent {
+            maxSockets: number;
+            sockets: any;
+            requests: any;
+
+            constructor(opts?: AgentOptions);
+
+            /**
+             * Destroy any sockets that are currently in use by the agent.
+             * It is usually not necessary to do this. However, if you are using an agent with KeepAlive enabled,
+             * then it is best to explicitly shut down the agent when you know that it will no longer be used. Otherwise,
+             * sockets may hang open for quite a long time before the server terminates them.
+             */
+            destroy(): void;
+        }
+
+        /**
+         * Options for http.request()
+         */
+        export interface RequestOptions {
+            /**
+             * A domain name or IP address of the server to issue the request to. Defaults to 'localhost'.
+             */
+            host?: string;
+            /**
+             * To support url.parse() hostname is preferred over host
+             */
+            hostname?: string;
+            /**
+             * Port of remote server. Defaults to 80.
+             */
+            port?: number;
+            /**
+             * Local interface to bind for network connections.
+             */
+            localAddress?: string;
+            /**
+             * Unix Domain Socket (use one of host:port or socketPath)
+             */
+            socketPath?: string;
+            /**
+             * A string specifying the HTTP request method. Defaults to 'GET'.
+             */
+            method?: string;
+            /**
+             * Request path. Defaults to '/'. Should include query string if any. E.G. '/index.html?page=12'
+             */
+            path?: string;
+            /**
+             * An object containing request headers.
+             */
+            headers?: { [index: string]: string };
+            /**
+             * Basic authentication i.e. 'user:password' to compute an Authorization header.
+             */
+            auth?: string;
+            /**
+             * Controls Agent behavior. When an Agent is used request will default to Connection: keep-alive. Possible values:
+             * - undefined (default): use global Agent for this host and port.
+             * - Agent object: explicitly use the passed in Agent.
+             * - false: opts out of connection pooling with an Agent, defaults request to Connection: close.
+             */
+            agent?: Agent | boolean;
+        }
+
+        export var STATUS_CODES: {
+            [errorCode: number]: string;
+            [errorCode: string]: string;
+        };
+        export function createServer(requestListener?: (request: ServerRequest, response: ServerResponse) => void): Server;
+        export function createClient(port?: number, host?: string): any;
+        export function request(options: RequestOptions, callback?: (response: ClientResponse) => void): ClientRequest;
+        export function get(options: RequestOptions, callback?: (response: ClientResponse) => void): ClientRequest;
+        export var globalAgent: Agent;
+    }
+}
