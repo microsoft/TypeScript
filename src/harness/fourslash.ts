@@ -321,11 +321,6 @@ namespace FourSlash {
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
 
-            this.testData.files.forEach(file => {
-                const fileName = file.fileName.replace(Harness.IO.directoryName(file.fileName), "").substr(1);
-                const fileNameWithoutExtension = fileName.substr(0, fileName.lastIndexOf("."));
-            });
-
             // Open the first file by default
             this.openFile(0);
         }
@@ -762,10 +757,6 @@ namespace FourSlash {
             return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
-        private assertionMessage(name: string, actualValue: any, expectedValue: any) {
-            return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
-        }
-
         public getSyntacticDiagnostics(expected: string) {
             const diagnostics = this.languageService.getSyntacticDiagnostics(this.activeFile.fileName);
             this.testDiagnostics(expected, diagnostics);
@@ -910,7 +901,6 @@ namespace FourSlash {
         }
 
         public verifyCurrentParameterSpanIs(parameter: string) {
-            const activeSignature = this.getActiveSignatureHelpItem();
             const activeParameter = this.getActiveParameter();
             assert.equal(ts.displayPartsToString(activeParameter.displayParts), parameter);
         }
@@ -2189,9 +2179,6 @@ namespace FourSlash {
         }
     }
 
-    // TOOD: should these just use the Harness's stdout/stderr?
-    const fsOutput = new Harness.Compiler.WriterAggregator();
-    const fsErrors = new Harness.Compiler.WriterAggregator();
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
         const content = Harness.IO.readFile(fileName);
         runFourSlashTestContent(basePath, testType, content, fileName);
