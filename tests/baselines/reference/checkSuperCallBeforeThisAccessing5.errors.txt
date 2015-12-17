@@ -1,4 +1,4 @@
-tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts(5,9): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts(5,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
 ==== tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts(5,9): error TS17008: 
         public x: number;
         constructor() {
             super(this.x);
-            ~~~~~~~~~~~~~~
+                  ~~~~
 !!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }

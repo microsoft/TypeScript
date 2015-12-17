@@ -7241,17 +7241,11 @@ namespace ts {
             let needToCaptureLexicalThis = false;
 
             if (container.kind === SyntaxKind.Constructor) {
-                // Keep track of whether we have seen "super" before encounter "this" so that
-                // we can report appropriate error later in checkConstructorDeclaration
-                // We have to do the check here to make sure we won't give false error when
-                // "this" is used in arrow functions
-                // For example:
-                //      constructor() {
-                //          (()=>this);  // No Error
-                //          super();
-                //      }
-                const nodeLinks = getNodeLinks(container);
-                nodeLinks.flags |= NodeCheckFlags.HasSeenThisCall;
+                const baseTypeNode = getClassExtendsHeritageClauseElement(<ClassLikeDeclaration>container.parent);
+                if (baseTypeNode && !(getNodeCheckFlags(container) & NodeCheckFlags.HasSeenSuperCall)) {
+                    // In ES6, super inside constructor of class-declaration has to precede "this" accessing
+                    error(node, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
+                }
             }
 
             // Now skip arrow functions to get the "real" owner of 'this'.
@@ -10201,10 +10195,7 @@ namespace ts {
                 const containgFunction = getContainingFunction(node.expression);
 
                 if (containgFunction && containgFunction.kind === SyntaxKind.Constructor) {
-                    const nodeLinks = getNodeLinks(containgFunction);
-                    if (!(nodeLinks.flags & NodeCheckFlags.HasSeenThisCall)) {
-                        nodeLinks.flags |= NodeCheckFlags.HasSeenSuperBeforeThis;
-                    }
+                    getNodeLinks(containgFunction).flags |= NodeCheckFlags.HasSeenSuperCall;
                 }
                 return voidType;
             }
@@ -11833,10 +11824,6 @@ namespace ts {
                             // In such a required super call, it is a compile-time error for argument expressions to reference this.
                             markThisReferencesAsErrors(superCallStatement.expression);
                         }
-                    }
-                    else if (!(getNodeCheckFlags(node) & NodeCheckFlags.HasSeenSuperBeforeThis)) {
-                        // In ES6, super inside constructor of class-declaration has to precede "this" accessing
-                        error(superCallStatement, Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class);
                     }
                 }
                 else if (baseConstructorType !== nullType) {
