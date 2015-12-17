@@ -8,6 +8,7 @@
 //// }
 
 let ranges = test.ranges();
+verify.assertRangesEmpty(ranges);
 for (let range of ranges) {
     goTo.position(range.start);
 

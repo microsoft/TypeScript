@@ -7,12 +7,13 @@
 ////     }
 //// }
 
-let ranges = test.ranges();
-for (let range of ranges) {
+const ranges = test.ranges();
+verify.assertRangesEmpty(ranges);
+for (const range of ranges) {
     goTo.position(range.start);
 
     verify.referencesCountIs(ranges.length);
-    for (let expectedRange of ranges) {
+    for (const expectedRange of ranges) {
         verify.referencesAtPositionContains(expectedRange);
     }
 }
