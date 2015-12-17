@@ -34,7 +34,7 @@ var A;
             return "from private B";
         };
         return B;
-    })();
+    }());
 })(A || (A = {}));
 var A;
 (function (A) {
@@ -45,6 +45,6 @@ var A;
             return "from export B";
         };
         return B;
-    })();
+    }());
     A.B = B;
 })(A || (A = {}));

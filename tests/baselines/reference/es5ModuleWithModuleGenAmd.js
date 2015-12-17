@@ -21,6 +21,6 @@ define(["require", "exports"], function (require, exports) {
             return 42;
         };
         return A;
-    })();
+    }());
     exports.A = A;
 });

@@ -87,7 +87,7 @@ var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
@@ -97,7 +97,7 @@ var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 var x;
 function foo() { return null; }
@@ -108,7 +108,7 @@ var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
@@ -118,7 +118,7 @@ var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;

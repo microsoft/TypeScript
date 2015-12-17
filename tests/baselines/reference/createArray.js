@@ -21,7 +21,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 new C[];
 var ba = new boolean[];
 var sa = new string[];

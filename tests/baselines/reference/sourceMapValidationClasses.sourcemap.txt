@@ -267,7 +267,7 @@ sourceFile:sourceMapValidationClasses.ts
 1->Emitted(13, 13) Source(11, 5) + SourceIndex(0)
 2 >Emitted(13, 27) Source(11, 6) + SourceIndex(0)
 ---
->>>        })();
+>>>        }());
 1 >^^^^^^^^
 2 >        ^
 3 >         

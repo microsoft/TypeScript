@@ -14,7 +14,7 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES5.ts(9,
         [""]() { return new Foo }
         ~~~~
 !!! error TS2393: Duplicate function implementation.
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property '[""]' of type '() => Foo' is not assignable to string index type '() => Foo2'.
         [""]() { return new Foo2 }
         ~~~~

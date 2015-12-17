@@ -53,7 +53,7 @@ var y = (function () {
     function y() {
     }
     return y;
-})();
+}());
 ;
 module.exports = x;
 //// [foo3.js]
@@ -66,7 +66,7 @@ var y = (function () {
     function y() {
     }
     return y;
-})();
+}());
 module.exports = x;
 //// [foo4.js]
 "use strict";

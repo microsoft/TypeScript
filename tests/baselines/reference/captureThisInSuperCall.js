@@ -18,7 +18,7 @@ var A = (function () {
     function A(p) {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -27,4 +27,4 @@ var B = (function (_super) {
     }
     B.prototype.someMethod = function () { };
     return B;
-})(A);
+}(A));

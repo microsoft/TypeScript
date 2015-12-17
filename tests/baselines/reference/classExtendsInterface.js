@@ -20,21 +20,21 @@ var A = (function (_super) {
         _super.apply(this, arguments);
     }
     return A;
-})(Comparable);
+}(Comparable));
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var A2 = (function (_super) {
     __extends(A2, _super);
     function A2() {
         _super.apply(this, arguments);
     }
     return A2;
-})(Comparable2);
+}(Comparable2));
 var B2 = (function () {
     function B2() {
     }
     return B2;
-})();
+}());

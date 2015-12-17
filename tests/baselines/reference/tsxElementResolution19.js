@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
         function MyClass() {
         }
         return MyClass;
-    })();
+    }());
     exports.MyClass = MyClass;
 });
 //// [file2.js]

@@ -11,6 +11,6 @@ var c2 = (function () {
     }
     c2.prototype.foo = function () { };
     return c2;
-})(); // error
+}()); // error
 function c2() { } // error
 var c2 = function () { };

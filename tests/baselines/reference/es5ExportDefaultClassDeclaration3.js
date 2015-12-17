@@ -24,7 +24,7 @@ var C = (function () {
         return new C();
     };
     return C;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = C;
 var after = new C();

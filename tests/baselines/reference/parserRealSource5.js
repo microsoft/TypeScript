@@ -111,7 +111,7 @@ var TypeScript;
             this.builder = "";
         };
         return PrintContext;
-    })();
+    }());
     TypeScript.PrintContext = PrintContext;
     function prePrintAST(ast, parent, walker) {
         var pc = walker.state;

@@ -21,7 +21,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 module.exports = C;
 //// [externalModuleExportingGenericClass_file1.js]
 "use strict";

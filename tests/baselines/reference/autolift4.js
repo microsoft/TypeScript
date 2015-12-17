@@ -39,7 +39,7 @@ var Point = (function () {
     };
     Point.origin = new Point(0, 0);
     return Point;
-})();
+}());
 var Point3D = (function (_super) {
     __extends(Point3D, _super);
     function Point3D(x, y, z, m) {
@@ -50,4 +50,4 @@ var Point3D = (function (_super) {
         return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.m);
     };
     return Point3D;
-})(Point);
+}(Point));

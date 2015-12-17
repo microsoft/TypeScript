@@ -118,7 +118,7 @@ var B = (function () {
         }
     }
     return B;
-})();
+}());
 var a;
 var b;
 var c;

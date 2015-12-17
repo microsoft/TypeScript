@@ -45,7 +45,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 exports.C = C;
 exports.C1 = C;
 (function (E) {

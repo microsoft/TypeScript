@@ -45,7 +45,7 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var i2;
 var i1;
 var i3;

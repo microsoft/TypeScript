@@ -9,4 +9,4 @@ var AtomicNumbers = (function () {
     }
     AtomicNumbers.H = 1;
     return AtomicNumbers;
-})();
+}());

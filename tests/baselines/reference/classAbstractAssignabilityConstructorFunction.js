@@ -13,7 +13,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 // var AA: typeof A;
 var AAA;
 // AA = A; // okay

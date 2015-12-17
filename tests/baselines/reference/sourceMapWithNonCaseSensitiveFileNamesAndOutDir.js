@@ -17,11 +17,11 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 //# sourceMappingURL=app.js.map//// [app2.js]
 var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 //# sourceMappingURL=app2.js.map

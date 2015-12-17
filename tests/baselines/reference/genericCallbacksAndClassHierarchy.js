@@ -35,13 +35,13 @@ var M;
         function C1() {
         }
         return C1;
-    })();
+    }());
     M.C1 = C1;
     var A = (function () {
         function A() {
         }
         return A;
-    })();
+    }());
     M.A = A;
     var B = (function (_super) {
         __extends(B, _super);
@@ -49,7 +49,7 @@ var M;
             _super.apply(this, arguments);
         }
         return B;
-    })(C1);
+    }(C1));
     M.B = B;
     var D = (function () {
         function D() {
@@ -62,6 +62,6 @@ var M;
             v.subscribe(function (newValue) { });
         };
         return D;
-    })();
+    }());
     M.D = D;
 })(M || (M = {}));

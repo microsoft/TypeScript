@@ -11,7 +11,7 @@ define(["require", "exports"], function (require, exports) {
         function a() {
         }
         return a;
-    })();
+    }());
     return a;
 });
 //# sourceMappingURL=sourceMapValidationExportAssignment.js.map

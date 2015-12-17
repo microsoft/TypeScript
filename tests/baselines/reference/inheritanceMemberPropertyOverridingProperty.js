@@ -17,11 +17,11 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
         _super.apply(this, arguments);
     }
     return b;
-})(a);
+}(a));

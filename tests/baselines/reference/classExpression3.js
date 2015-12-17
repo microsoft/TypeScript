@@ -19,19 +19,19 @@ var C = (function (_super) {
         this.c = 3;
     }
     return class_1;
-})((function (_super) {
+}((function (_super) {
     __extends(class_2, _super);
     function class_2() {
         _super.apply(this, arguments);
         this.b = 2;
     }
     return class_2;
-})((function () {
+}((function () {
     function class_3() {
         this.a = 1;
     }
     return class_3;
-})()));
+}())))));
 var c = new C();
 c.a;
 c.b;

@@ -31,19 +31,19 @@ var Constraint = (function () {
     }
     Constraint.prototype.method = function () { };
     return Constraint;
-})();
+}());
 var GenericBase = (function () {
     function GenericBase() {
     }
     return GenericBase;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.apply(this, arguments);
     }
     return Derived;
-})(GenericBase);
+}(GenericBase));
 var TypeArg = (function () {
     function TypeArg() {
     }
@@ -51,9 +51,9 @@ var TypeArg = (function () {
         Container.People.items;
     };
     return TypeArg;
-})();
+}());
 var Container = (function () {
     function Container() {
     }
     return Container;
-})();
+}());

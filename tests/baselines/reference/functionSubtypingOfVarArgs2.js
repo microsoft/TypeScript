@@ -28,7 +28,7 @@ var EventBase = (function () {
         this._listeners.push(listener);
     };
     return EventBase;
-})();
+}());
 var StringEvent = (function (_super) {
     __extends(StringEvent, _super);
     function StringEvent() {
@@ -38,4 +38,4 @@ var StringEvent = (function (_super) {
         _super.prototype.add.call(this, listener);
     };
     return StringEvent;
-})(EventBase);
+}(EventBase));

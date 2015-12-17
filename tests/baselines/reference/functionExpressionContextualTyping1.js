@@ -75,7 +75,7 @@ var Class = (function () {
     }
     Class.prototype.foo = function () { };
     return Class;
-})();
+}());
 var a1 = function (a1) {
     a1.foo();
     return 1;
@@ -117,4 +117,4 @@ var C = (function () {
         }; // Per spec, no contextual signature can be extracted in this case.
     }
     return C;
-})();
+}());

@@ -61,7 +61,7 @@ sourceFile:../outputdir_simple/m1.ts
 1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -213,7 +213,7 @@ sourceFile:../outputdir_simple/test.ts
 1->Emitted(6, 5) Source(5, 1) + SourceIndex(0)
 2 >Emitted(6, 14) Source(5, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

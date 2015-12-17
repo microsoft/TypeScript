@@ -26,7 +26,7 @@ var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 exports.Model = Model;
 //// [aliasUsageInFunctionExpression_moduleA.js]
 "use strict";
@@ -42,7 +42,7 @@ var VisualizationModel = (function (_super) {
         _super.apply(this, arguments);
     }
     return VisualizationModel;
-})(Backbone.Model);
+}(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInFunctionExpression_main.js]
 "use strict";

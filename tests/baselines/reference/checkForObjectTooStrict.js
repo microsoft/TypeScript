@@ -43,7 +43,7 @@ var Foo;
         function Object() {
         }
         return Object;
-    })();
+    }());
     Foo.Object = Object;
 })(Foo || (Foo = {}));
 var Bar = (function (_super) {
@@ -52,11 +52,11 @@ var Bar = (function (_super) {
         _super.call(this);
     }
     return Bar;
-})(Foo.Object);
+}(Foo.Object));
 var Baz = (function (_super) {
     __extends(Baz, _super);
     function Baz() {
         _super.call(this);
     }
     return Baz;
-})(Object);
+}(Object));

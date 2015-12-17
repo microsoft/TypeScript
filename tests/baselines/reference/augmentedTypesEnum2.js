@@ -39,6 +39,6 @@ var e2 = (function () {
         return 1;
     };
     return e2;
-})();
+}());
 //enum then enum - covered
 //enum then import - covered 

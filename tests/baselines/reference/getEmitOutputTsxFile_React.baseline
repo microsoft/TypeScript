@@ -7,7 +7,7 @@ var Bar = (function () {
     function Bar() {
     }
     return Bar;
-})();
+}());
 //# sourceMappingURL=inputFile1.js.mapFileName : tests/cases/fourslash/inputFile1.d.ts
 declare var t: number;
 declare class Bar {

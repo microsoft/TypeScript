@@ -48,7 +48,7 @@ var M;
         function Foo() {
         }
         return Foo;
-    })();
+    }());
     M.Foo = Foo;
     var S;
     (function (S) {
@@ -56,7 +56,7 @@ var M;
             function Bar() {
             }
             return Bar;
-        })();
+        }());
         S.Bar = Bar;
     })(S = M.S || (M.S = {}));
 })(M || (M = {}));

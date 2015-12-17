@@ -42,7 +42,7 @@ var P;
             function C() {
             }
             return C;
-        })();
+        }());
         exports["default"] = C;
         function bee() { }
         P.bee = bee;

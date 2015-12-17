@@ -23,7 +23,7 @@ var A = (function () {
         this.map = map;
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     // Ensure 'value' is of type 'number (and not '{}') by using its 'toExponential()' method.
@@ -31,4 +31,4 @@ var B = (function (_super) {
         _super.call(this, function (value) { return String(value.toExponential()); });
     }
     return B;
-})(A);
+}(A));

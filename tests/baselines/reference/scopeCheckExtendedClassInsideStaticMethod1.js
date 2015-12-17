@@ -18,7 +18,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -30,4 +30,4 @@ var D = (function (_super) {
         s = 1;
     };
     return D;
-})(C);
+}(C));

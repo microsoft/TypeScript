@@ -20,11 +20,11 @@ var C123 = (function () {
     function C123() {
     }
     return C123;
-})();
+}());
 var D123 = (function (_super) {
     __extends(D123, _super);
     function D123() {
         _super.apply(this, arguments);
     }
     return D123;
-})(C123);
+}(C123));

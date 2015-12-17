@@ -32,7 +32,7 @@ var C3 = (function () {
     }
     C3.prototype.CM3M1 = function () { return 3; };
     return C3;
-})();
+}());
 /*
 
 This behaves unexpectedly with teh following types:

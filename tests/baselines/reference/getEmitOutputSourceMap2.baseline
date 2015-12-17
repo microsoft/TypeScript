@@ -7,7 +7,7 @@ var M = (function () {
     function M() {
     }
     return M;
-})();
+}());
 //# sourceMappingURL=inputFile1.js.map
 EmitSkipped: false
 FileName : sample/outDir/inputFile2.js.map

@@ -20,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
         function T() {
         }
         return T;
-    })();
+    }());
     return T;
 });
 //// [exportAssignmentOfGenericType1_1.js]
@@ -37,7 +37,7 @@ define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (req
             _super.apply(this, arguments);
         }
         return M;
-    })(q);
+    }(q));
     var m;
     var r = m.foo;
 });

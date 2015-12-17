@@ -28,7 +28,7 @@ var X;
                 function C() {
                 }
                 return C;
-            })();
+            }());
             base.C = C;
             var M;
             (function (M) {

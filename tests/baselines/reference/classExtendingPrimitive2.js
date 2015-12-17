@@ -15,7 +15,7 @@ var C4a = (function () {
     function C4a() {
     }
     return C4a;
-})();
+}());
 void {};
 var C5a = (function (_super) {
     __extends(C5a, _super);
@@ -23,4 +23,4 @@ var C5a = (function (_super) {
         _super.apply(this, arguments);
     }
     return C5a;
-})(null);
+}(null));

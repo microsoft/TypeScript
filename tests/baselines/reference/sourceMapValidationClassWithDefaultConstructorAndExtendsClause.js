@@ -17,7 +17,7 @@ var AbstractGreeter = (function () {
     function AbstractGreeter() {
     }
     return AbstractGreeter;
-})();
+}());
 var Greeter = (function (_super) {
     __extends(Greeter, _super);
     function Greeter() {
@@ -26,5 +26,5 @@ var Greeter = (function (_super) {
         this.nameA = "Ten";
     }
     return Greeter;
-})(AbstractGreeter);
+}(AbstractGreeter));
 //# sourceMappingURL=sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js.map
