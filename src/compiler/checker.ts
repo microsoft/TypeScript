@@ -442,7 +442,11 @@ namespace ts {
             const parameterSymbol = getSymbol(constructoDeclaration.locals, parameterName, SymbolFlags.Value);
             const propertySymbol = getSymbol(classDeclaration.symbol.members, parameterName, SymbolFlags.Value);
 
-            return parameterSymbol && propertySymbol ? [parameterSymbol, propertySymbol] : undefined;
+            if (parameterSymbol && propertySymbol) {
+                return [parameterSymbol, propertySymbol];
+            }
+
+            Debug.fail("There should exist two symbols, one as property declaration and one as parameter declaration");
         }
 
         function isBlockScopedNameDeclaredBeforeUse(declaration: Declaration, usage: Node): boolean {
