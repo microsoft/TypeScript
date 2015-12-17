@@ -5762,21 +5762,18 @@ namespace ts {
                     target.symbol.flags & SymbolFlags.ConstEnum) {
                     return Ternary.False;
                 }
-                const targetNames = arrayToMap(getEnumMembersOfEnumType(target), member => member.name);
-                for (const member of getEnumMembersOfEnumType(source)) {
-                    if (!hasProperty(targetNames, member.name)) {
-                        reportError(Diagnostics.Property_0_is_missing_in_type_1,
-                                    member.name,
-                                    typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
-                        return Ternary.False;
+                for (const property of getPropertiesOfType(getTypeOfSymbol(source.symbol))) {
+                    if (property.flags & SymbolFlags.EnumMember) {
+                        const targetProperty = getPropertyOfType(getTypeOfSymbol(target.symbol), property.name);
+                        if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1,
+                                property.name,
+                                typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                            return Ternary.False;
+                        }
                     }
                 }
                 return Ternary.True;
-            }
-
-            function getEnumMembersOfEnumType(type: Type) {
-                return filter(resolveStructuredTypeMembers(getTypeOfSymbol(type.symbol)).properties,
-                              property => !!(property.flags & SymbolFlags.EnumMember));
             }
         }
 
