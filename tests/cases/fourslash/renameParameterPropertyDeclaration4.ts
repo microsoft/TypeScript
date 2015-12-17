@@ -1,8 +1,8 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class Foo {
-////     constructor(protected { |protectedParam| }) {
-////         let myProtectedParam = |protectedParam|;
+////     constructor(protected { [|protectedParam|] }) {
+////         let myProtectedParam = [|protectedParam|];
 ////     }
 //// }
 
