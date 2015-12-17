@@ -1,7 +1,8 @@
 tests/cases/compiler/thisInSuperCall1.ts(7,15): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/compiler/thisInSuperCall1.ts(7,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== tests/cases/compiler/thisInSuperCall1.ts (1 errors) ====
+==== tests/cases/compiler/thisInSuperCall1.ts (2 errors) ====
     class Base { 
         constructor(a: any) {}
     }
@@ -11,6 +12,8 @@ tests/cases/compiler/thisInSuperCall1.ts(7,15): error TS2332: 'this' cannot be r
             super(this);
                   ~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.
+                  ~~~~
+!!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     

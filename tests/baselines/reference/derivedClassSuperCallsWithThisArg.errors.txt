@@ -1,9 +1,10 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(8,9): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(8,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(14,15): error TS2332: 'this' cannot be referenced in current location.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(14,15): error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts(20,21): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts (3 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsWithThisArg.ts (4 errors) ====
     class Base {
         x: string;
         constructor(a) { }
@@ -12,7 +13,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
     class Derived extends Base {
         constructor() {
             super(this); // ok
-            ~~~~~~~~~~~~
+                  ~~~~
 !!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
@@ -22,6 +23,8 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             super(this); // error
                   ~~~~
 !!! error TS2332: 'this' cannot be referenced in current location.
+                  ~~~~
+!!! error TS17008: 'super' must be called before accessing 'this' in the constructor of a derived class.
         }
     }
     
