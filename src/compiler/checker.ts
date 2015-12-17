@@ -10823,6 +10823,13 @@ namespace ts {
         }
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
+            const parentKind = node.parent.kind;
+            if (parentKind === SyntaxKind.VariableDeclaration || parentKind === SyntaxKind.BindingElement) {
+                if (getCombinedNodeFlags(node.parent) & NodeFlags.Const) {
+                    return getStringLiteralTypeForText(node.text);
+                }
+            }
+
             const contextualType = getContextualType(node);
             if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
                 return getStringLiteralTypeForText(node.text);

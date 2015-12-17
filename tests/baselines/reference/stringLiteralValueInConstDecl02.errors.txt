@@ -1,0 +1,26 @@
+error TS1204: Cannot compile modules into 'es2015' when targeting 'ES5' or lower.
+tests/cases/compiler/stringLiteralValueInConstDecl02.ts(7,17): error TS2354: No best common type exists among return expressions.
+
+
+!!! error TS1204: Cannot compile modules into 'es2015' when targeting 'ES5' or lower.
+==== tests/cases/compiler/stringLiteralValueInConstDecl02.ts (1 errors) ====
+    
+    const foo = "foo";
+    const bar = "bar";
+    
+    declare function randBool(): boolean;
+    
+    export function fooOrBar1() {
+                    ~~~~~~~~~
+!!! error TS2354: No best common type exists among return expressions.
+        if (randBool()) {
+            return foo;
+        }
+        else {
+            return bar;
+        }
+    }
+    
+    export function fooOrBar2() {
+        return randBool() ? foo : bar;
+    }
