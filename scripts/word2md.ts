@@ -67,18 +67,14 @@ module Word {
     export interface Tables extends Collection<Table> {
     }
 
-    export interface InlineShape {
-    }
-
-    export interface InlineShapes extends Collection<InlineShape> {
-    }
-
     export interface Range {
         find: Find;
         listFormat: ListFormat;
         tables: Tables;
-        inlineShapes: InlineShapes;
         text: string;
+        textRetrievalMode: {
+            includeHiddenText: boolean;
+        }
         words: Ranges;
     }
 
@@ -266,21 +262,25 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
     function writeParagraph(p: Word.Paragraph) {
 
-        var text = p.range.text;
+        var range = p.range;
+        var text = range.text;
         var style = p.style.nameLocal;
-        var inTable = p.range.tables.count > 0;
-        var containsImage = p.range.inlineShapes.count > 0;
+        var inTable = range.tables.count > 0;
         var level = 1;
         var sectionBreak = text.indexOf("\x0C") >= 0;
 
         text = trimEndFormattingMarks(text);
+        if (text === "/") {
+            range.textRetrievalMode.includeHiddenText = true;
+            var fullText = range.text;
+            range.textRetrievalMode.includeHiddenText = false;
+            if (text !== fullText) {
+                text = "&emsp;&emsp;" + fullText.substr(1);
+            }
+        }
+
         if (inTable) {
             style = "Table";
-        }
-        else if (containsImage) {
-            imageCount++;
-            write("&emsp;&emsp;&emsp;![](images/image" + imageCount + ".png)\n\n");
-            text = "";
         }
         else if (style.match(/\s\d$/)) {
             level = +style.substr(style.length - 1);
@@ -294,7 +294,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
             case "Heading":
             case "Appendix":
-                var section = p.range.listFormat.listString;
+                var section = range.listFormat.listString;
                 write("####".substr(0, level) + ' <a name="' + section + '"/>' + section + " " + text + "\n\n");
                 break;
 
@@ -305,7 +305,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
                 break;
 
             case "List Paragraph":
-                write("        ".substr(0, p.range.listFormat.listLevelNumber * 2 - 2) + "* " + text + "\n");
+                write("        ".substr(0, range.listFormat.listLevelNumber * 2 - 2) + "* " + text + "\n");
                 break;
 
             case "Grammar":
@@ -324,7 +324,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
             case "Table":
                 if (!lastInTable) {
-                    tableColumnCount = p.range.tables.item(1).columns.count + 1;
+                    tableColumnCount = range.tables.item(1).columns.count + 1;
                     tableCellIndex = 0;
                 }
                 if (tableCellIndex < tableColumnCount) {
