@@ -486,7 +486,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFilelistChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -541,20 +541,20 @@ namespace ts.server {
             }
 
             this.log("Detected source file changes: " + fileName);
-            this.startTimerForDetectingProjectFilelistChanges(project);
+            this.startTimerForDetectingProjectFileListChanges(project);
         }
 
-        startTimerForDetectingProjectFilelistChanges(project: Project) {
-            if (this.timerForDetectingProjectFilelistChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFilelistChanges[project.projectFilename]);
+        startTimerForDetectingProjectFileListChanges(project: Project) {
+            if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
+                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFilelistChanges[project.projectFilename] = setTimeout(
-                () => this.handleProjectFilelistChanges(project),
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+                () => this.handleProjectFileListChanges(project),
                 250
             );
         }
 
-        handleProjectFilelistChanges(project: Project) {
+        handleProjectFileListChanges(project: Project) {
             const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
@@ -1083,7 +1083,6 @@ namespace ts.server {
          * Close file whose contents is managed by the client
          * @param filename is absolute pathname
          */
-
         closeClientFile(filename: string) {
             const info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
@@ -1739,9 +1738,9 @@ namespace ts.server {
         }
 
         getLineMapper() {
-            return ((line: number) => {
+            return (line: number) => {
                 return this.index.lineNumberToInfo(line).offset;
-            });
+            };
         }
 
         getTextChangeRangeSinceVersion(scriptVersion: number) {
