@@ -2389,6 +2389,10 @@
         "category": "Message",
         "code": 6083
     },
+    "Specify JSX emit namespace when JSX code generation mode is 'react'": {
+        "category": "Message",
+        "code": 6084    
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

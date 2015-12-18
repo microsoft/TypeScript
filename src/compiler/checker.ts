@@ -8491,13 +8491,14 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // If we're compiling under --jsx react, the symbol 'React' should
+            // If we're compiling under --jsx react, the JSX namespace symbol should
             // be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no 'React' symbol in scope, we should issue an error.
+            // is no JSX namespace symbol in scope, we should issue an error.
             if (compilerOptions.jsx === JsxEmit.React) {
-                const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
-                if (reactSym) {
-                    getSymbolLinks(reactSym).referenced = true;
+                const jsxNamespace = compilerOptions.jsxNamespace ? compilerOptions.jsxNamespace : "React";
+                const jsxSym = resolveName(node.tagName, jsxNamespace, SymbolFlags.Value, Diagnostics.Cannot_find_name_0, jsxNamespace);
+                if (jsxSym) {
+                    getSymbolLinks(jsxSym).referenced = true;
                 }
             }
 
