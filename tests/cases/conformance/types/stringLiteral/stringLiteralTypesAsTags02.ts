@@ -18,8 +18,7 @@ interface B extends Entity {
 
 function hasKind(entity: Entity, kind: "A"): entity is A;
 function hasKind(entity: Entity, kind: "B"): entity is B;
-function hasKind(entity: Entity, kind: Kind): entity is Entity;
-function hasKind(entity: Entity, kind: Kind): boolean {
+function hasKind(entity: Entity, kind: Kind): entity is (A | B) {
     return entity.kind === kind;
 }
 

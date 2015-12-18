@@ -1,4 +1,4 @@
-//// [stringLiteralTypesAsTags01.ts]
+//// [stringLiteralTypesAsTags02.ts]
 
 type Kind = "A" | "B"
 
@@ -18,8 +18,7 @@ interface B extends Entity {
 
 function hasKind(entity: Entity, kind: "A"): entity is A;
 function hasKind(entity: Entity, kind: "B"): entity is B;
-function hasKind(entity: Entity, kind: Kind): entity is Entity;
-function hasKind(entity: Entity, kind: Kind): boolean {
+function hasKind(entity: Entity, kind: Kind): entity is (A | B) {
     return entity.kind === kind;
 }
 
@@ -42,7 +41,7 @@ else {
     let d = x;
 }
 
-//// [stringLiteralTypesAsTags01.js]
+//// [stringLiteralTypesAsTags02.js]
 function hasKind(entity, kind) {
     return entity.kind === kind;
 }
@@ -64,7 +63,7 @@ else {
 }
 
 
-//// [stringLiteralTypesAsTags01.d.ts]
+//// [stringLiteralTypesAsTags02.d.ts]
 declare type Kind = "A" | "B";
 interface Entity {
     kind: Kind;
@@ -79,5 +78,4 @@ interface B extends Entity {
 }
 declare function hasKind(entity: Entity, kind: "A"): entity is A;
 declare function hasKind(entity: Entity, kind: "B"): entity is B;
-declare function hasKind(entity: Entity, kind: Kind): entity is Entity;
 declare let x: A;

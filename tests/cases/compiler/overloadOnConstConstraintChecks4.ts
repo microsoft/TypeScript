@@ -6,7 +6,7 @@ class C extends A {
 }
 function foo(name: 'hi'): B;
 function foo(name: 'bye'): C;
-function foo(name: string): A; // error
+function foo(name: string): A;
 function foo(name: any): Z {
     return null;
 }

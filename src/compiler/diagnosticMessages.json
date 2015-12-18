@@ -1691,7 +1691,7 @@
         "category": "Error",
         "code": 2528
     },
-    "JSX element attributes type '{0}' must be an object type.": {
+    "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
     },
