@@ -1,5 +1,5 @@
 interface Event {
-	time: number
+	time: number;
 }
 interface Base {
 	superHandle: (e: Event) => number;
@@ -15,16 +15,19 @@ abstract class Watcher {
 }
 
 class Alarm extends Watcher implements Listener, Ringer {
-	handle = e => { 
-		let n: number = e.time;
+	str: string;
+	handle = e => {
+		this.str = e.time; // error
 	}
 	superHandle = e => {
+		this.str = e.time; // error
 		return e.time;
 	}
-	ring = times => {
-		let m: number = times + 1;
+	ring(times) {
+		this.str = times; // error
 	}
 	watch(e) {
+		this.str = e.time; // error
 		return e.time;
 	}
 }
