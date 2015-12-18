@@ -32,7 +32,7 @@ define(["require", "exports"], function (require, exports) {
         function ClassB() {
         }
         return ClassB;
-    })();
+    }());
     return ClassB;
 });
 //// [recursiveExportAssignmentAndFindAliasedType5_moduleA.js]

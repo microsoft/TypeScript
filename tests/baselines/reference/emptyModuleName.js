@@ -17,4 +17,4 @@ var B = (function (_super) {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));

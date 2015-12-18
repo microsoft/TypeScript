@@ -17,7 +17,7 @@ var Super = (function () {
     function Super() {
     }
     return Super;
-})();
+}());
 exports.Super = Super;
 //// [importUsedInExtendsList1_1.js]
 "use strict";
@@ -34,6 +34,6 @@ var Sub = (function (_super) {
         _super.apply(this, arguments);
     }
     return Sub;
-})(foo.Super);
+}(foo.Super));
 var s;
 var r = s.foo;

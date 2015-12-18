@@ -153,7 +153,7 @@ var schema;
             configurable: true
         });
         return T;
-    })();
+    }());
     schema.T = T;
 })(schema || (schema = {}));
 

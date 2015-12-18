@@ -11,10 +11,27 @@ import Route = ReactRouter.Route;
 >ReactRouter : typeof ReactRouter
 >Route : any
 
-var routes = <Route />;
->routes : any
+var routes1 = <Route />;
+>routes1 : any
 ><Route /> : any
 >Route : any
+
+module M {
+>M : typeof M
+
+	export var X: any;
+>X : any
+}
+module M {
+>M : typeof M
+
+	// Should emit 'M.X' in both opening and closing tags
+	var y = <X></X>;
+>y : any
+><X></X> : any
+>X : any
+>X : any
+}
 
 === tests/cases/conformance/jsx/react.d.ts ===
 

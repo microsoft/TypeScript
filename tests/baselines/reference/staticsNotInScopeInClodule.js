@@ -13,7 +13,7 @@ var Clod = (function () {
     }
     Clod.x = 10;
     return Clod;
-})();
+}());
 var Clod;
 (function (Clod) {
     var p = x; // x isn't in scope here

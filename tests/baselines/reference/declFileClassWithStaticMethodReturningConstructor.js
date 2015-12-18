@@ -15,7 +15,7 @@ var Enhancement = (function () {
         return this;
     };
     return Enhancement;
-})();
+}());
 exports.Enhancement = Enhancement;
 
 

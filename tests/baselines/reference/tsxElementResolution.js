@@ -30,19 +30,19 @@ var foundFirst = (function () {
     function foundFirst() {
     }
     return foundFirst;
-})();
+}());
 var Other = (function () {
     function Other() {
     }
     return Other;
-})();
+}());
 var Dotted;
 (function (Dotted) {
     var Name = (function () {
         function Name() {
         }
         return Name;
-    })();
+    }());
     Dotted.Name = Name;
 })(Dotted || (Dotted = {}));
 // Should find the intrinsic element, not the class element

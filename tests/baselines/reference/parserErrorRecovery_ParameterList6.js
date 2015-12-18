@@ -9,6 +9,6 @@ var Foo = (function () {
     }
     Foo.prototype.banana = ;
     return Foo;
-})();
+}());
 break ;
 { }

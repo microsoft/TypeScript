@@ -40,7 +40,7 @@ var A = (function () {
         y = x;
     };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -54,6 +54,6 @@ var B = (function (_super) {
         var e = new Date();
     };
     return B;
-})(A);
+}(A));
 var b;
 var c = b;

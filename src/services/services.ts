@@ -1901,7 +1901,7 @@ namespace ts {
                     sourceMapText = text;
                 }
                 else {
-                    Debug.assert(outputText === undefined, "Unexpected multiple outputs for the file: " + name);
+                    Debug.assert(outputText === undefined, `Unexpected multiple outputs for the file: '${name}'`);
                     outputText = text;
                 }
             },
@@ -3751,7 +3751,8 @@ namespace ts {
                     // Ignore omitted expressions for missing members
                     if (m.kind !== SyntaxKind.PropertyAssignment &&
                         m.kind !== SyntaxKind.ShorthandPropertyAssignment &&
-                        m.kind !== SyntaxKind.BindingElement) {
+                        m.kind !== SyntaxKind.BindingElement &&
+                        m.kind !== SyntaxKind.MethodDeclaration) {
                         continue;
                     }
 
@@ -4248,28 +4249,31 @@ namespace ts {
                 }
                 else {
                     // Method/function type parameter
-                    let container = getContainingFunction(location);
-                    if (container) {
-                        let signatureDeclaration = <SignatureDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                        let signature = typeChecker.getSignatureFromDeclaration(signatureDeclaration);
-                        if (signatureDeclaration.kind === SyntaxKind.ConstructSignature) {
-                            displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                    let declaration = <Node>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
+                    Debug.assert(declaration !== undefined);
+                    declaration = declaration.parent;
+
+                    if (declaration) {
+                        if (isFunctionLikeKind(declaration.kind)) {
+                            const signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
+                            if (declaration.kind === SyntaxKind.ConstructSignature) {
+                                displayParts.push(keywordPart(SyntaxKind.NewKeyword));
+                                displayParts.push(spacePart());
+                            }
+                            else if (declaration.kind !== SyntaxKind.CallSignature && (<SignatureDeclaration>declaration).name) {
+                                addFullSymbolName(declaration.symbol);
+                            }
+                            addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
+                        }
+                        else {
+                            // Type alias type parameter
+                            // For example
+                            //      type list<T> = T[];  // Both T will go through same code path
+                            displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                             displayParts.push(spacePart());
+                            addFullSymbolName(declaration.symbol);
+                            writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                         }
-                        else if (signatureDeclaration.kind !== SyntaxKind.CallSignature && signatureDeclaration.name) {
-                            addFullSymbolName(signatureDeclaration.symbol);
-                        }
-                        addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
-                    }
-                    else {
-                        // Type  aliash type parameter
-                        // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
-                        let declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeParameter).parent;
-                        displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
-                        displayParts.push(spacePart());
-                        addFullSymbolName(declaration.symbol);
-                        writeTypeParametersOfSymbol(declaration.symbol, sourceFile);
                     }
                 }
             }

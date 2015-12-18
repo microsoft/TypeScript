@@ -95,7 +95,7 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -107,5 +107,5 @@ var D = (function (_super) {
         _super.prototype.foo.apply(this, [1, 2].concat(a));
     };
     return D;
-})(C);
+}(C));
 var _a, _b, _c;

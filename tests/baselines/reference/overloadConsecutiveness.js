@@ -24,4 +24,4 @@ var C = (function () {
     C.prototype.m2 = function () { };
     C.prototype.m3 = function () { };
     return C;
-})();
+}());

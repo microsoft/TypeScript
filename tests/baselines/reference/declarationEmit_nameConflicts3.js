@@ -59,7 +59,7 @@ var M;
             }
             C.f = function () { };
             return C;
-        })();
+        }());
         P.C = C;
         var E = (function (_super) {
             __extends(E, _super);
@@ -67,7 +67,7 @@ var M;
                 _super.apply(this, arguments);
             }
             return E;
-        })(C);
+        }(C));
         P.E = E;
         (function (D) {
             D[D["f"] = 0] = "f";

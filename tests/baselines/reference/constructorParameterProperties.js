@@ -28,7 +28,7 @@ var C = (function () {
         this.z = z;
     }
     return C;
-})();
+}());
 var c;
 var r = c.y;
 var r2 = c.x; // error
@@ -39,7 +39,7 @@ var D = (function () {
         this.z = z;
     }
     return D;
-})();
+}());
 var d;
 var r = d.y;
 var r2 = d.x; // error

@@ -22,5 +22,5 @@ var baz = (function () {
     }
     baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree
     return baz;
-})();
+}());
 function bar(s) { }

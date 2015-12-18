@@ -23,39 +23,39 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(E); // error
+}(E)); // error
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
         _super.apply(this, arguments);
     }
     return E;
-})(D);
+}(D));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(E2); // error
+}(E2)); // error
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
         _super.apply(this, arguments);
     }
     return D2;
-})(C2);
+}(C2));
 var E2 = (function (_super) {
     __extends(E2, _super);
     function E2() {
         _super.apply(this, arguments);
     }
     return E2;
-})(D2);
+}(D2));

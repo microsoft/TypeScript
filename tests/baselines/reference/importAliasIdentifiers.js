@@ -55,7 +55,7 @@ var moduleA;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     moduleA.Point = Point;
 })(moduleA || (moduleA = {}));
 var alias = moduleA;
@@ -66,7 +66,7 @@ var clodule = (function () {
     function clodule() {
     }
     return clodule;
-})();
+}());
 var clodule;
 (function (clodule) {
     var Point = { x: 0, y: 0 };

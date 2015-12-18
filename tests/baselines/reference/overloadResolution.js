@@ -104,28 +104,28 @@ var SomeBase = (function () {
     function SomeBase() {
     }
     return SomeBase;
-})();
+}());
 var SomeDerived1 = (function (_super) {
     __extends(SomeDerived1, _super);
     function SomeDerived1() {
         _super.apply(this, arguments);
     }
     return SomeDerived1;
-})(SomeBase);
+}(SomeBase));
 var SomeDerived2 = (function (_super) {
     __extends(SomeDerived2, _super);
     function SomeDerived2() {
         _super.apply(this, arguments);
     }
     return SomeDerived2;
-})(SomeBase);
+}(SomeBase));
 var SomeDerived3 = (function (_super) {
     __extends(SomeDerived3, _super);
     function SomeDerived3() {
         _super.apply(this, arguments);
     }
     return SomeDerived3;
-})(SomeBase);
+}(SomeBase));
 function fn1() { return null; }
 var s = fn1(undefined);
 var s;

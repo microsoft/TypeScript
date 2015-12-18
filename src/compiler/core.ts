@@ -356,6 +356,33 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Reduce the properties of a map.
+     *
+     * @param map The map to reduce
+     * @param callback An aggregation function that is called for each entry in the map
+     * @param initial The initial value for the reduction.
+     */
+    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
+        let result = initial;
+        if (map) {
+            for (const key in map) {
+                if (hasProperty(map, key)) {
+                    result = callback(result, map[key], String(key));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Tests whether a value is an array.
+     */
+    export function isArray(value: any): value is any[] {
+        return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
     export function memoize<T>(callback: () => T): () => T {
         let value: T;
         return () => {

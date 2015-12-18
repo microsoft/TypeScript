@@ -15,13 +15,13 @@ var m1;
         function m1() {
         }
         return m1;
-    })();
+    }());
     var x = new m1();
     var c1 = (function () {
         function c1() {
         }
         return c1;
-    })();
+    }());
     m1_1.c1 = c1;
 })(m1 || (m1 = {}));
 var foo = new m1.c1();

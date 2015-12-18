@@ -49,7 +49,7 @@ var Foo = (function () {
         return this;
     };
     return Foo;
-})();
+}());
 var Bar = (function (_super) {
     __extends(Bar, _super);
     function Bar() {
@@ -59,7 +59,7 @@ var Bar = (function (_super) {
         return this;
     };
     return Bar;
-})(Foo);
+}(Foo));
 var bar = new Bar();
 bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
 var foo = new Foo();

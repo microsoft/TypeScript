@@ -15,12 +15,12 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 //# sourceMappingURL=c.js.map
 
 //// [c.d.ts]

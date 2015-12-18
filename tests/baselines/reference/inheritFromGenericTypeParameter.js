@@ -14,4 +14,4 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(T);
+}(T));

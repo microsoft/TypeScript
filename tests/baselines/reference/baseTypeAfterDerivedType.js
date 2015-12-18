@@ -27,4 +27,4 @@ var Derived2 = (function () {
         }
     };
     return Derived2;
-})();
+}());

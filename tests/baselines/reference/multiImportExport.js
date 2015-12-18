@@ -33,7 +33,7 @@ var Adder = (function () {
     Adder.prototype.add = function (a, b) {
     };
     return Adder;
-})();
+}());
 module.exports = Adder;
 //// [Math.js]
 "use strict";

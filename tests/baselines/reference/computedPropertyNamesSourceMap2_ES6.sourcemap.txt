@@ -47,9 +47,9 @@ sourceFile:computedPropertyNamesSourceMap2_ES6.ts
   >        
 2 >        debugger
 3 >                ;
-1->Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (["hello"])
-2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0) name (["hello"])
-3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0) name (["hello"])
+1->Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -57,8 +57,8 @@ sourceFile:computedPropertyNamesSourceMap2_ES6.ts
 1 >
   >    
 2 >    }
-1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (["hello"])
-2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0) name (["hello"])
+1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
 ---
 >>>};
 1 >^

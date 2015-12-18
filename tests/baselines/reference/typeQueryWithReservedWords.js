@@ -26,4 +26,4 @@ var Controller = (function () {
     Controller.prototype.var = function () {
     };
     return Controller;
-})();
+}());

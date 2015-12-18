@@ -21,6 +21,6 @@ var C1 = (function () {
         var bar = this.x1 || this.x2 || this.x3 || this.y || this.z;
     }
     return C1;
-})();
+}());
 var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
 var _a = [a.x1, a.x2, a.x3, a.y, a.z], a_x1 = _a[0], a_x2 = _a[1], a_x3 = _a[2], a_y = _a[3], a_z = _a[4];

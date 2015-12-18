@@ -1,7 +1,9 @@
 tests/cases/compiler/propertyAssignment.ts(6,13): error TS1170: A computed property name in a type literal must directly refer to a built-in symbol.
 tests/cases/compiler/propertyAssignment.ts(6,14): error TS2304: Cannot find name 'index'.
 tests/cases/compiler/propertyAssignment.ts(14,1): error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
+  Type '{ x: number; }' provides no match for the signature 'new (): any'
 tests/cases/compiler/propertyAssignment.ts(16,1): error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
+  Type '{ x: number; }' provides no match for the signature '(): void'
 
 
 ==== tests/cases/compiler/propertyAssignment.ts (4 errors) ====
@@ -25,7 +27,9 @@ tests/cases/compiler/propertyAssignment.ts(16,1): error TS2322: Type '{ x: numbe
     foo1 = bar1; // should be an error
     ~~~~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
+!!! error TS2322:   Type '{ x: number; }' provides no match for the signature 'new (): any'
     foo2 = bar2; 
     foo3 = bar3; // should be an error
     ~~~~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
+!!! error TS2322:   Type '{ x: number; }' provides no match for the signature '(): void'

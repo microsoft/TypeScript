@@ -30,7 +30,7 @@ var A = (function () {
         return this;
     };
     return A;
-})();
+}());
 function f(x) {
     function g(x) {
         x = x.self();
@@ -47,4 +47,4 @@ var B = (function () {
         x = x.self();
     };
     return B;
-})();
+}());

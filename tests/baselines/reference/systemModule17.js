@@ -52,7 +52,7 @@ System.register([], function(exports_1) {
                 function A() {
                 }
                 return A;
-            })();
+            }());
             exports_1("A", A);
         }
     }

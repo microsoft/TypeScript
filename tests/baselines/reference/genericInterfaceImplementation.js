@@ -27,4 +27,4 @@ var None = (function () {
         return new None();
     };
     return None;
-})();
+}());

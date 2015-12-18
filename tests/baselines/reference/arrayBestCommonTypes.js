@@ -119,19 +119,19 @@ var EmptyTypes;
         function base() {
         }
         return base;
-    })();
+    }());
     var base2 = (function () {
         function base2() {
         }
         return base2;
-    })();
+    }());
     var derived = (function (_super) {
         __extends(derived, _super);
         function derived() {
             _super.apply(this, arguments);
         }
         return derived;
-    })(base);
+    }(base));
     var f = (function () {
         function f() {
         }
@@ -170,7 +170,7 @@ var EmptyTypes;
             var b4 = [ifaceObj, baseObj, base2Obj];
         };
         return f;
-    })();
+    }());
 })(EmptyTypes || (EmptyTypes = {}));
 var NonEmptyTypes;
 (function (NonEmptyTypes) {
@@ -178,19 +178,19 @@ var NonEmptyTypes;
         function base() {
         }
         return base;
-    })();
+    }());
     var base2 = (function () {
         function base2() {
         }
         return base2;
-    })();
+    }());
     var derived = (function (_super) {
         __extends(derived, _super);
         function derived() {
             _super.apply(this, arguments);
         }
         return derived;
-    })(base);
+    }(base));
     var f = (function () {
         function f() {
         }
@@ -229,5 +229,5 @@ var NonEmptyTypes;
             var b4 = [ifaceObj, baseObj, base2Obj];
         };
         return f;
-    })();
+    }());
 })(NonEmptyTypes || (NonEmptyTypes = {}));
