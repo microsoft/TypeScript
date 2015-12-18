@@ -925,7 +925,7 @@ var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
     .concat(scriptSources)
-    .concat([path.join(servicesDirectory,"services.ts")]);
+    .concat([path.join(servicesDirectory, "services.ts")]);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {
