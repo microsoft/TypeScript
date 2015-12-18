@@ -25,7 +25,7 @@ var Based = (function () {
     function Based() {
     }
     return Based;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -34,10 +34,10 @@ var Derived = (function (_super) {
                 this.y = true;
             }
             return innver;
-        })();
+        }());
         _super.call(this);
         this.x = 10;
         var that = this;
     }
     return Derived;
-})(Based);
+}(Based));

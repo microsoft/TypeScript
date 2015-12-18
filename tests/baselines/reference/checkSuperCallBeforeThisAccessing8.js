@@ -24,7 +24,7 @@ var Base = (function () {
         }
     }
     return Base;
-})();
+}());
 var Super = (function (_super) {
     __extends(Super, _super);
     function Super() {
@@ -32,4 +32,4 @@ var Super = (function (_super) {
         _super.call(this);
     }
     return Super;
-})(Base);
+}(Base));
