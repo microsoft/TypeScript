@@ -245,6 +245,9 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.CloseBraceToken:
                         return spanInCloseBraceToken(node);
+                        
+                    case SyntaxKind.CloseBracketToken:
+                        return spanInCloseBracketToken(node);
 
                     case SyntaxKind.OpenParenToken: 
                         return spanInOpenParenToken(node);
@@ -502,6 +505,19 @@ namespace ts.BreakpointResolver {
                         return undefined;
 
                     case SyntaxKind.ObjectBindingPattern:
+                        // Breakpoint in last binding element or binding pattern if it contains no elements
+                        let bindingPattern = <BindingPattern>node.parent;
+                        return spanInNode(lastOrUndefined(bindingPattern.elements) || bindingPattern);
+
+                    // Default to parent node
+                    default:
+                        return spanInNode(node.parent);
+                }
+            }
+
+            function spanInCloseBracketToken(node: Node): TextSpan {
+                switch (node.parent.kind) {
+                    case SyntaxKind.ArrayBindingPattern:
                         // Breakpoint in last binding element or binding pattern if it contains no elements
                         let bindingPattern = <BindingPattern>node.parent;
                         return spanInNode(lastOrUndefined(bindingPattern.elements) || bindingPattern);

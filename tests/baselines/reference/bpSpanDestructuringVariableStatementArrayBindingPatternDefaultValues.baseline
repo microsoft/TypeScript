@@ -51,14 +51,9 @@
     >:=> (line 9, col 20) to (line 9, col 37)
 9  >let [numberA2 = -1, nameA2 = "noName", skillA2 = "noSkill"] = robotA;
 
-                                          ~~~~~~~~~~~~~~~~~~~~=> Pos: (286 to 305)  SpanInfo: {"start":287,"length":19}
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (286 to 317)  SpanInfo: {"start":287,"length":19}
     >skillA2 = "noSkill"
     >:=> (line 9, col 39) to (line 9, col 58)
-9  >let [numberA2 = -1, nameA2 = "noName", skillA2 = "noSkill"] = robotA;
-
-                                                              ~~~~~~~~~~~~=> Pos: (306 to 317)  SpanInfo: {"start":253,"length":13}
-    >numberA2 = -1
-    >:=> (line 9, col 5) to (line 9, col 18)
 --------------------------------
 10 >let [numberC2 = -1] = [3, "edging", "Trimming edges"];
 
@@ -78,24 +73,15 @@
     >:=> (line 11, col 19) to (line 11, col 35)
 11 >let [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimming edges"];
 
-                                        ~~~~~~~~~~~~~~~~~~~=> Pos: (409 to 427)  SpanInfo: {"start":410,"length":18}
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (409 to 464)  SpanInfo: {"start":410,"length":18}
     >skillC = "noSkill"
     >:=> (line 11, col 37) to (line 11, col 55)
-11 >let [numberC = -1, nameC = "noName", skillC = "noSkill"] = [3, "edging", "Trimming edges"];
-
-                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (428 to 464)  SpanInfo: {"start":378,"length":12}
-    >numberC = -1
-    >:=> (line 11, col 5) to (line 11, col 17)
 --------------------------------
 12 >let [numberA3 = -1, ...robotAInfo] = robotA;
     ~~~~~~~~~~~~~~~~~~~                           => Pos: (465 to 483)  SpanInfo: {"start":470,"length":13}
     >numberA3 = -1
     >:=> (line 12, col 5) to (line 12, col 18)
 12 >let [numberA3 = -1, ...robotAInfo] = robotA;
-                       ~~~~~~~~~~~~~~             => Pos: (484 to 497)  SpanInfo: {"start":485,"length":13}
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (484 to 508)  SpanInfo: {"start":485,"length":13}
     >...robotAInfo
     >:=> (line 12, col 20) to (line 12, col 33)
-12 >let [numberA3 = -1, ...robotAInfo] = robotA;
-                                     ~~~~~~~~~~~  => Pos: (498 to 508)  SpanInfo: {"start":470,"length":13}
-    >numberA3 = -1
-    >:=> (line 12, col 5) to (line 12, col 18)

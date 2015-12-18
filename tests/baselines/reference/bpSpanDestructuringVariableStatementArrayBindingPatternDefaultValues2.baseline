@@ -51,24 +51,14 @@
     >:=> (line 9, col 25) to (line 9, col 50)
 9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 
-                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (382 to 409)  SpanInfo: {"start":383,"length":27}
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (382 to 410)  SpanInfo: {"start":383,"length":27}
     >secondarySkillA = "noSkill"
     >:=> (line 9, col 52) to (line 9, col 79)
 9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 
-                                                                                   ~=> Pos: (410 to 410)  SpanInfo: {"start":356,"length":25}
-    >primarySkillA = "noSkill"
-    >:=> (line 9, col 25) to (line 9, col 50)
-9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
-
-                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (411 to 435)  SpanInfo: {"start":355,"length":81}
+                                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (411 to 452)  SpanInfo: {"start":355,"length":81}
     >[primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
     >:=> (line 9, col 24) to (line 9, col 105)
-9  >let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
-
-                                                                                                             ~~~~~~~~~~~~~~~~~=> Pos: (436 to 452)  SpanInfo: {"start":336,"length":17}
-    >nameMA = "noName"
-    >:=> (line 9, col 5) to (line 9, col 22)
 --------------------------------
 10 >let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
 
@@ -85,18 +75,10 @@
     >primarySkillC = "noSkill"
     >:=> (line 11, col 26) to (line 11, col 51)
 11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
-                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (567 to 594)  SpanInfo: {"start":568,"length":27}
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (567 to 595)  SpanInfo: {"start":568,"length":27}
     >secondarySkillC = "noSkill"
     >:=> (line 11, col 53) to (line 11, col 80)
 11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
-                                                                                    ~=> Pos: (595 to 595)  SpanInfo: {"start":541,"length":25}
-    >primarySkillC = "noSkill"
-    >:=> (line 11, col 26) to (line 11, col 51)
-11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
-                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (596 to 620)  SpanInfo: {"start":540,"length":81}
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (596 to 658)  SpanInfo: {"start":540,"length":81}
     >[primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]
     >:=> (line 11, col 25) to (line 11, col 106)
-11 >let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
-                                                                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (621 to 658)  SpanInfo: {"start":520,"length":18}
-    >nameMC2 = "noName"
-    >:=> (line 11, col 5) to (line 11, col 23)

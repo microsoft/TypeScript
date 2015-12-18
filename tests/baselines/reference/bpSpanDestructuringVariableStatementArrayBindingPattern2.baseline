@@ -55,19 +55,14 @@
     >:=> (line 10, col 14) to (line 10, col 27)
 10 >let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
 
-                                ~~~~~~~~~~~~~~~~  => Pos: (331 to 346)  SpanInfo: {"start":332,"length":15}
+                                ~~~~~~~~~~~~~~~~~ => Pos: (331 to 347)  SpanInfo: {"start":332,"length":15}
     >secondarySkillA
     >:=> (line 10, col 29) to (line 10, col 44)
 10 >let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
 
-                                                ~ => Pos: (347 to 347)  SpanInfo: {"start":317,"length":13}
-    >primarySkillA
-    >:=> (line 10, col 14) to (line 10, col 27)
-10 >let [nameMA, [primarySkillA, secondarySkillA]] = multiRobotA;
-
-                                                 ~~~~~~~~~~~~~~~~~=> Pos: (348 to 364)  SpanInfo: {"start":308,"length":6}
-    >nameMA
-    >:=> (line 10, col 5) to (line 10, col 11)
+                                                 ~~~~~~~~~~~~~~~~~=> Pos: (348 to 364)  SpanInfo: {"start":316,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 10, col 13) to (line 10, col 45)
 --------------------------------
 11 >
 
@@ -91,19 +86,14 @@
     >:=> (line 13, col 15) to (line 13, col 28)
 13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
 
-                                 ~~~~~~~~~~~~~~~~ => Pos: (445 to 460)  SpanInfo: {"start":446,"length":15}
+                                 ~~~~~~~~~~~~~~~~~=> Pos: (445 to 461)  SpanInfo: {"start":446,"length":15}
     >secondarySkillC
     >:=> (line 13, col 30) to (line 13, col 45)
 13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
 
-                                                 ~=> Pos: (461 to 461)  SpanInfo: {"start":431,"length":13}
-    >primarySkillC
-    >:=> (line 13, col 15) to (line 13, col 28)
-13 >let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping"]];
-
-                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (462 to 500)  SpanInfo: {"start":421,"length":7}
-    >nameMC2
-    >:=> (line 13, col 5) to (line 13, col 12)
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (462 to 500)  SpanInfo: {"start":430,"length":32}
+    >[primarySkillC, secondarySkillC]
+    >:=> (line 13, col 14) to (line 13, col 46)
 --------------------------------
 14 >
 
