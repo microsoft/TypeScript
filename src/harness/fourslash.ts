@@ -2769,7 +2769,7 @@ namespace FourSlashInterface {
         }
 
         public assertRangesEmpty(ranges: FourSlash.Range[]) {
-            assert(ranges.length !== 0, "Ranges array is expected to be non-empty");
+            assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
         }
 
         public completionListIsEmpty() {
