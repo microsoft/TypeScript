@@ -5762,9 +5762,10 @@ namespace ts {
                     target.symbol.flags & SymbolFlags.ConstEnum) {
                     return Ternary.False;
                 }
+                const targetEnumType = getTypeOfSymbol(target.symbol);
                 for (const property of getPropertiesOfType(getTypeOfSymbol(source.symbol))) {
                     if (property.flags & SymbolFlags.EnumMember) {
-                        const targetProperty = getPropertyOfType(getTypeOfSymbol(target.symbol), property.name);
+                        const targetProperty = getPropertyOfType(targetEnumType, property.name);
                         if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
                             reportError(Diagnostics.Property_0_is_missing_in_type_1,
                                 property.name,
