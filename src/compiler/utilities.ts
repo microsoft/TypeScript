@@ -692,6 +692,10 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isMethod(node: Node): node is MethodDeclaration {
+        return node && node.kind === SyntaxKind.MethodDeclaration;
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
