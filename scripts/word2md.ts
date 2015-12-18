@@ -183,7 +183,6 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     var tableColumnCount: number;
     var tableCellIndex: number;
     var columnAlignment: number[] = [];
-    var imageCount: number = 0;
 
     function setProperties(target: any, properties: any) {
         for (var name in properties) {
