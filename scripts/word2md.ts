@@ -279,7 +279,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         }
         else if (containsImage) {
             imageCount++;
-            write("![](images/image" + imageCount + ".png)\n\n");
+            write("&emsp;&emsp;&emsp;![](images/image" + imageCount + ".png)\n\n");
             text = "";
         }
         else if (style.match(/\s\d$/)) {
