@@ -2512,7 +2512,14 @@ namespace ts {
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                return checkExpressionCached(declaration.initializer);
+                let mapper: TypeMapper;
+                if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                    const type = getTypeOfBasePropertyDeclaration(<PropertyDeclaration>declaration);
+                    if (type) {
+                        mapper = createTypeMapper([undefinedType, nullType], [type, type]);
+                    }
+                }
+                return checkExpressionCached(declaration.initializer, mapper);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
@@ -2804,6 +2811,33 @@ namespace ts {
                 return getTypeOfAlias(symbol);
             }
             return unknownType;
+        }
+
+        function getTypeOfBasePropertyDeclaration(declaration: PropertyDeclaration) {
+            if (declaration.parent.kind === SyntaxKind.ClassDeclaration) {
+                const property = getPropertyOfBaseTypeDeclaration(<ClassLikeDeclaration>declaration.parent, declaration.symbol.name);
+                if (property) {
+                    return getTypeOfSymbol(property);
+                }
+            }
+        }
+
+        function getPropertyOfBaseTypeDeclaration(declaration: ClassLikeDeclaration, propertyName: string): Symbol {
+            const implementedTypeNodes = getClassImplementsHeritageClauseElements(declaration);
+            if (implementedTypeNodes) {
+                for (const typeRefNode of implementedTypeNodes) {
+                    const t = getTypeFromTypeReference(typeRefNode);
+                    if (t !== unknownType) {
+                        const property = getPropertyOfType(t, propertyName);
+                        if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
+                            continue;
+                        }
+                        if (property.name === propertyName) {
+                            return property;
+                        }
+                    }
+                }
+            }
         }
 
         function getTargetType(type: ObjectType): Type {
@@ -6735,7 +6769,13 @@ namespace ts {
             }
         }
 
-        function checkIdentifier(node: Identifier): Type {
+        function skipParenthesizedNodes(expression: Expression): Expression {
+            while (expression.kind === SyntaxKind.ParenthesizedExpression) {
+                expression = (expression as ParenthesizedExpression).expression;
+            }
+            return expression;
+        }
+        function checkIdentifier(node: Identifier, contextualMapper?: TypeMapper): Type {
             const symbol = getResolvedSymbol(node);
 
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
@@ -6756,6 +6796,9 @@ namespace ts {
                     getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                     getNodeLinks(node).flags |= NodeCheckFlags.LexicalArguments;
                 }
+            }
+            if (symbol === undefinedSymbol && contextualMapper) {
+                return contextualMapper(undefinedType);
             }
 
             if (symbol.flags & SymbolFlags.Alias && !isInTypeQuery(node) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
@@ -7051,6 +7094,12 @@ namespace ts {
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
+                    if (type) {
+                        return type;
+                    }
+                }
+                if (declaration.kind === SyntaxKind.PropertyDeclaration) {
+                    const type = getTypeOfBasePropertyDeclaration(<PropertyDeclaration>declaration);
                     if (type) {
                         return type;
                     }
@@ -7603,7 +7652,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteral(node: ObjectLiteralExpression, contextualMapper: TypeMapper): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
@@ -10703,7 +10752,7 @@ namespace ts {
             return checkExpression((<PropertyAssignment>node).initializer, contextualMapper);
         }
 
-        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper?: TypeMapper): Type {
+        function checkObjectLiteralMethod(node: MethodDeclaration, contextualMapper: TypeMapper): Type {
             // Grammar checking
             checkGrammarMethod(node);
 
@@ -10778,7 +10827,7 @@ namespace ts {
         function checkExpressionWorker(node: Expression, contextualMapper: TypeMapper): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return checkIdentifier(<Identifier>node);
+                    return checkIdentifier(<Identifier>node, contextualMapper);
                 case SyntaxKind.ThisKeyword:
                     return checkThisExpression(node);
                 case SyntaxKind.SuperKeyword:

@@ -2265,7 +2265,7 @@ namespace ts {
 
     /* @internal */
     export interface TypeMapper {
-        (t: TypeParameter): Type;
+        (t: Type): Type;
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
         context?: InferenceContext; // The inference context this mapper was created from.
                                     // Only inference mappers have this set (in createInferenceMapper).
