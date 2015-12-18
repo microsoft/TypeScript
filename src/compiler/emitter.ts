@@ -779,12 +779,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>): void {
-                if (nodeList.hasTrailingComma) {
-                    write(",");
-                }
-            }
-
             function emitLinePreservingList(parent: Node, nodes: NodeArray<Node>, allowTrailingComma: boolean, spacesBetweenBraces: boolean) {
                 Debug.assert(nodes.length > 0);
 
@@ -3246,10 +3240,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 else {
                     emitNormalLoopBody(node, /*emitAsEmbeddedStatement*/ true);
                 }
-            }
-
-            function emitDownLevelForOfStatement(node: ForOfStatement) {
-                emitLoop(node, emitDownLevelForOfStatementWorker);
             }
 
             function emitDownLevelForOfStatementWorker(node: ForOfStatement, loop: ConvertedLoop) {
