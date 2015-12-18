@@ -222,8 +222,21 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
-                    // Binary expression case is for JS module 'module.exports = expr'
-                    return "export=";
+                    switch (getSpecialPropertyAssignmentKind(node)) {
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                            // module.exports = ...
+                            return "export=";
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            // exports.x = ... or this.y = ...
+                            return ((node as BinaryExpression).left as PropertyAccessExpression).name.text;
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                            // className.prototype.methodName = ...
+                            return (((node as BinaryExpression).left as PropertyAccessExpression).expression as PropertyAccessExpression).name.text;
+                    }
+                    Debug.fail("Unknown binary declaration kind");
+                    break;
+
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                     return node.flags & NodeFlags.Default ? "default" : undefined;
@@ -1166,11 +1179,25 @@ namespace ts {
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.BinaryExpression:
                     if (isInJavaScriptFile(node)) {
-                        if (isExportsPropertyAssignment(node)) {
-                            bindExportsPropertyAssignment(<BinaryExpression>node);
-                        }
-                        else if (isModuleExportsAssignment(node)) {
-                            bindModuleExportsAssignment(<BinaryExpression>node);
+                        const specialKind = getSpecialPropertyAssignmentKind(node);
+                        switch (specialKind) {
+                            case SpecialPropertyAssignmentKind.ExportsProperty:
+                                bindExportsPropertyAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.ModuleExports:
+                                bindModuleExportsAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.PrototypeProperty:
+                                bindPrototypePropertyAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.ThisProperty:
+                                bindThisPropertyAssignment(<BinaryExpression>node);
+                                break;
+                            case SpecialPropertyAssignmentKind.None:
+                                // Nothing to do
+                                break;
+                            default:
+                                Debug.fail("Unknown special property assignment kind");
                         }
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
@@ -1349,6 +1376,34 @@ namespace ts {
             // 'module.exports = expr' assignment
             setCommonJsModuleIndicator(node);
             bindExportAssignment(node);
+        }
+
+        function bindThisPropertyAssignment(node: BinaryExpression) {
+            // Declare a 'member' in case it turns out the container was an ES5 class
+            if (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) {
+                container.symbol.members = container.symbol.members || {};
+                declareSymbol(container.symbol.members, container.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+            }
+        }
+
+        function bindPrototypePropertyAssignment(node: BinaryExpression) {
+            // We saw a node of the form 'x.prototype.y = z'. Declare a 'member' y on x if x was a function.
+
+            // Look up the function in the local scope, since prototype assignments should
+            // follow the function declaration
+            const classId = <Identifier>(<PropertyAccessExpression>(<PropertyAccessExpression>node.left).expression).expression;
+            const funcSymbol = container.locals[classId.text];
+            if (!funcSymbol || !(funcSymbol.flags & SymbolFlags.Function)) {
+                return;
+            }
+
+            // Set up the members collection if it doesn't exist already
+            if (!funcSymbol.members) {
+                funcSymbol.members = {};
+            }
+
+            // Declare the method/property
+            declareSymbol(funcSymbol.members, funcSymbol, <PropertyAccessExpression>node.left, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
         }
 
         function bindCallExpression(node: CallExpression) {
