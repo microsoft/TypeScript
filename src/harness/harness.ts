@@ -615,7 +615,6 @@ namespace Harness {
             export const getExecutingFilePath = () => "";
             export const exit = (exitCode: number) => {};
 
-            const supportsCodePage = () => false;
             export let log = (s: string) => console.log(s);
 
             namespace Http {
