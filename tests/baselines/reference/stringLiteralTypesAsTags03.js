@@ -1,4 +1,4 @@
-//// [stringLiteralTypesAsTags01.ts]
+//// [stringLiteralTypesAsTags03.ts]
 
 type Kind = "A" | "B"
 
@@ -16,10 +16,13 @@ interface B extends Entity {
     b: string;
 }
 
-function hasKind(entity: Entity, kind: "A"): entity is A;
-function hasKind(entity: Entity, kind: "B"): entity is B;
-function hasKind(entity: Entity, kind: Kind): entity is Entity;
-function hasKind(entity: Entity, kind: Kind): boolean {
+// Currently (2015-12-14), we write '"A" | "A"' and '"B" | "B"' to avoid
+// interpreting respective overloads as "specialized" signatures.
+// That way, we can avoid the need to look for a compatible overload
+// signature and simply check compatibility with the implementation.
+function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
+function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
+function hasKind(entity: Entity, kind: Kind): entity is Entity {
     return entity.kind === kind;
 }
 
@@ -42,7 +45,7 @@ else {
     let d = x;
 }
 
-//// [stringLiteralTypesAsTags01.js]
+//// [stringLiteralTypesAsTags03.js]
 function hasKind(entity, kind) {
     return entity.kind === kind;
 }
@@ -64,7 +67,7 @@ else {
 }
 
 
-//// [stringLiteralTypesAsTags01.d.ts]
+//// [stringLiteralTypesAsTags03.d.ts]
 declare type Kind = "A" | "B";
 interface Entity {
     kind: Kind;
@@ -77,7 +80,6 @@ interface B extends Entity {
     kind: "B";
     b: string;
 }
-declare function hasKind(entity: Entity, kind: "A"): entity is A;
-declare function hasKind(entity: Entity, kind: "B"): entity is B;
-declare function hasKind(entity: Entity, kind: Kind): entity is Entity;
+declare function hasKind(entity: Entity, kind: "A" | "A"): entity is A;
+declare function hasKind(entity: Entity, kind: "B" | "B"): entity is B;
 declare let x: A;
