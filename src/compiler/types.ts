@@ -1723,6 +1723,7 @@ namespace ts {
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
+        getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
         getShorthandAssignmentValueSymbol(location: Node): Symbol;
         getTypeAtLocation(node: Node): Type;
         typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
@@ -2017,6 +2018,7 @@ namespace ts {
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
+        inferredClassType?: Type;           // Type of an inferred ES5 class
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
@@ -2314,6 +2316,19 @@ namespace ts {
         mapper?: TypeMapper;                // Type mapper for this inference context
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
+    }
+
+    /* @internal */
+    export const enum SpecialPropertyAssignmentKind {
+        None,
+        /// exports.name = expr
+        ExportsProperty,
+        /// module.exports = expr
+        ModuleExports,
+        /// className.prototype.name = expr
+        PrototypeProperty,
+        /// this.name = expr
+        ThisProperty
     }
 
     export interface DiagnosticMessage {
