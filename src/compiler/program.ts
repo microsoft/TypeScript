@@ -752,7 +752,7 @@ namespace ts {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
+                if (!options.allowNonTsExtensions && !options.allowJs && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }

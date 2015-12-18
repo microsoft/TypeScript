@@ -1006,15 +1006,18 @@ namespace ts {
                     if (result.error) {
                         return {
                             options: {},
+                            typingOptions: {},
                             files: [],
                             errors: [realizeDiagnostic(result.error, '\r\n')]
                         };
                     }
 
-                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    fileName = normalizeSlashes(fileName);
+                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(fileName), fileName);
 
                     return {
                         options: configFile.options,
+                        typingOptions: configFile.typingOptions,
                         files: configFile.fileNames,
                         errors: realizeDiagnostics(configFile.errors, '\r\n')
                     };
@@ -1031,19 +1034,24 @@ namespace ts {
 
         public resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson?: string, compilerOptionsJson?: string): string {
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
-                let cachePath = projectRootPath ? ts.combinePaths(projectRootPath, "inferTypings") : globalCachePath;
+                let cachePath = projectRootPath ? projectRootPath : globalCachePath;
                 let typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
+                // Convert the include and exclude lists from a semi-colon delimited string to a string array
+                typingOptions.include = typingOptions.include ? typingOptions.include.toString().split(";") : [];
+                typingOptions.exclude = typingOptions.exclude ? typingOptions.exclude.toString().split(";") : [];
+
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
                 return ts.JsTyping.discoverTypings(this.host, fileNames, globalCachePath, cachePath, typingOptions, compilerOptions);
             });
         }
 
-        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, cachePath: string, projectRootPath: string): string {
+        public updateTypingsConfig(cachedTypingsPathsJson: string, newTypingsJson: string, globalCachePath: string, projectRootPath: string): string {
             return this.forwardJSONCall("updateTypingsConfig()", () => {
                 let cachedTypingsPaths: string[] = JSON.parse(cachedTypingsPathsJson);
                 let newTypingNames: string[] = JSON.parse(newTypingsJson);
-                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypingNames, cachePath, projectRootPath);
+                let cachePath = projectRootPath ? projectRootPath : globalCachePath;
+                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypingNames, cachePath);
             });
         }
     }
