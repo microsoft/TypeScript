@@ -5779,7 +5779,7 @@ namespace ts {
             }
 
             function getReferencesForSuperKeyword(superKeyword: Node): ReferencedSymbol[] {
-                let searchSpaceNode = getSuperContainer(superKeyword, /*includeFunctions*/ false);
+                let searchSpaceNode = getSuperContainer(superKeyword, /*stopOnFunctions*/ false);
                 if (!searchSpaceNode) {
                     return undefined;
                 }
@@ -5814,7 +5814,7 @@ namespace ts {
                         return;
                     }
 
-                    const container = getSuperContainer(node, /*includeFunctions*/ false);
+                    const container = getSuperContainer(node, /*stopOnFunctions*/ false);
 
                     // If we have a 'super' container, we must have an enclosing class.
                     // Now make sure the owning class is the same as the search-space
