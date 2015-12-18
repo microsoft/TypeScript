@@ -212,6 +212,7 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.CallExpression:
                     case SyntaxKind.NewExpression:
+                    case SyntaxKind.BindingElement:
                         // span on complete node
                         return textSpan(node);
 
@@ -221,6 +222,10 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.Decorator:
                         return spanInNodeArray(node.parent.decorators);
+
+                    case SyntaxKind.ObjectBindingPattern:
+                    case SyntaxKind.ArrayBindingPattern:
+                        return spanInBindingPattern(<BindingPattern>node);
 
                     // No breakpoint in interface, type alias
                     case SyntaxKind.InterfaceDeclaration:
@@ -279,8 +284,27 @@ namespace ts.BreakpointResolver {
                             return spanInPreviousNode(node);
                         }
 
+                        // initializer of variable declaration go to previous node
+                        if (node.parent.kind === SyntaxKind.VariableDeclaration &&
+                            ((<VariableDeclaration>node.parent).initializer === node ||
+                                isAssignmentOperator(node.kind))) {
+                            return spanInPreviousNode(node);
+                        }
+
                         // Default go to parent to set the breakpoint
                         return spanInNode(node.parent);
+                }
+            }
+
+            function textSpanFromVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
+                let declarations = variableDeclaration.parent.declarations;
+                if (declarations && declarations[0] === variableDeclaration) {
+                    // First declaration - include let keyword
+                    return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
+                }
+                else {
+                    // Span only on this declaration
+                    return textSpan(variableDeclaration);
                 }
             }
 
@@ -291,36 +315,23 @@ namespace ts.BreakpointResolver {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
 
-                let isParentVariableStatement = variableDeclaration.parent.parent.kind === SyntaxKind.VariableStatement;
-                let isDeclarationOfForStatement = variableDeclaration.parent.parent.kind === SyntaxKind.ForStatement && contains((<VariableDeclarationList>(<ForStatement>variableDeclaration.parent.parent).initializer).declarations, variableDeclaration);
-                let declarations = isParentVariableStatement
-                    ? (<VariableStatement>variableDeclaration.parent.parent).declarationList.declarations
-                    : isDeclarationOfForStatement
-                        ? (<VariableDeclarationList>(<ForStatement>variableDeclaration.parent.parent).initializer).declarations
-                        : undefined;
+                // If this is a destructuring pattern set breakpoint in binding pattern
+                if (isBindingPattern(variableDeclaration.name)) {
+                    return spanInBindingPattern(<BindingPattern>variableDeclaration.name);
+                }
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
                 if (variableDeclaration.initializer || (variableDeclaration.flags & NodeFlags.Export)) {
-                    if (declarations && declarations[0] === variableDeclaration) {
-                        if (isParentVariableStatement) {
-                            // First declaration - include let keyword
-                            return textSpan(variableDeclaration.parent, variableDeclaration);
-                        }
-                        else {
-                            Debug.assert(isDeclarationOfForStatement);
-                            // Include let keyword from for statement declarations in the span
-                            return textSpan(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent), variableDeclaration);
-                        }
-                    }
-                    else {
-                        // Span only on this declaration
-                        return textSpan(variableDeclaration);
-                    }
+                    return textSpanFromVariableDeclaration(variableDeclaration);
                 }
-                else if (declarations && declarations[0] !== variableDeclaration) {
+
+                let declarations = variableDeclaration.parent.declarations;
+                if (declarations && declarations[0] !== variableDeclaration) {
                     // If we cant set breakpoint on this declaration, set it on previous one
-                    let indexOfCurrentDeclaration = indexOf(declarations, variableDeclaration);
-                    return spanInVariableDeclaration(declarations[indexOfCurrentDeclaration - 1]);
+                    // Because the variable declaration may be binding pattern and 
+                    // we would like to set breakpoint in last binding element if thats the case,
+                    // use preceding token instead
+                    return spanInNode(findPrecedingToken(variableDeclaration.pos, sourceFile, variableDeclaration.parent));
                 }
             }
 
@@ -421,6 +432,24 @@ namespace ts.BreakpointResolver {
                 }
             }
 
+            function spanInBindingPattern(bindingPattern: BindingPattern): TextSpan {
+                // Set breakpoint in first binding element
+                let firstBindingElement = forEach(bindingPattern.elements,
+                    element => element.kind !== SyntaxKind.OmittedExpression ? element : undefined);
+
+                if (firstBindingElement) {
+                    return spanInNode(firstBindingElement);
+                }
+
+                // Empty binding pattern of binding element, set breakpoint on binding element
+                if (bindingPattern.parent.kind === SyntaxKind.BindingElement) {
+                    return spanInNode(bindingPattern.parent);
+                }
+
+                // Variable declaration is used as the span
+                return textSpanFromVariableDeclaration(<VariableDeclaration>bindingPattern.parent);
+            }
+
             // Tokens:
             function spanInOpenBraceToken(node: Node): TextSpan {
                 switch (node.parent.kind) {
@@ -471,6 +500,11 @@ namespace ts.BreakpointResolver {
                             return spanInNode(lastOrUndefined(lastClause.statements));
                         }
                         return undefined;
+
+                    case SyntaxKind.ObjectBindingPattern:
+                        // Breakpoint in last binding element or binding pattern if it contains no elements
+                        let bindingPattern = <BindingPattern>node.parent;
+                        return spanInNode(lastOrUndefined(bindingPattern.elements) || bindingPattern);
 
                     // Default to parent node
                     default:

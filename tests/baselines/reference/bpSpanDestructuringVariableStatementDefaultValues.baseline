@@ -47,21 +47,31 @@
 --------------------------------
 11 >var { name: nameA = "<NoName>" } = robotA;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   => Pos: (247 to 289)  SpanInfo: {"start":247,"length":41}
-    >var { name: nameA = "<NoName>" } = robotA
-    >:=> (line 11, col 0) to (line 11, col 41)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   => Pos: (247 to 289)  SpanInfo: {"start":253,"length":24}
+    >name: nameA = "<NoName>"
+    >:=> (line 11, col 6) to (line 11, col 30)
 --------------------------------
 12 >var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (290 to 370)  SpanInfo: {"start":290,"length":79}
-    >var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB
-    >:=> (line 12, col 0) to (line 12, col 79)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (290 to 320)  SpanInfo: {"start":296,"length":24}
+    >name: nameB = "<NoName>"
+    >:=> (line 12, col 6) to (line 12, col 30)
+12 >var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB;
+
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (321 to 370)  SpanInfo: {"start":322,"length":36}
+    >skill: skillB = "<skillUnspecified>"
+    >:=> (line 12, col 32) to (line 12, col 68)
 --------------------------------
 13 >var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" };
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (371 to 486)  SpanInfo: {"start":371,"length":114}
-    >var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" }
-    >:=> (line 13, col 0) to (line 13, col 114)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (371 to 401)  SpanInfo: {"start":377,"length":24}
+    >name: nameC = "<NoName>"
+    >:=> (line 13, col 6) to (line 13, col 30)
+13 >var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" };
+
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (402 to 486)  SpanInfo: {"start":403,"length":36}
+    >skill: skillC = "<skillUnspecified>"
+    >:=> (line 13, col 32) to (line 13, col 68)
 --------------------------------
 14 >if (nameA == nameB) {
 

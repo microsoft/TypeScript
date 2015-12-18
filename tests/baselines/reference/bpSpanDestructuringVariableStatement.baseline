@@ -47,21 +47,31 @@
 --------------------------------
 11 >var { name: nameA } = robotA;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (247 to 276)  SpanInfo: {"start":247,"length":28}
-    >var { name: nameA } = robotA
-    >:=> (line 11, col 0) to (line 11, col 28)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                => Pos: (247 to 276)  SpanInfo: {"start":253,"length":11}
+    >name: nameA
+    >:=> (line 11, col 6) to (line 11, col 17)
 --------------------------------
 12 >var { name: nameB, skill: skillB } = robotB;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (277 to 321)  SpanInfo: {"start":277,"length":43}
-    >var { name: nameB, skill: skillB } = robotB
-    >:=> (line 12, col 0) to (line 12, col 43)
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (277 to 294)  SpanInfo: {"start":283,"length":11}
+    >name: nameB
+    >:=> (line 12, col 6) to (line 12, col 17)
+12 >var { name: nameB, skill: skillB } = robotB;
+
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (295 to 321)  SpanInfo: {"start":296,"length":13}
+    >skill: skillB
+    >:=> (line 12, col 19) to (line 12, col 32)
 --------------------------------
 13 >var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (322 to 401)  SpanInfo: {"start":322,"length":78}
-    >var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }
-    >:=> (line 13, col 0) to (line 13, col 78)
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (322 to 339)  SpanInfo: {"start":328,"length":11}
+    >name: nameC
+    >:=> (line 13, col 6) to (line 13, col 17)
+13 >var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
+
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (340 to 401)  SpanInfo: {"start":341,"length":13}
+    >skill: skillC
+    >:=> (line 13, col 19) to (line 13, col 32)
 --------------------------------
 14 >if (nameA == nameB) {
 

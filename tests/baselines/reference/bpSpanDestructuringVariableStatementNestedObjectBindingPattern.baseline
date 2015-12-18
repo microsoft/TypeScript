@@ -57,21 +57,76 @@
 --------------------------------
 14 >var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (349 to 419)  SpanInfo: {"start":349,"length":69}
-    >var { skills: { primary: primaryA, secondary: secondaryA } } = robotA
-    >:=> (line 14, col 0) to (line 14, col 69)
+    ~~~~~~~~~~~~~                                 => Pos: (349 to 361)  SpanInfo: {"start":355,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 14, col 6) to (line 14, col 58)
+14 >var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
+
+                 ~~~~~~~~~~~~~~~~~~~~~            => Pos: (362 to 382)  SpanInfo: {"start":365,"length":17}
+    >primary: primaryA
+    >:=> (line 14, col 16) to (line 14, col 33)
+14 >var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
+
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (383 to 406)  SpanInfo: {"start":384,"length":21}
+    >secondary: secondaryA
+    >:=> (line 14, col 35) to (line 14, col 56)
+14 >var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
+
+                                                              ~~~~~~~~~~~~~=> Pos: (407 to 419)  SpanInfo: {"start":355,"length":52}
+    >skills: { primary: primaryA, secondary: secondaryA }
+    >:=> (line 14, col 6) to (line 14, col 58)
 --------------------------------
 15 >var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (420 to 503)  SpanInfo: {"start":420,"length":82}
-    >var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB
-    >:=> (line 15, col 0) to (line 15, col 82)
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (420 to 437)  SpanInfo: {"start":426,"length":11}
+    >name: nameB
+    >:=> (line 15, col 6) to (line 15, col 17)
+15 >var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
+
+                      ~~~~~~~~                    => Pos: (438 to 445)  SpanInfo: {"start":439,"length":52}
+    >skills: { primary: primaryB, secondary: secondaryB }
+    >:=> (line 15, col 19) to (line 15, col 71)
+15 >var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
+
+                              ~~~~~~~~~~~~~~~~~~~~~=> Pos: (446 to 466)  SpanInfo: {"start":449,"length":17}
+    >primary: primaryB
+    >:=> (line 15, col 29) to (line 15, col 46)
+15 >var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
+
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (467 to 490)  SpanInfo: {"start":468,"length":21}
+    >secondary: secondaryB
+    >:=> (line 15, col 48) to (line 15, col 69)
+15 >var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
+
+                                                                           ~~~~~~~~~~~~~=> Pos: (491 to 503)  SpanInfo: {"start":439,"length":52}
+    >skills: { primary: primaryB, secondary: secondaryB }
+    >:=> (line 15, col 19) to (line 15, col 71)
 --------------------------------
 16 >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (504 to 659)  SpanInfo: {"start":504,"length":154}
-    >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
-    >:=> (line 16, col 0) to (line 16, col 154)
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (504 to 521)  SpanInfo: {"start":510,"length":11}
+    >name: nameC
+    >:=> (line 16, col 6) to (line 16, col 17)
+16 >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+
+                      ~~~~~~~~                    => Pos: (522 to 529)  SpanInfo: {"start":523,"length":52}
+    >skills: { primary: primaryB, secondary: secondaryB }
+    >:=> (line 16, col 19) to (line 16, col 71)
+16 >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+
+                              ~~~~~~~~~~~~~~~~~~~~~=> Pos: (530 to 550)  SpanInfo: {"start":533,"length":17}
+    >primary: primaryB
+    >:=> (line 16, col 29) to (line 16, col 46)
+16 >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+
+                                                   ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (551 to 574)  SpanInfo: {"start":552,"length":21}
+    >secondary: secondaryB
+    >:=> (line 16, col 48) to (line 16, col 69)
+16 >var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+
+                                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (575 to 659)  SpanInfo: {"start":523,"length":52}
+    >skills: { primary: primaryB, secondary: secondaryB }
+    >:=> (line 16, col 19) to (line 16, col 71)
 --------------------------------
 17 >
 
