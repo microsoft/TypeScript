@@ -5934,7 +5934,7 @@ namespace ts {
 
             function populateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[] {
                 // The search set contains at least the current symbol
-                const result = [symbol];
+                let result = [symbol];
 
                 // If the symbol is an alias, add what it alaises to the list
                 if (isImportOrExportSpecifierImportSymbol(symbol)) {
