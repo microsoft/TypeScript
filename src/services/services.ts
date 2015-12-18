@@ -5934,7 +5934,7 @@ namespace ts {
 
             function populateSearchSymbolSet(symbol: Symbol, location: Node): Symbol[] {
                 // The search set contains at least the current symbol
-                const result = [symbol];
+                let result = [symbol];
 
                 // If the symbol is an alias, add what it alaises to the list
                 if (isImportOrExportSpecifierImportSymbol(symbol)) {
@@ -5964,6 +5964,15 @@ namespace ts {
                     if (shorthandValueSymbol) {
                         result.push(shorthandValueSymbol);
                     }
+                }
+
+                // If the symbol.valueDeclaration is a property parameter declaration,
+                // we should include both parameter declaration symbol and property declaration symbol
+                // Parameter Declaration symbol is only visible within function scope, so the symbol is stored in contructor.locals.
+                // Property Declaration symbol is a member of the class, so the symbol is stored in its class Declaration.symbol.members
+                if (symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.Parameter &&
+                    isParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration)) {
+                    result = result.concat(typeChecker.getSymbolsOfParameterPropertyDeclaration(<ParameterDeclaration>symbol.valueDeclaration, symbol.name));
                 }
 
                 // If this is a union property, add all the symbols from all its source symbols in all unioned types.

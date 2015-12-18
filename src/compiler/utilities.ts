@@ -2748,4 +2748,8 @@ namespace ts {
             }
         }
     }
+
+    export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
+        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
+    }
 }

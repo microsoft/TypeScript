@@ -2782,6 +2782,10 @@ namespace FourSlashInterface {
             this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
         }
 
+        public assertHasRanges(ranges: FourSlash.Range[]) {
+            assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
+        }
+
         public completionListIsEmpty() {
             this.state.verifyCompletionListIsEmpty(this.negative);
         }
