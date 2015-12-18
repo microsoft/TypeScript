@@ -263,13 +263,11 @@ namespace ts.server {
         }
 
         resolvePath(path: string): string {
-            const start = new Date().getTime();
             const result = this.host.resolvePath(path);
             return result;
         }
 
         fileExists(path: string): boolean {
-            const start = new Date().getTime();
             const result = this.host.fileExists(path);
             return result;
         }
@@ -322,32 +320,6 @@ namespace ts.server {
             const index = script.snap().index;
             const lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };
-        }
-    }
-
-    // assumes normalized paths
-    function getAbsolutePath(filename: string, directory: string) {
-        const rootLength = ts.getRootLength(filename);
-        if (rootLength > 0) {
-            return filename;
-        }
-        else {
-            const splitFilename = filename.split("/");
-            const splitDir = directory.split("/");
-            let i = 0;
-            let dirTail = 0;
-            const sflen = splitFilename.length;
-            while ((i < sflen) && (splitFilename[i].charAt(0) == ".")) {
-                const dots = splitFilename[i];
-                if (dots == "..") {
-                    dirTail++;
-                }
-                else if (dots != ".") {
-                    return undefined;
-                }
-                i++;
-            }
-            return splitDir.slice(0, splitDir.length - dirTail).concat(splitFilename.slice(i)).join("/");
         }
     }
 
@@ -583,7 +555,9 @@ namespace ts.server {
         }
 
         handleProjectFilelistChanges(project: Project) {
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+            // TODO: Ignoring potentially returned 'error' and 'succeeded' condition
+            const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
+
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
@@ -611,7 +585,9 @@ namespace ts.server {
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(fileName);
+            // TODO: Ignoring potentially returned 'error' and 'succeeded' condition
+            const { projectOptions } = this.configFileToProjectOptions(fileName);
+
             const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
             const openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
 
