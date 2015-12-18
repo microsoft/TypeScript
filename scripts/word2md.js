@@ -47,6 +47,7 @@ function convertDocumentToMarkdown(doc) {
     var tableColumnCount;
     var tableCellIndex;
     var columnAlignment = [];
+    var imageCount = 0;
     function setProperties(target, properties) {
         for (var name in properties) {
             if (properties.hasOwnProperty(name)) {
@@ -120,11 +121,17 @@ function convertDocumentToMarkdown(doc) {
         var text = p.range.text;
         var style = p.style.nameLocal;
         var inTable = p.range.tables.count > 0;
+        var containsImage = p.range.inlineShapes.count > 0;
         var level = 1;
         var sectionBreak = text.indexOf("\x0C") >= 0;
         text = trimEndFormattingMarks(text);
         if (inTable) {
             style = "Table";
+        }
+        else if (containsImage) {
+            imageCount++;
+            write("![](images/image" + imageCount + ".png)\n\n");
+            text = "";
         }
         else if (style.match(/\s\d$/)) {
             level = +style.substr(style.length - 1);

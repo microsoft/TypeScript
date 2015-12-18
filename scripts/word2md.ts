@@ -67,10 +67,17 @@ module Word {
     export interface Tables extends Collection<Table> {
     }
 
+    export interface InlineShape {
+    }
+
+    export interface InlineShapes extends Collection<InlineShape> {
+    }
+
     export interface Range {
         find: Find;
         listFormat: ListFormat;
         tables: Tables;
+        inlineShapes: InlineShapes;
         text: string;
         words: Ranges;
     }
@@ -180,6 +187,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     var tableColumnCount: number;
     var tableCellIndex: number;
     var columnAlignment: number[] = [];
+    var imageCount: number = 0;
 
     function setProperties(target: any, properties: any) {
         for (var name in properties) {
@@ -261,12 +269,18 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         var text = p.range.text;
         var style = p.style.nameLocal;
         var inTable = p.range.tables.count > 0;
+        var containsImage = p.range.inlineShapes.count > 0;
         var level = 1;
         var sectionBreak = text.indexOf("\x0C") >= 0;
 
         text = trimEndFormattingMarks(text);
         if (inTable) {
             style = "Table";
+        }
+        else if (containsImage) {
+            imageCount++;
+            write("![](images/image" + imageCount + ".png)\n\n");
+            text = "";
         }
         else if (style.match(/\s\d$/)) {
             level = +style.substr(style.length - 1);
