@@ -555,7 +555,6 @@ namespace ts.server {
         }
 
         handleProjectFilelistChanges(project: Project) {
-            // TODO: Ignoring potentially returned 'error' and 'succeeded' condition
             const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
@@ -585,7 +584,6 @@ namespace ts.server {
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            // TODO: Ignoring potentially returned 'error' and 'succeeded' condition
             const { projectOptions } = this.configFileToProjectOptions(fileName);
 
             const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));

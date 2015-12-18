@@ -1,6 +1,6 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
-var expect: typeof _chai.expect = _chai.expect;
+const expect: typeof _chai.expect = _chai.expect;
 
 namespace ts.server {
     let lastWrittenToHost: string;
