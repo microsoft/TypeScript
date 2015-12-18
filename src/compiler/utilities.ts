@@ -775,26 +775,38 @@ namespace ts {
         }
     }
 
-    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
+    /**
+      * Given an super call\property node returns a closest node where either  
+      * - super call\property is legal in the node and not legal in the parent node the node. 
+      *   i.e. super call is legal in constructor but not legal in the class body.
+      * - node is arrow function (so caller might need to call getSuperContainer in case if he needs to climb higher)
+      * - super call\property is definitely illegal in the node (but might be legal in some subnode)
+      *   i.e. super property access is illegal in function declaration but can be legal in the statement list
+      */
+    export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
         while (true) {
             node = node.parent;
-            if (!node) return node;
+            if (!node) {
+                return node;
+            }
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
-                    // If the grandparent node is an object literal (as opposed to a class),
-                    // then the computed property is not a 'super' container.
-                    // A computed property name in a class needs to be a super container
-                    // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
-                        return node;
-                    }
-                    // If this is a computed property, then the parent should not
-                    // make it a super container. The parent might be a property
-                    // in an object literal, like a method or accessor. But in order for
-                    // such a parent to be a super container, the reference must be in
-                    // the *body* of the container.
                     node = node.parent;
                     break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!stopOnFunctions) {
+                        continue;
+                    }
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
@@ -808,20 +820,6 @@ namespace ts {
                         node = node.parent;
                     }
                     break;
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    if (!includeFunctions) {
-                        continue;
-                    }
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return node;
             }
         }
     }
@@ -2747,5 +2745,9 @@ namespace ts {
                 }
             }
         }
+    }
+
+    export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
+        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 }

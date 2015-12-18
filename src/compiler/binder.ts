@@ -1499,10 +1499,7 @@ namespace ts {
 
             // If this is a property-parameter, then also declare the property symbol into the
             // containing class.
-            if (node.flags & NodeFlags.AccessibilityModifier &&
-                node.parent.kind === SyntaxKind.Constructor &&
-                isClassLike(node.parent.parent)) {
-
+            if (isParameterPropertyDeclaration(node)) {
                 const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members, classDeclaration.symbol, node, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
             }
