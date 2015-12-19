@@ -840,15 +840,6 @@ namespace ts {
             return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier);
         }
 
-        function getMemberOfModuleVariable(moduleSymbol: Symbol, name: string): Symbol {
-            if (moduleSymbol.flags & SymbolFlags.Variable) {
-                const typeAnnotation = (<VariableDeclaration>moduleSymbol.valueDeclaration).type;
-                if (typeAnnotation) {
-                    return getPropertyOfType(getTypeFromTypeNode(typeAnnotation), name);
-                }
-            }
-        }
-
         // This function creates a synthetic symbol that combines the value side of one symbol with the
         // type/namespace side of another symbol. Consider this example:
         //
@@ -1084,7 +1075,6 @@ namespace ts {
             }
 
             const moduleReferenceLiteral = <LiteralExpression>moduleReferenceExpression;
-            const searchPath = getDirectoryPath(getSourceFile(location).fileName);
 
             // Module names are escaped in our symbol table.  However, string literal values aren't.
             // Escape the name in the "require(...)" clause to ensure we find the right symbol.
@@ -2204,65 +2194,15 @@ namespace ts {
         }
 
         function isDeclarationVisible(node: Declaration): boolean {
-            function getContainingExternalModule(node: Node) {
-                for (; node; node = node.parent) {
-                    if (node.kind === SyntaxKind.ModuleDeclaration) {
-                        if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
-                            return node;
-                        }
-                    }
-                    else if (node.kind === SyntaxKind.SourceFile) {
-                        return isExternalOrCommonJsModule(<SourceFile>node) ? node : undefined;
-                    }
+            if (node) {
+                const links = getNodeLinks(node);
+                if (links.isVisible === undefined) {
+                    links.isVisible = !!determineIfDeclarationIsVisible();
                 }
-                Debug.fail("getContainingModule cant reach here");
+                return links.isVisible;
             }
 
-            function isUsedInExportAssignment(node: Node) {
-                // Get source File and see if it is external module and has export assigned symbol
-                const externalModule = getContainingExternalModule(node);
-                let exportAssignmentSymbol: Symbol;
-                let resolvedExportSymbol: Symbol;
-                if (externalModule) {
-                    // This is export assigned symbol node
-                    const externalModuleSymbol = getSymbolOfNode(externalModule);
-                    exportAssignmentSymbol = getExportAssignmentSymbol(externalModuleSymbol);
-                    const symbolOfNode = getSymbolOfNode(node);
-                    if (isSymbolUsedInExportAssignment(symbolOfNode)) {
-                        return true;
-                    }
-
-                    // if symbolOfNode is alias declaration, resolve the symbol declaration and check
-                    if (symbolOfNode.flags & SymbolFlags.Alias) {
-                        return isSymbolUsedInExportAssignment(resolveAlias(symbolOfNode));
-                    }
-                }
-
-                // Check if the symbol is used in export assignment
-                function isSymbolUsedInExportAssignment(symbol: Symbol) {
-                    if (exportAssignmentSymbol === symbol) {
-                        return true;
-                    }
-
-                    if (exportAssignmentSymbol && !!(exportAssignmentSymbol.flags & SymbolFlags.Alias)) {
-                        // if export assigned symbol is alias declaration, resolve the alias
-                        resolvedExportSymbol = resolvedExportSymbol || resolveAlias(exportAssignmentSymbol);
-                        if (resolvedExportSymbol === symbol) {
-                            return true;
-                        }
-
-                        // Container of resolvedExportSymbol is visible
-                        return forEach(resolvedExportSymbol.declarations, (current: Node) => {
-                            while (current) {
-                                if (current === node) {
-                                    return true;
-                                }
-                                current = current.parent;
-                            }
-                        });
-                    }
-                }
-            }
+            return false;
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
@@ -2340,14 +2280,6 @@ namespace ts {
                     default:
                         Debug.fail("isDeclarationVisible unknown: SyntaxKind: " + node.kind);
                 }
-            }
-
-            if (node) {
-                const links = getNodeLinks(node);
-                if (links.isVisible === undefined) {
-                    links.isVisible = !!determineIfDeclarationIsVisible();
-                }
-                return links.isVisible;
             }
         }
 
@@ -3394,14 +3326,6 @@ namespace ts {
             }
         }
 
-        function addInheritedSignatures(signatures: Signature[], baseSignatures: Signature[]) {
-            if (baseSignatures) {
-                for (const signature of baseSignatures) {
-                    signatures.push(signature);
-                }
-            }
-        }
-
         function resolveDeclaredMembers(type: InterfaceType): InterfaceTypeWithDeclaredMembers {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
@@ -3890,25 +3814,6 @@ namespace ts {
         function getSignaturesOfType(type: Type, kind: SignatureKind): Signature[] {
             return getSignaturesOfStructuredType(getApparentType(type), kind);
         }
-
-        function typeHasConstructSignatures(type: Type): boolean {
-            const apparentType = getApparentType(type);
-            if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Union)) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                return resolved.constructSignatures.length > 0;
-            }
-            return false;
-        }
-
-        function typeHasCallOrConstructSignatures(type: Type): boolean {
-            const apparentType = getApparentType(type);
-            if (apparentType.flags & TypeFlags.StructuredType) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                return resolved.callSignatures.length > 0 || resolved.constructSignatures.length > 0;
-            }
-            return false;
-        }
-
         function getIndexTypeOfStructuredType(type: Type, kind: IndexKind): Type {
             if (type.flags & TypeFlags.StructuredType) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -4408,10 +4313,6 @@ namespace ts {
 
         function getGlobalType(name: string, arity = 0): ObjectType {
             return getTypeOfGlobalSymbol(getGlobalTypeSymbol(name), arity);
-        }
-
-        function tryGetGlobalType(name: string, arity = 0): ObjectType {
-            return getTypeOfGlobalSymbol(getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined), arity);
         }
 
         /**
@@ -5648,31 +5549,23 @@ namespace ts {
                 if (target === anyFunctionType || source === anyFunctionType) {
                     return Ternary.True;
                 }
+
                 const sourceSignatures = getSignaturesOfType(source, kind);
                 const targetSignatures = getSignaturesOfType(target, kind);
+                if (kind === SignatureKind.Construct && sourceSignatures.length && targetSignatures.length &&
+                    isAbstractConstructorType(source) && !isAbstractConstructorType(target)) {
+                    // An abstract constructor type is not assignable to a non-abstract constructor type
+                    // as it would otherwise be possible to new an abstract class. Note that the assignablity
+                    // check we perform for an extends clause excludes construct signatures from the target,
+                    // so this check never proceeds.
+                    if (reportErrors) {
+                        reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
+                    }
+                    return Ternary.False;
+                }
+
                 let result = Ternary.True;
                 const saveErrorInfo = errorInfo;
-
-
-
-                if (kind === SignatureKind.Construct) {
-                    // Only want to compare the construct signatures for abstractness guarantees.
-
-                    // Because the "abstractness" of a class is the same across all construct signatures
-                    // (internally we are checking the corresponding declaration), it is enough to perform
-                    // the check and report an error once over all pairs of source and target construct signatures.
-                    //
-                    // sourceSig and targetSig are (possibly) undefined.
-                    //
-                    // Note that in an extends-clause, targetSignatures is stripped, so the check never proceeds.
-                    const sourceSig = sourceSignatures[0];
-                    const targetSig = targetSignatures[0];
-
-                    result &= abstractSignatureRelatedTo(source, sourceSig, target, targetSig);
-                    if (result !== Ternary.True) {
-                        return result;
-                    }
-                }
 
                 outer: for (const t of targetSignatures) {
                     if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
@@ -5700,40 +5593,6 @@ namespace ts {
                     }
                 }
                 return result;
-
-                function abstractSignatureRelatedTo(source: Type, sourceSig: Signature, target: Type, targetSig: Signature) {
-                    if (sourceSig && targetSig) {
-
-                        const sourceDecl = source.symbol && getClassLikeDeclarationOfSymbol(source.symbol);
-                        const targetDecl = target.symbol && getClassLikeDeclarationOfSymbol(target.symbol);
-
-                        if (!sourceDecl) {
-                            // If the source object isn't itself a class declaration, it can be freely assigned, regardless
-                            // of whether the constructed object is abstract or not.
-                            return Ternary.True;
-                        }
-
-                        const sourceErasedSignature = getErasedSignature(sourceSig);
-                        const targetErasedSignature = getErasedSignature(targetSig);
-
-                        const sourceReturnType = sourceErasedSignature && getReturnTypeOfSignature(sourceErasedSignature);
-                        const targetReturnType = targetErasedSignature && getReturnTypeOfSignature(targetErasedSignature);
-
-                        const sourceReturnDecl = sourceReturnType && sourceReturnType.symbol && getClassLikeDeclarationOfSymbol(sourceReturnType.symbol);
-                        const targetReturnDecl = targetReturnType && targetReturnType.symbol && getClassLikeDeclarationOfSymbol(targetReturnType.symbol);
-                        const sourceIsAbstract = sourceReturnDecl && sourceReturnDecl.flags & NodeFlags.Abstract;
-                        const targetIsAbstract = targetReturnDecl && targetReturnDecl.flags & NodeFlags.Abstract;
-
-                        if (sourceIsAbstract && !(targetIsAbstract && targetDecl)) {
-                            // if target isn't a class-declaration type, then it can be new'd, so we forbid the assignment.
-                            if (reportErrors) {
-                                reportError(Diagnostics.Cannot_assign_an_abstract_constructor_type_to_a_non_abstract_constructor_type);
-                            }
-                            return Ternary.False;
-                        }
-                    }
-                    return Ternary.True;
-                }
             }
 
             /**
@@ -5927,6 +5786,20 @@ namespace ts {
                 }
                 return Ternary.True;
             }
+        }
+
+        // Return true if the given type is the constructor type for an abstract class
+        function isAbstractConstructorType(type: Type) {
+            if (type.flags & TypeFlags.Anonymous) {
+                const symbol = type.symbol;
+                if (symbol && symbol.flags & SymbolFlags.Class) {
+                    const declaration = getClassLikeDeclarationOfSymbol(symbol);
+                    if (declaration && declaration.flags & NodeFlags.Abstract) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         // Return true if the given type is part of a deeply nested chain of generic instantiations. We consider this to be the case
@@ -6299,17 +6172,21 @@ namespace ts {
         }
 
         function createInferenceContext(typeParameters: TypeParameter[], inferUnionTypes: boolean): InferenceContext {
-            const inferences: TypeInferences[] = [];
-            for (const unused of typeParameters) {
-                inferences.push({
-                    primary: undefined, secondary: undefined, isFixed: false
-                });
-            }
+            const inferences = map(typeParameters, createTypeInferencesObject);
+
             return {
                 typeParameters,
                 inferUnionTypes,
                 inferences,
                 inferredTypes: new Array(typeParameters.length),
+            };
+        }
+
+        function createTypeInferencesObject(): TypeInferences {
+            return {
+                primary: undefined,
+                secondary: undefined,
+                isFixed: false,
             };
         }
 
@@ -6581,10 +6458,6 @@ namespace ts {
                 getInferredType(context, i);
             }
             return context.inferredTypes;
-        }
-
-        function hasAncestor(node: Node, kind: SyntaxKind): boolean {
-            return getAncestor(node, kind) !== undefined;
         }
 
         // EXPRESSION TYPE CHECKING
@@ -8206,7 +8079,6 @@ namespace ts {
         /// type or factory function.
         /// Otherwise, returns unknownSymbol.
         function getJsxElementTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
-            const flags: JsxFlags = JsxFlags.UnknownElement;
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
                 if (isJsxIntrinsicIdentifier(node.tagName)) {
@@ -14479,16 +14351,6 @@ namespace ts {
             }
         }
 
-        function getModuleStatements(node: Declaration): Statement[] {
-            if (node.kind === SyntaxKind.SourceFile) {
-                return (<SourceFile>node).statements;
-            }
-            if (node.kind === SyntaxKind.ModuleDeclaration && (<ModuleDeclaration>node).body.kind === SyntaxKind.ModuleBlock) {
-                return (<ModuleBlock>(<ModuleDeclaration>node).body).statements;
-            }
-            return emptyArray;
-        }
-
         function hasExportedMembers(moduleSymbol: Symbol) {
             for (var id in moduleSymbol.exports) {
                 if (id !== "export=") {
@@ -15567,20 +15429,6 @@ namespace ts {
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
-        function instantiateSingleCallFunctionType(functionType: Type, typeArguments: Type[]): Type {
-            if (functionType === unknownType) {
-                return unknownType;
-            }
-
-            const signature = getSingleCallSignature(functionType);
-            if (!signature) {
-                return unknownType;
-            }
-
-            const instantiatedSignature = getSignatureInstantiation(signature, typeArguments);
-            return getOrCreateTypeFromSignature(instantiatedSignature);
-        }
-
         function createResolver(): EmitResolver {
             return {
                 getReferencedExportContainer,
@@ -16629,25 +16477,6 @@ namespace ts {
             }
         }
 
-        function isIntegerLiteral(expression: Expression): boolean {
-            if (expression.kind === SyntaxKind.PrefixUnaryExpression) {
-                const unaryExpression = <PrefixUnaryExpression>expression;
-                if (unaryExpression.operator === SyntaxKind.PlusToken || unaryExpression.operator === SyntaxKind.MinusToken) {
-                    expression = unaryExpression.operand;
-                }
-            }
-            if (expression.kind === SyntaxKind.NumericLiteral) {
-                // Allows for scientific notation since literalExpression.text was formed by
-                // coercing a number to a string. Sometimes this coercion can yield a string
-                // in scientific notation.
-                // We also don't need special logic for hex because a hex integer is converted
-                // to decimal when it is coerced.
-                return /^[0-9]+([eE]\+?[0-9]+)?$/.test((<LiteralExpression>expression).text);
-            }
-
-            return false;
-        }
-
         function hasParseDiagnostics(sourceFile: SourceFile): boolean {
             return sourceFile.parseDiagnostics.length > 0;
         }
@@ -16674,11 +16503,6 @@ namespace ts {
                 diagnostics.add(createDiagnosticForNode(node, message, arg0, arg1, arg2));
                 return true;
             }
-        }
-
-        function isEvalOrArgumentsIdentifier(node: Node): boolean {
-            return node.kind === SyntaxKind.Identifier &&
-                ((<Identifier>node).text === "eval" || (<Identifier>node).text === "arguments");
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {

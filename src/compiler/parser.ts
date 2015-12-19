@@ -771,10 +771,6 @@ namespace ts {
             return doInsideOfContext(ParserContextFlags.Yield, func);
         }
 
-        function doOutsideOfYieldContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Yield, func);
-        }
-
         function doInDecoratorContext<T>(func: () => T): T {
             return doInsideOfContext(ParserContextFlags.Decorator, func);
         }
@@ -789,10 +785,6 @@ namespace ts {
 
         function doInYieldAndAwaitContext<T>(func: () => T): T {
             return doInsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
-        }
-
-        function doOutsideOfYieldAndAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
         }
 
         function inContext(flags: ParserContextFlags) {
@@ -849,10 +841,6 @@ namespace ts {
 
         function nextToken(): SyntaxKind {
             return token = scanner.scan();
-        }
-
-        function getTokenPos(pos: number): number {
-            return skipTrivia(sourceText, pos);
         }
 
         function reScanGreaterToken(): SyntaxKind {
@@ -2644,10 +2632,6 @@ namespace ts {
                 isStartOfExpression();
         }
 
-        function allowInAndParseExpression(): Expression {
-            return allowInAnd(parseExpression);
-        }
-
         function parseExpression(): Expression {
             // Expression[in]:
             //      AssignmentExpression[in]
@@ -3962,7 +3946,6 @@ namespace ts {
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             const tokenIsIdentifier = isIdentifier();
-            const nameToken = token;
             const propertyName = parsePropertyName();
 
             // Disallowing of optional property assignments happens in the grammar checker.
@@ -5104,10 +5087,6 @@ namespace ts {
             return undefined;
         }
 
-        function parseHeritageClausesWorker() {
-            return parseList(ParsingContext.HeritageClauses, parseHeritageClause);
-        }
-
         function parseHeritageClause() {
             if (token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword) {
                 const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
@@ -5251,12 +5230,6 @@ namespace ts {
 
         function nextTokenIsSlash() {
             return nextToken() === SyntaxKind.SlashToken;
-        }
-
-        function nextTokenIsCommaOrFromKeyword() {
-            nextToken();
-            return token === SyntaxKind.CommaToken ||
-                token === SyntaxKind.FromKeyword;
         }
 
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
@@ -5749,13 +5722,6 @@ namespace ts {
                 const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
                 parameter.type = parseJSDocType();
                 return finishNode(parameter);
-            }
-
-            function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
-                const result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
-                nextToken();
-                result.type = type;
-                return finishNode(result);
             }
 
             function parseJSDocTypeReference(): JSDocTypeReference {

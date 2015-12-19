@@ -2987,7 +2987,6 @@ namespace ts {
 
         function getCompletionData(fileName: string, position: number) {
             const typeChecker = program.getTypeChecker();
-            const syntacticStart = new Date().getTime();
             const sourceFile = getValidSourceFile(fileName);
             const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
@@ -6175,10 +6174,6 @@ namespace ts {
             return ts.NavigateTo.getNavigateToItems(program, cancellationToken, searchValue, maxResultCount);
         }
 
-        function containErrors(diagnostics: Diagnostic[]): boolean {
-            return forEach(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
-        }
-
         function getEmitOutput(fileName: string): EmitOutput {
             synchronizeHostData();
 
@@ -7054,7 +7049,6 @@ namespace ts {
          * be performed.
          */
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
-            const start = new Date().getTime();
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Check if in a context where we don't want to perform any insertion
@@ -7348,11 +7342,17 @@ namespace ts {
                     if (declarations && declarations.length > 0) {
                         // Disallow rename for elements that are defined in the standard TypeScript library.
                         const defaultLibFileName = host.getDefaultLibFileName(host.getCompilationSettings());
+                        const canonicalDefaultLibName = getCanonicalFileName(ts.normalizePath(defaultLibFileName));
                         if (defaultLibFileName) {
                             for (const current of declarations) {
                                 const sourceFile = current.getSourceFile();
+                                // TODO (drosen): When is there no source file?
+                                if (!sourceFile) {
+                                    continue;
+                                }
+
                                 const canonicalName = getCanonicalFileName(ts.normalizePath(sourceFile.fileName));
-                                if (sourceFile && getCanonicalFileName(ts.normalizePath(sourceFile.fileName)) === getCanonicalFileName(ts.normalizePath(defaultLibFileName))) {
+                                if (canonicalName === canonicalDefaultLibName) {
                                     return getRenameInfoError(getLocaleSpecificMessage(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library));
                                 }
                             }

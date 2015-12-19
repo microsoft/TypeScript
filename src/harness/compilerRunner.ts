@@ -264,7 +264,6 @@ class CompilerBaselineRunner extends RunnerBase {
                     const allFiles = toBeCompiled.concat(otherFiles).filter(file => !!program.getSourceFile(file.unitName));
 
                     const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true);
-                    const pullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ false);
 
                     const fullResults: ts.Map<TypeWriterResult[]> = {};
                     const pullResults: ts.Map<TypeWriterResult[]> = {};
