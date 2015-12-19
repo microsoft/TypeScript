@@ -270,6 +270,10 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
         text = trimEndFormattingMarks(text);
         if (text === "/") {
+            // An inline image shows up in the text as a "/". When we see a paragraph
+            // consisting of nothing but "/", we check to see if the paragraph contains
+            // hidden text and, if so, emit that instead. The hidden text is assumed to
+            // contain an appropriate markdown image link.
             range.textRetrievalMode.includeHiddenText = true;
             var fullText = range.text;
             range.textRetrievalMode.includeHiddenText = false;
