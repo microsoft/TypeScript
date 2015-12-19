@@ -1195,7 +1195,7 @@ namespace ts {
 
     // @kind(SyntaxKind.CaseClause)
     export interface CaseClause extends Node {
-        expression?: Expression;
+        expression: Expression;
         statements: NodeArray<Statement>;
     }
 
