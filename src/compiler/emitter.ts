@@ -4280,9 +4280,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // TODO (yuisu) : we should not have special cases to condition emitting comments
                 // but have one place to fix check for these conditions.
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature &&
-                    node.parent && node.parent.kind !== SyntaxKind.PropertyAssignment &&
-                    node.parent.kind !== SyntaxKind.CallExpression) {
+                if (node.kind !== SyntaxKind.MethodDeclaration &&
+                    node.kind !== SyntaxKind.MethodSignature &&
+                    node.parent &&
+                    node.parent.kind !== SyntaxKind.PropertyAssignment &&
+                    node.parent.kind !== SyntaxKind.CallExpression &&
+                    node.parent.kind !== SyntaxKind.ArrayLiteralExpression) {
                     // 1. Methods will emit the comments as part of emitting method declaration
 
                     // 2. If the function is a property of object literal, emitting leading-comments
