@@ -2823,28 +2823,25 @@ namespace ts {
         }
 
         function getPropertyOfBaseTypeDeclaration(declaration: ClassLikeDeclaration, propertyName: string): Symbol {
-            // TODO: Refactor the repeated code here
-            for (const t of getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(declaration)))) {
-                const property = getPropertyOfType(t, propertyName);
-                if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
-                    continue;
-                }
-                if (property.name === propertyName) {
-                    return property;
-                }
+            const property = getFirstPropertyOfTypes(getBaseTypes(<InterfaceType>getTypeOfSymbol(getSymbolOfNode(declaration))), propertyName);
+            if (property) {
+                return property;
             }
             const implementedTypeNodes = getClassImplementsHeritageClauseElements(declaration);
             if (implementedTypeNodes) {
-                for (const typeRefNode of implementedTypeNodes) {
-                    const t = getTypeFromTypeReference(typeRefNode);
-                    if (t !== unknownType) {
-                        const property = getPropertyOfType(t, propertyName);
-                        if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
-                            continue;
-                        }
-                        if (property.name === propertyName) {
-                            return property;
-                        }
+                return getFirstPropertyOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
+            }
+        }
+
+        function getFirstPropertyOfTypes(types: Type[], propertyName: string) {
+            for (const t of types) {
+                if (t !== unknownType) {
+                    const property = getPropertyOfType(t, propertyName);
+                    if (!property || property.valueDeclaration.flags & NodeFlags.Private) {
+                        continue;
+                    }
+                    if (property.name === propertyName) {
+                        return property;
                     }
                 }
             }
@@ -6818,20 +6815,11 @@ namespace ts {
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             const exportedSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
-            return mapContextualType(exportedSymbol, contextualMapper) || 
-                getNarrowedTypeOfSymbol(exportedSymbol, node);
-        }
-
-        function mapContextualType(symbol: Symbol, contextualMapper: TypeMapper): Type {
-            // TODO: This function probably already exists
-            // if it doesn't, it needs a better name
-            if (contextualMapper) {
-                const type = getTypeOfSymbol(symbol);
-                const contextualType = contextualMapper(type);
-                if (type !== contextualType) {
-                    return contextualType;
-                }
+            const type = getNarrowedTypeOfSymbol(exportedSymbol, node);
+            if (type === undefinedType || type == nullType) {
+                return (contextualMapper || identityMapper)(type);
             }
+            return type;
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -7468,7 +7456,7 @@ namespace ts {
             else if (isObjectLiteralMethod(node)) {
                 type = getContextualTypeForObjectLiteralMethod(node);
             }
-            else if (isMethod(node)){
+            else if (isMethod(node)) {
                 type = getTypeOfBasePropertyDeclaration(node);
             }
 
@@ -7628,13 +7616,11 @@ namespace ts {
             }
             if (!elementTypes.length) {
                 const mapper = contextualMapper || identityMapper;
-                const t = mapper(undefinedType);
-                if(isArrayLikeType(t)) {
-                    elementTypes = (<TypeReference>t).typeArguments;
-                }
-                else {
+                const mappedType = mapper(undefinedType);
+                if (mappedType === undefinedType) {
                     return createArrayType(undefinedType);
                 }
+                elementTypes = (<TypeReference>mappedType).typeArguments;
             }
             return createArrayType(getUnionType(elementTypes));
         }
@@ -7822,12 +7808,13 @@ namespace ts {
                     let result: Type;
                     if (!propTypes.length) {
                         const mapper = contextualMapper || identityMapper;
-                        const t = mapper(undefinedType);
-                        if (t !== undefinedType) {
-                            result = kind === IndexKind.String ? (<ResolvedType>t).stringIndexType : (<ResolvedType>t).numberIndexType;
+                        const mappedType = mapper(undefinedType);
+                        if (mappedType === undefinedType) {
+                            result = undefinedType;
                         }
                         else {
-                            result = undefinedType;
+                            const resolvedType = <ResolvedType>mappedType;
+                            result = kind === IndexKind.String ? resolvedType.stringIndexType : resolvedType.numberIndexType;
                         }
                     }
                     else {
