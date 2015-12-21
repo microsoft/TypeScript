@@ -44,13 +44,8 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
             Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(46,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(55,7): error TS2420: Class 'C4' incorrectly implements interface 'F2'.
-  Types of property 'd4' are incompatible.
-    Type '({x, y, c}: { x: any; y: any; c: any; }) => void' is not assignable to type '({x, y, z}?: { x: any; y: any; z: any; }) => any'.
-      Types of parameters '__0' and '__0' are incompatible.
-        Type '{ x: any; y: any; c: any; }' is not assignable to type '{ x: any; y: any; z: any; }'.
-          Property 'z' is missing in type '{ x: any; y: any; c: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(57,15): error TS2459: Type '{ x: any; y: any; z: any; }' has no property 'c' and no string index signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
@@ -175,17 +170,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     }
     
     class C4 implements F2 {
-          ~~
-!!! error TS2420: Class 'C4' incorrectly implements interface 'F2'.
-!!! error TS2420:   Types of property 'd4' are incompatible.
-!!! error TS2420:     Type '({x, y, c}: { x: any; y: any; c: any; }) => void' is not assignable to type '({x, y, z}?: { x: any; y: any; z: any; }) => any'.
-!!! error TS2420:       Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2420:         Type '{ x: any; y: any; c: any; }' is not assignable to type '{ x: any; y: any; z: any; }'.
-!!! error TS2420:           Property 'z' is missing in type '{ x: any; y: any; c: any; }'.
         d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
            ~~~~~~~~~~
 !!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
         d4({x, y, c}) { }
+                  ~
+!!! error TS2459: Type '{ x: any; y: any; z: any; }' has no property 'c' and no string index signature.
         e0([a, b, q]) { }
     }
     
