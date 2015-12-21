@@ -67,12 +67,12 @@
     >:=> (line 12, col 45) to (line 12, col 66)
 12 >function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 
-                                                                        ~~=> Pos: (321 to 322)  SpanInfo: {"start":269,"length":52}
+                                                                        ~~~~~~~~~~=> Pos: (321 to 330)  SpanInfo: {"start":269,"length":52}
     >skills: { primary: primaryA, secondary: secondaryA }
     >:=> (line 12, col 16) to (line 12, col 68)
 12 >function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 
-                                                                          ~~~~~~~~~~~=> Pos: (323 to 333)  SpanInfo: {"start":338,"length":21}
+                                                                                  ~~~=> Pos: (331 to 333)  SpanInfo: {"start":338,"length":21}
     >console.log(primaryA)
     >:=> (line 13, col 4) to (line 13, col 25)
 --------------------------------
@@ -115,12 +115,12 @@
     >:=> (line 15, col 58) to (line 15, col 79)
 15 >function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) {
 
-                                                                                     ~~=> Pos: (444 to 445)  SpanInfo: {"start":392,"length":52}
+                                                                                     ~~~~~~~~~~=> Pos: (444 to 453)  SpanInfo: {"start":392,"length":52}
     >skills: { primary: primaryB, secondary: secondaryB }
     >:=> (line 15, col 29) to (line 15, col 81)
 15 >function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) {
 
-                                                                                       ~~~~~~~~~~~=> Pos: (446 to 456)  SpanInfo: {"start":461,"length":23}
+                                                                                               ~~~=> Pos: (454 to 456)  SpanInfo: {"start":461,"length":23}
     >console.log(secondaryB)
     >:=> (line 16, col 4) to (line 16, col 27)
 --------------------------------
@@ -143,12 +143,12 @@
     >:=> (line 19, col 4) to (line 19, col 31)
 18 >function foo3({ skills }: Robot) {
 
-                  ~~~~~~~~~~                      => Pos: (502 to 511)  SpanInfo: {"start":504,"length":6}
+                  ~~~~~~~~~~~~~~~~~~              => Pos: (502 to 519)  SpanInfo: {"start":504,"length":6}
     >skills
     >:=> (line 18, col 16) to (line 18, col 22)
 18 >function foo3({ skills }: Robot) {
 
-                            ~~~~~~~~~~~           => Pos: (512 to 522)  SpanInfo: {"start":527,"length":27}
+                                    ~~~           => Pos: (520 to 522)  SpanInfo: {"start":527,"length":27}
     >console.log(skills.primary)
     >:=> (line 19, col 4) to (line 19, col 31)
 --------------------------------

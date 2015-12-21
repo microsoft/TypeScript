@@ -287,11 +287,15 @@ namespace ts.BreakpointResolver {
                             return spanInPreviousNode(node);
                         }
 
-                        // initializer of variable declaration go to previous node
-                        if (node.parent.kind === SyntaxKind.VariableDeclaration &&
-                            ((<VariableDeclaration>node.parent).initializer === node ||
-                                isAssignmentOperator(node.kind))) {
-                            return spanInPreviousNode(node);
+                        // initializer of variable/parameter declaration go to previous node
+                        if ((node.parent.kind === SyntaxKind.VariableDeclaration ||
+                            node.parent.kind === SyntaxKind.Parameter)) {
+                            const paramOrVarDecl = <VariableDeclaration | ParameterDeclaration>node.parent;
+                            if (paramOrVarDecl.initializer === node ||
+                                paramOrVarDecl.type === node ||
+                                isAssignmentOperator(node.kind)) {
+                                return spanInPreviousNode(node);
+                            }
                         }
 
                         // Default go to parent to set the breakpoint
@@ -345,7 +349,11 @@ namespace ts.BreakpointResolver {
             }
 
             function spanInParameterDeclaration(parameter: ParameterDeclaration): TextSpan {
-                if (canHaveSpanInParameterDeclaration(parameter)) {
+                if (isBindingPattern(parameter.name)) {
+                    // set breakpoint in binding pattern
+                    return spanInBindingPattern(<BindingPattern>parameter.name);
+                }
+                else if (canHaveSpanInParameterDeclaration(parameter)) {
                     return textSpan(parameter);
                 }
                 else {
@@ -562,7 +570,9 @@ namespace ts.BreakpointResolver {
 
             function spanInColonToken(node: Node): TextSpan {
                 // Is this : specifying return annotation of the function declaration
-                if (isFunctionLike(node.parent) || node.parent.kind === SyntaxKind.PropertyAssignment) {
+                if (isFunctionLike(node.parent) ||
+                    node.parent.kind === SyntaxKind.PropertyAssignment || 
+                    node.parent.kind === SyntaxKind.Parameter) {
                     return spanInPreviousNode(node);
                 }
 

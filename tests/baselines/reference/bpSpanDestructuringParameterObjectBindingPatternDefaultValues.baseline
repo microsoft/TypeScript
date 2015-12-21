@@ -46,14 +46,9 @@
     >:=> (line 11, col 4) to (line 11, col 22)
 10 >function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (203 to 230)  SpanInfo: {"start":205,"length":24}
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (203 to 244)  SpanInfo: {"start":205,"length":24}
     >name: nameA = "<NoName>"
     >:=> (line 10, col 16) to (line 10, col 40)
-10 >function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
-
-                                              ~~~~~~~~~~~~~~=> Pos: (231 to 244)  SpanInfo: {"start":203,"length":41}
-    >{ name: nameA = "<NoName>" }: Robot = { }
-    >:=> (line 10, col 14) to (line 10, col 55)
 10 >function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 
                                                             ~~~=> Pos: (245 to 247)  SpanInfo: {"start":252,"length":18}
@@ -84,14 +79,9 @@
     >:=> (line 13, col 16) to (line 13, col 40)
 13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
 
-                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (315 to 342)  SpanInfo: {"start":316,"length":25}
+                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (315 to 355)  SpanInfo: {"start":316,"length":25}
     >skill: skillB = "noSkill"
     >:=> (line 13, col 42) to (line 13, col 67)
-13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
-
-                                                                         ~~~~~~~~~~~~~=> Pos: (343 to 355)  SpanInfo: {"start":288,"length":67}
-    >{ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}
-    >:=> (line 13, col 14) to (line 13, col 81)
 13 >function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
 
                                                                                       ~~~=> Pos: (356 to 358)  SpanInfo: {"start":363,"length":18}
@@ -117,14 +107,9 @@
     >:=> (line 17, col 4) to (line 17, col 21)
 16 >function foo3({ name = "<NoName>" }: Robot = {}) {
 
-                  ~~~~~~~~~~~~~~~~~~~~~           => Pos: (399 to 419)  SpanInfo: {"start":401,"length":17}
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (399 to 432)  SpanInfo: {"start":401,"length":17}
     >name = "<NoName>"
     >:=> (line 16, col 16) to (line 16, col 33)
-16 >function foo3({ name = "<NoName>" }: Robot = {}) {
-
-                                       ~~~~~~~~~~~~~=> Pos: (420 to 432)  SpanInfo: {"start":399,"length":33}
-    >{ name = "<NoName>" }: Robot = {}
-    >:=> (line 16, col 14) to (line 16, col 47)
 16 >function foo3({ name = "<NoName>" }: Robot = {}) {
 
                                                     ~~~=> Pos: (433 to 435)  SpanInfo: {"start":440,"length":17}

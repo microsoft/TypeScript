@@ -28,12 +28,12 @@
     >:=> (line 7, col 4) to (line 7, col 22)
 6  >function foo1([, nameA]: Robot) {
 
-                  ~~~~~~~~~                       => Pos: (147 to 155)  SpanInfo: {"start":150,"length":5}
+                  ~~~~~~~~~~~~~~~~~               => Pos: (147 to 163)  SpanInfo: {"start":150,"length":5}
     >nameA
     >:=> (line 6, col 17) to (line 6, col 22)
 6  >function foo1([, nameA]: Robot) {
 
-                           ~~~~~~~~~~~            => Pos: (156 to 166)  SpanInfo: {"start":171,"length":18}
+                                   ~~~            => Pos: (164 to 166)  SpanInfo: {"start":171,"length":18}
     >console.log(nameA)
     >:=> (line 7, col 4) to (line 7, col 22)
 --------------------------------
@@ -56,12 +56,12 @@
     >:=> (line 10, col 4) to (line 10, col 24)
 9  >function foo2([numberB]: Robot) {
 
-                  ~~~~~~~~~                       => Pos: (207 to 215)  SpanInfo: {"start":208,"length":7}
+                  ~~~~~~~~~~~~~~~~~               => Pos: (207 to 223)  SpanInfo: {"start":208,"length":7}
     >numberB
     >:=> (line 9, col 15) to (line 9, col 22)
 9  >function foo2([numberB]: Robot) {
 
-                           ~~~~~~~~~~~            => Pos: (216 to 226)  SpanInfo: {"start":231,"length":20}
+                                   ~~~            => Pos: (224 to 226)  SpanInfo: {"start":231,"length":20}
     >console.log(numberB)
     >:=> (line 10, col 4) to (line 10, col 24)
 --------------------------------
@@ -94,12 +94,12 @@
     >:=> (line 12, col 25) to (line 12, col 31)
 12 >function foo3([numberA2, nameA2, skillA2]: Robot) {
 
-                                    ~~~~~~~~~     => Pos: (287 to 295)  SpanInfo: {"start":288,"length":7}
+                                    ~~~~~~~~~~~~~~~~~=> Pos: (287 to 303)  SpanInfo: {"start":288,"length":7}
     >skillA2
     >:=> (line 12, col 33) to (line 12, col 40)
 12 >function foo3([numberA2, nameA2, skillA2]: Robot) {
 
-                                             ~~~~~~~~~~~=> Pos: (296 to 306)  SpanInfo: {"start":311,"length":19}
+                                                     ~~~=> Pos: (304 to 306)  SpanInfo: {"start":311,"length":19}
     >console.log(nameA2)
     >:=> (line 13, col 4) to (line 13, col 23)
 --------------------------------
@@ -127,12 +127,12 @@
     >:=> (line 15, col 15) to (line 15, col 23)
 15 >function foo4([numberA3, ...robotAInfo]: Robot) {
 
-                            ~~~~~~~~~~~~~~~       => Pos: (358 to 372)  SpanInfo: {"start":359,"length":13}
+                            ~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (358 to 380)  SpanInfo: {"start":359,"length":13}
     >...robotAInfo
     >:=> (line 15, col 25) to (line 15, col 38)
 15 >function foo4([numberA3, ...robotAInfo]: Robot) {
 
-                                           ~~~~~~~~~~~=> Pos: (373 to 383)  SpanInfo: {"start":388,"length":23}
+                                                   ~~~=> Pos: (381 to 383)  SpanInfo: {"start":388,"length":23}
     >console.log(robotAInfo)
     >:=> (line 16, col 4) to (line 16, col 27)
 --------------------------------

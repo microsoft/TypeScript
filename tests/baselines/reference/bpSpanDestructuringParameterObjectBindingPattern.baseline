@@ -46,12 +46,12 @@
     >:=> (line 11, col 4) to (line 11, col 22)
 10 >function foo1({ name: nameA }: Robot) {
 
-                  ~~~~~~~~~~~~~~~                 => Pos: (201 to 215)  SpanInfo: {"start":203,"length":11}
+                  ~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (201 to 223)  SpanInfo: {"start":203,"length":11}
     >name: nameA
     >:=> (line 10, col 16) to (line 10, col 27)
 10 >function foo1({ name: nameA }: Robot) {
 
-                                 ~~~~~~~~~~~      => Pos: (216 to 226)  SpanInfo: {"start":231,"length":18}
+                                         ~~~      => Pos: (224 to 226)  SpanInfo: {"start":231,"length":18}
     >console.log(nameA)
     >:=> (line 11, col 4) to (line 11, col 22)
 --------------------------------
@@ -79,12 +79,12 @@
     >:=> (line 13, col 16) to (line 13, col 27)
 13 >function foo2({ name: nameB, skill: skillB }: Robot) {
 
-                                ~~~~~~~~~~~~~~~~  => Pos: (281 to 296)  SpanInfo: {"start":282,"length":13}
+                                ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (281 to 304)  SpanInfo: {"start":282,"length":13}
     >skill: skillB
     >:=> (line 13, col 29) to (line 13, col 42)
 13 >function foo2({ name: nameB, skill: skillB }: Robot) {
 
-                                                ~~~~~~~~~~~=> Pos: (297 to 307)  SpanInfo: {"start":312,"length":18}
+                                                        ~~~=> Pos: (305 to 307)  SpanInfo: {"start":312,"length":18}
     >console.log(nameB)
     >:=> (line 14, col 4) to (line 14, col 22)
 --------------------------------
@@ -107,12 +107,12 @@
     >:=> (line 17, col 4) to (line 17, col 21)
 16 >function foo3({ name }: Robot) {
 
-                  ~~~~~~~~                        => Pos: (348 to 355)  SpanInfo: {"start":350,"length":4}
+                  ~~~~~~~~~~~~~~~~                => Pos: (348 to 363)  SpanInfo: {"start":350,"length":4}
     >name
     >:=> (line 16, col 16) to (line 16, col 20)
 16 >function foo3({ name }: Robot) {
 
-                          ~~~~~~~~~~~             => Pos: (356 to 366)  SpanInfo: {"start":371,"length":17}
+                                  ~~~             => Pos: (364 to 366)  SpanInfo: {"start":371,"length":17}
     >console.log(name)
     >:=> (line 17, col 4) to (line 17, col 21)
 --------------------------------

@@ -28,12 +28,12 @@
     >:=> (line 7, col 4) to (line 7, col 23)
 6  >function foo1([, skillA]: Robot) {
 
-                  ~~~~~~~~~~                      => Pos: (162 to 171)  SpanInfo: {"start":165,"length":6}
+                  ~~~~~~~~~~~~~~~~~~              => Pos: (162 to 179)  SpanInfo: {"start":165,"length":6}
     >skillA
     >:=> (line 6, col 17) to (line 6, col 23)
 6  >function foo1([, skillA]: Robot) {
 
-                            ~~~~~~~~~~~           => Pos: (172 to 182)  SpanInfo: {"start":187,"length":19}
+                                    ~~~           => Pos: (180 to 182)  SpanInfo: {"start":187,"length":19}
     >console.log(skillA)
     >:=> (line 7, col 4) to (line 7, col 23)
 --------------------------------
@@ -56,12 +56,12 @@
     >:=> (line 10, col 4) to (line 10, col 23)
 9  >function foo2([nameMB]: Robot) {
 
-                  ~~~~~~~~                        => Pos: (224 to 231)  SpanInfo: {"start":225,"length":6}
+                  ~~~~~~~~~~~~~~~~                => Pos: (224 to 239)  SpanInfo: {"start":225,"length":6}
     >nameMB
     >:=> (line 9, col 15) to (line 9, col 21)
 9  >function foo2([nameMB]: Robot) {
 
-                          ~~~~~~~~~~~             => Pos: (232 to 242)  SpanInfo: {"start":247,"length":19}
+                                  ~~~             => Pos: (240 to 242)  SpanInfo: {"start":247,"length":19}
     >console.log(nameMB)
     >:=> (line 10, col 4) to (line 10, col 23)
 --------------------------------
@@ -99,12 +99,12 @@
     >:=> (line 12, col 39) to (line 12, col 54)
 12 >function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 
-                                                           ~=> Pos: (325 to 325)  SpanInfo: {"start":293,"length":32}
+                                                           ~~~~~~~~~=> Pos: (325 to 333)  SpanInfo: {"start":293,"length":32}
     >[primarySkillA, secondarySkillA]
     >:=> (line 12, col 23) to (line 12, col 55)
 12 >function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 
-                                                            ~~~~~~~~~~~=> Pos: (326 to 336)  SpanInfo: {"start":341,"length":19}
+                                                                    ~~~=> Pos: (334 to 336)  SpanInfo: {"start":341,"length":19}
     >console.log(nameMA)
     >:=> (line 13, col 4) to (line 13, col 23)
 --------------------------------
@@ -127,12 +127,12 @@
     >:=> (line 16, col 4) to (line 16, col 32)
 15 >function foo4([...multiRobotAInfo]: Robot) {
 
-                  ~~~~~~~~~~~~~~~~~~~~            => Pos: (378 to 397)  SpanInfo: {"start":379,"length":18}
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (378 to 405)  SpanInfo: {"start":379,"length":18}
     >...multiRobotAInfo
     >:=> (line 15, col 15) to (line 15, col 33)
 15 >function foo4([...multiRobotAInfo]: Robot) {
 
-                                      ~~~~~~~~~~~ => Pos: (398 to 408)  SpanInfo: {"start":413,"length":28}
+                                              ~~~ => Pos: (406 to 408)  SpanInfo: {"start":413,"length":28}
     >console.log(multiRobotAInfo)
     >:=> (line 16, col 4) to (line 16, col 32)
 --------------------------------

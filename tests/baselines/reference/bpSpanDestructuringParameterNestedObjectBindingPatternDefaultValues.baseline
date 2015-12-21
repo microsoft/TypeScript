@@ -102,22 +102,12 @@
 --------------------------------
 18 >    }: Robot = robotA) {
 
-    ~~~~~                                         => Pos: (446 to 450)  SpanInfo: {"start":284,"length":161}
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (446 to 467)  SpanInfo: {"start":284,"length":161}
     >skills: {
     >            primary: primaryA = "primary",
     >            secondary: secondaryA = "secondary"
     >        } = { primary: "SomeSkill", secondary: "someSkill" }
     >:=> (line 14, col 8) to (line 17, col 60)
-18 >    }: Robot = robotA) {
-
-         ~~~~~~~~~~~~~~~~~                        => Pos: (451 to 467)  SpanInfo: {"start":274,"length":193}
-    >{
-    >        skills: {
-    >            primary: primaryA = "primary",
-    >            secondary: secondaryA = "secondary"
-    >        } = { primary: "SomeSkill", secondary: "someSkill" }
-    >    }: Robot = robotA
-    >:=> (line 13, col 4) to (line 18, col 21)
 18 >    }: Robot = robotA) {
 
                           ~~~                     => Pos: (468 to 470)  SpanInfo: {"start":475,"length":21}
@@ -196,23 +186,12 @@
 --------------------------------
 28 >    }: Robot = robotA) {
 
-    ~~~~~                                         => Pos: (721 to 725)  SpanInfo: {"start":559,"length":161}
+    ~~~~~~~~~~~~~~~~~~~~~~                        => Pos: (721 to 742)  SpanInfo: {"start":559,"length":161}
     >skills: {
     >            primary: primaryB = "primary",
     >            secondary: secondaryB = "secondary"
     >        } = { primary: "SomeSkill", secondary: "someSkill" }
     >:=> (line 24, col 8) to (line 27, col 60)
-28 >    }: Robot = robotA) {
-
-         ~~~~~~~~~~~~~~~~~                        => Pos: (726 to 742)  SpanInfo: {"start":519,"length":223}
-    >{
-    >        name: nameC = "name",
-    >        skills: {
-    >            primary: primaryB = "primary",
-    >            secondary: secondaryB = "secondary"
-    >        } = { primary: "SomeSkill", secondary: "someSkill" }
-    >    }: Robot = robotA
-    >:=> (line 22, col 4) to (line 28, col 21)
 28 >    }: Robot = robotA) {
 
                           ~~~                     => Pos: (743 to 745)  SpanInfo: {"start":750,"length":23}
@@ -238,14 +217,9 @@
     >:=> (line 32, col 4) to (line 32, col 31)
 31 >function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
 
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (791 to 852)  SpanInfo: {"start":793,"length":57}
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (791 to 869)  SpanInfo: {"start":793,"length":57}
     >skills = { primary: "SomeSkill", secondary: "someSkill" }
     >:=> (line 31, col 16) to (line 31, col 73)
-31 >function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
-
-                                                                                ~~~~~~~~~~~~~~~~~=> Pos: (853 to 869)  SpanInfo: {"start":791,"length":78}
-    >{ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA
-    >:=> (line 31, col 14) to (line 31, col 92)
 31 >function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
 
                                                                                                  ~~~=> Pos: (870 to 872)  SpanInfo: {"start":877,"length":27}

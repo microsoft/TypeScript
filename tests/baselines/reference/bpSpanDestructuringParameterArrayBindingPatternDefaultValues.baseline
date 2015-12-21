@@ -28,14 +28,9 @@
     >:=> (line 7, col 4) to (line 7, col 22)
 6  >function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 
-                  ~~~~~~~~~~~~~~~~~~~~            => Pos: (147 to 166)  SpanInfo: {"start":150,"length":16}
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (147 to 198)  SpanInfo: {"start":150,"length":16}
     >nameA = "noName"
     >:=> (line 6, col 17) to (line 6, col 33)
-6  >function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
-
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (167 to 198)  SpanInfo: {"start":147,"length":51}
-    >[, nameA = "noName"]: Robot = [-1, "name", "skill"]
-    >:=> (line 6, col 14) to (line 6, col 65)
 6  >function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 
                                                                       ~~~=> Pos: (199 to 201)  SpanInfo: {"start":206,"length":18}
@@ -61,14 +56,9 @@
     >:=> (line 10, col 4) to (line 10, col 24)
 9  >function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 
-                  ~~~~~~~~~~~~~~                  => Pos: (242 to 255)  SpanInfo: {"start":243,"length":12}
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (242 to 287)  SpanInfo: {"start":243,"length":12}
     >numberB = -1
     >:=> (line 9, col 15) to (line 9, col 27)
-9  >function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
-
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (256 to 287)  SpanInfo: {"start":242,"length":45}
-    >[numberB = -1]: Robot = [-1, "name", "skill"]
-    >:=> (line 9, col 14) to (line 9, col 59)
 9  >function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 
                                                                 ~~~=> Pos: (288 to 290)  SpanInfo: {"start":295,"length":20}
@@ -104,14 +94,9 @@
     >:=> (line 12, col 30) to (line 12, col 45)
 12 >function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]) {
 
-                                                  ~~~~~~~~~~~~~~~~~~~=> Pos: (365 to 383)  SpanInfo: {"start":366,"length":17}
+                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (365 to 415)  SpanInfo: {"start":366,"length":17}
     >skillA2 = "skill"
     >:=> (line 12, col 47) to (line 12, col 64)
-12 >function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]) {
-
-                                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (384 to 415)  SpanInfo: {"start":333,"length":82}
-    >[numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]
-    >:=> (line 12, col 14) to (line 12, col 96)
 12 >function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, "name", "skill"]) {
 
                                                                                                      ~~~=> Pos: (416 to 418)  SpanInfo: {"start":423,"length":19}
@@ -142,14 +127,9 @@
     >:=> (line 15, col 15) to (line 15, col 28)
 15 >function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 
-                                 ~~~~~~~~~~~~~~~  => Pos: (475 to 489)  SpanInfo: {"start":476,"length":13}
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (475 to 521)  SpanInfo: {"start":476,"length":13}
     >...robotAInfo
     >:=> (line 15, col 30) to (line 15, col 43)
-15 >function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
-
-                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (490 to 521)  SpanInfo: {"start":460,"length":61}
-    >[numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]
-    >:=> (line 15, col 14) to (line 15, col 75)
 15 >function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 
                                                                                 ~~~=> Pos: (522 to 524)  SpanInfo: {"start":529,"length":23}
