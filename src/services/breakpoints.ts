@@ -45,6 +45,10 @@ namespace ts.BreakpointResolver {
             return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
         }
 
+        function textSpanEndingAtNextToken(startNode: Node, previousTokenToFindNextEndToken: Node): TextSpan {
+            return textSpan(startNode, findNextToken(previousTokenToFindNextEndToken, previousTokenToFindNextEndToken.parent));
+        }
+
         function spanInNodeIfStartsOnSameLine(node: Node, otherwiseOnNode?: Node): TextSpan {
             if (node && lineOfPosition === sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line) {
                 return spanInNode(node);
@@ -67,29 +71,33 @@ namespace ts.BreakpointResolver {
         function spanInNode(node: Node): TextSpan {
             if (node) {
                 if (isExpression(node)) {
-                    if (node.parent.kind === SyntaxKind.DoStatement) {
-                        // Set span as if on while keyword
-                        return spanInPreviousNode(node);
-                    }
+                    switch (node.parent.kind) {
+                        case SyntaxKind.DoStatement:
+                            // Set span as if on while keyword
+                            return spanInPreviousNode(node);
 
-                    if (node.parent.kind === SyntaxKind.Decorator) {
-                        // Set breakpoint on the decorator emit
-                        return spanInNode(node.parent);
-                    }
+                        case SyntaxKind.Decorator:
+                            // Set breakpoint on the decorator emit
+                            return spanInNode(node.parent);
 
-                    if (node.parent.kind === SyntaxKind.ForStatement) {
-                        // For now lets set the span on this expression, fix it later
-                        return textSpan(node);
-                    }
+                        case SyntaxKind.ForStatement:
+                        case SyntaxKind.ForOfStatement:
+                            // For now lets set the span on this expression, fix it later
+                            return textSpan(node);
 
-                    if (node.parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.CommaToken) {
-                        // if this is comma expression, the breakpoint is possible in this expression
-                        return textSpan(node);
-                    }
+                        case SyntaxKind.BinaryExpression:
+                            if ((<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.CommaToken) {
+                                // if this is comma expression, the breakpoint is possible in this expression
+                                return textSpan(node);
+                            }
+                            break;
 
-                    if (node.parent.kind === SyntaxKind.ArrowFunction && (<FunctionLikeDeclaration>node.parent).body === node) {
-                        // If this is body of arrow function, it is allowed to have the breakpoint
-                        return textSpan(node);
+                        case SyntaxKind.ArrowFunction:
+                            if ((<FunctionLikeDeclaration>node.parent).body === node) {
+                                // If this is body of arrow function, it is allowed to have the breakpoint
+                                return textSpan(node);
+                            }
+                            break;
                     }
                 }
 
@@ -137,7 +145,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.WhileStatement:
                         // Span on while(...)
-                        return textSpan(node, findNextToken((<WhileStatement>node).expression, node));
+                        return textSpanEndingAtNextToken(node, (<WhileStatement>node).expression);
 
                     case SyntaxKind.DoStatement:
                         // span in statement of the do statement
@@ -149,7 +157,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.IfStatement:
                         // set on if(..) span
-                        return textSpan(node, findNextToken((<IfStatement>node).expression, node));
+                        return textSpanEndingAtNextToken(node, (<IfStatement>node).expression);
 
                     case SyntaxKind.LabeledStatement:
                         // span in statement
@@ -164,13 +172,16 @@ namespace ts.BreakpointResolver {
                         return spanInForStatement(<ForStatement>node);
 
                     case SyntaxKind.ForInStatement:
+                        // span of for (a in ...)
+                        return textSpanEndingAtNextToken(node, (<ForInStatement>node).expression);
+
                     case SyntaxKind.ForOfStatement:
-                        // span on for (a in ...)
-                        return textSpan(node, findNextToken((<ForInStatement | ForOfStatement>node).expression, node));
+                        // span in initializer
+                        return spanInInitializerOfForLike(<ForOfStatement | ForInStatement>node);
 
                     case SyntaxKind.SwitchStatement:
                         // span on switch(...)
-                        return textSpan(node, findNextToken((<SwitchStatement>node).expression, node));
+                        return textSpanEndingAtNextToken(node, (<SwitchStatement>node).expression);
 
                     case SyntaxKind.CaseClause:
                     case SyntaxKind.DefaultClause:
@@ -271,6 +282,9 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.FinallyKeyword:
                         return spanInNextNode(node);
 
+                    case SyntaxKind.OfKeyword:
+                        return spanInOfKeyword(node);
+
                     default:
                         // If this is name of property assignment, set breakpoint in the initializer
                         if (node.parent.kind === SyntaxKind.PropertyAssignment && (<PropertyDeclaration>node.parent).name === node) {
@@ -317,18 +331,20 @@ namespace ts.BreakpointResolver {
 
             function spanInVariableDeclaration(variableDeclaration: VariableDeclaration): TextSpan {
                 // If declaration of for in statement, just set the span in parent
-                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement ||
-                    variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
+                if (variableDeclaration.parent.parent.kind === SyntaxKind.ForInStatement) {
                     return spanInNode(variableDeclaration.parent.parent);
                 }
-
+                
                 // If this is a destructuring pattern set breakpoint in binding pattern
                 if (isBindingPattern(variableDeclaration.name)) {
                     return spanInBindingPattern(<BindingPattern>variableDeclaration.name);
                 }
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
-                if (variableDeclaration.initializer || (variableDeclaration.flags & NodeFlags.Export)) {
+                // or its declaration from 'for of'
+                if (variableDeclaration.initializer ||
+                    (variableDeclaration.flags & NodeFlags.Export) ||
+                    variableDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
                     return textSpanFromVariableDeclaration(variableDeclaration);
                 }
 
@@ -410,11 +426,11 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.IfStatement:
                     case SyntaxKind.ForInStatement:
-                    case SyntaxKind.ForOfStatement:
                         return spanInNodeIfStartsOnSameLine(block.parent, block.statements[0]);
 
                     // Set span on previous token if it starts on same line otherwise on the first statement of the block
                     case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForOfStatement:
                         return spanInNodeIfStartsOnSameLine(findPrecedingToken(block.pos, sourceFile, block.parent), block.statements[0]);
                 }
 
@@ -422,17 +438,23 @@ namespace ts.BreakpointResolver {
                 return spanInNode(block.statements[0]);
             }
 
+            function spanInInitializerOfForLike(forLikeStaement: ForStatement | ForOfStatement | ForInStatement): TextSpan {
+                if (forLikeStaement.initializer.kind === SyntaxKind.VariableDeclarationList) {
+                    // declaration list, set breakpoint in first declaration
+                    let variableDeclarationList = <VariableDeclarationList>forLikeStaement.initializer;
+                    if (variableDeclarationList.declarations.length > 0) {
+                        return spanInNode(variableDeclarationList.declarations[0]);
+                    }
+                }
+                else {
+                    // Expression - set breakpoint in it
+                    return spanInNode(forLikeStaement.initializer);
+                }
+            }
+
             function spanInForStatement(forStatement: ForStatement): TextSpan {
                 if (forStatement.initializer) {
-                    if (forStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                        let variableDeclarationList = <VariableDeclarationList>forStatement.initializer;
-                        if (variableDeclarationList.declarations.length > 0) {
-                            return spanInNode(variableDeclarationList.declarations[0]);
-                        }
-                    }
-                    else {
-                        return spanInNode(forStatement.initializer);
-                    }
+                    return spanInInitializerOfForLike(forStatement);
                 }
 
                 if (forStatement.condition) {
@@ -560,6 +582,7 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.DoStatement:
                     case SyntaxKind.ForStatement:
+                    case SyntaxKind.ForOfStatement:
                         return spanInPreviousNode(node);
 
                     // Default to parent node
@@ -590,7 +613,17 @@ namespace ts.BreakpointResolver {
             function spanInWhileKeyword(node: Node): TextSpan {
                 if (node.parent.kind === SyntaxKind.DoStatement) {
                     // Set span on while expression
-                    return textSpan(node, findNextToken((<DoStatement>node.parent).expression, node.parent));
+                    return textSpanEndingAtNextToken(node, (<DoStatement>node.parent).expression);
+                }
+
+                // Default to parent node
+                return spanInNode(node.parent);
+            }
+
+            function spanInOfKeyword(node: Node): TextSpan {
+                if (node.parent.kind === SyntaxKind.ForOfStatement) {
+                    // set using next token
+                    return spanInNextNode(node);
                 }
 
                 // Default to parent node
