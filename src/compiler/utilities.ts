@@ -238,11 +238,10 @@ namespace ts {
             return identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? true : false;
         }
     }
-    
+
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
-    // TODO(yuisu): comment
     export function escapeIdentifier(identifier: string): string {
-        return prefixWithUnderscoreUnderscore(identifier)? "_" + identifier : identifier;
+        return prefixWithUnderscoreUnderscore(identifier) ? "_" + identifier : identifier;
     }
 
     // Remove extra underscore from escaped identifier
