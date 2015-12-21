@@ -138,14 +138,9 @@
 --------------------------------
 26 >for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (550 to 574)  SpanInfo: {"start":560,"length":11}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~         => Pos: (550 to 586)  SpanInfo: {"start":560,"length":11}
     >name: nameA
     >:=> (line 26, col 10) to (line 26, col 21)
-26 >for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
-
-                             ~~~~~~~~~~~~         => Pos: (575 to 586)  SpanInfo: {"start":576,"length":10}
-    >getRobot()
-    >:=> (line 26, col 26) to (line 26, col 36)
 26 >for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
 
                                          ~~~~~~~  => Pos: (587 to 593)  SpanInfo: {"start":588,"length":5}
@@ -272,14 +267,9 @@
     >:=> (line 35, col 40) to (line 35, col 61)
 35 >for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
 
-                                                                   ~~~~=> Pos: (948 to 951)  SpanInfo: {"start":896,"length":52}
+                                                                   ~~~~~~~~~~~~~~~~~~~~~=> Pos: (948 to 968)  SpanInfo: {"start":896,"length":52}
     >skills: { primary: primaryA, secondary: secondaryA }
     >:=> (line 35, col 11) to (line 35, col 63)
-35 >for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
-
-                                                                       ~~~~~~~~~~~~~~~~~=> Pos: (952 to 968)  SpanInfo: {"start":953,"length":15}
-    >getMultiRobot()
-    >:=> (line 35, col 68) to (line 35, col 83)
 35 >for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
 
                                                                                         ~~~~~~~=> Pos: (969 to 975)  SpanInfo: {"start":970,"length":5}
@@ -408,14 +398,9 @@
     >:=> (line 46, col 10) to (line 46, col 21)
 46 >for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
 
-                          ~~~~~~~~~~~~~~~~~~      => Pos: (1350 to 1367)  SpanInfo: {"start":1351,"length":13}
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1350 to 1379)  SpanInfo: {"start":1351,"length":13}
     >skill: skillA
     >:=> (line 46, col 23) to (line 46, col 36)
-46 >for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
-
-                                            ~~~~~~~~~~~~=> Pos: (1368 to 1379)  SpanInfo: {"start":1369,"length":10}
-    >getRobot()
-    >:=> (line 46, col 41) to (line 46, col 51)
 46 >for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
 
                                                         ~~~~~~~=> Pos: (1380 to 1386)  SpanInfo: {"start":1381,"length":5}
@@ -557,14 +542,9 @@
     >:=> (line 55, col 52) to (line 55, col 73)
 55 >for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
 
-                                                                               ~~~~=> Pos: (1780 to 1783)  SpanInfo: {"start":1728,"length":52}
+                                                                               ~~~~~~~~~~~~~~~~~~~~~=> Pos: (1780 to 1800)  SpanInfo: {"start":1728,"length":52}
     >skills: { primary: primaryA, secondary: secondaryA }
     >:=> (line 55, col 23) to (line 55, col 75)
-55 >for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
-
-                                                                                   ~~~~~~~~~~~~~~~~~=> Pos: (1784 to 1800)  SpanInfo: {"start":1785,"length":15}
-    >getMultiRobot()
-    >:=> (line 55, col 80) to (line 55, col 95)
 55 >for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
 
                                                                                                     ~~~~~~~=> Pos: (1801 to 1807)  SpanInfo: {"start":1802,"length":5}
