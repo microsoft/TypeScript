@@ -2,19 +2,40 @@
 interface Long {
     length: number;
 }
-
-class Cat implements Long {
-    length = undefined;
+interface Lol {
+    canhaz: string;
 }
-const longCat = new Cat();
-longCat.length = "wat";
+interface Ceiling {
+    location: { [coordinates: string]: [number, number] };
+}
+interface Invisible {
+    invisibles: string[];
+}
+class Cat implements Long, Lol, Ceiling, Invisible {
+    length = undefined;
+    canhaz = null;
+    location = {};
+    invisibles = [];
+}
+const lolCat = new Cat();
+lolCat.length = "wat";
+lolCat.canhaz = false;
+lolCat.location['ceiling'] = -1;
+lolCat.invisibles.push(0);
+
 
 //// [implementedPropertyContextualTyping2.js]
 var Cat = (function () {
     function Cat() {
         this.length = undefined;
+        this.canhaz = null;
+        this.location = {};
+        this.invisibles = [];
     }
     return Cat;
 }());
-var longCat = new Cat();
-longCat.length = "wat";
+var lolCat = new Cat();
+lolCat.length = "wat";
+lolCat.canhaz = false;
+lolCat.location['ceiling'] = -1;
+lolCat.invisibles.push(0);

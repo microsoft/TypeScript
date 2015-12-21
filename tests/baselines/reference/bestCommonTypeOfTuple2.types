@@ -29,7 +29,7 @@ class F extends C { f }
 class C1 implements base1 { i = "foo"; c }
 >C1 : C1
 >base1 : base1
->i : any
+>i : string
 >"foo" : string
 >c : any
 
