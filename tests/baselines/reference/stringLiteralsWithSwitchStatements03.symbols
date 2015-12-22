@@ -1,0 +1,28 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements03.ts ===
+let x: "foo";
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+
+let y: "foo" | "bar"; 
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements03.ts, 1, 3))
+
+switch ("foo") {
+    case "foo":
+        break;
+    case "bar":
+        break;
+    case x:
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+
+        x;
+>x : Symbol(x, Decl(stringLiteralsWithSwitchStatements03.ts, 0, 3))
+
+        break;
+    case y:
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements03.ts, 1, 3))
+
+        y;
+>y : Symbol(y, Decl(stringLiteralsWithSwitchStatements03.ts, 1, 3))
+
+        break;
+}
+

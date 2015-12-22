@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements01.ts ===
+let x: "foo";
+>x : "foo"
+
+let y: "foo" | "bar"; 
+>y : "foo" | "bar"
+
+switch (x) {
+>x : "foo"
+
+    case "foo":
+>"foo" : string
+
+        break;
+    case "bar":
+>"bar" : string
+
+        break;
+    case y:
+>y : "foo" | "bar"
+
+        y;
+>y : "foo" | "bar"
+
+        break;
+}
+

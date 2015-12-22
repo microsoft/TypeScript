@@ -1,0 +1,67 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks01.ts ===
+let x: "foo";
+>x : "foo"
+
+let y: "foo" | "bar";
+>y : "foo" | "bar"
+
+let b: boolean;
+>b : boolean
+
+b = x === y;
+>b = x === y : boolean
+>b : boolean
+>x === y : boolean
+>x : "foo"
+>y : "foo" | "bar"
+
+b = "foo" === y
+>b = "foo" === y : boolean
+>b : boolean
+>"foo" === y : boolean
+>"foo" : string
+>y : "foo" | "bar"
+
+b = y === "foo";
+>b = y === "foo" : boolean
+>b : boolean
+>y === "foo" : boolean
+>y : "foo" | "bar"
+>"foo" : string
+
+b = "foo" === "bar";
+>b = "foo" === "bar" : boolean
+>b : boolean
+>"foo" === "bar" : boolean
+>"foo" : string
+>"bar" : string
+
+b = x !== y;
+>b = x !== y : boolean
+>b : boolean
+>x !== y : boolean
+>x : "foo"
+>y : "foo" | "bar"
+
+b = "foo" !== y
+>b = "foo" !== y : boolean
+>b : boolean
+>"foo" !== y : boolean
+>"foo" : string
+>y : "foo" | "bar"
+
+b = y !== "foo";
+>b = y !== "foo" : boolean
+>b : boolean
+>y !== "foo" : boolean
+>y : "foo" | "bar"
+>"foo" : string
+
+b = "foo" !== "bar";
+>b = "foo" !== "bar" : boolean
+>b : boolean
+>"foo" !== "bar" : boolean
+>"foo" : string
+>"bar" : string
+
+

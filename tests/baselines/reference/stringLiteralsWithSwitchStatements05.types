@@ -1,0 +1,52 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts ===
+let x: "foo";
+>x : "foo"
+
+let y: "foo" | "bar"; 
+>y : "foo" | "bar"
+
+declare function randBool(): boolean;
+>randBool : () => boolean
+
+switch (x) {
+>x : "foo"
+
+    case randBool() ? "foo" : "baz":
+>randBool() ? "foo" : "baz" : string
+>randBool() : boolean
+>randBool : () => boolean
+>"foo" : string
+>"baz" : string
+
+        break;
+    case (("bar")):
+>(("bar")) : string
+>("bar") : string
+>"bar" : string
+
+        break;
+    case (x, y, "baz"):
+>(x, y, "baz") : string
+>x, y, "baz" : string
+>x, y : "foo" | "bar"
+>x : "foo"
+>y : "foo" | "bar"
+>"baz" : string
+
+        x;
+>x : "foo"
+
+        break;
+    case (("foo" || "bar")):
+>(("foo" || "bar")) : string
+>("foo" || "bar") : string
+>"foo" || "bar" : string
+>"foo" : string
+>"bar" : string
+
+        y;
+>y : "foo" | "bar"
+
+        break;
+}
+

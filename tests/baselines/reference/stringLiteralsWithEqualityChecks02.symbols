@@ -1,0 +1,50 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsWithEqualityChecks02.ts ===
+interface Refrigerator {
+>Refrigerator : Symbol(Refrigerator, Decl(stringLiteralsWithEqualityChecks02.ts, 0, 0))
+
+    brrr: boolean;
+>brrr : Symbol(brrr, Decl(stringLiteralsWithEqualityChecks02.ts, 0, 24))
+}
+
+let x: "foo";
+>x : Symbol(x, Decl(stringLiteralsWithEqualityChecks02.ts, 4, 3))
+
+let y: "foo" | "bar";
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+let b: boolean;
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+
+b = x === y;
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+>x : Symbol(x, Decl(stringLiteralsWithEqualityChecks02.ts, 4, 3))
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+b = "foo" === y
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+b = y === "foo";
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+b = "foo" === "bar";
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+
+b = x !== y;
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+>x : Symbol(x, Decl(stringLiteralsWithEqualityChecks02.ts, 4, 3))
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+b = "foo" !== y
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+b = y !== "foo";
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+>y : Symbol(y, Decl(stringLiteralsWithEqualityChecks02.ts, 5, 3))
+
+b = "foo" !== "bar";
+>b : Symbol(b, Decl(stringLiteralsWithEqualityChecks02.ts, 7, 3))
+
+
