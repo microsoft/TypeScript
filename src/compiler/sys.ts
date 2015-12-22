@@ -33,7 +33,7 @@ namespace ts {
     export interface FileWatcher {
         close(): void;
     }
-    
+
     export interface DirWatcher extends FileWatcher {
         referenceCount: number;
     }
@@ -320,16 +320,17 @@ namespace ts {
                     const { watcher, isRecursive } = addDirWatcher(dirPath, recursive);
                     return {
                         close: () => reduceDirWatcherRefCount(watcher, dirPath, isRecursive)
-                    }
+                    };
                 }
-                
+
                 function reduceDirWatcherRefCount(watcher: DirWatcher, dirPath: Path, isRecursive: boolean) {
                     watcher.referenceCount -= 1;
                     if (watcher.referenceCount <= 0) {
                         watcher.close();
                         if (isRecursive) {
                             recursiveDirWatchers.remove(dirPath);
-                        } else {
+                        }
+                        else {
                             dirWatchers.remove(dirPath);
                         }
                     }
@@ -337,19 +338,20 @@ namespace ts {
 
                 function addDirWatcher(dirPath: Path, recursive?: boolean): { watcher: DirWatcher, isRecursive: boolean } {
                     let watchers: FileMap<DirWatcher>;
-                    let options: { persistent: boolean, recursive?: boolean } = { persistent: true };
+                    const options: { persistent: boolean, recursive?: boolean } = { persistent: true };
 
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     if (isNode4OrLater() && recursive === true) {
                         if (recursiveDirWatchers.contains(dirPath)) {
-                            const watcher = recursiveDirWatchers.get(dirPath); 
+                            const watcher = recursiveDirWatchers.get(dirPath);
                             watcher.referenceCount += 1;
                             return { watcher, isRecursive: true };
                         }
                         watchers = recursiveDirWatchers;
                         options.recursive = true;
-                    } else {
+                    }
+                    else {
                         if (dirWatchers.contains(dirPath)) {
                             const watcher = dirWatchers.get(dirPath);
                             watcher.referenceCount += 1;
@@ -391,7 +393,8 @@ namespace ts {
                     const { watcher } = findDirWatcherForFile(filePath);
                     if (!watcher) {
                         addDirWatcher(getDirectoryPath(filePath));
-                    } else {
+                    }
+                    else {
                         watcher.referenceCount += 1;
                     }
                     fileWatcherCallbacks.set(filePath, callback);
