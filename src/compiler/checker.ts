@@ -7602,12 +7602,14 @@ namespace ts {
                 break;
             }
 
-            // We could perform our walk, check if 'current' is an expression
-            // when we get to an unsupported node, and then get the contextual type on that.
-            // That would save a few steps through "pass-though" nodes,
-            // but the checks in 'isExpression' seem so involved that it would probably
-            // be better to simply grab the contextual type first and then see if we
-            // need to do any work.
+            // We haven't found a "literal match location" (i.e. a location that signals
+            // a literal should get a literal type). Check whether the contextual type
+            // has a literal type in it.
+            //
+            // We could perform our walk, check if 'current' is an expression when we get to a
+            // a node that isn't a match location, and then get the contextual type of that.
+            // That would save a few steps but the checks in 'isExpression' seem so involved
+            // that it would probably be better to simply grab the contextual type if we didn't.
             const contextualType = getContextualType(literalNode);
             return !!contextualType && contextualTypeIsStringLiteralType(contextualType);
         }
