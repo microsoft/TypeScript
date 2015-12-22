@@ -1651,10 +1651,6 @@
         "category": "Error",
         "code": 2518
     },
-    "A 'this'-based type predicate is only allowed within a class or interface's members, get accessors, or return type positions for functions and methods.": {
-        "category": "Error",
-        "code": 2519
-    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520

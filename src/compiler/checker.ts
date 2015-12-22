@@ -11138,29 +11138,19 @@ namespace ts {
             if (!parent) {
                 return;
             }
-            // NEW we now get and check the return type -- is this needed?
-            // Because of Wesley's change, sigs no longer have a special typePred member, 
-            // they have a type that extends PredicateType (with flags including PredicateType)
             const returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(parent));
             if (!returnType || !(returnType.flags & TypeFlags.PredicateType)) {
                 return;
             }
             const { parameterName } = node;
             if (parameterName.kind === SyntaxKind.ThisType) {
-                if (!isInLegalThisTypePredicatePosition(node)) {
-                    error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_within_a_class_or_interface_s_members_get_accessors_or_return_type_positions_for_functions_and_methods);
-                }
-                else {
-                    getTypeFromThisTypeNode(parameterName as ThisTypeNode);
-                    // TODO: Should probably skip past the other error checking now
-                    // ... because I bet the above function is the equivalent of this one.
-                }
+                getTypeFromThisTypeNode(parameterName as ThisTypeNode);
             }
             else {
                 const typePredicate = <IdentifierTypePredicate>(<PredicateType>returnType).predicate;
                 if (typePredicate.parameterIndex >= 0) {
                     if (parent.parameters[typePredicate.parameterIndex].dotDotDotToken) {
-                        error(node.parameterName,
+                        error(parameterName,
                             Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                     }
                     else {
@@ -11169,14 +11159,14 @@ namespace ts {
                             node.type);
                     }
                 }
-                else if (node.parameterName) {
+                else if (parameterName) {
                     let hasReportedError = false;
-                    for (const param of parent.parameters) {
-                        if ((param.name.kind === SyntaxKind.ObjectBindingPattern ||
-                            param.name.kind === SyntaxKind.ArrayBindingPattern) &&
+                    for (const { name } of parent.parameters) {
+                        if ((name.kind === SyntaxKind.ObjectBindingPattern ||
+                            name.kind === SyntaxKind.ArrayBindingPattern) &&
                             checkBindingPatternForTypePredicateVariable(
-                                <BindingPattern>param.name,
-                                node.parameterName,
+                                <BindingPattern>name,
+                                parameterName,
                                 typePredicate.parameterName)) {
                             hasReportedError = true;
                             break;
@@ -11209,37 +11199,24 @@ namespace ts {
             pattern: BindingPattern,
             predicateVariableNode: Node,
             predicateVariableName: string) {
-            for (const element of pattern.elements) {
-                if (element.name.kind === SyntaxKind.Identifier &&
-                    (<Identifier>element.name).text === predicateVariableName) {
+            for (const { name } of pattern.elements) {
+                if (name.kind === SyntaxKind.Identifier &&
+                    (<Identifier>name).text === predicateVariableName) {
                     error(predicateVariableNode,
                         Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
                         predicateVariableName);
                     return true;
                 }
-                else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
-                    element.name.kind === SyntaxKind.ObjectBindingPattern) {
+                else if (name.kind === SyntaxKind.ArrayBindingPattern ||
+                    name.kind === SyntaxKind.ObjectBindingPattern) {
                     if (checkBindingPatternForTypePredicateVariable(
-                        <BindingPattern>element.name,
+                        <BindingPattern>name,
                         predicateVariableNode,
                          predicateVariableName)) {
                         return true;
                     }
                 }
             }
-        }
-
-        function isInLegalThisTypePredicatePosition(node: Node): boolean {
-            if (getTypePredicateParent(node)) {
-                return true;
-            }
-            switch (node.parent.kind) {
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.GetAccessor:
-                    return node === (node.parent as (PropertyDeclaration | GetAccessorDeclaration | PropertySignature)).type;
-            }
-            return false;
         }
 
         function checkSignatureDeclaration(node: SignatureDeclaration) {
