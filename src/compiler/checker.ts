@@ -7560,10 +7560,10 @@ namespace ts {
         }
 
         function shouldAcquireLiteralType(literalNode: StringLiteral) {
+            loop: for (let current: Node = literalNode, parent = current.parent;
+                        parent;
+                        current = parent, parent = current.parent) {
 
-            let current: Node = literalNode;
-            while (true) {
-                const { parent } = current;
                 switch (parent.kind) {
                     // The operand of a 'switch' should get a literal type.
                     case SyntaxKind.SwitchStatement:
@@ -7585,31 +7585,34 @@ namespace ts {
                                 return current === binaryExpr.left || current === binaryExpr.right;
 
                             case SyntaxKind.BarBarToken:
-                                current = parent;
-                                continue;
-
+                                continue loop;
                         }
-                        break;
+                        break loop;
 
                     case SyntaxKind.ConditionalExpression:
-                    case SyntaxKind.ParenthesizedExpression:
-                        current = parent;
-                        continue;
-                }
+                        const conditional = parent as ConditionalExpression;
+                        if (current === conditional.whenTrue || current === conditional.whenFalse) {
+                            continue loop;
+                        }
+                        break loop;
 
-                // This is not a node we can account for.
-                // Let contextual typing take over.
-                break;
+                    case SyntaxKind.ParenthesizedExpression:
+                        continue loop;
+
+                    default:
+                        break loop;
+                }
             }
 
             // We haven't found a "literal match location" (i.e. a location that signals
             // a literal should get a literal type). Check whether the contextual type
-            // has a literal type in it.
+            // of the literal has a literal type in it.
             //
-            // We could perform our walk, check if 'current' is an expression when we get to a
-            // a node that isn't a match location, and then get the contextual type of that.
-            // That would save a few steps but the checks in 'isExpression' seem so involved
-            // that it would probably be better to simply grab the contextual type if we didn't.
+            // You might ask why we're not passing 'current' or 'parent' into 'getContextualType'
+            // since we've already walked up several nodes anyway. This is not correct
+            // because several nodes *do not* strictly acquire a contextual type from their parents.
+            // An example of this is '||' expressions, whose right operand is contextually typed by
+            // its left operand if it could not acquire a contextual type from its parent.
             const contextualType = getContextualType(literalNode);
             return !!contextualType && contextualTypeIsStringLiteralType(contextualType);
         }
