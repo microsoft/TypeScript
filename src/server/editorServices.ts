@@ -744,7 +744,8 @@ namespace ts.server {
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
                     // if the ref count for this directory watcher drops to 0, it's time to close it
-                    if (!(--project.projectService.directoryWatchersRefCount[directory])) {
+                    project.projectService.directoryWatchersRefCount[directory]--;
+                    if (!project.projectService.directoryWatchersRefCount[directory]) {
                         this.log("Close directory watcher for: " + directory);
                         project.projectService.directoryWatchersForTsconfig[directory].close();
                         delete project.projectService.directoryWatchersForTsconfig[directory];
@@ -1757,7 +1758,8 @@ namespace ts.server {
             let count = 1;
             let pos = 0;
             this.index.every((ll, s, len) => {
-                starts[count++] = pos;
+                starts[count] = pos;
+                count++;
                 pos += ll.text.length;
                 return true;
             }, 0);
@@ -2023,7 +2025,8 @@ namespace ts.server {
             while (adjustedStart >= childCharCount) {
                 this.skipChild(adjustedStart, rangeLength, childIndex, walkFns, CharRangeSection.PreStart);
                 adjustedStart -= childCharCount;
-                child = this.children[++childIndex];
+                childIndex++;
+                child = this.children[childIndex];
                 childCharCount = child.charCount();
             }
             // Case I: both start and end of range in same subtree
@@ -2038,14 +2041,16 @@ namespace ts.server {
                     return;
                 }
                 let adjustedLength = rangeLength - (childCharCount - adjustedStart);
-                child = this.children[++childIndex];
+                childIndex++;
+                child = this.children[childIndex];
                 childCharCount = child.charCount();
                 while (adjustedLength > childCharCount) {
                     if (this.execWalk(0, childCharCount, walkFns, childIndex, CharRangeSection.Mid)) {
                         return;
                     }
                     adjustedLength -= childCharCount;
-                    child = this.children[++childIndex];
+                    childIndex++;
+                    child = this.children[childIndex];
                     childCharCount = child.charCount();
                 }
                 if (adjustedLength > 0) {
@@ -2169,7 +2174,8 @@ namespace ts.server {
             if (childIndex < clen) {
                 splitNode = new LineNode();
                 while (childIndex < clen) {
-                    splitNode.add(this.children[childIndex++]);
+                    splitNode.add(this.children[childIndex]);
+                    childIndex++;
                 }
                 splitNode.updateCounts();
             }
@@ -2210,7 +2216,9 @@ namespace ts.server {
                 let nodeIndex = 0;
                 childIndex++;
                 while ((childIndex < lineCollectionCapacity) && (nodeIndex < nodeCount)) {
-                    this.children[childIndex++] = nodes[nodeIndex++];
+                    this.children[childIndex] = nodes[nodeIndex];
+                    childIndex++;
+                    nodeIndex++;
                 }
                 let splitNodes: LineNode[] = [];
                 let splitNodeCount = 0;
@@ -2223,7 +2231,8 @@ namespace ts.server {
                     }
                     let splitNode = <LineNode>splitNodes[0];
                     while (nodeIndex < nodeCount) {
-                        splitNode.add(nodes[nodeIndex++]);
+                        splitNode.add(nodes[nodeIndex]);
+                        nodeIndex++;
                         if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
                             splitNode = <LineNode>splitNodes[splitNodeIndex];
