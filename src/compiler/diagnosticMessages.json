@@ -1771,6 +1771,26 @@
         "category": "Error",
         "code": 2660
     },
+    "Invalid module name in augmentation, module '{0}' cannot be found.": {
+        "category": "Error",
+        "code": 2661
+    },
+    "Module augmentation cannot introduce new names in the top level scope.": {
+        "category": "Error",
+        "code": 2662
+    },
+    "Exports are not permitted in module augmentations.": {
+        "category": "Error",
+        "code": 2663
+    },
+    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.": {
+        "category": "Error",
+        "code": 2664
+    },
+    "'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.": {
+        "category": "Error",
+        "code": 2665
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

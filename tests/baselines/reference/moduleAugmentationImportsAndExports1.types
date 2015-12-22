@@ -1,0 +1,60 @@
+=== tests/cases/compiler/f1.ts ===
+
+export class A {}
+>A : A
+
+=== tests/cases/compiler/f2.ts ===
+export class B {
+>B : B
+
+    n: number;
+>n : number
+}
+
+=== tests/cases/compiler/f3.ts ===
+import {A} from "./f1";
+>A : typeof A
+
+import {B} from "./f2";
+>B : typeof B
+
+(<any>A.prototype).foo = function () {}
+>(<any>A.prototype).foo = function () {} : () => void
+>(<any>A.prototype).foo : any
+>(<any>A.prototype) : any
+><any>A.prototype : any
+>A.prototype : A
+>A : typeof A
+>prototype : A
+>foo : any
+>function () {} : () => void
+
+declare module "./f1" {
+    interface A {
+>A : A
+
+        foo(): B;
+>foo : () => B
+>B : B
+    }
+}
+
+=== tests/cases/compiler/f4.ts ===
+import {A} from "./f1";
+>A : typeof A
+
+import "./f3";
+
+let a: A;
+>a : A
+>A : A
+
+let b = a.foo().n;
+>b : number
+>a.foo().n : number
+>a.foo() : B
+>a.foo : () => B
+>a : A
+>foo : () => B
+>n : number
+

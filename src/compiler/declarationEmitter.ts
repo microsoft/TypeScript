@@ -54,6 +54,7 @@ namespace ts {
         let writer = createAndSetNewTextWriterWithSymbolWriter();
 
         let enclosingDeclaration: Node;
+        let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
         let currentIdentifiers: Map<string>;
@@ -101,6 +102,7 @@ namespace ts {
                 });
             }
 
+            resultHasExternalModuleIndicator = false;
             if (!isBundledEmit || !isExternalModule(sourceFile)) {
                 noDeclare = false;
                 emitSourceFile(sourceFile);
@@ -138,6 +140,14 @@ namespace ts {
 
                 allSourcesModuleElementDeclarationEmitInfo = allSourcesModuleElementDeclarationEmitInfo.concat(moduleElementDeclarationEmitInfo);
                 moduleElementDeclarationEmitInfo = [];
+            }
+
+            if (!isBundledEmit && isExternalModule(sourceFile) && sourceFile.moduleAugmentations.length && !resultHasExternalModuleIndicator) {
+                // if file was external module with augmentations - this fact should be preserved in .d.ts as well.
+                // in case if we didn't write any external module specifiers in .d.ts we need to emit something 
+                // that will force compiler to think that this file is an external module - 'export {}' is a reasonable choice here.
+                write("export {};");
+                writeLine();
             }
         });
 
@@ -720,16 +730,25 @@ namespace ts {
             writer.writeLine();
         }
 
-        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration) {
+        function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration) {
+            // emitExternalModuleSpecifier is usualyl called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
+            // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered 
+            // external modules since they are indistingushable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
+            // so compiler will treat them as external modules.
+            resultHasExternalModuleIndicator = resultHasExternalModuleIndicator || parent.kind !== SyntaxKind.ModuleDeclaration;
             let moduleSpecifier: Node;
             if (parent.kind === SyntaxKind.ImportEqualsDeclaration) {
                 const node = parent as ImportEqualsDeclaration;
                 moduleSpecifier = getExternalModuleImportEqualsDeclarationExpression(node);
             }
+            else if (parent.kind === SyntaxKind.ModuleDeclaration) {
+                moduleSpecifier = (<ModuleDeclaration>parent).name;
+            }
             else {
                 const node = parent as (ImportDeclaration | ExportDeclaration);
                 moduleSpecifier = node.moduleSpecifier;
             }
+
             if (moduleSpecifier.kind === SyntaxKind.StringLiteral && isBundledEmit && (compilerOptions.out || compilerOptions.outFile)) {
                 const moduleName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                 if (moduleName) {
@@ -789,7 +808,12 @@ namespace ts {
             else {
                 write("module ");
             }
-            writeTextOfNode(currentText, node.name);
+            if (isExternalModuleAugmentation(node)) {
+                emitExternalModuleSpecifier(node);
+            }
+            else {
+                writeTextOfNode(currentText, node.name);
+            }
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;
                 write(".");

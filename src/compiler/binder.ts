@@ -109,6 +109,7 @@ namespace ts {
         let blockScopeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
+        let isSourceFileExternalModule: boolean;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -129,8 +130,9 @@ namespace ts {
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
-            inStrictMode = !!file.externalModuleIndicator;
+            isSourceFileExternalModule = inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
+
             Symbol = objectAllocator.getSymbolConstructor();
 
             if (!file.locals) {
@@ -348,7 +350,12 @@ namespace ts {
                 //   2. When we checkIdentifier in the checker, we set its resolved symbol to the local symbol,
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
-                if (hasExportModifier || container.flags & NodeFlags.ExportContext) {
+
+                // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge
+                //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation 
+                //       and this case is specially handled. Module augmentations should only be merged with original module definition 
+                //       and should never be merged directly with other augmentation and the latter case would be possible is automatic merge is allowed.
+                if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
@@ -844,6 +851,9 @@ namespace ts {
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (node.name.kind === SyntaxKind.StringLiteral) {
+                if (node.flags & NodeFlags.Export) {
+                    errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
+                }
                 declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes);
             }
             else {

@@ -810,6 +810,7 @@ namespace ts {
         public nameTable: Map<string>;
         public resolvedModules: Map<ResolvedModule>;
         public imports: LiteralExpression[];
+        public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
