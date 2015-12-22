@@ -15563,7 +15563,12 @@ namespace ts {
                 return false;
             }
             if (!nodeCanBeDecorated(node)) {
-                return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
+                if (node.kind === SyntaxKind.MethodDeclaration && !ts.nodeIsPresent((<MethodDeclaration>node).body)) {
+                    return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
+                }
+                else {
+                    return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
+                }
             }
             else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
                 const accessors = getAllAccessorDeclarations((<ClassDeclaration>node.parent).members, <AccessorDeclaration>node);

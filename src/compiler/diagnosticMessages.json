@@ -795,6 +795,10 @@
         "category": "Error",
         "code": 1248
     },
+    "A decorator can only decorate a method implementation, not an overload.": {
+        "category": "Error",
+        "code": 1249
+    }, 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
