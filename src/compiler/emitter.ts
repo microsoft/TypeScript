@@ -3889,6 +3889,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
                         index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
+                        // We need to escape identifier here because when parsing an identifier prefixing with "__"
+                        // the parser need to append "_" in order to escape colliding with magic identifiers such as "__proto__"
+                        // Therefore, in order to correctly emit identifiers that are written in original TypeScript file,
+                        // we will unescapeIdentifier to remove additional underscore (if no underscore is added, the function will return original input string)
                         (<Identifier | LiteralExpression>index).text = unescapeIdentifier((<Identifier | LiteralExpression>propName).text);
                     }
 

@@ -230,18 +230,10 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
-    function prefixWithUnderscoreUnderscore(identifier: string): boolean {
-        if (identifier.length <= 2) {
-            return false;
-        }
-        else {
-            return identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? true : false;
-        }
-    }
-
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
     export function escapeIdentifier(identifier: string): string {
-        return prefixWithUnderscoreUnderscore(identifier) ? "_" + identifier : identifier;
+        const prefixWithUnderscore = identifier.length > 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._;
+        return prefixWithUnderscore ? "_" + identifier : identifier;
     }
 
     // Remove extra underscore from escaped identifier
