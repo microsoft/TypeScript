@@ -1,6 +1,9 @@
 /// <reference path="core.ts"/>
 
 namespace ts {
+    export type CallbackForWatchedFile = (path: string, removed?: boolean) => void;
+    export type CallbackForWatchedDirectory = (path: string) => void;
+
     export interface System {
         args: string[];
         newLine: string;
@@ -8,8 +11,8 @@ namespace ts {
         write(s: string): void;
         readFile(path: string, encoding?: string): string;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
-        watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
-        watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
+        watchFile?(path: string, callback: CallbackForWatchedFile): FileWatcher;
+        watchDirectory?(path: string, callback: CallbackForWatchedDirectory, recursive?: boolean): FileWatcher;
         resolvePath(path: string): string;
         fileExists(path: string): boolean;
         directoryExists(path: string): boolean;
@@ -23,7 +26,7 @@ namespace ts {
 
     interface WatchedFile {
         fileName: string;
-        callback: (fileName: string, removed?: boolean) => void;
+        callback: CallbackForWatchedFile;
         mtime?: Date;
     }
 
@@ -62,8 +65,8 @@ namespace ts {
         readFile(path: string): string;
         writeFile(path: string, contents: string): void;
         readDirectory(path: string, extension?: string, exclude?: string[]): string[];
-        watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
-        watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
+        watchFile?(path: string, callback: CallbackForWatchedFile): FileWatcher;
+        watchDirectory?(path: string, callback: CallbackForWatchedDirectory, recursive?: boolean): FileWatcher;
     };
 
     export var sys: System = (function () {
@@ -271,7 +274,7 @@ namespace ts {
                     }, interval);
                 }
 
-                function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
+                function addFile(fileName: string, callback: CallbackForWatchedFile): WatchedFile {
                     const file: WatchedFile = {
                         fileName,
                         callback,
@@ -298,16 +301,18 @@ namespace ts {
                 };
             }
 
+            
+
             function createWatchedFileSet() {
                 const watchedDirectories = createFileMap<FileWatcher>();
-                const watchedFiles = createFileMap<(fileName: string, removed?: boolean) => void>();
+                const watchedFiles = createFileMap<CallbackForWatchedFile>();
                 const currentDirectory = process.cwd();
 
                 return { addFile, removeFile };
 
-                function addFile(fileName: string, callback: (fileName: string, removed?: boolean) => void): WatchedFile {
+                function addFile(fileName: string, callback: CallbackForWatchedFile): WatchedFile {
                     const path = toPath(fileName, currentDirectory, getCanonicalPath);
-                    const parentDirPath = toPath(ts.getDirectoryPath(fileName), currentDirectory, getCanonicalPath);
+                    const parentDirPath = getDirectoryPath(path);
 
                     if (!watchedDirectories.contains(parentDirPath)) {
                         watchedDirectories.set(parentDirPath, _fs.watch(
@@ -323,7 +328,7 @@ namespace ts {
                     const path = toPath(file.fileName, currentDirectory, getCanonicalPath);
                     watchedFiles.remove(path);
 
-                    const parentDirPath = toPath(ts.getDirectoryPath(path), currentDirectory, getCanonicalPath);
+                    const parentDirPath = getDirectoryPath(path);
                     if (watchedDirectories.contains(parentDirPath)) {
                         let hasWatchedChildren = false;
                         watchedFiles.forEachValue((key, _) => {
@@ -474,9 +479,10 @@ namespace ts {
                 watchDirectory: (path, callback, recursive) => {
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+                    const options = isNode4OrLater() ? { persistent: true } : { persistent: true, recursive: !!recursive };
                     return _fs.watch(
                         path,
-                        { persistent: true, recursive: !!recursive },
+                        options,
                         (eventName: string, relativeFileName: string) => {
                             // In watchDirectory we only care about adding and removing files (when event name is
                             // "rename"); changes made within files are handled by corresponding fileWatchers (when

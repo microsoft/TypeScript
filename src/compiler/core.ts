@@ -612,7 +612,9 @@ namespace ts {
         return path.substr(0, rootLength) + normalized.join(directorySeparator);
     }
 
-    export function getDirectoryPath(path: string) {
+    export function getDirectoryPath(path: Path): Path;
+    export function getDirectoryPath(path: string): string;
+    export function getDirectoryPath(path: string): any {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
