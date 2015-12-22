@@ -1,12 +1,11 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(11,9): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(21,13): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(15,32): error TS2339: Property 'notHere' does not exist on type 'U'.
 tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(25,16): error TS2339: Property 'notHere' does not exist on type 'B'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(29,6): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2339: Property 'notHere' does not exist on type '{}'.
-tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(36,11): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
+tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(32,22): error TS2339: Property 'notHere' does not exist on type 'A'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(38,16): error TS2322: Type 'string' is not assignable to type 'U'.
+tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts(38,22): error TS2339: Property 'notHere' does not exist on type 'U'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts (6 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts (5 errors) ====
     class A {
         foo(): string { return ''; }
     }
@@ -18,20 +17,18 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
     }
     
     class C<U extends T, T extends A> {
-            ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         f() {
             var x: U;
             var a = x['foo'](); // should be string
             return a + x.foo() + x.notHere();
+                                   ~~~~~~~
+!!! error TS2339: Property 'notHere' does not exist on type 'U'.
         }
     }
     
     var r = (new C<B, A>()).f();
     
     interface I<U extends T, T extends A> {
-                ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         foo: U;
     }
     var i: I<B, A>;
@@ -42,21 +39,21 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
     
     var a: {
         <U extends T, T extends A>(): U;
-         ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
     }
     // BUG 794164
     var r3: string = a().notHere();
                          ~~~~~~~
-!!! error TS2339: Property 'notHere' does not exist on type '{}'.
+!!! error TS2339: Property 'notHere' does not exist on type 'A'.
     var r3b: string = a()['foo']();
     
     var b = {
         foo: <U extends T, T extends A>(x: U): U => {
-              ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var a = x['foo'](); // should be string
             return a + x.notHere();
+                   ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'U'.
+                         ~~~~~~~
+!!! error TS2339: Property 'notHere' does not exist on type 'U'.
         },
         // BUG 794164
         bar: b.foo(1).notHere()

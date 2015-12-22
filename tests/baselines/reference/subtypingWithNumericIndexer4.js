@@ -38,33 +38,33 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var Generics;
 (function (Generics) {
     var A = (function () {
         function A() {
         }
         return A;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
             _super.apply(this, arguments);
         }
         return B;
-    })(A);
+    }(A));
     var B3 = (function (_super) {
         __extends(B3, _super);
         function B3() {
             _super.apply(this, arguments);
         }
         return B3;
-    })(A);
+    }(A));
 })(Generics || (Generics = {}));

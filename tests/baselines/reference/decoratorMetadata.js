@@ -24,7 +24,7 @@ var Service = (function () {
     function Service() {
     }
     return Service;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Service;
 //// [component.js]
@@ -56,4 +56,4 @@ var MyComponent = (function () {
         __metadata('design:paramtypes', [service_1.default])
     ], MyComponent);
     return MyComponent;
-})();
+}());

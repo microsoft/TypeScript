@@ -51,7 +51,7 @@ function foo() {
             _super.apply(this, arguments);
         }
         return package;
-    })(public);
+    }(public));
     var b;
     function foo(x) { }
     function foo1(x) { }

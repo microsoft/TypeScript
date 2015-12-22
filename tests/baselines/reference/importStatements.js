@@ -43,7 +43,7 @@ var A;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     A.Point = Point;
     A.Origin = new Point(0, 0);
 })(A || (A = {}));

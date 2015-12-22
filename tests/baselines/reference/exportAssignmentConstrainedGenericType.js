@@ -20,7 +20,7 @@ var Foo = (function () {
     function Foo(x) {
     }
     return Foo;
-})();
+}());
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";

@@ -64,7 +64,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var a;
 var b;
 a = b; // ok
@@ -78,14 +78,14 @@ var Generics;
         function A() {
         }
         return A;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
             _super.apply(this, arguments);
         }
         return B;
-    })(A);
+    }(A));
     var b1;
     var a1;
     a1 = b1; // ok
@@ -96,7 +96,7 @@ var Generics;
             _super.apply(this, arguments);
         }
         return B2;
-    })(A);
+    }(A));
     var b2;
     a1 = b2; // ok
     b2 = a1; // error

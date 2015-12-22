@@ -54,7 +54,7 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
@@ -72,7 +72,7 @@ var b = (function (_super) {
         configurable: true
     });
     return b;
-})(Foo);
+}(Foo));
 var c = (function (_super) {
     __extends(c, _super);
     function c() {
@@ -94,4 +94,4 @@ var c = (function (_super) {
         configurable: true
     });
     return c;
-})(Foo);
+}(Foo));

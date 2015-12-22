@@ -1189,7 +1189,8 @@ namespace ts {
                 case SyntaxKind.ThisType:
                     seenThisKeyword = true;
                     return;
-
+                case SyntaxKind.TypePredicate:
+                    return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
@@ -1273,6 +1274,17 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return bindSourceFileIfExternalModule();
             }
+        }
+
+        function checkTypePredicate(node: TypePredicateNode) {
+            const { parameterName, type } = node;
+            if (parameterName && parameterName.kind === SyntaxKind.Identifier) {
+                checkStrictModeIdentifier(parameterName as Identifier);
+            }
+            if (parameterName && parameterName.kind === SyntaxKind.ThisType) {
+                seenThisKeyword = true;
+            }
+            bind(type);
         }
 
         function bindSourceFileIfExternalModule() {

@@ -30,7 +30,7 @@ var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -53,4 +53,4 @@ var C = (function (_super) {
     C.foo = function () { return this.x; };
     C.bar = function () { this.foo(); };
     return C;
-})(B);
+}(B));

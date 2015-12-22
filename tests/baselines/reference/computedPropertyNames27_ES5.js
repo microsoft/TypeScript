@@ -15,7 +15,7 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -23,4 +23,4 @@ var C = (function (_super) {
     }
     C.prototype[(_super.call(this), "prop")] = function () { };
     return C;
-})(Base);
+}(Base));

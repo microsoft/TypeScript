@@ -240,7 +240,7 @@ var C1T5 = (function () {
         };
     }
     return C1T5;
-})();
+}());
 // CONTEXT: Module property declaration
 var C2T5;
 (function (C2T5) {
@@ -279,7 +279,7 @@ var C4T5 = (function () {
         };
     }
     return C4T5;
-})();
+}());
 // CONTEXT: Module property assignment
 var C5T5;
 (function (C5T5) {
@@ -329,7 +329,7 @@ var C11t5 = (function () {
     function C11t5(f) {
     }
     return C11t5;
-})();
+}());
 ;
 var i = new C11t5(function (n) { return ({}); });
 // CONTEXT: Type annotated expression

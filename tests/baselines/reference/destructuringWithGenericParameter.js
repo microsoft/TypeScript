@@ -19,7 +19,7 @@ var GenericClass = (function () {
     function GenericClass() {
     }
     return GenericClass;
-})();
+}());
 var genericObject = new GenericClass();
 function genericFunction(object, callback) {
     callback(object.payload);

@@ -8,4 +8,4 @@ var v = (function () {
     C.a = 1;
     C.b = 2;
     return C;
-})();
+}());

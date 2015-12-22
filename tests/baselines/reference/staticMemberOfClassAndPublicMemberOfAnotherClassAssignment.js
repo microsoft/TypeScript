@@ -31,13 +31,13 @@ var B = (function () {
     }
     B.prototype.name = function () { };
     return B;
-})();
+}());
 var C = (function () {
     function C() {
     }
     C.name = function () { };
     return C;
-})();
+}());
 var a = new B();
 a = new C(); // error name is missing
 a = B; // error name is missing

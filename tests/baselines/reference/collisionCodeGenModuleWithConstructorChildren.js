@@ -32,7 +32,7 @@ var M;
             if (p === void 0) { p = M_1.x; }
         }
         return c;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M_2) {
@@ -42,7 +42,7 @@ var M;
             this.M = M;
         }
         return d;
-    })();
+    }());
 })(M || (M = {}));
 var M;
 (function (M_3) {
@@ -52,5 +52,5 @@ var M;
             var p = M_3.x;
         }
         return d2;
-    })();
+    }());
 })(M || (M = {}));

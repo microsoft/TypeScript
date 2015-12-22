@@ -19,12 +19,12 @@ var Base = (function () {
     function Base(a) {
     }
     return Base;
-})();
+}());
 var Generic = (function () {
     function Generic() {
     }
     return Generic;
-})();
+}());
 var Derived = (function () {
     function Derived(host) {
         this.host = host;
@@ -32,4 +32,4 @@ var Derived = (function () {
         this.n = 12;
     }
     return Derived;
-})();
+}());

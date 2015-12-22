@@ -19,4 +19,4 @@ var C = (function () {
         return bar;
     };
     return C;
-})();
+}());

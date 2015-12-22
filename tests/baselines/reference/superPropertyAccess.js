@@ -57,7 +57,7 @@ var MyBase = (function () {
         configurable: true
     });
     return MyBase;
-})();
+}());
 var MyDerived = (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
@@ -76,4 +76,4 @@ var MyDerived = (function (_super) {
         var z = _super.prototype.value; // Should error, instance data property not a public instance member function
     };
     return MyDerived;
-})(MyBase);
+}(MyBase));

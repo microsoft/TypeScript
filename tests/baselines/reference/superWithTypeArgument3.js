@@ -24,7 +24,7 @@ var C = (function () {
     }
     C.prototype.bar = function (x) { };
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -34,4 +34,4 @@ var D = (function (_super) {
         _super.prototype.bar.call(this, null);
     };
     return D;
-})(C);
+}(C));

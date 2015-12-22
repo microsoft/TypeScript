@@ -100,7 +100,7 @@ let test1: boolean = funA(isB);
 >isB : (p1: any) => p1 is B
 
 if (funB(retC, a)) {
->funB(retC, a) : boolean
+>funB(retC, a) : p2 is C
 >funB : <T>(p1: (p1: any) => T, p2: any) => p2 is T
 >retC : (x: any) => C
 >a : A
@@ -118,7 +118,7 @@ let test2: B = funC(isB);
 >isB : (p1: any) => p1 is B
 
 if (funD(isC, a)) {
->funD(isC, a) : boolean
+>funD(isC, a) : p2 is C
 >funD : <T>(p1: (p1: any) => p1 is T, p2: any) => p2 is T
 >isC : (p1: any) => p1 is C
 >a : A

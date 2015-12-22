@@ -21,12 +21,12 @@ var foo = (function () {
     }
     foo.prototype.bar = function () { return null; };
     return foo;
-})();
+}());
 var foo2 = (function (_super) {
     __extends(foo2, _super);
     function foo2() {
         _super.apply(this, arguments);
     }
     return foo2;
-})(foo);
+}(foo));
 var test = new foo();

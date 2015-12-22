@@ -164,7 +164,7 @@ var Widget1 = (function () {
         this.name = 'one';
     }
     return Widget1;
-})();
+}());
 exports.Widget1 = Widget1;
 function createWidget1() {
     return new Widget1();
@@ -177,7 +177,7 @@ var SpecializedWidget;
             this.name = 'one';
         }
         return Widget2;
-    })();
+    }());
     SpecializedWidget.Widget2 = Widget2;
     function createWidget2() {
         return new Widget2();
@@ -229,7 +229,7 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
     return publicClassWithWithPrivateParmeterTypes;
-})();
+}());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
 var publicClassWithWithPrivateParmeterTypes1 = (function () {
     function publicClassWithWithPrivateParmeterTypes1(param, param1, param2) {
@@ -252,7 +252,7 @@ var publicClassWithWithPrivateParmeterTypes1 = (function () {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
     return publicClassWithWithPrivateParmeterTypes1;
-})();
+}());
 exports.publicClassWithWithPrivateParmeterTypes1 = publicClassWithWithPrivateParmeterTypes1;
 var privateClassWithWithPrivateParmeterTypes = (function () {
     function privateClassWithWithPrivateParmeterTypes(param, param1, param2) {
@@ -275,7 +275,7 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
     };
     return privateClassWithWithPrivateParmeterTypes;
-})();
+}());
 var privateClassWithWithPrivateParmeterTypes2 = (function () {
     function privateClassWithWithPrivateParmeterTypes2(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
@@ -297,7 +297,7 @@ var privateClassWithWithPrivateParmeterTypes2 = (function () {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
     };
     return privateClassWithWithPrivateParmeterTypes2;
-})();
+}());
 function publicFunctionWithPrivateParmeterTypes(param) {
     if (param === void 0) { param = exporter.createExportedWidget1(); }
 }
@@ -327,7 +327,7 @@ var publicClassWithPrivateModuleParameterTypes = (function () {
         if (param === void 0) { param = exporter.createExportedWidget2(); }
     };
     return publicClassWithPrivateModuleParameterTypes;
-})();
+}());
 exports.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
 var publicClassWithPrivateModuleParameterTypes2 = (function () {
     function publicClassWithPrivateModuleParameterTypes2(param, param1, param2) {
@@ -344,7 +344,7 @@ var publicClassWithPrivateModuleParameterTypes2 = (function () {
         if (param === void 0) { param = exporter.createExportedWidget4(); }
     };
     return publicClassWithPrivateModuleParameterTypes2;
-})();
+}());
 exports.publicClassWithPrivateModuleParameterTypes2 = publicClassWithPrivateModuleParameterTypes2;
 function publicFunctionWithPrivateModuleParameterTypes(param) {
     if (param === void 0) { param = exporter.createExportedWidget2(); }
@@ -369,7 +369,7 @@ var privateClassWithPrivateModuleParameterTypes = (function () {
         if (param === void 0) { param = exporter.createExportedWidget2(); }
     };
     return privateClassWithPrivateModuleParameterTypes;
-})();
+}());
 var privateClassWithPrivateModuleParameterTypes1 = (function () {
     function privateClassWithPrivateModuleParameterTypes1(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget4(); }
@@ -385,7 +385,7 @@ var privateClassWithPrivateModuleParameterTypes1 = (function () {
         if (param === void 0) { param = exporter.createExportedWidget4(); }
     };
     return privateClassWithPrivateModuleParameterTypes1;
-})();
+}());
 function privateFunctionWithPrivateModuleParameterTypes(param) {
     if (param === void 0) { param = exporter.createExportedWidget2(); }
 }

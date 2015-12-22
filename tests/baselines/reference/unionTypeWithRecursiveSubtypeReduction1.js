@@ -24,21 +24,21 @@ var Module = (function () {
     function Module() {
     }
     return Module;
-})();
+}());
 var Namespace = (function () {
     function Namespace() {
     }
     return Namespace;
-})();
+}());
 var Class = (function () {
     function Class() {
     }
     return Class;
-})();
+}());
 var Property = (function () {
     function Property() {
     }
     return Property;
-})();
+}());
 var t;
 t.parent;

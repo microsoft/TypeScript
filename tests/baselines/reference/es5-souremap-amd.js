@@ -21,5 +21,5 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 //# sourceMappingURL=es5-souremap-amd.js.map

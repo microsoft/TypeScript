@@ -29,21 +29,21 @@ var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(B);
+}(B));
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
         _super.apply(this, arguments);
     }
     return D2;
-})(B);
+}(B));
 var b;
 var d;
 var d2;

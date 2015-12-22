@@ -132,27 +132,27 @@ var a = (function () {
         return ns.toString();
     };
     return a;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
         _super.apply(this, arguments);
     }
     return b;
-})(a);
+}(a));
 var m1;
 (function (m1) {
     var b = (function () {
         function b() {
         }
         return b;
-    })();
+    }());
     m1.b = b;
     var d = (function () {
         function d() {
         }
         return d;
-    })();
+    }());
 })(m1 || (m1 = {}));
 var m2;
 (function (m2) {
@@ -164,13 +164,13 @@ var m2;
                 _super.apply(this, arguments);
             }
             return c;
-        })(b);
+        }(b));
         m3.c = c;
         var ib2 = (function () {
             function ib2() {
             }
             return ib2;
-        })();
+        }());
         m3.ib2 = ib2;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (m2 = {}));
@@ -180,12 +180,12 @@ var c = (function (_super) {
         _super.apply(this, arguments);
     }
     return c;
-})(m1.b);
+}(m1.b));
 var ib2 = (function () {
     function ib2() {
     }
     return ib2;
-})();
+}());
 var d = (function () {
     function d() {
     }
@@ -193,7 +193,7 @@ var d = (function () {
         return ns.toString();
     };
     return d;
-})();
+}());
 var e = (function () {
     function e() {
     }
@@ -201,7 +201,7 @@ var e = (function () {
         return ns.toString();
     };
     return e;
-})();
+}());
 
 
 //// [classdecl.d.ts]

@@ -34,7 +34,7 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
         var rest = [];
@@ -55,4 +55,4 @@ var D = (function () {
         }
     };
     return D;
-})();
+}());

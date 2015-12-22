@@ -31,7 +31,7 @@ export default class A
             return 42;
         };
         return A;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = A;
 });

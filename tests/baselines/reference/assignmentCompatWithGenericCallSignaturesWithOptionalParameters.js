@@ -159,7 +159,7 @@ var ClassTypeParam;
             };
         }
         return Base;
-    })();
+    }());
 })(ClassTypeParam || (ClassTypeParam = {}));
 var GenericSignaturesInvalid;
 (function (GenericSignaturesInvalid) {
@@ -167,12 +167,12 @@ var GenericSignaturesInvalid;
         function Base2() {
         }
         return Base2;
-    })();
+    }());
     var Target = (function () {
         function Target() {
         }
         return Target;
-    })();
+    }());
     function foo() {
         var b;
         var t;
@@ -231,5 +231,5 @@ var GenericSignaturesValid;
             };
         }
         return Base2;
-    })();
+    }());
 })(GenericSignaturesValid || (GenericSignaturesValid = {}));

@@ -19,7 +19,7 @@ define(["require", "exports"], function (require, exports) {
             this.p = 0;
         }
         return C;
-    })();
+    }());
     return C;
 });
 //// [exportAssignmentClass_B.js]

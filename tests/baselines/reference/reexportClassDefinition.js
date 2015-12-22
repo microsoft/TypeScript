@@ -23,7 +23,7 @@ var x = (function () {
     function x() {
     }
     return x;
-})();
+}());
 module.exports = x;
 //// [foo2.js]
 "use strict";
@@ -45,4 +45,4 @@ var x = (function (_super) {
         _super.apply(this, arguments);
     }
     return x;
-})(foo2.x);
+}(foo2.x));

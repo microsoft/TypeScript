@@ -3,7 +3,7 @@ var m1_c1 = (function () {
     function m1_c1() {
     }
     return m1_c1;
-})();
+}());
 var m1_instance1 = new m1_c1();
 function m1_f1() {
     return m1_instance1;
@@ -15,7 +15,7 @@ define("ref/m2", ["require", "exports"], function (require, exports) {
         function m2_c1() {
         }
         return m2_c1;
-    })();
+    }());
     exports.m2_c1 = m2_c1;
     exports.m2_instance1 = new m2_c1();
     function m2_f1() {
@@ -30,7 +30,7 @@ var c1 = (function () {
     function c1() {
     }
     return c1;
-})();
+}());
 var instance1 = new c1();
 function f1() {
     return instance1;

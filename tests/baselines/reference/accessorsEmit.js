@@ -20,7 +20,7 @@ var Result = (function () {
     function Result() {
     }
     return Result;
-})();
+}());
 var Test = (function () {
     function Test() {
     }
@@ -33,7 +33,7 @@ var Test = (function () {
         configurable: true
     });
     return Test;
-})();
+}());
 var Test2 = (function () {
     function Test2() {
     }
@@ -46,4 +46,4 @@ var Test2 = (function () {
         configurable: true
     });
     return Test2;
-})();
+}());
