@@ -1,0 +1,24 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(9,10): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts (1 errors) ====
+    let x: "foo";
+    let y: "foo" | "bar"; 
+    
+    declare function randBool(): boolean;
+    
+    switch (x) {
+        case randBool() ? "foo" : "baz":
+            break;
+        case (("bar")):
+             ~~~~~~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+            break;
+        case (x, y, "baz"):
+            x;
+            break;
+        case (("foo" || "bar")):
+            y;
+            break;
+    }
+    

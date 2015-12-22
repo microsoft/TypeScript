@@ -1,0 +1,27 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(3,9): error TS2352: Neither type '"foo"' nor type '"bar"' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(4,9): error TS2352: Neither type '"bar"' nor type '"foo"' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(7,9): error TS2352: Neither type '"foo" | "bar"' nor type '"baz"' is assignable to the other.
+  Type '"foo"' is not assignable to type '"baz"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts(8,9): error TS2352: Neither type '"baz"' nor type '"foo" | "bar"' is assignable to the other.
+  Type '"baz"' is not assignable to type '"bar"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithTypeAssertions01.ts (4 errors) ====
+    let fooOrBar: "foo" | "bar";
+    
+    let a = "foo" as "bar";
+            ~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"foo"' nor type '"bar"' is assignable to the other.
+    let b = "bar" as "foo";
+            ~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"bar"' nor type '"foo"' is assignable to the other.
+    let c = fooOrBar as "foo";
+    let d = fooOrBar as "bar";
+    let e = fooOrBar as "baz";
+            ~~~~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"foo" | "bar"' nor type '"baz"' is assignable to the other.
+!!! error TS2352:   Type '"foo"' is not assignable to type '"baz"'.
+    let f = "baz" as typeof fooOrBar;
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"baz"' nor type '"foo" | "bar"' is assignable to the other.
+!!! error TS2352:   Type '"baz"' is not assignable to type '"bar"'.

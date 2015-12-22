@@ -1,0 +1,22 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements03.ts(7,10): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements03.ts (1 errors) ====
+    let x: "foo";
+    let y: "foo" | "bar"; 
+    
+    switch ("foo") {
+        case "foo":
+            break;
+        case "bar":
+             ~~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+            break;
+        case x:
+            x;
+            break;
+        case y:
+            y;
+            break;
+    }
+    
