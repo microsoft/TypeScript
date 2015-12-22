@@ -3,7 +3,7 @@ interface Runnable {
     isRunning: boolean;
 }
 
-interface Refrigerator {
+interface Refrigerator extends Runnable {
     makesFoodGoBrrr: boolean;
 }
 
@@ -15,12 +15,19 @@ b = x == y;
 b = "foo" == y
 b = y == "foo";
 b = "foo" == "bar";
+b = "bar" == x;
+b = x == "bar";
+b = y == "bar";
+b = "bar" == y;
 
 b = x != y;
 b = "foo" != y
 b = y != "foo";
 b = "foo" != "bar";
-
+b = "bar" != x;
+b = x != "bar";
+b = y != "bar";
+b = "bar" != y;
 
 
 //// [stringLiteralsWithEqualityChecks04.js]
@@ -31,7 +38,15 @@ b = x == y;
 b = "foo" == y;
 b = y == "foo";
 b = "foo" == "bar";
+b = "bar" == x;
+b = x == "bar";
+b = y == "bar";
+b = "bar" == y;
 b = x != y;
 b = "foo" != y;
 b = y != "foo";
 b = "foo" != "bar";
+b = "bar" != x;
+b = x != "bar";
+b = y != "bar";
+b = "bar" != y;
