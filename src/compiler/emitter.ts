@@ -3848,7 +3848,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // We create a synthetic copy of the identifier in order to avoid the rewriting that might
                         // otherwise occur when the identifier is emitted.
                         index = <Identifier | LiteralExpression>createSynthesizedNode(propName.kind);
-                        (<Identifier | LiteralExpression>index).text = (<Identifier | LiteralExpression>propName).text;
+                        (<Identifier | LiteralExpression>index).text = unescapeIdentifier((<Identifier | LiteralExpression>propName).text);
                     }
 
                     return !nameIsComputed && index.kind === SyntaxKind.Identifier
