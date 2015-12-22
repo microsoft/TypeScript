@@ -7,7 +7,7 @@ if (typeof x !== "string") {
 >typeof x !== "string" : boolean
 >typeof x : string
 >x : string | StringTreeArray
->"string" : string
+>"string" : "string"
 
     x.push("");
 >x.push("") : number

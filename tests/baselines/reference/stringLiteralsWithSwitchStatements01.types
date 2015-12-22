@@ -9,11 +9,11 @@ switch (x) {
 >x : "foo"
 
     case "foo":
->"foo" : string
+>"foo" : "foo"
 
         break;
     case "bar":
->"bar" : string
+>"bar" : "bar"
 
         break;
     case y:

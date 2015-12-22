@@ -14,7 +14,7 @@ function f1(x: Color | string) {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : Color | string
->"number" : string
+>"number" : "number"
 
         var y = x;
 >y : Color
@@ -43,7 +43,7 @@ function f2(x: Color | string | string[]) {
 >typeof x === "object" : boolean
 >typeof x : string
 >x : Color | string | string[]
->"object" : string
+>"object" : "object"
 
         var y = x;
 >y : string[]
@@ -56,7 +56,7 @@ function f2(x: Color | string | string[]) {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : Color | string | string[]
->"number" : string
+>"number" : "number"
 
         var z = x;
 >z : Color
@@ -78,7 +78,7 @@ function f2(x: Color | string | string[]) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : Color | string | string[]
->"string" : string
+>"string" : "string"
 
         var a = x;
 >a : string

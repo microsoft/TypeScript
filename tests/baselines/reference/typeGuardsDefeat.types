@@ -17,7 +17,7 @@ function foo(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 
         f();
 >f() : void
@@ -42,7 +42,7 @@ function foo2(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 
         return x.length; // string
 >x.length : number
@@ -78,7 +78,7 @@ function foo3(x: number | string) {
 >typeof x === "string" : boolean
 >typeof x : string
 >x : number | string
->"string" : string
+>"string" : "string"
 
         return x.length; // string
 >x.length : number

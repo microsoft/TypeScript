@@ -13,7 +13,7 @@ if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
 >x : symbol | E
->"number" : string
+>"number" : "number"
 
     x;
 >x : E

@@ -6,14 +6,14 @@ let y: "foo" | "bar";
 >y : "foo" | "bar"
 
 switch ("foo") {
->"foo" : string
+>"foo" : "foo"
 
     case "foo":
->"foo" : string
+>"foo" : "foo"
 
         break;
     case "bar":
->"bar" : string
+>"bar" : "bar"
 
         break;
     case x:

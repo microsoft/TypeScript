@@ -38,7 +38,7 @@ function rawr(dino: RexOrRaptor) {
     if (dino === "t-rex") {
 >dino === "t-rex" : boolean
 >dino : "t-rex" | "raptor"
->"t-rex" : string
+>"t-rex" : "t-rex"
 
         return "ROAAAAR!";
 >"ROAAAAR!" : string
@@ -46,7 +46,7 @@ function rawr(dino: RexOrRaptor) {
     if (dino === "raptor") {
 >dino === "raptor" : boolean
 >dino : "t-rex" | "raptor"
->"raptor" : string
+>"raptor" : "raptor"
 
         return "yip yip!";
 >"yip yip!" : string

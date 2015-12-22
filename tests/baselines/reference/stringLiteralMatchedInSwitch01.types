@@ -16,10 +16,10 @@ switch (foo) {
 >foo : ("a" | "b")[] | "a" | "b"
 
     case "a":
->"a" : string
+>"a" : "a"
 
     case "b":
->"b" : string
+>"b" : "b"
 
         break;
     default:

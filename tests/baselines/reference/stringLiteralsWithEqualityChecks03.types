@@ -35,7 +35,7 @@ b = "foo" === y
 >b = "foo" === y : boolean
 >b : boolean
 >"foo" === y : boolean
->"foo" : string
+>"foo" : "foo"
 >y : "foo" | Refrigerator
 
 b = y === "foo";
@@ -43,14 +43,14 @@ b = y === "foo";
 >b : boolean
 >y === "foo" : boolean
 >y : "foo" | Refrigerator
->"foo" : string
+>"foo" : "foo"
 
 b = "foo" === "bar";
 >b = "foo" === "bar" : boolean
 >b : boolean
 >"foo" === "bar" : boolean
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
 b = x !== y;
 >b = x !== y : boolean
@@ -63,7 +63,7 @@ b = "foo" !== y
 >b = "foo" !== y : boolean
 >b : boolean
 >"foo" !== y : boolean
->"foo" : string
+>"foo" : "foo"
 >y : "foo" | Refrigerator
 
 b = y !== "foo";
@@ -71,13 +71,13 @@ b = y !== "foo";
 >b : boolean
 >y !== "foo" : boolean
 >y : "foo" | Refrigerator
->"foo" : string
+>"foo" : "foo"
 
 b = "foo" !== "bar";
 >b = "foo" !== "bar" : boolean
 >b : boolean
 >"foo" !== "bar" : boolean
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
 

@@ -13,7 +13,7 @@ if (typeof var1 === "string") {
 >typeof var1 === "string" : boolean
 >typeof var1 : string
 >var1 : string | number
->"string" : string
+>"string" : "string"
 
     num = var1.length; // string
 >num = var1.length : number

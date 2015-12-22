@@ -9,18 +9,18 @@ declare function randBool(): boolean;
 >randBool : () => boolean
 
 switch (randBool() ? "foo" : "bar") {
->randBool() ? "foo" : "bar" : string
+>randBool() ? "foo" : "bar" : "foo" | "bar"
 >randBool() : boolean
 >randBool : () => boolean
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
     case "foo":
->"foo" : string
+>"foo" : "foo"
 
         break;
     case "bar":
->"bar" : string
+>"bar" : "bar"
 
         break;
     case x:
