@@ -158,7 +158,7 @@ sourceFile:tests/cases/compiler/b.ts
 1->Emitted(10, 9) Source(3, 5) + SourceIndex(1)
 2 >Emitted(10, 18) Source(3, 6) + SourceIndex(1)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     

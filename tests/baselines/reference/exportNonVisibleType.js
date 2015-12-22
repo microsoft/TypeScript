@@ -45,7 +45,7 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 module.exports = C1;
 //// [foo3.js]
 "use strict";
@@ -53,5 +53,5 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 module.exports = C1;

@@ -60,7 +60,7 @@ sourceFile:../m1.ts
 1->Emitted(7, 9) Source(4, 1) + SourceIndex(0)
 2 >Emitted(7, 21) Source(4, 2) + SourceIndex(0)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
@@ -228,7 +228,7 @@ sourceFile:../test.ts
 1->Emitted(22, 9) Source(5, 1) + SourceIndex(1)
 2 >Emitted(22, 18) Source(5, 2) + SourceIndex(1)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     

@@ -22,7 +22,7 @@ var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
@@ -38,4 +38,4 @@ var b = (function (_super) {
         configurable: true
     });
     return b;
-})(a);
+}(a));

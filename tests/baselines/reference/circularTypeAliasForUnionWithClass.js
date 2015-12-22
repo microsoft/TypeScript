@@ -24,16 +24,16 @@ var I0 = (function () {
     function I0() {
     }
     return I0;
-})();
+}());
 var v3;
 var I3 = (function () {
     function I3() {
     }
     return I3;
-})();
+}());
 var v4;
 var I4 = (function () {
     function I4() {
     }
     return I4;
-})();
+}());

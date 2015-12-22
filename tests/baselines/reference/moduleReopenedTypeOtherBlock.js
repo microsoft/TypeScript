@@ -15,7 +15,7 @@ var M;
         function C1() {
         }
         return C1;
-    })();
+    }());
     M.C1 = C1;
 })(M || (M = {}));
 var M;
@@ -25,6 +25,6 @@ var M;
         }
         C2.prototype.f = function () { return null; };
         return C2;
-    })();
+    }());
     M.C2 = C2;
 })(M || (M = {}));

@@ -27,4 +27,4 @@ var Foo = (function (_super) {
         return _super.m2.call(this);
     };
     return Foo;
-})(Bar);
+}(Bar));

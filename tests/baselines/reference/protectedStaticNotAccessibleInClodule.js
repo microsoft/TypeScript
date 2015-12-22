@@ -17,7 +17,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C;
 (function (C) {
     C.f = C.foo; // OK

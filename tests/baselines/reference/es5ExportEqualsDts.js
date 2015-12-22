@@ -23,7 +23,7 @@ var A = (function () {
         return aVal;
     };
     return A;
-})();
+}());
 module.exports = A;
 
 

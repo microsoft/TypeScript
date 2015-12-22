@@ -75,7 +75,7 @@ var M;
         function T() {
         }
         return T;
-    })();
+    }());
     M.T = T;
 })(M || (M = {}));
 var S = (function () {
@@ -89,4 +89,4 @@ var S = (function () {
         configurable: true
     });
     return S;
-})();
+}());

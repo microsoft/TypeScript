@@ -28,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
             function Person(name) {
             }
             return Person;
-        })();
+        }());
         Models.Person = Person;
     })(Models = exports.Models || (exports.Models = {}));
 });
@@ -44,7 +44,7 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
                 return new P.Models.Person("Rock");
             };
             return DB;
-        })();
+        }());
         Database.DB = DB;
     })(Database = exports.Database || (exports.Database = {}));
 });

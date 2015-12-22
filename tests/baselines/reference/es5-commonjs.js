@@ -23,6 +23,6 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = A;

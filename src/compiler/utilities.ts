@@ -342,6 +342,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+            case SyntaxKind.MethodDeclaration:
                 errorNode = (<Declaration>node).name;
                 break;
         }
@@ -692,6 +693,10 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
+        return predicate && predicate.kind === TypePredicateKind.Identifier;
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
@@ -770,26 +775,38 @@ namespace ts {
         }
     }
 
-    export function getSuperContainer(node: Node, includeFunctions: boolean): Node {
+    /**
+      * Given an super call\property node returns a closest node where either  
+      * - super call\property is legal in the node and not legal in the parent node the node. 
+      *   i.e. super call is legal in constructor but not legal in the class body.
+      * - node is arrow function (so caller might need to call getSuperContainer in case if he needs to climb higher)
+      * - super call\property is definitely illegal in the node (but might be legal in some subnode)
+      *   i.e. super property access is illegal in function declaration but can be legal in the statement list
+      */
+    export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
         while (true) {
             node = node.parent;
-            if (!node) return node;
+            if (!node) {
+                return node;
+            }
             switch (node.kind) {
                 case SyntaxKind.ComputedPropertyName:
-                    // If the grandparent node is an object literal (as opposed to a class),
-                    // then the computed property is not a 'super' container.
-                    // A computed property name in a class needs to be a super container
-                    // so that we can error on it.
-                    if (isClassLike(node.parent.parent)) {
-                        return node;
-                    }
-                    // If this is a computed property, then the parent should not
-                    // make it a super container. The parent might be a property
-                    // in an object literal, like a method or accessor. But in order for
-                    // such a parent to be a super container, the reference must be in
-                    // the *body* of the container.
                     node = node.parent;
                     break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (!stopOnFunctions) {
+                        continue;
+                    }
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
                     if (node.parent.kind === SyntaxKind.Parameter && isClassElement(node.parent.parent)) {
@@ -803,20 +820,6 @@ namespace ts {
                         node = node.parent;
                     }
                     break;
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    if (!includeFunctions) {
-                        continue;
-                    }
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return node;
             }
         }
     }
@@ -1063,33 +1066,40 @@ namespace ts {
                 (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral;
     }
 
-    /**
-     * Returns true if the node is an assignment to a property on the identifier 'exports'.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isExportsPropertyAssignment(expression: Node): boolean {
-        // of the form 'exports.name = expr' where 'name' and 'expr' are arbitrary
-        return isInJavaScriptFile(expression) &&
-            (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "exports");
-    }
+    /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
+    /// assignments we treat as special in the binder
+    export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
+        if (expression.kind !== SyntaxKind.BinaryExpression) {
+            return SpecialPropertyAssignmentKind.None;
+        }
+        const expr = <BinaryExpression>expression;
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || expr.left.kind !== SyntaxKind.PropertyAccessExpression) {
+            return SpecialPropertyAssignmentKind.None;
+        }
+        const lhs = <PropertyAccessExpression>expr.left;
+        if (lhs.expression.kind === SyntaxKind.Identifier) {
+            const lhsId = <Identifier>lhs.expression;
+            if (lhsId.text === "exports") {
+                // exports.name = expr
+                return SpecialPropertyAssignmentKind.ExportsProperty;
+            }
+            else if (lhsId.text === "module" && lhs.name.text === "exports") {
+                // module.exports = expr
+                return SpecialPropertyAssignmentKind.ModuleExports;
+            }
+        }
+        else if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+            return SpecialPropertyAssignmentKind.ThisProperty;
+        }
+        else if (lhs.expression.kind === SyntaxKind.PropertyAccessExpression) {
+            // chained dot, e.g. x.y.z = expr; this var is the 'x.y' part
+            const innerPropertyAccess = <PropertyAccessExpression>lhs.expression;
+            if (innerPropertyAccess.expression.kind === SyntaxKind.Identifier && innerPropertyAccess.name.text === "prototype") {
+                return SpecialPropertyAssignmentKind.PrototypeProperty;
+            }
+        }
 
-    /**
-     * Returns true if the node is an assignment to the property access expression 'module.exports'.
-     * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isModuleExportsAssignment(expression: Node): boolean {
-        // of the form 'module.exports = expr' where 'expr' is arbitrary
-        return isInJavaScriptFile(expression) &&
-            (expression.kind === SyntaxKind.BinaryExpression) &&
-            ((<BinaryExpression>expression).operatorToken.kind === SyntaxKind.EqualsToken) &&
-            ((<BinaryExpression>expression).left.kind === SyntaxKind.PropertyAccessExpression) &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression.kind === SyntaxKind.Identifier) &&
-            ((<Identifier>((<PropertyAccessExpression>(<BinaryExpression>expression).left).expression)).text === "module") &&
-            ((<PropertyAccessExpression>(<BinaryExpression>expression).left).name.text === "exports");
+        return SpecialPropertyAssignmentKind.None;
     }
 
     export function getExternalModuleName(node: Node): Expression {
@@ -2735,5 +2745,9 @@ namespace ts {
                 }
             }
         }
+    }
+
+    export function isParameterPropertyDeclaration(node: ParameterDeclaration): boolean {
+        return node.flags & NodeFlags.AccessibilityModifier && node.parent.kind === SyntaxKind.Constructor && isClassLike(node.parent.parent);
     }
 }

@@ -35,7 +35,7 @@ var B;
             _super.apply(this, arguments);
         }
         return D;
-    })(B.a.C);
+    }(B.a.C));
     B.D = D;
 })(B || (B = {}));
 var A;
@@ -44,7 +44,7 @@ var A;
         function C() {
         }
         return C;
-    })();
+    }());
     A.C = C;
     A.b = B;
 })(A || (A = {}));

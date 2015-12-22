@@ -155,19 +155,19 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
@@ -257,7 +257,7 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());
 is;
 C;
 // Reference to rest parameter

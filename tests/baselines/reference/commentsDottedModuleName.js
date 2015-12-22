@@ -20,7 +20,7 @@ define(["require", "exports"], function (require, exports) {
                 function b() {
                 }
                 return b;
-            })();
+            }());
             InnerModule.b = b;
         })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
     })(outerModule = exports.outerModule || (exports.outerModule = {}));

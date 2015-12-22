@@ -7,7 +7,7 @@ var M = (function () {
     function M() {
     }
     return M;
-})();
+}());
 //# sourceMappingURL=inputFile1.js.map
 EmitSkipped: false
 FileName : tests/cases/fourslash/inputFile2.js.map
@@ -17,5 +17,5 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 //# sourceMappingURL=inputFile2.js.map

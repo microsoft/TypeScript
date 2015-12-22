@@ -40,7 +40,7 @@ module.exports = (function () {
     function Foo3() {
     }
     return Foo3;
-})();
+}());
 //// [foo4.js]
 "use strict";
 module.exports = true;

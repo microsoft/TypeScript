@@ -1309,6 +1309,9 @@ namespace ts {
         }
 
         function emitSignatureDeclaration(node: SignatureDeclaration) {
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
+
             // Construct signature or constructor type write new Signature
             if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                 write("new ");
@@ -1320,9 +1323,6 @@ namespace ts {
             else {
                 write("(");
             }
-
-            const prevEnclosingDeclaration = enclosingDeclaration;
-            enclosingDeclaration = node;
 
             // Parameters
             emitCommaList(node.parameters, emitParameterDeclaration);
@@ -1534,14 +1534,6 @@ namespace ts {
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
-                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                    const diagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    return diagnosticMessage !== undefined ? {
-                        diagnosticMessage,
-                        errorNode: bindingElement,
-                        typeName: bindingElement.name
-                    } : undefined;
-                }
 
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
                     // If bindingElement is an omittedExpression (i.e. containing elision),

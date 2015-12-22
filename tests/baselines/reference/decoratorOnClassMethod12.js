@@ -28,7 +28,7 @@ var M;
         }
         S.prototype.decorator = function (target, key) { };
         return S;
-    })();
+    }());
     var C = (function (_super) {
         __extends(C, _super);
         function C() {
@@ -39,5 +39,5 @@ var M;
             _super.decorator
         ], C.prototype, "method", null);
         return C;
-    })(S);
+    }(S));
 })(M || (M = {}));

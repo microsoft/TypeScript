@@ -45,7 +45,7 @@ var Test = (function () {
         console.log(field); // Using field here shouldnt be error
     };
     return Test;
-})();
+}());
 var field1;
 var Test1 = (function () {
     function Test1(field1) {
@@ -60,4 +60,4 @@ var Test1 = (function () {
         console.log(field1); // This shouldnt be error as its a static property
     };
     return Test1;
-})();
+}());

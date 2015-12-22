@@ -123,6 +123,7 @@ namespace ts.formatting {
         public SpaceAfterModuleName: Rule;
 
         // Lambda expressions
+        public SpaceBeforeArrow: Rule;
         public SpaceAfterArrow: Rule;
 
         // Optional parameters and let args
@@ -254,7 +255,7 @@ namespace ts.formatting {
 
             // No space before and after indexer
             this.NoSpaceBeforeOpenBracket = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.OpenBracketToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
-            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext ), RuleAction.Delete));
+            this.NoSpaceAfterCloseBracket = new Rule(RuleDescriptor.create3(SyntaxKind.CloseBracketToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNotBeforeBlockInFunctionDeclarationContext), RuleAction.Delete));
 
             // Place a space before open brace in a function declaration
             this.FunctionOpenBraceLeftTokenRange = Shared.TokenRange.AnyIncludingMultilineComments;
@@ -342,6 +343,7 @@ namespace ts.formatting {
             this.SpaceAfterModuleName = new Rule(RuleDescriptor.create1(SyntaxKind.StringLiteral, SyntaxKind.OpenBraceToken), RuleOperation.create2(new RuleOperationContext(Rules.IsModuleDeclContext), RuleAction.Space));
 
             // Lambda expressions
+            this.SpaceBeforeArrow = new Rule(RuleDescriptor.create2(Shared.TokenRange.Any, SyntaxKind.EqualsGreaterThanToken), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
             this.SpaceAfterArrow = new Rule(RuleDescriptor.create3(SyntaxKind.EqualsGreaterThanToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
 
             // Optional parameters and let args
@@ -379,8 +381,7 @@ namespace ts.formatting {
             this.NoSpaceBeforeTemplateMiddleAndTail = new Rule(RuleDescriptor.create4(Shared.TokenRange.Any, Shared.TokenRange.FromTokens([SyntaxKind.TemplateMiddle, SyntaxKind.TemplateTail])), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // These rules are higher in priority than user-configurable rules.
-            this.HighPriorityCommonRules =
-            [
+            this.HighPriorityCommonRules = [
                 this.IgnoreBeforeComment, this.IgnoreAfterLineComment,
                 this.NoSpaceBeforeColon, this.SpaceAfterColon, this.NoSpaceBeforeQuestionMark, this.SpaceAfterQuestionMarkInConditionalOperator,
                 this.NoSpaceAfterQuestionMark,
@@ -411,7 +412,7 @@ namespace ts.formatting {
                 this.NoSpaceAfterConstructor, this.NoSpaceAfterModuleImport,
                 this.SpaceAfterCertainTypeScriptKeywords, this.SpaceBeforeCertainTypeScriptKeywords,
                 this.SpaceAfterModuleName,
-                this.SpaceAfterArrow,
+                this.SpaceBeforeArrow, this.SpaceAfterArrow,
                 this.NoSpaceAfterEllipsis,
                 this.NoSpaceAfterOptionalParameters,
                 this.NoSpaceBetweenEmptyInterfaceBraceBrackets,
@@ -427,8 +428,7 @@ namespace ts.formatting {
             ];
 
             // These rules are lower in priority than user-configurable rules.
-            this.LowPriorityCommonRules =
-            [
+            this.LowPriorityCommonRules = [
                 this.NoSpaceBeforeSemicolon,
                 this.SpaceBeforeOpenBraceInControl, this.SpaceBeforeOpenBraceInFunction, this.SpaceBeforeOpenBraceInTypeScriptDeclWithBlock,
                 this.NoSpaceBeforeComma,
@@ -732,7 +732,7 @@ namespace ts.formatting {
         }
 
         static IsStartOfVariableDeclarationList(context: FormattingContext): boolean {
-            return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList && 
+            return context.currentTokenParent.kind === SyntaxKind.VariableDeclarationList &&
                 context.currentTokenParent.getStart(context.sourceFile) === context.currentTokenSpan.pos;
         }
 

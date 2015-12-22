@@ -94,14 +94,14 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         _super.apply(this, arguments);
     }
     return D;
-})(C);
+}(C));
 switch (new C()) {
     case new D():
     case { id: 12, name: '' }:

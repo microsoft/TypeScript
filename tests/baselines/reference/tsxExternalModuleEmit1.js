@@ -48,7 +48,7 @@ var Button = (function (_super) {
         return <button>Some button</button>;
     };
     return Button;
-})(React.Component);
+}(React.Component));
 exports.Button = Button;
 //// [app.jsx]
 "use strict";
@@ -69,5 +69,5 @@ var App = (function (_super) {
         return <button_1.Button />;
     };
     return App;
-})(React.Component);
+}(React.Component));
 exports.App = App;

@@ -57,7 +57,7 @@ var c_public = (function () {
     function c_public() {
     }
     return c_public;
-})();
+}());
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_require1.js]
 "use strict";
@@ -65,7 +65,7 @@ var c_public = (function () {
     function c_public() {
     }
     return c_public;
-})();
+}());
 exports.c_public = c_public;
 //// [privacyTopLevelAmbientExternalModuleImportWithExport_core.js]
 "use strict";

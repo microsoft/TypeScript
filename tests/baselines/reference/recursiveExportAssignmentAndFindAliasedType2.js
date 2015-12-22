@@ -27,7 +27,7 @@ define(["require", "exports"], function (require, exports) {
         function ClassB() {
         }
         return ClassB;
-    })();
+    }());
     return ClassB;
 });
 //// [recursiveExportAssignmentAndFindAliasedType2_moduleA.js]

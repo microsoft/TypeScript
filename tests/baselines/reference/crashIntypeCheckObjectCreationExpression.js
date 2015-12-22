@@ -20,6 +20,6 @@ define(["require", "exports"], function (require, exports) {
         BuildWorkspaceService.prototype.injectBuildService = function (service) {
         };
         return BuildWorkspaceService;
-    })();
+    }());
     exports.BuildWorkspaceService = BuildWorkspaceService;
 });

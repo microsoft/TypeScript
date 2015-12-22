@@ -62,7 +62,7 @@ var Doing = (function () {
     Doing.prototype.instanceMethod = function () {
     };
     return Doing;
-})();
+}());
 var Other = (function (_super) {
     __extends(Other, _super);
     function Other() {
@@ -107,4 +107,4 @@ var Other = (function (_super) {
         configurable: true
     });
     return Other;
-})(Doing);
+}(Doing));

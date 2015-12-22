@@ -61,7 +61,7 @@ var templa;
                     _super.call(this);
                 }
                 return AbstractElementController;
-            })(templa.mvc.AbstractController);
+            }(templa.mvc.AbstractController));
             mvc.AbstractElementController = AbstractElementController;
         })(mvc = dom.mvc || (dom.mvc = {}));
     })(dom = templa.dom || (templa.dom = {}));
@@ -82,7 +82,7 @@ var templa;
                         this._controllers = [];
                     }
                     return AbstractCompositeElementController;
-                })(templa.dom.mvc.AbstractElementController);
+                }(templa.dom.mvc.AbstractElementController));
                 composite.AbstractCompositeElementController = AbstractCompositeElementController;
             })(composite = mvc.composite || (mvc.composite = {}));
         })(mvc = dom.mvc || (dom.mvc = {}));

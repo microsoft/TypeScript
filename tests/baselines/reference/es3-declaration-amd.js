@@ -21,7 +21,7 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 
 
 //// [es3-declaration-amd.d.ts]

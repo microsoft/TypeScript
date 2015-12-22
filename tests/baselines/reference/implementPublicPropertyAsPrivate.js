@@ -12,4 +12,4 @@ var C = (function () {
         this.x = 0; // should raise error at class decl
     }
     return C;
-})();
+}());

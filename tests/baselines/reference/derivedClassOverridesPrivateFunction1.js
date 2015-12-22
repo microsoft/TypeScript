@@ -28,7 +28,7 @@ var BaseClass = (function () {
     BaseClass.prototype._init = function () {
     };
     return BaseClass;
-})();
+}());
 var DerivedClass = (function (_super) {
     __extends(DerivedClass, _super);
     function DerivedClass() {
@@ -37,5 +37,5 @@ var DerivedClass = (function (_super) {
     DerivedClass.prototype._init = function () {
     };
     return DerivedClass;
-})(BaseClass);
+}(BaseClass));
 new DerivedClass();

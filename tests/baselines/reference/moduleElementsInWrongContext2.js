@@ -34,13 +34,12 @@ function blah () {
 function blah() {
     var v;
     function foo() { }
-    __export(require("ambient"));
     exports["default"] = v;
     var C = (function () {
         function C() {
         }
         return C;
-    })();
+    }());
     exports["default"] = C;
     function bee() { }
     exports.bee = bee;

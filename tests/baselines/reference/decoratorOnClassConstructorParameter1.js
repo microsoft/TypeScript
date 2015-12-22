@@ -22,4 +22,4 @@ var C = (function () {
         __param(0, dec)
     ], C);
     return C;
-})();
+}());

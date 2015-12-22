@@ -16,6 +16,6 @@ define(["require", "exports"], function (require, exports) {
         function FilterManager() {
         }
         return FilterManager;
-    })();
+    }());
     exports.FilterManager = FilterManager;
 });

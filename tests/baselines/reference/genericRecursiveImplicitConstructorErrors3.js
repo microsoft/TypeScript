@@ -44,7 +44,7 @@ var TypeScript;
         MemberName.create = function (arg1, arg2, arg3) {
         };
         return MemberName;
-    })();
+    }());
     TypeScript.MemberName = MemberName;
 })(TypeScript || (TypeScript = {}));
 var TypeScript;
@@ -54,7 +54,7 @@ var TypeScript;
             this.type = null;
         }
         return PullSymbol;
-    })();
+    }());
     TypeScript.PullSymbol = PullSymbol;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
@@ -76,6 +76,6 @@ var TypeScript;
             }
         };
         return PullTypeSymbol;
-    })(PullSymbol);
+    }(PullSymbol));
     TypeScript.PullTypeSymbol = PullTypeSymbol;
 })(TypeScript || (TypeScript = {}));

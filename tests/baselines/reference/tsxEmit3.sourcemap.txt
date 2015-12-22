@@ -85,7 +85,7 @@ sourceFile:file.tsx
 1->Emitted(6, 9) Source(8, 39) + SourceIndex(0)
 2 >Emitted(6, 19) Source(8, 40) + SourceIndex(0)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
@@ -183,7 +183,7 @@ sourceFile:file.tsx
 1->Emitted(14, 13) Source(10, 22) + SourceIndex(0)
 2 >Emitted(14, 23) Source(10, 23) + SourceIndex(0)
 ---
->>>        })();
+>>>        }());
 1 >^^^^^^^^
 2 >        ^
 3 >         

@@ -16,12 +16,12 @@ var A = (function (_super) {
         _super.apply(this, arguments);
     }
     return A;
-})(C);
+}(C));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));
 (new C).blah;

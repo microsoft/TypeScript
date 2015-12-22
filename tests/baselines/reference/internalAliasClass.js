@@ -16,7 +16,7 @@ var a;
         function c() {
         }
         return c;
-    })();
+    }());
     a.c = c;
 })(a || (a = {}));
 var c;

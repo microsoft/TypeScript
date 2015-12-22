@@ -1,5 +1,7 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
+const expect: typeof _chai.expect = _chai.expect;
+
 namespace ts.server {
     let lastWrittenToHost: string;
     const mockHost: ServerHost = {
@@ -28,7 +30,7 @@ namespace ts.server {
         endGroup(): void {},
         msg(s: string, type?: string): void {},
     };
-    
+
     describe("the Session class", () => {
         let session: Session;
         let lastSent: protocol.Message;
@@ -204,7 +206,7 @@ namespace ts.server {
                 .to.throw(`Protocol handler already exists for command "${command}"`);
             });
         });
-        
+
         describe("event", () => {
             it("can format event responses and send them", () => {
                 const evt = "notify-test";
@@ -315,7 +317,7 @@ namespace ts.server {
                     responseRequired: true
                 }));
             }
-            
+
             send(msg: protocol.Message) {
                 this.client.handle(msg);
             }
@@ -323,7 +325,7 @@ namespace ts.server {
             enqueue(msg: protocol.Request) {
                 this.queue.unshift(msg);
             }
-            
+
             handleRequest(msg: protocol.Request) {
                 let response: protocol.Response;
                 try {
@@ -345,7 +347,7 @@ namespace ts.server {
                 }
             }
         }
-        
+
         class InProcClient {
             private server: InProcSession;
             private seq = 0;
@@ -379,7 +381,7 @@ namespace ts.server {
             connect(session: InProcSession): void {
                 this.server = session;
             }
-            
+
             execute(command: string, args: any, callback: (resp: protocol.Response) => void): void {
                 if (!this.server) {
                     return;
@@ -394,7 +396,7 @@ namespace ts.server {
                 this.callbacks[this.seq] = callback;
             }
         };
-        
+
         it("can be constructed and respond to commands", (done) => {
             const cli = new InProcClient();
             const session = new InProcSession(cli);
@@ -402,23 +404,23 @@ namespace ts.server {
                 data: true
             };
             const toEvent = {
-                data: false    
+                data: false
             };
             let responses = 0;
 
             // Connect the client
             cli.connect(session);
-            
+
             // Add an event handler
             cli.on("testevent", (eventinfo) => {
                 expect(eventinfo).to.equal(toEvent);
                 responses++;
                 expect(responses).to.equal(1);
             });
-            
+
             // Trigger said event from the server
             session.event(toEvent, "testevent");
-            
+
             // Queue an echo command
             cli.execute("echo", toEcho, (resp) => {
                 assert(resp.success, resp.message);
@@ -426,7 +428,7 @@ namespace ts.server {
                 expect(responses).to.equal(2);
                 expect(resp.body).to.deep.equal(toEcho);
             });
-            
+
             // Queue a configure command
             cli.execute("configure", {
                 hostInfo: "unit test",
@@ -436,10 +438,10 @@ namespace ts.server {
             }, (resp) => {
                 assert(resp.success, resp.message);
                 responses++;
-                expect(responses).to.equal(3);                
+                expect(responses).to.equal(3);
                 done();
             });
-            
+
             // Consume the queue and trigger the callbacks
             session.consumeQueue();
         });

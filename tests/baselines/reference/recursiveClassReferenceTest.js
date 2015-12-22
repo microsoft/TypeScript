@@ -126,7 +126,7 @@ var Sample;
                         return true;
                     };
                     return StartFindAction;
-                })();
+                }());
                 Find.StartFindAction = StartFindAction;
             })(Find = Thing_1.Find || (Thing_1.Find = {}));
         })(Thing = Actions.Thing || (Actions.Thing = {}));
@@ -154,7 +154,7 @@ var Sample;
                 FindWidget.prototype.destroy = function () {
                 };
                 return FindWidget;
-            })();
+            }());
             Widgets.FindWidget = FindWidget;
         })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
     })(Thing = Sample.Thing || (Sample.Thing = {}));
@@ -164,7 +164,7 @@ var AbstractMode = (function () {
     }
     AbstractMode.prototype.getInitialState = function () { return null; };
     return AbstractMode;
-})();
+}());
 var Sample;
 (function (Sample) {
     var Thing;
@@ -185,7 +185,7 @@ var Sample;
                     };
                     State.prototype.getMode = function () { return mode; };
                     return State;
-                })();
+                }());
                 PlainText.State = State;
                 var Mode = (function (_super) {
                     __extends(Mode, _super);
@@ -197,7 +197,7 @@ var Sample;
                         return new State(self);
                     };
                     return Mode;
-                })(AbstractMode);
+                }(AbstractMode));
                 PlainText.Mode = Mode;
             })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
         })(Languages = Thing.Languages || (Thing.Languages = {}));

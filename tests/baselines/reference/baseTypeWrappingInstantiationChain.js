@@ -45,27 +45,27 @@ var C = (function (_super) {
     };
     C.prototype.method = function (t) { };
     return C;
-})(CBase);
+}(CBase));
 var CBase = (function (_super) {
     __extends(CBase, _super);
     function CBase() {
         _super.apply(this, arguments);
     }
     return CBase;
-})(CBaseBase);
+}(CBaseBase));
 var CBaseBase = (function () {
     function CBaseBase(x) {
     }
     return CBaseBase;
-})();
+}());
 var Parameter = (function () {
     function Parameter() {
     }
     Parameter.prototype.method = function (t) { };
     return Parameter;
-})();
+}());
 var Wrapper = (function () {
     function Wrapper() {
     }
     return Wrapper;
-})();
+}());

@@ -41,7 +41,7 @@ sourceFile:sourceMapValidationExportAssignment.ts
 1->Emitted(6, 9) Source(3, 1) + SourceIndex(0)
 2 >Emitted(6, 17) Source(3, 2) + SourceIndex(0)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
