@@ -28,7 +28,8 @@ class IncrementDecrementWalker extends Lint.RuleWalker {
     }
 
     visitIncrementDecrement(node: ts.UnaryExpression) {
-        if (node.parent && (node.parent.kind === ts.SyntaxKind.ExpressionStatement || node.parent.kind === ts.SyntaxKind.ForStatement || node.parent.kind === ts.SyntaxKind.ElementAccessExpression)) {
+        if (node.parent && (node.parent.kind === ts.SyntaxKind.ExpressionStatement ||
+                            node.parent.kind === ts.SyntaxKind.ForStatement)) {
             return;
         }
         this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.POSTFIX_FAILURE_STRING));
