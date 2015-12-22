@@ -7334,7 +7334,7 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForBinaryOperand(node: Expression, literalNode: StringLiteral): Type {
+        function getContextualTypeForBinaryOperand(node: Expression): Type {
             const binaryExpression = <BinaryExpression>node.parent;
             const operator = binaryExpression.operatorToken.kind;
 
@@ -7345,24 +7345,14 @@ namespace ts {
                 }
                 return undefined;
             }
-
-            switch (operator) {
-                case SyntaxKind.BarBarToken:
-                    // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
-                    // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
-                    let type = getContextualTypeWorker(binaryExpression, literalNode);
-                    if (!type && node === binaryExpression.right) {
-                        type = checkExpression(binaryExpression.left);
-                    }
-                    return type;
-                case SyntaxKind.EqualsEqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsEqualsToken:
-                case SyntaxKind.EqualsEqualsToken:
-                case SyntaxKind.ExclamationEqualsToken:
-                    if (literalNode) {
-                        return getStringLiteralTypeForText(literalNode.text);
-                    }
-                    break;
+            else if (operator === SyntaxKind.BarBarToken) {
+                // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
+                // expression has no contextual type, the right operand is contextually typed by the type of the left operand.
+                let type = getContextualType(binaryExpression);
+                if (!type && node === binaryExpression.right) {
+                    type = checkExpression(binaryExpression.left);
+                }
+                return type;
             }
 
             return undefined;
@@ -7472,9 +7462,9 @@ namespace ts {
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
-        function getContextualTypeForConditionalOperand(node: Expression, literalNode: StringLiteral): Type {
+        function getContextualTypeForConditionalOperand(node: Expression): Type {
             const conditional = <ConditionalExpression>node.parent;
-            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualTypeWorker(conditional, literalNode) : undefined;
+            return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
         function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
@@ -7522,14 +7512,7 @@ namespace ts {
          * @returns the contextual type of an expression.
          */
         function getContextualType(node: Expression): Type {
-            return getContextualTypeWorker(node, /*literalNode*/ undefined);
-        }
 
-        function getLiteralContextualType(literalNode: StringLiteral) {
-            return getContextualTypeWorker(literalNode, literalNode);
-        }
-
-        function getContextualTypeWorker(node: Expression, literalNode: StringLiteral): Type {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -7557,30 +7540,78 @@ namespace ts {
                 case SyntaxKind.AsExpression:
                     return getTypeFromTypeNode((<AssertionExpression>parent).type);
                 case SyntaxKind.BinaryExpression:
-                    return getContextualTypeForBinaryOperand(node, literalNode);
+                    return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
                     return getContextualTypeForObjectLiteralElement(<ObjectLiteralElement>parent);
                 case SyntaxKind.ArrayLiteralExpression:
                     return getContextualTypeForElementExpression(node);
                 case SyntaxKind.ConditionalExpression:
-                    return getContextualTypeForConditionalOperand(node, literalNode);
+                    return getContextualTypeForConditionalOperand(node);
                 case SyntaxKind.TemplateSpan:
                     Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression:
-                    return getContextualTypeWorker(<ParenthesizedExpression>parent, literalNode);
+                    return getContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxExpression(<JsxExpression>parent);
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseClause:
-                    if (literalNode) {
-                        return getStringLiteralTypeForText(literalNode.text);
-                    }
-                    break;
             }
             return undefined;
         }
+
+        function shouldAcquireLiteralType(literalNode: StringLiteral) {
+
+            let current: Node = literalNode;
+            while (true) {
+                const { parent } = current;
+                switch (parent.kind) {
+                    // The operand of a 'switch' should get a literal type.
+                    case SyntaxKind.SwitchStatement:
+                        return current === (parent as SwitchStatement).expression;
+
+                    // The tested expression of a 'case' clause should get a literal type.
+                    case SyntaxKind.CaseClause:
+                        return current === (parent as CaseClause).expression;
+
+                    case SyntaxKind.BinaryExpression:
+                        const binaryExpr = parent as BinaryExpression;
+                        switch (binaryExpr.operatorToken.kind) {
+                            // Either operand of an equality/inequality comparison
+                            // should get a literal type.
+                            case SyntaxKind.EqualsEqualsEqualsToken:
+                            case SyntaxKind.ExclamationEqualsEqualsToken:
+                            case SyntaxKind.EqualsEqualsToken:
+                            case SyntaxKind.ExclamationEqualsToken:
+                                return current === binaryExpr.left || current === binaryExpr.right;
+
+                            case SyntaxKind.BarBarToken:
+                                current = parent;
+                                continue;
+
+                        }
+                        break;
+
+                    case SyntaxKind.ConditionalExpression:
+                    case SyntaxKind.ParenthesizedExpression:
+                        current = parent;
+                        continue;
+                }
+
+                // This is not a node we can account for.
+                // Let contextual typing take over.
+                break;
+            }
+
+            // We could perform our walk, check if 'current' is an expression
+            // when we get to an unsupported node, and then get the contextual type on that.
+            // That would save a few steps through "pass-though" nodes,
+            // but the checks in 'isExpression' seem so involved that it would probably
+            // be better to simply grab the contextual type first and then see if we
+            // need to do any work.
+            const contextualType = getContextualType(literalNode);
+            return !!contextualType && contextualTypeIsStringLiteralType(contextualType);
+        }
+
 
         // If the given type is an object or union type, if that type has a single signature, and if
         // that signature is non-generic, return the signature. Otherwise return undefined.
@@ -10885,8 +10916,7 @@ namespace ts {
         }
 
         function checkStringLiteralExpression(node: StringLiteral): Type {
-            const contextualType = getLiteralContextualType(node);
-            if (contextualType && contextualTypeIsStringLiteralType(contextualType)) {
+            if (shouldAcquireLiteralType(node)) {
                 return getStringLiteralTypeForText(node.text);
             }
 
