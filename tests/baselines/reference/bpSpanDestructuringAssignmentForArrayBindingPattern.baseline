@@ -95,12 +95,7 @@
 --------------------------------
 20 >for ([, nameA] = robotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (712 to 716)  SpanInfo: {"start":717,"length":25}
-    >[, nameA] = robotA, i = 0
-    >:=> (line 20, col 5) to (line 20, col 30)
-20 >for ([, nameA] = robotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~                      => Pos: (717 to 735)  SpanInfo: {"start":720,"length":5}
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (712 to 735)  SpanInfo: {"start":720,"length":5}
     >nameA
     >:=> (line 20, col 8) to (line 20, col 13)
 20 >for ([, nameA] = robotA, i = 0; i < 1; i++) {
@@ -133,12 +128,7 @@
 --------------------------------
 23 >for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (784 to 788)  SpanInfo: {"start":789,"length":29}
-    >[, nameA] = getRobot(), i = 0
-    >:=> (line 23, col 5) to (line 23, col 34)
-23 >for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (789 to 811)  SpanInfo: {"start":792,"length":5}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (784 to 811)  SpanInfo: {"start":792,"length":5}
     >nameA
     >:=> (line 23, col 8) to (line 23, col 13)
 23 >for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
@@ -171,12 +161,7 @@
 --------------------------------
 26 >for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (860 to 864)  SpanInfo: {"start":865,"length":45}
-    >[, nameA] = [2, "trimmer", "trimming"], i = 0
-    >:=> (line 26, col 5) to (line 26, col 50)
-26 >for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (865 to 903)  SpanInfo: {"start":868,"length":5}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (860 to 903)  SpanInfo: {"start":868,"length":5}
     >nameA
     >:=> (line 26, col 8) to (line 26, col 13)
 26 >for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
@@ -209,12 +194,7 @@
 --------------------------------
 29 >for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (952 to 956)  SpanInfo: {"start":957,"length":57}
-    >[, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0
-    >:=> (line 29, col 5) to (line 29, col 62)
-29 >for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~                       => Pos: (957 to 974)  SpanInfo: {"start":961,"length":13}
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (952 to 974)  SpanInfo: {"start":961,"length":13}
     >primarySkillA
     >:=> (line 29, col 9) to (line 29, col 22)
 29 >for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
@@ -257,12 +237,7 @@
 --------------------------------
 32 >for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1064 to 1068)  SpanInfo: {"start":1069,"length":61}
-    >[, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0
-    >:=> (line 32, col 5) to (line 32, col 66)
-32 >for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~                       => Pos: (1069 to 1086)  SpanInfo: {"start":1073,"length":13}
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (1064 to 1086)  SpanInfo: {"start":1073,"length":13}
     >primarySkillA
     >:=> (line 32, col 9) to (line 32, col 22)
 32 >for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
@@ -305,12 +280,7 @@
 --------------------------------
 35 >for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1180 to 1184)  SpanInfo: {"start":1185,"length":81}
-    >[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0
-    >:=> (line 35, col 5) to (line 35, col 86)
-35 >for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~                       => Pos: (1185 to 1202)  SpanInfo: {"start":1189,"length":13}
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (1180 to 1202)  SpanInfo: {"start":1189,"length":13}
     >primarySkillA
     >:=> (line 35, col 9) to (line 35, col 22)
 35 >for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
@@ -353,12 +323,7 @@
 --------------------------------
 38 >for ([numberB] = robotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1316 to 1320)  SpanInfo: {"start":1321,"length":25}
-    >[numberB] = robotA, i = 0
-    >:=> (line 38, col 5) to (line 38, col 30)
-38 >for ([numberB] = robotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~                      => Pos: (1321 to 1339)  SpanInfo: {"start":1322,"length":7}
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1316 to 1339)  SpanInfo: {"start":1322,"length":7}
     >numberB
     >:=> (line 38, col 6) to (line 38, col 13)
 38 >for ([numberB] = robotA, i = 0; i < 1; i++) {
@@ -391,12 +356,7 @@
 --------------------------------
 41 >for ([numberB] = getRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1390 to 1394)  SpanInfo: {"start":1395,"length":29}
-    >[numberB] = getRobot(), i = 0
-    >:=> (line 41, col 5) to (line 41, col 34)
-41 >for ([numberB] = getRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (1395 to 1417)  SpanInfo: {"start":1396,"length":7}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (1390 to 1417)  SpanInfo: {"start":1396,"length":7}
     >numberB
     >:=> (line 41, col 6) to (line 41, col 13)
 41 >for ([numberB] = getRobot(), i = 0; i < 1; i++) {
@@ -429,12 +389,7 @@
 --------------------------------
 44 >for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1468 to 1472)  SpanInfo: {"start":1473,"length":45}
-    >[numberB] = [2, "trimmer", "trimming"], i = 0
-    >:=> (line 44, col 5) to (line 44, col 50)
-44 >for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (1473 to 1511)  SpanInfo: {"start":1474,"length":7}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (1468 to 1511)  SpanInfo: {"start":1474,"length":7}
     >numberB
     >:=> (line 44, col 6) to (line 44, col 13)
 44 >for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
@@ -467,12 +422,7 @@
 --------------------------------
 47 >for ([nameB] = multiRobotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1562 to 1566)  SpanInfo: {"start":1567,"length":28}
-    >[nameB] = multiRobotA, i = 0
-    >:=> (line 47, col 5) to (line 47, col 33)
-47 >for ([nameB] = multiRobotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1567 to 1588)  SpanInfo: {"start":1568,"length":5}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (1562 to 1588)  SpanInfo: {"start":1568,"length":5}
     >nameB
     >:=> (line 47, col 6) to (line 47, col 11)
 47 >for ([nameB] = multiRobotA, i = 0; i < 1; i++) {
@@ -505,12 +455,7 @@
 --------------------------------
 50 >for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1637 to 1641)  SpanInfo: {"start":1642,"length":32}
-    >[nameB] = getMultiRobot(), i = 0
-    >:=> (line 50, col 5) to (line 50, col 37)
-50 >for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (1642 to 1667)  SpanInfo: {"start":1643,"length":5}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (1637 to 1667)  SpanInfo: {"start":1643,"length":5}
     >nameB
     >:=> (line 50, col 6) to (line 50, col 11)
 50 >for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
@@ -543,12 +488,7 @@
 --------------------------------
 53 >for ([nameB] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1716 to 1720)  SpanInfo: {"start":1721,"length":52}
-    >[nameB] = ["trimmer", ["trimming", "edging"]], i = 0
-    >:=> (line 53, col 5) to (line 53, col 57)
-53 >for ([nameB] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1721 to 1766)  SpanInfo: {"start":1722,"length":5}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1716 to 1766)  SpanInfo: {"start":1722,"length":5}
     >nameB
     >:=> (line 53, col 6) to (line 53, col 11)
 53 >for ([nameB] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
@@ -581,12 +521,7 @@
 --------------------------------
 56 >for ([numberA2, nameA2, skillA2] = robotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1815 to 1819)  SpanInfo: {"start":1820,"length":43}
-    >[numberA2, nameA2, skillA2] = robotA, i = 0
-    >:=> (line 56, col 5) to (line 56, col 48)
-56 >for ([numberA2, nameA2, skillA2] = robotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~                               => Pos: (1820 to 1829)  SpanInfo: {"start":1821,"length":8}
+    ~~~~~~~~~~~~~~~                               => Pos: (1815 to 1829)  SpanInfo: {"start":1821,"length":8}
     >numberA2
     >:=> (line 56, col 6) to (line 56, col 14)
 56 >for ([numberA2, nameA2, skillA2] = robotA, i = 0; i < 1; i++) {
@@ -629,12 +564,7 @@
 --------------------------------
 59 >for ([numberA2, nameA2, skillA2] = getRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (1906 to 1910)  SpanInfo: {"start":1911,"length":47}
-    >[numberA2, nameA2, skillA2] = getRobot(), i = 0
-    >:=> (line 59, col 5) to (line 59, col 52)
-59 >for ([numberA2, nameA2, skillA2] = getRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~                               => Pos: (1911 to 1920)  SpanInfo: {"start":1912,"length":8}
+    ~~~~~~~~~~~~~~~                               => Pos: (1906 to 1920)  SpanInfo: {"start":1912,"length":8}
     >numberA2
     >:=> (line 59, col 6) to (line 59, col 14)
 59 >for ([numberA2, nameA2, skillA2] = getRobot(), i = 0; i < 1; i++) {
@@ -677,12 +607,7 @@
 --------------------------------
 62 >for ([numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2001 to 2005)  SpanInfo: {"start":2006,"length":63}
-    >[numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0
-    >:=> (line 62, col 5) to (line 62, col 68)
-62 >for ([numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~                               => Pos: (2006 to 2015)  SpanInfo: {"start":2007,"length":8}
+    ~~~~~~~~~~~~~~~                               => Pos: (2001 to 2015)  SpanInfo: {"start":2007,"length":8}
     >numberA2
     >:=> (line 62, col 6) to (line 62, col 14)
 62 >for ([numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
@@ -725,12 +650,7 @@
 --------------------------------
 65 >for ([nameMA, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2112 to 2116)  SpanInfo: {"start":2117,"length":63}
-    >[nameMA, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0
-    >:=> (line 65, col 5) to (line 65, col 68)
-65 >for ([nameMA, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~                                 => Pos: (2117 to 2124)  SpanInfo: {"start":2118,"length":6}
+    ~~~~~~~~~~~~~                                 => Pos: (2112 to 2124)  SpanInfo: {"start":2118,"length":6}
     >nameMA
     >:=> (line 65, col 6) to (line 65, col 12)
 65 >for ([nameMA, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
@@ -778,12 +698,7 @@
 --------------------------------
 68 >for ([nameMA, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2223 to 2227)  SpanInfo: {"start":2228,"length":67}
-    >[nameMA, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0
-    >:=> (line 68, col 5) to (line 68, col 72)
-68 >for ([nameMA, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~                                 => Pos: (2228 to 2235)  SpanInfo: {"start":2229,"length":6}
+    ~~~~~~~~~~~~~                                 => Pos: (2223 to 2235)  SpanInfo: {"start":2229,"length":6}
     >nameMA
     >:=> (line 68, col 6) to (line 68, col 12)
 68 >for ([nameMA, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
@@ -831,12 +746,7 @@
 --------------------------------
 71 >for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2338 to 2342)  SpanInfo: {"start":2343,"length":87}
-    >[nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0
-    >:=> (line 71, col 5) to (line 71, col 92)
-71 >for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
-
-         ~~~~~~~~                                 => Pos: (2343 to 2350)  SpanInfo: {"start":2344,"length":6}
+    ~~~~~~~~~~~~~                                 => Pos: (2338 to 2350)  SpanInfo: {"start":2344,"length":6}
     >nameMA
     >:=> (line 71, col 6) to (line 71, col 12)
 71 >for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
@@ -884,12 +794,7 @@
 --------------------------------
 74 >for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2473 to 2477)  SpanInfo: {"start":2478,"length":41}
-    >[numberA3, ...robotAInfo] = robotA, i = 0
-    >:=> (line 74, col 5) to (line 74, col 46)
-74 >for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~                               => Pos: (2478 to 2487)  SpanInfo: {"start":2479,"length":8}
+    ~~~~~~~~~~~~~~~                               => Pos: (2473 to 2487)  SpanInfo: {"start":2479,"length":8}
     >numberA3
     >:=> (line 74, col 6) to (line 74, col 14)
 74 >for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
@@ -927,12 +832,7 @@
 --------------------------------
 77 >for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2564 to 2568)  SpanInfo: {"start":2569,"length":45}
-    >[numberA3, ...robotAInfo] = getRobot(), i = 0
-    >:=> (line 77, col 5) to (line 77, col 50)
-77 >for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~                               => Pos: (2569 to 2578)  SpanInfo: {"start":2570,"length":8}
+    ~~~~~~~~~~~~~~~                               => Pos: (2564 to 2578)  SpanInfo: {"start":2570,"length":8}
     >numberA3
     >:=> (line 77, col 6) to (line 77, col 14)
 77 >for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
@@ -970,12 +870,7 @@
 --------------------------------
 80 >for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2659 to 2663)  SpanInfo: {"start":2664,"length":68}
-    >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0
-    >:=> (line 80, col 5) to (line 80, col 73)
-80 >for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~                               => Pos: (2664 to 2673)  SpanInfo: {"start":2665,"length":8}
+    ~~~~~~~~~~~~~~~                               => Pos: (2659 to 2673)  SpanInfo: {"start":2665,"length":8}
     >numberA3
     >:=> (line 80, col 6) to (line 80, col 14)
 80 >for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
@@ -1013,12 +908,7 @@
 --------------------------------
 83 >for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2777 to 2781)  SpanInfo: {"start":2782,"length":41}
-    >[...multiRobotAInfo] = multiRobotA, i = 0
-    >:=> (line 83, col 5) to (line 83, col 46)
-83 >for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (2782 to 2816)  SpanInfo: {"start":2783,"length":18}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (2777 to 2816)  SpanInfo: {"start":2783,"length":18}
     >...multiRobotAInfo
     >:=> (line 83, col 6) to (line 83, col 24)
 83 >for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
@@ -1051,12 +941,7 @@
 --------------------------------
 86 >for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2875 to 2879)  SpanInfo: {"start":2880,"length":45}
-    >[...multiRobotAInfo] = getMultiRobot(), i = 0
-    >:=> (line 86, col 5) to (line 86, col 50)
-86 >for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (2880 to 2918)  SpanInfo: {"start":2881,"length":18}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (2875 to 2918)  SpanInfo: {"start":2881,"length":18}
     >...multiRobotAInfo
     >:=> (line 86, col 6) to (line 86, col 24)
 86 >for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
@@ -1089,12 +974,7 @@
 --------------------------------
 89 >for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 
-    ~~~~~                                         => Pos: (2977 to 2981)  SpanInfo: {"start":2982,"length":84}
-    >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0
-    >:=> (line 89, col 5) to (line 89, col 89)
-89 >for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
-
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2982 to 3059)  SpanInfo: {"start":2983,"length":18}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2977 to 3059)  SpanInfo: {"start":2983,"length":18}
     >...multiRobotAInfo
     >:=> (line 89, col 6) to (line 89, col 24)
 89 >for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {

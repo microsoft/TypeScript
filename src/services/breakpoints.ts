@@ -287,6 +287,10 @@ namespace ts.BreakpointResolver {
                                 // { a = expression, b, c } = someExpression
                                 return textSpan(node);
                             }
+
+                            if (binaryExpression.operatorToken.kind === SyntaxKind.CommaToken) {
+                                return spanInNode(binaryExpression.left);
+                            }
                         }
 
                         if (isExpression(node)) {
@@ -301,7 +305,6 @@ namespace ts.BreakpointResolver {
 
                                 case SyntaxKind.ForStatement:
                                 case SyntaxKind.ForOfStatement:
-                                    // For now lets set the span on this expression, fix it later
                                     return textSpan(node);
 
                                 case SyntaxKind.BinaryExpression:
