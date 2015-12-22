@@ -9896,11 +9896,7 @@ namespace ts {
             if (produceDiagnostics && targetType !== unknownType) {
                 const widenedType = getWidenedType(exprType);
 
-                // Permit 'number[] | "foo"' to be asserted to 'string'.
-                const bothAreStringLike =
-                    someConstituentTypeHasKind(targetType, TypeFlags.StringLike) &&
-                        someConstituentTypeHasKind(widenedType, TypeFlags.StringLike);
-                if (!bothAreStringLike && !(isTypeAssignableTo(targetType, widenedType))) {
+                if (!isTypeAssignableTo(targetType, widenedType)) {
                     checkTypeAssignableTo(exprType, targetType, node, Diagnostics.Neither_type_0_nor_type_1_is_assignable_to_the_other);
                 }
             }
@@ -10750,10 +10746,6 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    // Permit 'number[] | "foo"' to be asserted to 'string'.
-                    if (someConstituentTypeHasKind(leftType, TypeFlags.StringLike) && someConstituentTypeHasKind(rightType, TypeFlags.StringLike)) {
-                        return booleanType;
-                    }
                     if (!isTypeAssignableTo(leftType, rightType) && !isTypeAssignableTo(rightType, leftType)) {
                         reportOperatorError();
                     }
@@ -13276,7 +13268,6 @@ namespace ts {
             let hasDuplicateDefaultClause = false;
 
             const expressionType = checkExpression(node.expression);
-            const expressionTypeIsStringLike = someConstituentTypeHasKind(expressionType, TypeFlags.StringLike);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
                 if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -13298,12 +13289,7 @@ namespace ts {
                     // In a 'switch' statement, each 'case' expression must be of a type that is assignable to or from the type of the 'switch' expression.
                     const caseType = checkExpression(caseClause.expression);
 
-                    const expressionTypeIsAssignableToCaseType =
-                        // Permit 'number[] | "foo"' to be asserted to 'string'.
-                        (expressionTypeIsStringLike && someConstituentTypeHasKind(caseType, TypeFlags.StringLike)) ||
-                        isTypeAssignableTo(expressionType, caseType);
-
-                    if (!expressionTypeIsAssignableToCaseType) {
+                    if (!isTypeAssignableTo(expressionType, caseType)) {
                         // 'expressionType is not assignable to caseType', try the reversed check and report errors if it fails
                         checkTypeAssignableTo(caseType, expressionType, caseClause.expression, /*headMessage*/ undefined);
                     }
