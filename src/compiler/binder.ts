@@ -109,7 +109,6 @@ namespace ts {
         let blockScopeContainer: Node;
         let lastContainer: Node;
         let seenThisKeyword: boolean;
-        let isSourceFileExternalModule: boolean;
 
         // state used by reachability checks
         let hasExplicitReturn: boolean;
@@ -130,7 +129,7 @@ namespace ts {
         function bindSourceFile(f: SourceFile, opts: CompilerOptions) {
             file = f;
             options = opts;
-            isSourceFileExternalModule = inStrictMode = !!file.externalModuleIndicator;
+            inStrictMode = !!file.externalModuleIndicator;
             classifiableNames = {};
 
             Symbol = objectAllocator.getSymbolConstructor();
@@ -354,7 +353,7 @@ namespace ts {
                 // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation 
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition 
-                //       and should never be merged directly with other augmentation and the latter case would be possible is automatic merge is allowed.
+                //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |

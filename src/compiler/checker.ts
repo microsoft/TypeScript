@@ -387,7 +387,7 @@ namespace ts {
                 if (!mainModule) {
                     return;
                 }
-                // is module symbol is already merged - it is safe to use it.
+                // if module symbol has already been merged - it is safe to use it.
                 // otherwise clone it
                 mainModule = mainModule.flags & SymbolFlags.Merged ? mainModule : cloneSymbol(mainModule);
                 mergeSymbol(mainModule, moduleAugmentation.symbol);
