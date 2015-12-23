@@ -1,24 +1,53 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(9,10): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(10,10): error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
+  Type '"bar"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(12,10): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(20,10): error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
+  Type '"bar"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(22,10): error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
+  Type '"bar"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(23,10): error TS2322: Type '"baz" | "bar"' is not assignable to type '"foo"'.
+  Type '"baz"' is not assignable to type '"foo"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts (1 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts (5 errors) ====
     let x: "foo";
     let y: "foo" | "bar"; 
+    let z: "bar";
     
     declare function randBool(): boolean;
     
     switch (x) {
         case randBool() ? "foo" : "baz":
             break;
+        case (randBool() ? ("bar") : "baz" ? "bar" : "baz"):
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
+!!! error TS2322:   Type '"bar"' is not assignable to type '"foo"'.
+            break;
         case (("bar")):
              ~~~~~~~~~
 !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
             break;
-        case (x, y, "baz"):
+        case (x, y, ("baz")):
             x;
-            break;
-        case (("foo" || "bar")):
             y;
+            break;
+        case (("foo" || ("bar"))):
+            break;
+        case (("bar" || ("baz"))):
+             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
+!!! error TS2322:   Type '"bar"' is not assignable to type '"foo"'.
+            break;
+        case z || "baz":
+             ~~~~~~~~~~
+!!! error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
+!!! error TS2322:   Type '"bar"' is not assignable to type '"foo"'.
+        case "baz" || z:
+             ~~~~~~~~~~
+!!! error TS2322: Type '"baz" | "bar"' is not assignable to type '"foo"'.
+!!! error TS2322:   Type '"baz"' is not assignable to type '"foo"'.
+            z;
             break;
     }
     
