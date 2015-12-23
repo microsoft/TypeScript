@@ -629,7 +629,9 @@ namespace ts {
 
             // [a, b, c] of
             // [x, [a, b, c] ] = someExpression
-            if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+            // or 
+            // {x, a: {a, b, c} } = someExpression
+            if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
                 return true;
             }
         }
