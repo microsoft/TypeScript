@@ -315,13 +315,6 @@ namespace Harness.LanguageService {
     class LanguageServiceShimProxy implements ts.LanguageService {
         constructor(private shim: ts.LanguageServiceShim) {
         }
-        private unwrappJSONCallResult(result: string): any {
-            const parsedResult = JSON.parse(result);
-            if (parsedResult.error) {
-                throw new Error("Language Service Shim Error: " + JSON.stringify(parsedResult.error));
-            }
-            return parsedResult.result;
-        }
         cleanupSemanticCache(): void {
             this.shim.cleanupSemanticCache();
         }

@@ -15,7 +15,6 @@ namespace ts {
         reset(): void;
     }
 
-    const nop = <(...args: any[]) => any>Function.prototype;
     let nullSourceMapWriter: SourceMapWriter;
 
     export function getNullSourceMapWriter(): SourceMapWriter {

@@ -1,0 +1,39 @@
+=== tests/cases/compiler/functionOverloads43.ts ===
+function foo(bar: { a:number }[]): number;
+>foo : Symbol(foo, Decl(functionOverloads43.ts, 0, 0), Decl(functionOverloads43.ts, 0, 42), Decl(functionOverloads43.ts, 1, 42))
+>bar : Symbol(bar, Decl(functionOverloads43.ts, 0, 13))
+>a : Symbol(a, Decl(functionOverloads43.ts, 0, 19))
+
+function foo(bar: { a:string }[]): string;
+>foo : Symbol(foo, Decl(functionOverloads43.ts, 0, 0), Decl(functionOverloads43.ts, 0, 42), Decl(functionOverloads43.ts, 1, 42))
+>bar : Symbol(bar, Decl(functionOverloads43.ts, 1, 13))
+>a : Symbol(a, Decl(functionOverloads43.ts, 1, 19))
+
+function foo([x]: { a:number | string }[]): string | number {
+>foo : Symbol(foo, Decl(functionOverloads43.ts, 0, 0), Decl(functionOverloads43.ts, 0, 42), Decl(functionOverloads43.ts, 1, 42))
+>x : Symbol(x, Decl(functionOverloads43.ts, 2, 14))
+>a : Symbol(a, Decl(functionOverloads43.ts, 2, 19))
+
+    if (x) {
+>x : Symbol(x, Decl(functionOverloads43.ts, 2, 14))
+
+        return x.a;
+>x.a : Symbol(a, Decl(functionOverloads43.ts, 2, 19))
+>x : Symbol(x, Decl(functionOverloads43.ts, 2, 14))
+>a : Symbol(a, Decl(functionOverloads43.ts, 2, 19))
+    }
+    
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
+var x = foo([{a: "str"}]);
+>x : Symbol(x, Decl(functionOverloads43.ts, 10, 3))
+>foo : Symbol(foo, Decl(functionOverloads43.ts, 0, 0), Decl(functionOverloads43.ts, 0, 42), Decl(functionOverloads43.ts, 1, 42))
+>a : Symbol(a, Decl(functionOverloads43.ts, 10, 14))
+
+var y = foo([{a: 100}]);
+>y : Symbol(y, Decl(functionOverloads43.ts, 11, 3))
+>foo : Symbol(foo, Decl(functionOverloads43.ts, 0, 0), Decl(functionOverloads43.ts, 0, 42), Decl(functionOverloads43.ts, 1, 42))
+>a : Symbol(a, Decl(functionOverloads43.ts, 11, 14))
+
