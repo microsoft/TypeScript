@@ -61,21 +61,21 @@ var Action = (function () {
     function Action() {
     }
     return Action;
-})();
+}());
 var ActionA = (function (_super) {
     __extends(ActionA, _super);
     function ActionA() {
         _super.apply(this, arguments);
     }
     return ActionA;
-})(Action);
+}(Action));
 var ActionB = (function (_super) {
     __extends(ActionB, _super);
     function ActionB() {
         _super.apply(this, arguments);
     }
     return ActionB;
-})(Action);
+}(Action));
 var x1 = [
     { id: 2, trueness: false },
     { id: 3, name: "three" }

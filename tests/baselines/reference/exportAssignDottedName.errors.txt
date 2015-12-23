@@ -1,4 +1,4 @@
-tests/cases/conformance/externalModules/foo1.ts(1,17): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/externalModules/foo1.ts(1,17): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
 ==== tests/cases/conformance/externalModules/foo2.ts (0 errors) ====
@@ -8,7 +8,7 @@ tests/cases/conformance/externalModules/foo1.ts(1,17): error TS1148: Cannot comp
 ==== tests/cases/conformance/externalModules/foo1.ts (1 errors) ====
     export function x(){
                     ~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
     	return true;
     }
     

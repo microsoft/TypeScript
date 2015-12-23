@@ -16,6 +16,7 @@ import {x} from "test";
 use(x);
 
 //// [f.js]
-#!/usr/bin/env node"use strict";
+#!/usr/bin/env node
+"use strict";
 var test_1 = require("test");
 use(test_1.x);

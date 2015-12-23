@@ -35,6 +35,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     Foo = __decorate([
         decorator
     ], Foo);
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Foo;
 });
 //// [b.js]
@@ -59,5 +60,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     default_1 = __decorate([
         decorator
     ], default_1);
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = default_1;
 });

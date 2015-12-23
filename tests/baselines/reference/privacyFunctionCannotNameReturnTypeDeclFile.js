@@ -171,7 +171,7 @@ var Widget1 = (function () {
         this.name = 'one';
     }
     return Widget1;
-})();
+}());
 exports.Widget1 = Widget1;
 function createWidget1() {
     return new Widget1();
@@ -184,7 +184,7 @@ var SpecializedWidget;
             this.name = 'one';
         }
         return Widget2;
-    })();
+    }());
     SpecializedWidget.Widget2 = Widget2;
     function createWidget2() {
         return new Widget2();
@@ -249,7 +249,7 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
         ;
     };
     return publicClassWithWithPrivateParmeterTypes;
-})();
+}());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
 var privateClassWithWithPrivateParmeterTypes = (function () {
     function privateClassWithWithPrivateParmeterTypes() {
@@ -285,7 +285,7 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
         ;
     };
     return privateClassWithWithPrivateParmeterTypes;
-})();
+}());
 function publicFunctionWithPrivateParmeterTypes() {
     return exporter.createExportedWidget1();
 }
@@ -316,7 +316,7 @@ var publicClassWithPrivateModuleReturnTypes = (function () {
         return exporter.createExportedWidget4();
     };
     return publicClassWithPrivateModuleReturnTypes;
-})();
+}());
 exports.publicClassWithPrivateModuleReturnTypes = publicClassWithPrivateModuleReturnTypes;
 function publicFunctionWithPrivateModuleReturnTypes() {
     return exporter.createExportedWidget2();
@@ -342,7 +342,7 @@ var privateClassWithPrivateModuleReturnTypes = (function () {
         return exporter.createExportedWidget4();
     };
     return privateClassWithPrivateModuleReturnTypes;
-})();
+}());
 function privateFunctionWithPrivateModuleReturnTypes() {
     return exporter.createExportedWidget2();
 }

@@ -12,4 +12,4 @@ var C = (function () {
     C.prototype.f = function () { };
     ;
     return C;
-})();
+}());

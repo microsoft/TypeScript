@@ -47,6 +47,25 @@ namespace ts {
         constructor(o: any);
     }
 
+    declare var ChakraHost: {
+        args: string[];
+        currentDirectory: string;
+        executingFile: string;
+        newLine?: string;
+        useCaseSensitiveFileNames?: boolean;
+        echo(s: string): void;
+        quit(exitCode?: number): void;
+        fileExists(path: string): boolean;
+        directoryExists(path: string): boolean;
+        createDirectory(path: string): void;
+        resolvePath(path: string): string;
+        readFile(path: string): string;
+        writeFile(path: string, contents: string): void;
+        readDirectory(path: string, extension?: string, exclude?: string[]): string[];
+        watchFile?(path: string, callback: (path: string, removed?: boolean) => void): FileWatcher;
+        watchDirectory?(path: string, callback: (path: string) => void, recursive?: boolean): FileWatcher;
+    };
+
     export var sys: System = (function () {
 
         function getWScriptSystem(): System {
@@ -194,11 +213,11 @@ namespace ts {
                 }
             };
         }
+
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _tty = require("tty");
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -281,7 +300,7 @@ namespace ts {
             // REVIEW: for now this implementation uses polling.
             // The advantage of polling is that it works reliably
             // on all os and with network mounted files.
-            // For 90 referenced files, the average time to detect 
+            // For 90 referenced files, the average time to detect
             // changes is 2*msInterval (by default 5 seconds).
             // The overhead of this is .04 percent (1/2500) with
             // average pause of < 1 millisecond (and max
@@ -292,10 +311,6 @@ namespace ts {
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
             const watchedFileSet = createWatchedFileSet();
-
-            function isNode4OrLater(): Boolean {
-                return parseInt(process.version.charAt(1)) >= 4;
-            }
 
             const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive
@@ -395,18 +410,13 @@ namespace ts {
                     // and is more efficient than `fs.watchFile` (ref: https://github.com/nodejs/node/pull/2649
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
-                    if (isNode4OrLater()) {
-                        // Note: in node the callback of fs.watch is given only the relative file name as a parameter
-                        return _fs.watch(fileName, (eventName: string, relativeFileName: string) => callback(fileName));
-                    }
-
                     const watchedFile = watchedFileSet.addFile(fileName, callback);
                     return {
                         close: () => watchedFileSet.removeFile(watchedFile)
                     };
                 },
                 watchDirectory: (path, callback, recursive) => {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows 
+                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     return _fs.watch(
                         path,
@@ -454,6 +464,37 @@ namespace ts {
                 }
             };
         }
+
+        function getChakraSystem(): System {
+
+            return {
+                newLine: ChakraHost.newLine || "\r\n",
+                args: ChakraHost.args,
+                useCaseSensitiveFileNames: !!ChakraHost.useCaseSensitiveFileNames,
+                write: ChakraHost.echo,
+                readFile(path: string, encoding?: string) {
+                    // encoding is automatically handled by the implementation in ChakraHost
+                    return ChakraHost.readFile(path);
+                },
+                writeFile(path: string, data: string, writeByteOrderMark?: boolean) {
+                    // If a BOM is required, emit one
+                    if (writeByteOrderMark) {
+                        data = "\uFEFF" + data;
+                    }
+
+                    ChakraHost.writeFile(path, data);
+                },
+                resolvePath: ChakraHost.resolvePath,
+                fileExists: ChakraHost.fileExists,
+                directoryExists: ChakraHost.directoryExists,
+                createDirectory: ChakraHost.createDirectory,
+                getExecutingFilePath: () => ChakraHost.executingFile,
+                getCurrentDirectory: () => ChakraHost.currentDirectory,
+                readDirectory: ChakraHost.readDirectory,
+                exit: ChakraHost.quit,
+            };
+        }
+
         if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
             return getWScriptSystem();
         }
@@ -462,8 +503,13 @@ namespace ts {
             // process.browser check excludes webpack and browserify
             return getNodeSystem();
         }
+        else if (typeof ChakraHost !== "undefined") {
+            return getChakraSystem();
+        }
         else {
             return undefined; // Unsupported host
         }
     })();
 }
+
+

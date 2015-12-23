@@ -33,7 +33,7 @@ var Outer;
             function C() {
             }
             return C;
-        })();
+        }());
         instantiated.C = C;
     })(instantiated = Outer.instantiated || (Outer.instantiated = {}));
 })(Outer || (Outer = {}));

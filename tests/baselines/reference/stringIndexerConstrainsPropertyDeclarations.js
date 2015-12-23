@@ -123,7 +123,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var a;
 // error
 var b = {

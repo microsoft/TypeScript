@@ -32,7 +32,7 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var i;
 var r1 = i.x;
 var r2 = i.y();

@@ -27,12 +27,12 @@ var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var publicClass = (function () {
     function publicClass() {
     }
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 var publicClassWithWithPrivateTypeParameters = (function () {
     function publicClassWithWithPrivateTypeParameters() {
@@ -50,7 +50,7 @@ var publicClassWithWithPrivateTypeParameters = (function () {
     publicClassWithWithPrivateTypeParameters.prototype.myPublicMethod = function () {
     };
     return publicClassWithWithPrivateTypeParameters;
-})();
+}());
 exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
 
 

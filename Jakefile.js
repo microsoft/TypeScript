@@ -533,7 +533,8 @@ compileFile(word2mdJs,
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
     var specWordFullPath = path.resolve(specWord);
-    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
+    var specMDFullPath = path.resolve(specMd);
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + '"' + specMDFullPath + '"';
     console.log(cmd);
     child_process.exec(cmd, function () {
         complete();
@@ -913,7 +914,8 @@ function lintFileAsync(options, path, cb) {
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
-    .concat(tslintRulesFiles);
+    .concat(tslintRulesFiles)
+    .concat([path.join(servicesDirectory, "services.ts")]);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

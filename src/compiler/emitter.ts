@@ -499,7 +499,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             let externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];
             let exportSpecifiers: Map<ExportSpecifier[]>;
             let exportEquals: ExportAssignment;
-            let hasExportStars: boolean;
+            let hasExportStarsToExportValues: boolean;
 
             let detachedCommentsInfo: { nodePos: number; detachedCommentEndPos: number }[];
 
@@ -574,7 +574,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
-                hasExportStars = undefined;
+                hasExportStarsToExportValues = undefined;
                 detachedCommentsInfo = undefined;
                 sourceMapData = undefined;
                 isEs6Module = false;
@@ -776,12 +776,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(node);
                 if (parenthesized) {
                     write(")");
-                }
-            }
-
-            function emitTrailingCommaIfPresent(nodeList: NodeArray<Node>): void {
-                if (nodeList.hasTrailingComma) {
-                    write(",");
                 }
             }
 
@@ -1453,6 +1447,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     case SyntaxKind.ForInStatement:
                     case SyntaxKind.ForOfStatement:
                     case SyntaxKind.IfStatement:
+                    case SyntaxKind.JsxClosingElement:
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxOpeningElement:
                     case SyntaxKind.JsxSpreadAttribute:
@@ -2450,7 +2445,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-                const exportChanged = isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
+                const exportChanged = (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) &&
+                    isNameOfExportedSourceLevelDeclarationInSystemExternalModule(node.operand);
 
                 if (exportChanged) {
                     // emit
@@ -3247,10 +3243,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
             }
 
-            function emitDownLevelForOfStatement(node: ForOfStatement) {
-                emitLoop(node, emitDownLevelForOfStatementWorker);
-            }
-
             function emitDownLevelForOfStatementWorker(node: ForOfStatement, loop: ConvertedLoop) {
                 // The following ES6 code:
                 //
@@ -3628,12 +3620,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // only allow export default at a source file level
                     if (modulekind === ModuleKind.CommonJS || modulekind === ModuleKind.AMD || modulekind === ModuleKind.UMD) {
                         if (!isEs6Module) {
-                            if (languageVersion === ScriptTarget.ES5) {
+                            if (languageVersion !== ScriptTarget.ES3) {
                                 // default value of configurable, enumerable, writable are `false`.
                                 write("Object.defineProperty(exports, \"__esModule\", { value: true });");
                                 writeLine();
                             }
-                            else if (languageVersion === ScriptTarget.ES3) {
+                            else {
                                 write("exports.__esModule = true;");
                                 writeLine();
                             }
@@ -4288,22 +4280,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 // TODO (yuisu) : we should not have special cases to condition emitting comments
                 // but have one place to fix check for these conditions.
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature &&
-                    node.parent && node.parent.kind !== SyntaxKind.PropertyAssignment &&
-                    node.parent.kind !== SyntaxKind.CallExpression) {
-                    // 1. Methods will emit the comments as part of emitting method declaration
-
+                const { kind, parent } = node;
+                if (kind !== SyntaxKind.MethodDeclaration &&
+                    kind !== SyntaxKind.MethodSignature &&
+                    parent &&
+                    parent.kind !== SyntaxKind.PropertyAssignment &&
+                    parent.kind !== SyntaxKind.CallExpression &&
+                    parent.kind !== SyntaxKind.ArrayLiteralExpression) {
+                    // 1. Methods will emit comments at their assignment declaration sites.
+                    //
                     // 2. If the function is a property of object literal, emitting leading-comments
-                    // is done by emitNodeWithoutSourceMap which then call this function.
-                    // In particular, we would like to avoid emit comments twice in following case:
-                    //      For example:
+                    //    is done by emitNodeWithoutSourceMap which then call this function.
+                    //    In particular, we would like to avoid emit comments twice in following case:
+                    //
                     //          var obj = {
                     //              id:
                     //                  /*comment*/ () => void
                     //          }
-
+                    //
                     // 3. If the function is an argument in call expression, emitting of comments will be
-                    // taken care of in emit list of arguments inside of emitCallexpression
+                    //    taken care of in emit list of arguments inside of 'emitCallExpression'.
+                    //
+                    // 4. If the function is in an array literal, 'emitLinePreservingList' will take care
+                    //    of leading comments.
                     emitLeadingComments(node);
                 }
 
@@ -4330,12 +4329,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 emitSignatureAndBody(node);
-                if (modulekind !== ModuleKind.ES6 && node.kind === SyntaxKind.FunctionDeclaration && node.parent === currentSourceFile && node.name) {
+                if (modulekind !== ModuleKind.ES6 && kind === SyntaxKind.FunctionDeclaration && parent === currentSourceFile && node.name) {
                     emitExportMemberAssignments((<FunctionDeclaration>node).name);
                 }
 
                 emitEnd(node);
-                if (node.kind !== SyntaxKind.MethodDeclaration && node.kind !== SyntaxKind.MethodSignature) {
+                if (kind !== SyntaxKind.MethodDeclaration && kind !== SyntaxKind.MethodSignature) {
                     emitTrailingComments(node);
                 }
             }
@@ -4530,7 +4529,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 }
 
                 const isAsync = isAsyncFunctionLike(node);
-                if (isAsync && languageVersion === ScriptTarget.ES6) {
+                if (isAsync) {
                     emitAsyncFunctionBodyForES6(node);
                 }
                 else {
@@ -5171,35 +5170,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 if (!(node.flags & NodeFlags.Export)) {
                     return;
                 }
-                // If this is an exported class, but not on the top level (i.e. on an internal
-                // module), export it
-                if (node.flags & NodeFlags.Default) {
-                    // if this is a top level default export of decorated class, write the export after the declaration.
-                    writeLine();
-                    if (thisNodeIsDecorated && modulekind === ModuleKind.ES6) {
-                        write("export default ");
-                        emitDeclarationName(node);
-                        write(";");
-                    }
-                    else if (modulekind === ModuleKind.System) {
-                        write(`${exportFunctionForFile}("default", `);
-                        emitDeclarationName(node);
-                        write(");");
-                    }
-                    else if (modulekind !== ModuleKind.ES6) {
-                        write(`exports.default = `);
-                        emitDeclarationName(node);
-                        write(";");
-                    }
+                if (modulekind !== ModuleKind.ES6) {
+                    emitExportMemberAssignment(node as ClassDeclaration);
                 }
-                else if (node.parent.kind !== SyntaxKind.SourceFile || (modulekind !== ModuleKind.ES6 && !(node.flags & NodeFlags.Default))) {
-                    writeLine();
-                    emitStart(node);
-                    emitModuleMemberName(node);
-                    write(" = ");
-                    emitDeclarationName(node);
-                    emitEnd(node);
-                    write(";");
+                else {
+                    // If this is an exported class, but not on the top level (i.e. on an internal
+                    // module), export it
+                    if (node.flags & NodeFlags.Default) {
+                        // if this is a top level default export of decorated class, write the export after the declaration.
+                        if (thisNodeIsDecorated) {
+                            writeLine();
+                            write("export default ");
+                            emitDeclarationName(node);
+                            write(";");
+                        }
+                    }
+                    else if (node.parent.kind !== SyntaxKind.SourceFile) {
+                        writeLine();
+                        emitStart(node);
+                        emitModuleMemberName(node);
+                        write(" = ");
+                        emitDeclarationName(node);
+                        emitEnd(node);
+                        write(";");
+                    }
                 }
             }
 
@@ -5264,11 +5258,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 writeLine();
                 emitToken(SyntaxKind.CloseBraceToken, node.members.end);
                 emitStart(node);
-                write(")(");
+                write("(");
                 if (baseTypeNode) {
                     emit(baseTypeNode.expression);
                 }
-                write(")");
+                write("))");
                 if (node.kind === SyntaxKind.ClassDeclaration) {
                     write(";");
                 }
@@ -5800,9 +5794,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 if (!shouldHoistDeclarationInSystemJsModule(node)) {
                     // do not emit var if variable was already hoisted
-                    if (!(node.flags & NodeFlags.Export) || isES6ExportedDeclaration(node)) {
+
+                    const isES6ExportedEnum = isES6ExportedDeclaration(node);
+                    if (!(node.flags & NodeFlags.Export) || (isES6ExportedEnum && isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.EnumDeclaration))) {
                         emitStart(node);
-                        if (isES6ExportedDeclaration(node)) {
+                        if (isES6ExportedEnum) {
                             write("export ");
                         }
                         write("var ");
@@ -5899,6 +5895,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 return languageVersion === ScriptTarget.ES6 && !!(resolver.getNodeCheckFlags(node) & NodeCheckFlags.LexicalModuleMergesWithClass);
             }
 
+            function isFirstDeclarationOfKind(node: Declaration, declarations: Declaration[], kind: SyntaxKind) {
+                return !forEach(declarations, declaration => declaration.kind === kind && declaration.pos < node.pos);
+            }
+
             function emitModuleDeclaration(node: ModuleDeclaration) {
                 // Emit only if this module is non-ambient.
                 const shouldEmit = shouldEmitModuleDeclaration(node);
@@ -5910,15 +5910,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const emitVarForModule = !hoistedInDeclarationScope && !isModuleMergedWithES6Class(node);
 
                 if (emitVarForModule) {
-                    emitStart(node);
-                    if (isES6ExportedDeclaration(node)) {
-                        write("export ");
+                    const isES6ExportedNamespace = isES6ExportedDeclaration(node);
+                    if (!isES6ExportedNamespace || isFirstDeclarationOfKind(node, node.symbol && node.symbol.declarations, SyntaxKind.ModuleDeclaration)) {
+                        emitStart(node);
+                        if (isES6ExportedNamespace) {
+                            write("export ");
+                        }
+                        write("var ");
+                        emit(node.name);
+                        write(";");
+                        emitEnd(node);
+                        writeLine();
                     }
-                    write("var ");
-                    emit(node.name);
-                    write(";");
-                    emitEnd(node);
-                    writeLine();
                 }
 
                 emitStart(node);
@@ -6226,15 +6229,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         }
                         else {
                             // export * from "foo"
-                            writeLine();
-                            write("__export(");
-                            if (modulekind !== ModuleKind.AMD) {
-                                emitRequire(getExternalModuleName(node));
+                            if (hasExportStarsToExportValues && resolver.moduleExportsSomeValue(node.moduleSpecifier)) {
+                                writeLine();
+                                write("__export(");
+                                if (modulekind !== ModuleKind.AMD) {
+                                    emitRequire(getExternalModuleName(node));
+                                }
+                                else {
+                                    write(generatedName);
+                                }
+                                write(");");
                             }
-                            else {
-                                write(generatedName);
-                            }
-                            write(");");
                         }
                         emitEnd(node);
                     }
@@ -6322,7 +6327,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 externalImports = [];
                 exportSpecifiers = {};
                 exportEquals = undefined;
-                hasExportStars = false;
+                hasExportStarsToExportValues = false;
                 for (const node of sourceFile.statements) {
                     switch (node.kind) {
                         case SyntaxKind.ImportDeclaration:
@@ -6345,8 +6350,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if ((<ExportDeclaration>node).moduleSpecifier) {
                                 if (!(<ExportDeclaration>node).exportClause) {
                                     // export * from "mod"
-                                    externalImports.push(<ExportDeclaration>node);
-                                    hasExportStars = true;
+                                    if (resolver.moduleExportsSomeValue((<ExportDeclaration>node).moduleSpecifier)) {
+                                        externalImports.push(<ExportDeclaration>node);
+                                        hasExportStarsToExportValues = true;
+                                    }
                                 }
                                 else if (resolver.isValueAliasDeclaration(node)) {
                                     // export { x, y } from "mod" where at least one export is a value symbol
@@ -6372,7 +6379,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
 
             function emitExportStarHelper() {
-                if (hasExportStars) {
+                if (hasExportStarsToExportValues) {
                     writeLine();
                     write("function __export(m) {");
                     increaseIndent();
@@ -6450,7 +6457,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 // should always win over entries with similar names that were added via star exports
                 // to support this we store names of local/indirect exported entries in a set.
                 // this set is used to filter names brought by star expors.
-                if (!hasExportStars) {
+                if (!hasExportStarsToExportValues) {
                     // local names set is needed only in presence of star exports
                     return undefined;
                 }
@@ -6875,6 +6882,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     write("});");
                                 }
                                 else {
+                                    // collectExternalModuleInfo prefilters star exports to keep only ones that export values
+                                    // this means that check 'resolver.moduleExportsSomeValue' is redundant and can be omitted here
                                     writeLine();
                                     // export * from 'foo'
                                     // emit as:
@@ -7143,7 +7152,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 externalImports = undefined;
                 exportSpecifiers = undefined;
                 exportEquals = undefined;
-                hasExportStars = false;
+                hasExportStarsToExportValues = false;
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ false);
                 emitEmitHelpers(node);
                 emitCaptureThisForNodeIfNecessary(node);
@@ -7367,7 +7376,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     externalImports = undefined;
                     exportSpecifiers = undefined;
                     exportEquals = undefined;
-                    hasExportStars = false;
+                    hasExportStarsToExportValues = false;
                     emitEmitHelpers(node);
                     emitCaptureThisForNodeIfNecessary(node);
                     emitLinesStartingAt(node.statements, startIndex);
@@ -7819,6 +7828,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const shebang = getShebang(currentText);
                 if (shebang) {
                     write(shebang);
+                    writeLine();
                 }
             }
         }

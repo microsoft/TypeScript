@@ -64,18 +64,18 @@ var Derived = (function (_super) {
         return item;
     };
     return Derived;
-})(Base);
+}(Base));
 var BaseCollection = (function () {
     function BaseCollection(f) {
         (function (item) { return [item.Components]; });
     }
     return BaseCollection;
-})();
+}());
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Thing = (function () {
     function Thing() {
     }
@@ -85,7 +85,7 @@ var Thing = (function () {
         configurable: true
     });
     return Thing;
-})();
+}());
 var ComponentCollection = (function () {
     function ComponentCollection() {
     }
@@ -93,7 +93,7 @@ var ComponentCollection = (function () {
         return p.prop1;
     };
     return ComponentCollection;
-})();
+}());
 var Foo = (function () {
     function Foo() {
     }
@@ -115,16 +115,16 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var GenericType = (function () {
     function GenericType(parent) {
     }
     return GenericType;
-})();
+}());
 var FooBase = (function () {
     function FooBase() {
     }
     FooBase.prototype.populate = function () {
     };
     return FooBase;
-})();
+}());

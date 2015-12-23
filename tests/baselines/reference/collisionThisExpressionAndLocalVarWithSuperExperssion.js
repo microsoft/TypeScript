@@ -30,7 +30,7 @@ var a = (function () {
     a.prototype.foo = function () {
     };
     return a;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
@@ -42,7 +42,7 @@ var b = (function (_super) {
         var f = function () { return _super.prototype.foo.call(_this); };
     };
     return b;
-})(a);
+}(a));
 var b2 = (function (_super) {
     __extends(b2, _super);
     function b2() {
@@ -56,4 +56,4 @@ var b2 = (function (_super) {
         };
     };
     return b2;
-})(a);
+}(a));

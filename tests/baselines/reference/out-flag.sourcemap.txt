@@ -160,7 +160,7 @@ sourceFile:out-flag.ts
 1->Emitted(13, 5) Source(16, 1) + SourceIndex(0)
 2 >Emitted(13, 19) Source(16, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

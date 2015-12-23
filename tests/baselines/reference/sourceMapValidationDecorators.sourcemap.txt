@@ -776,7 +776,7 @@ sourceFile:sourceMapValidationDecorators.ts
 1->Emitted(65, 5) Source(54, 1) + SourceIndex(0)
 2 >Emitted(65, 19) Source(54, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

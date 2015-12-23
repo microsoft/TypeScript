@@ -61,7 +61,7 @@ sourceFile:file:///tests/cases/projects/outputdir_mixed_subfolder/ref/m1.ts
 1->Emitted(5, 5) Source(4, 1) + SourceIndex(0)
 2 >Emitted(5, 17) Source(4, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 
@@ -203,7 +203,7 @@ sourceFile:file:///tests/cases/projects/outputdir_mixed_subfolder/ref/m2.ts
 1->Emitted(7, 9) Source(4, 1) + SourceIndex(0)
 2 >Emitted(7, 21) Source(4, 2) + SourceIndex(0)
 ---
->>>    })();
+>>>    }());
 1 >^^^^
 2 >    ^
 3 >     
@@ -396,7 +396,7 @@ sourceFile:file:///tests/cases/projects/outputdir_mixed_subfolder/test.ts
 1->Emitted(7, 5) Source(6, 1) + SourceIndex(0)
 2 >Emitted(7, 14) Source(6, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

@@ -23,6 +23,6 @@ var c = (function () {
         return null;
     };
     return c;
-})();
+}());
 var a2;
 var r2 = a2.groupBy();

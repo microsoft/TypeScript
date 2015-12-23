@@ -24,11 +24,11 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(T);
+}(T));
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(U);
+}(U));

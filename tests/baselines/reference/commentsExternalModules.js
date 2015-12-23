@@ -79,7 +79,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             m2.c = c;
             ;
             /** i*/
@@ -110,7 +110,7 @@ define(["require", "exports"], function (require, exports) {
                 function c() {
                 }
                 return c;
-            })();
+            }());
             m2.c = c;
             ;
             /** i */

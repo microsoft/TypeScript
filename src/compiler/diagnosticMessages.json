@@ -435,7 +435,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided.": {
+    "Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
         "category": "Error",
         "code": 1148
     },
@@ -791,7 +791,14 @@
         "category": "Error",
         "code": 1247
     },
-
+    "A class member cannot have the '{0}' keyword.": {
+        "category": "Error",
+        "code": 1248
+    },
+    "A decorator can only decorate a method implementation, not an overload.": {
+        "category": "Error",
+        "code": 1249
+    }, 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -844,6 +851,10 @@
         "category": "Error",
         "code": 2307
     },
+    "Module {0} has already exported a member named '{1}'. Consider explicitly re-exporting to resolve the ambiguity.": {
+        "category": "Error",
+        "code": 2308
+    },
     "An export assignment cannot be used in a module with other exported elements.": {
         "category": "Error",
         "code": 2309
@@ -860,7 +871,7 @@
         "category": "Error",
         "code": 2312
     },
-    "Constraint of a type parameter cannot reference any type parameter from the same type parameter list.": {
+    "Type parameter '{0}' has a circular constraint.": {
         "category": "Error",
         "code": 2313
     },
@@ -899,6 +910,10 @@
     "Type '{0}' is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2322
+    },
+    "Cannot redeclare exported variable '{0}'.": {
+        "category": "Error",
+        "code": 2323
     },
     "Property '{0}' is missing in type '{1}'.": {
         "category": "Error",
@@ -1179,6 +1194,10 @@
     "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.": {
         "category": "Error",
         "code": 2396
+    },
+    "Declaration name conflicts with built-in global identifier '{0}'.": {
+        "category": "Error",
+        "code": 2397
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -1632,6 +1651,14 @@
         "category": "Error",
         "code": 2517
     },
+    "A 'this'-based type guard is not compatible with a parameter-based type guard.": {
+        "category": "Error",
+        "code": 2518
+    },
+    "A 'this'-based type predicate is only allowed within a class or interface's members, get accessors, or return type positions for functions and methods.": {
+        "category": "Error",
+        "code": 2519
+    },
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
@@ -1668,7 +1695,7 @@
         "category": "Error",
         "code": 2528
     },
-    "JSX element attributes type '{0}' must be an object type.": {
+    "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
     },
@@ -1731,6 +1758,18 @@
     "JSX expressions must have one parent element": {
         "category": "Error",
         "code": 2657
+    },
+    "Type '{0}' provides no match for the signature '{1}'": {
+        "category": "Error",
+        "code": 2658
+    },
+    "'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.": {
+        "category": "Error",
+        "code": 2659
+    },
+    "'super' can only be referenced in members of derived classes or object literal expressions.": {
+        "category": "Error",
+        "code": 2660
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

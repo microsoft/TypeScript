@@ -1,4 +1,4 @@
-tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts(1,15): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts(1,15): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
 ==== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file1.ts (0 errors) ====
@@ -12,7 +12,7 @@ tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts(
 ==== tests/cases/compiler/importAliasAnExternalModuleInsideAnInternalModule_file0.ts (1 errors) ====
     export module m {
                   ~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
         export function foo() { }
     }
     

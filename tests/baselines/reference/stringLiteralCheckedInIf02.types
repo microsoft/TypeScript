@@ -31,7 +31,7 @@ function f(foo: T) {
 >T : ("a" | "b")[] | "a" | "b"
 
     if (isS(foo)) {
->isS(foo) : boolean
+>isS(foo) : t is "a" | "b"
 >isS : (t: ("a" | "b")[] | "a" | "b") => t is "a" | "b"
 >foo : ("a" | "b")[] | "a" | "b"
 

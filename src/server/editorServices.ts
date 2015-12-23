@@ -263,13 +263,11 @@ namespace ts.server {
         }
 
         resolvePath(path: string): string {
-            const start = new Date().getTime();
             const result = this.host.resolvePath(path);
             return result;
         }
 
         fileExists(path: string): boolean {
-            const start = new Date().getTime();
             const result = this.host.fileExists(path);
             return result;
         }
@@ -322,32 +320,6 @@ namespace ts.server {
             const index = script.snap().index;
             const lineOffset = index.charOffsetToLineNumberAndPos(position);
             return { line: lineOffset.line, offset: lineOffset.offset + 1 };
-        }
-    }
-
-    // assumes normalized paths
-    function getAbsolutePath(filename: string, directory: string) {
-        const rootLength = ts.getRootLength(filename);
-        if (rootLength > 0) {
-            return filename;
-        }
-        else {
-            const splitFilename = filename.split("/");
-            const splitDir = directory.split("/");
-            let i = 0;
-            let dirTail = 0;
-            const sflen = splitFilename.length;
-            while ((i < sflen) && (splitFilename[i].charAt(0) == ".")) {
-                const dots = splitFilename[i];
-                if (dots == "..") {
-                    dirTail++;
-                }
-                else if (dots != ".") {
-                    return undefined;
-                }
-                i++;
-            }
-            return splitDir.slice(0, splitDir.length - dirTail).concat(splitFilename.slice(i)).join("/");
         }
     }
 
@@ -514,7 +486,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFilelistChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -569,21 +541,22 @@ namespace ts.server {
             }
 
             this.log("Detected source file changes: " + fileName);
-            this.startTimerForDetectingProjectFilelistChanges(project);
+            this.startTimerForDetectingProjectFileListChanges(project);
         }
 
-        startTimerForDetectingProjectFilelistChanges(project: Project) {
-            if (this.timerForDetectingProjectFilelistChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFilelistChanges[project.projectFilename]);
+        startTimerForDetectingProjectFileListChanges(project: Project) {
+            if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
+                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFilelistChanges[project.projectFilename] = setTimeout(
-                () => this.handleProjectFilelistChanges(project),
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+                () => this.handleProjectFileListChanges(project),
                 250
             );
         }
 
-        handleProjectFilelistChanges(project: Project) {
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(project.projectFilename);
+        handleProjectFileListChanges(project: Project) {
+            const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
+
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
             const currentRootFiles = project.getRootFiles().map((f => this.getCanonicalFileName(f)));
 
@@ -611,7 +584,8 @@ namespace ts.server {
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            const { succeeded, projectOptions, error } = this.configFileToProjectOptions(fileName);
+            const { projectOptions } = this.configFileToProjectOptions(fileName);
+
             const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
             const openFileRoots = this.openFileRoots.map(s => this.getCanonicalFileName(s.fileName));
 
@@ -1110,7 +1084,6 @@ namespace ts.server {
          * Close file whose contents is managed by the client
          * @param filename is absolute pathname
          */
-
         closeClientFile(filename: string) {
             const info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
@@ -1767,9 +1740,9 @@ namespace ts.server {
         }
 
         getLineMapper() {
-            return ((line: number) => {
+            return (line: number) => {
                 return this.index.lineNumberToInfo(line).offset;
-            });
+            };
         }
 
         getTextChangeRangeSinceVersion(scriptVersion: number) {

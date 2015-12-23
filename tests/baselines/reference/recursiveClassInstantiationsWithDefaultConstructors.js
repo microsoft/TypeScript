@@ -23,7 +23,7 @@ var TypeScript2;
             this.prefix = "";
         }
         return MemberName;
-    })();
+    }());
     TypeScript2.MemberName = MemberName;
     var MemberNameArray = (function (_super) {
         __extends(MemberNameArray, _super);
@@ -31,6 +31,6 @@ var TypeScript2;
             _super.apply(this, arguments);
         }
         return MemberNameArray;
-    })(MemberName);
+    }(MemberName));
     TypeScript2.MemberNameArray = MemberNameArray;
 })(TypeScript2 || (TypeScript2 = {}));

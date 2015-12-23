@@ -32,7 +32,7 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var Foo2 = (function () {
     function Foo2() {
     }
@@ -46,4 +46,4 @@ var Foo2 = (function () {
         configurable: true
     });
     return Foo2;
-})();
+}());

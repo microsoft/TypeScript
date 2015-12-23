@@ -1,5 +1,7 @@
 tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
+  Type 'Object' provides no match for the signature '(): void'
 tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts(14,1): error TS2322: Type 'Object' is not assignable to type '() => void'.
+  Type 'Object' provides no match for the signature '(): void'
 
 
 ==== tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAutomaticSemicolonInsertion1.ts (2 errors) ====
@@ -13,6 +15,7 @@ tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAut
     i = o;
     ~
 !!! error TS2322: Type 'Object' is not assignable to type 'I'.
+!!! error TS2322:   Type 'Object' provides no match for the signature '(): void'
      
     var a: {
         (): void
@@ -21,4 +24,5 @@ tests/cases/conformance/parser/ecmascript5/AutomaticSemicolonInsertion/parserAut
     a = o;
     ~
 !!! error TS2322: Type 'Object' is not assignable to type '() => void'.
+!!! error TS2322:   Type 'Object' provides no match for the signature '(): void'
     

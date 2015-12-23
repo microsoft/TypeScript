@@ -86,7 +86,7 @@ sourceFile:es5-souremap-amd.ts
 1->Emitted(7, 5) Source(13, 1) + SourceIndex(0)
 2 >Emitted(7, 13) Source(13, 2) + SourceIndex(0)
 ---
->>>})();
+>>>}());
 1 >
 2 >^
 3 > 

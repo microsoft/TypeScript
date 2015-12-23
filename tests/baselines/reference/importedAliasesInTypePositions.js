@@ -35,7 +35,7 @@ define(["require", "exports"], function (require, exports) {
                         ReferredTo.prototype.doSomething = function () {
                         };
                         return ReferredTo;
-                    })();
+                    }());
                     name.ReferredTo = ReferredTo;
                 })(name = mod.name || (mod.name = {}));
             })(mod = nested.mod || (nested.mod = {}));
@@ -52,6 +52,6 @@ define(["require", "exports"], function (require, exports) {
                 this.referred = referred;
             }
             return UsesReferredType;
-        })();
+        }());
     })(ImportingModule = exports.ImportingModule || (exports.ImportingModule = {}));
 });

@@ -19,4 +19,4 @@ var C = (function () {
         dec
     ], C);
     return C;
-})();
+}());
