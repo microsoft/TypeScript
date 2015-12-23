@@ -15,8 +15,8 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(65,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(68,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(69,19): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(73,13): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(76,40): error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(73,13): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(76,40): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(87,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(91,23): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(94,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -34,8 +34,8 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(120,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(121,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(122,9): error TS2341: Property 'privateStaticFunc' is private and only accessible within class 'SomeBase'.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,16): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,30): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,16): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts(127,30): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
 
 
 ==== tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess.ts (38 errors) ====
@@ -147,12 +147,12 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
             function inner() {
                 super.publicFunc();
                 ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
             }
             var x = {
                 test: function () { return super.publicFunc(); }
                                            ~~~~~
-!!! error TS2338: 'super' property access is permitted only in a constructor, member function, or member accessor of a derived class.
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
             }
         }
     }
@@ -239,7 +239,7 @@ tests/cases/conformance/expressions/superPropertyAccess/errorSuperPropertyAccess
     // In object literal
     var obj = { n: super.wat, p: super.foo() };
                    ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
                                  ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
     

@@ -137,6 +137,7 @@ declare namespace FourSlashInterface {
         verifyDefinitionsName(name: string, containerName: string): void;
     }
     class verify extends verifyNegatable {
+        assertHasRanges(ranges: FourSlash.Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
         indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
