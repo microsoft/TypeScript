@@ -7585,8 +7585,13 @@ namespace ts {
                                 return current === binaryExpr.left || current === binaryExpr.right;
 
                             case SyntaxKind.BarBarToken:
-                                continue loop;
+                                if (current === binaryExpr.left || current === binaryExpr.right) {
+                                    continue loop;
+                                }
+                                break loop;
                         }
+
+                        // No binary operators apply. Try to get the contextual type below.
                         break loop;
 
                     case SyntaxKind.ConditionalExpression:
@@ -7600,6 +7605,7 @@ namespace ts {
                         continue loop;
 
                     default:
+                        // Nothing applies. Try to get the contextual type below.
                         break loop;
                 }
             }
