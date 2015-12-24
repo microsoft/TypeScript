@@ -1,12 +1,10 @@
-tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx(11,15): error TS2322: Type 'string' is not assignable to type '"A" | "B" | "C"'.
-  Type 'string' is not assignable to type '"C"'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx(13,15): error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
   Type '"f"' is not assignable to type '"C"'.
-tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx(14,15): error TS2322: Type 'string' is not assignable to type '"A" | "B" | "C"'.
-  Type 'string' is not assignable to type '"C"'.
+tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx(14,15): error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+  Type '"f"' is not assignable to type '"C"'.
 
 
-==== tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx (3 errors) ====
+==== tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes01.tsx (2 errors) ====
     
     namespace JSX {
         interface IntrinsicElements {
@@ -18,9 +16,6 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStr
     
     <FooComponent foo={"A"} />;
     <FooComponent foo="A"   />;
-                  ~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type '"A" | "B" | "C"'.
-!!! error TS2322:   Type 'string' is not assignable to type '"C"'.
     
     <FooComponent foo={"f"} />;
                   ~~~~~~~~~
@@ -28,5 +23,5 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStr
 !!! error TS2322:   Type '"f"' is not assignable to type '"C"'.
     <FooComponent foo="f"   />;
                   ~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type '"A" | "B" | "C"'.
-!!! error TS2322:   Type 'string' is not assignable to type '"C"'.
+!!! error TS2322: Type '"f"' is not assignable to type '"A" | "B" | "C"'.
+!!! error TS2322:   Type '"f"' is not assignable to type '"C"'.
