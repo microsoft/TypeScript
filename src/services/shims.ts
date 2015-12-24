@@ -60,7 +60,7 @@ namespace ts {
         getNewLine?(): string;
         getProjectVersion?(): string;
         useCaseSensitiveFileNames?(): boolean;
-        
+
         getModuleResolutionsForFile?(fileName: string): string;
     }
 
@@ -247,14 +247,14 @@ namespace ts {
         }
 
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-            var oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
-            var encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            let oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
+            let encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             // TODO: should this be '==='?
             if (encoded == null) {
                 return null;
             }
 
-            var decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            let decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
@@ -272,9 +272,9 @@ namespace ts {
         private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
-        
+
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
-        
+
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect. 
@@ -319,7 +319,7 @@ namespace ts {
         }
 
         public getCompilationSettings(): CompilerOptions {
-            var settingsJson = this.shimHost.getCompilationSettings();
+            let settingsJson = this.shimHost.getCompilationSettings();
             // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
@@ -328,12 +328,12 @@ namespace ts {
         }
 
         public getScriptFileNames(): string[] {
-            var encoded = this.shimHost.getScriptFileNames();
+            let encoded = this.shimHost.getScriptFileNames();
             return this.files = JSON.parse(encoded);
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
+            let scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
@@ -342,7 +342,7 @@ namespace ts {
         }
 
         public getLocalizedDiagnosticMessages(): any {
-            var diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
+            let diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
                 return null;
             }
@@ -357,7 +357,7 @@ namespace ts {
         }
 
         public getCancellationToken(): HostCancellationToken {
-            var hostCancellationToken = this.shimHost.getCancellationToken();
+            let hostCancellationToken = this.shimHost.getCancellationToken();
             return new ThrottledCancellationToken(hostCancellationToken);
         }
 
@@ -381,8 +381,8 @@ namespace ts {
         }
 
         public isCancellationRequested(): boolean {
-            var time = Date.now();
-            var duration = Math.abs(time - this.lastCancellationCheckTime);
+            let time = Date.now();
+            let duration = Math.abs(time - this.lastCancellationCheckTime);
             if (duration > 10) {
                 // Check no more than once every 10 ms.
                 this.lastCancellationCheckTime = time;
@@ -401,36 +401,37 @@ namespace ts {
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
             // Consider removing the optional designation for
             // the exclude param at this time.
-            var encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            let encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
             return JSON.parse(encoded);
         }
-        
+
         public fileExists(fileName: string): boolean {
             return this.shimHost.fileExists(fileName);
         }
-        
+
         public readFile(fileName: string): string {
             return this.shimHost.readFile(fileName);
         }
     }
 
     function simpleForwardCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): any {
+        let start: number;
         if (logPerformance) {
             logger.log(actionDescription);
-            var start = Date.now();
+            start = Date.now();
         }
 
-        var result = action();
+        let result = action();
 
         if (logPerformance) {
-            var end = Date.now();
-            logger.log(actionDescription + " completed in " + (end - start) + " msec");
-            if (typeof (result) === "string") {
-                var str = <string>result;
+            let end = Date.now();
+            logger.log(`${actionDescription} completed in ${end - start} msec`);
+            if (typeof result === "string") {
+                let str = result;
                 if (str.length > 128) {
                     str = str.substring(0, 128) + "...";
                 }
-                logger.log("  result.length=" + str.length + ", result='" + JSON.stringify(str) + "'");
+                logger.log(`  result.length=${str.length}, result='${JSON.stringify(str)}'`);
             }
         }
 
@@ -439,7 +440,7 @@ namespace ts {
 
     function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
         try {
-            var result = simpleForwardCall(logger, actionDescription, action, logPerformance);
+            let result = simpleForwardCall(logger, actionDescription, action, logPerformance);
             return JSON.stringify({ result: result });
         }
         catch (err) {
@@ -461,7 +462,7 @@ namespace ts {
         }
     }
 
-    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; } []{
+    export function realizeDiagnostics(diagnostics: Diagnostic[], newLine: string): { message: string; start: number; length: number; category: string; code: number; }[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
     }
 
@@ -520,7 +521,7 @@ namespace ts {
          */
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
-                "refresh(" + throwOnError + ")",
+                `refresh(${throwOnError})`,
                 () => {
                     return <any>null;
                 });
@@ -535,32 +536,32 @@ namespace ts {
                 });
         }
 
-        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[]{
-            var newLine = getNewLineOrDefaultFromHost(this.host);
+        private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
+            let newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                `getSyntacticClassifications('${fileName}', ${start}, ${length})`,
                 () => {
-                    var classifications = this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length));
+                    let classifications = this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length));
                     return classifications;
                 });
         }
 
         public getSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                `getSemanticClassifications('${fileName}', ${start}, ${length})`,
                 () => {
-                    var classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
+                    let classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
                     return classifications;
                 });
         }
 
         public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getEncodedSyntacticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                `getEncodedSyntacticClassifications('${fileName}', ${start}, ${length})`,
                 () => {
                     // directly serialize the spans out to a string.  This is much faster to decode
                     // on the managed side versus a full JSON array.
@@ -570,7 +571,7 @@ namespace ts {
 
         public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
-                "getEncodedSemanticClassifications('" + fileName + "', " + start + ", " + length + ")",
+                `getEncodedSemanticClassifications('${fileName}', ${start}, ${length})`,
                 () => {
                     // directly serialize the spans out to a string.  This is much faster to decode
                     // on the managed side versus a full JSON array.
@@ -580,18 +581,18 @@ namespace ts {
 
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
-                "getSyntacticDiagnostics('" + fileName + "')",
+                `getSyntacticDiagnostics('${fileName}')`,
                 () => {
-                    var diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    let diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
 
         public getSemanticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
-                "getSemanticDiagnostics('" + fileName + "')",
+                `getSemanticDiagnostics('${fileName}')`,
                 () => {
-                    var diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+                    let diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -600,7 +601,7 @@ namespace ts {
             return this.forwardJSONCall(
                 "getCompilerOptionsDiagnostics()",
                 () => {
-                    var diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    let diagnostics = this.languageService.getCompilerOptionsDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -613,9 +614,9 @@ namespace ts {
          */
         public getQuickInfoAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getQuickInfoAtPosition('" + fileName + "', " + position + ")",
+                `getQuickInfoAtPosition('${fileName}', ${position})`,
                 () => {
-                    var quickInfo = this.languageService.getQuickInfoAtPosition(fileName, position);
+                    let quickInfo = this.languageService.getQuickInfoAtPosition(fileName, position);
                     return quickInfo;
                 });
         }
@@ -629,9 +630,9 @@ namespace ts {
          */
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
             return this.forwardJSONCall(
-                "getNameOrDottedNameSpan('" + fileName + "', " + startPos + ", " + endPos + ")",
+                `getNameOrDottedNameSpan('${fileName}', ${startPos}, ${endPos})`,
                 () => {
-                    var spanInfo = this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
+                    let spanInfo = this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
                     return spanInfo;
                 });
         }
@@ -642,9 +643,9 @@ namespace ts {
          */
         public getBreakpointStatementAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getBreakpointStatementAtPosition('" + fileName + "', " + position + ")",
+                `getBreakpointStatementAtPosition('${fileName}', ${position})`,
                 () => {
-                    var spanInfo = this.languageService.getBreakpointStatementAtPosition(fileName, position);
+                    let spanInfo = this.languageService.getBreakpointStatementAtPosition(fileName, position);
                     return spanInfo;
                 });
         }
@@ -653,9 +654,9 @@ namespace ts {
 
         public getSignatureHelpItems(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getSignatureHelpItems('" + fileName + "', " + position + ")",
+                `getSignatureHelpItems('${fileName}', ${position})`,
                 () => {
-                    var signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
+                    let signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
                     return signatureInfo;
                 });
         }
@@ -668,7 +669,7 @@ namespace ts {
          */
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getDefinitionAtPosition('" + fileName + "', " + position + ")",
+                `getDefinitionAtPosition('${fileName}', ${position})`,
                 () => {
                     return this.languageService.getDefinitionAtPosition(fileName, position);
                 });
@@ -682,7 +683,7 @@ namespace ts {
          */
         public getTypeDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getTypeDefinitionAtPosition('" + fileName + "', " + position + ")",
+                `getTypeDefinitionAtPosition('${fileName}', ${position})`,
                 () => {
                     return this.languageService.getTypeDefinitionAtPosition(fileName, position);
                 });
@@ -690,7 +691,7 @@ namespace ts {
 
         public getRenameInfo(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getRenameInfo('" + fileName + "', " + position + ")",
+                `getRenameInfo('${fileName}', ${position})`,
                 () => {
                     return this.languageService.getRenameInfo(fileName, position);
                 });
@@ -698,7 +699,7 @@ namespace ts {
 
         public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
             return this.forwardJSONCall(
-                "findRenameLocations('" + fileName + "', " + position + ", " + findInStrings + ", " + findInComments + ")",
+                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
                 () => {
                     return this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
                 });
@@ -707,9 +708,9 @@ namespace ts {
         /// GET BRACE MATCHING
         public getBraceMatchingAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getBraceMatchingAtPosition('" + fileName + "', " + position + ")",
+                `getBraceMatchingAtPosition('${fileName}', ${position})`,
                 () => {
-                    var textRanges = this.languageService.getBraceMatchingAtPosition(fileName, position);
+                    let textRanges = this.languageService.getBraceMatchingAtPosition(fileName, position);
                     return textRanges;
                 });
         }
@@ -717,9 +718,9 @@ namespace ts {
         /// GET SMART INDENT
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
             return this.forwardJSONCall(
-                "getIndentationAtPosition('" + fileName + "', " + position + ")",
+                `getIndentationAtPosition('${fileName}', ${position})`,
                 () => {
-                    var localOptions: EditorOptions = JSON.parse(options);
+                    let localOptions: EditorOptions = JSON.parse(options);
                     return this.languageService.getIndentationAtPosition(fileName, position, localOptions);
                 });
         }
@@ -728,7 +729,7 @@ namespace ts {
 
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getReferencesAtPosition('" + fileName + "', " + position + ")",
+                `getReferencesAtPosition('${fileName}', ${position})`,
                 () => {
                     return this.languageService.getReferencesAtPosition(fileName, position);
                 });
@@ -736,7 +737,7 @@ namespace ts {
 
         public findReferences(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "findReferences('" + fileName + "', " + position + ")",
+                `findReferences('${fileName}', ${position})`,
                 () => {
                     return this.languageService.findReferences(fileName, position);
                 });
@@ -744,7 +745,7 @@ namespace ts {
 
         public getOccurrencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getOccurrencesAtPosition('" + fileName + "', " + position + ")",
+                `getOccurrencesAtPosition('${fileName}', ${position})`,
                 () => {
                     return this.languageService.getOccurrencesAtPosition(fileName, position);
                 });
@@ -752,9 +753,9 @@ namespace ts {
 
         public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
             return this.forwardJSONCall(
-                "getDocumentHighlights('" + fileName + "', " + position + ")",
+                `getDocumentHighlights('${fileName}', ${position})`,
                 () => {
-                    var results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    let results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                     // workaround for VS document higlighting issue - keep only items from the initial file
                     let normalizedName = normalizeSlashes(fileName).toLowerCase();
                     return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
@@ -770,9 +771,9 @@ namespace ts {
          */
         public getCompletionsAtPosition(fileName: string, position: number) {
             return this.forwardJSONCall(
-                "getCompletionsAtPosition('" + fileName + "', " + position + ")",
+                `getCompletionsAtPosition('${fileName}', ${position})`,
                 () => {
-                    var completion = this.languageService.getCompletionsAtPosition(fileName, position);
+                    let completion = this.languageService.getCompletionsAtPosition(fileName, position);
                     return completion;
                 });
         }
@@ -780,46 +781,46 @@ namespace ts {
         /** Get a string based representation of a completion list entry details */
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
             return this.forwardJSONCall(
-                "getCompletionEntryDetails('" + fileName + "', " + position + ", " + entryName + ")",
+                `getCompletionEntryDetails('${fileName}', ${position}, ${entryName})`,
                 () => {
-                    var details = this.languageService.getCompletionEntryDetails(fileName, position, entryName);
+                    let details = this.languageService.getCompletionEntryDetails(fileName, position, entryName);
                     return details;
                 });
         }
 
         public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsForRange('" + fileName + "', " + start + ", " + end + ")",
+                `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
                 () => {
-                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
+                    let localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    let edits = this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                     return edits;
                 });
         }
 
         public getFormattingEditsForDocument(fileName: string, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsForDocument('" + fileName + "')",
+                `getFormattingEditsForDocument('${fileName}')`,
                 () => {
-                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsForDocument(fileName, localOptions);
+                    let localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    let edits = this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                     return edits;
                 });
         }
 
         public getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: string/*Services.FormatCodeOptions*/): string {
             return this.forwardJSONCall(
-                "getFormattingEditsAfterKeystroke('" + fileName + "', " + position + ", '" + key + "')",
+                `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
                 () => {
-                    var localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    var edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
+                    let localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    let edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                     return edits;
                 });
         }
 
         public getDocCommentTemplateAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
-                "getDocCommentTemplateAtPosition('" + fileName + "', " + position + ")",
+                `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
             );
         }
@@ -829,36 +830,36 @@ namespace ts {
         /** Return a list of symbols that are interesting to navigate to */
         public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
             return this.forwardJSONCall(
-                "getNavigateToItems('" + searchValue + "', " + maxResultCount+ ")",
+                `getNavigateToItems('${searchValue}', ${maxResultCount})`,
                 () => {
-                    var items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
+                    let items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
                     return items;
                 });
         }
 
         public getNavigationBarItems(fileName: string): string {
             return this.forwardJSONCall(
-                "getNavigationBarItems('" + fileName + "')",
+                `getNavigationBarItems('${fileName}')`,
                 () => {
-                    var items = this.languageService.getNavigationBarItems(fileName);
+                    let items = this.languageService.getNavigationBarItems(fileName);
                     return items;
                 });
         }
 
         public getOutliningSpans(fileName: string): string {
             return this.forwardJSONCall(
-                "getOutliningSpans('" + fileName + "')",
+                `getOutliningSpans('${fileName}')`,
                 () => {
-                    var items = this.languageService.getOutliningSpans(fileName);
+                    let items = this.languageService.getOutliningSpans(fileName);
                     return items;
                 });
         }
 
         public getTodoComments(fileName: string, descriptors: string): string {
             return this.forwardJSONCall(
-                "getTodoComments('" + fileName + "')",
+                `getTodoComments('${fileName}')`,
                 () => {
-                    var items = this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
+                    let items = this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
                     return items;
                 });
         }
@@ -866,9 +867,9 @@ namespace ts {
         /// Emit
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
-                "getEmitOutput('" + fileName + "')",
+                `getEmitOutput('${fileName}')`,
                 () => {
-                    var output = this.languageService.getEmitOutput(fileName);
+                    let output = this.languageService.getEmitOutput(fileName);
                     return output;
                 });
         }
@@ -895,12 +896,11 @@ namespace ts {
 
         /// COLORIZATION
         public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
-            var classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
-            var items = classification.entries;
-            var result = "";
-            for (var i = 0; i < items.length; i++) {
-                result += items[i].length + "\n";
-                result += items[i].classification + "\n";
+            let classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
+            let result = "";
+            for (let item of classification.entries) {
+                result += item.length + "\n";
+                result += item.classification + "\n";
             }
             result += classification.finalLexState;
             return result;
@@ -917,16 +917,16 @@ namespace ts {
         private forwardJSONCall(actionDescription: string, action: () => any): any {
             return forwardJSONCall(this.logger, actionDescription, action, this.logPerformance);
         }
-        
+
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
                 return {
-                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName: undefined,
+                    resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined,
                     failedLookupLocations: result.failedLookupLocations
                 };
-            }); 
+            });
         }
 
         public getPreProcessedFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
@@ -934,8 +934,8 @@ namespace ts {
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     // for now treat files as JavaScript 
-                    var result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
-                    var convertResult = {
+                    let result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    let convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
                         ambientExternalModules: result.ambientExternalModules,
@@ -963,7 +963,7 @@ namespace ts {
 
         public getTSConfigFileInfo(fileName: string, sourceTextSnapshot: IScriptSnapshot): string {
             return this.forwardJSONCall(
-                "getTSConfigFileInfo('" + fileName + "')",
+                `getTSConfigFileInfo('${fileName}')`,
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
@@ -977,7 +977,7 @@ namespace ts {
                         };
                     }
 
-                    var configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    let configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
@@ -1012,8 +1012,8 @@ namespace ts {
                 if (this.documentRegistry === undefined) {
                     this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
-                var hostAdapter = new LanguageServiceShimHostAdapter(host);
-                var languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                let hostAdapter = new LanguageServiceShimHostAdapter(host);
+                let languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
@@ -1034,7 +1034,7 @@ namespace ts {
 
         public createCoreServicesShim(host: CoreServicesShimHost): CoreServicesShim {
             try {
-                var adapter = new CoreServicesShimHostAdapter(host);
+                let adapter = new CoreServicesShimHostAdapter(host);
                 return new CoreServicesShimObject(this, <Logger>host, adapter);
             }
             catch (err) {
@@ -1054,7 +1054,7 @@ namespace ts {
         }
 
         public unregisterShim(shim: Shim): void {
-            for (var i = 0, n = this._shims.length; i < n; i++) {
+            for (let i = 0, n = this._shims.length; i < n; i++) {
                 if (this._shims[i] === shim) {
                     delete this._shims[i];
                     return;
