@@ -305,25 +305,6 @@ namespace Playback {
         }
     }
 
-    const pathEquivCache: any = {};
-    function pathsAreEquivalent(left: string, right: string, wrapper: { resolvePath(s: string): string }) {
-        const key = left + "-~~-" + right;
-        function areSame(a: string, b: string) {
-            return ts.normalizeSlashes(a).toLowerCase() === ts.normalizeSlashes(b).toLowerCase();
-        }
-        function check() {
-            if (Harness.Path.getFileName(left).toLowerCase() === Harness.Path.getFileName(right).toLowerCase()) {
-                return areSame(left, right) || areSame(wrapper.resolvePath(left), right) || areSame(left, wrapper.resolvePath(right)) || areSame(wrapper.resolvePath(left), wrapper.resolvePath(right));
-            }
-        }
-        if (pathEquivCache.hasOwnProperty(key)) {
-            return pathEquivCache[key];
-        }
-        else {
-            return pathEquivCache[key] = check();
-        }
-    }
-
     function noOpReplay(name: string) {
         // console.log("Swallowed write operation during replay: " + name);
     }
