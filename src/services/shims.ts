@@ -333,11 +333,6 @@ namespace ts {
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            // Shim the API changes for 1.5 release. This should be removed once
-            // TypeScript 1.5 has shipped.
-            if (this.files && this.files.indexOf(fileName) < 0) {
-                return undefined;
-            }
             var scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
@@ -371,14 +366,7 @@ namespace ts {
         }
 
         public getDefaultLibFileName(options: CompilerOptions): string {
-            // Wrap the API changes for 1.5 release. This try/catch
-            // should be removed once TypeScript 1.5 has shipped.
-            try {
-                return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
-            }
-            catch (e) {
-                return "";
-            }
+            return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
     }
 
@@ -411,17 +399,9 @@ namespace ts {
         }
 
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            // Wrap the API changes for 1.5 release. This try/catch
-            // should be removed once TypeScript 1.5 has shipped.
-            // Also consider removing the optional designation for
+            // Consider removing the optional designation for
             // the exclude param at this time.
-            var encoded: string;
-            try {
-                encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
-            }
-            catch (e) {
-                encoded = this.shimHost.readDirectory(rootDir, extension);
-            }
+            var encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
             return JSON.parse(encoded);
         }
         
@@ -889,9 +869,6 @@ namespace ts {
                 "getEmitOutput('" + fileName + "')",
                 () => {
                     var output = this.languageService.getEmitOutput(fileName);
-                    // Shim the API changes for 1.5 release. This should be removed once
-                    // TypeScript 1.5 has shipped.
-                    (<any>output).emitOutputStatus = output.emitSkipped ? 1 : 0;
                     return output;
                 });
         }
