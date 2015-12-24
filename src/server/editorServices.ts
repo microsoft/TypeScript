@@ -1051,7 +1051,7 @@ namespace ts.server {
 
         acquireTypingForJs(path: string, project: Project) {
             let cachePath = project.isConfiguredProject() 
-                ? project.projectFilename
+                ? ts.getDirectoryPath(project.projectFilename)
                 : globalCachePath;
                 
             let typingOptions = project.projectOptions ? project.projectOptions.typingOptions : undefined;
