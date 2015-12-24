@@ -11,6 +11,7 @@ export module E { var x; }
 
 //// [systemModuleDeclarationMerging.js]
 System.register([], function(exports_1) {
+    "use strict";
     var F, C, E;
     function F() { }
     exports_1("F", F);
@@ -25,7 +26,7 @@ System.register([], function(exports_1) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports_1("C", C);
             (function (C) {
                 var x;

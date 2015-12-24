@@ -325,7 +325,6 @@ namespace ts {
             // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
-                return null;
             }
             return <CompilerOptions>JSON.parse(settingsJson);
         }
@@ -1001,7 +1000,7 @@ namespace ts {
                 () => {
                     let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = parseConfigFileText(fileName, text);
+                    let result = parseConfigFileTextToJson(fileName, text);
 
                     if (result.error) {
                         return {
@@ -1013,7 +1012,7 @@ namespace ts {
                     }
 
                     fileName = normalizeSlashes(fileName);
-                    var configFile = parseConfigFile(result.config, this.host, getDirectoryPath(fileName), fileName);
+                    var configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(fileName), {}, fileName);
 
                     return {
                         options: configFile.options,
@@ -1070,7 +1069,7 @@ namespace ts {
         public createLanguageServiceShim(host: LanguageServiceShimHost): LanguageServiceShim {
             try {
                 if (this.documentRegistry === undefined) {
-                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+                    this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
                 var hostAdapter = new LanguageServiceShimHostAdapter(host);
                 var languageService = createLanguageService(hostAdapter, this.documentRegistry);
@@ -1106,7 +1105,7 @@ namespace ts {
         public close(): void {
             // Forget all the registered shims
             this._shims = [];
-            this.documentRegistry = createDocumentRegistry();
+            this.documentRegistry = undefined;
         }
 
         public registerShim(shim: Shim): void {

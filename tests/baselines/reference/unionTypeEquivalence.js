@@ -30,7 +30,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -38,7 +38,7 @@ var D = (function (_super) {
     }
     D.prototype.foo = function () { };
     return D;
-})(C);
+}(C));
 var x;
 var x;
 // A | B is equivalent to B | A.

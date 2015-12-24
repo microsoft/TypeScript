@@ -50,7 +50,7 @@ var c = (function () {
     c.prototype.foo = function (a) {
     };
     return c;
-})();
+}());
 //// [b.js]
 ///<reference path='a.ts'/>
 function foo2(a) {

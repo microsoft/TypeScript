@@ -24,4 +24,4 @@ var Linq = (function () {
         return result;
     };
     return Linq;
-})();
+}());

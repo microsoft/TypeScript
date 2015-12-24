@@ -21,13 +21,13 @@ var Foo1 = (function () {
         }
     }
     return Foo1;
-})();
+}());
 var Foo2 = (function () {
     function Foo2(args) {
         this.args = args;
     }
     return Foo2;
-})();
+}());
 var Foo3 = (function () {
     function Foo3(public) {
         var args = [];
@@ -36,4 +36,4 @@ var Foo3 = (function () {
         }
     }
     return Foo3;
-})();
+}());

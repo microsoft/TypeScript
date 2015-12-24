@@ -19,4 +19,12 @@ class MyComponent {
 >Service : Symbol(Service, Decl(component.ts, 6, 16))
 >Service : Symbol(Service, Decl(component.ts, 0, 6))
     }
+
+    @decorator
+>decorator : Symbol(decorator, Decl(component.ts, 2, 11))
+
+    method(x: this) {
+>method : Symbol(method, Decl(component.ts, 7, 5))
+>x : Symbol(x, Decl(component.ts, 10, 11))
+    }
 }

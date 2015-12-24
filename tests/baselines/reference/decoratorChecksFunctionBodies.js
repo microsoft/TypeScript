@@ -38,4 +38,4 @@ var A = (function () {
         })
     ], A.prototype, "m", null);
     return A;
-})();
+}());

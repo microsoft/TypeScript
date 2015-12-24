@@ -81,7 +81,7 @@ var User = (function () {
         //console.log("Hello, " + this.name);
     };
     return User;
-})();
+}());
 var RegisteredUser = (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
@@ -101,7 +101,7 @@ var RegisteredUser = (function (_super) {
         var x = function () { return _super.prototype.sayHello.call(_this); };
     };
     return RegisteredUser;
-})(User);
+}(User));
 var RegisteredUser2 = (function (_super) {
     __extends(RegisteredUser2, _super);
     function RegisteredUser2() {
@@ -117,7 +117,7 @@ var RegisteredUser2 = (function (_super) {
         var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
     };
     return RegisteredUser2;
-})(User);
+}(User));
 var RegisteredUser3 = (function (_super) {
     __extends(RegisteredUser3, _super);
     function RegisteredUser3() {
@@ -133,7 +133,7 @@ var RegisteredUser3 = (function (_super) {
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
     };
     return RegisteredUser3;
-})(User);
+}(User));
 var RegisteredUser4 = (function (_super) {
     __extends(RegisteredUser4, _super);
     function RegisteredUser4() {
@@ -149,4 +149,4 @@ var RegisteredUser4 = (function (_super) {
         var x = function () { return function () { return _super.prototype.; }; };
     };
     return RegisteredUser4;
-})(User);
+}(User));

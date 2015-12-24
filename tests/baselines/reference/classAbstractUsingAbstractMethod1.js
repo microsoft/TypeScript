@@ -27,7 +27,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -35,14 +35,14 @@ var B = (function (_super) {
     }
     B.prototype.foo = function () { return 1; };
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));
 var a = new B;
 a.foo();
 a = new C; // error, cannot instantiate abstract class.

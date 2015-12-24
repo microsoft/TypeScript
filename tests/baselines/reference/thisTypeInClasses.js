@@ -2,7 +2,6 @@
 class C1 {
     x: this;
     f(x: this): this { return undefined; }
-    constructor(x: this) { }
 }
 
 class C2 {
@@ -53,21 +52,21 @@ class C5 {
 
 //// [thisTypeInClasses.js]
 var C1 = (function () {
-    function C1(x) {
+    function C1() {
     }
     C1.prototype.f = function (x) { return undefined; };
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var C5 = (function () {
     function C5() {
     }
@@ -88,4 +87,4 @@ var C5 = (function () {
         var x2 = undefined;
     };
     return C5;
-})();
+}());

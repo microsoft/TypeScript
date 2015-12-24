@@ -12,18 +12,19 @@ export class B<T2> {
 
 //// [privacyCheckOnTypeParameterReferenceInConstructorParameter.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var A = (function () {
         function A(callback) {
             var child = new B(this);
         }
         return A;
-    })();
+    }());
     exports.A = A;
     var B = (function () {
         function B(parent) {
         }
         return B;
-    })();
+    }());
     exports.B = B;
 });
 

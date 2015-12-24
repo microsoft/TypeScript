@@ -31,7 +31,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -42,7 +42,7 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());
 var E = (function () {
     function E() {
     }
@@ -55,4 +55,4 @@ var E = (function () {
         configurable: true
     });
     return E;
-})();
+}());

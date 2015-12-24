@@ -38,50 +38,50 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 // Inheritance
 var F = (function () {
     function F() {
     }
     return F;
-})();
+}());
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
         _super.apply(this, arguments);
     }
     return G;
-})(F);
+}(F));
 // Other way
 var H = (function () {
     function H() {
     }
     return H;
-})();
+}());
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
         _super.apply(this, arguments);
     }
     return I;
-})(H);
+}(H));
 // With hidden indexer
 var J = (function () {
     function J() {
     }
     return J;
-})();
+}());
 var K = (function (_super) {
     __extends(K, _super);
     function K() {
         _super.apply(this, arguments);
     }
     return K;
-})(J);
+}(J));

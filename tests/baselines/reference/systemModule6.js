@@ -8,6 +8,7 @@ function foo() {
 
 //// [systemModule6.js]
 System.register([], function(exports_1) {
+    "use strict";
     var C;
     function foo() {
         new C();
@@ -19,7 +20,7 @@ System.register([], function(exports_1) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports_1("C", C);
         }
     }

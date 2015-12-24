@@ -1,14 +1,11 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts(3,17): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts(11,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Date'.
   Property 'toDateString' is missing in type 'Number'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithConstraintsTypeArgumentInference2.ts (1 errors) ====
     // Generic call with parameters of T and U, U extends T, no parameter of type U
     
     function foo<T, U extends T>(t: T) {
-                    ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var u: U;
         return u;
     }

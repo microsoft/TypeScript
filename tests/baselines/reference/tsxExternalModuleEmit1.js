@@ -32,6 +32,7 @@ export class Button extends React.Component<any, any> {
 }
 
 //// [button.jsx]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -47,9 +48,10 @@ var Button = (function (_super) {
         return <button>Some button</button>;
     };
     return Button;
-})(React.Component);
+}(React.Component));
 exports.Button = Button;
 //// [app.jsx]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -67,5 +69,5 @@ var App = (function (_super) {
         return <button_1.Button />;
     };
     return App;
-})(React.Component);
+}(React.Component));
 exports.App = App;

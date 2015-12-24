@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES6.ts ===
 var v = {
->v : {}
->{    ["hello"]() {        debugger;    }} : {}
+>v : { ["hello"](): void; }
+>{    ["hello"]() {        debugger;    }} : { ["hello"](): void; }
 
     ["hello"]() {
 >"hello" : string

@@ -40,24 +40,24 @@ var A;
         function A() {
         }
         return A;
-    })();
+    }());
     A_1.A = A;
     var AG = (function () {
         function AG() {
         }
         return AG;
-    })();
+    }());
     A_1.AG = AG;
     var A2 = (function () {
         function A2() {
         }
         return A2;
-    })();
+    }());
     var AG2 = (function () {
         function AG2() {
         }
         return AG2;
-    })();
+    }());
 })(A || (A = {}));
 // no errors expected, these are all exported
 var a;

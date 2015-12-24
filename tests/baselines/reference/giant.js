@@ -683,6 +683,7 @@ export declare module eaM {
 
 //// [giant.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     /*
         Prefixes
         p -> public
@@ -742,7 +743,7 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return C;
-    })();
+    }());
     var M;
     (function (M_1) {
         var V;
@@ -791,7 +792,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return C;
-        })();
+        }());
         var M;
         (function (M) {
             var V;
@@ -801,7 +802,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -812,7 +813,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             M.eC = eC;
             ;
             ;
@@ -867,7 +868,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return eC;
-        })();
+        }());
         M_1.eC = eC;
         var eM;
         (function (eM) {
@@ -878,7 +879,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -889,7 +890,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             eM.eC = eC;
             ;
             ;
@@ -946,7 +947,7 @@ define(["require", "exports"], function (require, exports) {
             configurable: true
         });
         return eC;
-    })();
+    }());
     exports.eC = eC;
     var eM;
     (function (eM_1) {
@@ -996,7 +997,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return C;
-        })();
+        }());
         var M;
         (function (M) {
             var V;
@@ -1006,7 +1007,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -1017,7 +1018,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             M.eC = eC;
             ;
             ;
@@ -1072,7 +1073,7 @@ define(["require", "exports"], function (require, exports) {
                 configurable: true
             });
             return eC;
-        })();
+        }());
         eM_1.eC = eC;
         var eM;
         (function (eM) {
@@ -1083,7 +1084,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             ;
             ;
             ;
@@ -1094,7 +1095,7 @@ define(["require", "exports"], function (require, exports) {
                 function eC() {
                 }
                 return eC;
-            })();
+            }());
             eM.eC = eC;
             ;
             ;

@@ -262,7 +262,7 @@ function f() {
 
 To benefit from this inference, a programmer can use the TypeScript language service. For example, a code editor can incorporate the TypeScript language service and use the service to find the members of a string object as in the following screen shot.
 
-/
+&emsp;&emsp;![](images/image1.png)
 
 In this example, the programmer benefits from type inference without providing type annotations. Some beneficial tools, however, do require the programmer to provide type annotations. In TypeScript, we can express a parameter requirement as in the following code fragment.
 
@@ -410,7 +410,7 @@ This signature denotes that a function may be passed as the parameter of the '$'
 
 A typical client would not need to add any additional typing but could just use a community-supplied typing to discover (through statement completion with documentation tips) and verify (through static checking) correct use of the library, as in the following screen shot.
 
-/
+&emsp;&emsp;![](images/image2.png)
 
 Section [3.3](#3.3) provides additional information about object types.
 
@@ -627,7 +627,7 @@ An important goal of TypeScript is to provide accurate and straightforward types
 
 JavaScript programming interfaces often include functions whose behavior is discriminated by a string constant passed to the function. The Document Object Model makes heavy use of this pattern. For example, the following screen shot shows that the 'createElement' method of the 'document' object has multiple signatures, some of which identify the types returned when specific strings are passed into the method.
 
-/
+&emsp;&emsp;![](images/image3.png)
 
 The following code fragment uses this feature. Because the 'span' variable is inferred to have the type 'HTMLSpanElement', the code can reference without static error the 'isMultiline' property of 'span'.
 
@@ -638,7 +638,7 @@ span.isMultiLine = false;  // OK: HTMLSpanElement has isMultiline property
 
 In the following screen shot, a programming tool combines information from overloading on string parameters with contextual typing to infer that the type of the variable 'e' is 'MouseEvent' and that therefore 'e' has a 'clientX' property.
 
-/
+&emsp;&emsp;![](images/image4.png)
 
 Section [3.9.2.4](#3.9.2.4) provides details on how to use string literals in function signatures.
 
@@ -1323,7 +1323,7 @@ x = "hello";            // Ok
 x = 42;                 // Ok  
 x = test;               // Error, boolean not assignable  
 x = test ? 5 : "five";  // Ok  
-x = test ? 0 : false;   // Error, number | boolean not asssignable
+x = test ? 0 : false;   // Error, number | boolean not assignable
 ```
 
 it is possible to assign 'x' a value of type `string`, `number`, or the union type `string | number`, but not any other type. To access a value in 'x', a type guard can be used to first narrow the type of 'x' to either `string` or `number`:

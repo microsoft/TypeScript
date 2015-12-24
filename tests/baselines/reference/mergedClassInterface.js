@@ -11,13 +11,13 @@ interface C2 { }
 
 declare class C2 { }
 
-class C3 { } // error -- cannot merge non-ambient class and interface
+class C3 { }
 
-interface C3 { } // error -- cannot merge non-ambient class and interface
+interface C3 { }
 
-interface C4 { } // error -- cannot merge non-ambient class and interface
+interface C4 { }
 
-class C4 { } // error -- cannot merge non-ambient class and interface
+class C4 { }
 
 interface C5 {
     x1: number;
@@ -59,12 +59,12 @@ var C3 = (function () {
     function C3() {
     }
     return C3;
-})(); // error -- cannot merge non-ambient class and interface
+}());
 var C4 = (function () {
     function C4() {
     }
     return C4;
-})(); // error -- cannot merge non-ambient class and interface
+}());
 // checks if properties actually were merged
 var c5;
 c5.x1;

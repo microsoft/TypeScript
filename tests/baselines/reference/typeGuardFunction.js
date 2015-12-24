@@ -93,19 +93,19 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         _super.apply(this, arguments);
     }
     return C;
-})(A);
+}(A));
 var a;
 var b;
 // Basic
@@ -134,7 +134,7 @@ var D = (function () {
         return true;
     };
     return D;
-})();
+}());
 // Arrow function
 var f1 = function (p1) { return false; };
 // Function expressions

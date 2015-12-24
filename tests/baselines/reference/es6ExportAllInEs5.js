@@ -17,11 +17,12 @@ export module uninstantiated {
 export * from "./server";
 
 //// [server.js]
+"use strict";
 var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 exports.c = c;
 var m;
 (function (m) {
@@ -29,6 +30,7 @@ var m;
 })(m = exports.m || (exports.m = {}));
 exports.x = 10;
 //// [client.js]
+"use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }

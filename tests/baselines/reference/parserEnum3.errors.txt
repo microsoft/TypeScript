@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum3.ts(3,17): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum3.ts(3,17): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum3.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum3.ts(3,17)
     
         export enum SignatureFlags {
                     ~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
         }

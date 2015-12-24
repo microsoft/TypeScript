@@ -1,4 +1,5 @@
 //// [inheritanceStaticPropertyOverridingAccessor.ts]
+
 class a {
     static get x(): () => string {
         return null;;
@@ -31,11 +32,11 @@ var a = (function () {
         configurable: true
     });
     return a;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
         _super.apply(this, arguments);
     }
     return b;
-})(a);
+}(a));

@@ -19,7 +19,7 @@ var m;
         function c() {
         }
         return c;
-    })();
+    }());
     m.c = c;
 })(m || (m = {}));
 var m1;

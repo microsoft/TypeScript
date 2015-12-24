@@ -1,4 +1,4 @@
-//// [isolatedModulesImportExportElision.ts]
+//// [file1.ts]
 
 import {c} from "module"
 import {c2} from "module"
@@ -13,7 +13,8 @@ let y = ns.value;
 export {c1} from "module";
 export var z = x;
 
-//// [isolatedModulesImportExportElision.js]
+//// [file1.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -28,7 +29,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(module_2.c2.C);
+}(module_2.c2.C));
 var x = new module_1.c();
 var y = ns.value;
 var module_3 = require("module");

@@ -82,46 +82,52 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 
 
 //// [importDecl_require.js]
+"use strict";
 var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require1.js]
+"use strict";
 var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 var x;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require2.js]
+"use strict";
 var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require3.js]
+"use strict";
 var d = (function () {
     function d() {
     }
     return d;
-})();
+}());
 exports.d = d;
 function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require4.js]
+"use strict";
 function foo2() { return null; }
 exports.foo2 = foo2;
 //// [importDecl_1.js]
+"use strict";
 ///<reference path='importDecl_require.ts'/>
 ///<reference path='importDecl_require1.ts'/>
 ///<reference path='importDecl_require2.ts'/>

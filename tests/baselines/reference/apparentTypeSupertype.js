@@ -23,7 +23,7 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 // is String (S) a subtype of U extends String (T)? Would only be true if we used the apparent type of U (T)
 var Derived = (function (_super) {
     __extends(Derived, _super);
@@ -31,4 +31,4 @@ var Derived = (function (_super) {
         _super.apply(this, arguments);
     }
     return Derived;
-})(Base);
+}(Base));

@@ -22,5 +22,5 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());
 exports.default = A;

@@ -7,7 +7,7 @@ class C extends A {
 }
 function foo(name: 'hi'): B;
 function foo(name: 'bye'): C;
-function foo(name: string): A; // error
+function foo(name: string): A;
 function foo(name: any): Z {
     return null;
 }
@@ -23,7 +23,7 @@ var Z = (function () {
     function Z() {
     }
     return Z;
-})();
+}());
 var A = (function (_super) {
     __extends(A, _super);
     function A() {
@@ -31,14 +31,14 @@ var A = (function (_super) {
         this.x = 1;
     }
     return A;
-})(Z);
+}(Z));
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -46,7 +46,7 @@ var C = (function (_super) {
     }
     C.prototype.foo = function () { };
     return C;
-})(A);
+}(A));
 function foo(name) {
     return null;
 }

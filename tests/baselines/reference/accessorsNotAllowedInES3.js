@@ -16,5 +16,5 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var y = { get foo() { return 3; } };

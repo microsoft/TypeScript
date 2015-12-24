@@ -61,14 +61,14 @@ var Animal = (function () {
     function Animal() {
     }
     return Animal;
-})();
+}());
 var Giraffe = (function (_super) {
     __extends(Giraffe, _super);
     function Giraffe() {
         _super.apply(this, arguments);
     }
     return Giraffe;
-})(Animal);
+}(Animal));
 function f2() {
     var a = new Animal();
     var g = new Giraffe();

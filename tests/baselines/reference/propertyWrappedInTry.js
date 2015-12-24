@@ -24,7 +24,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 try {
     bar = someInitThatMightFail();
 }

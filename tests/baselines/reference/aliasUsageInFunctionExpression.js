@@ -21,13 +21,15 @@ var f = (x: IHasVisualizationModel) => x;
 f = (x) => moduleA;
 
 //// [aliasUsageInFunctionExpression_backbone.js]
+"use strict";
 var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 exports.Model = Model;
 //// [aliasUsageInFunctionExpression_moduleA.js]
+"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -40,9 +42,10 @@ var VisualizationModel = (function (_super) {
         _super.apply(this, arguments);
     }
     return VisualizationModel;
-})(Backbone.Model);
+}(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInFunctionExpression_main.js]
+"use strict";
 var moduleA = require("./aliasUsageInFunctionExpression_moduleA");
 var f = function (x) { return x; };
 f = function (x) { return moduleA; };

@@ -32,7 +32,7 @@ var SubText = (function (_super) {
         _super.call(this);
     }
     return SubText;
-})(TextBase);
+}(TextBase));
 var TextBase = (function () {
     function TextBase() {
     }
@@ -40,4 +40,4 @@ var TextBase = (function () {
         return new SubText(this, span);
     };
     return TextBase;
-})();
+}());

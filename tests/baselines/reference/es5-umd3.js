@@ -23,6 +23,7 @@ export default class A
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
+    "use strict";
     var A = (function () {
         function A() {
         }
@@ -30,7 +31,7 @@ export default class A
             return 42;
         };
         return A;
-    })();
+    }());
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = A;
 });

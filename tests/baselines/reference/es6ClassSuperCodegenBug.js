@@ -1,4 +1,5 @@
 //// [es6ClassSuperCodegenBug.ts]
+
 class A {
 	constructor(str1:string, str2:string) {}
 }
@@ -23,7 +24,7 @@ var A = (function () {
     function A(str1, str2) {
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -35,4 +36,4 @@ var B = (function (_super) {
         }
     }
     return B;
-})(A);
+}(A));

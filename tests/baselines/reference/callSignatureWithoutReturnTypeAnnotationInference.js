@@ -1,4 +1,5 @@
 //// [callSignatureWithoutReturnTypeAnnotationInference.ts]
+
 // Call signatures without a return type should infer one from the function body (if present)
 
 // Simple types
@@ -177,7 +178,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 function foo10(x) {
     var c;
     return c;
@@ -190,7 +191,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 function foo11() {
@@ -215,7 +216,7 @@ var c1 = (function () {
     function c1(x) {
     }
     return c1;
-})();
+}());
 var c1;
 (function (c1) {
     c1.x = 1;

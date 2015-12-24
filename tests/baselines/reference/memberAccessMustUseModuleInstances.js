@@ -16,6 +16,7 @@ WinJS.Promise.timeout(10);
 
 //// [memberAccessMustUseModuleInstances_0.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var Promise = (function () {
         function Promise() {
         }
@@ -23,10 +24,11 @@ define(["require", "exports"], function (require, exports) {
             return null;
         };
         return Promise;
-    })();
+    }());
     exports.Promise = Promise;
 });
 //// [memberAccessMustUseModuleInstances_1.js]
 define(["require", "exports", 'memberAccessMustUseModuleInstances_0'], function (require, exports, WinJS) {
+    "use strict";
     WinJS.Promise.timeout(10);
 });
