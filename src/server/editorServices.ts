@@ -16,7 +16,7 @@ namespace ts.server {
     }
 
     const lineCollectionCapacity = 4;
-    var globalCachePath = ts.combinePaths(process.env.HOME, ".typingCache");
+    const globalCachePath = ts.combinePaths(process.env.HOME, ".typingCache");
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
