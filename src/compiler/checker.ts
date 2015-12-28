@@ -5568,29 +5568,25 @@ namespace ts {
                 const saveErrorInfo = errorInfo;
 
                 outer: for (const t of targetSignatures) {
-                    if (!t.hasStringLiterals || target.flags & TypeFlags.FromSignature) {
-                        // Only elaborate errors from the first failure
-                        let shouldElaborateErrors = reportErrors;
-                        for (const s of sourceSignatures) {
-                            if (!s.hasStringLiterals || source.flags & TypeFlags.FromSignature) {
-                                const related = signatureRelatedTo(s, t, shouldElaborateErrors);
-                                if (related) {
-                                    result &= related;
-                                    errorInfo = saveErrorInfo;
-                                    continue outer;
-                                }
-                                shouldElaborateErrors = false;
-                            }
+                    // Only elaborate errors from the first failure
+                    let shouldElaborateErrors = reportErrors;
+                    for (const s of sourceSignatures) {
+                        const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                        if (related) {
+                            result &= related;
+                            errorInfo = saveErrorInfo;
+                            continue outer;
                         }
-                        // don't elaborate the primitive apparent types (like Number)
-                        // because the actual primitives will have already been reported.
-                        if (shouldElaborateErrors && !isPrimitiveApparentType(source)) {
-                            reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
-                                typeToString(source),
-                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
-                        }
-                        return Ternary.False;
+                        shouldElaborateErrors = false;
                     }
+                    // don't elaborate the primitive apparent types (like Number)
+                    // because the actual primitives will have already been reported.
+                    if (shouldElaborateErrors && !isPrimitiveApparentType(source)) {
+                        reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
+                            typeToString(source),
+                            signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                    }
+                    return Ternary.False;
                 }
                 return result;
             }
