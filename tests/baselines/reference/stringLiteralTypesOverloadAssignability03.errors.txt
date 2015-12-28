@@ -1,0 +1,25 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability03.ts(2,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability03.ts(7,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability03.ts (2 errors) ====
+    
+    function f(x: "foo"): number;
+             ~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function f(x: string): number {
+        return 0;
+    }
+    
+    function g(x: "foo"): number;
+             ~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function g(x: string): number {
+        return 0;
+    }
+    
+    let a = f;
+    let b = g;
+    
+    a = b;
+    b = a;
