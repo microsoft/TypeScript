@@ -307,15 +307,21 @@ namespace ts {
             function createWatchedFileSet() {
                 const dirWatchers = createFileMap<DirWatcher>();
                 const recursiveDirWatchers = createFileMap<DirWatcher>();
-                const fileWatcherCallbacks = createFileMap<FileWatcherCallback>();
-                const dirWatcherCallbacks = createFileMap<DirWatcherCallback>();
+                // One file can have multiple watchers
+                const fileWatcherCallbacks = createFileMap<FileWatcherCallback[]>();
+                const dirWatcherCallbacks = createFileMap<DirWatcherCallback[]>();
 
                 const currentDirectory = process.cwd();
                 return { addFile, removeFile, addDir };
 
                 function addDir(dirName: string, callback: DirWatcherCallback, recursive?: boolean) {
                     const dirPath = toPath(dirName, currentDirectory, getCanonicalPath);
-                    dirWatcherCallbacks.set(dirPath, callback);
+                    if (!dirWatcherCallbacks.contains(dirPath)) {
+                        dirWatcherCallbacks.set(dirPath, [callback]);
+                    }
+                    else {
+                        dirWatcherCallbacks.get(dirPath).push(callback);
+                    }
                     const { watcher, isRecursive } = addDirWatcher(dirPath, recursive);
                     return {
                         close: () => reduceDirWatcherRefCount(watcher, dirPath, isRecursive)
@@ -341,7 +347,8 @@ namespace ts {
 
                     // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    if (isNode4OrLater() && recursive === true) {
+                    if (isNode4OrLater() && recursive === true &&
+                        (process.platform === "win32" || process.platform === "darwin")) {
                         if (recursiveDirWatchers.contains(dirPath)) {
                             const watcher = recursiveDirWatchers.get(dirPath);
                             watcher.referenceCount += 1;
@@ -357,12 +364,13 @@ namespace ts {
                             return { watcher, isRecursive: false };
                         }
                         watchers = dirWatchers;
+                        options.recursive = false;
                     }
 
                     const watcher: DirWatcher = _fs.watch(dirPath, options, (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath));
                     watcher.referenceCount = 1;
                     watchers.set(dirPath, watcher);
-                    return { watcher, isRecursive: false };
+                    return { watcher, isRecursive: options.recursive };
                 }
 
                 function findDirWatcherForFile(filePath: Path): { watcher: DirWatcher, watcherPath: Path, isRecursive: boolean } {
@@ -389,24 +397,37 @@ namespace ts {
 
                 function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
                     const filePath = toPath(fileName, currentDirectory, getCanonicalPath);
-                    const { watcher } = findDirWatcherForFile(filePath);
-                    if (!watcher) {
-                        addDirWatcher(getDirectoryPath(filePath));
+
+                    if (fileWatcherCallbacks.contains(filePath)) {
+                        fileWatcherCallbacks.get(filePath).push(callback);
                     }
                     else {
-                        watcher.referenceCount += 1;
+                        const { watcher } = findDirWatcherForFile(filePath);
+                        if (!watcher) {
+                            addDirWatcher(getDirectoryPath(filePath));
+                        }
+                        else {
+                            watcher.referenceCount += 1;
+                        }
+                        fileWatcherCallbacks.set(filePath, [callback]);
                     }
-                    fileWatcherCallbacks.set(filePath, callback);
                     return { fileName, callback };
                 }
 
                 function removeFile(file: WatchedFile) {
                     const filePath = toPath(file.fileName, currentDirectory, getCanonicalPath);
-                    fileWatcherCallbacks.remove(filePath);
-
-                    const { watcher, watcherPath, isRecursive } = findDirWatcherForFile(filePath);
-                    if (watcher) {
-                        reduceDirWatcherRefCount(watcher, watcherPath, isRecursive);
+                    if (fileWatcherCallbacks.contains(filePath)) {
+                        const newCallbacks = copyListRemovingItem(file.callback, fileWatcherCallbacks.get(filePath));
+                        if (newCallbacks.length === 0) {
+                            fileWatcherCallbacks.remove(filePath);
+                            const { watcher, watcherPath, isRecursive } = findDirWatcherForFile(filePath);
+                            if (watcher) {
+                                reduceDirWatcherRefCount(watcher, watcherPath, isRecursive);
+                            }
+                        }
+                        else {
+                            fileWatcherCallbacks.set(filePath, newCallbacks);
+                        }
                     }
                 }
 
@@ -419,12 +440,14 @@ namespace ts {
                     // Directory callbacks are not set for file content changes, they are more often used for
                     // adding/removing/renaming files, which corresponds to the "rename" event
                     if (eventName === "rename" && dirWatcherCallbacks.contains(baseDirPath)) {
-                        const dirCallback = dirWatcherCallbacks.get(baseDirPath);
-                        dirCallback(filePath);
+                        for (const dirCallback of dirWatcherCallbacks.get(baseDirPath)) {
+                            dirCallback(filePath);
+                        }
                     }
                     if (fileWatcherCallbacks.contains(filePath)) {
-                        const fileCallback = fileWatcherCallbacks.get(filePath);
-                        fileCallback(filePath);
+                        for (const fileCallback of fileWatcherCallbacks.get(filePath)) {
+                            fileCallback(filePath);
+                        }
                     }
                 }
             }
