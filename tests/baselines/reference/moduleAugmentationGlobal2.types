@@ -9,7 +9,9 @@ export class A {};
 import {A} from "./f1";
 >A : typeof A
 
-declare module "/" {
+declare global {
+>global : typeof 
+
     interface Array<T> {
 >Array : T[]
 >T : T

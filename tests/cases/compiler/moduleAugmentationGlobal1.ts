@@ -8,7 +8,7 @@ export class A {x: number;}
 import {A} from "./f1";
 
 // change the shape of Array<T>
-declare module "/" {
+declare global {
     interface Array<T> {
         getA(): A;
     }

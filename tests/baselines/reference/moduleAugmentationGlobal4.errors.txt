@@ -4,7 +4,7 @@ tests/cases/compiler/f2.ts(3,15): error TS2662: Module augmentation cannot intro
 
 ==== tests/cases/compiler/f1.ts (1 errors) ====
     
-    declare module "/" {
+    declare global {
         interface Something {x}
                   ~~~~~~~~~
 !!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
@@ -12,7 +12,7 @@ tests/cases/compiler/f2.ts(3,15): error TS2662: Module augmentation cannot intro
     export {};
 ==== tests/cases/compiler/f2.ts (1 errors) ====
     
-    declare module "/" {
+    declare global {
         interface Something {y}
                   ~~~~~~~~~
 !!! error TS2662: Module augmentation cannot introduce new names in the top level scope.

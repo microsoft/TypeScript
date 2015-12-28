@@ -8,7 +8,7 @@ export class A {};
 // change the shape of Array<T>
 import {A} from "./f1";
 
-declare module "/" {
+declare global {
     interface Array<T> {
         getCountAsString(): string;
     }

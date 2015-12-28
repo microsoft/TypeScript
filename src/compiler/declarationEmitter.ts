@@ -731,7 +731,7 @@ namespace ts {
         }
 
         function emitExternalModuleSpecifier(parent: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration) {
-            // emitExternalModuleSpecifier is usualyl called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
+            // emitExternalModuleSpecifier is usually called when we emit something in the.d.ts file that will make it an external module (i.e. import/export declarations).
             // the only case when it is not true is when we call it to emit correct name for module augmentation - d.ts files with just module augmentations are not considered 
             // external modules since they are indistingushable from script files with ambient modules. To fix this in such d.ts files we'll emit top level 'export {}'
             // so compiler will treat them as external modules.
@@ -802,17 +802,22 @@ namespace ts {
         function writeModuleDeclaration(node: ModuleDeclaration) {
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
-            if (node.flags & NodeFlags.Namespace) {
-                write("namespace ");
+            if (isGlobalScopeAugmentation(node)) {
+                write("global ");
             }
             else {
-                write("module ");
-            }
-            if (isExternalModuleAugmentation(node)) {
-                emitExternalModuleSpecifier(node);
-            }
-            else {
-                writeTextOfNode(currentText, node.name);
+                if (node.flags & NodeFlags.Namespace) {
+                    write("namespace ");
+                }
+                else {
+                    write("module ");
+                }
+                if (isExternalModuleAugmentation(node)) {
+                    emitExternalModuleSpecifier(node);
+                }
+                else {
+                    writeTextOfNode(currentText, node.name);
+                }
             }
             while (node.body.kind !== SyntaxKind.ModuleBlock) {
                 node = <ModuleDeclaration>node.body;

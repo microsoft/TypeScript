@@ -2,13 +2,13 @@
 
 //// [f1.ts]
 
-declare module "/" {
+declare global {
     interface Something {x}
 }
 export {};
 //// [f2.ts]
 
-declare module "/" {
+declare global {
     interface Something {y}
 }
 export {};
@@ -29,7 +29,7 @@ require("./f2");
 
 
 //// [f1.d.ts]
-declare module "/" {
+declare global  {
     interface Something {
         x: any;
     }
@@ -37,7 +37,7 @@ declare module "/" {
 export {  };
 export {};
 //// [f2.d.ts]
-declare module "/" {
+declare global  {
     interface Something {
         y: any;
     }

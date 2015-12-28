@@ -192,8 +192,8 @@ namespace ts {
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): string {
             if (node.name) {
-                if (node.kind === SyntaxKind.ModuleDeclaration && node.name.kind === SyntaxKind.StringLiteral) {
-                    return `"${(<LiteralExpression>node.name).text}"`;
+                if (isAmbientModule(node)) {
+                    return isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${(<LiteralExpression>node.name).text}"`;
                 }
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = (<ComputedPropertyName>node.name).expression;
@@ -849,7 +849,7 @@ namespace ts {
 
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
-            if (node.name.kind === SyntaxKind.StringLiteral) {
+            if (isAmbientModule(node)) {
                 if (node.flags & NodeFlags.Export) {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }

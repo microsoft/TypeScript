@@ -1791,6 +1791,14 @@
         "category": "Error",
         "code": 2665
     },
+    "Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.": {
+        "category": "Error",
+        "code": 2666
+    },
+    "Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.": {
+        "category": "Error",
+        "code": 2667
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000

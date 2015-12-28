@@ -8,7 +8,7 @@ export class A {};
 // change the shape of Array<T>
 import {A} from "./f1";
 
-declare module "/" {
+declare global {
     interface Array<T> {
         getCountAsString(): string;
     }
@@ -43,7 +43,7 @@ var y = x.getCountAsString().toLowerCase();
 export declare class A {
 }
 //// [f2.d.ts]
-declare module "/" {
+declare global  {
     interface Array<T> {
         getCountAsString(): string;
     }

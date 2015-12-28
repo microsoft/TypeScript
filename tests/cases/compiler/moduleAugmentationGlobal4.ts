@@ -2,13 +2,13 @@
 // @declaration: true
 
 // @filename: f1.ts
-declare module "/" {
+declare global {
     interface Something {x}
 }
 export {};
 // @filename: f2.ts
 
-declare module "/" {
+declare global {
     interface Something {y}
 }
 export {};

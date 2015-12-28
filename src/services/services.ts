@@ -6229,7 +6229,7 @@ namespace ts {
                     return SemanticMeaning.Value | SemanticMeaning.Type;
 
                 case SyntaxKind.ModuleDeclaration:
-                    if ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral) {
+                    if (isAmbientModule(<ModuleDeclaration>node)) {
                         return SemanticMeaning.Namespace | SemanticMeaning.Value;
                     }
                     else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
