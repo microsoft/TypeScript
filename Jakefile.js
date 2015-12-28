@@ -921,11 +921,14 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
+var servicesLintTargets = ["services.ts", "outliningElementsCollector.ts"].map(function (s) {
+    return path.join(servicesDirectory, s);
+});
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
     .concat(scriptSources)
-    .concat([path.join(servicesDirectory, "services.ts")]);
+    .concat(servicesLintTargets);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

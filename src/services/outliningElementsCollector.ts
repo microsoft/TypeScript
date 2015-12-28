@@ -1,13 +1,13 @@
 /* @internal */
 namespace ts {
-    export module OutliningElementsCollector {
+    export namespace OutliningElementsCollector {
         export function collectElements(sourceFile: SourceFile): OutliningSpan[] {
-            let elements: OutliningSpan[] = [];
-            let collapseText = "...";
+            const elements: OutliningSpan[] = [];
+            const collapseText = "...";
 
             function addOutliningSpan(hintSpanNode: Node, startElement: Node, endElement: Node, autoCollapse: boolean) {
                 if (hintSpanNode && startElement && endElement) {
-                    let span: OutliningSpan = {
+                    const span: OutliningSpan = {
                         textSpan: createTextSpanFromBounds(startElement.pos, endElement.end),
                         hintSpan: createTextSpanFromBounds(hintSpanNode.getStart(), hintSpanNode.end),
                         bannerText: collapseText,
@@ -19,7 +19,7 @@ namespace ts {
 
             function addOutliningSpanComments(commentSpan: CommentRange, autoCollapse: boolean) {
                 if (commentSpan) {
-                    let span: OutliningSpan = {
+                    const span: OutliningSpan = {
                         textSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
                         hintSpan: createTextSpanFromBounds(commentSpan.pos, commentSpan.end),
                         bannerText: collapseText,
@@ -30,7 +30,7 @@ namespace ts {
             }
 
             function addOutliningForLeadingCommentsForNode(n: Node) {
-                let comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
+                const comments = ts.getLeadingCommentRangesOfNode(n, sourceFile);
 
                 if (comments) {
                     let firstSingleLineCommentStart = -1;
@@ -38,7 +38,7 @@ namespace ts {
                     let isFirstSingleLineComment = true;
                     let singleLineCommentCount = 0;
 
-                    for (let currentComment of comments) {
+                    for (const currentComment of comments) {
 
                         // For single line comments, combine consecutive ones (2 or more) into
                         // a single span from the start of the first till the end of the last
@@ -64,14 +64,15 @@ namespace ts {
                 }
             }
 
-            function combineAndAddMultipleSingleLineComments(count: number, start: number, end: number) {                
+            function combineAndAddMultipleSingleLineComments(count: number, start: number, end: number) {
+
                 // Only outline spans of two or more consecutive single line comments
                 if (count > 1) {
-                    let multipleSingleLineComments = {
+                    const multipleSingleLineComments = {
                         pos: start,
                         end: end,
                         kind: SyntaxKind.SingleLineCommentTrivia
-                    }
+                    };
 
                     addOutliningSpanComments(multipleSingleLineComments, /*autoCollapse*/ false);
                 }
@@ -82,7 +83,7 @@ namespace ts {
             }
 
             let depth = 0;
-            let maxDepth = 20;
+            const maxDepth = 20;
             function walk(n: Node): void {
                 if (depth > maxDepth) {
                     return;
@@ -95,9 +96,9 @@ namespace ts {
                 switch (n.kind) {
                     case SyntaxKind.Block:
                         if (!isFunctionBlock(n)) {
-                            let parent = n.parent;
-                            let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                            let closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                            const parent = n.parent;
+                            const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                            const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
 
                             // Check if the block is standalone, or 'attached' to some parent statement.
                             // If the latter, we want to collaps the block, but consider its hint span
@@ -117,13 +118,13 @@ namespace ts {
 
                             if (parent.kind === SyntaxKind.TryStatement) {
                                 // Could be the try-block, or the finally-block.
-                                let tryStatement = <TryStatement>parent;
+                                const tryStatement = <TryStatement>parent;
                                 if (tryStatement.tryBlock === n) {
                                     addOutliningSpan(parent, openBrace, closeBrace, autoCollapse(n));
                                     break;
                                 }
                                 else if (tryStatement.finallyBlock === n) {
-                                    let finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+                                    const finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
                                     if (finallyKeyword) {
                                         addOutliningSpan(finallyKeyword, openBrace, closeBrace, autoCollapse(n));
                                         break;
@@ -135,7 +136,7 @@ namespace ts {
 
                             // Block was a standalone block.  In this case we want to only collapse
                             // the span of the block, independent of any parent span.
-                            let span = createTextSpanFromBounds(n.getStart(), n.end);
+                            const span = createTextSpanFromBounds(n.getStart(), n.end);
                             elements.push({
                                 textSpan: span,
                                 hintSpan: span,
@@ -147,8 +148,8 @@ namespace ts {
                     // Fallthrough.
 
                     case SyntaxKind.ModuleBlock: {
-                        let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                        let closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                        const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                        const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutliningSpan(n.parent, openBrace, closeBrace, autoCollapse(n));
                         break;
                     }
@@ -157,14 +158,14 @@ namespace ts {
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ObjectLiteralExpression:
                     case SyntaxKind.CaseBlock: {
-                        let openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
-                        let closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
+                        const openBrace = findChildOfKind(n, SyntaxKind.OpenBraceToken, sourceFile);
+                        const closeBrace = findChildOfKind(n, SyntaxKind.CloseBraceToken, sourceFile);
                         addOutliningSpan(n, openBrace, closeBrace, autoCollapse(n));
                         break;
                     }
                     case SyntaxKind.ArrayLiteralExpression:
-                        let openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
-                        let closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
+                        const openBracket = findChildOfKind(n, SyntaxKind.OpenBracketToken, sourceFile);
+                        const closeBracket = findChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
                         addOutliningSpan(n, openBracket, closeBracket, autoCollapse(n));
                         break;
                 }
