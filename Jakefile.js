@@ -925,6 +925,7 @@ var servicesLintTargets = [
     "services.ts",
     "outliningElementsCollector.ts",
     "navigateTo.ts",
+    "patternMatcher.ts",
 ].map(function (s) {
     return path.join(servicesDirectory, s);
 });
