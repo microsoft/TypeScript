@@ -1,9 +1,8 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts(8,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts(16,1): error TS2322: Type '(x: "foo") => number' is not assignable to type '{ (x: "foo"): number; (x: string): number; }'.
   Type '(x: "foo") => number' provides no match for the signature '(x: string): number'
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts (2 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts (1 errors) ====
     
     function f(x: "foo"): number;
     function f(x: string): number;
@@ -12,8 +11,6 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesOverloadAssignabil
     }
     
     function g(x: "foo"): number;
-             ~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
     function g(x: string): number {
         return 0;
     }
