@@ -921,7 +921,11 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var servicesLintTargets = ["services.ts", "outliningElementsCollector.ts"].map(function (s) {
+var servicesLintTargets = [
+    "services.ts",
+    "outliningElementsCollector.ts",
+    "navigateTo.ts",
+].map(function (s) {
     return path.join(servicesDirectory, s);
 });
 var lintTargets = compilerSources
