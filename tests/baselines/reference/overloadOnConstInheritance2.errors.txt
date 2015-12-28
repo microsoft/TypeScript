@@ -1,7 +1,8 @@
 tests/cases/compiler/overloadOnConstInheritance2.ts(5,11): error TS2430: Interface 'Deriver' incorrectly extends interface 'Base'.
   Types of property 'addEventListener' are incompatible.
     Type '(x: "bar") => string' is not assignable to type '{ (x: string): any; (x: "foo"): string; }'.
-      Type '(x: "bar") => string' provides no match for the signature '(x: string): any'
+      Types of parameters 'x' and 'x' are incompatible.
+        Type '"bar"' is not assignable to type '"foo"'.
 
 
 ==== tests/cases/compiler/overloadOnConstInheritance2.ts (1 errors) ====
@@ -14,7 +15,8 @@ tests/cases/compiler/overloadOnConstInheritance2.ts(5,11): error TS2430: Interfa
 !!! error TS2430: Interface 'Deriver' incorrectly extends interface 'Base'.
 !!! error TS2430:   Types of property 'addEventListener' are incompatible.
 !!! error TS2430:     Type '(x: "bar") => string' is not assignable to type '{ (x: string): any; (x: "foo"): string; }'.
-!!! error TS2430:       Type '(x: "bar") => string' provides no match for the signature '(x: string): any'
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type '"bar"' is not assignable to type '"foo"'.
         addEventListener(x: 'bar'): string; // shouldn't need to redeclare the string overload
     }
     
