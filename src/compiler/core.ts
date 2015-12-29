@@ -770,7 +770,7 @@ namespace ts {
     const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions, configFileName?: string): string[] {
-        if (configFileName && fileExtensionIs(configFileName, ".jsconfig")) {
+        if (configFileName && getBaseFileName(configFileName) === "jsconfig.json") {
             return allSupportedExtensions;
         }
         return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;

@@ -539,9 +539,9 @@ namespace ts {
         }
 
         function getTypingOptions(): TypingOptions {
-            const options: TypingOptions = { enableAutoDiscovery: false };
             const jsonTypingOptions = json["typingOptions"];
             if (jsonTypingOptions) {
+                const options: TypingOptions = {};
                 for (const id in jsonTypingOptions) {
                     if (id === "enableAutoDiscovery") {
                         if (typeof jsonTypingOptions[id] === "boolean") {
@@ -562,8 +562,9 @@ namespace ts {
                         errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
                     }
                 }
+                return options;
             }
-            return options;
+            return undefined;
         }
     }
 
