@@ -24,14 +24,14 @@ namespace ts.JsTyping {
         if (_host.fileExists(jsonPath)) {
             try {
                 // Strip out single-line comments
-                let contents = _host.readFile(jsonPath).replace(/^\/\/(.*)$/gm, "");
+                const contents = _host.readFile(jsonPath).replace(/^\/\/(.*)$/gm, "");
                 return JSON.parse(contents);
             }
             catch (e) { }
         }
         return undefined;
     }
-    
+
     /**
      * @param cachePath is the path to the cache location, which contains a tsd.json file and a typings folder
      * @param fileNames are the file names that belongs to the same project
@@ -53,7 +53,6 @@ namespace ts.JsTyping {
         // Clear inferred typings map
         inferredTypings = {};
 
-        // Normalize everything
         globalCachePath = ts.normalizePath(globalCachePath);
         cachePath = cachePath ? ts.normalizePath(cachePath) : globalCachePath;
         fileNames = fileNames.map(ts.normalizePath).filter(f => ts.getBaseFileName(f) !== "lib.d.ts");

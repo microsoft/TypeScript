@@ -539,10 +539,10 @@ namespace ts {
         }
 
         function getTypingOptions(): TypingOptions {
-            let options: TypingOptions = { enableAutoDiscovery: false };
-            let jsonTypingOptions = json["typingOptions"];
+            const options: TypingOptions = { enableAutoDiscovery: false };
+            const jsonTypingOptions = json["typingOptions"];
             if (jsonTypingOptions) {
-                for (let id in jsonTypingOptions) {
+                for (const id in jsonTypingOptions) {
                     if (id === "enableAutoDiscovery") {
                         if (typeof jsonTypingOptions[id] === "boolean") {
                             options.enableAutoDiscovery = jsonTypingOptions[id];

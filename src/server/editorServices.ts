@@ -1049,20 +1049,22 @@ namespace ts.server {
             return undefined;
         }
 
-        acquireTypingForJs(path: string, project: Project) {
-            let cachePath = project.isConfiguredProject() 
+        acquireTypingForJs(fileName: string, project: Project) {
+            if (!project) { return; }
+
+            const cachePath = project.isConfiguredProject()
                 ? ts.getDirectoryPath(project.projectFilename)
                 : globalCachePath;
-                
-            let typingOptions = project.projectOptions ? project.projectOptions.typingOptions : undefined;
-            let compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
 
-            let { cachedTypingPaths, newTypingNames, filesToWatch } = ts.JsTyping.discoverTypings(
-                sys, 
-                project.getFileNames(), 
-                globalCachePath, 
+            const typingOptions = project.projectOptions ? project.projectOptions.typingOptions : undefined;
+            const compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
+
+            const { cachedTypingPaths, newTypingNames } = ts.JsTyping.discoverTypings(
+                sys,
+                project.getFileNames(),
+                globalCachePath,
                 cachePath,
-                typingOptions, 
+                typingOptions,
                 compilerOptions
             );
 
@@ -1074,13 +1076,12 @@ namespace ts.server {
             if (!sys.directoryExists(cachePath)) {
                 sys.createDirectory(cachePath);
             }
-            let tsd = require("tsd");
-            let tsdJsonPath = ts.combinePaths(cachePath, 'tsd.json');
-            let typingPath = ts.combinePaths(cachePath, 'typings');
-            let api = tsd.getAPI(tsdJsonPath);
-            let cachedInstalledPaths: Map<string>;
+            const tsd = require("tsd");
+            const tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
+            const typingsPath = ts.combinePaths(cachePath, "typings");
+            const api = tsd.getAPI(tsdJsonPath);
 
-            let options = new tsd.Options();
+            const options = new tsd.Options();
             options.resolveDependencies = true;
             options.overwriteFiles = true;
             options.saveToConfig = true;
@@ -1091,11 +1092,11 @@ namespace ts.server {
 
             this.log("New typings to download: " + newTypingNames);
             if (newTypingNames && newTypingNames.length > 0) {
-                let query = new tsd.Query();
-                for(let newTypingName of newTypingNames) {
+                const query = new tsd.Query();
+                for (const newTypingName of newTypingNames) {
                     query.addNamePattern(newTypingName);
                 }
-                
+
                 let promise: PromiseLike<void>;
                 if (!sys.fileExists(tsdJsonPath)) {
                     promise = api.initConfig(/*overwrite*/true).then((paths: string[]) => api.readConfig());
@@ -1108,16 +1109,20 @@ namespace ts.server {
                     .then(() => api.select(query, options))
                     .then((selection: any) => api.install(selection, options))
                     .then((installResult: any) => {
-                        let keys = Object.keys(installResult.written.dict);
-                        keys.forEach(key => addTypingToProject(ts.combinePaths(typingPath, key), project));
+                        const keys = Object.keys(installResult.written.dict);
+                        keys.forEach(key => addTypingToProject(ts.combinePaths(typingsPath, key), project));
                         project.projectService.updateProjectStructure();
                     });
             }
 
             function addTypingToProject(fileName: string, project: Project) {
-                let script = project.projectService.openFile(fileName, false);
-                project.addRoot(script);
-                project.projectService.openFileRootsConfigured.push(script);
+                const script = project.projectService.openFile(fileName, /*openedByClient*/false);
+                if (script.defaultProject !== project) {
+                    project.addRoot(script);
+                }
+                if (project.projectService.openFileRootsConfigured.indexOf(script) < 0) {
+                    project.projectService.openFileRootsConfigured.push(script);
+                }
             }
         }
 

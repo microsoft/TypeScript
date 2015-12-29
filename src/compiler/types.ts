@@ -2427,7 +2427,7 @@ namespace ts {
 
         [option: string]: string | number | boolean;
     }
-    
+
     export interface TypingOptions {
         enableAutoDiscovery?: boolean;
         include?: string[];
