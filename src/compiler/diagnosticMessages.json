@@ -795,6 +795,10 @@
         "category": "Error",
         "code": 1248
     },
+    "A decorator can only decorate a method implementation, not an overload.": {
+        "category": "Error",
+        "code": 1249
+    }, 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -1691,7 +1695,7 @@
         "category": "Error",
         "code": 2528
     },
-    "JSX element attributes type '{0}' must be an object type.": {
+    "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
     },
@@ -1758,6 +1762,14 @@
     "Type '{0}' provides no match for the signature '{1}'": {
         "category": "Error",
         "code": 2658
+    },
+    "'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.": {
+        "category": "Error",
+        "code": 2659
+    },
+    "'super' can only be referenced in members of derived classes or object literal expressions.": {
+        "category": "Error",
+        "code": 2660
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
