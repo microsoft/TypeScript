@@ -7938,31 +7938,12 @@ namespace ts {
             return jsxElementType || anyType;
         }
 
-        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
-            if (lhs.kind !== rhs.kind) {
-                return false;
-            }
-
-            if (lhs.kind === SyntaxKind.Identifier) {
-                return (<Identifier>lhs).text === (<Identifier>rhs).text;
-            }
-
-            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
-                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
-        }
-
         function checkJsxElement(node: JsxElement) {
             // Check attributes
             checkJsxOpeningLikeElement(node.openingElement);
 
-            // Check that the closing tag matches
-            if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
-                error(node.closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNode(node.openingElement.tagName));
-            }
-            else {
-                // Perform resolution on the closing tag so that rename/go to definition/etc work
-                getJsxElementTagSymbol(node.closingElement);
-            }
+            // Perform resolution on the closing tag so that rename/go to definition/etc work
+            getJsxElementTagSymbol(node.closingElement);
 
             // Check children
             for (const child of node.children) {

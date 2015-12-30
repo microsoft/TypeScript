@@ -1,14 +1,20 @@
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,6): error TS17008: JSX element 'any' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,13): error TS2304: Cannot find name 'test'.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(7,17): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(9,6): error TS17008: JSX element 'any' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(11,6): error TS17008: JSX element 'foo' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(11,32): error TS1005: '}' expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(13,36): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,17): error TS17008: JSX element 'foo' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(15,45): error TS1005: '}' expected.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,2): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,8): error TS17008: JSX element 'foo' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(19,13): error TS17008: JSX element 'foo' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: ':' expected.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expected corresponding JSX closing tag for 'any'.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expected corresponding JSX closing tag for 'foo'.
+tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS1005: '</' expected.
 
 
-==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (8 errors) ====
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (14 errors) ====
     
     declare var createElement: any;
     
@@ -16,14 +22,20 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
     
     var x: any;
     x = <any> { test: <any></any> };
+         ~~~
+!!! error TS17008: JSX element 'any' has no corresponding closing tag.
                 ~~~~
 !!! error TS2304: Cannot find name 'test'.
                     ~
 !!! error TS1005: '}' expected.
     
     x = <any><any></any>;
+         ~~~
+!!! error TS17008: JSX element 'any' has no corresponding closing tag.
      
     x = <foo>hello {<foo>{}} </foo>;
+         ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
                                    ~
 !!! error TS1005: '}' expected.
     
@@ -32,18 +44,24 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(22,1): error TS17002: Expect
 !!! error TS1005: '}' expected.
     
     x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
+                    ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
                                                 ~
 !!! error TS1005: '}' expected.
     
     x = <foo>x</foo>, x = <foo/>;
     
     <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
+     ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+           ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
+                ~~~
+!!! error TS17008: JSX element 'foo' has no corresponding closing tag.
     
         
     
     
 !!! error TS1005: ':' expected.
     
-!!! error TS17002: Expected corresponding JSX closing tag for 'any'.
-    
-!!! error TS17002: Expected corresponding JSX closing tag for 'foo'.
+!!! error TS1005: '</' expected.
