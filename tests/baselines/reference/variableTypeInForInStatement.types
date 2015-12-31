@@ -1,0 +1,21 @@
+=== tests/cases/compiler/variableTypeInForInStatement.ts ===
+let x = {};
+>x : {}
+>{} : {}
+
+for (const c in x) {
+>c : string
+>x : {}
+    
+}
+
+let arr = [1];
+>arr : number[]
+>[1] : number[]
+>1 : number
+
+for (const c in arr) {
+>c : string
+>arr : number[]
+    
+}

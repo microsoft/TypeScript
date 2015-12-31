@@ -2510,9 +2510,9 @@ namespace ts {
 
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
-            // A variable declared in a for..in statement is always of type any
+            // A variable declared in a for..in statement is always of type string
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                return anyType;
+                return stringType;
             }
 
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -12691,8 +12691,11 @@ namespace ts {
                 }
             }
 
+            const isVariableInForInStatement = node.parent.parent.kind === SyntaxKind.ForInStatement;
             // For a binding pattern, check contained binding elements
-            if (isBindingPattern(node.name)) {
+            // NOTE: do not check them if this is a binding pattern in variable declaration of ForIn statement
+            // this situation is already illegal so no need to report misleading errors.
+            if (isBindingPattern(node.name) && !isVariableInForInStatement) {
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
@@ -12702,7 +12705,9 @@ namespace ts {
             }
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
-                if (node.initializer) {
+                // do not check initializer if this is variable in ForIn statement.
+                // this situation is already illegal so no need to report misleading errors.
+                if (node.initializer && !isVariableInForInStatement) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
@@ -12712,7 +12717,9 @@ namespace ts {
             const type = getTypeOfVariableOrParameterOrProperty(symbol);
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
-                if (node.initializer) {
+                // NOTE: do not check initializer if this is variable in ForIn statement.
+                // this situation is already illegal so no need to report misleading errors.
+                if (node.initializer && !isVariableInForInStatement) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }

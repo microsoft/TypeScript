@@ -139,23 +139,23 @@ do {
 >true : boolean
 
 for (let x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : any
+>x : string
 }
 
 for (const x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : any
+>x : string
 }
 
 for (const x of []) {

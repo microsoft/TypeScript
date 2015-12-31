@@ -55,7 +55,7 @@ function foo00(x) {
 >x : Symbol(x, Decl(capturedLetConstInLoop5_ES6.ts, 18, 12))
 >v : Symbol(v, Decl(capturedLetConstInLoop5_ES6.ts, 19, 11))
 
-        if (x == 1) {
+        if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop5_ES6.ts, 18, 12))
 
             return;
@@ -396,7 +396,7 @@ function foo00_c(x) {
 >x : Symbol(x, Decl(capturedLetConstInLoop5_ES6.ts, 157, 14))
 >v : Symbol(v, Decl(capturedLetConstInLoop5_ES6.ts, 158, 11))
 
-        if (x == 1) {
+        if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop5_ES6.ts, 157, 14))
 
             return;

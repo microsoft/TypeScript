@@ -1,3 +1,5 @@
+// @noImplicitAny: true
+
 var aNumber: number;
 for (aNumber in {}) { }
 
