@@ -23,4 +23,4 @@ var Foo = (function () {
     Foo.prototype.f3 = function () {
     };
     return Foo;
-})();
+}());

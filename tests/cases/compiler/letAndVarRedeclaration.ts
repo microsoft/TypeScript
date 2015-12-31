@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // @target: es6
 
 let e0

@@ -3,4 +3,4 @@
 // @target: es6
 
 // @filename: file1.ts
-export var x;
+export var x = 1;

@@ -27,7 +27,7 @@ var Base = (function () {
         return new this();
     };
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -35,6 +35,6 @@ var Derived = (function (_super) {
     }
     Derived.prototype.foo = function () { return 2; };
     return Derived;
-})(Base);
+}(Base));
 var d = Derived.create();
 d.foo();

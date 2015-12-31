@@ -51,7 +51,7 @@ true ? {} : 1;
 >1 : number
 
 true ? { a: 1 } : { a: 2, b: 'string' };
->true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
+>true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
 >true : boolean
 >{ a: 1 } : { a: number; }
 >a : number
@@ -70,8 +70,8 @@ var result2 = true ? {} : 1;
 >1 : number
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
->result3 : { a: number; }
->true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; }
+>result3 : { a: number; } | { a: number; b: string; }
+>true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
 >true : boolean
 >{ a: 1 } : { a: number; }
 >a : number
@@ -131,7 +131,7 @@ true ? 1 : {};
 >{} : {}
 
 true ? { a: 2, b: 'string' } : { a: 1 };
->true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >true : boolean
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
@@ -150,8 +150,8 @@ var result6 = true ? 1 : {};
 >{} : {}
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; }
->true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; }
+>result7 : { a: number; b: string; } | { a: number; }
+>true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
 >true : boolean
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
@@ -218,7 +218,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : string | number
+>true ? 1 : 'string' : number | string
 >true : boolean
 >1 : number
 >'string' : string

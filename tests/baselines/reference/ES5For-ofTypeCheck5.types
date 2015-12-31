@@ -3,6 +3,6 @@ var union: string | number[];
 >union : string | number[]
 
 for (var v of union) { }
->v : string | number
+>v : number | string
 >union : string | number[]
 

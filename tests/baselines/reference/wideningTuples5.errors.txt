@@ -1,0 +1,10 @@
+tests/cases/conformance/types/tuple/wideningTuples5.ts(1,6): error TS7005: Variable 'a' implicitly has an 'any' type.
+tests/cases/conformance/types/tuple/wideningTuples5.ts(1,9): error TS7005: Variable 'b' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/types/tuple/wideningTuples5.ts (2 errors) ====
+    var [a, b] = [undefined, null];
+         ~
+!!! error TS7005: Variable 'a' implicitly has an 'any' type.
+            ~
+!!! error TS7005: Variable 'b' implicitly has an 'any' type.

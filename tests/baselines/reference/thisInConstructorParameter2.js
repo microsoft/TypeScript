@@ -27,4 +27,4 @@ var P = (function () {
     };
     P.y = this;
     return P;
-})();
+}());

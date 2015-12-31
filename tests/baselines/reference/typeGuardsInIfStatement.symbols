@@ -1,9 +1,9 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardsInIfStatement.ts ===
-// In the true branch statement of an �if� statement, 
-// the type of a variable or parameter is narrowed by any type guard in the �if� condition when true, 
+// In the true branch statement of an 'if' statement, 
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when true, 
 // provided the true branch statement contains no assignments to the variable or parameter.
-// In the false branch statement of an �if� statement, 
-// the type of a variable or parameter is narrowed by any type guard in the �if� condition when false, 
+// In the false branch statement of an 'if' statement, 
+// the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false, 
 // provided the false branch statement contains no assignments to the variable or parameter
 function foo(x: number | string) {
 >foo : Symbol(foo, Decl(typeGuardsInIfStatement.ts, 0, 0))
@@ -13,9 +13,9 @@ function foo(x: number | string) {
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 6, 13))
 
         return x.length; // string
->x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 6, 13))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
     }
     else {
         return x++; // number
@@ -181,9 +181,9 @@ function foo9(x: number | string) {
         // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
         y = x.length; 
 >y : Symbol(y, Decl(typeGuardsInIfStatement.ts, 91, 7))
->x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 90, 14))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         return x === "hello"; // string
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 90, 14))
@@ -249,9 +249,9 @@ function foo11(x: number | string | boolean) {
             // change value of x
             x = 10 && x.toString() // number | boolean | string
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 114, 15))
->x.toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 114, 15))
->toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
             )
             : (
@@ -259,9 +259,9 @@ function foo11(x: number | string | boolean) {
             y = x && x.toString() // number | boolean | string
 >y : Symbol(y, Decl(typeGuardsInIfStatement.ts, 121, 11))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 114, 15))
->x.toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 114, 15))
->toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
             );
     }
@@ -276,9 +276,9 @@ function foo12(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 134, 15))
 
         return x.toString(); // string | number | boolean - x changed in else branch
->x.toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 134, 15))
->toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
     else {
         x = 10;
@@ -292,13 +292,13 @@ function foo12(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 134, 15))
 
             ? x.toString() // number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 134, 15))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 
             : x.toString(); // boolean | string
->x.toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 96, 26))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 134, 15))
->toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 96, 26))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
     }
 }

@@ -6,20 +6,23 @@ var a = 10;
 export default a;
 
 //// [es6ImportDefaultBindingMergeErrors_1.ts]
-import defaultBinding from "es6ImportDefaultBindingMergeErrors_0";
+import defaultBinding from "./es6ImportDefaultBindingMergeErrors_0";
 interface defaultBinding { // This is ok
 }
 var x = defaultBinding;
-import defaultBinding2 from "es6ImportDefaultBindingMergeErrors_0"; // Should be error
+import defaultBinding2 from "./es6ImportDefaultBindingMergeErrors_0"; // Should be error
 var defaultBinding2 = "hello world"; 
-import defaultBinding3 from "es6ImportDefaultBindingMergeErrors_0"; // Should be error
-import defaultBinding3 from "es6ImportDefaultBindingMergeErrors_0"; // SHould be error
+import defaultBinding3 from "./es6ImportDefaultBindingMergeErrors_0"; // Should be error
+import defaultBinding3 from "./es6ImportDefaultBindingMergeErrors_0"; // SHould be error
 
 
 //// [es6ImportDefaultBindingMergeErrors_0.js]
+"use strict";
 var a = 10;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [es6ImportDefaultBindingMergeErrors_1.js]
-var es6ImportDefaultBindingMergeErrors_0_1 = require("es6ImportDefaultBindingMergeErrors_0");
+"use strict";
+var es6ImportDefaultBindingMergeErrors_0_1 = require("./es6ImportDefaultBindingMergeErrors_0");
 var x = es6ImportDefaultBindingMergeErrors_0_1.default;
 var defaultBinding2 = "hello world";

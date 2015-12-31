@@ -1,8 +1,13 @@
 === tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts ===
 
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+>a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 46))
 >x11 : Symbol(x11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 5))
+>b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 52))
+>a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 57))
 >y11 : Symbol(y11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 18))
+>b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 69))
+>a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 74))
 >z11 : Symbol(z11, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 31))
 >a : Symbol(a, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 46))
 >b : Symbol(b, Decl(declarationEmitDestructuringObjectLiteralPattern2.ts, 1, 52))

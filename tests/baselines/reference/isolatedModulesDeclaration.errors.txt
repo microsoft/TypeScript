@@ -1,7 +1,7 @@
-error TS5044: Option 'declaration' cannot be specified with option 'isolatedModules'.
+error TS5053: Option 'declaration' cannot be specified with option 'isolatedModules'.
 
 
-!!! error TS5044: Option 'declaration' cannot be specified with option 'isolatedModules'.
-==== tests/cases/compiler/isolatedModulesDeclaration.ts (0 errors) ====
+!!! error TS5053: Option 'declaration' cannot be specified with option 'isolatedModules'.
+==== tests/cases/compiler/file1.ts (0 errors) ====
     
     export var x;

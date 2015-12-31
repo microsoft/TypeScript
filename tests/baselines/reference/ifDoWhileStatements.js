@@ -1,4 +1,5 @@
 //// [ifDoWhileStatements.ts]
+
 interface I {
     id: number;
 }
@@ -172,19 +173,19 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
         _super.apply(this, arguments);
     }
     return C2;
-})(C);
+}(C));
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 function F(x) { return 42; }
 function F2(x) { return x < 42; }
 var M;
@@ -193,7 +194,7 @@ var M;
         function A() {
         }
         return A;
-    })();
+    }());
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
@@ -204,7 +205,7 @@ var N;
         function A() {
         }
         return A;
-    })();
+    }());
     N.A = A;
     function F2(x) { return x.toString(); }
     N.F2 = F2;

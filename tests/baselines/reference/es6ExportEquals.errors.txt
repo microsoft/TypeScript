@@ -1,4 +1,4 @@
-tests/cases/compiler/es6ExportEquals.ts(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
+tests/cases/compiler/es6ExportEquals.ts(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.
 tests/cases/compiler/es6ExportEquals.ts(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/es6ExportEquals.ts(4,1): error TS2309: An export assignment
     
     export = f;
     ~~~~~~~~~~~
-!!! error TS1203: Export assignment cannot be used when targeting ECMAScript 6 or higher. Consider using 'export default' instead.
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.
     ~~~~~~~~~~~
 !!! error TS2309: An export assignment cannot be used in a module with other exported elements.
     

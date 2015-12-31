@@ -47,19 +47,19 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
         _super.apply(this, arguments);
     }
     return D1;
-})(C1);
+}(C1));
 var str;
 var num;
 var strOrNum;

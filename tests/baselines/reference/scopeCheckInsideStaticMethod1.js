@@ -20,4 +20,4 @@ var C = (function () {
         this.p = 1; // ERR
     };
     return C;
-})();
+}());

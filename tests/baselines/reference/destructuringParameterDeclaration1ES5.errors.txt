@@ -1,16 +1,8 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(32,4): error TS2345: Argument of type '[string, number, number]' is not assignable to parameter of type '[undefined, null, undefined]'.
-  Types of property '0' are incompatible.
-    Type 'string' is not assignable to type 'undefined'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(33,4): error TS2345: Argument of type '[[string], number, [[boolean, boolean]]]' is not assignable to parameter of type '[[undefined], undefined, [[undefined, undefined]]]'.
-  Types of property '0' are incompatible.
-    Type '[string]' is not assignable to type '[undefined]'.
-      Types of property '0' are incompatible.
-        Type 'string' is not assignable to type 'undefined'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(62,10): error TS2393: Duplicate function implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts(63,10): error TS2393: Duplicate function implementation.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts (4 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.ts (2 errors) ====
     // A parameter declaration may specify either an identifier or a binding pattern.
     // The identifiers specified in parameter declarations and binding patterns
     // in a parameter list must be unique within that parameter list.
@@ -43,17 +35,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration1ES5.
     b2("string", { x: 200, y: "string" });
     b2("string", { x: 200, y: true });
     b6(["string", 1, 2]);                    // Shouldn't be an error
-       ~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '[string, number, number]' is not assignable to parameter of type '[undefined, null, undefined]'.
-!!! error TS2345:   Types of property '0' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'undefined'.
     b7([["string"], 1, [[true, false]]]);    // Shouldn't be an error
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '[[string], number, [[boolean, boolean]]]' is not assignable to parameter of type '[[undefined], undefined, [[undefined, undefined]]]'.
-!!! error TS2345:   Types of property '0' are incompatible.
-!!! error TS2345:     Type '[string]' is not assignable to type '[undefined]'.
-!!! error TS2345:       Types of property '0' are incompatible.
-!!! error TS2345:         Type 'string' is not assignable to type 'undefined'.
     
     
     // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)

@@ -1,5 +1,5 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardsOnClassProperty.ts(14,70): error TS2339: Property 'join' does not exist on type 'string | string[]'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsOnClassProperty.ts(26,44): error TS2339: Property 'toLowerCase' does not exist on type 'string | number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsOnClassProperty.ts(26,44): error TS2339: Property 'toLowerCase' does not exist on type 'number | string'.
 
 
 ==== tests/cases/conformance/expressions/typeGuards/typeGuardsOnClassProperty.ts (2 errors) ====
@@ -32,6 +32,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsOnClassProperty.ts(26,4
     
     if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
                                                ~~~~~~~~~~~
-!!! error TS2339: Property 'toLowerCase' does not exist on type 'string | number'.
+!!! error TS2339: Property 'toLowerCase' does not exist on type 'number | string'.
     var prop1 = o.prop1;
     if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }

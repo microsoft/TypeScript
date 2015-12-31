@@ -163,8 +163,8 @@ xa[1].foo(1, 2, ...a, "abc");
 >xa : X[]
 >1 : number
 >foo : (x: number, y: number, ...z: string[]) => any
->...[1, 2, "abc"] : string | number
->[1, 2, "abc"] : (string | number)[]
+>...[1, 2, "abc"] : number | string
+>[1, 2, "abc"] : (number | string)[]
 >1 : number
 >2 : number
 >"abc" : string
@@ -180,7 +180,7 @@ class C {
         this.foo(x, y);
 >this.foo(x, y) : void
 >this.foo : (x: number, y: number, ...z: string[]) => void
->this : C
+>this : this
 >foo : (x: number, y: number, ...z: string[]) => void
 >x : number
 >y : number
@@ -188,7 +188,7 @@ class C {
         this.foo(x, y, ...z);
 >this.foo(x, y, ...z) : void
 >this.foo : (x: number, y: number, ...z: string[]) => void
->this : C
+>this : this
 >foo : (x: number, y: number, ...z: string[]) => void
 >x : number
 >y : number

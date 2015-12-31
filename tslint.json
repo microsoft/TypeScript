@@ -4,20 +4,44 @@
         "comment-format": [true,
             "check-space"
         ],
-        "indent": true,
-        "one-line": [true,
-            "check-open-brace"
+        "indent": [true,
+            "spaces"
         ],
-        "no-unreachable": true,
-        "no-use-before-declare": true,
+        "one-line": [true,
+            "check-open-brace",
+            "check-whitespace"
+        ],
         "no-var-keyword": true,
-        "quotemark": true,
+        "quotemark": [true,
+            "double"
+        ],
         "semicolon": true,
         "whitespace": [true,
             "check-branch",
             "check-operator",
             "check-separator",
-            "check-type"
-        ]
+            "check-type",
+            "check-module"
+        ],
+        "typedef-whitespace": [true, {
+            "call-signature": "nospace",
+            "index-signature": "nospace",
+            "parameter": "nospace",
+            "property-declaration": "nospace",
+            "variable-declaration": "nospace"
+        }],
+        "next-line": [true, 
+            "check-catch",
+            "check-else"
+        ],
+        "no-internal-module": true,
+        "no-trailing-whitespace": true,
+        "no-inferrable-types": true,
+        "no-null": true,
+        "no-unused-variable": true,
+        "boolean-trivia": true,
+        "type-operator-spacing": true,
+        "prefer-const": true,
+        "no-in-operator": true
   }
 }

@@ -27,7 +27,7 @@ var foo;
         function Provide() {
         }
         return Provide;
-    })();
+    }());
     foo.Provide = Provide;
     var bar;
     (function (bar) {
@@ -37,7 +37,7 @@ var foo;
                 function boo() {
                 }
                 return boo;
-            })();
+            }());
             baz.boo = boo;
         })(baz = bar.baz || (bar.baz = {}));
     })(bar = foo.bar || (foo.bar = {}));

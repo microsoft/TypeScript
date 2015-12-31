@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxReactEmit1.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 
@@ -47,6 +47,7 @@ var selfClosed5 = <div x={0} y='0' />;
 ><div x={0} y='0' /> : JSX.Element
 >div : any
 >x : any
+>0 : number
 >y : any
 
 var selfClosed6 = <div x={"1"} y='0' />;
@@ -54,6 +55,7 @@ var selfClosed6 = <div x={"1"} y='0' />;
 ><div x={"1"} y='0' /> : JSX.Element
 >div : any
 >x : any
+>"1" : string
 >y : any
 
 var selfClosed7 = <div x={p} y='p' b />;
@@ -117,8 +119,8 @@ class SomeClass {
 >rewrites1 : JSX.Element
 ><div>{() => this}</div> : JSX.Element
 >div : any
->() => this : () => SomeClass
->this : SomeClass
+>() => this : () => this
+>this : this
 >div : any
 
 		var rewrites2 = <div>{[p, ...p, p]}</div>;
@@ -145,8 +147,8 @@ class SomeClass {
 ><div a={() => this}></div> : JSX.Element
 >div : any
 >a : any
->() => this : () => SomeClass
->this : SomeClass
+>() => this : () => this
+>this : this
 >div : any
 
 		var rewrites5 = <div a={[p, ...p, p]}></div>;

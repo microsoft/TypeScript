@@ -1,8 +1,8 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
-import foo = require("vs/foo_0");
+import foo = require("./vs/foo_0");
 >foo : typeof foo
 
-import fum = require("vs/fum");
+import fum = require("./vs/fum");
 >fum : typeof fum
 
 var z = foo.x + fum.y;

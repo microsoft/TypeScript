@@ -7,16 +7,18 @@ export class Promise {
 
 //// [moduleInTypePosition1_1.ts]
 ///<reference path='moduleInTypePosition1_0.ts'/>
-import WinJS = require('moduleInTypePosition1_0');
+import WinJS = require('./moduleInTypePosition1_0');
 var x = (w1: WinJS) => { };
 
 
 //// [moduleInTypePosition1_0.js]
+"use strict";
 var Promise = (function () {
     function Promise() {
     }
     return Promise;
-})();
+}());
 exports.Promise = Promise;
 //// [moduleInTypePosition1_1.js]
+"use strict";
 var x = function (w1) { };

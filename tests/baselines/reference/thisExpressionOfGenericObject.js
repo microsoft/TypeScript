@@ -14,4 +14,4 @@ var MyClass1 = (function () {
         (function () { return _this; });
     }
     return MyClass1;
-})();
+}());

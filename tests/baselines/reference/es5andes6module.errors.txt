@@ -1,0 +1,19 @@
+error TS1204: Cannot compile modules into 'es2015' when targeting 'ES5' or lower.
+
+
+!!! error TS1204: Cannot compile modules into 'es2015' when targeting 'ES5' or lower.
+==== tests/cases/compiler/es5andes6module.ts (0 errors) ====
+    
+    export default class A
+    {
+        constructor ()
+        {
+    
+        }
+    
+        public B()
+        {
+            return 42;
+        }
+    }
+    

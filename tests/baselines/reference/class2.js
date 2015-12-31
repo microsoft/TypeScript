@@ -7,4 +7,4 @@ var foo = (function () {
     }
     foo.f = 3;
     return foo;
-})();
+}());

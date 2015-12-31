@@ -24,7 +24,7 @@
 ////var x4: I = [a, b, c];
 ////var /*4*/r4 = x4[1];
 
-////var /*5*/x5 = [a, b, c, d];
+////var /*5*/x5 = [a, b];
 ////var /*6*/r5 = x5[1];
 
 // the above code should have a couple errors that will need to be updated with appropriate new (non-error) code and quick info checks
@@ -43,7 +43,13 @@ goTo.marker('4');
 verify.quickInfoIs('var r4: C');
 
 goTo.marker('5');
-verify.quickInfoIs('var x5: C[]');
+verify.quickInfoIs('var x5: {\n\
+    name: string;\n\
+    age: number;\n\
+}[]');
 
 goTo.marker('6');
-verify.quickInfoIs('var r5: C');
+verify.quickInfoIs('var r5: {\n\
+    name: string;\n\
+    age: number;\n\
+}');

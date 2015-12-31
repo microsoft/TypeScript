@@ -6,8 +6,10 @@ export default f;
 
 
 //// [es5ExportDefaultIdentifier.js]
+"use strict";
 function f() { }
 exports.f = f;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
 
 

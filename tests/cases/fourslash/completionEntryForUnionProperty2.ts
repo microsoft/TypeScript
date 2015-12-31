@@ -1,12 +1,12 @@
 ///<reference path="fourslash.ts" />
 
 ////interface One {
-////    commonProperty: number;
+////    commonProperty: string;
 ////    commonFunction(): number;
 ////}
 ////
 ////interface Two {
-////    commonProperty: string
+////    commonProperty: number;
 ////    commonFunction(): number;
 ////}
 ////

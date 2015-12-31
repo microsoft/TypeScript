@@ -18,11 +18,9 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(60,15): error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base1<T>'.
   Types of property 'x' are incompatible.
     Type 'T' is not assignable to type '{ a: T; }'.
-      Property 'a' is missing in type '{}'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(60,15): error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base2<T>'.
   Types of property 'x' are incompatible.
     Type 'T' is not assignable to type '{ b: T; }'.
-      Property 'b' is missing in type '{}'.
 
 
 ==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts (6 errors) ====
@@ -111,12 +109,10 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
 !!! error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base1<T>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
 !!! error TS2430:     Type 'T' is not assignable to type '{ a: T; }'.
-!!! error TS2430:       Property 'a' is missing in type '{}'.
                   ~~~~~~~~
 !!! error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base2<T>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
 !!! error TS2430:     Type 'T' is not assignable to type '{ b: T; }'.
-!!! error TS2430:       Property 'b' is missing in type '{}'.
             x: T;
         }
     }

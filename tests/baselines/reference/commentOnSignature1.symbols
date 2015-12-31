@@ -14,49 +14,54 @@ function foo2(a: any): void {
 >a : Symbol(a, Decl(b.ts, 4, 14))
 }
 === tests/cases/compiler/a.ts ===
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 function foo(n: number): void;
->foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 1, 30), Decl(a.ts, 3, 30))
->n : Symbol(n, Decl(a.ts, 1, 13))
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 6, 30), Decl(a.ts, 8, 30))
+>n : Symbol(n, Decl(a.ts, 6, 13))
 
 // Don't keep this comment.
 function foo(s: string): void;
->foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 1, 30), Decl(a.ts, 3, 30))
->s : Symbol(s, Decl(a.ts, 3, 13))
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 6, 30), Decl(a.ts, 8, 30))
+>s : Symbol(s, Decl(a.ts, 8, 13))
 
 function foo(a: any): void {
->foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 1, 30), Decl(a.ts, 3, 30))
->a : Symbol(a, Decl(a.ts, 4, 13))
+>foo : Symbol(foo, Decl(a.ts, 0, 0), Decl(a.ts, 6, 30), Decl(a.ts, 8, 30))
+>a : Symbol(a, Decl(a.ts, 9, 13))
 }
 
 class c {
->c : Symbol(c, Decl(a.ts, 5, 1))
+>c : Symbol(c, Decl(a.ts, 10, 1))
 
     // dont keep this comment
     constructor(a: string);
->a : Symbol(a, Decl(a.ts, 9, 16))
+>a : Symbol(a, Decl(a.ts, 14, 16))
 
     /*! keep this pinned comment */
     constructor(a: number);
->a : Symbol(a, Decl(a.ts, 11, 16))
+>a : Symbol(a, Decl(a.ts, 16, 16))
 
     constructor(a: any) {
->a : Symbol(a, Decl(a.ts, 12, 16))
+>a : Symbol(a, Decl(a.ts, 17, 16))
     }
 
     // dont keep this comment
     foo(a: string);
->foo : Symbol(foo, Decl(a.ts, 13, 5), Decl(a.ts, 16, 19), Decl(a.ts, 18, 19))
->a : Symbol(a, Decl(a.ts, 16, 8))
+>foo : Symbol(foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+>a : Symbol(a, Decl(a.ts, 21, 8))
 
     /*! keep this pinned comment */
     foo(a: number);
->foo : Symbol(foo, Decl(a.ts, 13, 5), Decl(a.ts, 16, 19), Decl(a.ts, 18, 19))
->a : Symbol(a, Decl(a.ts, 18, 8))
+>foo : Symbol(foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+>a : Symbol(a, Decl(a.ts, 23, 8))
 
     foo(a: any) {
->foo : Symbol(foo, Decl(a.ts, 13, 5), Decl(a.ts, 16, 19), Decl(a.ts, 18, 19))
->a : Symbol(a, Decl(a.ts, 19, 8))
+>foo : Symbol(foo, Decl(a.ts, 18, 5), Decl(a.ts, 21, 19), Decl(a.ts, 23, 19))
+>a : Symbol(a, Decl(a.ts, 24, 8))
     }
 }
 

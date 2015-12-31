@@ -12,11 +12,11 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 {
     var C_1 = (function () {
         function C_1() {
         }
         return C_1;
-    })();
+    }());
 }

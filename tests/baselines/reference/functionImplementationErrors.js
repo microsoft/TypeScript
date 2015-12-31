@@ -1,4 +1,5 @@
 //// [functionImplementationErrors.ts]
+
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types
 var f1 = function () {
     return '';
@@ -124,26 +125,26 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var AnotherClass = (function () {
     function AnotherClass() {
     }
     return AnotherClass;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         _super.apply(this, arguments);
     }
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         _super.apply(this, arguments);
     }
     return Derived2;
-})(Base);
+}(Base));
 function f8() {
     return new Derived1();
     return new Derived2();

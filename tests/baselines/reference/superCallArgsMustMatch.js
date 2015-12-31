@@ -36,7 +36,7 @@ var T5 = (function () {
         this.bar = bar;
     }
     return T5;
-})();
+}());
 var T6 = (function (_super) {
     __extends(T6, _super);
     function T6() {
@@ -46,4 +46,4 @@ var T6 = (function (_super) {
         var x = this.foo;
     }
     return T6;
-})(T5);
+}(T5));

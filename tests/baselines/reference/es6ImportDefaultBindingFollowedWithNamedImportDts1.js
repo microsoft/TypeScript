@@ -6,38 +6,41 @@ class a { }
 export default a;
 
 //// [client.ts]
-import defaultBinding1, { } from "server";
+import defaultBinding1, { } from "./server";
 export var x1 = new defaultBinding1();
-import defaultBinding2, { a } from "server";
+import defaultBinding2, { a } from "./server";
 export var x2 = new defaultBinding2();
-import defaultBinding3, { a as b } from "server";
+import defaultBinding3, { a as b } from "./server";
 export var x3 = new defaultBinding3();
-import defaultBinding4, { x, a as y } from "server";
+import defaultBinding4, { x, a as y } from "./server";
 export var x4 = new defaultBinding4();
-import defaultBinding5, { x as z,  } from "server";
+import defaultBinding5, { x as z,  } from "./server";
 export var x5 = new defaultBinding5();
-import defaultBinding6, { m,  } from "server";
+import defaultBinding6, { m,  } from "./server";
 export var x6 = new defaultBinding6();
 
 //// [server.js]
+"use strict";
 var a = (function () {
     function a() {
     }
     return a;
-})();
+}());
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = a;
 //// [client.js]
-var server_1 = require("server");
+"use strict";
+var server_1 = require("./server");
 exports.x1 = new server_1.default();
-var server_2 = require("server");
+var server_2 = require("./server");
 exports.x2 = new server_2.default();
-var server_3 = require("server");
+var server_3 = require("./server");
 exports.x3 = new server_3.default();
-var server_4 = require("server");
+var server_4 = require("./server");
 exports.x4 = new server_4.default();
-var server_5 = require("server");
+var server_5 = require("./server");
 exports.x5 = new server_5.default();
-var server_6 = require("server");
+var server_6 = require("./server");
 exports.x6 = new server_6.default();
 
 
@@ -46,7 +49,7 @@ declare class a {
 }
 export default a;
 //// [client.d.ts]
-import defaultBinding1 from "server";
+import defaultBinding1 from "./server";
 export declare var x1: defaultBinding1;
 export declare var x2: defaultBinding1;
 export declare var x3: defaultBinding1;

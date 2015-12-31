@@ -19,7 +19,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
     var D = (function (_super) {
         __extends(D, _super);
@@ -27,5 +27,5 @@ var M;
             _super.apply(this, arguments);
         }
         return D;
-    })(M.C);
+    }(M.C));
 })(M || (M = {}));

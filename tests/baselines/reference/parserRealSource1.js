@@ -197,7 +197,7 @@ var TypeScript;
         NullLogger.prototype.log = function (s) {
         };
         return NullLogger;
-    })();
+    }());
     TypeScript.NullLogger = NullLogger;
     var LoggerAdapter = (function () {
         function LoggerAdapter(logger) {
@@ -217,7 +217,7 @@ var TypeScript;
             this.logger.log(s);
         };
         return LoggerAdapter;
-    })();
+    }());
     TypeScript.LoggerAdapter = LoggerAdapter;
     var BufferedLogger = (function () {
         function BufferedLogger() {
@@ -232,7 +232,7 @@ var TypeScript;
             this.logContents.push(s);
         };
         return BufferedLogger;
-    })();
+    }());
     TypeScript.BufferedLogger = BufferedLogger;
     function timeFunction(logger, funcDescription, func) {
         var start = +new Date();

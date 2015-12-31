@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxElementResolution14.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 
@@ -20,4 +20,5 @@ var obj1: Obj1;
 ><obj1 x={10} /> : JSX.Element
 >obj1 : Obj1
 >x : any
+>10 : number
 

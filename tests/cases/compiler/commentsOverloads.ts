@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 /** this is signature 1*/
 function f1(/**param a*/a: number): number;
 function f1(b: string): number;

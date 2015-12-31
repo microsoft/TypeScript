@@ -49,10 +49,10 @@ class ObjectField<A, T extends { [name: string]: Field<any> }> {
 }
 
 var person = new ObjectField({
->person : ObjectField<{}, { [x: string]: CharField | NumberField; id: NumberField; name: CharField; }>
->new ObjectField({    id: new NumberField(),    name: new CharField()}) : ObjectField<{}, { [x: string]: CharField | NumberField; id: NumberField; name: CharField; }>
+>person : ObjectField<{}, { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }>
+>new ObjectField({    id: new NumberField(),    name: new CharField()}) : ObjectField<{}, { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }>
 >ObjectField : typeof ObjectField
->{    id: new NumberField(),    name: new CharField()} : { [x: string]: CharField | NumberField; id: NumberField; name: CharField; }
+>{    id: new NumberField(),    name: new CharField()} : { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }
 
     id: new NumberField(),
 >id : NumberField
@@ -68,8 +68,8 @@ var person = new ObjectField({
 
 person.fields.id;
 >person.fields.id : NumberField
->person.fields : { [x: string]: CharField | NumberField; id: NumberField; name: CharField; }
->person : ObjectField<{}, { [x: string]: CharField | NumberField; id: NumberField; name: CharField; }>
->fields : { [x: string]: CharField | NumberField; id: NumberField; name: CharField; }
+>person.fields : { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }
+>person : ObjectField<{}, { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }>
+>fields : { [x: string]: NumberField | CharField; id: NumberField; name: CharField; }
 >id : NumberField
 

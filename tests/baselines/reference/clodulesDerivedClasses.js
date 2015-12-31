@@ -32,7 +32,7 @@ var Shape = (function () {
     function Shape() {
     }
     return Shape;
-})();
+}());
 var Shape;
 (function (Shape) {
     var Utils;
@@ -47,7 +47,7 @@ var Path = (function (_super) {
         _super.apply(this, arguments);
     }
     return Path;
-})(Shape);
+}(Shape));
 var Path;
 (function (Path) {
     var Utils;

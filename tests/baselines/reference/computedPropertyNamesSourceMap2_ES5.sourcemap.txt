@@ -28,28 +28,30 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 2 >    ^^^
 3 >       ^^^^^^^
 4 >              ^
-5 >               ^^^->
+5 >               ^^^
 1->{
   >    
 2 >    [
 3 >       "hello"
 4 >              ]
+5 >               
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 8) Source(2, 6) + SourceIndex(0)
 3 >Emitted(2, 15) Source(2, 13) + SourceIndex(0)
 4 >Emitted(2, 16) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 19) Source(2, 5) + SourceIndex(0)
 ---
 >>>        debugger;
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^
 3 >                ^
-1->() {
+1 >["hello"]() {
   >        
 2 >        debugger
 3 >                ;
-1->Emitted(3, 9) Source(3, 9) + SourceIndex(0) name (["hello"])
-2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0) name (["hello"])
-3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0) name (["hello"])
+1 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+2 >Emitted(3, 17) Source(3, 17) + SourceIndex(0)
+3 >Emitted(3, 18) Source(3, 18) + SourceIndex(0)
 ---
 >>>    },
 1 >^^^^
@@ -58,8 +60,8 @@ sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 1 >
   >    
 2 >    }
-1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0) name (["hello"])
-2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0) name (["hello"])
+1 >Emitted(4, 5) Source(4, 5) + SourceIndex(0)
+2 >Emitted(4, 6) Source(4, 6) + SourceIndex(0)
 ---
 >>>    _a
 >>>);

@@ -118,7 +118,7 @@ var TargetIsPublic;
         function Base() {
         }
         return Base;
-    })();
+    }());
     var a;
     var b;
     var i;
@@ -127,12 +127,12 @@ var TargetIsPublic;
         function D() {
         }
         return D;
-    })();
+    }());
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     var d;
     var e;
     a = b;
@@ -164,7 +164,7 @@ var TargetIsPublic;
         function Base() {
         }
         return Base;
-    })();
+    }());
     var a;
     var b;
     var i;
@@ -173,12 +173,12 @@ var TargetIsPublic;
         function D() {
         }
         return D;
-    })();
+    }());
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     var d;
     var e;
     a = b; // error

@@ -19,6 +19,7 @@ export default class {}
 
 //// [file1.js]
 System.register([], function(exports_1) {
+    "use strict";
     function default_1() { }
     exports_1("default", default_1);
     return {
@@ -29,6 +30,7 @@ System.register([], function(exports_1) {
 });
 //// [file2.js]
 System.register([], function(exports_1) {
+    "use strict";
     function f() { }
     exports_1("default", f);
     return {
@@ -39,6 +41,7 @@ System.register([], function(exports_1) {
 });
 //// [file3.js]
 System.register([], function(exports_1) {
+    "use strict";
     var C;
     return {
         setters:[],
@@ -47,13 +50,14 @@ System.register([], function(exports_1) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports_1("default", C);
         }
     }
 });
 //// [file4.js]
 System.register([], function(exports_1) {
+    "use strict";
     var default_1;
     return {
         setters:[],
@@ -62,7 +66,7 @@ System.register([], function(exports_1) {
                 function default_1() {
                 }
                 return default_1;
-            })();
+            }());
             exports_1("default", default_1);
         }
     }

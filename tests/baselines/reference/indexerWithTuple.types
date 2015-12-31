@@ -101,20 +101,20 @@ var eleUnion11 = unionTuple1[1]; // string | number
 >1 : number
 
 var eleUnion12 = unionTuple1[2]; // string | number
->eleUnion12 : string | number
->unionTuple1[2] : string | number
+>eleUnion12 : number | string
+>unionTuple1[2] : number | string
 >unionTuple1 : [number, string | number]
 >2 : number
 
 var eleUnion13 = unionTuple1[idx0]; // string | number
->eleUnion13 : string | number
->unionTuple1[idx0] : string | number
+>eleUnion13 : number | string
+>unionTuple1[idx0] : number | string
 >unionTuple1 : [number, string | number]
 >idx0 : number
 
 var eleUnion14 = unionTuple1[idx1]; // string | number
->eleUnion14 : string | number
->unionTuple1[idx1] : string | number
+>eleUnion14 : number | string
+>unionTuple1[idx1] : number | string
 >unionTuple1 : [number, string | number]
 >idx1 : number
 
@@ -143,20 +143,20 @@ var eleUnion21 = unionTuple2[1]; // string | number
 >1 : number
 
 var eleUnion22 = unionTuple2[2]; // string | number | boolean
->eleUnion22 : string | number | boolean
->unionTuple2[2] : string | number | boolean
+>eleUnion22 : boolean | string | number
+>unionTuple2[2] : boolean | string | number
 >unionTuple2 : [boolean, string | number]
 >2 : number
 
 var eleUnion23 = unionTuple2[idx0]; // string | number | boolean
->eleUnion23 : string | number | boolean
->unionTuple2[idx0] : string | number | boolean
+>eleUnion23 : boolean | string | number
+>unionTuple2[idx0] : boolean | string | number
 >unionTuple2 : [boolean, string | number]
 >idx0 : number
 
 var eleUnion24 = unionTuple2[idx1]; // string | number | boolean
->eleUnion24 : string | number | boolean
->unionTuple2[idx1] : string | number | boolean
+>eleUnion24 : boolean | string | number
+>unionTuple2[idx1] : boolean | string | number
 >unionTuple2 : [boolean, string | number]
 >idx1 : number
 

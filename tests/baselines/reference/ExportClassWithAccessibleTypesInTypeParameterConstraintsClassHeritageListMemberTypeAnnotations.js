@@ -32,7 +32,7 @@ var A;
         function Point() {
         }
         return Point;
-    })();
+    }());
     A.Point = Point;
     A.Origin = { x: 0, y: 0 };
     var Point3d = (function (_super) {
@@ -41,7 +41,7 @@ var A;
             _super.apply(this, arguments);
         }
         return Point3d;
-    })(Point);
+    }(Point));
     A.Point3d = Point3d;
     A.Origin3d = { x: 0, y: 0, z: 0 };
     var Line = (function () {
@@ -50,6 +50,6 @@ var A;
             this.end = end;
         }
         return Line;
-    })();
+    }());
     A.Line = Line;
 })(A || (A = {}));

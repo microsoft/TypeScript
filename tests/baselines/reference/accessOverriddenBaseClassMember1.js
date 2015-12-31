@@ -30,7 +30,7 @@ var Point = (function () {
         return "x=" + this.x + " y=" + this.y;
     };
     return Point;
-})();
+}());
 var ColoredPoint = (function (_super) {
     __extends(ColoredPoint, _super);
     function ColoredPoint(x, y, color) {
@@ -41,4 +41,4 @@ var ColoredPoint = (function (_super) {
         return _super.prototype.toString.call(this) + " color=" + this.color;
     };
     return ColoredPoint;
-})(Point);
+}(Point));

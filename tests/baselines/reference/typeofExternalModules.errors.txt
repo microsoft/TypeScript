@@ -5,8 +5,8 @@ tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2322: Type 'typ
 
 
 ==== tests/cases/compiler/typeofExternalModules_core.ts (2 errors) ====
-    import ext = require('typeofExternalModules_external');
-    import exp = require('typeofExternalModules_exportAssign');
+    import ext = require('./typeofExternalModules_external');
+    import exp = require('./typeofExternalModules_exportAssign');
     
     var y1: typeof ext = ext;
     y1 = exp;

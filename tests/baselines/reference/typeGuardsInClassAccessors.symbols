@@ -24,9 +24,9 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -35,9 +35,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 15, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 15, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         return strOrNum;
 >strOrNum : Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
@@ -51,17 +51,17 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 21, 11))
->param.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 21, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -70,9 +70,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 29, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 29, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
     }
     // Inside private accessor getter
     private get pp1() {
@@ -82,9 +82,9 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -93,9 +93,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 38, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 38, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         return strOrNum;
 >strOrNum : Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
@@ -109,17 +109,17 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 44, 20))
->param.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 44, 20))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -128,9 +128,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 52, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 52, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
     }
     // Inside static accessor getter
     static get s1() {
@@ -140,9 +140,9 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -151,9 +151,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 61, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 61, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         return strOrNum;
 >strOrNum : Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
@@ -167,17 +167,17 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 67, 18))
->param.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 67, 18))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -186,9 +186,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 75, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 75, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
     }
     // Inside private static accessor getter
     private static get ss1() {
@@ -198,9 +198,9 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -209,9 +209,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 84, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 84, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         return strOrNum;
 >strOrNum : Symbol(strOrNum, Decl(typeGuardsInClassAccessors.ts, 6, 3))
@@ -225,17 +225,17 @@ class ClassWithAccessors {
         num = typeof var1 === "string" && var1.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->var1.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardsInClassAccessors.ts, 7, 3))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // parameter of function declaration
         num = typeof param === "string" && param.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 90, 27))
->param.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>param.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >param : Symbol(param, Decl(typeGuardsInClassAccessors.ts, 90, 27))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         // variables in function declaration
         var var2: string | number;
@@ -244,9 +244,9 @@ class ClassWithAccessors {
         num = typeof var2 === "string" && var2.length; // string
 >num : Symbol(num, Decl(typeGuardsInClassAccessors.ts, 5, 3))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 98, 11))
->var2.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>var2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >var2 : Symbol(var2, Decl(typeGuardsInClassAccessors.ts, 98, 11))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
     }
 }
 

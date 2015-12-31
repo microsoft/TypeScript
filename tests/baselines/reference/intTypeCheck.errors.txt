@@ -14,28 +14,29 @@ tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(106,21): error TS2304: Cannot find name 'i1'.
 tests/cases/compiler/intTypeCheck.ts(107,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(112,5): error TS2322: Type '{}' is not assignable to type 'i2'.
+  Type '{}' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(113,5): error TS2322: Type 'Object' is not assignable to type 'i2'.
+  Type 'Object' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(114,17): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not assignable to type 'i2'.
+  Type 'Base' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
 tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(120,22): error TS2304: Cannot find name 'i2'.
 tests/cases/compiler/intTypeCheck.ts(121,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(126,5): error TS2322: Type '{}' is not assignable to type 'i3'.
+  Type '{}' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(127,5): error TS2322: Type 'Object' is not assignable to type 'i3'.
+  Type 'Object' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(129,5): error TS2322: Type 'Base' is not assignable to type 'i3'.
+  Type 'Base' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is not assignable to type 'i3'.
+  Type '() => void' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
 tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2304: Cannot find name 'i3'.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(141,5): error TS2322: Type 'Object' is not assignable to type 'i4'.
-  Index signature is missing in type 'Object'.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(143,5): error TS2322: Type 'Base' is not assignable to type 'i4'.
-  Index signature is missing in type 'Base'.
-tests/cases/compiler/intTypeCheck.ts(145,5): error TS2322: Type '() => void' is not assignable to type 'i4'.
-  Index signature is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
   Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
@@ -56,9 +57,12 @@ tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(162,22): error TS2304: Cannot find name 'i5'.
 tests/cases/compiler/intTypeCheck.ts(163,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(168,5): error TS2322: Type '{}' is not assignable to type 'i6'.
+  Type '{}' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(169,5): error TS2322: Type 'Object' is not assignable to type 'i6'.
+  Type 'Object' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(170,17): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/compiler/intTypeCheck.ts(171,5): error TS2322: Type 'Base' is not assignable to type 'i6'.
+  Type 'Base' provides no match for the signature '(): any'
 tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is not assignable to type 'i6'.
   Type 'void' is not assignable to type 'number'.
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
@@ -66,20 +70,18 @@ tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(176,22): error TS2304: Cannot find name 'i6'.
 tests/cases/compiler/intTypeCheck.ts(177,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
+  Type '{}' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
+  Type 'Object' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Neither type 'Base' nor type 'i7' is assignable to the other.
+  Type 'Base' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
+  Type '() => void' provides no match for the signature 'new (): any'
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2304: Cannot find name 'i7'.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(197,5): error TS2322: Type 'Object' is not assignable to type 'i8'.
-  Index signature is missing in type 'Object'.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(199,5): error TS2322: Type 'Base' is not assignable to type 'i8'.
-  Index signature is missing in type 'Base'.
-tests/cases/compiler/intTypeCheck.ts(201,5): error TS2322: Type '() => void' is not assignable to type 'i8'.
-  Index signature is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
   Index signature is missing in type 'Boolean'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
@@ -87,7 +89,7 @@ tests/cases/compiler/intTypeCheck.ts(204,22): error TS2304: Cannot find name 'i8
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (69 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -228,15 +230,18 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj12: i2 = {};
         ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'i2'.
+!!! error TS2322:   Type '{}' provides no match for the signature '(): any'
     var obj13: i2 = new Object();
         ~~~~~
 !!! error TS2322: Type 'Object' is not assignable to type 'i2'.
+!!! error TS2322:   Type 'Object' provides no match for the signature '(): any'
     var obj14: i2 = new obj11;
                     ~~~~~~~~~
 !!! error TS2350: Only a void function can be called with the 'new' keyword.
     var obj15: i2 = new Base;
         ~~~~~
 !!! error TS2322: Type 'Base' is not assignable to type 'i2'.
+!!! error TS2322:   Type 'Base' provides no match for the signature '(): any'
     var obj16: i2 = null;
     var obj17: i2 = function ():any { return 0; };
     //var obj18: i2 = function foo() { };
@@ -258,17 +263,21 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj23: i3 = {};
         ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'i3'.
+!!! error TS2322:   Type '{}' provides no match for the signature 'new (): any'
     var obj24: i3 = new Object();
         ~~~~~
 !!! error TS2322: Type 'Object' is not assignable to type 'i3'.
+!!! error TS2322:   Type 'Object' provides no match for the signature 'new (): any'
     var obj25: i3 = new obj22;
     var obj26: i3 = new Base;
         ~~~~~
 !!! error TS2322: Type 'Base' is not assignable to type 'i3'.
+!!! error TS2322:   Type 'Base' provides no match for the signature 'new (): any'
     var obj27: i3 = null;
     var obj28: i3 = function () { };
         ~~~~~
 !!! error TS2322: Type '() => void' is not assignable to type 'i3'.
+!!! error TS2322:   Type '() => void' provides no match for the signature 'new (): any'
     //var obj29: i3 = function foo() { };
     var obj30: i3 = <i3> anyVar;
     var obj31: i3 = new <i3> anyVar;
@@ -287,21 +296,12 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj33: i4;
     var obj34: i4 = {};
     var obj35: i4 = new Object();
-        ~~~~~
-!!! error TS2322: Type 'Object' is not assignable to type 'i4'.
-!!! error TS2322:   Index signature is missing in type 'Object'.
     var obj36: i4 = new obj33;
                     ~~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var obj37: i4 = new Base;
-        ~~~~~
-!!! error TS2322: Type 'Base' is not assignable to type 'i4'.
-!!! error TS2322:   Index signature is missing in type 'Base'.
     var obj38: i4 = null;
     var obj39: i4 = function () { };
-        ~~~~~
-!!! error TS2322: Type '() => void' is not assignable to type 'i4'.
-!!! error TS2322:   Index signature is missing in type '() => void'.
     //var obj40: i4 = function foo() { };
     var obj41: i4 = <i4> anyVar;
     var obj42: i4 = new <i4> anyVar;
@@ -359,15 +359,18 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj56: i6 = {};
         ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'i6'.
+!!! error TS2322:   Type '{}' provides no match for the signature '(): any'
     var obj57: i6 = new Object();
         ~~~~~
 !!! error TS2322: Type 'Object' is not assignable to type 'i6'.
+!!! error TS2322:   Type 'Object' provides no match for the signature '(): any'
     var obj58: i6 = new obj55;
                     ~~~~~~~~~
 !!! error TS2350: Only a void function can be called with the 'new' keyword.
     var obj59: i6 = new Base;
         ~~~~~
 !!! error TS2322: Type 'Base' is not assignable to type 'i6'.
+!!! error TS2322:   Type 'Base' provides no match for the signature '(): any'
     var obj60: i6 = null;
     var obj61: i6 = function () { };
         ~~~~~
@@ -392,17 +395,21 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj67: i7 = {};
         ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'i7'.
+!!! error TS2322:   Type '{}' provides no match for the signature 'new (): any'
     var obj68: i7 = new Object();
         ~~~~~
 !!! error TS2322: Type 'Object' is not assignable to type 'i7'.
+!!! error TS2322:   Type 'Object' provides no match for the signature 'new (): any'
     var obj69: i7 = new obj66;
     var obj70: i7 = <i7>new Base;
                     ~~~~~~~~~~~~
 !!! error TS2352: Neither type 'Base' nor type 'i7' is assignable to the other.
+!!! error TS2352:   Type 'Base' provides no match for the signature 'new (): any'
     var obj71: i7 = null;
     var obj72: i7 = function () { };
         ~~~~~
 !!! error TS2322: Type '() => void' is not assignable to type 'i7'.
+!!! error TS2322:   Type '() => void' provides no match for the signature 'new (): any'
     //var obj73: i7 = function foo() { };
     var obj74: i7 = <i7> anyVar;
     var obj75: i7 = new <i7> anyVar;
@@ -421,21 +428,12 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj77: i8;
     var obj78: i8 = {};
     var obj79: i8 = new Object();
-        ~~~~~
-!!! error TS2322: Type 'Object' is not assignable to type 'i8'.
-!!! error TS2322:   Index signature is missing in type 'Object'.
     var obj80: i8 = new obj77;
                     ~~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var obj81: i8 = new Base;
-        ~~~~~
-!!! error TS2322: Type 'Base' is not assignable to type 'i8'.
-!!! error TS2322:   Index signature is missing in type 'Base'.
     var obj82: i8 = null;
     var obj83: i8 = function () { };
-        ~~~~~
-!!! error TS2322: Type '() => void' is not assignable to type 'i8'.
-!!! error TS2322:   Index signature is missing in type '() => void'.
     //var obj84: i8 = function foo() { };
     var obj85: i8 = <i8> anyVar;
     var obj86: i8 = new <i8> anyVar;

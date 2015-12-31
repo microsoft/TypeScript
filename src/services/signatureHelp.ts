@@ -204,7 +204,7 @@ namespace ts.SignatureHelp {
         if (!candidates.length) {
             // We didn't have any sig help items produced by the TS compiler.  If this is a JS 
             // file, then see if we can figure out anything better.
-            if (isJavaScript(sourceFile.fileName)) {
+            if (isSourceFileJavaScript(sourceFile)) {
                 return createJavaScriptSignatureHelpItems(argumentInfo);
             }
 
@@ -611,13 +611,11 @@ namespace ts.SignatureHelp {
                 let displayParts = mapToDisplayParts(writer =>
                     typeChecker.getSymbolDisplayBuilder().buildParameterDisplay(parameter, writer, invocation));
 
-                let isOptional = hasQuestionToken(parameter.valueDeclaration);
-
                 return {
                     name: parameter.name,
                     documentation: parameter.getDocumentationComment(),
                     displayParts,
-                    isOptional
+                    isOptional: typeChecker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration)
                 };
             }
 

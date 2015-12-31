@@ -1,4 +1,4 @@
-tests/cases/compiler/importDeclWithDeclareModifier.ts(5,1): error TS1148: Cannot compile modules unless the '--module' flag is provided.
+tests/cases/compiler/importDeclWithDeclareModifier.ts(5,1): error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
 tests/cases/compiler/importDeclWithDeclareModifier.ts(5,9): error TS1029: 'export' modifier must precede 'declare' modifier.
 tests/cases/compiler/importDeclWithDeclareModifier.ts(5,29): error TS2305: Module 'x' has no exported member 'c'.
 
@@ -10,7 +10,7 @@ tests/cases/compiler/importDeclWithDeclareModifier.ts(5,29): error TS2305: Modul
     }
     declare export import a = x.c;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1148: Cannot compile modules unless the '--module' flag is provided.
+!!! error TS1148: Cannot compile modules unless the '--module' flag is provided. Consider setting the 'module' compiler option in a 'tsconfig.json' file.
             ~~~~~~
 !!! error TS1029: 'export' modifier must precede 'declare' modifier.
                                 ~

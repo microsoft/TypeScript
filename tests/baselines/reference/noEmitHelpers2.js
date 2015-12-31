@@ -18,4 +18,4 @@ var A = (function () {
         __metadata('design:paramtypes', [Number, String])
     ], A);
     return A;
-})();
+}());

@@ -22,14 +22,14 @@ var I = (function () {
     function I() {
     }
     return I;
-})();
+}());
 var I2 = (function (_super) {
     __extends(I2, _super);
     function I2() {
         _super.apply(this, arguments);
     }
     return I2;
-})(I);
+}(I));
 var i;
 var r = i[1]; // error: numeric indexer returns the type of the string indexer
 var i2;

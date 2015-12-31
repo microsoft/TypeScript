@@ -1,7 +1,12 @@
 //// [tests/cases/compiler/commentOnSignature1.ts] ////
 
 //// [a.ts]
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
+
+/*! Don't keep this pinned comment */
 function foo(n: number): void;
 // Don't keep this comment.
 function foo(s: string): void;
@@ -33,18 +38,19 @@ function foo2(a: any): void {
 }
 
 //// [a.js]
-/*! Keep this pinned comment */
+/*!=================
+    Keep this pinned
+   =================
+*/
 function foo(a) {
 }
 var c = (function () {
-    /*! keep this pinned comment */
     function c(a) {
     }
-    /*! keep this pinned comment */
     c.prototype.foo = function (a) {
     };
     return c;
-})();
+}());
 //// [b.js]
 ///<reference path='a.ts'/>
 function foo2(a) {

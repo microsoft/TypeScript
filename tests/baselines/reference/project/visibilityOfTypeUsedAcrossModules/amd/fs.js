@@ -1,4 +1,5 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var RM = (function () {
         function RM() {
         }
@@ -12,6 +13,6 @@ define(["require", "exports"], function (require, exports) {
             var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
         };
         return RM;
-    })();
+    }());
     exports.RM = RM;
 });

@@ -16,10 +16,12 @@ export const [bar2] = [2];
 >bar2 : Symbol(bar2, Decl(downlevelLetConst13.ts, 7, 14))
 
 export let {a: bar3} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst13.ts, 8, 24))
 >bar3 : Symbol(bar3, Decl(downlevelLetConst13.ts, 8, 12))
 >a : Symbol(a, Decl(downlevelLetConst13.ts, 8, 24))
 
 export const {a: bar4} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst13.ts, 9, 26))
 >bar4 : Symbol(bar4, Decl(downlevelLetConst13.ts, 9, 14))
 >a : Symbol(a, Decl(downlevelLetConst13.ts, 9, 26))
 
@@ -39,10 +41,12 @@ export module M {
 >bar6 : Symbol(bar6, Decl(downlevelLetConst13.ts, 15, 18))
 
     export let {a: bar7} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst13.ts, 16, 28))
 >bar7 : Symbol(bar7, Decl(downlevelLetConst13.ts, 16, 16))
 >a : Symbol(a, Decl(downlevelLetConst13.ts, 16, 28))
 
     export const {a: bar8} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst13.ts, 17, 30))
 >bar8 : Symbol(bar8, Decl(downlevelLetConst13.ts, 17, 18))
 >a : Symbol(a, Decl(downlevelLetConst13.ts, 17, 30))
 }

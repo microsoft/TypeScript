@@ -13,24 +13,44 @@ namespace ts.formatting {
                 return 0; // past EOF
             }
 
+            // no indentation when the indent style is set to none,
+            // so we can return fast
+            if (options.IndentStyle === IndentStyle.None) {
+                return 0;
+            }
+
             let precedingToken = findPrecedingToken(position, sourceFile);
             if (!precedingToken) {
                 return 0;
             }
 
             // no indentation in string \regex\template literals
-            let precedingTokenIsLiteral =
-                precedingToken.kind === SyntaxKind.StringLiteral ||
-                precedingToken.kind === SyntaxKind.RegularExpressionLiteral ||
-                precedingToken.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
-                precedingToken.kind === SyntaxKind.TemplateHead ||
-                precedingToken.kind === SyntaxKind.TemplateMiddle ||
-                precedingToken.kind === SyntaxKind.TemplateTail;
+            let precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
             if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
                 return 0;
             }
 
             let lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+
+            // indentation is first non-whitespace character in a previous line
+            // for block indentation, we should look for a line which contains something that's not
+            // whitespace.
+            if (options.IndentStyle === IndentStyle.Block) {
+
+                // move backwards until we find a line with a non-whitespace character,
+                // then find the first non-whitespace character for that line.
+                let current = position;
+                while (current > 0){
+                    let char = sourceFile.text.charCodeAt(current);
+                    if (!isWhiteSpace(char) && !isLineBreak(char)) {
+                        break;
+                    }
+                    current--;
+                }
+
+                let lineStart = ts.getLineStartPositionForPosition(current, sourceFile);
+                return SmartIndenter.findFirstNonWhitespaceColumn(lineStart, current, sourceFile, options);
+            }
 
             if (precedingToken.kind === SyntaxKind.CommaToken && precedingToken.parent.kind !== SyntaxKind.BinaryExpression) {
                 // previous token is comma that separates items in list - find the previous item and try to derive indentation from it
@@ -49,9 +69,9 @@ namespace ts.formatting {
 
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) &&
-                    shouldIndentChildNode(current.kind, previous ? previous.kind : SyntaxKind.Unknown) &&
+                    shouldIndentChildNode(current, previous) &&
                     !isNodeComponentListIndentationPrevented(current, position, sourceFile)) {
-
+                    
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
                     if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
@@ -136,10 +156,10 @@ namespace ts.formatting {
                 }
 
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
-                if (shouldIndentChildNode(parent.kind, current.kind) &&
+                if (shouldIndentChildNode(parent, current) &&
                     !parentAndChildShareLine &&
                     !isListElementIndentationPrevented(current, sourceFile)) {
-
+                    
                     indentationDelta += options.IndentSize;
                 }
 
@@ -230,7 +250,7 @@ namespace ts.formatting {
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFile): LineAndCharacter {
             return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
-        
+
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFile): boolean {
             if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
                 let elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile);
@@ -340,7 +360,7 @@ namespace ts.formatting {
             }
 
             return Value.Unknown;
-            
+
             function getStartingExpression(node: PropertyAccessExpression | CallExpression | ElementAccessExpression) {
                 while (true) {
                     switch (node.kind) {
@@ -355,7 +375,6 @@ namespace ts.formatting {
                             return node;
                     }
                 }
-                return node;
             }
         }
 
@@ -458,9 +477,12 @@ namespace ts.formatting {
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
             switch (kind) {
+                case SyntaxKind.ExpressionStatement:
                 case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
@@ -471,6 +493,7 @@ namespace ts.formatting {
                 case SyntaxKind.DefaultClause:
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.VariableStatement:
@@ -480,16 +503,28 @@ namespace ts.formatting {
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxExpression:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.ConstructSignature:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.ParenthesizedType:
+                case SyntaxKind.TaggedTemplateExpression:
+                case SyntaxKind.AwaitExpression:
+                case SyntaxKind.NamedImports:
                     return true;
             }
             return false;
         }
-
-        export function shouldIndentChildNode(parent: SyntaxKind, child: SyntaxKind): boolean {
-            if (nodeContentIsAlwaysIndented(parent)) {
-                return true;
-            }
-            switch (parent) {
+        
+        /* @internal */
+        export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
+            let childKind = child ? child.kind : SyntaxKind.Unknown;
+            switch (parent.kind) {
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.ForInStatement:
@@ -499,16 +534,23 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                case SyntaxKind.CallSignature:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return child !== SyntaxKind.Block;
-                default:
-                    return false;
+                    return childKind !== SyntaxKind.Block;
+                case SyntaxKind.JsxElement:
+                    return childKind !== SyntaxKind.JsxClosingElement;
             }
+            // No explicit rule for given nodes so the result will follow the default value argument
+            return indentByDefault;
+        }
+
+        /*
+        Function returns true when the parent node should indent the given child by an explicit rule
+        */
+        export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
+            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false); 
         }
     }
 }

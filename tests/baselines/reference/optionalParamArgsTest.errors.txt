@@ -1,6 +1,6 @@
 tests/cases/compiler/optionalParamArgsTest.ts(31,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/optionalParamArgsTest.ts(35,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/optionalParamArgsTest.ts(35,47): error TS1016: A required parameter cannot follow an optional parameter.
+tests/cases/compiler/optionalParamArgsTest.ts(34,12): error TS2393: Duplicate function implementation.
+tests/cases/compiler/optionalParamArgsTest.ts(98,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/optionalParamArgsTest.ts(99,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/optionalParamArgsTest.ts(100,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/optionalParamArgsTest.ts(101,1): error TS2346: Supplied parameters do not match any signature of call target.
@@ -20,10 +20,9 @@ tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2346: Supplied par
 tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(118,1): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/compiler/optionalParamArgsTest.ts (23 errors) ====
+==== tests/cases/compiler/optionalParamArgsTest.ts (22 errors) ====
     // Optional parameter and default argument tests
     
     // Key:
@@ -58,13 +57,10 @@ tests/cases/compiler/optionalParamArgsTest.ts(118,1): error TS2346: Supplied par
                ~~~~
 !!! error TS2393: Duplicate function implementation.
     
-        // Negative test
-        // "Optional parameters may only be followed by other optional parameters"
+        // Uninitialized parameter makes the initialized one required
         public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3:number) { return C1M5A1 + C1M5A2; }
                ~~~~
 !!! error TS2393: Duplicate function implementation.
-                                                  ~~~~~~
-!!! error TS1016: A required parameter cannot follow an optional parameter.
     }
     
     class C2 extends C1 {

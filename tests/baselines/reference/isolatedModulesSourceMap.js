@@ -1,7 +1,7 @@
-//// [isolatedModulesSourceMap.ts]
+//// [file1.ts]
 
-export var x;
+export var x = 1;
 
-//// [isolatedModulesSourceMap.js]
-export var x;
-//# sourceMappingURL=isolatedModulesSourceMap.js.map
+//// [file1.js]
+export var x = 1;
+//# sourceMappingURL=file1.js.map

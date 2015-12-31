@@ -75,7 +75,7 @@ var A = (function () {
         return a;
     };
     return A;
-})();
+}());
 var M;
 (function (M) {
 })(M || (M = {}));

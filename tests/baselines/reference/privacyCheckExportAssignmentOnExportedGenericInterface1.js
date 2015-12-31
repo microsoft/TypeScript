@@ -9,6 +9,7 @@ var Foo: new () => Foo.A<Foo<string>>;
 export = Foo;
 
 //// [privacyCheckExportAssignmentOnExportedGenericInterface1.js]
+"use strict";
 var Foo;
 module.exports = Foo;
 

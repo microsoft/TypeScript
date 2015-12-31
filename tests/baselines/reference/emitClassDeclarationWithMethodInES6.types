@@ -8,15 +8,15 @@ class D {
     foo() { }
 >foo : () => void
 
-    ["computedName"]() { }
->"computedName" : string
+    ["computedName1"]() { }
+>"computedName1" : string
 
-    ["computedName"](a: string) { }
->"computedName" : string
+    ["computedName2"](a: string) { }
+>"computedName2" : string
 >a : string
 
-    ["computedName"](a: string): number { return 1; }
->"computedName" : string
+    ["computedName3"](a: string): number { return 1; }
+>"computedName3" : string
 >a : string
 >1 : number
 
@@ -25,7 +25,7 @@ class D {
 
         return this._bar;
 >this._bar : string
->this : D
+>this : this
 >_bar : string
     } 
     baz(a: any, x: string): string {
@@ -36,15 +36,15 @@ class D {
         return "HELLO";
 >"HELLO" : string
     }
-    static ["computedname"]() { }
->"computedname" : string
+    static ["computedname4"]() { }
+>"computedname4" : string
 
-    static ["computedname"](a: string) { }
->"computedname" : string
+    static ["computedname5"](a: string) { }
+>"computedname5" : string
 >a : string
 
-    static ["computedname"](a: string): boolean { return true; }
->"computedname" : string
+    static ["computedname6"](a: string): boolean { return true; }
+>"computedname6" : string
 >a : string
 >true : boolean
 

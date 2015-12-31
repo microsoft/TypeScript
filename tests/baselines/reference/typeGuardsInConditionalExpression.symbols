@@ -14,9 +14,9 @@ function foo(x: number | string) {
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
 
         ? x.length // string
->x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         : x++; // number
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
@@ -157,9 +157,9 @@ function foo9(x: number | string) {
 
         ? ((y = x.length) && x === "hello") // string
 >y : Symbol(y, Decl(typeGuardsInConditionalExpression.ts, 61, 7))
->x.length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 60, 14))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 60, 14))
 
         : x === 10; // number
@@ -187,9 +187,9 @@ function foo10(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 67, 15))
 
         && x.toString()); // x is number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 67, 15))
->toString : Symbol(Number.toString, Decl(lib.d.ts, 458, 18))
+>toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 }
 function foo11(x: number | string | boolean) {
 >foo11 : Symbol(foo11, Decl(typeGuardsInConditionalExpression.ts, 75, 1))
@@ -233,11 +233,11 @@ function foo12(x: number | string | boolean) {
 
         ? (x = 10 && x.toString().length) // number | boolean | string - changed here
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 87, 15))
->x.toString().length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
->x.toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
+>x.toString().length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 87, 15))
->toString : Symbol(toString, Decl(lib.d.ts, 277, 18), Decl(lib.d.ts, 458, 18), Decl(lib.d.ts, 96, 26))
->length : Symbol(String.length, Decl(lib.d.ts, 414, 19))
+>toString : Symbol(toString, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         : ((b = x) // x is number | boolean | string  - changed in true branch
 >b : Symbol(b, Decl(typeGuardsInConditionalExpression.ts, 90, 7))

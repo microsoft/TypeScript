@@ -13,6 +13,7 @@ export module c {
 
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.js]
+"use strict";
 var a;
 (function (a) {
     function foo(x) {

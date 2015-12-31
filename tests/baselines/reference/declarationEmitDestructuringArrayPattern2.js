@@ -25,7 +25,7 @@ declare var x11: number, y11: string;
 declare var a11: any, b11: any, c11: any;
 declare var a2: number, b2: string, x12: number, c2: boolean;
 declare var x13: number, y13: string;
-declare var a3: (string | number)[], b3: {
+declare var a3: (number | string)[], b3: {
     x: number;
     y: string;
 };

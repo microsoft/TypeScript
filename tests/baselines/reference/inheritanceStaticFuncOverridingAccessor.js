@@ -33,7 +33,7 @@ var a = (function () {
         configurable: true
     });
     return a;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
@@ -43,4 +43,4 @@ var b = (function (_super) {
         return "20";
     };
     return b;
-})(a);
+}(a));

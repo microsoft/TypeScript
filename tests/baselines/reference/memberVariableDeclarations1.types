@@ -49,21 +49,21 @@ class Employee2 {
         this.retired = false;
 >this.retired = false : boolean
 >this.retired : boolean
->this : Employee2
+>this : this
 >retired : boolean
 >false : boolean
 
         this.manager = null;
 >this.manager = null : null
 >this.manager : Employee
->this : Employee2
+>this : this
 >manager : Employee
 >null : null
 
         this.reports = [];
 >this.reports = [] : undefined[]
 >this.reports : Employee[]
->this : Employee2
+>this : this
 >reports : Employee[]
 >[] : undefined[]
     }

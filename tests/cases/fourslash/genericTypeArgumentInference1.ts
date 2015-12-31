@@ -18,9 +18,9 @@
 ////var /*4*/r4 = _./*41*/all([<any>true], _.identity);
 
 goTo.marker('1');
-verify.quickInfoIs('var r: string | number | boolean');
+verify.quickInfoIs('var r: boolean | number | string');
 goTo.marker('11');
-verify.quickInfoIs('(method) Underscore.Static.all<string | number | boolean>(list: (string | number | boolean)[], iterator?: Underscore.Iterator<string | number | boolean, boolean>, context?: any): string | number | boolean');
+verify.quickInfoIs('(method) Underscore.Static.all<boolean | number | string>(list: (boolean | number | string)[], iterator?: Underscore.Iterator<boolean | number | string, boolean>, context?: any): boolean | number | string');
 
 goTo.marker('2');
 verify.quickInfoIs('var r2: boolean');

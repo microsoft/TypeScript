@@ -24,13 +24,16 @@ export var x1: number = m;
 
 //// [server.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {};
 });
 //// [client.js]
 define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
+    "use strict";
     exports.x1 = server_1.a;
     exports.x1 = server_2.a;
     exports.x1 = server_3.x;

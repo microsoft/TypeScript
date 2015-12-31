@@ -1,0 +1,10 @@
+=== tests/cases/compiler/typeAliasExport.ts ===
+declare module "a" {
+  export default 0
+  export var a;
+>a : Symbol(a, Decl(typeAliasExport.ts, 2, 12), Decl(typeAliasExport.ts, 2, 15))
+
+  export type a = typeof a;
+>a : Symbol(a, Decl(typeAliasExport.ts, 2, 12), Decl(typeAliasExport.ts, 2, 15))
+>a : Symbol(a, Decl(typeAliasExport.ts, 2, 12), Decl(typeAliasExport.ts, 2, 15))
+}

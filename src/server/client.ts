@@ -120,8 +120,8 @@ namespace ts.server {
             return response;
         }
 
-        openFile(fileName: string): void {
-            var args: protocol.FileRequestArgs = { file: fileName };
+        openFile(fileName: string, content?: string): void {
+            var args: protocol.OpenRequestArgs = { file: fileName, fileContent: content };
             this.processRequest(CommandNames.Open, args);
         }
 
@@ -183,7 +183,7 @@ namespace ts.server {
 
             return {
                 configFileName: response.body.configFileName,
-                fileNameList: response.body.fileNameList
+                fileNames: response.body.fileNames
             };
         }
         
@@ -202,9 +202,7 @@ namespace ts.server {
             return  {
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body,
-                fileName: fileName,
-                position: position
+                entries: response.body
             };
         }
      
@@ -529,8 +527,33 @@ namespace ts.server {
             });
         }
 
-        getDocumentHighlights(fileName: string, position: number): DocumentHighlights[] {
-            throw new Error("Not Implemented Yet.");
+        getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] {
+            let { line, offset } = this.positionToOneBasedLineOffset(fileName, position);
+            let args: protocol.DocumentHighlightsRequestArgs = { file: fileName, line, offset, filesToSearch };
+
+            let request = this.processRequest<protocol.DocumentHighlightsRequest>(CommandNames.DocumentHighlights, args);
+            let response = this.processResponse<protocol.DocumentHighlightsResponse>(request);
+
+            let self = this;
+            return response.body.map(convertToDocumentHighlights);
+
+            function convertToDocumentHighlights(item: ts.server.protocol.DocumentHighlightsItem): ts.DocumentHighlights {
+                let { file, highlightSpans } = item;
+
+                return {
+                    fileName: file,
+                    highlightSpans: highlightSpans.map(convertHighlightSpan)
+                };
+
+                function convertHighlightSpan(span: ts.server.protocol.HighlightSpan): ts.HighlightSpan {
+                    let start = self.lineOffsetToPosition(file, span.start);
+                    let end = self.lineOffsetToPosition(file, span.end);
+                    return {
+                        textSpan: ts.createTextSpanFromBounds(start, end),
+                        kind: span.kind
+                    };
+                }
+            }
         }
 
         getOutliningSpans(fileName: string): OutliningSpan[] {
@@ -538,6 +561,10 @@ namespace ts.server {
         }
 
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
+            throw new Error("Not Implemented Yet."); 
+        }
+        
+        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion {
             throw new Error("Not Implemented Yet."); 
         }
 

@@ -1,4 +1,5 @@
 === tests/cases/conformance/functions/functionImplementations.ts ===
+
 // FunctionExpression with no return type annotation and no return statement returns void
 var v: void = function () { } ();
 >v : void
@@ -324,7 +325,7 @@ class AnotherClass { private x }
 var f7: (x: number) => string | number = x => { // should be (x: number) => number | string
 >f7 : (x: number) => string | number
 >x : number
->x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
+>x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => number | string
 >x : number
 
     if (x < 0) { return x; }

@@ -11,14 +11,15 @@ m1.f();
 ///<amd-dependency path='bar' name='b'/>
 ///<amd-dependency path='foo'/>
 ///<amd-dependency path='goo' name='c'/>
-(function (deps, factory) {
+(function (factory) {
     if (typeof module === 'object' && typeof module.exports === 'object') {
         var v = factory(require, exports); if (v !== undefined) module.exports = v;
     }
     else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
+        define(["require", "exports", "bar", "goo", "foo", "m2"], factory);
     }
-})(["require", "exports", "bar", "goo", "foo", "m2"], function (require, exports, b, c) {
+})(function (require, exports, b, c) {
+    "use strict";
     var m1 = require("m2");
     m1.f();
 });

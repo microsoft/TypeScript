@@ -16,7 +16,7 @@ class c1 {
         return this.p1 + b;
 >this.p1 + b : number
 >this.p1 : number
->this : c1
+>this : this
 >p1 : number
 >b : number
 
@@ -28,10 +28,10 @@ class c1 {
         return this.p2(this.p1);
 >this.p2(this.p1) : number
 >this.p2 : (b: number) => number
->this : c1
+>this : this
 >p2 : (b: number) => number
 >this.p1 : number
->this : c1
+>this : this
 >p1 : number
 
     }// trailing comment Getter
@@ -43,11 +43,11 @@ class c1 {
         this.p1 = this.p2(value);
 >this.p1 = this.p2(value) : number
 >this.p1 : number
->this : c1
+>this : this
 >p1 : number
 >this.p2(value) : number
 >this.p2 : (b: number) => number
->this : c1
+>this : this
 >p2 : (b: number) => number
 >value : number
 
@@ -64,7 +64,7 @@ class c1 {
         return this.p1 + b;
 >this.p1 + b : number
 >this.p1 : number
->this : c1
+>this : this
 >p1 : number
 >b : number
 
@@ -76,10 +76,10 @@ class c1 {
         return this.pp2(this.pp1);
 >this.pp2(this.pp1) : number
 >this.pp2 : (b: number) => number
->this : c1
+>this : this
 >pp2 : (b: number) => number
 >this.pp1 : number
->this : c1
+>this : this
 >pp1 : number
     }
     /** setter property*/
@@ -90,11 +90,11 @@ class c1 {
         this.pp1 = this.pp2(value);
 >this.pp1 = this.pp2(value) : number
 >this.pp1 : number
->this : c1
+>this : this
 >pp1 : number
 >this.pp2(value) : number
 >this.pp2 : (b: number) => number
->this : c1
+>this : this
 >pp2 : (b: number) => number
 >value : number
     }
@@ -158,7 +158,7 @@ class c1 {
         return this.nc_p1 + b;
 >this.nc_p1 + b : number
 >this.nc_p1 : number
->this : c1
+>this : this
 >nc_p1 : number
 >b : number
     }
@@ -168,10 +168,10 @@ class c1 {
         return this.nc_p2(this.nc_p1);
 >this.nc_p2(this.nc_p1) : number
 >this.nc_p2 : (b: number) => number
->this : c1
+>this : this
 >nc_p2 : (b: number) => number
 >this.nc_p1 : number
->this : c1
+>this : this
 >nc_p1 : number
     }
     public set nc_p3(value: number) {
@@ -181,11 +181,11 @@ class c1 {
         this.nc_p1 = this.nc_p2(value);
 >this.nc_p1 = this.nc_p2(value) : number
 >this.nc_p1 : number
->this : c1
+>this : this
 >nc_p1 : number
 >this.nc_p2(value) : number
 >this.nc_p2 : (b: number) => number
->this : c1
+>this : this
 >nc_p2 : (b: number) => number
 >value : number
     }
@@ -199,7 +199,7 @@ class c1 {
         return this.nc_pp1 + b;
 >this.nc_pp1 + b : number
 >this.nc_pp1 : number
->this : c1
+>this : this
 >nc_pp1 : number
 >b : number
     }
@@ -209,10 +209,10 @@ class c1 {
         return this.nc_pp2(this.nc_pp1);
 >this.nc_pp2(this.nc_pp1) : number
 >this.nc_pp2 : (b: number) => number
->this : c1
+>this : this
 >nc_pp2 : (b: number) => number
 >this.nc_pp1 : number
->this : c1
+>this : this
 >nc_pp1 : number
     }
     private set nc_pp3(value: number) {
@@ -222,11 +222,11 @@ class c1 {
         this.nc_pp1 = this.nc_pp2(value);
 >this.nc_pp1 = this.nc_pp2(value) : number
 >this.nc_pp1 : number
->this : c1
+>this : this
 >nc_pp1 : number
 >this.nc_pp2(value) : number
 >this.nc_pp2 : (b: number) => number
->this : c1
+>this : this
 >nc_pp2 : (b: number) => number
 >value : number
     }
@@ -284,7 +284,7 @@ class c1 {
         return this.a_p1 + b;
 >this.a_p1 + b : number
 >this.a_p1 : number
->this : c1
+>this : this
 >a_p1 : number
 >b : number
     }
@@ -295,10 +295,10 @@ class c1 {
         return this.a_p2(this.a_p1);
 >this.a_p2(this.a_p1) : number
 >this.a_p2 : (b: number) => number
->this : c1
+>this : this
 >a_p2 : (b: number) => number
 >this.a_p1 : number
->this : c1
+>this : this
 >a_p1 : number
     }
     // setter property
@@ -309,11 +309,11 @@ class c1 {
         this.a_p1 = this.a_p2(value);
 >this.a_p1 = this.a_p2(value) : number
 >this.a_p1 : number
->this : c1
+>this : this
 >a_p1 : number
 >this.a_p2(value) : number
 >this.a_p2 : (b: number) => number
->this : c1
+>this : this
 >a_p2 : (b: number) => number
 >value : number
     }
@@ -329,7 +329,7 @@ class c1 {
         return this.a_p1 + b;
 >this.a_p1 + b : number
 >this.a_p1 : number
->this : c1
+>this : this
 >a_p1 : number
 >b : number
     }
@@ -340,10 +340,10 @@ class c1 {
         return this.a_pp2(this.a_pp1);
 >this.a_pp2(this.a_pp1) : number
 >this.a_pp2 : (b: number) => number
->this : c1
+>this : this
 >a_pp2 : (b: number) => number
 >this.a_pp1 : number
->this : c1
+>this : this
 >a_pp1 : number
     }
     // setter property
@@ -354,11 +354,11 @@ class c1 {
         this.a_pp1 = this.a_pp2(value);
 >this.a_pp1 = this.a_pp2(value) : number
 >this.a_pp1 : number
->this : c1
+>this : this
 >a_pp1 : number
 >this.a_pp2(value) : number
 >this.a_pp2 : (b: number) => number
->this : c1
+>this : this
 >a_pp2 : (b: number) => number
 >value : number
     }
@@ -422,7 +422,7 @@ class c1 {
         return this.b_p1 + b;
 >this.b_p1 + b : number
 >this.b_p1 : number
->this : c1
+>this : this
 >b_p1 : number
 >b : number
     }
@@ -433,10 +433,10 @@ class c1 {
         return this.b_p2(this.b_p1);
 >this.b_p2(this.b_p1) : number
 >this.b_p2 : (b: number) => number
->this : c1
+>this : this
 >b_p2 : (b: number) => number
 >this.b_p1 : number
->this : c1
+>this : this
 >b_p1 : number
     }
     /** setter property */
@@ -447,11 +447,11 @@ class c1 {
         this.b_p1 = this.b_p2(value);
 >this.b_p1 = this.b_p2(value) : number
 >this.b_p1 : number
->this : c1
+>this : this
 >b_p1 : number
 >this.b_p2(value) : number
 >this.b_p2 : (b: number) => number
->this : c1
+>this : this
 >b_p2 : (b: number) => number
 >value : number
     }
@@ -467,7 +467,7 @@ class c1 {
         return this.b_p1 + b;
 >this.b_p1 + b : number
 >this.b_p1 : number
->this : c1
+>this : this
 >b_p1 : number
 >b : number
     }
@@ -478,10 +478,10 @@ class c1 {
         return this.b_pp2(this.b_pp1);
 >this.b_pp2(this.b_pp1) : number
 >this.b_pp2 : (b: number) => number
->this : c1
+>this : this
 >b_pp2 : (b: number) => number
 >this.b_pp1 : number
->this : c1
+>this : this
 >b_pp1 : number
     }
     /** setter property */
@@ -492,11 +492,11 @@ class c1 {
         this.b_pp1 = this.b_pp2(value);
 >this.b_pp1 = this.b_pp2(value) : number
 >this.b_pp1 : number
->this : c1
+>this : this
 >b_pp1 : number
 >this.b_pp2(value) : number
 >this.b_pp2 : (b: number) => number
->this : c1
+>this : this
 >b_pp2 : (b: number) => number
 >value : number
     }
@@ -704,7 +704,7 @@ class cProperties {
 
         return this.val;
 >this.val : number
->this : cProperties
+>this : this
 >val : number
 
     } // trailing comment of only getter
@@ -713,7 +713,7 @@ class cProperties {
 
         return this.val;
 >this.val : number
->this : cProperties
+>this : this
 >val : number
     }
     /**setter only property*/
@@ -724,7 +724,7 @@ class cProperties {
         this.val = value;
 >this.val = value : number
 >this.val : number
->this : cProperties
+>this : this
 >val : number
 >value : number
     }
@@ -735,7 +735,7 @@ class cProperties {
         this.val = value;
 >this.val = value : number
 >this.val : number
->this : cProperties
+>this : this
 >val : number
 >value : number
 

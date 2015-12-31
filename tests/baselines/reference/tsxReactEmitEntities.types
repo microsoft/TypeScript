@@ -1,0 +1,22 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+declare var React: any;
+>React : any
+
+<div>Dot goes here: &middot; &notAnEntity; </div>;
+><div>Dot goes here: &middot; &notAnEntity; </div> : JSX.Element
+>div : any
+>div : any
+

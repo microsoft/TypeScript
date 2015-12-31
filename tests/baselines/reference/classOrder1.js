@@ -19,6 +19,6 @@ var A = (function () {
         /*WScript.Echo("Here!");*/
     };
     return A;
-})();
+}());
 var a = new A();
 a.foo();

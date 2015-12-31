@@ -6,14 +6,14 @@ enum Color { R, G, B }
 >B : Color
 
 function f1(x: Color | string) {
->f1 : (x: string | Color) => void
->x : string | Color
+>f1 : (x: Color | string) => void
+>x : Color | string
 >Color : Color
 
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | Color
+>x : Color | string
 >"number" : string
 
         var y = x;
@@ -35,14 +35,14 @@ function f1(x: Color | string) {
 }
 
 function f2(x: Color | string | string[]) {
->f2 : (x: string | Color | string[]) => void
->x : string | Color | string[]
+>f2 : (x: Color | string | string[]) => void
+>x : Color | string | string[]
 >Color : Color
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
 >typeof x : string
->x : string | Color | string[]
+>x : Color | string | string[]
 >"object" : string
 
         var y = x;
@@ -55,7 +55,7 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "number") {
 >typeof x === "number" : boolean
 >typeof x : string
->x : string | Color | string[]
+>x : Color | string | string[]
 >"number" : string
 
         var z = x;
@@ -77,7 +77,7 @@ function f2(x: Color | string | string[]) {
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >typeof x : string
->x : string | Color | string[]
+>x : Color | string | string[]
 >"string" : string
 
         var a = x;

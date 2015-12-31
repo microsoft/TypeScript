@@ -3,8 +3,14 @@
 
 /* @internal */
 namespace ts.formatting {
-    let scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
-
+    const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
+    const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);
+    
+    /**
+     * Scanner that is currently used for formatting
+     */
+    let scanner: Scanner;
+    
     export interface FormattingScanner {
         advance(): void;
         isOnToken(): boolean;
@@ -17,10 +23,13 @@ namespace ts.formatting {
         Scan,
         RescanGreaterThanToken,
         RescanSlashToken,
-        RescanTemplateToken
+        RescanTemplateToken,
+        RescanJsxIdentifier
     }
 
     export function getFormattingScanner(sourceFile: SourceFile, startPos: number, endPos: number): FormattingScanner {
+        Debug.assert(scanner === undefined);
+        scanner = sourceFile.languageVariant === LanguageVariant.JSX ? jsxScanner : standardScanner;
 
         scanner.setText(sourceFile.text);
         scanner.setTextPos(startPos);
@@ -39,12 +48,17 @@ namespace ts.formatting {
             isOnToken: isOnToken,
             lastTrailingTriviaWasNewLine: () => wasNewLine,
             close: () => {
+                Debug.assert(scanner !== undefined);
+                
                 lastTokenInfo = undefined;
                 scanner.setText(undefined);
+                scanner = undefined;
             }
         }
 
         function advance(): void {
+            Debug.assert(scanner !== undefined);
+            
             lastTokenInfo = undefined;
             let isStarted = scanner.getStartPos() !== startPos;
 
@@ -108,6 +122,20 @@ namespace ts.formatting {
 
             return false;
         }
+        
+        function shouldRescanJsxIdentifier(node: Node): boolean {
+            if (node.parent) {
+                switch(node.parent.kind) {
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxClosingElement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return node.kind === SyntaxKind.Identifier;
+                }
+            }
+            
+            return false;
+        }
 
         function shouldRescanSlashToken(container: Node): boolean {
             return container.kind === SyntaxKind.RegularExpressionLiteral;
@@ -123,6 +151,8 @@ namespace ts.formatting {
         }
 
         function readTokenInfo(n: Node): TokenInfo {
+            Debug.assert(scanner !== undefined);
+            
             if (!isOnToken()) {
                 // scanner is not on the token (either advance was not called yet or scanner is already past the end position)
                 return {
@@ -141,7 +171,9 @@ namespace ts.formatting {
                     ? ScanAction.RescanSlashToken 
                     : shouldRescanTemplateToken(n)
                         ? ScanAction.RescanTemplateToken
-                        : ScanAction.Scan
+                        : shouldRescanJsxIdentifier(n)
+                            ? ScanAction.RescanJsxIdentifier 
+                            : ScanAction.Scan
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
                 // readTokenInfo was called before with the same expected scan action.
@@ -175,6 +207,10 @@ namespace ts.formatting {
             else if (expectedScanAction === ScanAction.RescanTemplateToken && currentToken === SyntaxKind.CloseBraceToken) {
                 currentToken = scanner.reScanTemplateToken();
                 lastScanAction = ScanAction.RescanTemplateToken;
+            }
+            else if (expectedScanAction === ScanAction.RescanJsxIdentifier && currentToken === SyntaxKind.Identifier) {
+                currentToken = scanner.scanJsxIdentifier();
+                lastScanAction = ScanAction.RescanJsxIdentifier;
             }
             else {
                 lastScanAction = ScanAction.Scan;
@@ -224,6 +260,8 @@ namespace ts.formatting {
         }
 
         function isOnToken(): boolean {
+            Debug.assert(scanner !== undefined);
+            
             let current = (lastTokenInfo && lastTokenInfo.token.kind) || scanner.getToken();
             let startPos = (lastTokenInfo && lastTokenInfo.token.pos) || scanner.getStartPos();
             return startPos < endPos && current !== SyntaxKind.EndOfFileToken && !isTrivia(current);

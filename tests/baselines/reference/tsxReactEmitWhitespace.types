@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxReactEmitWhitespace.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 
@@ -32,7 +32,7 @@ var p = 0;
 <div>  {p}    </div>;
 ><div>  {p}    </div> : JSX.Element
 >div : any
->p : any
+>p : number
 >div : any
 
 // Emit only p
@@ -41,7 +41,7 @@ var p = 0;
 >div : any
 
       {p}    
->p : any
+>p : number
 
       </div>;
 >div : any
@@ -52,7 +52,7 @@ var p = 0;
 >div : any
 
   {p}
->p : any
+>p : number
 
     </div>;
 >div : any

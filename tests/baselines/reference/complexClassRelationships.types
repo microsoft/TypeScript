@@ -79,14 +79,14 @@ class Foo {
         return new GenericType<string>(this);
 >new GenericType<string>(this) : GenericType<string>
 >GenericType : typeof GenericType
->this : Foo
+>this : this
     }
     public populate() {
 >populate : () => void
 
         this.prop2;
 >this.prop2 : BaseCollection<Derived>
->this : Foo
+>this : this
 >prop2 : BaseCollection<Derived>
     }
     public get prop2(): BaseCollection<Derived> {

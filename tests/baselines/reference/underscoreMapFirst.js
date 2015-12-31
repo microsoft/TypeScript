@@ -65,4 +65,4 @@ var MyView = (function (_super) {
         return _.map(allSeries, _.first);
     };
     return MyView;
-})(View);
+}(View));

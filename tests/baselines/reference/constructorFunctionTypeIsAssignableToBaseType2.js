@@ -43,14 +43,14 @@ var Base = (function () {
     function Base(x) {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived(x) {
         _super.call(this, x);
     }
     return Derived;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     // ok, not enforcing assignability relation on this
@@ -59,4 +59,4 @@ var Derived2 = (function (_super) {
         return 1;
     }
     return Derived2;
-})(Base);
+}(Base));

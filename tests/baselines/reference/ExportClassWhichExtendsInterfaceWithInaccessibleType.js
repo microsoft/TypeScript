@@ -31,6 +31,6 @@ var A;
             return 1;
         };
         return Point2d;
-    })();
+    }());
     A.Point2d = Point2d;
 })(A || (A = {}));

@@ -70,33 +70,34 @@ fileNames.forEach(fileName => {
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+"use strict";
 var ts = require("typescript");
 function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
         switch (node.kind) {
-            case 196 /* ForStatement */:
-            case 197 /* ForInStatement */:
-            case 195 /* WhileStatement */:
-            case 194 /* DoStatement */:
-                if (node.statement.kind !== 189 /* Block */) {
+            case ts.SyntaxKind.ForStatement:
+            case ts.SyntaxKind.ForInStatement:
+            case ts.SyntaxKind.WhileStatement:
+            case ts.SyntaxKind.DoStatement:
+                if (node.statement.kind !== ts.SyntaxKind.Block) {
                     report(node, "A looping statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 193 /* IfStatement */:
+            case ts.SyntaxKind.IfStatement:
                 var ifStatement = node;
-                if (ifStatement.thenStatement.kind !== 189 /* Block */) {
+                if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
                 if (ifStatement.elseStatement &&
-                    ifStatement.elseStatement.kind !== 189 /* Block */ &&
-                    ifStatement.elseStatement.kind !== 193 /* IfStatement */) {
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.Block &&
+                    ifStatement.elseStatement.kind !== ts.SyntaxKind.IfStatement) {
                     report(ifStatement.elseStatement, "An else statement's contents should be wrapped in a block body.");
                 }
                 break;
-            case 178 /* BinaryExpression */:
+            case ts.SyntaxKind.BinaryExpression:
                 var op = node.operatorToken.kind;
-                if (op === 29 /* EqualsEqualsToken */ || op == 30 /* ExclamationEqualsToken */) {
+                if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.");
                 }
                 break;
@@ -112,7 +113,7 @@ exports.delint = delint;
 var fileNames = process.argv.slice(2);
 fileNames.forEach(function (fileName) {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), 2 /* ES6 */, true);
+    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

@@ -1,4 +1,5 @@
 === tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
+
 function fn(x) {
 >fn : (x: any) => void
 >x : any
@@ -81,13 +82,13 @@ class C<T> {
 
         throw this.value;
 >this.value : T
->this : C<T>
+>this : this
 >value : T
     }
 
     constructor() {
         throw this;
->this : C<T>
+>this : this
     }
 }
 

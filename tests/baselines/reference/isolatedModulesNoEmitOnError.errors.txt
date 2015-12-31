@@ -1,7 +1,7 @@
-error TS5045: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
+error TS5053: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
 
 
-!!! error TS5045: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
-==== tests/cases/compiler/isolatedModulesNoEmitOnError.ts (0 errors) ====
+!!! error TS5053: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
+==== tests/cases/compiler/file1.ts (0 errors) ====
     
     export var x;

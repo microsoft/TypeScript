@@ -1,5 +1,5 @@
-tests/cases/compiler/contextualTyping21.ts(1,36): error TS2322: Type '(number | { id: number; })[]' is not assignable to type '{ id: number; }[]'.
-  Type 'number | { id: number; }' is not assignable to type '{ id: number; }'.
+tests/cases/compiler/contextualTyping21.ts(1,36): error TS2322: Type '({ id: number; } | number)[]' is not assignable to type '{ id: number; }[]'.
+  Type '{ id: number; } | number' is not assignable to type '{ id: number; }'.
     Type 'number' is not assignable to type '{ id: number; }'.
       Property 'id' is missing in type 'Number'.
 
@@ -7,7 +7,7 @@ tests/cases/compiler/contextualTyping21.ts(1,36): error TS2322: Type '(number | 
 ==== tests/cases/compiler/contextualTyping21.ts (1 errors) ====
     var foo:{id:number;}[] = [{id:1}]; foo = [{id:1}, 1];
                                        ~~~
-!!! error TS2322: Type '(number | { id: number; })[]' is not assignable to type '{ id: number; }[]'.
-!!! error TS2322:   Type 'number | { id: number; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322: Type '({ id: number; } | number)[]' is not assignable to type '{ id: number; }[]'.
+!!! error TS2322:   Type '{ id: number; } | number' is not assignable to type '{ id: number; }'.
 !!! error TS2322:     Type 'number' is not assignable to type '{ id: number; }'.
 !!! error TS2322:       Property 'id' is missing in type 'Number'.

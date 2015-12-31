@@ -22,24 +22,24 @@
     }
 
 type FileMatchOrMatch = FileMatch | Match;
->FileMatchOrMatch : Match | FileMatch
+>FileMatchOrMatch : FileMatch | Match
 >FileMatch : FileMatch
 >Match : Match
 
 
 let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;
->elementA : Match | FileMatch
->FileMatchOrMatch : Match | FileMatch
->elementB : Match | FileMatch
->FileMatchOrMatch : Match | FileMatch
+>elementA : FileMatch | Match
+>FileMatchOrMatch : FileMatch | Match
+>elementB : FileMatch | Match
+>FileMatchOrMatch : FileMatch | Match
 
 if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 >elementA instanceof FileMatch && elementB instanceof FileMatch : boolean
 >elementA instanceof FileMatch : boolean
->elementA : Match | FileMatch
+>elementA : FileMatch | Match
 >FileMatch : typeof FileMatch
 >elementB instanceof FileMatch : boolean
->elementB : Match | FileMatch
+>elementB : FileMatch | Match
 >FileMatch : typeof FileMatch
 
     let a = elementA.resource().path;
@@ -66,7 +66,7 @@ if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 >elementA : Match | FileMatch
 >Match : typeof Match
 >elementB instanceof Match : boolean
->elementB : Match | FileMatch
+>elementB : FileMatch | Match
 >Match : typeof Match
 
     let a = elementA.range();

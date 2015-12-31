@@ -31,8 +31,7 @@ class C1 {
 
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3?:number) { return C1M5A1 + C1M5A2; }
 
-    // Negative test
-    // "Optional parameters may only be followed by other optional parameters"
+    // Uninitialized parameter makes the initialized one required
     public C1M5(C1M5A1:number,C1M5A2:number=0,C1M5A3:number) { return C1M5A1 + C1M5A2; }
 }
 
@@ -152,14 +151,13 @@ var C1 = (function () {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;
     };
-    // Negative test
-    // "Optional parameters may only be followed by other optional parameters"
+    // Uninitialized parameter makes the initialized one required
     C1.prototype.C1M5 = function (C1M5A1, C1M5A2, C1M5A3) {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;
     };
     return C1;
-})();
+}());
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2(v2) {
@@ -167,7 +165,7 @@ var C2 = (function (_super) {
         _super.call(this, v2);
     }
     return C2;
-})(C1);
+}(C1));
 function F1() { return 0; }
 function F2(F2A1) { return F2A1; }
 function F3(F3A1, F3A2) {

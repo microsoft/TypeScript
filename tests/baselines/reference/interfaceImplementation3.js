@@ -21,4 +21,4 @@ var C4 = (function () {
     }
     C4.prototype.iFn = function () { };
     return C4;
-})();
+}());
