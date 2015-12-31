@@ -1,0 +1,1 @@
+for (let {toString, toLowerCase} in []) {}

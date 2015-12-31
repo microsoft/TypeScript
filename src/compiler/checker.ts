@@ -12693,9 +12693,7 @@ namespace ts {
 
             const isVariableInForInStatement = node.parent.parent.kind === SyntaxKind.ForInStatement;
             // For a binding pattern, check contained binding elements
-            // NOTE: do not check them if this is a binding pattern in variable declaration of ForIn statement
-            // this situation is already illegal so no need to report misleading errors.
-            if (isBindingPattern(node.name) && !isVariableInForInStatement) {
+            if (isBindingPattern(node.name)) {
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
