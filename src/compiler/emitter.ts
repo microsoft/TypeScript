@@ -7221,7 +7221,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Replace entities like &nbsp;
                     result = result.replace(/&(\w+);/g, function(s: any, m: string) {
                         if (entities[m] !== undefined) {
-                            return String.fromCharCode(entities[m]);
+                            const ch = String.fromCharCode(entities[m]);
+                            // &quot; needs to be escaped
+                            return ch === "\"" ? "\\\"" : ch;
                         }
                         else {
                             return s;

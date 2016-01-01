@@ -19,3 +19,7 @@ declare var React: any;
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 
+<div>Be careful of &quot;-ed strings!</div>;
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+
