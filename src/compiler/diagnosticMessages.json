@@ -798,7 +798,7 @@
     "A decorator can only decorate a method implementation, not an overload.": {
         "category": "Error",
         "code": 1249
-    }, 
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -2377,12 +2377,12 @@
         "category": "Message",
         "code": 6078
     },
-    "Specify JSX code generation: 'preserve' or 'react'": {
+    "Specify JSX code generation: 'preserve', 'transform', or 'react'": {
         "category": "Message",
         "code": 6080
     },
-    "Argument for '--jsx' must be 'preserve' or 'react'.": {
-        "category": "Message",
+    "Argument for '--jsx' must be 'preserve', 'transform', or 'react'.": {
+        "category": "Error",
         "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
@@ -2393,7 +2393,22 @@
         "category": "Message",
         "code": 6083
     },
-
+    "JSX transform: Namespace. Default to 'JSX'": {
+        "category": "Message",
+        "code": 6084
+    },
+    "JSX transform: Compose function. Default to 'compose'": {
+        "category": "Message",
+        "code": 6085
+    },
+    "JSX transform: Spread function. Default to 'spread'": {
+        "category": "Message",
+        "code": 6086
+    },
+    "JSX transform: Pass children as array. Default to false.": {
+        "category": "Message",
+        "code": 6087
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -48,11 +48,32 @@ namespace ts {
             name: "jsx",
             type: {
                 "preserve": JsxEmit.Preserve,
-                "react": JsxEmit.React
+                "react": JsxEmit.React,
+                "transform": JsxEmit.Transform
             },
             paramType: Diagnostics.KIND,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_or_react,
-            error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
+            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_transform_or_react,
+            error: Diagnostics.Argument_for_jsx_must_be_preserve_transform_or_react
+        },
+        {
+            name: "jsxNamespace",
+            type: "string",
+            description: Diagnostics.JSX_transform_Colon_Namespace_Default_to_JSX
+        },
+        {
+            name: "jsxComposeFunction",
+            type: "string",
+            description: Diagnostics.JSX_transform_Colon_Compose_function_Default_to_compose
+        },
+        {
+            name: "jsxSpreadFunction",
+            type: "string",
+            description: Diagnostics.JSX_transform_Colon_Spread_function_Default_to_spread
+        },
+        {
+            name: "jsxChildrenAsArray",
+            type: "boolean",
+            description: Diagnostics.JSX_transform_Colon_Pass_children_as_array_Default_to_false
         },
         {
             name: "listFiles",
@@ -514,7 +535,7 @@ namespace ts {
                 for (const extension of supportedExtensions) {
                     const filesInDirWithExtension = host.readDirectory(basePath, extension, exclude);
                     for (const fileName of filesInDirWithExtension) {
-                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension, 
+                        // .ts extension would read the .d.ts extension files too but since .d.ts is lower priority extension,
                         // lets pick them when its turn comes up
                         if (extension === ".ts" && fileExtensionIs(fileName, ".d.ts")) {
                             continue;

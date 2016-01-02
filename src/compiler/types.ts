@@ -2382,6 +2382,10 @@ namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
+        jsxNamespace?: string;
+        jsxComposeFunction?: string;
+        jsxSpreadFunction?: string;
+        jsxChildrenAsArray?: boolean;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -2441,7 +2445,8 @@ namespace ts {
     export const enum JsxEmit {
         None = 0,
         Preserve = 1,
-        React = 2
+        React = 2,
+        Transform = 3
     }
 
     export const enum NewLineKind {
