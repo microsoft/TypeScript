@@ -1,0 +1,153 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterDefaults.ts ===
+/** Defaults on interfaces **/
+interface HasDefault1<T = number> {
+>HasDefault1 : Symbol(HasDefault1, Decl(typeParameterDefaults.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 1, 22))
+
+	x: T;
+>x : Symbol(x, Decl(typeParameterDefaults.ts, 1, 35))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 1, 22))
+}
+// OK
+let a3: HasDefault1;
+>a3 : Symbol(a3, Decl(typeParameterDefaults.ts, 5, 3))
+>HasDefault1 : Symbol(HasDefault1, Decl(typeParameterDefaults.ts, 0, 0))
+
+// a3.x: number
+a3.x = 10;
+>a3.x : Symbol(HasDefault1.x, Decl(typeParameterDefaults.ts, 1, 35))
+>a3 : Symbol(a3, Decl(typeParameterDefaults.ts, 5, 3))
+>x : Symbol(HasDefault1.x, Decl(typeParameterDefaults.ts, 1, 35))
+
+interface HasDefault2<T1, T2 = number> {
+>HasDefault2 : Symbol(HasDefault2, Decl(typeParameterDefaults.ts, 7, 10))
+>T1 : Symbol(T1, Decl(typeParameterDefaults.ts, 9, 22))
+>T2 : Symbol(T2, Decl(typeParameterDefaults.ts, 9, 25))
+
+	x1: T1;
+>x1 : Symbol(x1, Decl(typeParameterDefaults.ts, 9, 40))
+>T1 : Symbol(T1, Decl(typeParameterDefaults.ts, 9, 22))
+
+	x2: T2;
+>x2 : Symbol(x2, Decl(typeParameterDefaults.ts, 10, 8))
+>T2 : Symbol(T2, Decl(typeParameterDefaults.ts, 9, 25))
+}
+// Same as <string, number>
+let a5: HasDefault2<string>;
+>a5 : Symbol(a5, Decl(typeParameterDefaults.ts, 14, 3))
+>HasDefault2 : Symbol(HasDefault2, Decl(typeParameterDefaults.ts, 7, 10))
+
+// a5.x1: string
+a5.x1 = '';
+>a5.x1 : Symbol(HasDefault2.x1, Decl(typeParameterDefaults.ts, 9, 40))
+>a5 : Symbol(a5, Decl(typeParameterDefaults.ts, 14, 3))
+>x1 : Symbol(HasDefault2.x1, Decl(typeParameterDefaults.ts, 9, 40))
+
+// a5.x2: number
+a5.x2 = 42;
+>a5.x2 : Symbol(HasDefault2.x2, Decl(typeParameterDefaults.ts, 10, 8))
+>a5 : Symbol(a5, Decl(typeParameterDefaults.ts, 14, 3))
+>x2 : Symbol(HasDefault2.x2, Decl(typeParameterDefaults.ts, 10, 8))
+
+let a6: HasDefault2<boolean, boolean>;
+>a6 : Symbol(a6, Decl(typeParameterDefaults.ts, 20, 3))
+>HasDefault2 : Symbol(HasDefault2, Decl(typeParameterDefaults.ts, 7, 10))
+
+// a6.x1: boolean, a6.x2: boolean
+a6.x1 = true;
+>a6.x1 : Symbol(HasDefault2.x1, Decl(typeParameterDefaults.ts, 9, 40))
+>a6 : Symbol(a6, Decl(typeParameterDefaults.ts, 20, 3))
+>x1 : Symbol(HasDefault2.x1, Decl(typeParameterDefaults.ts, 9, 40))
+
+a6.x2 = false;
+>a6.x2 : Symbol(HasDefault2.x2, Decl(typeParameterDefaults.ts, 10, 8))
+>a6 : Symbol(a6, Decl(typeParameterDefaults.ts, 20, 3))
+>x2 : Symbol(HasDefault2.x2, Decl(typeParameterDefaults.ts, 10, 8))
+
+/** Defaults on classes */
+class ClassDefault1<T = number> {
+>ClassDefault1 : Symbol(ClassDefault1, Decl(typeParameterDefaults.ts, 23, 14))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 26, 20))
+
+	x: T;
+>x : Symbol(x, Decl(typeParameterDefaults.ts, 26, 33))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 26, 20))
+}
+let c1 = new ClassDefault1();
+>c1 : Symbol(c1, Decl(typeParameterDefaults.ts, 29, 3))
+>ClassDefault1 : Symbol(ClassDefault1, Decl(typeParameterDefaults.ts, 23, 14))
+
+// c1.x: number
+c1.x = 10;
+>c1.x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+>c1 : Symbol(c1, Decl(typeParameterDefaults.ts, 29, 3))
+>x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+
+class Derived1 extends ClassDefault1 {	
+>Derived1 : Symbol(Derived1, Decl(typeParameterDefaults.ts, 31, 10))
+>ClassDefault1 : Symbol(ClassDefault1, Decl(typeParameterDefaults.ts, 23, 14))
+}
+let d1 = new Derived1();
+>d1 : Symbol(d1, Decl(typeParameterDefaults.ts, 35, 3))
+>Derived1 : Symbol(Derived1, Decl(typeParameterDefaults.ts, 31, 10))
+
+// d1.x: number
+d1.x = 10;
+>d1.x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+>d1 : Symbol(d1, Decl(typeParameterDefaults.ts, 35, 3))
+>x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+
+class Derived2<T = string> extends ClassDefault1<T> {
+>Derived2 : Symbol(Derived2, Decl(typeParameterDefaults.ts, 37, 10))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 39, 15))
+>ClassDefault1 : Symbol(ClassDefault1, Decl(typeParameterDefaults.ts, 23, 14))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 39, 15))
+}
+let d2a = new Derived2();
+>d2a : Symbol(d2a, Decl(typeParameterDefaults.ts, 41, 3))
+>Derived2 : Symbol(Derived2, Decl(typeParameterDefaults.ts, 37, 10))
+
+// d2a.x: string
+d2a.x = 'hello';
+>d2a.x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+>d2a : Symbol(d2a, Decl(typeParameterDefaults.ts, 41, 3))
+>x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+
+let d2b = new Derived2<number>();
+>d2b : Symbol(d2b, Decl(typeParameterDefaults.ts, 45, 3))
+>Derived2 : Symbol(Derived2, Decl(typeParameterDefaults.ts, 37, 10))
+
+// d2b.x: number
+d2b.x = 43;
+>d2b.x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+>d2b : Symbol(d2b, Decl(typeParameterDefaults.ts, 45, 3))
+>x : Symbol(ClassDefault1.x, Decl(typeParameterDefaults.ts, 26, 33))
+
+class ClassDefault2<T, U = string> {
+>ClassDefault2 : Symbol(ClassDefault2, Decl(typeParameterDefaults.ts, 47, 11))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 49, 20))
+>U : Symbol(U, Decl(typeParameterDefaults.ts, 49, 22))
+
+	t: T;
+>t : Symbol(t, Decl(typeParameterDefaults.ts, 49, 36))
+>T : Symbol(T, Decl(typeParameterDefaults.ts, 49, 20))
+
+	u: U;
+>u : Symbol(u, Decl(typeParameterDefaults.ts, 50, 6))
+>U : Symbol(U, Decl(typeParameterDefaults.ts, 49, 22))
+}
+class Derived3 extends ClassDefault2<string> {}
+>Derived3 : Symbol(Derived3, Decl(typeParameterDefaults.ts, 52, 1))
+>ClassDefault2 : Symbol(ClassDefault2, Decl(typeParameterDefaults.ts, 47, 11))
+
+let d3 = new Derived3();
+>d3 : Symbol(d3, Decl(typeParameterDefaults.ts, 54, 3))
+>Derived3 : Symbol(Derived3, Decl(typeParameterDefaults.ts, 52, 1))
+
+// d3.u: string
+d3.u = '';
+>d3.u : Symbol(ClassDefault2.u, Decl(typeParameterDefaults.ts, 50, 6))
+>d3 : Symbol(d3, Decl(typeParameterDefaults.ts, 54, 3))
+>u : Symbol(ClassDefault2.u, Decl(typeParameterDefaults.ts, 50, 6))
+
+

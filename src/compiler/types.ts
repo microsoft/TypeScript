@@ -538,6 +538,7 @@ namespace ts {
     export interface TypeParameterDeclaration extends Declaration {
         name: Identifier;
         constraint?: TypeNode;
+        default?: TypeNode;
 
         // For error recovery purposes.
         expression?: Expression;
@@ -2248,6 +2249,7 @@ namespace ts {
     // Type parameters (TypeFlags.TypeParameter)
     export interface TypeParameter extends Type {
         constraint: Type;        // Constraint
+        default?: Type;
         /* @internal */
         target?: TypeParameter;  // Instantiation target
         /* @internal */

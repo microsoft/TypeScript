@@ -1771,6 +1771,14 @@
         "category": "Error",
         "code": 2660
     },
+    "Required type parameters may not follow optional type parameters": {
+        "category": "Error",
+        "code": 2661
+    },
+     "Type parameter '{0}' has a circular default.": {
+        "category": "Error",
+        "code": 2662
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
