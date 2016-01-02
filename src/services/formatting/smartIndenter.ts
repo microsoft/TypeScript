@@ -40,7 +40,7 @@ namespace ts.formatting {
                 // move backwards until we find a line with a non-whitespace character,
                 // then find the first non-whitespace character for that line.
                 let current = position;
-                while (current > 0){
+                while (current > 0) {
                     let char = sourceFile.text.charCodeAt(current);
                     if (!isWhiteSpace(char) && !isLineBreak(char)) {
                         break;
@@ -70,10 +70,10 @@ namespace ts.formatting {
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) &&
                     shouldIndentChildNode(current, previous)) {
-                    
+
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
-                    if (isNodeComponentListIndentationPrevented(current, position, sourceFile) ||
+                    if (listAtPositionPreventsIndentation(current, position, sourceFile) ||
                         nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
 
                         indentationDelta = 0;
@@ -159,8 +159,8 @@ namespace ts.formatting {
                 // increase indentation if parent node wants its content to be indented and parent and child nodes don't start on the same line
                 if (shouldIndentChildNode(parent, current) &&
                     !parentAndChildShareLine &&
-                    !isListElementIndentationPrevented(current, sourceFile)) {
-                    
+                    !containingListPreventsIndentation(current, sourceFile)) {
+
                     indentationDelta += options.IndentSize;
                 }
 
@@ -437,43 +437,46 @@ namespace ts.formatting {
         export function findFirstNonWhitespaceColumn(startPos: number, endPos: number, sourceFile: SourceFile, options: EditorOptions): number {
             return findFirstNonWhitespaceCharacterAndColumn(startPos, endPos, sourceFile, options).column;
         }
-        
-        function isNodeComponentListIndentationPrevented(node: Node, position: number, sourceFile: SourceFile) {
-            let list = getListByPosition(position, position, node);
+
+        function listAtPositionPreventsIndentation(parent: Node, position: number, sourceFile: SourceFile) {
+            let list = getListByPosition(position, position, parent);
             if (!list || !list.length) {
                 return false;
             }
-            return isListIndentationPrevented(list, sourceFile);
+            return listPreventsIndentation(list, sourceFile);
         }
 
-        function isListElementIndentationPrevented(listElementNode: Node, sourceFile: SourceFile) {
-            let list = getContainingList(listElementNode, sourceFile);
+        function containingListPreventsIndentation(listItem: Node, sourceFile: SourceFile) {
+            let list = getContainingList(listItem, sourceFile);
             if (!list) {
                 return false;
             }
-            return isListIndentationPrevented(list, sourceFile);
+            return listPreventsIndentation(list, sourceFile);
         }
 
-        function isListIndentationPrevented(list: NodeArray<Node>, sourceFile: SourceFile) {
+        function listPreventsIndentation(list: NodeArray<Node>, sourceFile: SourceFile) {
             let listStartLine = sourceFile.getLineAndCharacterOfPosition(list.pos).line;
 
-            for (let listElement of list) {
-                let listElementEnd = sourceFile.getLineAndCharacterOfPosition(listElement.getEnd());
-
-                if (listElementEnd.line === listStartLine) {
-                    continue;
+            for (let child of list) {
+                if (nodeStretchesFromLine(child, listStartLine, sourceFile)) {
+                    return true;
                 }
-
-                let listElementStart = sourceFile.getLineAndCharacterOfPosition(listElement.getStart());
-
-                if (listElementStart.line !== listStartLine) {
-                    continue;
-                }
-
-                return true;
             }
 
             return false;
+        }
+
+        /* @internal */
+        export function nodeStretchesFromLine(node: Node, line: number, sourceFile: SourceFile) {
+            let childEndLine = sourceFile.getLineAndCharacterOfPosition(node.getEnd()).line;
+            if (childEndLine === line) {
+                return false;
+            }
+            let childStartLine = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile)).line;
+            if (childStartLine !== line) {
+                return false;
+            }
+            return true;
         }
 
         function nodeContentIsAlwaysIndented(kind: SyntaxKind): boolean {
@@ -551,7 +554,7 @@ namespace ts.formatting {
         Function returns true when the parent node should indent the given child by an explicit rule
         */
         export function shouldIndentChildNode(parent: TextRangeWithKind, child?: TextRangeWithKind): boolean {
-            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false); 
+            return nodeContentIsAlwaysIndented(parent.kind) || nodeWillIndentChild(parent, child, false);
         }
     }
 }

@@ -363,7 +363,7 @@ namespace ts.formatting {
 
             if (rangeOverlapsWithStartEnd(range, startPos, endPos) ||
                 rangeContainsStartEnd(range, startPos, endPos) /* Not to miss zero-range nodes e.g. JsxText */) {
-                
+
                 if (inheritedIndentation !== Constants.Unknown) {
                     return inheritedIndentation;
                 }
@@ -656,7 +656,7 @@ namespace ts.formatting {
                 let listDeltaRemoved = false;
                 for (let child of nodes) {
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
-                    if (!listDeltaRemoved && listItemStretchesOnListStartLine(child)) {
+                    if (!listDeltaRemoved && SmartIndenter.nodeStretchesFromLine(child, startLine, sourceFile)) {
                         listDynamicIndentation.clearDelta();
                         listDeltaRemoved = true;
                     }
@@ -674,18 +674,6 @@ namespace ts.formatting {
                             consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);
                         }
                     }
-                }
-
-                function listItemStretchesOnListStartLine(child: Node) {
-                    let childEndLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
-                    if (childEndLine === startLine) {
-                        return false;
-                    }
-                    let childStartLine = sourceFile.getLineAndCharacterOfPosition(child.getStart(sourceFile)).line;
-                    if (childStartLine !== startLine) {
-                        return false;
-                    }
-                    return true;
                 }
             }
 
@@ -719,7 +707,7 @@ namespace ts.formatting {
                         else {
                             // indent token only if end line of previous range does not match start line of the token
                             const prevEndLine = savePreviousRange && sourceFile.getLineAndCharacterOfPosition(savePreviousRange.end).line;
-                            indentToken = lastTriviaWasNewLine &&  tokenStart.line !== prevEndLine;
+                            indentToken = lastTriviaWasNewLine && tokenStart.line !== prevEndLine;
                         }
                     }
                 }
@@ -850,8 +838,8 @@ namespace ts.formatting {
 
                 // We need to trim trailing whitespace between the tokens if they were on different lines, and no rule was applied to put them on the same line
                 trimTrailingWhitespaces =
-                (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
-                rule.Flag !== RuleFlags.CanDeleteNewLines;
+                    (rule.Operation.Action & (RuleAction.NewLine | RuleAction.Space)) &&
+                    rule.Flag !== RuleFlags.CanDeleteNewLines;
             }
             else {
                 trimTrailingWhitespaces = true;
