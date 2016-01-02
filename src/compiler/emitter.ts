@@ -1144,9 +1144,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 emit(span.literal);
             }
 
-            function jsxEmitReact(node: JsxElement | JsxSelfClosingElement) {
+            function jsxEmitTransform(node: JsxElement | JsxSelfClosingElement, jsxOptions: any) {
                 /// Emit a tag name, which is either '"div"' for lower-cased names, or
                 /// 'Div' for upper-cased or dotted names
+                /// May add an option to disable this as generic transform may not follow this convension
                 function emitTagName(name: Identifier | QualifiedName) {
                     if (name.kind === SyntaxKind.Identifier && isIntrinsicJsxName((<Identifier>name).text)) {
                         write("\"");
@@ -1186,28 +1187,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     const syntheticReactRef = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                    syntheticReactRef.text = "React";
+                    syntheticReactRef.text = jsxOptions.namespace;
                     syntheticReactRef.parent = openingNode;
 
-                    // Call React.createElement(tag, ...
+                    // Call React.createElement(tag, ... or JSX.compose(tag,...
                     emitLeadingComments(openingNode);
                     emitExpressionIdentifier(syntheticReactRef);
-                    write(".createElement(");
+                    write(`.${jsxOptions.composeFunction}(`);
                     emitTagName(openingNode.tagName);
                     write(", ");
 
                     // Attribute list
                     if (openingNode.attributes.length === 0) {
                         // When there are no attributes, React wants "null"
+                        // May need to add an jsxOption to override this behavior.
                         write("null");
                     }
                     else {
                         // Either emit one big object literal (no spread attribs), or
-                        // a call to React.__spread
+                        // a call to React.__spread or JSX.spread
                         const attrs = openingNode.attributes;
                         if (forEach(attrs, attr => attr.kind === SyntaxKind.JsxSpreadAttribute)) {
                             emitExpressionIdentifier(syntheticReactRef);
-                            write(".__spread(");
+                            write(`.${jsxOptions.spreadFunction}(`);
 
                             let haveOpenedObjectLiteral = false;
                             for (let i = 0; i < attrs.length; i++) {
@@ -1243,7 +1245,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             }
                             if (haveOpenedObjectLiteral) write("}");
 
-                            write(")"); // closing paren to React.__spread(
+                            write(")"); // closing paren to React.__spread( or JSX.spread(
                         }
                         else {
                             // One object literal with all the attributes in them
@@ -1260,6 +1262,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     // Children
                     if (children) {
+                        let skipFirstComma = false;
+                        if (jsxOptions.childrenAsArray) {
+                            write(", [");
+                            skipFirstComma = true;
+                        }
+
                         for (var i = 0; i < children.length; i++) {
                             // Don't emit empty expressions
                             if (children[i].kind === SyntaxKind.JsxExpression && !((<JsxExpression>children[i]).expression)) {
@@ -1270,21 +1278,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             if (children[i].kind === SyntaxKind.JsxText) {
                                 const text = getTextToEmit(<JsxText>children[i]);
                                 if (text !== undefined) {
-                                    write(", \"");
+                                    if (skipFirstComma) {
+                                        skipFirstComma = false;
+                                    }
+                                    else {
+                                        write(", ");
+                                    }
+
+                                    write("\"");
                                     write(text);
                                     write("\"");
                                 }
                             }
                             else {
-                                write(", ");
+                                if (skipFirstComma) {
+                                    skipFirstComma = false;
+                                }
+                                else {
+                                    write(", ");
+                                }
                                 emit(children[i]);
                             }
 
                         }
+                        if (jsxOptions.childrenAsArray) {
+                            write("]");
+                        }
                     }
 
                     // Closing paren
-                    write(")"); // closes "React.createElement("
+                    write(")"); // closes "React.createElement(" or "JSX.compose("
                     emitTrailingComments(openingNode);
                 }
 
@@ -7176,7 +7199,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitJsxElement(node: JsxElement | JsxSelfClosingElement) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
-                        jsxEmitReact(node);
+                        jsxEmitTransform(node, {
+                            namespace: "React",
+                            composeFunction: "createElement",
+                            spreadFunction: "__spread",
+                            childrenAsArray: false
+                        });
+                        break;
+                    case JsxEmit.Transform:
+                        jsxEmitTransform(node, {
+                            namespace: compilerOptions.jsxNamespace || "JSX",
+                            composeFunction: compilerOptions.jsxComposeFunction || "compose",
+                            spreadFunction: compilerOptions.jsxSpreadFunction || "spread",
+                            childrenAsArray: compilerOptions.jsxChildrenAsArray || false
+                        });
                         break;
                     case JsxEmit.Preserve:
                     // Fall back to preserve if None was specified (we'll error earlier)
@@ -7237,6 +7273,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function getTextToEmit(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
+                    case JsxEmit.Transform:
                         let text = trimReactWhitespaceAndApplyEntities(node);
                         if (text === undefined || text.length === 0) {
                             return undefined;
@@ -7253,6 +7290,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitJsxText(node: JsxText) {
                 switch (compilerOptions.jsx) {
                     case JsxEmit.React:
+                    case JsxEmit.Transform:
                         write("\"");
                         write(trimReactWhitespaceAndApplyEntities(node));
                         write("\"");
@@ -7275,6 +7313,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             write("}");
                             break;
                         case JsxEmit.React:
+                        case JsxEmit.Transform:
                             emit(node.expression);
                             break;
                     }

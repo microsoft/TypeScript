@@ -435,7 +435,7 @@ namespace ts {
          * Get symbols that represent parameter-property-declaration as parameter and as property declaration
          * @param parameter a parameterDeclaration node
          * @param parameterName a name of the parameter to get the symbols for.
-         * @return a tuple of two symbols 
+         * @return a tuple of two symbols
          */
         function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): [Symbol, Symbol] {
             const constructoDeclaration = parameter.parent;
@@ -8363,13 +8363,27 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // If we're compiling under --jsx react, the symbol 'React' should
-            // be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no 'React' symbol in scope, we should issue an error.
+            /**
+             * Mark symbol as 'used' so we don't incorreclty elide its import.
+             * If the symbol is not found in scope, we should issue an error.
+             */
+            function markReferenced(symbolName: string) {
+                const symbol = resolveName(node.tagName, symbolName, SymbolFlags.Value, Diagnostics.Cannot_find_name_0, symbolName);
+                if (symbol) {
+                    getSymbolLinks(symbol).referenced = true;
+                }
+            }
+
             if (compilerOptions.jsx === JsxEmit.React) {
-                const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
-                if (reactSym) {
-                    getSymbolLinks(reactSym).referenced = true;
+                markReferenced("React");
+            }
+            else if (compilerOptions.jsx === JsxEmit.Transform) {
+                if (compilerOptions.jsxNamespace !== "") {
+                    markReferenced(compilerOptions.jsxNamespace || "JSX");
+                }
+                else {
+                    markReferenced(compilerOptions.jsxComposeFunction || "compose");
+                    markReferenced(compilerOptions.jsxSpreadFunction || "spread");
                 }
             }
 
