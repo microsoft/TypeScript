@@ -55,6 +55,7 @@ namespace ts.formatting {
           * 
           */
         getDelta(child: TextRangeWithKind): number;
+        clearDelta(): void;
         /**
           * Formatter calls this function when rule adds or deletes new lines from the text 
           * so indentation scope can adjust values of indentation and delta.
@@ -65,12 +66,6 @@ namespace ts.formatting {
     interface Indentation {
         indentation: number;
         delta: number
-    }
-
-    interface ListStates {
-        indentationLocked: boolean;
-        base: NodeArray<Node>;
-        startLine: number;
     }
 
     export function formatOnEnter(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeOptions): TextChange[] {
@@ -484,6 +479,9 @@ namespace ts.formatting {
                 },
                 getIndentation: () => indentation,
                 getDelta: child => getEffectiveDelta(delta, child),
+                clearDelta: () => {
+                    delta = 0;
+                },
                 recomputeIndentation: lineAdded => {
                     if (node.parent && SmartIndenter.shouldIndentChildNode(node.parent, node)) {
                         if (lineAdded) {
@@ -535,7 +533,7 @@ namespace ts.formatting {
             forEachChild(
                 node,
                 child => {
-                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListElement*/ null)
+                    processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListElement*/ false)
                 },
                 (nodes: NodeArray<Node>) => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
@@ -557,7 +555,7 @@ namespace ts.formatting {
                 parentDynamicIndentation: DynamicIndentation,
                 parentStartLine: number,
                 undecoratedParentStartLine: number,
-                parentListStates: ListStates): number {
+                isListItem: boolean): number {
 
                 let childStartPos = child.getStart(sourceFile);
 
@@ -570,7 +568,7 @@ namespace ts.formatting {
 
                 // if child is a list item - try to get its indentation
                 let childIndentationAmount = Constants.Unknown;
-                if (parentListStates) {
+                if (isListItem) {
                     childIndentationAmount = tryComputeIndentationForListItem(childStartPos, child.end, parentStartLine, originalRange, inheritedIndentation);
                     if (childIndentationAmount !== Constants.Unknown) {
                         inheritedIndentation = childIndentationAmount;
@@ -578,8 +576,10 @@ namespace ts.formatting {
                 }
 
                 // child node is outside the target range - do not dive inside
-                let outOfTargetRange = !rangeOverlapsWithStartEnd(originalRange, child.pos, child.end);
-                
+                if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
+                    return inheritedIndentation;
+                }
+
                 if (child.getFullWidth() === 0) {
                     return inheritedIndentation;
                 }
@@ -599,62 +599,22 @@ namespace ts.formatting {
                     return inheritedIndentation;
                 }
 
-                // inherit indentation of preceding argument
-                let {indentationLocked} = parentListStates || <ListStates>{};
-
-                if (isToken(child) && !outOfTargetRange) {
-                    // replace indentation with inherited one, ignoring delta to prevent unexpected over-indentation
-                    if (indentationLocked) {
-                        parentDynamicIndentation = getDynamicIndentation(parent, parentStartLine, inheritedIndentation, 0);
-                    }
-
+                if (isToken(child)) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     let tokenInfo = formattingScanner.readTokenInfo(child);
                     Debug.assert(tokenInfo.token.end === child.end);
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
-                    if (checkListElementLockIndentation()) {
-                        parentListStates.indentationLocked = true;
-                        return parentDynamicIndentation.getIndentation();
-                    }
-                    else {
-                        return inheritedIndentation;
-                    }
+                    return inheritedIndentation;
                 }
 
                 let effectiveParentStartLine = child.kind === SyntaxKind.Decorator ? childStartLine : undecoratedParentStartLine;
                 let childIndentation = computeIndentation(child, childStartLine, childIndentationAmount, node, parentDynamicIndentation, effectiveParentStartLine);
 
-                if (!outOfTargetRange) {
-                    processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
-                    childContextNode = node;
-                }
+                processNode(child, childContextNode, childStartLine, undecoratedChildStartLine, childIndentation.indentation, childIndentation.delta);
 
-                // lock indentation as current value
-                if (checkListElementLockIndentation()) {
-                    parentListStates.indentationLocked = true;
-                    inheritedIndentation = childIndentation.indentation;
-                }
+                childContextNode = node;
 
                 return inheritedIndentation;
-
-                function checkListElementLockIndentation() {
-                    if (!parentListStates || indentationLocked /* already cancelled */) {
-                        return false;
-                    }
-
-                    let listElementEnd = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
-
-                    // single-line argument should not affect other indentation
-                    if (parentListStates.startLine === listElementEnd) {
-                        return false;
-                    }
-
-                    if (parentListStates.startLine !== childStartLine) {
-                        return false;
-                    }
-
-                    return true;
-                }
             }
 
             function processChildNodes(nodes: NodeArray<Node>,
@@ -693,13 +653,13 @@ namespace ts.formatting {
                 }
 
                 let inheritedIndentation = Constants.Unknown;
-                let listStates = <ListStates>{
-                    base: nodes,
-                    startLine: sourceFile.getLineAndCharacterOfPosition(nodes.pos).line
-                };
-                
+                let listDeltaRemoved = false;
                 for (let child of nodes) {
-                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ listStates)
+                    inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListElement*/ true)
+                    if (!listDeltaRemoved && listItemStretchesOnListStartLine(child)) {
+                        listDynamicIndentation.clearDelta();
+                        listDeltaRemoved = true;
+                    }
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
@@ -714,6 +674,18 @@ namespace ts.formatting {
                             consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation);
                         }
                     }
+                }
+
+                function listItemStretchesOnListStartLine(child: Node) {
+                    let childEndLine = sourceFile.getLineAndCharacterOfPosition(child.getEnd()).line;
+                    if (childEndLine === startLine) {
+                        return false;
+                    }
+                    let childStartLine = sourceFile.getLineAndCharacterOfPosition(child.getStart(sourceFile)).line;
+                    if (childStartLine !== startLine) {
+                        return false;
+                    }
+                    return true;
                 }
             }
 
