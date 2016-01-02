@@ -69,12 +69,13 @@ namespace ts.formatting {
 
             while (current) {
                 if (positionBelongsToNode(current, position, sourceFile) &&
-                    shouldIndentChildNode(current, previous) &&
-                    !isNodeComponentListIndentationPrevented(current, position, sourceFile)) {
+                    shouldIndentChildNode(current, previous)) {
                     
                     currentStart = getStartLineAndCharacterForNode(current, sourceFile);
 
-                    if (nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
+                    if (isNodeComponentListIndentationPrevented(current, position, sourceFile) ||
+                        nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken, current, lineAtPosition, sourceFile)) {
+
                         indentationDelta = 0;
                     }
                     else {
