@@ -6674,10 +6674,6 @@ namespace ts {
                 if (typeInfo && typeInfo.type === undefinedType) {
                     return type;
                 }
-                // If the type to be narrowed is any and we're checking a primitive with assumeTrue=true, return the primitive
-                if (!!(type.flags & TypeFlags.Any) && typeInfo && assumeTrue) {
-                    return typeInfo.type;
-                }
                 let flags: TypeFlags;
                 if (typeInfo) {
                     flags = typeInfo.flags;
@@ -6688,6 +6684,10 @@ namespace ts {
                 }
                 // At this point we can bail if it's not a union
                 if (!(type.flags & TypeFlags.Union)) {
+                    // If we're on the true branch and the type is a subtype, we should return the primitive type
+                    if (assumeTrue && typeInfo && isTypeSubtypeOf(typeInfo.type, type)) {
+                        return typeInfo.type;
+                    }
                     // If the active non-union type would be removed from a union by this type guard, return an empty union
                     return filterUnion(type) ? type : emptyUnionType;
                 }
