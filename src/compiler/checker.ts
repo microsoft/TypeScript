@@ -5103,17 +5103,6 @@ namespace ts {
                             }
                             return Ternary.False;
                         }
-                        if (sourcePredicate.predicate.kind === TypePredicateKind.Identifier) {
-                            const sourceIdentifierPredicate = sourcePredicate.predicate as IdentifierTypePredicate;
-                            const targetIdentifierPredicate = targetPredicate.predicate as IdentifierTypePredicate;
-                            if (sourceIdentifierPredicate.parameterIndex !== targetIdentifierPredicate.parameterIndex) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceIdentifierPredicate.parameterName, targetIdentifierPredicate.parameterName);
-                                    reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
-                                }
-                                return Ternary.False;
-                            }
-                        }
                         const related = isRelatedTo(sourcePredicate.predicate.type, targetPredicate.predicate.type, reportErrors, headMessage);
                         if (related === Ternary.False && reportErrors) {
                             reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(source), typeToString(target));
@@ -5666,7 +5655,24 @@ namespace ts {
                     }
                 }
 
-                return result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
+                result = result & isRelatedTo(sourceReturnType, targetReturnType, reportErrors);
+                if (!(sourceReturnType.flags & TypeFlags.PredicateType && targetReturnType.flags & TypeFlags.PredicateType)) {
+                    return result;
+                }
+                const sourcePredicate = sourceReturnType as PredicateType;
+                const targetPredicate = targetReturnType as PredicateType;
+                if (sourcePredicate.predicate.kind === TypePredicateKind.Identifier) {
+                    const sourceIdentifierPredicate = sourcePredicate.predicate as IdentifierTypePredicate;
+                    const targetIdentifierPredicate = targetPredicate.predicate as IdentifierTypePredicate;
+                    if (sourceIdentifierPredicate.parameterIndex !== targetIdentifierPredicate.parameterIndex) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Parameter_0_is_not_in_the_same_position_as_parameter_1, sourceIdentifierPredicate.parameterName, targetIdentifierPredicate.parameterName);
+                            reportError(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typeToString(sourceReturnType), typeToString(targetReturnType));
+                        }
+                        return Ternary.False;
+                    }
+                }
+                return result;
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
