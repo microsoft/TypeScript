@@ -94,7 +94,7 @@ namespace ts {
 
         // The spans in this text chunk that we think are of interest and should be matched
         // independently.  For example, if the chunk is for "UIElement" the the spans of interest
-        // correspond to "U", "I" and "Element".  If "UIElement" isn't found as an exaxt, prefix.
+        // correspond to "U", "I" and "Element".  If "UIElement" isn't found as an exact, prefix.
         // or substring match, then the character spans will be used to attempt a camel case match.
         characterSpans: TextSpan[];
     }
@@ -168,7 +168,7 @@ namespace ts {
 
             for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
                  i >= 0;
-                 i--, j--) {
+                 i -= 1, j -= 1) {
 
                 const segment = dotSeparatedSegments[i];
                 const containerName = candidateContainers[j];
@@ -581,9 +581,10 @@ namespace ts {
         for (let i = 0; i < pattern.length; i++) {
             const ch = pattern.charCodeAt(i);
             if (isWordChar(ch)) {
-                if (wordLength++ === 0) {
+                if (wordLength === 0) {
                     wordStart = i;
                 }
+                wordLength++;
             }
             else {
                 if (wordLength > 0) {
