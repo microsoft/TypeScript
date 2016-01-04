@@ -1,5 +1,7 @@
 /// <reference path="..\..\..\src\harness\harness.ts" />
 
+const expect: typeof _chai.expect = _chai.expect;
+
 namespace ts.server {
     let lastWrittenToHost: string;
     const mockHost: ServerHost = {

@@ -211,7 +211,6 @@ namespace ts {
             const _fs = require("fs");
             const _path = require("path");
             const _os = require("os");
-            const _tty = require("tty");
 
             // average async stat takes about 30 microseconds
             // set chunk size to do 30 files in < 1 millisecond
@@ -305,10 +304,6 @@ namespace ts {
             // to increase the chunk size or decrease the interval
             // time dynamically to match the large reference set?
             const watchedFileSet = createWatchedFileSet();
-
-            function isNode4OrLater(): Boolean {
-                return parseInt(process.version.charAt(1)) >= 4;
-            }
 
             const platform: string = _os.platform();
             // win32\win64 are case insensitive platforms, MacOS (darwin) by default is also case insensitive

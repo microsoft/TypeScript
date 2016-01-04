@@ -16,7 +16,7 @@ export default class C {}
 
 
 //// [file1.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     function default_1() { }
     exports_1("default", default_1);
@@ -27,7 +27,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     function foo() { }
     exports_1("default", foo);
@@ -38,7 +38,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file3.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var default_1;
     return {
@@ -54,7 +54,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var C;
     return {

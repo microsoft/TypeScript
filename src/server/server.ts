@@ -4,9 +4,7 @@
 /* tslint:disable:no-null */
 
 namespace ts.server {
-    const nodeproto: typeof NodeJS._debugger = require("_debugger");
     const readline: NodeJS.ReadLine = require("readline");
-    const path: NodeJS.Path = require("path");
     const fs: typeof NodeJS.fs = require("fs");
 
     const rl = readline.createInterface({

@@ -13,7 +13,7 @@ export class Bar extends Foo {
 }
 
 //// [foo.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var Foo;
     return {
@@ -29,7 +29,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [bar.js]
-System.register(['./foo'], function(exports_1) {
+System.register(['./foo'], function(exports_1, __moduleName) {
     "use strict";
     var __extends = (this && this.__extends) || function (d, b) {
         for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
