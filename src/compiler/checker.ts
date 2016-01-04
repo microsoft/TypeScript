@@ -7474,24 +7474,22 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
-        function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
-            // Contextual type only applies to JSX expressions that are in attribute assignments (not in 'Children' positions)
-            if (expr.parent.kind === SyntaxKind.JsxAttribute) {
-                const attrib = <JsxAttribute>expr.parent;
-                const attrsType = getJsxElementAttributesType(<JsxOpeningLikeElement>attrib.parent);
+        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
+            const kind = attribute.kind;
+            const jsxElement = attribute.parent as JsxOpeningLikeElement;
+            const attrsType = getJsxElementAttributesType(jsxElement);
+
+            if (attribute.kind === SyntaxKind.JsxAttribute) {
                 if (!attrsType || isTypeAny(attrsType)) {
                     return undefined;
                 }
-                else {
-                    return getTypeOfPropertyOfType(attrsType, attrib.name.text);
-                }
+                return getTypeOfPropertyOfType(attrsType, (attribute as JsxAttribute).name.text);
+            }
+            else if (attribute.kind === SyntaxKind.JsxSpreadAttribute) {
+                return attrsType;
             }
 
-            if (expr.kind === SyntaxKind.JsxSpreadAttribute) {
-                return getJsxElementAttributesType(<JsxOpeningLikeElement>expr.parent);
-            }
-
-            return undefined;
+            Debug.fail(`Expected JsxAttribute or JsxSpreadAttribute, got ts.SyntaxKind[${kind}]`);
         }
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -7559,8 +7557,10 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return getContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
+                    return getContextualType(<JsxExpression>parent);
+                case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
-                    return getContextualTypeForJsxExpression(<JsxExpression>parent);
+                    return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
             }
             return undefined;
         }
