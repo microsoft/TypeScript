@@ -263,7 +263,8 @@ namespace ts.server {
             let index = 0;
             const checkOne = () => {
                 if (matchSeq(seq)) {
-                    const checkSpec = checkList[index++];
+                    const checkSpec = checkList[index];
+                    index++;
                     if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {

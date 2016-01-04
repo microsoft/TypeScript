@@ -495,7 +495,7 @@ namespace ts {
                         const moduleNames = map(newSourceFile.imports, name => name.text);
                         const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory));
                         // ensure that module resolution results are still correct
-                        for (let i = 0; i < moduleNames.length; ++i) {
+                        for (let i = 0; i < moduleNames.length; i++) {
                             const newResolution = resolutions[i];
                             const oldResolution = getResolvedModule(oldSourceFile, moduleNames[i]);
                             const resolutionChanged = oldResolution
@@ -523,7 +523,7 @@ namespace ts {
             }
 
             // update fileName -> file mapping
-            for (let i = 0, len = newSourceFiles.length; i < len; ++i) {
+            for (let i = 0, len = newSourceFiles.length; i < len; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
@@ -1073,7 +1073,7 @@ namespace ts {
                 file.resolvedModules = {};
                 const moduleNames = map(file.imports, name => name.text);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
-                for (let i = 0; i < file.imports.length; ++i) {
+                for (let i = 0; i < file.imports.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
