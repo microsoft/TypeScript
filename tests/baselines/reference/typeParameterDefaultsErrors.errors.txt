@@ -1,6 +1,6 @@
 tests/cases/conformance/types/typeParameters/typeParameterDefaultsErrors.ts(7,9): error TS2314: Generic type 'NoDefaults<T>' requires 1 type argument(s).
 tests/cases/conformance/types/typeParameters/typeParameterDefaultsErrors.ts(13,9): error TS2314: Generic type 'NoDefaultsWithConstraint<T>' requires 1 type argument(s).
-tests/cases/conformance/types/typeParameters/typeParameterDefaultsErrors.ts(20,9): error TS2660: Generic type 'HasDefault2<T1, T2>' requires between 1 and 2 type arguments.
+tests/cases/conformance/types/typeParameters/typeParameterDefaultsErrors.ts(20,9): error TS2663: Generic type 'HasDefault2<T1, T2>' requires between 1 and 2 type arguments
 
 
 ==== tests/cases/conformance/types/typeParameters/typeParameterDefaultsErrors.ts (3 errors) ====
@@ -29,7 +29,7 @@ tests/cases/conformance/types/typeParameters/typeParameterDefaultsErrors.ts(20,9
     // Still an error
     let a4: HasDefault2;
             ~~~~~~~~~~~
-!!! error TS2660: Generic type 'HasDefault2<T1, T2>' requires between 1 and 2 type arguments.
+!!! error TS2663: Generic type 'HasDefault2<T1, T2>' requires between 1 and 2 type arguments
     
     /** Required may not follow optional */
     interface Wrong<T, U = number> { }

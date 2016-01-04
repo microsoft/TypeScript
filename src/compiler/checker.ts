@@ -128,7 +128,6 @@ namespace ts {
         anyFunctionType.flags |= TypeFlags.ContainsAnyFunctionType;
 
         const noConstraintType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
-        const noDefaultType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
         const anySignature = createSignature(undefined, undefined, emptyArray, anyType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
         const unknownSignature = createSignature(undefined, undefined, emptyArray, unknownType, 0, /*hasRestParameter*/ false, /*hasStringLiterals*/ false);
@@ -3231,7 +3230,6 @@ namespace ts {
                         error(symbol.declarations[0], Diagnostics.Type_parameter_0_has_a_circular_default, type.symbol.name);
                     }
                 }
-                symbol.declarations.forEach
                 links.declaredType = type;
             }
             return <TypeParameter>links.declaredType;
@@ -4285,7 +4283,6 @@ namespace ts {
             const typeParameters = links.typeParameters;
             if (typeParameters) {
                 if (!checkTypeArgumentArity(typeParameters, node.typeArguments)) {
-                    debugger;
                     error(node, Diagnostics.Generic_type_0_requires_1_type_argument_s, symbolToString(symbol), typeParameters.length);
                     return unknownType;
                 }
@@ -11144,7 +11141,7 @@ namespace ts {
             }
 
             checkSourceElement(node.constraint);
-            if(node.default) {
+            if (node.default) {
                 checkSourceElement(node.default);
             }
 
@@ -11610,7 +11607,6 @@ namespace ts {
                         Diagnostics.Type_0_does_not_satisfy_the_constraint_1);
                 }
             }
-            if(!result) debugger;
             return result;
         }
 
@@ -13582,7 +13578,6 @@ namespace ts {
         }
 
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
-            debugger;
             checkGrammarClassDeclarationHeritageClauses(node);
             checkDecorators(node);
             if (node.name) {
