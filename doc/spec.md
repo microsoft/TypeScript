@@ -1837,9 +1837,9 @@ Here, 'g' and 'g.x' have the same recursive type, and likewise 'h' and 'h()' hav
 The `this` keyword is used to reference the this-type (section [3.6.3](#3.6.3)) of a class or interface.
 
 &emsp;&emsp;*ThisType:*  
-&emsp;&emsp;&emsp;`this
+&emsp;&emsp;&emsp;`this`
 
-`The meaning of a *ThisType* depends on the closest enclosing *FunctionDeclaration*, *FunctionExpression*, *PropertyDefinition*, *ClassElement*, or *TypeMember*, known as the root declaration of the *ThisType*, as follows:
+The meaning of a *ThisType* depends on the closest enclosing *FunctionDeclaration*, *FunctionExpression*, *PropertyDefinition*, *ClassElement*, or *TypeMember*, known as the root declaration of the *ThisType*, as follows:
 
 * When the root declaration is an instance member or constructor of a class, the *ThisType* references the this-type of that class.
 * When the root declaration is a member of an interface type, the *ThisType* references the this-type of that interface.
@@ -2305,7 +2305,7 @@ Types are required to be assignment compatible in certain circumstances, such as
 * *S* or *T* is the Any type.
 * *S* is the Undefined type.
 * *S* is the Null type and *T* is not the Undefined type.
-* *S* or *T* is an enum type and* *the other is the primitive type Number.
+* *S* or *T* is an enum type and the other is the primitive type Number.
 * *S* is a string literal type and *T* is the primitive type String.
 * *S* is a union type and each constituent type of *S* is assignable to *T*.
 * *S* is an intersection type and at least one constituent type of *S* is assignable to *T*.
@@ -2325,7 +2325,7 @@ Types are required to be assignment compatible in certain circumstances, such as
     * for parameter positions that are present in both signatures, each parameter type in *N* is assignable to or from the corresponding parameter type in *M*, and
     * the result type of *M* is Void, or the result type of *N* is assignable to that of *M*.
   * *M* is a string index signature of type *U*, and *U* is the Any type or *S* has an apparent string index signature of a type that is assignable to *U*.
-  * *M* is a numeric index signature of type *U*, and *U* is the Any type or* S* has an apparent string or numeric index signature of a type that is assignable to *U*.
+  * *M* is a numeric index signature of type *U*, and *U* is the Any type or *S* has an apparent string or numeric index signature of a type that is assignable to *U*.
 
 When comparing call or construct signatures, parameter names are ignored and rest parameters correspond to an unbounded expansion of optional parameters of the rest parameter element type.
 
@@ -6275,9 +6275,9 @@ This appendix contains a summary of the grammar found in the main document. As d
 &emsp;&emsp;&emsp;*TypeQueryExpression*&emsp;`.`&emsp;*IdentifierName*
 
 &emsp;&emsp;*ThisType:*  
-&emsp;&emsp;&emsp;`this
+&emsp;&emsp;&emsp;`this`
 
-&emsp;&emsp;`*PropertySignature:*  
+&emsp;&emsp;*PropertySignature:*  
 &emsp;&emsp;&emsp;*PropertyName*&emsp;`?`*<sub>opt</sub>*&emsp;*TypeAnnotation<sub>opt</sub>*
 
 &emsp;&emsp;*PropertyName:*  
