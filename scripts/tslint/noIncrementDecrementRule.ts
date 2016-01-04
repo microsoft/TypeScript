@@ -3,7 +3,7 @@ import * as ts from "typescript";
 
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static POSTFIX_FAILURE_STRING = "Don't use '++' or '--' postfix operators outside statements, for loops, or element access expressions.";
+    public static POSTFIX_FAILURE_STRING = "Don't use '++' or '--' postfix operators outside statements or for loops.";
     public static PREFIX_FAILURE_STRING = "Don't use '++' or '--' prefix operators.";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
