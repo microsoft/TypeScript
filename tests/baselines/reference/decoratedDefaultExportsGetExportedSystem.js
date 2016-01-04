@@ -13,7 +13,7 @@ var decorator: ClassDecorator;
 export default class {}
 
 //// [a.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -35,7 +35,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [b.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

@@ -1457,7 +1457,7 @@ namespace Harness {
 
             // check if project has tsconfig.json in the list of files
             let tsConfig: ts.ParsedCommandLine;
-            for (let i = 0; i < testUnitData.length; ++i) {
+            for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
                 if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
                     const configJson = ts.parseConfigFileTextToJson(data.name, data.content);

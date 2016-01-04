@@ -13,7 +13,7 @@ x,y,a1,b1,d1;
 
 
 //// [systemModule16.js]
-System.register(["foo", "bar"], function(exports_1) {
+System.register(["foo", "bar"], function(exports_1, __moduleName) {
     "use strict";
     var x, y, foo_1;
     var exportedNames_1 = {

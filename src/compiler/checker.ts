@@ -7,7 +7,10 @@ namespace ts {
     let nextMergeId = 1;
 
     export function getNodeId(node: Node): number {
-        if (!node.id) node.id = nextNodeId++;
+        if (!node.id) {
+            node.id = nextNodeId;
+            nextNodeId++;
+        }
         return node.id;
     }
 
@@ -15,7 +18,8 @@ namespace ts {
 
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
-            symbol.id = nextSymbolId++;
+            symbol.id = nextSymbolId;
+            nextSymbolId++;
         }
 
         return symbol.id;
@@ -287,7 +291,10 @@ namespace ts {
         }
 
         function recordMergedSymbol(target: Symbol, source: Symbol) {
-            if (!source.mergeId) source.mergeId = nextMergeId++;
+            if (!source.mergeId) {
+                source.mergeId = nextMergeId;
+                nextMergeId++;
+            }
             mergedSymbols[source.mergeId] = target;
         }
 
@@ -1267,7 +1274,8 @@ namespace ts {
 
         function createType(flags: TypeFlags): Type {
             const result = new Type(checker, flags);
-            result.id = typeCount++;
+            result.id = typeCount;
+            typeCount++;
             return result;
         }
 
@@ -1823,11 +1831,13 @@ namespace ts {
                     }
                     if (pos < end) {
                         writePunctuation(writer, SyntaxKind.LessThanToken);
-                        writeType(typeArguments[pos++], TypeFormatFlags.None);
+                        writeType(typeArguments[pos], TypeFormatFlags.None);
+                        pos++;
                         while (pos < end) {
                             writePunctuation(writer, SyntaxKind.CommaToken);
                             writeSpace(writer);
-                            writeType(typeArguments[pos++], TypeFormatFlags.None);
+                            writeType(typeArguments[pos], TypeFormatFlags.None);
+                            pos++;
                         }
                         writePunctuation(writer, SyntaxKind.GreaterThanToken);
                     }
@@ -5676,7 +5686,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 let result = Ternary.True;
-                for (let i = 0, len = sourceSignatures.length; i < len; ++i) {
+                for (let i = 0, len = sourceSignatures.length; i < len; i++) {
                     const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
                     if (!related) {
                         return Ternary.False;
@@ -8363,14 +8373,12 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // If we're compiling under --jsx react, the symbol 'React' should
-            // be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no 'React' symbol in scope, we should issue an error.
-            if (compilerOptions.jsx === JsxEmit.React) {
-                const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
-                if (reactSym) {
-                    getSymbolLinks(reactSym).referenced = true;
-                }
+            // The symbol 'React' should be marked as 'used' so we don't incorrectly elide its import. And if there
+            // is no 'React' symbol in scope when targeting React emit, we should issue an error.
+            const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, reactRefErr, "React");
+            if (reactSym) {
+                getSymbolLinks(reactSym).referenced = true;
             }
 
             const targetAttributesType = getJsxElementAttributesType(node);
@@ -13841,7 +13849,8 @@ namespace ts {
                     }
 
                     if (autoValue !== undefined) {
-                        getNodeLinks(member).enumMemberValue = autoValue++;
+                        getNodeLinks(member).enumMemberValue = autoValue;
+                        autoValue++;
                     }
                 }
 

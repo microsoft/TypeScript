@@ -11,7 +11,7 @@ export default function foo() { new Foo(); }
 
 
 //// [output.js]
-System.register("b", ["a"], function(exports_1) {
+System.register("b", ["a"], function(exports_1, __moduleName) {
     "use strict";
     var a_1;
     function foo() { new a_1.default(); }
@@ -25,7 +25,7 @@ System.register("b", ["a"], function(exports_1) {
         }
     }
 });
-System.register("a", ["b"], function(exports_2) {
+System.register("a", ["b"], function(exports_2, __moduleName) {
     "use strict";
     var b_1;
     var Foo;
