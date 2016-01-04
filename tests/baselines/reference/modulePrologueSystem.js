@@ -4,7 +4,7 @@
 export class Foo {}
 
 //// [modulePrologueSystem.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var Foo;
     return {

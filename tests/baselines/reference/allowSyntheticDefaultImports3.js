@@ -11,7 +11,7 @@ export class Foo {
 
 
 //// [b.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var Foo;
     return {
@@ -27,7 +27,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [a.js]
-System.register(["./b"], function(exports_1) {
+System.register(["./b"], function(exports_1, __moduleName) {
     "use strict";
     var b_1;
     var x;

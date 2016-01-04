@@ -5,7 +5,7 @@ import n from 'file1'
 
 
 //// [systemModule12.js]
-System.register("NamedModule", [], function(exports_1) {
+System.register("NamedModule", [], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],

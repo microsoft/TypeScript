@@ -11,7 +11,7 @@ var x = 1;
 export {foo as b}
 
 //// [systemModule14.js]
-System.register(["foo"], function(exports_1) {
+System.register(["foo"], function(exports_1, __moduleName) {
     "use strict";
     var foo_1;
     var x;
