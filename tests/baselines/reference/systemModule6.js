@@ -7,7 +7,7 @@ function foo() {
 
 
 //// [systemModule6.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var C;
     function foo() {

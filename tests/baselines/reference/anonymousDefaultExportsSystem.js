@@ -7,7 +7,7 @@ export default class {}
 export default function() {}
 
 //// [a.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var default_1;
     return {
@@ -20,7 +20,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [b.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     function default_1() { }
     exports_1("default", default_1);

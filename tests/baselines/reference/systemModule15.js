@@ -34,7 +34,7 @@ export default value;
 export var value2 = "v";
 
 //// [file3.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var value;
     return {
@@ -46,7 +46,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var value2;
     return {
@@ -57,7 +57,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register(["./file3"], function(exports_1) {
+System.register(["./file3"], function(exports_1, __moduleName) {
     "use strict";
     var moduleCStar, file3_1, file3_2;
     return {
@@ -75,7 +75,7 @@ System.register(["./file3"], function(exports_1) {
     }
 });
 //// [file1.js]
-System.register(["./file2"], function(exports_1) {
+System.register(["./file2"], function(exports_1, __moduleName) {
     "use strict";
     var moduleB;
     return {

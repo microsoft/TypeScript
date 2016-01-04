@@ -9,7 +9,7 @@ export * from "file1"
 var x = 1;
 
 //// [file1.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],
@@ -18,7 +18,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var x;
     return {
