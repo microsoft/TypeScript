@@ -29,7 +29,7 @@ export declare module M { var v: number; }
 
 
 //// [file1.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     var promise, foo, c, e;
     return {
@@ -44,7 +44,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file2.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],
@@ -53,7 +53,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file3.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],
@@ -62,7 +62,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file4.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],
@@ -71,7 +71,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file5.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],
@@ -80,7 +80,7 @@ System.register([], function(exports_1) {
     }
 });
 //// [file6.js]
-System.register([], function(exports_1) {
+System.register([], function(exports_1, __moduleName) {
     "use strict";
     return {
         setters:[],

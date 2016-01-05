@@ -495,7 +495,7 @@ namespace ts {
                         const moduleNames = map(newSourceFile.imports, name => name.text);
                         const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory));
                         // ensure that module resolution results are still correct
-                        for (let i = 0; i < moduleNames.length; ++i) {
+                        for (let i = 0; i < moduleNames.length; i++) {
                             const newResolution = resolutions[i];
                             const oldResolution = getResolvedModule(oldSourceFile, moduleNames[i]);
                             const resolutionChanged = oldResolution
@@ -523,7 +523,7 @@ namespace ts {
             }
 
             // update fileName -> file mapping
-            for (let i = 0, len = newSourceFiles.length; i < len; ++i) {
+            for (let i = 0, len = newSourceFiles.length; i < len; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
@@ -573,8 +573,11 @@ namespace ts {
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
             // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
             // get any preEmit diagnostics, not just the ones
-            if (options.noEmitOnError && getPreEmitDiagnostics(program, /*sourceFile:*/ undefined, cancellationToken).length > 0) {
-                return { diagnostics: [], sourceMaps: undefined, emitSkipped: true };
+            if (options.noEmitOnError) {
+                const preEmitDiagnostics = getPreEmitDiagnostics(program, /*sourceFile:*/ undefined, cancellationToken);
+                if (preEmitDiagnostics.length > 0) {
+                    return { diagnostics: preEmitDiagnostics, sourceMaps: undefined, emitSkipped: true };
+                }
             }
 
             // Create the emit resolver outside of the "emitTime" tracking code below.  That way
@@ -1070,7 +1073,7 @@ namespace ts {
                 file.resolvedModules = {};
                 const moduleNames = map(file.imports, name => name.text);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
-                for (let i = 0; i < file.imports.length; ++i) {
+                for (let i = 0; i < file.imports.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     if (resolution && !options.noResolve) {
