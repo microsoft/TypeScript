@@ -565,7 +565,7 @@ interface IterableIterator<T> extends Iterator<T> {
 }
 
 interface GeneratorFunction extends Function {
-
+    [Symbol.toStringTag]: string;
 }
 
 interface GeneratorFunctionConstructor {
