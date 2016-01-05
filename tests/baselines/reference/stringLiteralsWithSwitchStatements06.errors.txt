@@ -1,0 +1,30 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts(17,24): error TS1005: ':' expected.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements06.ts (1 errors) ====
+    let x: "foo";
+    let y: "foo" | "bar"; 
+    
+    declare function randBool(): boolean;
+    
+    switch (y) {
+        case "foo", x:
+            break;
+        case x, "foo":
+            break;
+        case x, "baz":
+            break;
+        case "baz", x:
+            break;
+        case "baz" && "bar":
+            break;
+        case "bar" && "baz";
+                           ~
+!!! error TS1005: ':' expected.
+            break;
+        case "baz" && ("foo" || "bar"):
+            break;
+        case "bar" && ("baz" || "bar"):
+            break;
+    }
+    
