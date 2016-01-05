@@ -2727,5 +2727,9 @@
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
       "category": "Error",
       "code": 17007
+    },
+    "JSX element '{0}' has no corresponding closing tag.": {
+      "category": "Error",
+      "code": 17008
     }
 }

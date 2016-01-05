@@ -134,7 +134,7 @@ var x = 0;`,
 
         it("Sets module name", () => {
             let output =
-                `System.register("NamedModule", [], function(exports_1, __moduleName) {\n    "use strict";\n    var x;\n` +
+                `System.register("NamedModule", [], function(exports_1) {\n    "use strict";\n    var x;\n` +
                 `    return {\n` +
                 `        setters:[],\n` +
                 `        execute: function() {\n` +
@@ -159,7 +159,7 @@ var x = 0;`,
                 `declare function use(a: any);\n` +
                 `use(foo);`
             let output =
-                `System.register(["SomeOtherName"], function(exports_1, __moduleName) {\n` +
+                `System.register(["SomeOtherName"], function(exports_1) {\n` +
                 `    "use strict";\n` +
                 `    var SomeName_1;\n` +
                 `    return {\n` +
