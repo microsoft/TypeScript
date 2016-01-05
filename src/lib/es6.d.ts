@@ -909,6 +909,7 @@ interface Int8Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Int8Array";
 }
 
 interface Int8ArrayConstructor {
@@ -941,6 +942,7 @@ interface Uint8Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "UInt8Array";
 }
 
 interface Uint8ArrayConstructor {
@@ -976,6 +978,7 @@ interface Uint8ClampedArray {
     values(): IterableIterator<number>;
 
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
 interface Uint8ClampedArrayConstructor {
@@ -1013,6 +1016,7 @@ interface Int16Array {
 
 
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Int16Array";
 }
 
 interface Int16ArrayConstructor {
@@ -1045,6 +1049,7 @@ interface Uint16Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Uint16Array";
 }
 
 interface Uint16ArrayConstructor {
@@ -1077,6 +1082,7 @@ interface Int32Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Int32Array";
 }
 
 interface Int32ArrayConstructor {
@@ -1109,6 +1115,7 @@ interface Uint32Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Uint32Array";
 }
 
 interface Uint32ArrayConstructor {
@@ -1141,6 +1148,7 @@ interface Float32Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Float32Array";
 }
 
 interface Float32ArrayConstructor {
@@ -1173,6 +1181,7 @@ interface Float64Array {
       */
     values(): IterableIterator<number>;
     [Symbol.iterator](): IterableIterator<number>;
+    [Symbol.toStringTag]: "Float64Array";
 }
 
 interface Float64ArrayConstructor {
