@@ -7599,6 +7599,13 @@ namespace ts {
                             case SyntaxKind.ExclamationEqualsToken:
                                 return current === binaryExpr.left || current === binaryExpr.right;
 
+                            case SyntaxKind.AmpersandAmpersandToken:
+                            case SyntaxKind.CommaToken:
+                                if (current === binaryExpr.right) {
+                                    continue loop;
+                                }
+                                break loop;
+
                             case SyntaxKind.BarBarToken:
                                 if (current === binaryExpr.left || current === binaryExpr.right) {
                                     continue loop;
