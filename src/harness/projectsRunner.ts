@@ -287,10 +287,6 @@ class ProjectRunner extends RunnerBase {
                 return Harness.IO.fileExists(getFileNameInTheProjectTest(fileName));
             }
 
-            function directoryExists(directoryName: string): boolean {
-                return Harness.IO.directoryExists(getFileNameInTheProjectTest(directoryName));
-            }
-
             function getSourceFileText(fileName: string): string {
                 let text: string = undefined;
                 try {

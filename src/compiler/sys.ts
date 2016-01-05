@@ -139,10 +139,6 @@ namespace ts {
                 }
             }
 
-            function getCanonicalPath(path: string): string {
-                return path.toLowerCase();
-            }
-
             function getNames(collection: any): string[] {
                 const result: string[] = [];
                 for (let e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
@@ -355,10 +351,6 @@ namespace ts {
                         _fs.closeSync(fd);
                     }
                 }
-            }
-
-            function getCanonicalPath(path: string): string {
-                return useCaseSensitiveFileNames ? path.toLowerCase() : path;
             }
 
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {

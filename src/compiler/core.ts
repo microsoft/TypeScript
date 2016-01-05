@@ -116,7 +116,7 @@ namespace ts {
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
-        for (let i = start || 0, len = text.length; i < len; ++i) {
+        for (let i = start || 0, len = text.length; i < len; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
                 return i;
             }
@@ -824,7 +824,7 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        for (let i = 0; i < sharedLength; ++i) {
+        for (let i = 0; i < sharedLength; i++) {
             const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
             if (result !== Comparison.EqualTo) {
                 return result;
@@ -846,7 +846,7 @@ namespace ts {
             return false;
         }
 
-        for (let i = 0; i < parentComponents.length; ++i) {
+        for (let i = 0; i < parentComponents.length; i++) {
             const result = compareStrings(parentComponents[i], childComponents[i], ignoreCase);
             if (result !== Comparison.EqualTo) {
                 return false;
@@ -1021,9 +1021,9 @@ namespace ts {
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
-            include: for (let i = 0; i < includeBasePaths.length; ++i) {
+            include: for (let i = 0; i < includeBasePaths.length; i++) {
                 const includeBasePath = includeBasePaths[i];
-                for (let j = 0; j < basePaths.length; ++j) {
+                for (let j = 0; j < basePaths.length; j++) {
                     if (containsPath(basePaths[j], includeBasePath, path, !useCaseSensitiveFileNames)) {
                         continue include;
                     }
