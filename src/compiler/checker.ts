@@ -7362,6 +7362,12 @@ namespace ts {
                 }
                 return type;
             }
+            else if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.CommaToken) {
+                if (node === binaryExpression.right) {
+                    return getContextualType(binaryExpression);
+                }
+            }
+
             return undefined;
         }
 
