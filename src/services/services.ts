@@ -5490,9 +5490,11 @@ namespace ts {
                 };
             }
 
-            function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
+            function isES6StyleImportSymbol(symbol: Symbol) {
                 return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
-                    return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
+                    const { kind } = declaration;
+                    return kind === SyntaxKind.ImportSpecifier || kind === SyntaxKind.ExportSpecifier
+                        || kind === SyntaxKind.ImportClause || kind === SyntaxKind.NamespaceImport;
                 });
             }
 
@@ -5936,8 +5938,8 @@ namespace ts {
                 // The search set contains at least the current symbol
                 let result = [symbol];
 
-                // If the symbol is an alias, add what it alaises to the list
-                if (isImportOrExportSpecifierImportSymbol(symbol)) {
+                // If the symbol is an alias, add what it aliases to the list
+                if (isES6StyleImportSymbol(symbol)) {
                     result.push(typeChecker.getAliasedSymbol(symbol));
                 }
 
@@ -6028,7 +6030,7 @@ namespace ts {
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
-                if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
+                if (isES6StyleImportSymbol(referenceSymbol)) {
                     const aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
                     if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
                         return aliasedSymbol;
