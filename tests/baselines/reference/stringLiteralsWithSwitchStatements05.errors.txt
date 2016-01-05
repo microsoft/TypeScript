@@ -1,6 +1,7 @@
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(10,10): error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
   Type '"bar"' is not assignable to type '"foo"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(12,10): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(14,10): error TS2322: Type '"baz"' is not assignable to type '"foo"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(20,10): error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
   Type '"bar"' is not assignable to type '"foo"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts(22,10): error TS2322: Type '"bar" | "baz"' is not assignable to type '"foo"'.
@@ -9,7 +10,7 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05
   Type '"baz"' is not assignable to type '"foo"'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts (5 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05.ts (6 errors) ====
     let x: "foo";
     let y: "foo" | "bar"; 
     let z: "bar";
@@ -29,6 +30,8 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsWithSwitchStatements05
 !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
             break;
         case (x, y, ("baz")):
+             ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"baz"' is not assignable to type '"foo"'.
             x;
             y;
             break;
