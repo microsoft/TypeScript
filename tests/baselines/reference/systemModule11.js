@@ -42,7 +42,7 @@ export * from 'a';
 
 //// [file1.js]
 // set of tests cases that checks generation of local storage for exported names
-System.register(['bar'], function(exports_1, __moduleName) {
+System.register(['bar'], function(exports_1) {
     "use strict";
     var x;
     function foo() { }
@@ -68,7 +68,7 @@ System.register(['bar'], function(exports_1, __moduleName) {
     }
 });
 //// [file2.js]
-System.register(['bar'], function(exports_1, __moduleName) {
+System.register(['bar'], function(exports_1) {
     "use strict";
     var x, y;
     var exportedNames_1 = {
@@ -94,7 +94,7 @@ System.register(['bar'], function(exports_1, __moduleName) {
     }
 });
 //// [file3.js]
-System.register(['a', 'bar'], function(exports_1, __moduleName) {
+System.register(['a', 'bar'], function(exports_1) {
     "use strict";
     function foo() { }
     exports_1("default", foo);
@@ -125,7 +125,7 @@ System.register(['a', 'bar'], function(exports_1, __moduleName) {
     }
 });
 //// [file4.js]
-System.register(['a'], function(exports_1, __moduleName) {
+System.register(['a'], function(exports_1) {
     "use strict";
     var x, z, z1;
     function foo() { }
@@ -147,7 +147,7 @@ System.register(['a'], function(exports_1, __moduleName) {
     }
 });
 //// [file5.js]
-System.register(['a'], function(exports_1, __moduleName) {
+System.register(['a'], function(exports_1) {
     "use strict";
     function foo() { }
     function exportStar_1(m) {

@@ -13,7 +13,7 @@ export * from "file1";
 var x = 1;
 
 //// [file0.js]
-System.register([], function(exports_1, __moduleName) {
+System.register([], function(exports_1) {
     "use strict";
     var v;
     return {
@@ -24,7 +24,7 @@ System.register([], function(exports_1, __moduleName) {
     }
 });
 //// [file1.js]
-System.register([], function(exports_1, __moduleName) {
+System.register([], function(exports_1) {
     "use strict";
     return {
         setters:[],
@@ -33,7 +33,7 @@ System.register([], function(exports_1, __moduleName) {
     }
 });
 //// [file2.js]
-System.register(["file0"], function(exports_1, __moduleName) {
+System.register(["file0"], function(exports_1) {
     "use strict";
     var x;
     function exportStar_1(m) {

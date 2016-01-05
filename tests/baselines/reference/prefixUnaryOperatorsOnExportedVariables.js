@@ -31,7 +31,7 @@ if (++y) {
 }
 
 //// [prefixUnaryOperatorsOnExportedVariables.js]
-System.register([], function(exports_1, __moduleName) {
+System.register([], function(exports_1) {
     "use strict";
     var x, y;
     return {
