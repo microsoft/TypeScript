@@ -8264,7 +8264,7 @@ namespace ts {
                             if (intrinsicAttributes !== unknownType) {
                                 paramType = intersectTypes(intrinsicAttributes, paramType);
                             }
-                            return paramType;
+                            return links.resolvedJsxType = paramType;
                         }
                     }
 
