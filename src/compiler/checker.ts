@@ -164,6 +164,8 @@ namespace ts {
         let getGlobalPromiseConstructorLikeType: () => ObjectType;
         let getGlobalThenableType: () => ObjectType;
 
+        let jsxElementClassType: Type;
+
         let deferredNodes: Node[];
 
         const tupleTypes: Map<TupleType> = {};
@@ -7502,6 +7504,7 @@ namespace ts {
                 if (isContextSensitive(func)) {
                     const contextualSignature = getContextualSignature(func);
                     if (contextualSignature) {
+
                         const funcHasRestParameters = hasRestParameter(func);
                         const len = func.parameters.length - (funcHasRestParameters ? 1 : 0);
                         const indexOfParameter = indexOf(func.parameters, parameter);
@@ -8605,7 +8608,10 @@ namespace ts {
         }
 
         function getJsxGlobalElementClassType(): Type {
-            return getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
+            if (!jsxElementClassType) {
+                jsxElementClassType = getExportedTypeFromNamespace(JsxNames.JSX, JsxNames.ElementClass);
+            }
+            return jsxElementClassType;
         }
 
         /// Returns all the properties of the Jsx.IntrinsicElements interface
@@ -9407,33 +9413,32 @@ namespace ts {
           */
         function getEffectiveDecoratorFirstArgumentType(node: Node): Type {
             // The first argument to a decorator is its `target`.
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                    // For a class decorator, the `target` is the type of the class (e.g. the
-                    // "static" or "constructor" side of the class)
+            if (node.kind === SyntaxKind.ClassDeclaration) {
+                // For a class decorator, the `target` is the type of the class (e.g. the
+                // "static" or "constructor" side of the class)
+                const classSymbol = getSymbolOfNode(node);
+                return getTypeOfSymbol(classSymbol);
+            }
+
+            if (node.kind === SyntaxKind.Parameter) {
+                // For a parameter decorator, the `target` is the parent type of the
+                // parameter's containing method.
+                node = node.parent;
+                if (node.kind === SyntaxKind.Constructor) {
                     const classSymbol = getSymbolOfNode(node);
                     return getTypeOfSymbol(classSymbol);
+                }
+            }
 
-                case SyntaxKind.Parameter:
-                    // For a parameter decorator, the `target` is the parent type of the
-                    // parameter's containing method.
-                    node = node.parent;
-                    if (node.kind === SyntaxKind.Constructor) {
-                        const classSymbol = getSymbolOfNode(node);
-                        return getTypeOfSymbol(classSymbol);
-                    }
-
-                // fall-through
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    // For a property or method decorator, the `target` is the
-                    // "static"-side type of the parent of the member if the member is
-                    // declared "static"; otherwise, it is the "instance"-side type of the
-                    // parent of the member.
-                    return getParentTypeOfClassElement(<ClassElement>node);
+            if (node.kind === SyntaxKind.PropertyDeclaration ||
+                node.kind === SyntaxKind.MethodDeclaration ||
+                node.kind === SyntaxKind.GetAccessor ||
+                node.kind === SyntaxKind.SetAccessor) {
+                // For a property or method decorator, the `target` is the
+                // "static"-side type of the parent of the member if the member is
+                // declared "static"; otherwise, it is the "instance"-side type of the
+                // parent of the member.
+                return getParentTypeOfClassElement(<ClassElement>node);
             }
 
             Debug.fail("Unsupported decorator target.");
@@ -10243,11 +10248,11 @@ namespace ts {
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, contextualMapper?: TypeMapper): Type {
+            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             if (!func.body) {
                 return unknownType;
             }
 
-            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
             const isAsync = isAsyncFunctionLike(func);
             let type: Type;
             if (func.body.kind !== SyntaxKind.Block) {
