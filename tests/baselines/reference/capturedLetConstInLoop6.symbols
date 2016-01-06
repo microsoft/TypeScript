@@ -30,12 +30,12 @@ for (let x in []) {
     (() => x);
 >x : Symbol(x, Decl(capturedLetConstInLoop6.ts, 12, 8))
 
-    if (x == 1) {
+    if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop6.ts, 12, 8))
 
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
 >x : Symbol(x, Decl(capturedLetConstInLoop6.ts, 12, 8))
 
         continue;
@@ -272,12 +272,12 @@ for (const x in []) {
     (() => x);
 >x : Symbol(x, Decl(capturedLetConstInLoop6.ts, 131, 10))
 
-    if (x == 1) {
+    if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop6.ts, 131, 10))
 
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
 >x : Symbol(x, Decl(capturedLetConstInLoop6.ts, 131, 10))
 
         continue;

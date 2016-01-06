@@ -1,0 +1,43 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsArray.ts ===
+let a: Date[];
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+let b: boolean[];
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+
+for (let x in a) {
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+
+    let a1 = a[x];
+>a1 : Symbol(a1, Decl(for-inStatementsArray.ts, 4, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let a2 = a[(x)];
+>a2 : Symbol(a2, Decl(for-inStatementsArray.ts, 5, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let a3 = a[+x];
+>a3 : Symbol(a3, Decl(for-inStatementsArray.ts, 6, 7))
+>a : Symbol(a, Decl(for-inStatementsArray.ts, 0, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let b1 = b[x];
+>b1 : Symbol(b1, Decl(for-inStatementsArray.ts, 7, 7))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let b2 = b[(x)];
+>b2 : Symbol(b2, Decl(for-inStatementsArray.ts, 8, 7))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+
+    let b3 = b[+x];
+>b3 : Symbol(b3, Decl(for-inStatementsArray.ts, 9, 7))
+>b : Symbol(b, Decl(for-inStatementsArray.ts, 1, 3))
+>x : Symbol(x, Decl(for-inStatementsArray.ts, 3, 8))
+}
+
