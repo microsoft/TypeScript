@@ -1,0 +1,40 @@
+=== tests/cases/compiler/inheritedModuleMembersForClodule.ts ===
+class C {
+>C : Symbol(C, Decl(inheritedModuleMembersForClodule.ts, 0, 0))
+
+    static foo(): string {
+>foo : Symbol(C.foo, Decl(inheritedModuleMembersForClodule.ts, 0, 9))
+
+        return "123";
+    }
+}
+
+class D extends C {
+>D : Symbol(D, Decl(inheritedModuleMembersForClodule.ts, 4, 1), Decl(inheritedModuleMembersForClodule.ts, 7, 1))
+>C : Symbol(C, Decl(inheritedModuleMembersForClodule.ts, 0, 0))
+}
+
+module D {
+>D : Symbol(D, Decl(inheritedModuleMembersForClodule.ts, 4, 1), Decl(inheritedModuleMembersForClodule.ts, 7, 1))
+
+    export function foo(): number {
+>foo : Symbol(foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
+
+        return 0;
+    };
+}
+
+class E extends D {
+>E : Symbol(E, Decl(inheritedModuleMembersForClodule.ts, 13, 1))
+>D : Symbol(D, Decl(inheritedModuleMembersForClodule.ts, 4, 1), Decl(inheritedModuleMembersForClodule.ts, 7, 1))
+
+    static bar() {
+>bar : Symbol(E.bar, Decl(inheritedModuleMembersForClodule.ts, 15, 19))
+
+        return this.foo();
+>this.foo : Symbol(D.foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
+>this : Symbol(E, Decl(inheritedModuleMembersForClodule.ts, 13, 1))
+>foo : Symbol(D.foo, Decl(inheritedModuleMembersForClodule.ts, 9, 10))
+    }
+}
+
