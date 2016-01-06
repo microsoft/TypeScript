@@ -2667,6 +2667,7 @@ namespace ts {
         // to determine location of bundled typings for node module
         readFile(fileName: string): string;
         trace?(s: string): void;
+        directoryExists?(directoryName: string): boolean;
     }
 
     export interface ResolvedModule {

@@ -26,15 +26,36 @@ module ts {
         content?: string
     }
 
-    function createModuleResolutionHost(...files: File[]): ModuleResolutionHost {
+    function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
         let map = arrayToMap(files, f => f.name);
 
-        return { fileExists, readFile };
-
-        function fileExists(path: string): boolean {
-            return hasProperty(map, path);
+        if (hasDirectoryExists) {
+            const directories: Map<string> = {};
+            for (const f of files) {
+                let name = getDirectoryPath(f.name);
+                while (true) {
+                    directories[name] = name;
+                    let baseName = getDirectoryPath(name);
+                    if (baseName === name) {
+                        break;
+                    }
+                    name = baseName;
+                }
+            }
+            return {
+                readFile,
+                directoryExists: path => { 
+                    return hasProperty(directories, path); 
+                },
+                fileExists: path => {
+                    assert.isTrue(hasProperty(directories, getDirectoryPath(path)), "'fileExists' request in non-existing directory");
+                    return hasProperty(map, path);
+                }
+            }
         }
-
+        else {
+            return { readFile, fileExists: path => hasProperty(map, path), };
+        }
         function readFile(path: string): string {
             return hasProperty(map, path) ? map[path].content : undefined;
         }
@@ -51,9 +72,14 @@ module ts {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
             for (let ext of supportedTypeScriptExtensions) {
+                test(ext, /*hasDirectoryExists*/ false);
+                test(ext, /*hasDirectoryExists*/ true);
+            }
+
+            function test(ext: string, hasDirectoryExists: boolean) {
                 let containingFile = { name: containingFileName }
                 let moduleFile = { name: moduleFileNameNoExt + ext }
-                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
+                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
                 assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
                 assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
 
@@ -69,6 +95,7 @@ module ts {
                 }
 
                 assert.deepEqual(resolution.failedLookupLocations, failedLookupLocations);
+
             }
         }
 
@@ -89,14 +116,19 @@ module ts {
         });
 
         function testLoadingFromPackageJson(containingFileName: string, packageJsonFileName: string, fieldRef: string, moduleFileName: string, moduleName: string): void {
-            let containingFile = { name: containingFileName };
-            let packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
-            let moduleFile = { name: moduleFileName };
-            let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, moduleFile));
-            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
-            assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
-            // expect three failed lookup location - attempt to load module as file with all supported extensions
-            assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let containingFile = { name: containingFileName };
+                let packageJson = { name: packageJsonFileName, content: JSON.stringify({ "typings": fieldRef }) };
+                let moduleFile = { name: moduleFileName };
+                let resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
+                assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
+                assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
+                // expect three failed lookup location - attempt to load module as file with all supported extensions
+                assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
+            }
         }
 
         it("module name as directory - load from 'typings'", () => {
@@ -107,16 +139,21 @@ module ts {
         });
 
         function testTypingsIgnored(typings: any): void {
-            let containingFile = { name: "/a/b.ts" };
-            let packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ "typings": typings }) };
-            let moduleFile = { name: "/a/b.d.ts" };
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
 
-            let indexPath = "/node_modules/b/index.d.ts";
-            let indexFile = { name: indexPath }
+            function test(hasDirectoryExists: boolean) {
+                let containingFile = { name: "/a/b.ts" };
+                let packageJson = { name: "/node_modules/b/package.json", content: JSON.stringify({ "typings": typings }) };
+                let moduleFile = { name: "/a/b.d.ts" };
 
-            let resolution = nodeModuleNameResolver("b", containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, moduleFile, indexFile));
+                let indexPath = "/node_modules/b/index.d.ts";
+                let indexFile = { name: indexPath }
 
-            assert.equal(resolution.resolvedModule.resolvedFileName, indexPath);
+                let resolution = nodeModuleNameResolver("b", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile, indexFile));
+
+                assert.equal(resolution.resolvedModule.resolvedFileName, indexPath);
+            }
         }
 
         it("module name as directory - handle invalid 'typings'", () => {
@@ -128,89 +165,110 @@ module ts {
         });
 
         it("module name as directory - load index.d.ts", () => {
-            let containingFile = { name: "/a/b/c.ts" };
-            let packageJson = { name: "/a/b/foo/package.json", content: JSON.stringify({ main: "/c/d" }) };
-            let indexFile = { name: "/a/b/foo/index.d.ts" };
-            let resolution = nodeModuleNameResolver("./foo", containingFile.name, {}, createModuleResolutionHost(containingFile, packageJson, indexFile));
-            assert.equal(resolution.resolvedModule.resolvedFileName, indexFile.name);
-            assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
-            assert.deepEqual(resolution.failedLookupLocations, [
-                "/a/b/foo.ts",
-                "/a/b/foo.tsx",
-                "/a/b/foo.d.ts",
-                "/a/b/foo/index.ts",
-                "/a/b/foo/index.tsx",
-            ]);
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let containingFile = { name: "/a/b/c.ts" };
+                let packageJson = { name: "/a/b/foo/package.json", content: JSON.stringify({ main: "/c/d" }) };
+                let indexFile = { name: "/a/b/foo/index.d.ts" };
+                let resolution = nodeModuleNameResolver("./foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, indexFile));
+                assert.equal(resolution.resolvedModule.resolvedFileName, indexFile.name);
+                assert.equal(!!resolution.resolvedModule.isExternalLibraryImport, false);
+                assert.deepEqual(resolution.failedLookupLocations, [
+                    "/a/b/foo.ts",
+                    "/a/b/foo.tsx",
+                    "/a/b/foo.d.ts",
+                    "/a/b/foo/index.ts",
+                    "/a/b/foo/index.tsx",
+                ]);
+            }
         });
     });
 
     describe("Node module resolution - non-relative paths", () => {
         it("load module as file - ts files not loaded", () => {
-            let containingFile = { name: "/a/b/c/d/e.ts" };
-            let moduleFile = { name: "/a/b/node_modules/foo.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
-            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
-            assert.deepEqual(resolution.failedLookupLocations, [
-                "/a/b/c/d/node_modules/foo.ts",
-                "/a/b/c/d/node_modules/foo.tsx",
-                "/a/b/c/d/node_modules/foo.d.ts",
-                "/a/b/c/d/node_modules/foo/package.json",
-                "/a/b/c/d/node_modules/foo/index.ts",
-                "/a/b/c/d/node_modules/foo/index.tsx",
-                "/a/b/c/d/node_modules/foo/index.d.ts",
-                "/a/b/c/node_modules/foo.ts",
-                "/a/b/c/node_modules/foo.tsx",
-                "/a/b/c/node_modules/foo.d.ts",
-                "/a/b/c/node_modules/foo/package.json",
-                "/a/b/c/node_modules/foo/index.ts",
-                "/a/b/c/node_modules/foo/index.tsx",
-                "/a/b/c/node_modules/foo/index.d.ts",
-            ])
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let containingFile = { name: "/a/b/c/d/e.ts" };
+                let moduleFile = { name: "/a/b/node_modules/foo.ts" };
+                let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
+                assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
+                assert.deepEqual(resolution.failedLookupLocations, [
+                    "/a/b/c/d/node_modules/foo.ts",
+                    "/a/b/c/d/node_modules/foo.tsx",
+                    "/a/b/c/d/node_modules/foo.d.ts",
+                    "/a/b/c/d/node_modules/foo/package.json",
+                    "/a/b/c/d/node_modules/foo/index.ts",
+                    "/a/b/c/d/node_modules/foo/index.tsx",
+                    "/a/b/c/d/node_modules/foo/index.d.ts",
+                    "/a/b/c/node_modules/foo.ts",
+                    "/a/b/c/node_modules/foo.tsx",
+                    "/a/b/c/node_modules/foo.d.ts",
+                    "/a/b/c/node_modules/foo/package.json",
+                    "/a/b/c/node_modules/foo/index.ts",
+                    "/a/b/c/node_modules/foo/index.tsx",
+                    "/a/b/c/node_modules/foo/index.d.ts",
+                ])
+            }
         });
 
         it("load module as file", () => {
-            let containingFile = { name: "/a/b/c/d/e.ts" };
-            let moduleFile = { name: "/a/b/node_modules/foo.d.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
-            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
-            assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let containingFile = { name: "/a/b/c/d/e.ts" };
+                let moduleFile = { name: "/a/b/node_modules/foo.d.ts" };
+                let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
+                assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
+                assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
+            }
         });
 
         it("load module as directory", () => {
-            let containingFile = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
-            let moduleFile = { name: "/a/node_modules/foo/index.d.ts" };
-            let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(containingFile, moduleFile));
-            assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
-            assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
-            assert.deepEqual(resolution.failedLookupLocations, [
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
-                "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
-                "/a/node_modules/b/c/node_modules/foo.ts",
-                "/a/node_modules/b/c/node_modules/foo.tsx",
-                "/a/node_modules/b/c/node_modules/foo.d.ts",
-                "/a/node_modules/b/c/node_modules/foo/package.json",
-                "/a/node_modules/b/c/node_modules/foo/index.ts",
-                "/a/node_modules/b/c/node_modules/foo/index.tsx",
-                "/a/node_modules/b/c/node_modules/foo/index.d.ts",
-                "/a/node_modules/b/node_modules/foo.ts",
-                "/a/node_modules/b/node_modules/foo.tsx",
-                "/a/node_modules/b/node_modules/foo.d.ts",
-                "/a/node_modules/b/node_modules/foo/package.json",
-                "/a/node_modules/b/node_modules/foo/index.ts",
-                "/a/node_modules/b/node_modules/foo/index.tsx",
-                "/a/node_modules/b/node_modules/foo/index.d.ts",
-                "/a/node_modules/foo.ts",
-                "/a/node_modules/foo.tsx",
-                "/a/node_modules/foo.d.ts",
-                "/a/node_modules/foo/package.json",
-                "/a/node_modules/foo/index.ts",
-                "/a/node_modules/foo/index.tsx"
-            ]);
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let containingFile = { name: "/a/node_modules/b/c/node_modules/d/e.ts" };
+                let moduleFile = { name: "/a/node_modules/foo/index.d.ts" };
+                let resolution = nodeModuleNameResolver("foo", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, moduleFile));
+                assert.equal(resolution.resolvedModule.resolvedFileName, moduleFile.name);
+                assert.equal(resolution.resolvedModule.isExternalLibraryImport, true);
+                assert.deepEqual(resolution.failedLookupLocations, [
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo.tsx",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo.d.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.ts",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.tsx",
+                    "/a/node_modules/b/c/node_modules/d/node_modules/foo/index.d.ts",
+                    "/a/node_modules/b/c/node_modules/foo.ts",
+                    "/a/node_modules/b/c/node_modules/foo.tsx",
+                    "/a/node_modules/b/c/node_modules/foo.d.ts",
+                    "/a/node_modules/b/c/node_modules/foo/package.json",
+                    "/a/node_modules/b/c/node_modules/foo/index.ts",
+                    "/a/node_modules/b/c/node_modules/foo/index.tsx",
+                    "/a/node_modules/b/c/node_modules/foo/index.d.ts",
+                    "/a/node_modules/b/node_modules/foo.ts",
+                    "/a/node_modules/b/node_modules/foo.tsx",
+                    "/a/node_modules/b/node_modules/foo.d.ts",
+                    "/a/node_modules/b/node_modules/foo/package.json",
+                    "/a/node_modules/b/node_modules/foo/index.ts",
+                    "/a/node_modules/b/node_modules/foo/index.tsx",
+                    "/a/node_modules/b/node_modules/foo/index.d.ts",
+                    "/a/node_modules/foo.ts",
+                    "/a/node_modules/foo.tsx",
+                    "/a/node_modules/foo.d.ts",
+                    "/a/node_modules/foo/package.json",
+                    "/a/node_modules/foo/index.ts",
+                    "/a/node_modules/foo/index.tsx"
+                ]);
+
+            }
         });
     });
 
@@ -403,129 +461,161 @@ import b = require("./moduleB.ts");
 
     describe("baseUrl module resolution", () => {
         it("module resolution without path mappings/rootDirs", () => {
-            const file1: File = { name: "/root/folder1/file1.ts" };
-            const file2: File = { name: "/root/folder2/file2.ts" };
-            const file3: File = { name: "/root/folder2/file3.ts" };
-            const host = createModuleResolutionHost(file1, file2, file3);
-            const options: CompilerOptions = { moduleResolution: ModuleResolutionKind.BaseUrl, baseUrl: "/root" };
-            {
-                const result = baseUrlModuleNameResolver("folder2/file2", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file2.name);
-                assert.deepEqual(result.failedLookupLocations, []);
-            }
-            {
-                const result = baseUrlModuleNameResolver("./file3", file2.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file3.name);
-                assert.deepEqual(result.failedLookupLocations, []);
-            }
-            {
-                const result = baseUrlModuleNameResolver(file1.name, file2.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file1.name);
-                assert.deepEqual(result.failedLookupLocations, []);
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const file1: File = { name: "/root/folder1/file1.ts" };
+                const file2: File = { name: "/root/folder2/file2.ts" };
+                const file3: File = { name: "/root/folder2/file3.ts" };
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3);
+                const options: CompilerOptions = { moduleResolution: ModuleResolutionKind.BaseUrl, baseUrl: "/root" };
+                {
+                    const result = baseUrlModuleNameResolver("folder2/file2", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file2.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
+                }
+                {
+                    const result = baseUrlModuleNameResolver("./file3", file2.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file3.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
+                }
+                {
+                    const result = baseUrlModuleNameResolver(file1.name, file2.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file1.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
+                }
             }
             // add failure tests
         });
 
         it("module resolution with path mappings", () => {
-            const file1: File = { name: "/root/folder1/file1.ts" };
-            const file2: File = { name: "/root/folder1/file2.ts" }
-            const file3: File = { name: "/root/generated/folder1/file3.ts" }
-            const file4: File = { name: "/root/generated/folder2/file4.ts" }
-            const file5: File = { name: "/root/someanotherfolder/file5.ts" }
-            const host = createModuleResolutionHost(file1, file2, file3, file4, file5);
-            const options: CompilerOptions = { 
-                moduleResolution: ModuleResolutionKind.BaseUrl,
-                baseUrl: "/root",
-                paths: {
-                    "*": [
-                        "*",
-                        "generated/*"
-                    ],
-                    "somefolder/*": [
-                        "someanotherfolder/*"
-                    ]
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                const file1: File = { name: "/root/folder1/file1.ts" };
+                const file2: File = { name: "/root/folder1/file2.ts" }
+                const file3: File = { name: "/root/generated/folder1/file3.ts" }
+                const file4: File = { name: "/root/generated/folder2/file4.ts" }
+                const file5: File = { name: "/root/someanotherfolder/file5.ts" }
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3, file4, file5);
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.BaseUrl,
+                    baseUrl: "/root",
+                    paths: {
+                        "*": [
+                            "*",
+                            "generated/*"
+                        ],
+                        "somefolder/*": [
+                            "someanotherfolder/*"
+                        ]
+                    }
+                };
+                {
+                    const result = baseUrlModuleNameResolver("folder1/file2", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file2.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
                 }
-            };
-            {
-                const result = baseUrlModuleNameResolver("folder1/file2", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file2.name);
-                assert.deepEqual(result.failedLookupLocations, []);
+                {
+                    const result = baseUrlModuleNameResolver("./file2", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file2.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
+                }
+                {
+                    const result = baseUrlModuleNameResolver("folder1/file3", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file3.name);
+                    // non-empty because it tries to use '*' match first 
+                    assert.deepEqual(result.failedLookupLocations, [
+                        "/root/folder1/file3.ts",
+                        "/root/folder1/file3.tsx",
+                        "/root/folder1/file3.d.ts",
+                    ]);
+                }
+                {
+                    const result = baseUrlModuleNameResolver("folder2/file4", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file4.name);
+                    assert.deepEqual(result.failedLookupLocations, [
+                        "/root/folder2/file4.ts",
+                        "/root/folder2/file4.tsx",
+                        "/root/folder2/file4.d.ts",
+                    ]);
+                }
+                {
+                    const result = baseUrlModuleNameResolver("somefolder/file5", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file5.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
+                }
+                // add failure tests
             }
-            {
-                const result = baseUrlModuleNameResolver("./file2", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file2.name);
-                assert.deepEqual(result.failedLookupLocations, []);
-            }
-            {
-                const result = baseUrlModuleNameResolver("folder1/file3", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file3.name);
-                // non-empty because it tries to use '*' match first 
-                assert.deepEqual(result.failedLookupLocations, [
-                    "/root/folder1/file3.ts",
-                    "/root/folder1/file3.tsx",
-                    "/root/folder1/file3.d.ts",
-                ]);
-            }
-            {
-                const result = baseUrlModuleNameResolver("folder2/file4", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file4.name);
-                assert.deepEqual(result.failedLookupLocations, [
-                    "/root/folder2/file4.ts",
-                    "/root/folder2/file4.tsx",
-                    "/root/folder2/file4.d.ts",
-                ]);
-            }
-            {
-                const result = baseUrlModuleNameResolver("somefolder/file5", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file5.name);
-                assert.deepEqual(result.failedLookupLocations, []);
-            }
-            // add failure tests
         });
 
-        it ("module resolution with path mappings and root dirs", () => {
-            let file1: File = { name: "/root/folder1/file1.ts" };
-            let file2: File = { name: "/root/generated/folder1/file2.ts" };
-            let file3: File = { name: "/root/generated/folder2/file3.ts" };
-            const host = createModuleResolutionHost(file1, file2, file3);
-            const options: CompilerOptions = { 
-                moduleResolution: ModuleResolutionKind.BaseUrl,
-                baseUrl: "/root",
-                paths: {
-                    "*": [
-                        "*",
-                        "generated/*"
+        it("module resolution with path mappings and root dirs", () => {
+            test(/*hasDirectoryExists*/ false);
+            test(/*hasDirectoryExists*/ true);
+
+            function test(hasDirectoryExists: boolean) {
+                let file1: File = { name: "/root/folder1/file1.ts" };
+                let file2: File = { name: "/root/generated/folder1/file2.ts" };
+                let file3: File = { name: "/root/generated/folder2/file3.ts" };
+                const host = createModuleResolutionHost(hasDirectoryExists, file1, file2, file3);
+                const options: CompilerOptions = {
+                    moduleResolution: ModuleResolutionKind.BaseUrl,
+                    baseUrl: "/root",
+                    paths: {
+                        "*": [
+                            "*",
+                            "generated/*"
+                        ]
+                    },
+                    rootDirs: [
+                        "/root",
+                        "/root/generated/"
                     ]
-                },
-                rootDirs: [
-                    "/root",
-                    "/root/generated/"
-                ]
-            };
-            {
-                const result = baseUrlModuleNameResolver("./file2", file1.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file2.name);
-                assert.deepEqual(result.failedLookupLocations, [
-                    "/root/folder1/file2.ts",
-                    "/root/folder1/file2.tsx",
-                    "/root/folder1/file2.d.ts",
-                ]);
-            }
-            {
-                const result = baseUrlModuleNameResolver("../folder1/file1", file3.name, options, host);
-                assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
-                assert.equal(result.resolvedModule.resolvedFileName, file1.name);
-                assert.deepEqual(result.failedLookupLocations, []);
+                };
+                {
+                    const result = baseUrlModuleNameResolver("./file2", file1.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file2.name);
+                    assert.deepEqual(result.failedLookupLocations, [
+                        "/root/folder1/file2.ts",
+                        "/root/folder1/file2.tsx",
+                        "/root/folder1/file2.d.ts",
+                    ]);
+                }
+                {
+                    const result = baseUrlModuleNameResolver("../folder1/file1", file3.name, options, host);
+                    assert.isTrue(result.resolvedModule !== undefined, "module should be resolved");
+                    assert.equal(result.resolvedModule.resolvedFileName, file1.name);
+                    assert.deepEqual(result.failedLookupLocations, []);
+                }
             }
         });
-    })
+    });
+
+    function notImplemented(name: string): () => any {
+        return () => assert(`${name} is not implemented and should not be called`);
+    }
+
+    describe("ModuleResolutionHost.directoryExists", () => {
+        it("No 'fileExists' calls if containing directory is missing", () => {
+            const host: ModuleResolutionHost = {
+                readFile: notImplemented("readFile"),
+                fileExists: notImplemented("fileExists"),
+                directoryExists: _ => false
+            };
+
+            const result = resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ModuleResolutionKind.NodeJs }, host);
+            assert(!result.resolvedModule);
+        });
+    });
 }
