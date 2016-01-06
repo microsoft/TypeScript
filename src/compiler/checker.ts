@@ -11164,7 +11164,7 @@ namespace ts {
                     for (const { name } of parent.parameters) {
                         if ((name.kind === SyntaxKind.ObjectBindingPattern ||
                             name.kind === SyntaxKind.ArrayBindingPattern) &&
-                            checkBindingPatternForTypePredicateVariable(
+                            checkIfTypePredicateVariableIsDeclaredInBindingPattern(
                                 <BindingPattern>name,
                                 parameterName,
                                 typePredicate.parameterName)) {
@@ -11195,7 +11195,7 @@ namespace ts {
             }
         }
 
-        function checkBindingPatternForTypePredicateVariable(
+        function checkIfTypePredicateVariableIsDeclaredInBindingPattern(
             pattern: BindingPattern,
             predicateVariableNode: Node,
             predicateVariableName: string) {
@@ -11209,7 +11209,7 @@ namespace ts {
                 }
                 else if (name.kind === SyntaxKind.ArrayBindingPattern ||
                     name.kind === SyntaxKind.ObjectBindingPattern) {
-                    if (checkBindingPatternForTypePredicateVariable(
+                    if (checkIfTypePredicateVariableIsDeclaredInBindingPattern(
                         <BindingPattern>name,
                         predicateVariableNode,
                          predicateVariableName)) {
