@@ -2520,9 +2520,9 @@ namespace ts {
 
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type {
-            // A variable declared in a for..in statement is always of type any
+            // A variable declared in a for..in statement is always of type string
             if (declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                return anyType;
+                return stringType;
             }
 
             if (declaration.parent.parent.kind === SyntaxKind.ForOfStatement) {
@@ -8563,6 +8563,23 @@ namespace ts {
             return true;
         }
 
+        /**
+         * Return true if given node is an expression consisting of an identifier (possibly parenthesized)
+         * that references a variable declared in a for-in statement for an array-like object.
+         */
+        function isForInVariableForArrayLikeObject(node: Expression) {
+            const e = skipParenthesizedNodes(node);
+            if (e.kind === SyntaxKind.Identifier) {
+                const symbol = getResolvedSymbol(<Identifier>e);
+                if (symbol.flags & SymbolFlags.Variable) {
+                    const parent = symbol.valueDeclaration.parent.parent;
+                    return parent.kind === SyntaxKind.ForInStatement &&
+                        isArrayLikeType(checkExpression((<ForInStatement>parent).expression));
+                }
+            }
+            return false;
+        }
+
         function checkIndexedAccess(node: ElementAccessExpression): Type {
             // Grammar checking
             if (!node.argumentExpression) {
@@ -8623,7 +8640,7 @@ namespace ts {
             if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
 
                 // Try to use a number indexer.
-                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike)) {
+                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) || isForInVariableForArrayLikeObject(node.argumentExpression)) {
                     const numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -12697,7 +12714,8 @@ namespace ts {
             }
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
-                if (node.initializer) {
+                // Don't validate for-in initializer as it is already an error
+                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), getWidenedTypeForVariableLikeDeclaration(node), node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
@@ -12707,7 +12725,8 @@ namespace ts {
             const type = getTypeOfVariableOrParameterOrProperty(symbol);
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
-                if (node.initializer) {
+                // Don't validate for-in initializer as it is already an error
+                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), type, node, /*headMessage*/ undefined);
                     checkParameterInitializer(node);
                 }
