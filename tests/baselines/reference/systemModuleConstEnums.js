@@ -13,7 +13,7 @@ module M {
 }
 
 //// [systemModuleConstEnums.js]
-System.register([], function(exports_1, __moduleName) {
+System.register([], function(exports_1) {
     "use strict";
     function foo() {
         use(0 /* X */);

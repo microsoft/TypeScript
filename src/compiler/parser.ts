@@ -3478,6 +3478,20 @@ namespace ts {
             return finishNode(node);
         }
 
+        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
+            if (lhs.kind !== rhs.kind) {
+                return false;
+            }
+
+            if (lhs.kind === SyntaxKind.Identifier) {
+                return (<Identifier>lhs).text === (<Identifier>rhs).text;
+            }
+
+            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
+                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
+        }
+
+
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             const opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement;
@@ -3487,6 +3501,11 @@ namespace ts {
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
+
+                if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
+                    parseErrorAtPosition(node.closingElement.pos, node.closingElement.end - node.closingElement.pos, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, node.openingElement.tagName));
+                }
+
                 result = finishNode(node);
             }
             else {
@@ -3546,10 +3565,13 @@ namespace ts {
             while (true) {
                 token = scanner.reScanJsxToken();
                 if (token === SyntaxKind.LessThanSlashToken) {
+                    // Closing tag
                     break;
                 }
                 else if (token === SyntaxKind.EndOfFileToken) {
-                    parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                    // If we hit EOF, issue the error at the tag that lacks the closing element
+                    // rather than at the end of the file (which is useless)
+                    parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
                     break;
                 }
                 result.push(parseJsxChild());
