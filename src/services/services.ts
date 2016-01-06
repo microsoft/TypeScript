@@ -2185,7 +2185,6 @@ namespace ts {
                 }
                 return true;
             }
-
             return false;
         }
 
@@ -2368,6 +2367,7 @@ namespace ts {
 
                 // skip open bracket
                 token = scanner.scan();
+
                 let i = 0;
                 // scan until ']' or EOF
                 while (token !== SyntaxKind.CloseBracketToken && token !== SyntaxKind.EndOfFileToken) {

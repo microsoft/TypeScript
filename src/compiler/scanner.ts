@@ -29,6 +29,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         reScanJsxToken(): SyntaxKind;
         scanJsxToken(): SyntaxKind;
+        scanJSDocToken(): SyntaxKind;
         scan(): SyntaxKind;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
@@ -41,6 +42,10 @@ namespace ts {
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
         lookAhead<T>(callback: () => T): T;
+
+        // Invokes the callback with the scanner set to scan the specified range. When the callback
+        // returns, the scanner is restored to the state it was in before scanRange was called.
+        scanRange<T>(start: number, length: number, callback: () => T): T;
 
         // Invokes the provided callback.  If the callback returns something falsy, then it restores
         // the scanner to the state it was in immediately prior to invoking the callback.  If the
@@ -734,6 +739,7 @@ namespace ts {
             scanJsxIdentifier,
             reScanJsxToken,
             scanJsxToken,
+            scanJSDocToken,
             scan,
             setText,
             setScriptTarget,
@@ -742,6 +748,7 @@ namespace ts {
             setTextPos,
             tryScan,
             lookAhead,
+            scanRange,
         };
 
         function error(message: DiagnosticMessage, length?: number): void {
@@ -1649,6 +1656,69 @@ namespace ts {
             return token;
         }
 
+        function scanJSDocToken(): SyntaxKind {
+            startPos = pos;
+
+            // Eat leading whitespace
+            while (pos < end) {
+                const ch = text.charCodeAt(pos);
+                if (isWhiteSpace(ch)) {
+                    pos++;
+                }
+                else {
+                    break;
+                }
+            }
+            tokenPos = pos;
+
+            let identifierStarted = false;
+            while (pos < end) {
+                const ch = text.charCodeAt(pos);
+                if (identifierStarted) {
+                    if (!isIdentifierPart(ch, ScriptTarget.Latest)) {
+                        return token = SyntaxKind.Identifier;
+                    }
+                }
+                else {
+                    if (ch === CharacterCodes.at) {
+                        return pos += 1, token = SyntaxKind.AtToken;
+                    }
+                    else if (isLineBreak(ch)) {
+                        return pos += 1, token = SyntaxKind.NewLineTrivia;
+                    }
+                    else if (ch === CharacterCodes.asterisk) {
+                        return pos += 1, token = SyntaxKind.AsteriskToken;
+                    }
+                    else if (ch === CharacterCodes.openBrace) {
+                        return pos += 1, token = SyntaxKind.OpenBraceToken;
+                    }
+                    else if (ch === CharacterCodes.closeBrace) {
+                        return pos += 1, token = SyntaxKind.CloseBraceToken;
+                    }
+                    else if (ch === CharacterCodes.openBracket) {
+                        return pos += 1, token = SyntaxKind.OpenBracketToken;
+                    }
+                    else if (ch === CharacterCodes.closeBracket) {
+                        return pos += 1, token = SyntaxKind.CloseBracketToken;
+                    }
+                    else if (ch === CharacterCodes.equals) {
+                        return pos += 1, token = SyntaxKind.EqualsToken;
+                    }
+                    else if (ch === CharacterCodes.comma) {
+                        return pos += 1, token = SyntaxKind.CommaToken;
+                    }
+                    else if (isWhiteSpace(ch)) {
+                        // Keep going
+                    }
+                    else {
+                        identifierStarted = true;
+                    }
+                }
+                pos += 1;
+            }
+            return token = SyntaxKind.EndOfFileToken;
+        }
+
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
             const savePos = pos;
             const saveStartPos = startPos;
@@ -1668,6 +1738,33 @@ namespace ts {
                 tokenValue = saveTokenValue;
                 precedingLineBreak = savePrecedingLineBreak;
             }
+            return result;
+        }
+
+        function scanRange<T>(start: number, length: number, callback: () => T): T {
+            const saveEnd = end;
+            const savePos = pos;
+            const saveStartPos = startPos;
+            const saveTokenPos = tokenPos;
+            const saveToken = token;
+            const savePrecedingLineBreak = precedingLineBreak;
+            const saveTokenValue = tokenValue;
+            const saveHasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+            const saveTokenIsUnterminated = tokenIsUnterminated;
+
+            setText(text, start, length);
+            const result = callback();
+
+            end = saveEnd;
+            pos = savePos;
+            startPos = saveStartPos;
+            tokenPos = saveTokenPos;
+            token = saveToken;
+            precedingLineBreak = savePrecedingLineBreak;
+            tokenValue = saveTokenValue;
+            hasExtendedUnicodeEscape = saveHasExtendedUnicodeEscape;
+            tokenIsUnterminated = saveTokenIsUnterminated;
+
             return result;
         }
 
