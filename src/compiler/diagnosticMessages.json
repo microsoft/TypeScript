@@ -2393,9 +2393,9 @@
         "category": "Message",
         "code": 6083
     },
-    "Specify JSX emit namespace when JSX code generation mode is 'react'": {
+    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
         "category": "Message",
-        "code": 6084    
+        "code": 6084
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
