@@ -276,7 +276,7 @@ namespace ts {
 
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
         public directoryExists: (directoryName: string) => boolean;
-        
+
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect. 
@@ -401,7 +401,7 @@ namespace ts {
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;
-        
+
         constructor(private shimHost: CoreServicesShimHost) {
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
@@ -532,9 +532,8 @@ namespace ts {
         public refresh(throwOnError: boolean): void {
             this.forwardJSONCall(
                 `refresh(${throwOnError})`,
-                () => {
-                    return <any>null;
-                });
+                () => <any>null
+            );
         }
 
         public cleanupSemanticCache(): void {
@@ -554,46 +553,40 @@ namespace ts {
         public getSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 `getSyntacticClassifications('${fileName}', ${start}, ${length})`,
-                () => {
-                    let classifications = this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length));
-                    return classifications;
-                });
+                () => this.languageService.getSyntacticClassifications(fileName, createTextSpan(start, length))
+            );
         }
 
         public getSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 `getSemanticClassifications('${fileName}', ${start}, ${length})`,
-                () => {
-                    let classifications = this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length));
-                    return classifications;
-                });
+                () => this.languageService.getSemanticClassifications(fileName, createTextSpan(start, length))
+            );
         }
 
         public getEncodedSyntacticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 `getEncodedSyntacticClassifications('${fileName}', ${start}, ${length})`,
-                () => {
-                    // directly serialize the spans out to a string.  This is much faster to decode
-                    // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)));
-                });
+                // directly serialize the spans out to a string.  This is much faster to decode
+                // on the managed side versus a full JSON array.
+                () => convertClassifications(this.languageService.getEncodedSyntacticClassifications(fileName, createTextSpan(start, length)))
+            );
         }
 
         public getEncodedSemanticClassifications(fileName: string, start: number, length: number): string {
             return this.forwardJSONCall(
                 `getEncodedSemanticClassifications('${fileName}', ${start}, ${length})`,
-                () => {
-                    // directly serialize the spans out to a string.  This is much faster to decode
-                    // on the managed side versus a full JSON array.
-                    return convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)));
-                });
+                // directly serialize the spans out to a string.  This is much faster to decode
+                // on the managed side versus a full JSON array.
+                () => convertClassifications(this.languageService.getEncodedSemanticClassifications(fileName, createTextSpan(start, length)))
+            );
         }
 
         public getSyntacticDiagnostics(fileName: string): string {
             return this.forwardJSONCall(
                 `getSyntacticDiagnostics('${fileName}')`,
                 () => {
-                    let diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
+                    const diagnostics = this.languageService.getSyntacticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -602,7 +595,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getSemanticDiagnostics('${fileName}')`,
                 () => {
-                    let diagnostics = this.languageService.getSemanticDiagnostics(fileName);
+                    const diagnostics = this.languageService.getSemanticDiagnostics(fileName);
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -611,7 +604,7 @@ namespace ts {
             return this.forwardJSONCall(
                 "getCompilerOptionsDiagnostics()",
                 () => {
-                    let diagnostics = this.languageService.getCompilerOptionsDiagnostics();
+                    const diagnostics = this.languageService.getCompilerOptionsDiagnostics();
                     return this.realizeDiagnostics(diagnostics);
                 });
         }
@@ -625,10 +618,8 @@ namespace ts {
         public getQuickInfoAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getQuickInfoAtPosition('${fileName}', ${position})`,
-                () => {
-                    let quickInfo = this.languageService.getQuickInfoAtPosition(fileName, position);
-                    return quickInfo;
-                });
+                () => this.languageService.getQuickInfoAtPosition(fileName, position)
+            );
         }
 
 
@@ -641,10 +632,8 @@ namespace ts {
         public getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): string {
             return this.forwardJSONCall(
                 `getNameOrDottedNameSpan('${fileName}', ${startPos}, ${endPos})`,
-                () => {
-                    let spanInfo = this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos);
-                    return spanInfo;
-                });
+                () => this.languageService.getNameOrDottedNameSpan(fileName, startPos, endPos)
+            );
         }
 
         /**
@@ -654,10 +643,8 @@ namespace ts {
         public getBreakpointStatementAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getBreakpointStatementAtPosition('${fileName}', ${position})`,
-                () => {
-                    let spanInfo = this.languageService.getBreakpointStatementAtPosition(fileName, position);
-                    return spanInfo;
-                });
+                () => this.languageService.getBreakpointStatementAtPosition(fileName, position)
+            );
         }
 
         /// SIGNATUREHELP
@@ -665,10 +652,8 @@ namespace ts {
         public getSignatureHelpItems(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getSignatureHelpItems('${fileName}', ${position})`,
-                () => {
-                    let signatureInfo = this.languageService.getSignatureHelpItems(fileName, position);
-                    return signatureInfo;
-                });
+                () => this.languageService.getSignatureHelpItems(fileName, position)
+            );
         }
 
         /// GOTO DEFINITION
@@ -680,9 +665,8 @@ namespace ts {
         public getDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getDefinitionAtPosition('${fileName}', ${position})`,
-                () => {
-                    return this.languageService.getDefinitionAtPosition(fileName, position);
-                });
+                () => this.languageService.getDefinitionAtPosition(fileName, position)
+            );
         }
 
         /// GOTO Type
@@ -694,35 +678,30 @@ namespace ts {
         public getTypeDefinitionAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getTypeDefinitionAtPosition('${fileName}', ${position})`,
-                () => {
-                    return this.languageService.getTypeDefinitionAtPosition(fileName, position);
-                });
+                () => this.languageService.getTypeDefinitionAtPosition(fileName, position)
+            );
         }
 
         public getRenameInfo(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
-                () => {
-                    return this.languageService.getRenameInfo(fileName, position);
-                });
+                () => this.languageService.getRenameInfo(fileName, position)
+            );
         }
 
         public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
             return this.forwardJSONCall(
                 `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
-                () => {
-                    return this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments);
-                });
+                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments)
+            );
         }
 
         /// GET BRACE MATCHING
         public getBraceMatchingAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getBraceMatchingAtPosition('${fileName}', ${position})`,
-                () => {
-                    let textRanges = this.languageService.getBraceMatchingAtPosition(fileName, position);
-                    return textRanges;
-                });
+                () => this.languageService.getBraceMatchingAtPosition(fileName, position)
+            );
         }
 
         /// GET SMART INDENT
@@ -740,25 +719,22 @@ namespace ts {
         public getReferencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getReferencesAtPosition('${fileName}', ${position})`,
-                () => {
-                    return this.languageService.getReferencesAtPosition(fileName, position);
-                });
+                () => this.languageService.getReferencesAtPosition(fileName, position)
+            );
         }
 
         public findReferences(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `findReferences('${fileName}', ${position})`,
-                () => {
-                    return this.languageService.findReferences(fileName, position);
-                });
+                () => this.languageService.findReferences(fileName, position)
+            );
         }
 
         public getOccurrencesAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getOccurrencesAtPosition('${fileName}', ${position})`,
-                () => {
-                    return this.languageService.getOccurrencesAtPosition(fileName, position);
-                });
+                () => this.languageService.getOccurrencesAtPosition(fileName, position)
+            );
         }
 
         public getDocumentHighlights(fileName: string, position: number, filesToSearch: string): string {
@@ -782,20 +758,16 @@ namespace ts {
         public getCompletionsAtPosition(fileName: string, position: number) {
             return this.forwardJSONCall(
                 `getCompletionsAtPosition('${fileName}', ${position})`,
-                () => {
-                    let completion = this.languageService.getCompletionsAtPosition(fileName, position);
-                    return completion;
-                });
+                () => this.languageService.getCompletionsAtPosition(fileName, position)
+            );
         }
 
         /** Get a string based representation of a completion list entry details */
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
-                () => {
-                    let details = this.languageService.getCompletionEntryDetails(fileName, position, entryName);
-                    return details;
-                });
+                () => this.languageService.getCompletionEntryDetails(fileName, position, entryName)
+            );
         }
 
         public getFormattingEditsForRange(fileName: string, start: number, end: number, options: string/*Services.FormatCodeOptions*/): string {
@@ -838,47 +810,37 @@ namespace ts {
         public getNavigateToItems(searchValue: string, maxResultCount?: number): string {
             return this.forwardJSONCall(
                 `getNavigateToItems('${searchValue}', ${maxResultCount})`,
-                () => {
-                    let items = this.languageService.getNavigateToItems(searchValue, maxResultCount);
-                    return items;
-                });
+                () => this.languageService.getNavigateToItems(searchValue, maxResultCount)
+            );
         }
 
         public getNavigationBarItems(fileName: string): string {
             return this.forwardJSONCall(
                 `getNavigationBarItems('${fileName}')`,
-                () => {
-                    let items = this.languageService.getNavigationBarItems(fileName);
-                    return items;
-                });
+                () => this.languageService.getNavigationBarItems(fileName)
+            );
         }
 
         public getOutliningSpans(fileName: string): string {
             return this.forwardJSONCall(
                 `getOutliningSpans('${fileName}')`,
-                () => {
-                    let items = this.languageService.getOutliningSpans(fileName);
-                    return items;
-                });
+                () => this.languageService.getOutliningSpans(fileName)
+            );
         }
 
         public getTodoComments(fileName: string, descriptors: string): string {
             return this.forwardJSONCall(
                 `getTodoComments('${fileName}')`,
-                () => {
-                    let items = this.languageService.getTodoComments(fileName, JSON.parse(descriptors));
-                    return items;
-                });
+                () => this.languageService.getTodoComments(fileName, JSON.parse(descriptors))
+            );
         }
 
         /// Emit
         public getEmitOutput(fileName: string): string {
             return this.forwardJSONCall(
                 `getEmitOutput('${fileName}')`,
-                () => {
-                    let output = this.languageService.getEmitOutput(fileName);
-                    return output;
-                });
+                () => this.languageService.getEmitOutput(fileName)
+            );
         }
     }
 
@@ -997,9 +959,8 @@ namespace ts {
         public getDefaultCompilationSettings(): string {
             return this.forwardJSONCall(
                 "getDefaultCompilationSettings()",
-                () => {
-                    return getDefaultCompilerOptions();
-                });
+                () => getDefaultCompilerOptions()
+            );
         }
     }
 
