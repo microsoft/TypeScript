@@ -2902,6 +2902,8 @@ namespace ts {
                     return getTypeOfSymbol(property);
                 }
             }
+
+            return undefined;
         }
 
         function getPropertyOfBaseTypeDeclaration(declaration: ClassLikeDeclaration, propertyName: string): Symbol {
@@ -2913,6 +2915,8 @@ namespace ts {
             if (implementedTypeNodes) {
                 return getFirstPropertyOfTypes(map(implementedTypeNodes, getTypeFromTypeReference), propertyName);
             }
+
+            return undefined;
         }
 
         function getFirstPropertyOfTypes(types: Type[], propertyName: string) {
@@ -2927,6 +2931,8 @@ namespace ts {
                     }
                 }
             }
+
+            return undefined;
         }
 
         function getTargetType(type: ObjectType): Type {
