@@ -4878,21 +4878,6 @@ namespace ts {
             return !node.typeParameters && node.parameters.length && !forEach(node.parameters, p => p.type);
         }
 
-        function getTypeWithoutSignatures(type: Type): Type {
-            if (type.flags & TypeFlags.ObjectType) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                if (resolved.constructSignatures.length) {
-                    const result = <ResolvedType>createObjectType(TypeFlags.Anonymous, type.symbol);
-                    result.members = resolved.members;
-                    result.properties = resolved.properties;
-                    result.callSignatures = emptyArray;
-                    result.constructSignatures = emptyArray;
-                    type = result;
-                }
-            }
-            return type;
-        }
-
         // TYPE CHECKING
 
         function isTypeIdenticalTo(source: Type, target: Type): boolean {
@@ -13503,7 +13488,6 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
             const typeWithThis = getTypeWithThisArgument(type);
-            const staticType = <ObjectType>getTypeOfSymbol(symbol);
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
