@@ -8363,7 +8363,8 @@ namespace ts {
             // The symbol 'React' should be marked as 'used' so we don't incorrectly elide its import. And if there
             // is no 'React' symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, reactRefErr, "React");
+            const jsxNamespace = compilerOptions.jsxNamespace ? compilerOptions.jsxNamespace : "React";
+            const reactSym = resolveName(node.tagName, jsxNamespace, SymbolFlags.Value, reactRefErr, jsxNamespace);
             if (reactSym) {
                 getSymbolLinks(reactSym).referenced = true;
             }

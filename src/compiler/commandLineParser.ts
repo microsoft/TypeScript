@@ -55,6 +55,11 @@ namespace ts {
             error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {
+            name: "jsxNamespace",
+            type: "string",
+            description: Diagnostics.Specify_JSX_emit_namespace_when_JSX_code_generation_mode_is_react
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },

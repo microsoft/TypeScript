@@ -2382,6 +2382,7 @@ namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
+        jsxNamespace? : string;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
