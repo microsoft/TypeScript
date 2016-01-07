@@ -1,0 +1,18 @@
+=== tests/cases/compiler/variableTypeInForInStatement.ts ===
+let x = {};
+>x : Symbol(x, Decl(variableTypeInForInStatement.ts, 0, 3))
+
+for (const c in x) {
+>c : Symbol(c, Decl(variableTypeInForInStatement.ts, 1, 10))
+>x : Symbol(x, Decl(variableTypeInForInStatement.ts, 0, 3))
+    
+}
+
+let arr = [1];
+>arr : Symbol(arr, Decl(variableTypeInForInStatement.ts, 5, 3))
+
+for (const c in arr) {
+>c : Symbol(c, Decl(variableTypeInForInStatement.ts, 6, 10))
+>arr : Symbol(arr, Decl(variableTypeInForInStatement.ts, 5, 3))
+    
+}

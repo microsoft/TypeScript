@@ -1,22 +1,26 @@
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(2,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(5,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(8,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(10,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(13,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(17,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(3,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(9,6): error TS2405: The left-hand side of a 'for...in' statement must be of type 'string' or 'any'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(11,10): error TS2404: The left-hand side of a 'for...in' statement cannot use a type annotation.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(14,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(16,27): error TS7005: Variable 'e' implicitly has an 'any' type.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(18,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(19,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(20,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(21,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(22,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(38,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(46,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(51,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(62,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(22,20): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(22,27): error TS7017: Index signature of object type implicitly has an 'any' type.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(23,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(30,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(39,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(46,5): error TS7010: 'boz', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(47,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(52,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(63,15): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
 
 
-==== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts (16 errors) ====
+==== tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts (19 errors) ====
+    
     var aNumber: number;
     for (aNumber in {}) { }
          ~~~~~~~
@@ -42,6 +46,8 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     
     var c : string, d:string, e;
+                              ~
+!!! error TS7005: Variable 'e' implicitly has an 'any' type.
     
     for (var x in c || d) { }
                   ~~~~~~
@@ -56,8 +62,10 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
                   ~~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
     for (var x in 42 ? d[x] : c[x]) { }
-                  ~~~~~~~~~~~~~~~~
-!!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
+                       ~~~~
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
+                              ~~~~
+!!! error TS7017: Index signature of object type implicitly has an 'any' type.
     for (var x in c[23]) { }
                   ~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.
@@ -88,6 +96,8 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsInvalid.ts(6
     
     class B extends A {
         boz() {
+        ~~~
+!!! error TS7010: 'boz', which lacks return-type annotation, implicitly has an 'any' return type.
             for (var x in this.biz()) { }
                           ~~~~~~~~~~
 !!! error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter.

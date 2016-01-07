@@ -1,4 +1,5 @@
 //// [for-inStatementsInvalid.ts]
+
 var aNumber: number;
 for (aNumber in {}) { }
 
