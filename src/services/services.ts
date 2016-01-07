@@ -2978,14 +2978,8 @@ namespace ts {
             // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
             // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifierStart(name.charCodeAt(0), target)) {
+                if (!isIdentifier(name, target)) {
                     return undefined;
-                }
-
-                for (let i = 1, n = name.length; i < n; i++) {
-                    if (!isIdentifierPart(name.charCodeAt(i), target)) {
-                        return undefined;
-                    }
                 }
             }
 
