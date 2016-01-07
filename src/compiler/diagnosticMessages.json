@@ -2123,6 +2123,10 @@
         "category": "Error",
         "code": 5058
     },
+    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+        "category": "Error",
+        "code": 5059
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
