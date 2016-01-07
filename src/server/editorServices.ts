@@ -784,12 +784,6 @@ namespace ts.server {
                     this.openFileRoots.push(info);
                 }
             }
-
-            // Acquire typings for JS files
-            if (fileExtensionIs(info.fileName, ".js")) {
-                this.acquireTypingForJs(info.fileName, info.defaultProject);
-            }
-
             this.updateConfiguredProjectList();
         }
 
@@ -1049,7 +1043,7 @@ namespace ts.server {
             return undefined;
         }
 
-        acquireTypingForJs(fileName: string, project: Project) {
+        acquireTypingForJs(project: Project) {
             if (!project) { return; }
 
             const cachePath = project.isConfiguredProject()
@@ -1366,6 +1360,11 @@ namespace ts.server {
 
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
+
+                    //Acquire typings for JS files
+                    if (projectOptions.typingOptions) {
+                        this.acquireTypingForJs(project);
+                    }
                 }
             }
         }
