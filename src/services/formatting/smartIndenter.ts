@@ -450,8 +450,9 @@ namespace ts.formatting {
                 case SyntaxKind.ConditionalExpression:
                 case SyntaxKind.ArrayBindingPattern:
                 case SyntaxKind.ObjectBindingPattern:
-                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxExpression:
                 case SyntaxKind.MethodSignature:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
@@ -467,6 +468,7 @@ namespace ts.formatting {
             return false;
         }
         
+        /* @internal */
         export function nodeWillIndentChild(parent: TextRangeWithKind, child: TextRangeWithKind, indentByDefault: boolean) {
             let childKind = child ? child.kind : SyntaxKind.Unknown;
             switch (parent.kind) {
@@ -484,6 +486,8 @@ namespace ts.formatting {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                     return childKind !== SyntaxKind.Block;
+                case SyntaxKind.JsxElement:
+                    return childKind !== SyntaxKind.JsxClosingElement;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;

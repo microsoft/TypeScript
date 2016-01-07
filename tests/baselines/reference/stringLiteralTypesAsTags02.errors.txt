@@ -1,0 +1,50 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags02.ts(18,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags02.ts(19,10): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTags02.ts (2 errors) ====
+    
+    type Kind = "A" | "B"
+    
+    interface Entity {
+        kind: Kind;
+    }
+    
+    interface A extends Entity {
+        kind: "A";
+        a: number;
+    }
+    
+    interface B extends Entity {
+        kind: "B";
+        b: string;
+    }
+    
+    function hasKind(entity: Entity, kind: "A"): entity is A;
+             ~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function hasKind(entity: Entity, kind: "B"): entity is B;
+             ~~~~~~~
+!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+    function hasKind(entity: Entity, kind: Kind): entity is (A | B) {
+        return entity.kind === kind;
+    }
+    
+    let x: A = {
+        kind: "A",
+        a: 100,
+    }
+    
+    if (hasKind(x, "A")) {
+        let a = x;
+    }
+    else {
+        let b = x;
+    }
+    
+    if (!hasKind(x, "B")) {
+        let c = x;
+    }
+    else {
+        let d = x;
+    }
