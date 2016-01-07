@@ -2123,6 +2123,10 @@
         "category": "Error",
         "code": 5058
     },
+    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+        "category": "Error",
+        "code": 5059
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2392,6 +2396,10 @@
     "Allow javascript files to be compiled.": {
         "category": "Message",
         "code": 6083
+    },
+    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+        "category": "Message",
+        "code": 6084
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
