@@ -8564,17 +8564,43 @@ namespace ts {
         }
 
         /**
-         * Return true if given node is an expression consisting of an identifier (possibly parenthesized)
-         * that references a variable declared in a for-in statement for an array-like object.
+         * Return the symbol of the for-in variable declared or referenced by the given for-in statement.
          */
-        function isForInVariableForArrayLikeObject(node: Expression) {
-            const e = skipParenthesizedNodes(node);
+        function getForInVariableSymbol(node: ForInStatement): Symbol {
+            const initializer = node.initializer;
+            if (initializer.kind === SyntaxKind.VariableDeclarationList) {
+                const variable = (<VariableDeclarationList>initializer).declarations[0];
+                if (variable && !isBindingPattern(variable.name)) {
+                    return getSymbolOfNode(variable);
+                }
+            }
+            else if (initializer.kind === SyntaxKind.Identifier) {
+                return getResolvedSymbol(<Identifier>initializer);
+            }
+            return undefined;
+        }
+
+        /**
+         * Return true if given node is an expression consisting of an identifier (possibly parenthesized)
+         * that references a variable declared in a containing for-in statement for an array-like object.
+         */
+        function isForInVariableForArrayLikeObject(expr: Expression) {
+            const e = skipParenthesizedNodes(expr);
             if (e.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>e);
                 if (symbol.flags & SymbolFlags.Variable) {
-                    const parent = symbol.valueDeclaration.parent.parent;
-                    return parent.kind === SyntaxKind.ForInStatement &&
-                        isArrayLikeType(checkExpression((<ForInStatement>parent).expression));
+                    let child: Node = expr;
+                    let node = expr.parent;
+                    while (node) {
+                        if (node.kind === SyntaxKind.ForInStatement &&
+                            child === (<ForInStatement>node).statement &&
+                            getForInVariableSymbol(<ForInStatement>node) === symbol &&
+                            isArrayLikeType(checkExpression((<ForInStatement>node).expression))) {
+                            return true;
+                        }
+                        child = node;
+                        node = node.parent;
+                    }
                 }
             }
             return false;
