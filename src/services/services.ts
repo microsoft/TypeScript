@@ -5491,7 +5491,7 @@ namespace ts {
             }
 
             function isImportSpecifierSymbol(symbol: Symbol) {
-                return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => declaration.kind === SyntaxKind.ImportSpecifier);
+                return (symbol.flags & SymbolFlags.Alias) && !!getDeclarationOfKind(symbol, SyntaxKind.ImportSpecifier);
             }
 
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
@@ -5939,10 +5939,11 @@ namespace ts {
                      result.push(typeChecker.getAliasedSymbol(symbol));
                 }
 
-                // For export specifiers, it can be a local symbol, e.g. 
+                // For export specifiers, the exported name can be refering to a local symbol, e.g.:
                 //     import {a} from "mod";
                 //     export {a as somethingElse}
-                // We want the local target of the export (i.e. the import symbol) and not the final target (i.e. "mod".a)
+                // We want the *local* declaration of 'a' as declared in the import,
+                // *not* as declared within "mod" (or farther)
                 if (location.parent.kind === SyntaxKind.ExportSpecifier) {
                     result.push(typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>location.parent));
                 }
