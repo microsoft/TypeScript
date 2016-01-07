@@ -248,14 +248,14 @@ namespace ts {
         }
 
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-            let oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
-            let encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
+            const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
+            const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             // TODO: should this be '==='?
             if (encoded == null) {
                 return null;
             }
 
-            let decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
+            const decoded: { span: { start: number; length: number; }; newLength: number; } = JSON.parse(encoded);
             return createTextChangeRange(
                 createTextSpan(decoded.span.start, decoded.span.length), decoded.newLength);
         }
@@ -282,7 +282,7 @@ namespace ts {
             // 'in' does not have this effect. 
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames: string[], containingFile: string) => {
-                    let resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
+                    const resolutionsInFile = <Map<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile(containingFile));
                     return map(moduleNames, name => {
                         const result = lookUp(resolutionsInFile, name);
                         return result ? { resolvedFileName: result } : undefined;
@@ -324,7 +324,7 @@ namespace ts {
         }
 
         public getCompilationSettings(): CompilerOptions {
-            let settingsJson = this.shimHost.getCompilationSettings();
+            const settingsJson = this.shimHost.getCompilationSettings();
             // TODO: should this be '==='?
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
@@ -333,12 +333,12 @@ namespace ts {
         }
 
         public getScriptFileNames(): string[] {
-            let encoded = this.shimHost.getScriptFileNames();
+            const encoded = this.shimHost.getScriptFileNames();
             return this.files = JSON.parse(encoded);
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot {
-            let scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
+            const scriptSnapshot = this.shimHost.getScriptSnapshot(fileName);
             return scriptSnapshot && new ScriptSnapshotShimAdapter(scriptSnapshot);
         }
 
@@ -347,7 +347,7 @@ namespace ts {
         }
 
         public getLocalizedDiagnosticMessages(): any {
-            let diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
+            const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
             if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
                 return null;
             }
@@ -362,7 +362,7 @@ namespace ts {
         }
 
         public getCancellationToken(): HostCancellationToken {
-            let hostCancellationToken = this.shimHost.getCancellationToken();
+            const hostCancellationToken = this.shimHost.getCancellationToken();
             return new ThrottledCancellationToken(hostCancellationToken);
         }
 
@@ -386,8 +386,8 @@ namespace ts {
         }
 
         public isCancellationRequested(): boolean {
-            let time = Date.now();
-            let duration = Math.abs(time - this.lastCancellationCheckTime);
+            const time = Date.now();
+            const duration = Math.abs(time - this.lastCancellationCheckTime);
             if (duration > 10) {
                 // Check no more than once every 10 ms.
                 this.lastCancellationCheckTime = time;
@@ -411,7 +411,7 @@ namespace ts {
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
             // Consider removing the optional designation for
             // the exclude param at this time.
-            let encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
+            const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
             return JSON.parse(encoded);
         }
 
@@ -431,10 +431,10 @@ namespace ts {
             start = Date.now();
         }
 
-        let result = action();
+        const result = action();
 
         if (logPerformance) {
-            let end = Date.now();
+            const end = Date.now();
             logger.log(`${actionDescription} completed in ${end - start} msec`);
             if (typeof result === "string") {
                 let str = result;
@@ -450,8 +450,8 @@ namespace ts {
 
     function forwardJSONCall(logger: Logger, actionDescription: string, action: () => any, logPerformance: boolean): string {
         try {
-            let result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return JSON.stringify({ result: result });
+            const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
+            return JSON.stringify({ result });
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
@@ -547,7 +547,7 @@ namespace ts {
         }
 
         private realizeDiagnostics(diagnostics: Diagnostic[]): { message: string; start: number; length: number; category: string; }[] {
-            let newLine = getNewLineOrDefaultFromHost(this.host);
+            const newLine = getNewLineOrDefaultFromHost(this.host);
             return ts.realizeDiagnostics(diagnostics, newLine);
         }
 
@@ -730,7 +730,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getIndentationAtPosition('${fileName}', ${position})`,
                 () => {
-                    let localOptions: EditorOptions = JSON.parse(options);
+                    const localOptions: EditorOptions = JSON.parse(options);
                     return this.languageService.getIndentationAtPosition(fileName, position, localOptions);
                 });
         }
@@ -765,9 +765,9 @@ namespace ts {
             return this.forwardJSONCall(
                 `getDocumentHighlights('${fileName}', ${position})`,
                 () => {
-                    let results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
+                    const results = this.languageService.getDocumentHighlights(fileName, position, JSON.parse(filesToSearch));
                     // workaround for VS document higlighting issue - keep only items from the initial file
-                    let normalizedName = normalizeSlashes(fileName).toLowerCase();
+                    const normalizedName = normalizeSlashes(fileName).toLowerCase();
                     return filter(results, r => normalizeSlashes(r.fileName).toLowerCase() === normalizedName);
                 });
         }
@@ -802,9 +802,8 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForRange('${fileName}', ${start}, ${end})`,
                 () => {
-                    let localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    let edits = this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
-                    return edits;
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getFormattingEditsForRange(fileName, start, end, localOptions);
                 });
         }
 
@@ -812,9 +811,8 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsForDocument('${fileName}')`,
                 () => {
-                    let localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    let edits = this.languageService.getFormattingEditsForDocument(fileName, localOptions);
-                    return edits;
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getFormattingEditsForDocument(fileName, localOptions);
                 });
         }
 
@@ -822,9 +820,8 @@ namespace ts {
             return this.forwardJSONCall(
                 `getFormattingEditsAfterKeystroke('${fileName}', ${position}, '${key}')`,
                 () => {
-                    let localOptions: ts.FormatCodeOptions = JSON.parse(options);
-                    let edits = this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
-                    return edits;
+                    const localOptions: ts.FormatCodeOptions = JSON.parse(options);
+                    return this.languageService.getFormattingEditsAfterKeystroke(fileName, position, key, localOptions);
                 });
         }
 
@@ -906,9 +903,9 @@ namespace ts {
 
         /// COLORIZATION
         public getClassificationsForLine(text: string, lexState: EndOfLineState, classifyKeywordsInGenerics?: boolean): string {
-            let classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
+            const classification = this.classifier.getClassificationsForLine(text, lexState, classifyKeywordsInGenerics);
             let result = "";
-            for (let item of classification.entries) {
+            for (const item of classification.entries) {
                 result += item.length + "\n";
                 result += item.classification + "\n";
             }
@@ -930,7 +927,7 @@ namespace ts {
 
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
-                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
                 return {
                     resolvedFileName: result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined,
@@ -944,8 +941,8 @@ namespace ts {
                 "getPreProcessedFileInfo('" + fileName + "')",
                 () => {
                     // for now treat files as JavaScript 
-                    let result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
-                    let convertResult = {
+                    const result = preProcessFile(sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength()), /* readImportFiles */ true, /* detectJavaScriptImports */ true);
+                    const convertResult = {
                         referencedFiles: <IFileReference[]>[],
                         importedFiles: <IFileReference[]>[],
                         ambientExternalModules: result.ambientExternalModules,
@@ -975,9 +972,9 @@ namespace ts {
             return this.forwardJSONCall(
                 `getTSConfigFileInfo('${fileName}')`,
                 () => {
-                    let text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
+                    const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    let result = parseConfigFileTextToJson(fileName, text);
+                    const result = parseConfigFileTextToJson(fileName, text);
 
                     if (result.error) {
                         return {
@@ -987,7 +984,7 @@ namespace ts {
                         };
                     }
 
-                    let configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
+                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizeSlashes(fileName)));
 
                     return {
                         options: configFile.options,
@@ -1022,8 +1019,8 @@ namespace ts {
                 if (this.documentRegistry === undefined) {
                     this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory());
                 }
-                let hostAdapter = new LanguageServiceShimHostAdapter(host);
-                let languageService = createLanguageService(hostAdapter, this.documentRegistry);
+                const hostAdapter = new LanguageServiceShimHostAdapter(host);
+                const languageService = createLanguageService(hostAdapter, this.documentRegistry);
                 return new LanguageServiceShimObject(this, host, languageService);
             }
             catch (err) {
@@ -1044,7 +1041,7 @@ namespace ts {
 
         public createCoreServicesShim(host: CoreServicesShimHost): CoreServicesShim {
             try {
-                let adapter = new CoreServicesShimHostAdapter(host);
+                const adapter = new CoreServicesShimHostAdapter(host);
                 return new CoreServicesShimObject(this, <Logger>host, adapter);
             }
             catch (err) {
