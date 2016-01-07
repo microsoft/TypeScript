@@ -791,7 +791,7 @@ namespace ts {
         /** Get a string based representation of a completion list entry details */
         public getCompletionEntryDetails(fileName: string, position: number, entryName: string) {
             return this.forwardJSONCall(
-                `getCompletionEntryDetails('${fileName}', ${position}, ${entryName})`,
+                `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
                     let details = this.languageService.getCompletionEntryDetails(fileName, position, entryName);
                     return details;
