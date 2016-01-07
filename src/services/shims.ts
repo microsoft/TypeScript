@@ -409,8 +409,6 @@ namespace ts {
         }
 
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {
-            // Consider removing the optional designation for
-            // the exclude param at this time.
             const encoded = this.shimHost.readDirectory(rootDir, extension, JSON.stringify(exclude));
             return JSON.parse(encoded);
         }
