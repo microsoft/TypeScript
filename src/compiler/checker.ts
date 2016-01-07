@@ -2595,14 +2595,7 @@ namespace ts {
 
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
-                let mapper: TypeMapper;
-                if (declaration.kind === SyntaxKind.PropertyDeclaration) {
-                    const type = getTypeOfBasePropertyDeclaration(<PropertyDeclaration>declaration);
-                    if (type) {
-                        mapper = createTypeMapper([undefinedType, nullType], [type, type]);
-                    }
-                }
-                return checkExpressionCached(declaration.initializer, mapper);
+                return checkExpressionCached(declaration.initializer);
             }
 
             // If it is a short-hand property assignment, use the type of the identifier
@@ -6967,8 +6960,9 @@ namespace ts {
             checkBlockScopedBindingCapturedInLoop(node, symbol);
 
             const type = getNarrowedTypeOfSymbol(getExportSymbolOfValueSymbolIfExported(symbol), node);
-            if (type === undefinedType || type == nullType) {
-                return (contextualMapper || identityMapper)(type);
+
+            if (symbol.name === "undefined" && !isInferentialContext(contextualMapper)) {
+                return getContextualType(node) || type;
             }
             return type;
         }
@@ -7215,8 +7209,11 @@ namespace ts {
             }
         }
 
-        function checkNullKeyword(nullNode: Node, contextualMapper: TypeMapper) {
-            return (contextualMapper || identityMapper)(nullType);
+        function checkNullKeyword(nullNode: Expression, contextualMapper?: TypeMapper) {
+            if (isInferentialContext(contextualMapper)) {
+                return nullType;
+            }
+            return getContextualType(nullNode) || nullType;
         }
 
         // Return contextual type of parameter or undefined if no contextual type is available
@@ -7766,12 +7763,11 @@ namespace ts {
                 }
             }
             if (!elementTypes.length) {
-                const mapper = contextualMapper || identityMapper;
-                const mappedType = mapper(undefinedType);
-                if (mappedType === undefinedType) {
+                const contextualType = getContextualType(node);
+                if (isInferentialContext(contextualMapper) || !contextualType || !(<TypeReference>contextualType).typeArguments) {
                     return createArrayType(undefinedType);
                 }
-                elementTypes = (<TypeReference>mappedType).typeArguments;
+                elementTypes = (<TypeReference>contextualType).typeArguments;
             }
             return createArrayType(getUnionType(elementTypes));
         }
@@ -7958,14 +7954,14 @@ namespace ts {
                     }
                     let result: Type;
                     if (!propTypes.length) {
-                        const mapper = contextualMapper || identityMapper;
-                        const mappedType = mapper(undefinedType);
-                        if (mappedType === undefinedType) {
+                        const contextualType = getContextualType(node);
+                        if (isInferentialContext(contextualMapper) || !contextualType) {
                             result = undefinedType;
                         }
                         else {
-                            const resolvedType = <ResolvedType>mappedType;
+                            const resolvedType = <ResolvedType>contextualType;
                             result = kind === IndexKind.String ? resolvedType.stringIndexType : resolvedType.numberIndexType;
+                            result = result || undefinedType;
                         }
                     }
                     else {
