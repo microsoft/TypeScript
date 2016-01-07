@@ -8581,10 +8581,17 @@ namespace ts {
         }
 
         /**
-         * Return true if given node is an expression consisting of an identifier (possibly parenthesized)
-         * that references a variable declared in a containing for-in statement for an array-like object.
+         * Return true if the given type is considered to have numeric property names.
          */
-        function isForInVariableForArrayLikeObject(expr: Expression) {
+        function hasNumericPropertyNames(type: Type) {
+            return getIndexTypeOfType(type, IndexKind.Number) && !getIndexTypeOfType(type, IndexKind.String);
+        }
+
+        /**
+         * Return true if given node is an expression consisting of an identifier (possibly parenthesized)
+         * that references a for-in variable for an object with numeric property names.
+         */
+        function isForInVariableForNumericPropertyNames(expr: Expression) {
             const e = skipParenthesizedNodes(expr);
             if (e.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>e);
@@ -8595,7 +8602,7 @@ namespace ts {
                         if (node.kind === SyntaxKind.ForInStatement &&
                             child === (<ForInStatement>node).statement &&
                             getForInVariableSymbol(<ForInStatement>node) === symbol &&
-                            isArrayLikeType(checkExpression((<ForInStatement>node).expression))) {
+                            hasNumericPropertyNames(checkExpression((<ForInStatement>node).expression))) {
                             return true;
                         }
                         child = node;
@@ -8666,7 +8673,7 @@ namespace ts {
             if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
 
                 // Try to use a number indexer.
-                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) || isForInVariableForArrayLikeObject(node.argumentExpression)) {
+                if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.NumberLike) || isForInVariableForNumericPropertyNames(node.argumentExpression)) {
                     const numberIndexType = getIndexTypeOfType(objectType, IndexKind.Number);
                     if (numberIndexType) {
                         return numberIndexType;
@@ -8681,7 +8688,9 @@ namespace ts {
 
                 // Fall back to any.
                 if (compilerOptions.noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !isTypeAny(objectType)) {
-                    error(node, Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
+                    error(node, getIndexTypeOfType(objectType, IndexKind.Number) ?
+                        Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number :
+                        Diagnostics.Index_signature_of_object_type_implicitly_has_an_any_type);
                 }
 
                 return anyType;
