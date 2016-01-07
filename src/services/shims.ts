@@ -62,6 +62,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
 
         getModuleResolutionsForFile?(fileName: string): string;
+        directoryExists(directoryName: string): boolean;
     }
 
     /** Public interface of the the of a config service shim instance.*/
@@ -274,7 +275,8 @@ namespace ts {
         private tracingEnabled = false;
 
         public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModule[];
-
+        public directoryExists: (directoryName: string) => boolean;
+        
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect. 
@@ -286,6 +288,9 @@ namespace ts {
                         return result ? { resolvedFileName: result } : undefined;
                     });
                 };
+            }
+            if ("directoryExists" in this.shimHost) {
+                this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
         }
 
@@ -393,9 +398,14 @@ namespace ts {
         }
     }
 
-    export class CoreServicesShimHostAdapter implements ParseConfigHost {
+    export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
 
+        public directoryExists: (directoryName: string) => boolean;
+        
         constructor(private shimHost: CoreServicesShimHost) {
+            if ("directoryExists" in this.shimHost) {
+                this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
+            }
         }
 
         public readDirectory(rootDir: string, extension: string, exclude: string[]): string[] {

@@ -727,7 +727,7 @@ namespace FourSlash {
                 // Count only the references in local files. Filter the ones in lib and other files.
                 ts.forEach(references, entry => {
                     if (localFiles.some((fileName) => fileName === entry.fileName)) {
-                        ++referencesCount;
+                        referencesCount++;
                     }
                 });
             }
@@ -1093,7 +1093,7 @@ namespace FourSlash {
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
             const allFourSlashFiles = this.testData.files;
-            for (let idx = 0; idx < allFourSlashFiles.length; ++idx) {
+            for (let idx = 0; idx < allFourSlashFiles.length; idx++) {
                 const file = allFourSlashFiles[idx];
                 if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
@@ -1853,7 +1853,7 @@ namespace FourSlash {
             let item: ts.NavigateToItem = null;
 
             // Count only the match that match the same MatchKind
-            for (let i = 0; i < items.length; ++i) {
+            for (let i = 0; i < items.length; i++) {
                 item = items[i];
                 if (!matchKind || item.matchKind === matchKind) {
                     actual++;

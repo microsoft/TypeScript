@@ -7,7 +7,10 @@ namespace ts {
     let nextMergeId = 1;
 
     export function getNodeId(node: Node): number {
-        if (!node.id) node.id = nextNodeId++;
+        if (!node.id) {
+            node.id = nextNodeId;
+            nextNodeId++;
+        }
         return node.id;
     }
 
@@ -15,7 +18,8 @@ namespace ts {
 
     export function getSymbolId(symbol: Symbol): number {
         if (!symbol.id) {
-            symbol.id = nextSymbolId++;
+            symbol.id = nextSymbolId;
+            nextSymbolId++;
         }
 
         return symbol.id;
@@ -287,7 +291,10 @@ namespace ts {
         }
 
         function recordMergedSymbol(target: Symbol, source: Symbol) {
-            if (!source.mergeId) source.mergeId = nextMergeId++;
+            if (!source.mergeId) {
+                source.mergeId = nextMergeId;
+                nextMergeId++;
+            }
             mergedSymbols[source.mergeId] = target;
         }
 
@@ -1267,7 +1274,8 @@ namespace ts {
 
         function createType(flags: TypeFlags): Type {
             const result = new Type(checker, flags);
-            result.id = typeCount++;
+            result.id = typeCount;
+            typeCount++;
             return result;
         }
 
@@ -1823,11 +1831,13 @@ namespace ts {
                     }
                     if (pos < end) {
                         writePunctuation(writer, SyntaxKind.LessThanToken);
-                        writeType(typeArguments[pos++], TypeFormatFlags.None);
+                        writeType(typeArguments[pos], TypeFormatFlags.None);
+                        pos++;
                         while (pos < end) {
                             writePunctuation(writer, SyntaxKind.CommaToken);
                             writeSpace(writer);
-                            writeType(typeArguments[pos++], TypeFormatFlags.None);
+                            writeType(typeArguments[pos], TypeFormatFlags.None);
+                            pos++;
                         }
                         writePunctuation(writer, SyntaxKind.GreaterThanToken);
                     }
@@ -5676,7 +5686,7 @@ namespace ts {
                     return Ternary.False;
                 }
                 let result = Ternary.True;
-                for (let i = 0, len = sourceSignatures.length; i < len; ++i) {
+                for (let i = 0, len = sourceSignatures.length; i < len; i++) {
                     const related = compareSignaturesIdentical(sourceSignatures[i], targetSignatures[i], /*partialMatch*/ false, /*ignoreReturnTypes*/ false, isRelatedTo);
                     if (!related) {
                         return Ternary.False;
@@ -7352,6 +7362,12 @@ namespace ts {
                 }
                 return type;
             }
+            else if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.CommaToken) {
+                if (node === binaryExpression.right) {
+                    return getContextualType(binaryExpression);
+                }
+            }
+
             return undefined;
         }
 
@@ -7464,24 +7480,22 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
-        function getContextualTypeForJsxExpression(expr: JsxExpression | JsxSpreadAttribute): Type {
-            // Contextual type only applies to JSX expressions that are in attribute assignments (not in 'Children' positions)
-            if (expr.parent.kind === SyntaxKind.JsxAttribute) {
-                const attrib = <JsxAttribute>expr.parent;
-                const attrsType = getJsxElementAttributesType(<JsxOpeningLikeElement>attrib.parent);
+        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
+            const kind = attribute.kind;
+            const jsxElement = attribute.parent as JsxOpeningLikeElement;
+            const attrsType = getJsxElementAttributesType(jsxElement);
+
+            if (attribute.kind === SyntaxKind.JsxAttribute) {
                 if (!attrsType || isTypeAny(attrsType)) {
                     return undefined;
                 }
-                else {
-                    return getTypeOfPropertyOfType(attrsType, attrib.name.text);
-                }
+                return getTypeOfPropertyOfType(attrsType, (attribute as JsxAttribute).name.text);
+            }
+            else if (attribute.kind === SyntaxKind.JsxSpreadAttribute) {
+                return attrsType;
             }
 
-            if (expr.kind === SyntaxKind.JsxSpreadAttribute) {
-                return getJsxElementAttributesType(<JsxOpeningLikeElement>expr.parent);
-            }
-
-            return undefined;
+            Debug.fail(`Expected JsxAttribute or JsxSpreadAttribute, got ts.SyntaxKind[${kind}]`);
         }
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -7549,8 +7563,10 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return getContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
+                    return getContextualType(<JsxExpression>parent);
+                case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
-                    return getContextualTypeForJsxExpression(<JsxExpression>parent);
+                    return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
             }
             return undefined;
         }
@@ -7938,31 +7954,12 @@ namespace ts {
             return jsxElementType || anyType;
         }
 
-        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
-            if (lhs.kind !== rhs.kind) {
-                return false;
-            }
-
-            if (lhs.kind === SyntaxKind.Identifier) {
-                return (<Identifier>lhs).text === (<Identifier>rhs).text;
-            }
-
-            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
-                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
-        }
-
         function checkJsxElement(node: JsxElement) {
             // Check attributes
             checkJsxOpeningLikeElement(node.openingElement);
 
-            // Check that the closing tag matches
-            if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
-                error(node.closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNode(node.openingElement.tagName));
-            }
-            else {
-                // Perform resolution on the closing tag so that rename/go to definition/etc work
-                getJsxElementTagSymbol(node.closingElement);
-            }
+            // Perform resolution on the closing tag so that rename/go to definition/etc work
+            getJsxElementTagSymbol(node.closingElement);
 
             // Check children
             for (const child of node.children) {
@@ -8363,14 +8360,12 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // If we're compiling under --jsx react, the symbol 'React' should
-            // be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no 'React' symbol in scope, we should issue an error.
-            if (compilerOptions.jsx === JsxEmit.React) {
-                const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, Diagnostics.Cannot_find_name_0, "React");
-                if (reactSym) {
-                    getSymbolLinks(reactSym).referenced = true;
-                }
+            // The symbol 'React' should be marked as 'used' so we don't incorrectly elide its import. And if there
+            // is no 'React' symbol in scope when targeting React emit, we should issue an error.
+            const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, reactRefErr, "React");
+            if (reactSym) {
+                getSymbolLinks(reactSym).referenced = true;
             }
 
             const targetAttributesType = getJsxElementAttributesType(node);
@@ -13841,7 +13836,8 @@ namespace ts {
                     }
 
                     if (autoValue !== undefined) {
-                        getNodeLinks(member).enumMemberValue = autoValue++;
+                        getNodeLinks(member).enumMemberValue = autoValue;
+                        autoValue++;
                     }
                 }
 
