@@ -227,7 +227,7 @@ var r1arg = <T>(x: T) => <T[]>null;
 >T : T
 ><T[]>null : T[]
 >T : T
->null : null
+>null : T[]
 
 var r1arg2 = <T>(x: T) => <T[]>null;
 >r1arg2 : <T>(x: T) => T[]
@@ -237,7 +237,7 @@ var r1arg2 = <T>(x: T) => <T[]>null;
 >T : T
 ><T[]>null : T[]
 >T : T
->null : null
+>null : T[]
 
 var r1 = foo1(r1arg);
 >r1 : any
@@ -301,7 +301,7 @@ var r3arg = <T>(x: T) => <T>null;
 >T : T
 ><T>null : T
 >T : T
->null : null
+>null : T
 
 var r3arg2 = <T>(x: T) => { };
 >r3arg2 : <T>(x: T) => void
@@ -379,7 +379,7 @@ var r5arg = <T, U>(x: (arg: T) => U) => <T>null;
 >U : U
 ><T>null : T
 >T : T
->null : null
+>null : T
 
 var r5arg2 = <T, U>(x: (arg: T) => U) => <T>null;
 >r5arg2 : <T, U>(x: (arg: T) => U) => T
@@ -392,7 +392,7 @@ var r5arg2 = <T, U>(x: (arg: T) => U) => <T>null;
 >U : U
 ><T>null : T
 >T : T
->null : null
+>null : T
 
 var r5 = foo5(r5arg);
 >r5 : any
@@ -425,7 +425,7 @@ var r6arg = <T extends Base, U extends Derived>(x: (arg: T) => U) => <T>null;
 >U : U
 ><T>null : T
 >T : T
->null : null
+>null : T
 
 var r6arg2 = <T extends Base>(x: (arg: T) => Derived) => <T>null;
 >r6arg2 : <T extends Base>(x: (arg: T) => Derived) => T
@@ -438,7 +438,7 @@ var r6arg2 = <T extends Base>(x: (arg: T) => Derived) => <T>null;
 >Derived : Derived
 ><T>null : T
 >T : T
->null : null
+>null : T
 
 var r6 = foo6(r6arg);
 >r6 : any
@@ -473,7 +473,7 @@ var r11arg = <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => <Base>null;
 >U : U
 ><Base>null : Base
 >Base : Base
->null : null
+>null : Base
 
 var r11arg2 = <T>(x: { foo: T }, y: { foo: T; bar: T }) => <Base>null;
 >r11arg2 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
@@ -489,7 +489,7 @@ var r11arg2 = <T>(x: { foo: T }, y: { foo: T; bar: T }) => <Base>null;
 >T : T
 ><Base>null : Base
 >Base : Base
->null : null
+>null : Base
 
 var r11 = foo11(r11arg);
 >r11 : any
@@ -521,7 +521,7 @@ var r15arg = <U, V>(x: { a: U; b: V; }) => <U[]>null;
 >V : V
 ><U[]>null : U[]
 >U : U
->null : null
+>null : U[]
 
 var r15arg2 = <T>(x: { a: T; b: T }) => <T[]>null;
 >r15arg2 : <T>(x: { a: T; b: T; }) => T[]
@@ -534,7 +534,7 @@ var r15arg2 = <T>(x: { a: T; b: T }) => <T[]>null;
 >T : T
 ><T[]>null : T[]
 >T : T
->null : null
+>null : T[]
 
 var r15 = foo15(r15arg);
 >r15 : any
@@ -566,7 +566,7 @@ var r16arg = <T extends Base>(x: { a: T; b: T }) => <T[]>null;
 >T : T
 ><T[]>null : T[]
 >T : T
->null : null
+>null : T[]
 
 var r16arg2 = <T extends Base>(x: { a: T; b: T }) => <T[]>null;
 >r16arg2 : <T extends Base>(x: { a: T; b: T; }) => T[]
@@ -580,7 +580,7 @@ var r16arg2 = <T extends Base>(x: { a: T; b: T }) => <T[]>null;
 >T : T
 ><T[]>null : T[]
 >T : T
->null : null
+>null : T[]
 
 var r16 = foo16(r16arg);
 >r16 : any
@@ -610,7 +610,7 @@ var r17arg = <T>(x: (a: T) => T) => <T[]>null;
 >T : T
 ><T[]>null : T[]
 >T : T
->null : null
+>null : T[]
 
 var r17 = foo17(r17arg);
 >r17 : any
@@ -627,7 +627,7 @@ var r18arg = (x: <T>(a: T) => T) => <any[]>null;
 >T : T
 >T : T
 ><any[]>null : any[]
->null : null
+>null : any[]
 
 var r18 = foo18(r18arg);
 >r18 : any

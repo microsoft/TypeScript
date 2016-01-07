@@ -17,7 +17,7 @@ class bar {
 >a : bar
 ><bar>null : bar
 >bar : bar
->null : null
+>null : bar
 >b : undefined
 >undefined : undefined
 >c : undefined

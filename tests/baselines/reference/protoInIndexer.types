@@ -4,10 +4,10 @@ class X {
 
     constructor() {
         this['__proto__'] = null; // used to cause ICE
->this['__proto__'] = null : null
+>this['__proto__'] = null : any
 >this['__proto__'] : any
 >this : this
 >'__proto__' : string
->null : null
+>null : any
     }
 }

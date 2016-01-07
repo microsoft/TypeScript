@@ -22,7 +22,7 @@ export class Promise {
 >Promise : Promise
 
         return null;
->null : null
+>null : Promise
     }
 }
 

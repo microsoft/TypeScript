@@ -43,5 +43,5 @@ foo("", function* () {
 }, p => undefined); // T is fixed, should be string
 >p => undefined : (p: number) => any
 >p : number
->undefined : undefined
+>undefined : string
 

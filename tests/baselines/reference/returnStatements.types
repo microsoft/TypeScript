@@ -10,7 +10,7 @@ function fn2(): string { return ''; }
 
 function fn3(): void { return undefined; }
 >fn3 : () => void
->undefined : undefined
+>undefined : void
 
 function fn4(): void { return; }
 >fn4 : () => void
@@ -28,7 +28,7 @@ function fn6(): Date { return new Date(12); }
 
 function fn7(): any { return null; }
 >fn7 : () => any
->null : null
+>null : any
 
 function fn8(): any { return; } // OK, eq. to 'return undefined'
 >fn8 : () => any
@@ -76,5 +76,5 @@ function fn12(): C { return new D(); }
 function fn13(): C { return null; }
 >fn13 : () => C
 >C : C
->null : null
+>null : C
 

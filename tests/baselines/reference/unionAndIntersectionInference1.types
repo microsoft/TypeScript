@@ -10,7 +10,7 @@ var y: Y = <Y>undefined;
 >Y : Y
 ><Y>undefined : Y
 >Y : Y
->undefined : undefined
+>undefined : Y
 
 function destructure<a, r>(
 >destructure : <a, r>(something: a | Y, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
@@ -64,7 +64,7 @@ var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >'hey!' : string
 ><Y>undefined : Y
 >Y : Y
->undefined : undefined
+>undefined : Y
 
 var result = destructure(value, text => 'string', y => 'other one'); // text: string, y: Y
 >result : string
@@ -88,7 +88,7 @@ function isVoid<a>(value: void | a): value is void {
 >value : any
 
     return undefined;
->undefined : undefined
+>undefined : value is void
 }
 
 function isNonVoid<a>(value: void | a) : value is a {
@@ -100,7 +100,7 @@ function isNonVoid<a>(value: void | a) : value is a {
 >a : a
 
     return undefined;
->undefined : undefined
+>undefined : value is a
 }
 
 function foo1<a>(value: void|a): void {
@@ -158,7 +158,7 @@ function get<U>(x: U | void): U {
 >U : U
 
    return null; // just an example
->null : null
+>null : U
 }
 
 let foo: Maybe<string>;

@@ -10,7 +10,7 @@ function f<T>() {
 >u : U
 >U : U
 >U : U
->null : null
+>null : U
 
     return g;
 >g : <U extends T>(u: U) => U

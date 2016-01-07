@@ -407,7 +407,7 @@ function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
 >x : string
 >I : I
->null : null
+>null : I
 
 if (fn()) { }
 >fn() : I

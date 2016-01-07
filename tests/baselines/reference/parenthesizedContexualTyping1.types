@@ -162,7 +162,7 @@ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 >x : number
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >10 : number
 
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
@@ -184,7 +184,7 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >10 : number
 
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
@@ -206,7 +206,7 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -234,7 +234,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >(x => undefined) : (x: number) => any
 >x => undefined : (x: number) => any
 >x : number
->undefined : undefined
+>undefined : number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number

@@ -44,6 +44,6 @@ function from(arg: any): any {
 >arg : any
 
     return undefined;
->undefined : undefined
+>undefined : any
 }
 

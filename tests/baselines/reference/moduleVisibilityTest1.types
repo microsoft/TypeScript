@@ -150,7 +150,7 @@ var cprime : M.I = <M.I>null;
 ><M.I>null : M.I
 >M : any
 >I : M.I
->null : null
+>null : M.I
 
 var c = new M.C();
 >c : M.C

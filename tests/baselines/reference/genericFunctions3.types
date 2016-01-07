@@ -25,6 +25,6 @@ function from<T>(arg: any): Query<T> {
 >T : T
 
     return undefined;
->undefined : undefined
+>undefined : Query<T>
 }
 

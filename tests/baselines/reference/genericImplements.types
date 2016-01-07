@@ -28,7 +28,7 @@ class X implements I {
 >T : T
 >B : B
 >T : T
->undefined : undefined
+>undefined : T
 
 } // { f: () => { b; } }
 
@@ -42,7 +42,7 @@ class Y implements I {
 >T : T
 >A : A
 >T : T
->undefined : undefined
+>undefined : T
 
 } // { f: () => { a; } }
 
@@ -55,6 +55,6 @@ class Z implements I {
 >f : <T>() => T
 >T : T
 >T : T
->undefined : undefined
+>undefined : T
 
 } // { f: <T>() => T } 

@@ -399,7 +399,7 @@ var b = {
 
     "0.1": <void>null,
 ><void>null : void
->null : null
+>null : void
 
     ".1": new Object(),
 >new Object() : Object

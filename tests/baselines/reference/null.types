@@ -50,9 +50,9 @@ interface I {
 var w:I={x:null,y:3};
 >w : I
 >I : I
->{x:null,y:3} : { x: null; y: number; }
->x : null
->null : null
+>{x:null,y:3} : { x: any; y: number; }
+>x : any
+>null : any
 >y : number
 >3 : number
 

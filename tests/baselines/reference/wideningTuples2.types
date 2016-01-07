@@ -16,7 +16,7 @@ var foo: () => [any] = function bar() {
 >"" : string
 
     return [undefined];
->[undefined] : [undefined]
->undefined : undefined
+>[undefined] : [any]
+>undefined : any
 
 };

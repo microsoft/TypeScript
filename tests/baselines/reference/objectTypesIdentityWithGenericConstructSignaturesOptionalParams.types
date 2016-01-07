@@ -12,7 +12,7 @@ class B<T> {
 >T : T
 >y : T
 >T : T
->null : null
+>null : B<T>
 }
 
 class C<T> {
@@ -24,7 +24,7 @@ class C<T> {
 >T : T
 >y : T
 >T : T
->null : null
+>null : C<T>
 }
 
 interface I<T> {

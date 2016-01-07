@@ -6,7 +6,7 @@
 >range : () => any
 
             return undefined;
->undefined : undefined
+>undefined : any
         }
     }
 
@@ -17,7 +17,7 @@
 >resource : () => any
 
             return undefined;
->undefined : undefined
+>undefined : any
         }
     }
 

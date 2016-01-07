@@ -39,5 +39,5 @@ foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }
 >{ method(p2) { return undefined } } : { [x: string]: (p2: number) => any; method(p2: number): any; }
 >method : (p2: number) => any
 >p2 : number
->undefined : undefined
+>undefined : string
 

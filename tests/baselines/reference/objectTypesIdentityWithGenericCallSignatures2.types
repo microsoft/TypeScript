@@ -13,7 +13,7 @@ class A {
 >y : U
 >U : U
 >T : T
->null : null
+>null : T
 }
 
 class B<T, U> {
@@ -28,7 +28,7 @@ class B<T, U> {
 >y : U
 >U : U
 >T : T
->null : null
+>null : T
 }
 
 class C<T, U> {
@@ -43,7 +43,7 @@ class C<T, U> {
 >y : U
 >U : U
 >T : T
->null : null
+>null : T
 }
 
 interface I<T, U> {

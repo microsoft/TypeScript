@@ -65,10 +65,10 @@ var a5 = [...a0, , ]
 
 var b0: [any, any, any] = [undefined, null, undefined];
 >b0 : [any, any, any]
->[undefined, null, undefined] : [undefined, null, undefined]
->undefined : undefined
->null : null
->undefined : undefined
+>[undefined, null, undefined] : [any, any, any]
+>undefined : any
+>null : any
+>undefined : any
 
 var b1: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >b1 : [number[], string[]]

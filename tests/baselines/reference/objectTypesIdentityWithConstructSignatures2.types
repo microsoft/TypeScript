@@ -6,7 +6,7 @@ class B {
 
     constructor(x: number) { return null; }
 >x : number
->null : null
+>null : B
 }
 
 class C<T> {
@@ -16,7 +16,7 @@ class C<T> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
->null : null
+>null : C<T>
 }
 
 interface I {

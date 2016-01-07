@@ -53,12 +53,12 @@ x1 += {};
 x1 += null;
 >x1 += null : any
 >x1 : any
->null : null
+>null : any
 
 x1 += undefined;
 >x1 += undefined : any
 >x1 : any
->undefined : undefined
+>undefined : any
 
 var x2: string;
 >x2 : string
@@ -103,12 +103,12 @@ x2 += {};
 x2 += null;
 >x2 += null : string
 >x2 : string
->null : null
+>null : string
 
 x2 += undefined;
 >x2 += undefined : string
 >x2 : string
->undefined : undefined
+>undefined : string
 
 var x3: number;
 >x3 : number
@@ -133,12 +133,12 @@ x3 += E.a;
 x3 += null;
 >x3 += null : number
 >x3 : number
->null : null
+>null : number
 
 x3 += undefined;
 >x3 += undefined : number
 >x3 : number
->undefined : undefined
+>undefined : number
 
 var x4: E;
 >x4 : E
@@ -164,12 +164,12 @@ x4 += E.a;
 x4 += null;
 >x4 += null : number
 >x4 : E
->null : null
+>null : E
 
 x4 += undefined;
 >x4 += undefined : number
 >x4 : E
->undefined : undefined
+>undefined : E
 
 var x5: boolean;
 >x5 : boolean

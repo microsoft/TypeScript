@@ -81,15 +81,15 @@ var anObject: Object = new Object();
 
 var anAny: any = null;
 >anAny : any
->null : null
+>null : any
 
 var aSecondAny: any = undefined;
 >aSecondAny : any
->undefined : undefined
+>undefined : any
 
 var aVoid: void = undefined;
 >aVoid : void
->undefined : undefined
+>undefined : void
 
 var anInterface: I = new C();
 >anInterface : I

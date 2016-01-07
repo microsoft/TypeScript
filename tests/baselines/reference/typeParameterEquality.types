@@ -8,7 +8,7 @@ class C {
 >a : T
 >T : T
 >T : T
->null : null
+>null : <T>(a: T) => T
 
     set x(p: <U>(a: U) => U) {}
 >x : <T>(a: T) => T

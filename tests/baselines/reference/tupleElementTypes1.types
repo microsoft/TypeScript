@@ -2,7 +2,7 @@
 var [a, b]: [number, any] = [undefined, undefined];
 >a : number
 >b : any
->[undefined, undefined] : [undefined, undefined]
->undefined : undefined
->undefined : undefined
+>[undefined, undefined] : [number, any]
+>undefined : number
+>undefined : any
 

@@ -8,7 +8,7 @@ function foo<T extends String>(x: T): T { return null; }
 >x : T
 >T : T
 >T : T
->null : null
+>null : T
 
 function foo2<T extends { x: number }>(x: T): T { return null; }
 >foo2 : <T extends { x: number; }>(x: T) => T
@@ -17,7 +17,7 @@ function foo2<T extends { x: number }>(x: T): T { return null; }
 >x : T
 >T : T
 >T : T
->null : null
+>null : T
 
 //function foo3<T extends T[]>(x: T): T { return null; }
 function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
@@ -29,7 +29,7 @@ function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
 >x : T
 >T : T
 >T : T
->null : null
+>null : T
 
 var a;
 >a : any

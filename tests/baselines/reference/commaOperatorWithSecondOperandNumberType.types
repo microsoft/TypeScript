@@ -85,9 +85,9 @@ null, NUMBER;
 
 ANY = undefined, NUMBER;
 >ANY = undefined, NUMBER : number
->ANY = undefined : undefined
+>ANY = undefined : any
 >ANY : any
->undefined : undefined
+>undefined : any
 >NUMBER : number
 
 true, 1;
@@ -130,9 +130,9 @@ var resultIsNumber7 = (ANY = undefined, NUMBER);
 >resultIsNumber7 : number
 >(ANY = undefined, NUMBER) : number
 >ANY = undefined, NUMBER : number
->ANY = undefined : undefined
+>ANY = undefined : any
 >ANY : any
->undefined : undefined
+>undefined : any
 >NUMBER : number
 
 var resultIsNumber8 = (true, 1);

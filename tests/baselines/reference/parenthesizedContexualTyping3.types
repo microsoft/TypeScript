@@ -161,5 +161,5 @@ var h = tempFun `${ (x => x) } ${ (((x => x))) } ${ undefined }`
 >x => x : (x: any) => any
 >x : any
 >x : any
->undefined : undefined
+>undefined : any
 

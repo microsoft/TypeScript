@@ -29,7 +29,7 @@ class c {
 >T : T
 
         return null;
->null : null
+>null : { [key: string]: T[]; }
     }
 }
 var a2: c;

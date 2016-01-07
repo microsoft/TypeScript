@@ -42,7 +42,7 @@ var y = x(undefined);
 >y : Date[]
 >x(undefined) : Date[]
 >x : I2<Date>
->undefined : undefined
+>undefined : Date[]
 
 y.length;  // should not error
 >y.length : number

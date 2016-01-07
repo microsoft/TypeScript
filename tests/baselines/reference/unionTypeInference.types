@@ -54,7 +54,7 @@ var a4 = f(undefined, "abc");
 >a4 : any
 >f(undefined, "abc") : any
 >f : <T>(x: T, y: string | T) => T
->undefined : undefined
+>undefined : any
 >"abc" : string
 
 function g<T>(value: [string, T]): T {
@@ -99,7 +99,7 @@ function h<T>(x: string|boolean|T): T {
 >typeof x : string
 >x : boolean | T
 >"boolean" : string
->undefined : undefined
+>undefined : T
 >x : T
 }
 

@@ -34,6 +34,6 @@ module Q {
         foo(null);
 >foo(null) : (a: Iterator<{}>) => number
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
->null : null
+>null : (a: Iterator<{}>) => number
     }
 }

@@ -10,7 +10,7 @@ module B {
 >f : () => A.I
 >A : any
 >I : A.I
->null : null
+>null : A.I
 }
 
 

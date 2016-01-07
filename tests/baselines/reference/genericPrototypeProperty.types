@@ -12,7 +12,7 @@ class C<T> {
 >x : T
 >T : T
 >T : T
->null : null
+>null : T
 }
 
 var r = C.prototype;
@@ -34,5 +34,5 @@ var r3 = r.foo(null);
 >r.foo : (x: any) => any
 >r : C<any>
 >foo : (x: any) => any
->null : null
+>null : any
 

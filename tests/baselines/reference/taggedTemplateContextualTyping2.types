@@ -42,7 +42,7 @@ function tempTag2(...rest: any[]): any {
 >rest : any[]
 
     return undefined;
->undefined : undefined
+>undefined : any
 }
 
 // If contextual typing takes place, these functions should work.
@@ -57,7 +57,7 @@ tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 >x : <T>(p: T) => T
 >x<number>(undefined) : number
 >x : <T>(p: T) => T
->undefined : undefined
+>undefined : number
 >x : <T>(p: T) => T
 >0 : number
 
@@ -69,13 +69,13 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >x : <S, T>(p: T) => T
 >x<number, string>(undefined) : string
 >x : <S, T>(p: T) => T
->undefined : undefined
+>undefined : string
 >x : <S, T>(p: T) => T
 >y => { y<string, number>(null); return y; } : (y: <S, T>(p: T) => T) => <S, T>(p: T) => T
 >y : <S, T>(p: T) => T
 >y<string, number>(null) : number
 >y : <S, T>(p: T) => T
->null : null
+>null : number
 >y : <S, T>(p: T) => T
 >"hello" : string
 
@@ -87,8 +87,8 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ 
 >x : <S, T>(p: T) => T
 >x<number, string>(undefined) : string
 >x : <S, T>(p: T) => T
->undefined : undefined
+>undefined : string
 >x : <S, T>(p: T) => T
->undefined : undefined
+>undefined : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
 >"hello" : string
 

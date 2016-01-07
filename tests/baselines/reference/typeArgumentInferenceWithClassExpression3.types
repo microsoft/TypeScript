@@ -9,7 +9,7 @@ function foo<T>(x = class { prop: T }): T {
 >T : T
 
     return undefined;
->undefined : undefined
+>undefined : T
 }
 
 foo(class { prop = "hello" }).length;

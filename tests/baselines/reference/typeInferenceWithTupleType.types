@@ -56,10 +56,10 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >length : number
 
         return [[undefined, undefined]];
->[[undefined, undefined]] : [[undefined, undefined]]
->[undefined, undefined] : [undefined, undefined]
->undefined : undefined
->undefined : undefined
+>[[undefined, undefined]] : [[T, U]]
+>[undefined, undefined] : [T, U]
+>undefined : T
+>undefined : U
     }
     var length = array1.length;
 >length : number

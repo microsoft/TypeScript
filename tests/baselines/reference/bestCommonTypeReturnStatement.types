@@ -31,10 +31,10 @@ function f() {
 function b(): IPromise<void> { return null; }
 >b : () => IPromise<void>
 >IPromise : IPromise<T>
->null : null
+>null : IPromise<void>
 
 function d(): IPromise<any> { return null; }
 >d : () => IPromise<any>
 >IPromise : IPromise<T>
->null : null
+>null : IPromise<any>
 

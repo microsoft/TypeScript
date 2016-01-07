@@ -36,12 +36,12 @@ x1 *= c;
 x1 *= null;
 >x1 *= null : number
 >x1 : any
->null : null
+>null : any
 
 x1 *= undefined;
 >x1 *= undefined : number
 >x1 : any
->undefined : undefined
+>undefined : any
 
 var x2: number;
 >x2 : number
@@ -64,12 +64,12 @@ x2 *= c;
 x2 *= null;
 >x2 *= null : number
 >x2 : number
->null : null
+>null : number
 
 x2 *= undefined;
 >x2 *= undefined : number
 >x2 : number
->undefined : undefined
+>undefined : number
 
 var x3: E;
 >x3 : E
@@ -93,10 +93,10 @@ x3 *= c;
 x3 *= null;
 >x3 *= null : number
 >x3 : E
->null : null
+>null : E
 
 x3 *= undefined;
 >x3 *= undefined : number
 >x3 : E
->undefined : undefined
+>undefined : E
 

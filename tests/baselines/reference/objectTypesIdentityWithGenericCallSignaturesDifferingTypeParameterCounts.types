@@ -10,7 +10,7 @@ class A {
 >x : T
 >T : T
 >T : T
->null : null
+>null : T
 }
 
 class B<U, V> {
@@ -23,7 +23,7 @@ class B<U, V> {
 >x : U
 >U : U
 >U : U
->null : null
+>null : U
 }
 
 class C<V, W, X> {
@@ -37,7 +37,7 @@ class C<V, W, X> {
 >x : V
 >V : V
 >V : V
->null : null
+>null : V
 }
 
 interface I<X, Y, Z, A> {

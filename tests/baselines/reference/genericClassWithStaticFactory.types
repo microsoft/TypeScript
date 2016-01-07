@@ -164,7 +164,7 @@ module Editor {
             }
             else {
                 return null;
->null : null
+>null : T
             }
         }
 
@@ -292,7 +292,7 @@ module Editor {
 >isHead : boolean
 
                 return null;
->null : null
+>null : List<T>
             }
             else {
                 return this.listFactory.RemoveEntry(this.next);
@@ -502,7 +502,7 @@ module Editor {
 >List : typeof List
 >T : T
 >true : boolean
->null : null
+>null : T
 
             entry.prev = entry;
 >entry.prev = entry : List<T>
@@ -573,7 +573,7 @@ module Editor {
 >null : null
 
                 return null;
->null : null
+>null : List<T>
             }
             else if (entry.isHead) {
 >entry.isHead : boolean
@@ -582,7 +582,7 @@ module Editor {
 
             // Can't remove the head of a list!
                 return null;
->null : null
+>null : List<T>
             }
             else {
                 entry.next.prev = entry.prev;

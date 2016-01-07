@@ -5,7 +5,7 @@ class Signature {
     public parameters: ParameterSymbol[] = null;
 >parameters : ParameterSymbol[]
 >ParameterSymbol : ParameterSymbol
->null : null
+>null : ParameterSymbol[]
 }
 
 function aEnclosesB(a: Symbol) {

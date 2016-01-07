@@ -47,7 +47,7 @@ var obj = { x: 3, y: null }; // assignable because null is widened, and therefor
 declare var t: number[];
 declare var x: typeof undefined;
 declare var y: any;
-declare var u: number[];
+declare var u: any[];
 declare var ob: {
     x: typeof undefined;
 };

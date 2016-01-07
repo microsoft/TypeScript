@@ -22,7 +22,7 @@ foo((y): (y2: number) => void => {
 >0 : number
 
     return null;
->null : null
+>null : (y2: number) => void
 
 });
 

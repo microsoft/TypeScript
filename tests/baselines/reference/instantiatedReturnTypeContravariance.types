@@ -20,7 +20,7 @@ foo(): B<void> {
 >B : B<T>
 
 return null;
->null : null
+>null : B<void>
 
 }
 
@@ -35,7 +35,7 @@ foo(): B<number> {
 >B : B<T>
 
 return null;
->null : null
+>null : B<number>
 
 }
 

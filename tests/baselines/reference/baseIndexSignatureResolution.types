@@ -30,7 +30,7 @@ var x: FooOf<Derived> = null;
 >x : FooOf<Derived>
 >FooOf : FooOf<TBase>
 >Derived : Derived
->null : null
+>null : FooOf<Derived>
 
 var y: Derived = x[0];
 >y : Derived

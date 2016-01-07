@@ -8,7 +8,7 @@ class List<T extends {}>{
 >T : T
 >List : List<T>
 >T : T
->null : null
+>null : List<T>
 }
 
 

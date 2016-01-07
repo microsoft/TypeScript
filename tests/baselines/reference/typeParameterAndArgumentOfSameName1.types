@@ -16,5 +16,5 @@ function f<A extends Number>(A: A): A {
 >123 : number
 
     return null;
->null : null
+>null : A
 }

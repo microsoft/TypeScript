@@ -11,7 +11,7 @@ class B<T extends Date> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
->null : null
+>null : B<T>
 }
 
 class C<T extends Date> {
@@ -22,7 +22,7 @@ class C<T extends Date> {
     constructor(x: T) { return null; }
 >x : T
 >T : T
->null : null
+>null : C<T>
 }
 
 interface I<T extends Date> {

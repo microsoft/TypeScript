@@ -41,7 +41,7 @@ module EmptyTypes {
 >x : any
 >y : boolean
 >false : boolean
->null : null
+>null : any
 
         public x() {
 >x : () => void
@@ -274,10 +274,10 @@ module EmptyTypes {
 >x : string
 >y : base
 >base : base
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: derived; }[]
->{ x: undefined, y: new base() } : { x: undefined; y: base; }
->x : undefined
->undefined : undefined
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: base; }[]
+>{ x: undefined, y: new base() } : { x: string; y: base; }
+>x : string
+>undefined : string
 >y : base
 >new base() : base
 >base : typeof base
@@ -290,7 +290,7 @@ module EmptyTypes {
 
             var anyObj: any = null;
 >anyObj : any
->null : null
+>null : any
 
             // Order matters here so test all the variants
             var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
@@ -353,7 +353,7 @@ module EmptyTypes {
             var ifaceObj: iface = null;
 >ifaceObj : iface
 >iface : iface
->null : null
+>null : iface
 
             var baseObj = new base();
 >baseObj : base
@@ -444,7 +444,7 @@ module NonEmptyTypes {
 >x : any
 >y : boolean
 >false : boolean
->null : null
+>null : any
 
         public x() {
 >x : () => void
@@ -677,10 +677,10 @@ module NonEmptyTypes {
 >x : string
 >y : base
 >base : base
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
->{ x: undefined, y: new base() } : { x: undefined; y: base; }
->x : undefined
->undefined : undefined
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: base; }[]
+>{ x: undefined, y: new base() } : { x: string; y: base; }
+>x : string
+>undefined : string
 >y : base
 >new base() : base
 >base : typeof base
@@ -693,7 +693,7 @@ module NonEmptyTypes {
 
             var anyObj: any = null;
 >anyObj : any
->null : null
+>null : any
 
             // Order matters here so test all the variants
             var a1 = [{ x: 0, y: 'a' }, { x: 'a', y: 'a' }, { x: anyObj, y: 'a' }];
@@ -756,7 +756,7 @@ module NonEmptyTypes {
             var ifaceObj: iface = null;
 >ifaceObj : iface
 >iface : iface
->null : null
+>null : iface
 
             var baseObj = new base();
 >baseObj : base

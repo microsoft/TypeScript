@@ -19,6 +19,6 @@ class CacheService implements ICache { // Should not error that property type of
 >T : T
 
         return undefined;
->undefined : undefined
+>undefined : T
     }
 }

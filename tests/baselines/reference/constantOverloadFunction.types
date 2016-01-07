@@ -44,6 +44,6 @@ function foo(tagName: any): Base {
 >Base : Base
 
     return null;
->null : null
+>null : Base
 }
 

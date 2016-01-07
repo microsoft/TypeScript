@@ -31,7 +31,7 @@ class Nil<C> implements IList<C>{
 >D : D
 
         return null;
->null : null
+>null : IList<D>
     }
 }
 
@@ -85,6 +85,6 @@ class Cons<T> implements IList<T>{
 >E : E
 
         return null;
->null : null
+>null : E
     }
 }
