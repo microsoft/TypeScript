@@ -2650,6 +2650,8 @@ namespace ts {
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
         readFile(fileName: string): string;
+
+        directoryExists?(directoryName: string): boolean;
     }
 
     export interface ResolvedModule {

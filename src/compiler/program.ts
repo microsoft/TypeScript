@@ -53,13 +53,13 @@ namespace ts {
         if (getRootLength(moduleName) !== 0 || nameStartsWithDotSlashOrDotDotSlash(moduleName)) {
             const failedLookupLocations: string[] = [];
             const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
-            let resolvedFileName = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, host);
+            let resolvedFileName = loadNodeModuleFromFile(supportedExtensions, candidate, failedLookupLocations, /*onlyRecordFailures*/ false, host);
 
             if (resolvedFileName) {
                 return { resolvedModule: { resolvedFileName }, failedLookupLocations };
             }
 
-            resolvedFileName = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, host);
+            resolvedFileName = loadNodeModuleFromDirectory(supportedExtensions, candidate, failedLookupLocations, /*onlyRecordFailures*/ false,  host);
             return resolvedFileName
                 ? { resolvedModule: { resolvedFileName }, failedLookupLocations }
                 : { resolvedModule: undefined, failedLookupLocations };
@@ -69,12 +69,22 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    /* @internal */
+    export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean } ): boolean {
+        // if host does not support 'directoryExists' assume that directory will exist
+        return !host.directoryExists || host.directoryExists(directoryName);
+    }
+
+    /**
+     * @param {boolean} onlyRecordFailures - if true then function won't try to actually load files but instead record all attempts as failures. This flag is necessary
+     * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations. 
+     */
+    function loadNodeModuleFromFile(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, host: ModuleResolutionHost): string {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
-            if (host.fileExists(fileName)) {
+            if (!onlyRecordFailures && host.fileExists(fileName)) {
                 return fileName;
             }
             else {
@@ -84,9 +94,10 @@ namespace ts {
         }
     }
 
-    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], host: ModuleResolutionHost): string {
+    function loadNodeModuleFromDirectory(extensions: string[], candidate: string, failedLookupLocation: string[], onlyRecordFailures: boolean, host: ModuleResolutionHost): string {
         const packageJsonPath = combinePaths(candidate, "package.json");
-        if (host.fileExists(packageJsonPath)) {
+        const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, host);
+        if (directoryExists && host.fileExists(packageJsonPath)) {
 
             let jsonContent: { typings?: string };
 
@@ -100,7 +111,8 @@ namespace ts {
             }
 
             if (typeof jsonContent.typings === "string") {
-                const result = loadNodeModuleFromFile(extensions, normalizePath(combinePaths(candidate, jsonContent.typings)), failedLookupLocation, host);
+                const path = normalizePath(combinePaths(candidate, jsonContent.typings));
+                const result = loadNodeModuleFromFile(extensions, path, failedLookupLocation, !directoryProbablyExists(getDirectoryPath(path), host), host);
                 if (result) {
                     return result;
                 }
@@ -111,7 +123,7 @@ namespace ts {
             failedLookupLocation.push(packageJsonPath);
         }
 
-        return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, host);
+        return loadNodeModuleFromFile(extensions, combinePaths(candidate, "index"), failedLookupLocation, !directoryExists, host);
     }
 
     function loadModuleFromNodeModules(moduleName: string, directory: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -121,14 +133,15 @@ namespace ts {
             const baseName = getBaseFileName(directory);
             if (baseName !== "node_modules") {
                 const nodeModulesFolder = combinePaths(directory, "node_modules");
+                const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, host);
                 const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
                 // Load only typescript files irrespective of allowJs option if loading from node modules
-                let result = loadNodeModuleFromFile(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
+                let result = loadNodeModuleFromFile(supportedTypeScriptExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
 
-                result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, host);
+                result = loadNodeModuleFromDirectory(supportedTypeScriptExtensions, candidate, failedLookupLocations, !nodeModulesFolderExists, host);
                 if (result) {
                     return { resolvedModule: { resolvedFileName: result, isExternalLibraryImport: true }, failedLookupLocations };
                 }
@@ -281,7 +294,8 @@ namespace ts {
             getCanonicalFileName,
             getNewLine: () => newLine,
             fileExists: fileName => sys.fileExists(fileName),
-            readFile: fileName => sys.readFile(fileName)
+            readFile: fileName => sys.readFile(fileName),
+            directoryExists: directoryName => sys.directoryExists(directoryName)
         };
     }
 

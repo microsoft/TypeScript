@@ -1034,6 +1034,7 @@ namespace ts {
          * host specific questions using 'getScriptSnapshot'.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        directoryExists?(directoryName: string): boolean;
     }
 
     //
@@ -1911,7 +1912,8 @@ namespace ts {
             getCurrentDirectory: () => "",
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
-            readFile: (fileName): string => ""
+            readFile: (fileName): string => "",
+            directoryExists: directoryExists => true
         };
 
         const program = createProgram([inputFileName], options, compilerHost);
@@ -2768,6 +2770,10 @@ namespace ts {
                     // stub missing host functionality
                     const entry = hostCache.getOrCreateEntry(fileName);
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                },
+                directoryExists: directoryName => {
+                    Debug.assert(!host.resolveModuleNames);
+                    return directoryProbablyExists(directoryName, host);
                 }
             };
 
