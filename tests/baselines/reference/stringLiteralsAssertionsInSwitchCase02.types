@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInSwitchCase02.ts ===
 switch ("foo" as string) {
 >"foo" as string : string
->"foo" : string
+>"foo" : "foo"
 
     case "bar":
 >"bar" : "bar"

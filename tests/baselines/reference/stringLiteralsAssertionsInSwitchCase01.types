@@ -4,16 +4,16 @@ switch ("foo") {
 
     case "bar" as string:
 >"bar" as string : string
->"bar" : string
+>"bar" : "bar"
 
         break;
     case (("bar" || "baz") as string):
 >(("bar" || "baz") as string) : string
 >("bar" || "baz") as string : string
->("bar" || "baz") : string
->"bar" || "baz" : string
->"bar" : string
->"baz" : string
+>("bar" || "baz") : "bar" | "baz"
+>"bar" || "baz" : "bar" | "baz"
+>"bar" : "bar"
+>"baz" : "baz"
 
         break;
 }
