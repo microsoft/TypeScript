@@ -2430,6 +2430,10 @@
         "category": "Error",
         "code": 7013
     },
+    "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
+        "category": "Error",
+        "code": 7015
+    },
     "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
         "category": "Error",
         "code": 7016

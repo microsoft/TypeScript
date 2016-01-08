@@ -9,7 +9,7 @@ class C<T> {
 >T : T
 
         for (var p in x) {
->p : any
+>p : string
 >x : T
         }
     }
