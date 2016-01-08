@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-/////*InsertSpaceAfterCommaDelimiter*/[1,2,   3];[72,];
+/////*InsertSpaceAfterCommaDelimiter*/[1,2,   3];[ 72  ,    ];
 /////*InsertSpaceAfterSemicolonInForStatements*/for (i = 0;i;    i++);
 /////*InsertSpaceBeforeAndAfterBinaryOperators*/1+2-    3
 /////*InsertSpaceAfterKeywordsInControlFlowStatements*/if     (true) { }
