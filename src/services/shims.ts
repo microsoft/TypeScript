@@ -1056,6 +1056,6 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "1.6";
+const toolsVersion = "1.8";
 
 /* tslint:enable:no-unused-variable */
