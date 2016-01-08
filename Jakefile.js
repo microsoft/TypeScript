@@ -912,10 +912,11 @@ function lintFileAsync(options, path, cb) {
 }
 
 var servicesLintTargets = [
-    "services.ts",
-    "outliningElementsCollector.ts",
     "navigateTo.ts",
+    "outliningElementsCollector.ts",
     "patternMatcher.ts",
+    "services.ts",
+    "shims.ts",
 ].map(function (s) {
     return path.join(servicesDirectory, s);
 });
