@@ -1725,8 +1725,11 @@ namespace ts {
                     else if (isWhiteSpace(ch)) {
                         // Keep going
                     }
-                    else {
+                    else if (isIdentifierStart(ch, ScriptTarget.Latest)) {
                         identifierStarted = true;
+                    }
+                    else {
+                        return pos += 1, token = SyntaxKind.Unknown;
                     }
                 }
                 pos += 1;
