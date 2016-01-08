@@ -7589,7 +7589,6 @@ namespace ts {
          */
         function isEqualityComparisonOperand(expression: Expression): boolean {
             const parent = expression.parent;
-            const parentKind = parent.kind;
 
             switch (parent.kind) {
                 // The operand of a 'switch' should get a literal type.
@@ -7614,7 +7613,7 @@ namespace ts {
                         case SyntaxKind.AmpersandAmpersandToken:
                         case SyntaxKind.CommaToken:
                             if (expression === binaryExpr.right) {
-                                return isEqualityComparisonOperand(binaryExpr)
+                                return isEqualityComparisonOperand(binaryExpr);
                             }
                             return false;
 
