@@ -7634,6 +7634,10 @@ namespace ts {
 
                 case SyntaxKind.ParenthesizedExpression:
                     return isEqualityComparisonOperand(parent as ParenthesizedExpression);
+
+                case SyntaxKind.TypeAssertionExpression:
+                case SyntaxKind.AsExpression:
+                    return isEqualityComparisonOperand(parent as TypeAssertion);
             }
 
             return false;
