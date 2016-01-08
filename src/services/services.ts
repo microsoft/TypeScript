@@ -5983,7 +5983,7 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, undefined);
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, {});
                     }
                 });
 
@@ -5995,10 +5995,11 @@ namespace ts {
              * @param symbol a symbol to start searching for the given propertyName
              * @param propertyName a name of property to serach for
              * @param result an array of symbol of found property symbols
-             * @param previousIterationSymbol a symbol from previous iteration of calling this function to prevent infinite revisitng of the same symbol.
+             * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisitng of the same symbol.
              *                                The value of previousIterationSymbol is undefined when the function is first called.
              */
-            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[], previousIterationSymbol: Symbol): void {
+            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[],
+                previousIterationSymbolsCache: SymbolTable): void {
                 // If the current symbol is the smae as the previous-iteration symbol, we can just return as the symbol has already been visited
                 // This is particularly important for the following cases, so that we do not inifinitely visit the same symbol.
                 // For example:
@@ -6010,7 +6011,7 @@ namespace ts {
                 // the function will add any found symbol of the property-name, then its sub-routine will call
                 // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
                 // visited symbol, interface "C", the sub- routine will pass the current symbol as previousIterationSymbol.
-                if (symbol === previousIterationSymbol) {
+                if (previousIterationSymbolsCache && previousIterationSymbolsCache[symbol.name] === symbol) {
                     return;
                 }
 
@@ -6037,7 +6038,8 @@ namespace ts {
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, symbol);
+                            previousIterationSymbolsCache[symbol.name] = symbol;
+                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache);
                         }
                     }
                 }
@@ -6078,7 +6080,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, undefined);
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, {});
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
