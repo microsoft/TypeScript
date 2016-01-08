@@ -46,7 +46,25 @@
 ////            }/>/*6*/
 ////    )
 ////}
-
+////
+////(function () {
+////    return <div
+////className=""/*attrAutoformat*/
+/////*attrIndent*/
+////id={
+////"abc" + "cde"/*expressionAutoformat*/
+/////*expressionIndent*/
+////}
+////        >/*danglingBracketAutoformat*/
+////        </div>/*closingTagAutoformat*/
+////})
+////
+////let h5 = <h5>
+////<span>/*childJsxElementAutoformat*/
+/////*childJsxElementIndent*/
+////<span></span>/*grandchildJsxElementAutoformat*/
+////</span>/*containedClosingTagAutoformat*/
+////</h5>
 
 format.document();
 goTo.marker("autoformat");
@@ -83,3 +101,28 @@ goTo.marker("5");
 verify.currentLineContentIs('            class3= {');
 goTo.marker("6");
 verify.currentLineContentIs('            }/>');
+
+
+goTo.marker("attrAutoformat");
+verify.currentLineContentIs('        className=""');
+goTo.marker("attrIndent");
+verify.indentationIs(8);
+goTo.marker("expressionAutoformat");
+verify.currentLineContentIs('            "abc" + "cde"');
+goTo.marker("expressionIndent");
+verify.indentationIs(12);
+
+goTo.marker("danglingBracketAutoformat")
+// TODO: verify.currentLineContentIs("    >");
+verify.currentLineContentIs("        >");
+goTo.marker("closingTagAutoformat");
+verify.currentLineContentIs("    </div>");
+
+goTo.marker("childJsxElementAutoformat");
+verify.currentLineContentIs("    <span>");
+goTo.marker("childJsxElementIndent");
+verify.indentationIs(8);
+goTo.marker("grandchildJsxElementAutoformat");
+verify.currentLineContentIs("        <span></span>");
+goTo.marker("containedClosingTagAutoformat");
+verify.currentLineContentIs("    </span>");
