@@ -5999,12 +5999,11 @@ namespace ts {
                     atToken.end = scanner.getTextPos();
                     nextJSDocToken();
 
-                    const tagName = scanJsDocIdentifier();
+                    const tagName = parseJSDocIdentifier();
                     if (!tagName) {
                         return;
                     }
 
-                    nextJSDocToken();
                     const tag = handleTag(atToken, tagName) || handleUnknownTag(atToken, tagName);
                     addTag(tag);
                 }
@@ -6063,8 +6062,7 @@ namespace ts {
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
                     if (parseOptionalToken(SyntaxKind.OpenBracketToken)) {
-                        name = scanJsDocIdentifier();
-                        nextJSDocToken();
+                        name = parseJSDocIdentifier();
                         isBracketed = true;
 
                         // May have an optional default, e.g. '[foo = 42]'
@@ -6075,8 +6073,7 @@ namespace ts {
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
                     else if (token === SyntaxKind.Identifier) {
-                        name = scanJsDocIdentifier();
-                        nextJSDocToken();
+                        name = parseJSDocIdentifier();
                     }
 
                     if (!name) {
@@ -6140,7 +6137,7 @@ namespace ts {
                     typeParameters.pos = scanner.getStartPos();
 
                     while (true) {
-                        const name = scanJsDocIdentifier();
+                        const name = parseJSDocIdentifier();
                         if (!name) {
                             parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
                             return undefined;
@@ -6148,7 +6145,6 @@ namespace ts {
 
                         const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter, name.pos);
                         typeParameter.name = name;
-                        nextJSDocToken();
                         finishNode(typeParameter);
 
                         typeParameters.push(typeParameter);
@@ -6174,7 +6170,7 @@ namespace ts {
                     return token = scanner.scanJSDocToken();
                 }
 
-                function scanJsDocIdentifier(): Identifier {
+                function parseJSDocIdentifier(): Identifier {
                     if (token !== SyntaxKind.Identifier) {
                         parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                         return undefined;
@@ -6184,7 +6180,10 @@ namespace ts {
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
                     result.text = content.substring(pos, end);
-                    return finishNode(result, end);
+                    finishNode(result, end);
+
+                    nextJSDocToken();
+                    return result;
                 }
             }
         }
