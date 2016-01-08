@@ -1,11 +1,17 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(1,9): error TS2365: Operator '===' cannot be applied to types '"foo"' and '"baz"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(1,19): error TS2352: Neither type '"bar"' nor type '"baz"' is assignable to the other.
-tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(2,20): error TS2352: Neither type '"bar"' nor type '"foo"' is assignable to the other.
-tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(3,9): error TS2365: Operator '==' cannot be applied to types '"foo"' and 'number'.
-tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(3,19): error TS2352: Neither type '"bar"' nor type 'number' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(3,9): error TS2365: Operator '===' cannot be applied to types '"foo"' and '"baz"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(3,19): error TS2352: Neither type '"bar"' nor type '"baz"' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(4,20): error TS2352: Neither type '"bar"' nor type '"foo"' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(5,9): error TS2365: Operator '==' cannot be applied to types '"foo"' and 'number'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(5,19): error TS2352: Neither type '"bar"' nor type 'number' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(6,9): error TS2365: Operator '===' cannot be applied to types '"foo"' and 'string & { enhancements: any; }'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts(6,20): error TS2352: Neither type '"bar"' nor type 'string & { enhancements: any; }' is assignable to the other.
+  Type '"bar"' is not assignable to type '{ enhancements: any; }'.
+    Property 'enhancements' is missing in type 'String'.
 
 
-==== tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts (5 errors) ====
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityComparisons02.ts (7 errors) ====
+    type EnhancedString = string & { enhancements: any };
+    
     var a = "foo" === "bar" as "baz";
             ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '===' cannot be applied to types '"foo"' and '"baz"'.
@@ -19,3 +25,10 @@ tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInEqualityCo
 !!! error TS2365: Operator '==' cannot be applied to types '"foo"' and 'number'.
                       ~~~~~~~~~~~~~
 !!! error TS2352: Neither type '"bar"' nor type 'number' is assignable to the other.
+    var d = "foo" === ("bar" as EnhancedString);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types '"foo"' and 'string & { enhancements: any; }'.
+                       ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"bar"' nor type 'string & { enhancements: any; }' is assignable to the other.
+!!! error TS2352:   Type '"bar"' is not assignable to type '{ enhancements: any; }'.
+!!! error TS2352:     Property 'enhancements' is missing in type 'String'.
