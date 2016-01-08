@@ -16,7 +16,11 @@
 /// <reference path='services.ts' />
 
 /* @internal */
-var debugObjectHost = (<any>this);
+let debugObjectHost = (<any>this);
+
+// We need to use 'null' to interface with the managed side.
+/* tslint:disable:no-null */
+/* tslint:disable:no-in-operator */
 
 /* @internal */
 namespace ts {
@@ -234,8 +238,6 @@ namespace ts {
     }
 
     class ScriptSnapshotShimAdapter implements IScriptSnapshot {
-        private lineStartPositions: number[] = null;
-
         constructor(private scriptSnapshotShim: ScriptSnapshotShim) {
         }
 
@@ -940,7 +942,7 @@ namespace ts {
                         return {
                             options: {},
                             files: [],
-                            errors: [realizeDiagnostic(result.error, '\r\n')]
+                            errors: [realizeDiagnostic(result.error, "\r\n")]
                         };
                     }
 
@@ -949,7 +951,7 @@ namespace ts {
                     return {
                         options: configFile.options,
                         files: configFile.fileNames,
-                        errors: realizeDiagnostics(configFile.errors, '\r\n')
+                        errors: realizeDiagnostics(configFile.errors, "\r\n")
                     };
                 });
         }
@@ -1039,12 +1041,21 @@ namespace ts {
     }
 }
 
+/* tslint:enable:no-in-operator */
+/* tslint:enable:no-null */
+
 
 /// TODO: this is used by VS, clean this up on both sides of the interface
 /* @internal */
-module TypeScript.Services {
-    export var TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
+namespace TypeScript.Services {
+    export const TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
 }
 
+/* tslint:disable:no-unused-variable */
+// 'toolsVersion' gets consumed by the managed side, so it's not unused.
+// TODO: it should be moved into a namespace though.
+
 /* @internal */
-const toolsVersion = "1.6";
+const toolsVersion = "1.8";
+
+/* tslint:enable:no-unused-variable */
