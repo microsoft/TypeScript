@@ -1186,7 +1186,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     const syntheticReactRef = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                    syntheticReactRef.text = "React";
+                    syntheticReactRef.text = compilerOptions.reactNamespace ? compilerOptions.reactNamespace : "React";
                     syntheticReactRef.parent = openingNode;
 
                     // Call React.createElement(tag, ...
@@ -5464,7 +5464,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                             });
                             leadingComma = true;
                         }
-                        ++parameterIndex;
+                        parameterIndex++;
                     }
                 }
                 return argumentsWritten;
@@ -6488,7 +6488,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 let started = false;
                 if (exportedDeclarations) {
-                    for (let i = 0; i < exportedDeclarations.length; ++i) {
+                    for (let i = 0; i < exportedDeclarations.length; i++) {
                         // write name of exported declaration, i.e 'export var x...'
                         writeExportedName(exportedDeclarations[i]);
                     }
@@ -6604,7 +6604,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     writeLine();
                     write("var ");
                     const seen: Map<string> = {};
-                    for (let i = 0; i < hoistedVars.length; ++i) {
+                    for (let i = 0; i < hoistedVars.length; i++) {
                         const local = hoistedVars[i];
                         const name = local.kind === SyntaxKind.Identifier
                             ? <Identifier>local
@@ -6816,7 +6816,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             function emitSetters(exportStarFunction: string, dependencyGroups: DependencyGroup[]) {
                 write("setters:[");
 
-                for (let i = 0; i < dependencyGroups.length; ++i) {
+                for (let i = 0; i < dependencyGroups.length; i++) {
                     if (i !== 0) {
                         write(",");
                     }
@@ -6864,7 +6864,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                                     write(`${exportFunctionForFile}({`);
                                     writeLine();
                                     increaseIndent();
-                                    for (let i = 0, len = (<ExportDeclaration>entry).exportClause.elements.length; i < len; ++i) {
+                                    for (let i = 0, len = (<ExportDeclaration>entry).exportClause.elements.length; i < len; i++) {
                                         if (i !== 0) {
                                             write(",");
                                             writeLine();
@@ -6909,7 +6909,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 write("execute: function() {");
                 increaseIndent();
                 writeLine();
-                for (let i = startIndex; i < node.statements.length; ++i) {
+                for (let i = startIndex; i < node.statements.length; i++) {
                     const statement = node.statements[i];
                     switch (statement.kind) {
                         // - function declarations are not emitted because they were already hoisted
@@ -6971,7 +6971,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 const groupIndices: Map<number> = {};
                 const dependencyGroups: DependencyGroup[] = [];
 
-                for (let i = 0; i < externalImports.length; ++i) {
+                for (let i = 0; i < externalImports.length; i++) {
                     const text = getExternalModuleNameText(externalImports[i], emitRelativePathAsModuleName);
                     if (hasProperty(groupIndices, text)) {
                         // deduplicate/group entries in dependency list by the dependency name
@@ -7221,7 +7221,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                     // Replace entities like &nbsp;
                     result = result.replace(/&(\w+);/g, function(s: any, m: string) {
                         if (entities[m] !== undefined) {
-                            return String.fromCharCode(entities[m]);
+                            const ch = String.fromCharCode(entities[m]);
+                            // &quot; needs to be escaped
+                            return ch === "\"" ? "\\\"" : ch;
                         }
                         else {
                             return s;
@@ -7294,7 +7296,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function emitDirectivePrologues(statements: Node[], startWithNewLine: boolean, ensureUseStrict?: boolean): number {
                 let foundUseStrict = false;
-                for (let i = 0; i < statements.length; ++i) {
+                for (let i = 0; i < statements.length; i++) {
                     if (isPrologueDirective(statements[i])) {
                         if (isUseStrictPrologue(statements[i] as ExpressionStatement)) {
                             foundUseStrict = true;
@@ -7316,7 +7318,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             function writeLines(text: string): void {
                 const lines = text.split(/\r\n|\r|\n/g);
-                for (let i = 0; i < lines.length; ++i) {
+                for (let i = 0; i < lines.length; i++) {
                     const line = lines[i];
                     if (line.length) {
                         writeLine();

@@ -307,9 +307,10 @@ class ProjectRunner extends RunnerBase {
                     // If the generated output file resides in the parent folder or is rooted path,
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the fileName the compiler asked to write
-                    diskRelativeName = "diskFile" + nonSubfolderDiskFiles++ +
+                    diskRelativeName = "diskFile" + nonSubfolderDiskFiles +
                     (Harness.Compiler.isDTS(fileName) ? ".d.ts" :
                     Harness.Compiler.isJS(fileName) ? ".js" : ".js.map");
+                    nonSubfolderDiskFiles++;
                 }
 
                 if (Harness.Compiler.isJS(fileName)) {

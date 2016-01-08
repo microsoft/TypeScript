@@ -9,3 +9,4 @@ declare module JSX {
 declare var React: any;
 
 <div>Dot goes here: &middot; &notAnEntity; </div>;
+<div>Be careful of &quot;-ed strings!</div>;
