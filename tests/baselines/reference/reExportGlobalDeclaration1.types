@@ -1,0 +1,27 @@
+=== tests/cases/compiler/file1.d.ts ===
+
+declare var x: number;
+>x : number
+
+declare var x1: number;
+>x1 : number
+
+=== tests/cases/compiler/file2.ts ===
+export {x, x as y};
+>x : number
+>x : number
+>y : number
+
+export {x1, x1 as y1};
+>x1 : number
+>x1 : number
+>y1 : number
+
+export {x as z};
+>x : number
+>z : number
+
+export {x1 as z1};
+>x1 : number
+>z1 : number
+
