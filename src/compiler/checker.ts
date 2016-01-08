@@ -7574,75 +7574,69 @@ namespace ts {
             return undefined;
         }
 
-        function shouldAcquireLiteralType(literalNode: StringLiteral) {
-            loop: for (let current: Node = literalNode, parent = current.parent;
-                        parent;
-                        current = parent, parent = current.parent) {
-
-                switch (parent.kind) {
-                    // The operand of a 'switch' should get a literal type.
-                    case SyntaxKind.SwitchStatement:
-                        return current === (parent as SwitchStatement).expression;
-
-                    // The tested expression of a 'case' clause should get a literal type.
-                    case SyntaxKind.CaseClause:
-                        return current === (parent as CaseClause).expression;
-
-                    case SyntaxKind.BinaryExpression:
-                        const binaryExpr = parent as BinaryExpression;
-                        switch (binaryExpr.operatorToken.kind) {
-                            // Either operand of an equality/inequality comparison
-                            // should get a literal type.
-                            case SyntaxKind.EqualsEqualsEqualsToken:
-                            case SyntaxKind.ExclamationEqualsEqualsToken:
-                            case SyntaxKind.EqualsEqualsToken:
-                            case SyntaxKind.ExclamationEqualsToken:
-                                return current === binaryExpr.left || current === binaryExpr.right;
-
-                            case SyntaxKind.AmpersandAmpersandToken:
-                            case SyntaxKind.CommaToken:
-                                if (current === binaryExpr.right) {
-                                    continue loop;
-                                }
-                                break loop;
-
-                            case SyntaxKind.BarBarToken:
-                                if (current === binaryExpr.left || current === binaryExpr.right) {
-                                    continue loop;
-                                }
-                                break loop;
-                        }
-
-                        // No binary operators apply. Try to get the contextual type below.
-                        break loop;
-
-                    case SyntaxKind.ConditionalExpression:
-                        const conditional = parent as ConditionalExpression;
-                        if (current === conditional.whenTrue || current === conditional.whenFalse) {
-                            continue loop;
-                        }
-                        break loop;
-
-                    case SyntaxKind.ParenthesizedExpression:
-                        continue loop;
-
-                    default:
-                        // Nothing applies. Try to get the contextual type below.
-                        break loop;
-                }
+        function shouldAcquireLiteralType(literalNode: LiteralExpression) {
+            if (isEqualityComparisonOperand(literalNode)) {
+                return true;
             }
 
-            // We haven't found a "literal match location" (i.e. a location that signals
-            // a literal should get a literal type). Check whether the contextual type
-            // of the literal has a literal type in it.
-            //
-            // You might ask why we're not passing 'current' or 'parent' into 'getContextualType'
-            // since we've already walked up several nodes anyway. This is not correct
-            // because several nodes *do not* strictly acquire a contextual type from their parents.
-            // An example of this is '||' expressions, whose right operand is contextually typed by
-            // its left operand if it could not acquire a contextual type from its parent.
             const contextualType = getContextualType(literalNode);
             return !!contextualType && contextualTypeIsStringLiteralType(contextualType);
+        }
+
+        /**
+         * Returns true if an expression might be evaluated as part of an equality comparison.
+         * This includes inequality (e.g. '!==') and 'switch'/'case' equality.
+         */
+        function isEqualityComparisonOperand(expression: Expression): boolean {
+            const parent = expression.parent;
+            const parentKind = parent.kind;
+
+            switch (parent.kind) {
+                // The operand of a 'switch' should get a literal type.
+                case SyntaxKind.SwitchStatement:
+                    return expression === (parent as SwitchStatement).expression;
+
+                // The tested expression of a 'case' clause should get a literal type.
+                case SyntaxKind.CaseClause:
+                    return expression === (parent as CaseClause).expression;
+
+                case SyntaxKind.BinaryExpression:
+                    const binaryExpr = parent as BinaryExpression;
+                    switch (binaryExpr.operatorToken.kind) {
+                        // Either operand of an equality/inequality comparison
+                        // should get a literal type.
+                        case SyntaxKind.EqualsEqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsEqualsToken:
+                        case SyntaxKind.EqualsEqualsToken:
+                        case SyntaxKind.ExclamationEqualsToken:
+                            return true;
+
+                        case SyntaxKind.AmpersandAmpersandToken:
+                        case SyntaxKind.CommaToken:
+                            if (expression === binaryExpr.right) {
+                                return isEqualityComparisonOperand(binaryExpr)
+                            }
+                            return false;
+
+                        case SyntaxKind.BarBarToken:
+                            return isEqualityComparisonOperand(binaryExpr);
+                    }
+
+                    // No binary operators apply.
+                    return false;
+
+                case SyntaxKind.ConditionalExpression:
+                    const conditional = parent as ConditionalExpression;
+                    if (expression === conditional.whenTrue || expression === conditional.whenFalse) {
+                        return isEqualityComparisonOperand(conditional);
+                    }
+                    return false;
+
+                case SyntaxKind.ParenthesizedExpression:
+                    return isEqualityComparisonOperand(parent as ParenthesizedExpression);
+            }
+
+            return false;
         }
 
 
