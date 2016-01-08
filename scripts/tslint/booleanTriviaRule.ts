@@ -26,7 +26,9 @@ class BooleanTriviaWalker extends Lint.RuleWalker {
                 for (let index = 0; index < targetParameters.length; index++) {
                     const param = targetParameters[index];
                     const arg = node.arguments[index];
-                    if (!(arg && param)) continue;
+                    if (!(arg && param)) {
+                        continue;
+                    }
 
                     const argType = this.checker.getContextualType(arg);
                     if (argType && (argType.getFlags() & ts.TypeFlags.Boolean)) {
@@ -38,7 +40,9 @@ class BooleanTriviaWalker extends Lint.RuleWalker {
                         if (ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia) {
                             triviaContent = arg.getFullText().slice(ranges[0].pos + 2, ranges[0].end - 2); // +/-2 to remove /**/
                         }
-                        if (triviaContent !== param.getName()) {
+
+                        const paramName = param.getName();
+                        if (triviaContent !== paramName && triviaContent !== paramName + ":") {
                             this.addFailure(this.createFailure(arg.getStart(source), arg.getWidth(source), Rule.FAILURE_STRING_FACTORY(param.getName(), triviaContent)));
                         }
                     }
