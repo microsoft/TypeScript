@@ -99,11 +99,11 @@ namespace ts {
         if (diagnostic.file) {
             const { line, character } = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
             const relativeFileName = getRelativeFileName(diagnostic.file.fileName, host);
-            output += `${ relativeFileName }(${ line + 1 },${ character + 1 }): `;
+            output += `${relativeFileName}(${line + 1},${character + 1}): `;
         }
 
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ category } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        output += `${category} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
 
         sys.write(output);
     }
@@ -184,12 +184,12 @@ namespace ts {
             }
 
             output += sys.newLine;
-            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+            output += `${relativeFileName}(${firstLine + 1},${firstLineChar + 1}): `;
         }
 
         const categoryColor = categoryFormatMap[diagnostic.category];
         const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        output += `${formatAndReset(category, categoryColor)} TS${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}`;
         output += sys.newLine + sys.newLine;
 
         sys.write(output);
@@ -200,10 +200,10 @@ namespace ts {
 
         if (diagnostic.file) {
             const loc = getLineAndCharacterOfPosition(diagnostic.file, diagnostic.start);
-            output += `${ diagnostic.file.fileName }(${ loc.line + 1 },${ loc.character + 1 }): `;
+            output += `${diagnostic.file.fileName}(${loc.line + 1},${loc.character + 1}): `;
         }
 
-        output += `${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }${ sys.newLine }`;
+        output += `${flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine)}${sys.newLine}`;
 
         sys.write(output);
     }
@@ -535,8 +535,14 @@ namespace ts {
         emitTime = 0;
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
-        const exitStatus = compileProgram();
 
+        let exitStatus = ExitStatus.Success;
+        if (compilerOptions.listEmit) {
+            exitStatus = preComputeOutputFiles();
+        } else {
+            exitStatus = compileProgram();
+        }
+ 
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
                 sys.write(file.fileName + sys.newLine);
@@ -570,6 +576,23 @@ namespace ts {
         }
 
         return { program, exitStatus };
+
+        function preComputeOutputFiles(): ExitStatus {
+
+            // So user wants both the list of emitted files and 
+            // noEmit. Guess we're done
+            if (compilerOptions.noEmit) {
+                return ExitStatus.Success;
+            }
+
+            function writeFileName(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void {
+                sys.write(fileName + sys.newLine);
+            };
+
+            program.emit(undefined, writeFileName);
+
+            return ExitStatus.Success;
+        }
 
         function compileProgram(): ExitStatus {
             let diagnostics: Diagnostic[];

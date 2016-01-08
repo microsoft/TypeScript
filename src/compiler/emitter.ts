@@ -342,6 +342,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
         const newLine = host.getNewLine();
 
         const emitJavaScript = createFileEmitter();
+
+        const emitFileCB = compilerOptions.listEmit ? emitNullFile : emitFile;
+
         forEachExpectedEmitFile(host, emitFile, targetSourceFile);
 
         return {
@@ -7844,6 +7847,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
             if (declarationFilePath) {
                 emitSkipped = writeDeclarationFile(declarationFilePath, sourceFiles, isBundledEmit, host, resolver, emitterDiagnostics) || emitSkipped;
+            }
+        }
+
+        function emitNullFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
+            sourceFiles: SourceFile[], isBundledEmit: boolean) {
+
+            sys.write(jsFilePath + newLine);
+            if (sourceMapFilePath) {
+                sys.write(sourceMapFilePath + newLine);
+            }
+
+            if (declarationFilePath) {
+                sys.write(declarationFilePath + newLine);
             }
         }
     }

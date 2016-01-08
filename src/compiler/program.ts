@@ -565,8 +565,21 @@ namespace ts {
             return runWithCancellationToken(() => emitWorker(this, sourceFile, writeFileCallback, cancellationToken));
         }
 
+        function preComputeEmit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
+            return preComputeEmitWorker(this, sourceFile, writeFileCallback, cancellationToken);
+        }
+
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
+        }
+
+        function preComputeEmitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken): EmitResult {
+
+            return {
+                emitSkipped: true,
+                diagnostics: [],
+                sourceMaps: []
+            };
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken): EmitResult {
@@ -585,7 +598,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile);
+            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
 
             const start = new Date().getTime();
 
