@@ -444,7 +444,7 @@ namespace ts.formatting {
             ///
 
             // Insert space after comma delimiter
-            this.SpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Space));
+            this.SpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext, Rules.IsNextTokenNotCloseBracket), RuleAction.Space));
             this.NoSpaceAfterComma = new Rule(RuleDescriptor.create3(SyntaxKind.CommaToken, Shared.TokenRange.Any), RuleOperation.create2(new RuleOperationContext(Rules.IsSameLineTokenContext), RuleAction.Delete));
 
             // Insert space before and after binary operators
@@ -709,6 +709,10 @@ namespace ts.formatting {
 
         static IsPreviousTokenNotComma(context: FormattingContext): boolean {
             return context.currentTokenSpan.kind !== SyntaxKind.CommaToken;
+        }
+
+        static IsNextTokenNotCloseBracket(context: FormattingContext): boolean {
+            return context.nextTokenSpan.kind !== SyntaxKind.CloseBracketToken;
         }
 
         static IsArrowFunctionContext(context: FormattingContext): boolean {
