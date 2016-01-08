@@ -75,7 +75,6 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
     return typedArrays;
 }
 
-/*
 function CreateTypedArraysOf(obj) {
     var typedArrays = [];
     typedArrays[0] = Int8Array.of(...obj);
@@ -90,7 +89,6 @@ function CreateTypedArraysOf(obj) {
 
     return typedArrays;
 }
-*/
 
 function CreateTypedArraysOf2() {
     var typedArrays = [];

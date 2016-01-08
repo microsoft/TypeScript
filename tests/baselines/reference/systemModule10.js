@@ -10,7 +10,7 @@ export {n2}
 export {n2 as n3}
 
 //// [systemModule10.js]
-System.register(['file1', 'file2'], function(exports_1, __moduleName) {
+System.register(['file1', 'file2'], function(exports_1) {
     "use strict";
     var file1_1, n2;
     return {

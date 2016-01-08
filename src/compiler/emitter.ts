@@ -1186,7 +1186,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                 function emitJsxElement(openingNode: JsxOpeningLikeElement, children?: JsxChild[]) {
                     const syntheticReactRef = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-                    syntheticReactRef.text = "React";
+                    syntheticReactRef.text = compilerOptions.reactNamespace ? compilerOptions.reactNamespace : "React";
                     syntheticReactRef.parent = openingNode;
 
                     // Call React.createElement(tag, ...
@@ -6990,7 +6990,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
                     write(text);
                 }
-                write(`], function(${exportFunctionForFile}, __moduleName) {`);
+                write(`], function(${exportFunctionForFile}) {`);
                 writeLine();
                 increaseIndent();
                 const startIndex = emitDirectivePrologues(node.statements, /*startWithNewLine*/ true, /*ensureUseStrict*/ true);

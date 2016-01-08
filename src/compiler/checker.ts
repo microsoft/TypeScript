@@ -8026,31 +8026,12 @@ namespace ts {
             return jsxElementType || anyType;
         }
 
-        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
-            if (lhs.kind !== rhs.kind) {
-                return false;
-            }
-
-            if (lhs.kind === SyntaxKind.Identifier) {
-                return (<Identifier>lhs).text === (<Identifier>rhs).text;
-            }
-
-            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
-                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
-        }
-
         function checkJsxElement(node: JsxElement) {
             // Check attributes
             checkJsxOpeningLikeElement(node.openingElement);
 
-            // Check that the closing tag matches
-            if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
-                error(node.closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNode(node.openingElement.tagName));
-            }
-            else {
-                // Perform resolution on the closing tag so that rename/go to definition/etc work
-                getJsxElementTagSymbol(node.closingElement);
-            }
+            // Perform resolution on the closing tag so that rename/go to definition/etc work
+            getJsxElementTagSymbol(node.closingElement);
 
             // Check children
             for (const child of node.children) {
@@ -8451,10 +8432,11 @@ namespace ts {
             checkGrammarJsxElement(node);
             checkJsxPreconditions(node);
 
-            // The symbol 'React' should be marked as 'used' so we don't incorrectly elide its import. And if there
-            // is no 'React' symbol in scope when targeting React emit, we should issue an error.
+            // The reactNamespace symbol should be marked as 'used' so we don't incorrectly elide its import. And if there
+            // is no reactNamespace symbol in scope when targeting React emit, we should issue an error.
             const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactSym = resolveName(node.tagName, "React", SymbolFlags.Value, reactRefErr, "React");
+            const reactNamespace = compilerOptions.reactNamespace ? compilerOptions.reactNamespace : "React";
+            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
             if (reactSym) {
                 getSymbolLinks(reactSym).referenced = true;
             }

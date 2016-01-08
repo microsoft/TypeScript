@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-System.register("ref/a", [], function(exports_1, __moduleName) {
+System.register("ref/a", [], function(exports_1) {
     "use strict";
     var A;
     return {
@@ -29,7 +29,7 @@ System.register("ref/a", [], function(exports_1, __moduleName) {
         }
     }
 });
-System.register("b", ["ref/a"], function(exports_2, __moduleName) {
+System.register("b", ["ref/a"], function(exports_2) {
     "use strict";
     var a_1;
     var B;

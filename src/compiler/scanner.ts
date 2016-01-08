@@ -688,6 +688,21 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
+    /* @internal */
+    export function isIdentifier(name: string, languageVersion: ScriptTarget): boolean {
+        if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
+            return false;
+        }
+
+        for (let i = 1, n = name.length; i < n; i++) {
+            if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,

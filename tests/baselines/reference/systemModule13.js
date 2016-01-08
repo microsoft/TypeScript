@@ -5,7 +5,7 @@ export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
 for ([x] of [[1]]) {}
 
 //// [systemModule13.js]
-System.register([], function(exports_1, __moduleName) {
+System.register([], function(exports_1) {
     "use strict";
     var x, y, z, z0, z1;
     return {

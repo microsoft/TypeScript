@@ -100,7 +100,8 @@ namespace ts.server {
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
-                readFile: fileName => this.host.readFile(fileName)
+                readFile: fileName => this.host.readFile(fileName),
+                directoryExists: directoryName => this.host.directoryExists(directoryName)
             };
         }
 
@@ -1331,6 +1332,7 @@ namespace ts.server {
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         };
