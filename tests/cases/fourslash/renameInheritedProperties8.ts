@@ -1,11 +1,15 @@
 ﻿/// <reference path='fourslash.ts'/>
 
-//// class class1 extends class1 {
-////    [|propName|]: string;
+//// class C implements D {
+////     [|prop1|]: string;
 //// }
-////
-//// var v: class1;
-//// v.[|propName|];
+//// 
+//// interface D extends C {
+////     [|prop1|]: string;
+//// }
+//// 
+//// var c: C;
+//// c.[|prop1|];
 
 const ranges = test.ranges();
 verify.assertHasRanges(ranges);
