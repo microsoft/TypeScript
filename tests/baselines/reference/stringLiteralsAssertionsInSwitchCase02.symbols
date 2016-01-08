@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInSwitchCase02.ts ===
+switch ("foo" as string) {
+No type information for this code.    case "bar":
+No type information for this code.        break;
+No type information for this code.    case (("bar" || "baz")):
+No type information for this code.        break;
+No type information for this code.}
+No type information for this code.

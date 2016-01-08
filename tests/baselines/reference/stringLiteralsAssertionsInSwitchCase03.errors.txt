@@ -1,0 +1,20 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInSwitchCase03.ts(2,10): error TS2322: Type '"baz"' is not assignable to type '"foo"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInSwitchCase03.ts(2,10): error TS2352: Neither type '"bar"' nor type '"baz"' is assignable to the other.
+tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInSwitchCase03.ts(4,11): error TS2352: Neither type '"bar" | "baz"' nor type '"foo"' is assignable to the other.
+  Type '"bar"' is not assignable to type '"foo"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralsAssertionsInSwitchCase03.ts (3 errors) ====
+    switch ("foo") {
+        case "bar" as "baz":
+             ~~~~~~~~~~~~~~
+!!! error TS2322: Type '"baz"' is not assignable to type '"foo"'.
+             ~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"bar"' nor type '"baz"' is assignable to the other.
+            break;
+        case (("bar" || "baz") as "foo"):
+              ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Neither type '"bar" | "baz"' nor type '"foo"' is assignable to the other.
+!!! error TS2352:   Type '"bar"' is not assignable to type '"foo"'.
+            break;
+    }
