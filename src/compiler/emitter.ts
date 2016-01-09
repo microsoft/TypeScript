@@ -6207,7 +6207,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         // so export needs to be written here 
                         for (const element of node.exportClause.elements) {
                             const elementName = element.propertyName || element.name;
-                            if (resolver.isReferenceToGlobalDeclaration(elementName)) {
+                            if (resolver.isReferenceToGlobalValueDeclaration(elementName)) {
                                 emitExportMemberAssignments(elementName);
                             }
                         }

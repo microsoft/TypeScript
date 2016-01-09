@@ -10,4 +10,3 @@ export declare function foo(): X.bar;
 //// [exportSpecifierReferencingOuterDeclaration2_A.js]
 //// [exportSpecifierReferencingOuterDeclaration2_B.js]
 "use strict";
-exports.X = X;

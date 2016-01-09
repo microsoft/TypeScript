@@ -15426,9 +15426,8 @@ namespace ts {
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
-        function isReferenceToGlobalDeclaration(reference: Identifier): boolean {
-            const flags = SymbolFlags.Namespace | SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Alias;
-            const symbol =  getNodeLinks(reference).resolvedSymbol || resolveName(reference, reference.text, flags, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+        function isReferenceToGlobalValueDeclaration(reference: Identifier): boolean {
+            const symbol =  getNodeLinks(reference).resolvedSymbol || resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             return symbol && isGlobalSourceFile(getSourceFileOfNode(symbol.declarations[0]));
         }
 
@@ -15439,7 +15438,7 @@ namespace ts {
                 getReferencedNestedRedeclaration,
                 isNestedRedeclaration,
                 isValueAliasDeclaration,
-                isReferenceToGlobalDeclaration,
+                isReferenceToGlobalValueDeclaration,
                 hasGlobalName,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,

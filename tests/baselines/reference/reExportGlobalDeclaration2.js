@@ -18,9 +18,3 @@ export {I2 as III2};
 
 //// [file2.js]
 "use strict";
-exports.I1 = I1;
-exports.II1 = I1;
-exports.III1 = I1;
-exports.I2 = I2;
-exports.II2 = I2;
-exports.III2 = I2;
