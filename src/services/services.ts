@@ -6864,7 +6864,7 @@ namespace ts {
                 }
                 else if (tokenKind === SyntaxKind.JsxText) {
                     return ClassificationType.jsxText;
-                }                
+                }
                 else if (tokenKind === SyntaxKind.Identifier) {
                     if (token) {
                         switch (token.parent.kind) {

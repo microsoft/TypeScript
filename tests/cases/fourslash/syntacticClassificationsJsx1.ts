@@ -7,7 +7,7 @@
 ////
 ////let y = <element attr="123"/>
 
-const c = classification;
+const c = classification;   
 verify.syntacticClassificationsAre(
     c.keyword("let"), c.identifier("x"), c.operator("="),
         c.punctuation("<"), 

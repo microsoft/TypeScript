@@ -3284,7 +3284,7 @@ namespace FourSlashInterface {
         export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("typeAliasName", text, position);
         }
-        
+
         export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("jsxOpenTagName", text, position);
         }
