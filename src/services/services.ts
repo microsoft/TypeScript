@@ -1640,6 +1640,7 @@ namespace ts {
         jsxOpenTagName = 19,
         jsxCloseTagName = 20,
         jsxSelfClosingTagName = 21,
+        jsxAttribute = 22
     }
 
     /// Language Service
@@ -6903,9 +6904,12 @@ namespace ts {
                                     return ClassificationType.jsxSelfClosingTagName;
                                 }
                                 return;
+                            case SyntaxKind.JsxAttribute:
+                                if ((<JsxAttribute>token.parent).name === token) {
+                                    return ClassificationType.jsxAttribute;
+                                }
                         }
                     }
-
                     return ClassificationType.identifier;
                 }
             }
