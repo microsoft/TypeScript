@@ -1616,6 +1616,9 @@ namespace ts {
         public static jsxOpenTagName = "jsx open tag name";
         public static jsxCloseTagName = "jsx close tag name";
         public static jsxSelfClosingTagName = "jsx self closing tag name";
+        public static jsxAttribute = "jsx attribute";
+        public static jsxText = "jsx text";
+        public static jsxAttributeStringLiteralValue = "jsx attribute string literal value";
     }
 
     export const enum ClassificationType {
@@ -1642,7 +1645,7 @@ namespace ts {
         jsxSelfClosingTagName = 21,
         jsxAttribute = 22,
         jsxText = 23,
-        jsxAttributeStringValue = 24,
+        jsxAttributeStringLiteralValue = 24,
     }
 
     /// Language Service
@@ -6577,6 +6580,9 @@ namespace ts {
                 case ClassificationType.jsxOpenTagName: return ClassificationTypeNames.jsxOpenTagName;
                 case ClassificationType.jsxCloseTagName: return ClassificationTypeNames.jsxCloseTagName;
                 case ClassificationType.jsxSelfClosingTagName: return ClassificationTypeNames.jsxSelfClosingTagName;
+                case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
+                case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
+                case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
             }
         }
 
@@ -6826,7 +6832,8 @@ namespace ts {
                             // the '=' in a variable declaration is special cased here.
                             if (token.parent.kind === SyntaxKind.VariableDeclaration ||
                                 token.parent.kind === SyntaxKind.PropertyDeclaration ||
-                                token.parent.kind === SyntaxKind.Parameter) {
+                                token.parent.kind === SyntaxKind.Parameter ||
+                                token.parent.kind === SyntaxKind.JsxAttribute) {
                                 return ClassificationType.operator;
                             }
                         }
@@ -6845,7 +6852,7 @@ namespace ts {
                     return ClassificationType.numericLiteral;
                 }
                 else if (tokenKind === SyntaxKind.StringLiteral || tokenKind === SyntaxKind.StringLiteralType) {
-                    return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringValue : ClassificationType.stringLiteral;
+                    return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                     // TODO: we should get another classification type for these literals.

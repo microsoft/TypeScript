@@ -3284,6 +3284,30 @@ namespace FourSlashInterface {
         export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("typeAliasName", text, position);
         }
+        
+        export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxOpenTagName", text, position);
+        }
+
+        export function jsxCloseTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxCloseTagName", text, position);
+        }
+
+        export function jsxSelfClosingTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxSelfClosingTagName", text, position);
+        }
+
+        export function jsxAttribute(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttribute", text, position);
+        }
+
+        export function jsxText(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxText", text, position);
+        }
+
+        export function jsxAttributeStringLiteralValue(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttributeStringLiteralValue", text, position);
+        }
 
         function getClassification(type: string, text: string, position?: number) {
             return {
