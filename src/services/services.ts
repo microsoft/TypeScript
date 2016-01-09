@@ -3124,8 +3124,12 @@ namespace ts {
                 isNewIdentifierLocation = false;
             }
             else if (isStartingCloseTag) {
+                symbols = [];
                 const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
-                symbols = [typeChecker.getSymbolAtLocation(tagName)];
+                const symbol = typeChecker.getSymbolAtLocation(tagName);
+                if (symbol) {
+                    symbols.push(symbol);
+                }
 
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
