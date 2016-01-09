@@ -1672,11 +1672,16 @@ namespace ts {
         }
 
         function scanJSDocToken(): SyntaxKind {
+            if (pos >= end) {
+                return token = SyntaxKind.EndOfFileToken;
+            }
+
             startPos = pos;
 
             // Eat leading whitespace
+            let ch = text.charCodeAt(pos);
             while (pos < end) {
-                const ch = text.charCodeAt(pos);
+                ch = text.charCodeAt(pos);
                 if (isWhiteSpace(ch)) {
                     pos++;
                 }
@@ -1686,55 +1691,38 @@ namespace ts {
             }
             tokenPos = pos;
 
-            let identifierStarted = false;
-            while (pos < end) {
-                const ch = text.charCodeAt(pos);
-                if (identifierStarted) {
-                    if (!isIdentifierPart(ch, ScriptTarget.Latest)) {
-                        return token = SyntaxKind.Identifier;
-                    }
-                }
-                else {
-                    if (ch === CharacterCodes.at) {
-                        return pos += 1, token = SyntaxKind.AtToken;
-                    }
-                    else if (isLineBreak(ch)) {
-                        return pos += 1, token = SyntaxKind.NewLineTrivia;
-                    }
-                    else if (ch === CharacterCodes.asterisk) {
-                        return pos += 1, token = SyntaxKind.AsteriskToken;
-                    }
-                    else if (ch === CharacterCodes.openBrace) {
-                        return pos += 1, token = SyntaxKind.OpenBraceToken;
-                    }
-                    else if (ch === CharacterCodes.closeBrace) {
-                        return pos += 1, token = SyntaxKind.CloseBraceToken;
-                    }
-                    else if (ch === CharacterCodes.openBracket) {
-                        return pos += 1, token = SyntaxKind.OpenBracketToken;
-                    }
-                    else if (ch === CharacterCodes.closeBracket) {
-                        return pos += 1, token = SyntaxKind.CloseBracketToken;
-                    }
-                    else if (ch === CharacterCodes.equals) {
-                        return pos += 1, token = SyntaxKind.EqualsToken;
-                    }
-                    else if (ch === CharacterCodes.comma) {
-                        return pos += 1, token = SyntaxKind.CommaToken;
-                    }
-                    else if (isWhiteSpace(ch)) {
-                        // Keep going
-                    }
-                    else if (isIdentifierStart(ch, ScriptTarget.Latest)) {
-                        identifierStarted = true;
-                    }
-                    else {
-                        return pos += 1, token = SyntaxKind.Unknown;
-                    }
-                }
-                pos += 1;
+            switch (ch) {
+                case CharacterCodes.at:
+                    return pos += 1, token = SyntaxKind.AtToken;
+                case CharacterCodes.lineFeed:
+                case CharacterCodes.carriageReturn:
+                    return pos += 1, token = SyntaxKind.NewLineTrivia;
+                case CharacterCodes.asterisk:
+                    return pos += 1, token = SyntaxKind.AsteriskToken;
+                case CharacterCodes.openBrace:
+                    return pos += 1, token = SyntaxKind.OpenBraceToken;
+                case CharacterCodes.closeBrace:
+                    return pos += 1, token = SyntaxKind.CloseBraceToken;
+                case CharacterCodes.openBracket:
+                    return pos += 1, token = SyntaxKind.OpenBracketToken;
+                case CharacterCodes.closeBracket:
+                    return pos += 1, token = SyntaxKind.CloseBracketToken;
+                case CharacterCodes.equals:
+                    return pos += 1, token = SyntaxKind.EqualsToken;
+                case CharacterCodes.comma:
+                    return pos += 1, token = SyntaxKind.CommaToken;
             }
-            return token = SyntaxKind.EndOfFileToken;
+
+            if (isIdentifierStart(ch, ScriptTarget.Latest)) {
+                pos++;
+                while (isIdentifierPart(text.charCodeAt(pos), ScriptTarget.Latest) && pos < end) {
+                    pos++;
+                }
+                return token = SyntaxKind.Identifier;
+            }
+            else {
+                return pos += 1, token = SyntaxKind.Unknown;
+            }
         }
 
         function speculationHelper<T>(callback: () => T, isLookahead: boolean): T {
