@@ -1640,7 +1640,9 @@ namespace ts {
         jsxOpenTagName = 19,
         jsxCloseTagName = 20,
         jsxSelfClosingTagName = 21,
-        jsxAttribute = 22
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringValue = 24,
     }
 
     /// Language Service
@@ -6783,12 +6785,12 @@ namespace ts {
                 }
             }
 
-            function classifyToken(token: Node): void {
+            function classifyTokenOrJsxText(token: Node): void {
                 if (nodeIsMissing(token)) {
                     return;
                 }
 
-                const tokenStart = classifyLeadingTriviaAndGetTokenStart(token);
+                const tokenStart = token.kind === SyntaxKind.JsxText ? token.pos : classifyLeadingTriviaAndGetTokenStart(token);
 
                 const tokenWidth = token.end - tokenStart;
                 Debug.assert(tokenWidth >= 0);
@@ -6843,7 +6845,7 @@ namespace ts {
                     return ClassificationType.numericLiteral;
                 }
                 else if (tokenKind === SyntaxKind.StringLiteral || tokenKind === SyntaxKind.StringLiteralType) {
-                    return ClassificationType.stringLiteral;
+                    return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringValue : ClassificationType.stringLiteral;
                 }
                 else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                     // TODO: we should get another classification type for these literals.
@@ -6853,6 +6855,9 @@ namespace ts {
                     // TODO (drosen): we should *also* get another classification type for these literals.
                     return ClassificationType.stringLiteral;
                 }
+                else if (tokenKind === SyntaxKind.JsxText) {
+                    return ClassificationType.jsxText;
+                }                
                 else if (tokenKind === SyntaxKind.Identifier) {
                     if (token) {
                         switch (token.parent.kind) {
@@ -6926,8 +6931,8 @@ namespace ts {
                     const children = element.getChildren(sourceFile);
                     for (let i = 0, n = children.length; i < n; i++) {
                         const child = children[i];
-                        if (isToken(child)) {
-                            classifyToken(child);
+                        if (isToken(child) || child.kind === SyntaxKind.JsxText) {
+                            classifyTokenOrJsxText(child);
                         }
                         else {
                             // Recurse into our child nodes.
