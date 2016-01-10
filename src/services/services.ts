@@ -3100,6 +3100,7 @@ namespace ts {
                     }
                     else if (kind === SyntaxKind.SlashToken && contextToken.parent.kind === SyntaxKind.JsxClosingElement) {
                         isStartingCloseTag = true;
+                        location = contextToken;
                     }
                 }
             }
@@ -3125,8 +3126,11 @@ namespace ts {
             }
             else if (isStartingCloseTag) {
                 const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
-                symbols = [typeChecker.getSymbolAtLocation(tagName)];
+                const tagSymbol = typeChecker.getSymbolAtLocation(tagName);
 
+                if (!typeChecker.isUnknownSymbol(tagSymbol)) {
+                    symbols = [tagSymbol];
+                }
                 isMemberCompletion = true;
                 isNewIdentifierLocation = false;
             }
@@ -3832,7 +3836,23 @@ namespace ts {
             }
             else {
                 if (!symbols || symbols.length === 0) {
-                    return undefined;
+                    if (sourceFile.languageVariant === LanguageVariant.JSX &&
+                        location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
+                        // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
+                        // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
+                        // For example:
+                        //     var x = <div> </ /*1*/>  completion list at "1" will contain "div" with type any
+                        const tagName = (<JsxElement>location.parent.parent).openingElement.tagName;
+                        entries.push({
+                            name: (<Identifier>tagName).text,
+                            kind: undefined,
+                            kindModifiers: undefined,
+                            sortText: "0",
+                        });
+                    }
+                    else {
+                        return undefined;
+                    }
                 }
 
                 getCompletionEntriesFromSymbols(symbols, entries);
@@ -4440,7 +4460,7 @@ namespace ts {
             const typeChecker = program.getTypeChecker();
             const symbol = typeChecker.getSymbolAtLocation(node);
 
-            if (!symbol) {
+            if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
                 // Try getting just type at this position and show
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
