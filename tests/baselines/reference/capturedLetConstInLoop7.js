@@ -22,16 +22,16 @@ l00:
 for (let x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00;
     }
 }
@@ -210,16 +210,16 @@ l00_c:
 for (const x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
         break l00_c;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue l00_c;
     }
 }
@@ -406,16 +406,16 @@ l0: for (var _i = 0, _a = []; _i < _a.length; _i++) {
 var _loop_2 = function(x) {
     (function () { return x; });
     (function () { return x; });
-    if (x == 1) {
+    if (x == "1") {
         return "break";
     }
-    if (x == 1) {
+    if (x == "1") {
         return "break-l00";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue-l00";
     }
 };
@@ -664,16 +664,16 @@ l0_c: for (var _b = 0, _c = []; _b < _c.length; _b++) {
 var _loop_12 = function(x) {
     (function () { return x; });
     (function () { return x; });
-    if (x == 1) {
+    if (x == "1") {
         return "break";
     }
-    if (x == 1) {
+    if (x == "1") {
         return "break-l00_c";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue";
     }
-    if (x == 2) {
+    if (x == "2") {
         return "continue-l00_c";
     }
 };

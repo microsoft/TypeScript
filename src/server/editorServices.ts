@@ -100,7 +100,8 @@ namespace ts.server {
             this.filenameToScript = createFileMap<ScriptInfo>();
             this.moduleResolutionHost = {
                 fileExists: fileName => this.fileExists(fileName),
-                readFile: fileName => this.host.readFile(fileName)
+                readFile: fileName => this.host.readFile(fileName),
+                directoryExists: directoryName => this.host.directoryExists(directoryName)
             };
         }
 
@@ -486,7 +487,7 @@ namespace ts.server {
         // number becomes 0 for a watcher, then we should close it.
         directoryWatchersRefCount: ts.Map<number> = {};
         hostConfiguration: HostConfiguration;
-        timerForDetectingProjectFilelistChanges: Map<NodeJS.Timer> = {};
+        timerForDetectingProjectFileListChanges: Map<NodeJS.Timer> = {};
 
         constructor(public host: ServerHost, public psLogger: Logger, public eventHandler?: ProjectServiceEventHandler) {
             // ts.disableIncrementalParsing = true;
@@ -541,21 +542,20 @@ namespace ts.server {
             }
 
             this.log("Detected source file changes: " + fileName);
-            this.startTimerForDetectingProjectFilelistChanges(project);
+            this.startTimerForDetectingProjectFileListChanges(project);
         }
 
-        startTimerForDetectingProjectFilelistChanges(project: Project) {
-            if (this.timerForDetectingProjectFilelistChanges[project.projectFilename]) {
-                clearTimeout(this.timerForDetectingProjectFilelistChanges[project.projectFilename]);
+        startTimerForDetectingProjectFileListChanges(project: Project) {
+            if (this.timerForDetectingProjectFileListChanges[project.projectFilename]) {
+                clearTimeout(this.timerForDetectingProjectFileListChanges[project.projectFilename]);
             }
-            this.timerForDetectingProjectFilelistChanges[project.projectFilename] = setTimeout(
-                () => this.handleProjectFilelistChanges(project),
+            this.timerForDetectingProjectFileListChanges[project.projectFilename] = setTimeout(
+                () => this.handleProjectFileListChanges(project),
                 250
             );
         }
 
-        handleProjectFilelistChanges(project: Project) {
-            // TODO: Ignoring potentially returned 'error' and 'succeeded' condition
+        handleProjectFileListChanges(project: Project) {
             const { projectOptions } = this.configFileToProjectOptions(project.projectFilename);
 
             const newRootFiles = projectOptions.files.map((f => this.getCanonicalFileName(f)));
@@ -585,7 +585,6 @@ namespace ts.server {
 
             this.log("Detected newly added tsconfig file: " + fileName);
 
-            // TODO: Ignoring potentially returned 'error' and 'succeeded' condition
             const { projectOptions } = this.configFileToProjectOptions(fileName);
 
             const rootFilesInTsconfig = projectOptions.files.map(f => this.getCanonicalFileName(f));
@@ -720,7 +719,8 @@ namespace ts.server {
             else {
                 for (const directory of project.directoriesWatchedForTsconfig) {
                     // if the ref count for this directory watcher drops to 0, it's time to close it
-                    if (!(--project.projectService.directoryWatchersRefCount[directory])) {
+                    project.projectService.directoryWatchersRefCount[directory]--;
+                    if (!project.projectService.directoryWatchersRefCount[directory]) {
                         this.log("Close directory watcher for: " + directory);
                         project.projectService.directoryWatchersForTsconfig[directory].close();
                         delete project.projectService.directoryWatchersForTsconfig[directory];
@@ -1085,7 +1085,6 @@ namespace ts.server {
          * Close file whose contents is managed by the client
          * @param filename is absolute pathname
          */
-
         closeClientFile(filename: string) {
             const info = ts.lookUp(this.filenameToScriptInfo, filename);
             if (info) {
@@ -1333,6 +1332,7 @@ namespace ts.server {
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         };
@@ -1733,7 +1733,8 @@ namespace ts.server {
             let count = 1;
             let pos = 0;
             this.index.every((ll, s, len) => {
-                starts[count++] = pos;
+                starts[count] = pos;
+                count++;
                 pos += ll.text.length;
                 return true;
             }, 0);
@@ -1741,9 +1742,9 @@ namespace ts.server {
         }
 
         getLineMapper() {
-            return ((line: number) => {
+            return (line: number) => {
                 return this.index.lineNumberToInfo(line).offset;
-            });
+            };
         }
 
         getTextChangeRangeSinceVersion(scriptVersion: number) {
@@ -1999,7 +2000,8 @@ namespace ts.server {
             while (adjustedStart >= childCharCount) {
                 this.skipChild(adjustedStart, rangeLength, childIndex, walkFns, CharRangeSection.PreStart);
                 adjustedStart -= childCharCount;
-                child = this.children[++childIndex];
+                childIndex++;
+                child = this.children[childIndex];
                 childCharCount = child.charCount();
             }
             // Case I: both start and end of range in same subtree
@@ -2014,14 +2016,16 @@ namespace ts.server {
                     return;
                 }
                 let adjustedLength = rangeLength - (childCharCount - adjustedStart);
-                child = this.children[++childIndex];
+                childIndex++;
+                child = this.children[childIndex];
                 childCharCount = child.charCount();
                 while (adjustedLength > childCharCount) {
                     if (this.execWalk(0, childCharCount, walkFns, childIndex, CharRangeSection.Mid)) {
                         return;
                     }
                     adjustedLength -= childCharCount;
-                    child = this.children[++childIndex];
+                    childIndex++;
+                    child = this.children[childIndex];
                     childCharCount = child.charCount();
                 }
                 if (adjustedLength > 0) {
@@ -2145,7 +2149,8 @@ namespace ts.server {
             if (childIndex < clen) {
                 splitNode = new LineNode();
                 while (childIndex < clen) {
-                    splitNode.add(this.children[childIndex++]);
+                    splitNode.add(this.children[childIndex]);
+                    childIndex++;
                 }
                 splitNode.updateCounts();
             }
@@ -2186,7 +2191,9 @@ namespace ts.server {
                 let nodeIndex = 0;
                 childIndex++;
                 while ((childIndex < lineCollectionCapacity) && (nodeIndex < nodeCount)) {
-                    this.children[childIndex++] = nodes[nodeIndex++];
+                    this.children[childIndex] = nodes[nodeIndex];
+                    childIndex++;
+                    nodeIndex++;
                 }
                 let splitNodes: LineNode[] = [];
                 let splitNodeCount = 0;
@@ -2199,7 +2206,8 @@ namespace ts.server {
                     }
                     let splitNode = <LineNode>splitNodes[0];
                     while (nodeIndex < nodeCount) {
-                        splitNode.add(nodes[nodeIndex++]);
+                        splitNode.add(nodes[nodeIndex]);
+                        nodeIndex++;
                         if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
                             splitNode = <LineNode>splitNodes[splitNodeIndex];

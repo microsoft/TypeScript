@@ -469,7 +469,8 @@ namespace ts {
 
             function pushDocCommentLineText(docComments: SymbolDisplayPart[], text: string, blankLineCount: number) {
                 // Add the empty lines in between texts
-                while (blankLineCount--) {
+                while (blankLineCount) {
+                    blankLineCount--;
                     docComments.push(textPart(""));
                 }
 
@@ -1033,6 +1034,7 @@ namespace ts {
          * host specific questions using 'getScriptSnapshot'.
          */
         resolveModuleNames?(moduleNames: string[], containingFile: string): ResolvedModule[];
+        directoryExists?(directoryName: string): boolean;
     }
 
     //
@@ -1216,6 +1218,7 @@ namespace ts {
         InsertSpaceAfterFunctionKeywordForAnonymousFunctions: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: boolean;
         InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
         [s: string]: boolean | number | string;
@@ -1637,6 +1640,7 @@ namespace ts {
         jsxOpenTagName = 19,
         jsxCloseTagName = 20,
         jsxSelfClosingTagName = 21,
+        jsxAttribute = 22
     }
 
     /// Language Service
@@ -1910,7 +1914,8 @@ namespace ts {
             getCurrentDirectory: () => "",
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
-            readFile: (fileName): string => ""
+            readFile: (fileName): string => "",
+            directoryExists: directoryExists => true
         };
 
         const program = createProgram([inputFileName], options, compilerHost);
@@ -2767,6 +2772,10 @@ namespace ts {
                     // stub missing host functionality
                     const entry = hostCache.getOrCreateEntry(fileName);
                     return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                },
+                directoryExists: directoryName => {
+                    Debug.assert(!host.resolveModuleNames);
+                    return directoryProbablyExists(directoryName, host);
                 }
             };
 
@@ -2971,14 +2980,8 @@ namespace ts {
             // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
             // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
             if (performCharacterChecks) {
-                if (!isIdentifierStart(name.charCodeAt(0), target)) {
+                if (!isIdentifier(name, target)) {
                     return undefined;
-                }
-
-                for (let i = 1, n = name.length; i < n; i++) {
-                    if (!isIdentifierPart(name.charCodeAt(i), target)) {
-                        return undefined;
-                    }
                 }
             }
 
@@ -6921,9 +6924,12 @@ namespace ts {
                                     return ClassificationType.jsxSelfClosingTagName;
                                 }
                                 return;
+                            case SyntaxKind.JsxAttribute:
+                                if ((<JsxAttribute>token.parent).name === token) {
+                                    return ClassificationType.jsxAttribute;
+                                }
                         }
                     }
-
                     return ClassificationType.identifier;
                 }
             }

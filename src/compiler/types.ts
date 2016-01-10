@@ -1195,7 +1195,7 @@ namespace ts {
 
     // @kind(SyntaxKind.CaseClause)
     export interface CaseClause extends Node {
-        expression?: Expression;
+        expression: Expression;
         statements: NodeArray<Statement>;
     }
 
@@ -2383,6 +2383,7 @@ namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         jsx?: JsxEmit;
+        reactNamespace?: string;
         listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
@@ -2650,6 +2651,8 @@ namespace ts {
         // readFile function is used to read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json'
         // to determine location of bundled typings for node module
         readFile(fileName: string): string;
+
+        directoryExists?(directoryName: string): boolean;
     }
 
     export interface ResolvedModule {
