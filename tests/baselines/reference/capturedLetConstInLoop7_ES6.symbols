@@ -42,22 +42,22 @@ for (let x in []) {
     (() => x);
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 20, 8))
 
-    if (x == 1) {
+    if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 20, 8))
 
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 20, 8))
 
         break l00;
     }
-    if (x == 2) {
+    if (x == "2") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 20, 8))
 
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 20, 8))
 
         continue l00;
@@ -393,22 +393,22 @@ for (const x in []) {
     (() => x);
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 208, 10))
 
-    if (x == 1) {
+    if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 208, 10))
 
         break;
     }
-    if (x == 1) {
+    if (x == "1") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 208, 10))
 
         break l00_c;
     }
-    if (x == 2) {
+    if (x == "2") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 208, 10))
 
         continue;
     }
-    if (x == 2) {
+    if (x == "2") {
 >x : Symbol(x, Decl(capturedLetConstInLoop7_ES6.ts, 208, 10))
 
         continue l00_c;

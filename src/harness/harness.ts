@@ -31,7 +31,6 @@
 // this will work in the browser via browserify
 var _chai: typeof chai = require("chai");
 var assert: typeof _chai.assert = _chai.assert;
-var expect: typeof _chai.expect = _chai.expect;
 declare var __dirname: string; // Node-specific
 var global = <any>Function("return this").call(null);
 /* tslint:enable:no-var-keyword */
@@ -513,7 +512,6 @@ namespace Harness {
                 }
 
                 const folder: any = fso.GetFolder(path);
-                const paths: string[] = [];
 
                 return filesInFolder(folder, path);
             };
@@ -617,7 +615,6 @@ namespace Harness {
             export const getExecutingFilePath = () => "";
             export const exit = (exitCode: number) => {};
 
-            const supportsCodePage = () => false;
             export let log = (s: string) => console.log(s);
 
             namespace Http {
@@ -627,18 +624,6 @@ namespace Harness {
                 }
 
                 /// Ask the server to use node's path.resolve to resolve the given path
-                function getResolvedPathFromServer(path: string) {
-                    const xhr = new XMLHttpRequest();
-                    try {
-                        xhr.open("GET", path + "?resolve", /*async*/ false);
-                        xhr.send();
-                    }
-                    catch (e) {
-                        return { status: 404, responseText: null };
-                    }
-
-                    return waitForXHR(xhr);
-                }
 
                 export interface XHRResponse {
                     status: number;

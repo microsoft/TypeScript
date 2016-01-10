@@ -38,9 +38,11 @@
         "no-trailing-whitespace": true,
         "no-inferrable-types": true,
         "no-null": true,
+        "no-unused-variable": true,
         "boolean-trivia": true,
         "type-operator-spacing": true,
         "prefer-const": true,
-        "no-in-operator": true
+        "no-in-operator": true,
+        "no-increment-decrement": true
   }
 }

@@ -317,14 +317,10 @@ namespace FourSlash {
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
-
-            this.testData.files.forEach(file => {
-                const fileName = file.fileName.replace(Harness.IO.directoryName(file.fileName), "").substr(1);
-                const fileNameWithoutExtension = fileName.substr(0, fileName.lastIndexOf("."));
-            });
 
             // Open the first file by default
             this.openFile(0);
@@ -732,7 +728,7 @@ namespace FourSlash {
                 // Count only the references in local files. Filter the ones in lib and other files.
                 ts.forEach(references, entry => {
                     if (localFiles.some((fileName) => fileName === entry.fileName)) {
-                        ++referencesCount;
+                        referencesCount++;
                     }
                 });
             }
@@ -760,10 +756,6 @@ namespace FourSlash {
 
         private getReferencesAtCaret() {
             return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-        }
-
-        private assertionMessage(name: string, actualValue: any, expectedValue: any) {
-            return "\nActual " + name + ":\n\t" + actualValue + "\nExpected value:\n\t" + expectedValue;
         }
 
         public getSyntacticDiagnostics(expected: string) {
@@ -910,7 +902,6 @@ namespace FourSlash {
         }
 
         public verifyCurrentParameterSpanIs(parameter: string) {
-            const activeSignature = this.getActiveSignatureHelpItem();
             const activeParameter = this.getActiveParameter();
             assert.equal(ts.displayPartsToString(activeParameter.displayParts), parameter);
         }
@@ -1103,7 +1094,7 @@ namespace FourSlash {
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
             const allFourSlashFiles = this.testData.files;
-            for (let idx = 0; idx < allFourSlashFiles.length; ++idx) {
+            for (let idx = 0; idx < allFourSlashFiles.length; idx++) {
                 const file = allFourSlashFiles[idx];
                 if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
@@ -1863,7 +1854,7 @@ namespace FourSlash {
             let item: ts.NavigateToItem = null;
 
             // Count only the match that match the same MatchKind
-            for (let i = 0; i < items.length; ++i) {
+            for (let i = 0; i < items.length; i++) {
                 item = items[i];
                 if (!matchKind || item.matchKind === matchKind) {
                     actual++;
@@ -2189,9 +2180,6 @@ namespace FourSlash {
         }
     }
 
-    // TOOD: should these just use the Harness's stdout/stderr?
-    const fsOutput = new Harness.Compiler.WriterAggregator();
-    const fsErrors = new Harness.Compiler.WriterAggregator();
     export function runFourSlashTest(basePath: string, testType: FourSlashTestType, fileName: string) {
         const content = Harness.IO.readFile(fileName);
         runFourSlashTestContent(basePath, testType, content, fileName);
@@ -2780,6 +2768,10 @@ namespace FourSlashInterface {
         // completion list is brought up if necessary
         public completionListItemsCountIsGreaterThan(count: number) {
             this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
+        }
+
+        public assertHasRanges(ranges: FourSlash.Range[]) {
+            assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
         }
 
         public completionListIsEmpty() {

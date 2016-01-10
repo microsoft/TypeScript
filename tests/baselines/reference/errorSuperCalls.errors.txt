@@ -1,12 +1,12 @@
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(4,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(9,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(14,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(18,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(22,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(26,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(30,16): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(34,9): error TS2335: 'super' can only be referenced in a derived class.
-tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(38,9): error TS2335: 'super' can only be referenced in a derived class.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(9,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(14,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(18,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(26,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(30,16): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(34,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(38,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(46,14): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(58,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(62,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
@@ -27,50 +27,50 @@ tests/cases/conformance/expressions/superCalls/errorSuperCalls.ts(71,9): error T
         fn() {
             super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     
         //super call in class accessor (get and set) with no base type
         get foo() {
             super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
             return null;
         }
         set foo(v) {
             super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     
         //super call in class member initializer with no base type
         p = super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
     
         //super call in static class member function with no base type
         static fn() {
             super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     
         //super call in static class member initializer with no base type
         static k = super();
                    ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
     
         //super call in static class accessor (get and set) with no base type
         static get q() {
             super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
             return null;
         }
         static set q(n) {
             super();
             ~~~~~
-!!! error TS2335: 'super' can only be referenced in a derived class.
+!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     }
     

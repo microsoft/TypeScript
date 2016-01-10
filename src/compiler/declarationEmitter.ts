@@ -501,7 +501,8 @@ namespace ts {
             }
             let count = 0;
             while (true) {
-                const name = baseName + "_" + (++count);
+                count++;
+                const name = baseName + "_" + count;
                 if (!hasProperty(currentIdentifiers, name)) {
                     return name;
                 }
@@ -1534,14 +1535,6 @@ namespace ts {
             }
 
             function emitBindingElement(bindingElement: BindingElement) {
-                function getBindingElementTypeVisibilityError(symbolAccesibilityResult: SymbolAccessiblityResult): SymbolAccessibilityDiagnostic {
-                    const diagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccesibilityResult);
-                    return diagnosticMessage !== undefined ? {
-                        diagnosticMessage,
-                        errorNode: bindingElement,
-                        typeName: bindingElement.name
-                    } : undefined;
-                }
 
                 if (bindingElement.kind === SyntaxKind.OmittedExpression) {
                     // If bindingElement is an omittedExpression (i.e. containing elision),
