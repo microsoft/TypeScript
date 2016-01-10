@@ -2057,8 +2057,7 @@ namespace ts {
         BlockScopedBindingInLoop    = 0x00004000,
         LexicalModuleMergesWithClass = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithBlockScopedBindingCapturedInFunction = 0x00010000, // Loop that contains block scoped variable captured in closure
-        HasSeenSuperBeforeThis      = 0x00020000,  // Set during the binding if 'super' is used before 'this' in constructor function
-        HasSeenThisCall             = 0x00040000,  // Set during the binding when encounter 'this'
+        HasSeenSuperCall             = 0x00040000,  // Set during the binding when encounter 'super'
     }
 
     /* @internal */

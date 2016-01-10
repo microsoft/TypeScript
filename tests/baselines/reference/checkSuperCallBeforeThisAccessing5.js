@@ -21,11 +21,11 @@ var Based = (function () {
         }
     }
     return Based;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         _super.call(this, this.x);
     }
     return Derived;
-})(Based);
+}(Based));
