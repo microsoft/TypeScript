@@ -1,0 +1,178 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterDefaults.ts ===
+/** Defaults on interfaces **/
+interface HasDefault1<T = number> {
+>HasDefault1 : HasDefault1<T>
+>T : T
+
+	x: T;
+>x : T
+>T : T
+}
+// OK
+let a3: HasDefault1;
+>a3 : HasDefault1<number>
+>HasDefault1 : HasDefault1<T>
+
+// a3.x: number
+a3.x = 10;
+>a3.x = 10 : number
+>a3.x : number
+>a3 : HasDefault1<number>
+>x : number
+>10 : number
+
+interface HasDefault2<T1, T2 = number> {
+>HasDefault2 : HasDefault2<T1, T2>
+>T1 : T1
+>T2 : T2
+
+	x1: T1;
+>x1 : T1
+>T1 : T1
+
+	x2: T2;
+>x2 : T2
+>T2 : T2
+}
+// Same as <string, number>
+let a5: HasDefault2<string>;
+>a5 : HasDefault2<string, number>
+>HasDefault2 : HasDefault2<T1, T2>
+
+// a5.x1: string
+a5.x1 = '';
+>a5.x1 = '' : string
+>a5.x1 : string
+>a5 : HasDefault2<string, number>
+>x1 : string
+>'' : string
+
+// a5.x2: number
+a5.x2 = 42;
+>a5.x2 = 42 : number
+>a5.x2 : number
+>a5 : HasDefault2<string, number>
+>x2 : number
+>42 : number
+
+let a6: HasDefault2<boolean, boolean>;
+>a6 : HasDefault2<boolean, boolean>
+>HasDefault2 : HasDefault2<T1, T2>
+
+// a6.x1: boolean, a6.x2: boolean
+a6.x1 = true;
+>a6.x1 = true : boolean
+>a6.x1 : boolean
+>a6 : HasDefault2<boolean, boolean>
+>x1 : boolean
+>true : boolean
+
+a6.x2 = false;
+>a6.x2 = false : boolean
+>a6.x2 : boolean
+>a6 : HasDefault2<boolean, boolean>
+>x2 : boolean
+>false : boolean
+
+/** Defaults on classes */
+class ClassDefault1<T = number> {
+>ClassDefault1 : ClassDefault1<T>
+>T : T
+
+	x: T;
+>x : T
+>T : T
+}
+let c1 = new ClassDefault1();
+>c1 : ClassDefault1<number>
+>new ClassDefault1() : ClassDefault1<number>
+>ClassDefault1 : typeof ClassDefault1
+
+// c1.x: number
+c1.x = 10;
+>c1.x = 10 : number
+>c1.x : number
+>c1 : ClassDefault1<number>
+>x : number
+>10 : number
+
+class Derived1 extends ClassDefault1 {	
+>Derived1 : Derived1
+>ClassDefault1 : ClassDefault1<number>
+}
+let d1 = new Derived1();
+>d1 : Derived1
+>new Derived1() : Derived1
+>Derived1 : typeof Derived1
+
+// d1.x: number
+d1.x = 10;
+>d1.x = 10 : number
+>d1.x : number
+>d1 : Derived1
+>x : number
+>10 : number
+
+class Derived2<T = string> extends ClassDefault1<T> {
+>Derived2 : Derived2<T>
+>T : T
+>ClassDefault1 : ClassDefault1<T>
+>T : T
+}
+let d2a = new Derived2();
+>d2a : Derived2<string>
+>new Derived2() : Derived2<string>
+>Derived2 : typeof Derived2
+
+// d2a.x: string
+d2a.x = 'hello';
+>d2a.x = 'hello' : string
+>d2a.x : string
+>d2a : Derived2<string>
+>x : string
+>'hello' : string
+
+let d2b = new Derived2<number>();
+>d2b : Derived2<number>
+>new Derived2<number>() : Derived2<number>
+>Derived2 : typeof Derived2
+
+// d2b.x: number
+d2b.x = 43;
+>d2b.x = 43 : number
+>d2b.x : number
+>d2b : Derived2<number>
+>x : number
+>43 : number
+
+class ClassDefault2<T, U = string> {
+>ClassDefault2 : ClassDefault2<T, U>
+>T : T
+>U : U
+
+	t: T;
+>t : T
+>T : T
+
+	u: U;
+>u : U
+>U : U
+}
+class Derived3 extends ClassDefault2<string> {}
+>Derived3 : Derived3
+>ClassDefault2 : ClassDefault2<string, string>
+
+let d3 = new Derived3();
+>d3 : Derived3
+>new Derived3() : Derived3
+>Derived3 : typeof Derived3
+
+// d3.u: string
+d3.u = '';
+>d3.u = '' : string
+>d3.u : string
+>d3 : Derived3
+>u : string
+>'' : string
+
+
