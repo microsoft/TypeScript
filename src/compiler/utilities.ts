@@ -92,7 +92,7 @@ namespace ts {
             return false;
         }
 
-        for (let i = 0; i < array1.length; ++i) {
+        for (let i = 0; i < array1.length; i++) {
             const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
             if (!equals) {
                 return false;
@@ -1885,8 +1885,8 @@ namespace ts {
             writeTextOfNode,
             writeLiteral,
             writeLine,
-            increaseIndent: () => indent++,
-            decreaseIndent: () => indent--,
+            increaseIndent: () => { indent++; },
+            decreaseIndent: () => { indent--; },
             getIndent: () => indent,
             getTextPos: () => output.length,
             getLine: () => lineCount + 1,
