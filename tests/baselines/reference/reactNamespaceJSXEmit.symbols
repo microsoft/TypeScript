@@ -13,6 +13,7 @@ declare var x: any;
 >x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
 
 <foo data/>;
+>foo : Symbol(unknown)
 >data : Symbol(unknown)
 
 <Bar x={x} />;
@@ -21,6 +22,8 @@ declare var x: any;
 >x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
 
 <x-component />;
+>x-component : Symbol(unknown)
+
 <Bar {...x} />;
 >Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
 >x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))

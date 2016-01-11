@@ -8,5 +8,6 @@ declare module JSX {
 
 // OK, but implicit any
 <div n='x' />;
+>div : Symbol(unknown)
 >n : Symbol(unknown)
 
