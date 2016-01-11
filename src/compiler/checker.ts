@@ -5636,7 +5636,7 @@ namespace ts {
              * See signatureAssignableTo, compareSignaturesIdentical
              */
             function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
-                return compareSignaturesRelated(source, target, /*ignoreReturnTypes*/ false, reportErrors && reportError, isRelatedTo);
+                return compareSignaturesRelated(source, target, /*ignoreReturnTypes*/ false, reportErrors ? reportError : undefined, isRelatedTo);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
