@@ -1771,6 +1771,10 @@
         "category": "Error",
         "code": 2660
     },
+    "Cannot re-export name that is not defined in the module.": {
+        "category": "Error",
+        "code": 2661
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
