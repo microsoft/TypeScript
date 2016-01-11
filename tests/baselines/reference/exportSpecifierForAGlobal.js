@@ -14,6 +14,7 @@ export function f() {
 
 //// [b.js]
 "use strict";
+exports.X = X;
 function f() {
     var x;
     return x;

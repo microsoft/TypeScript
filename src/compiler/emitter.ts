@@ -3692,6 +3692,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                         emitExpressionIdentifier(name);
                         write(";");
                     }
+                    exportSpecifiers[name.text] = []; // write each export specifier only once
                 }
             }
 
@@ -6199,7 +6200,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
                 Debug.assert(modulekind !== ModuleKind.System);
 
                 if (modulekind !== ModuleKind.ES6) {
-                    if (node.moduleSpecifier && (!node.exportClause || resolver.isValueAliasDeclaration(node))) {
+                    if (!node.moduleSpecifier) {
+                        // export {x, y, z ... }
+                        // normally we emit export member assignments immediately after the declaration
+                        // however for re-exported global symbol declaration is not in this file 
+                        // so export needs to be written here 
+                        for (const element of node.exportClause.elements) {
+                            const elementName = element.propertyName || element.name;
+                            if (resolver.isReferenceToGlobalValueDeclaration(elementName)) {
+                                emitExportMemberAssignments(elementName);
+                            }
+                        }
+                    }
+                    else if (!node.exportClause || resolver.isValueAliasDeclaration(node)) {
                         emitStart(node);
                         const generatedName = getGeneratedNameForNode(node);
                         if (node.exportClause) {

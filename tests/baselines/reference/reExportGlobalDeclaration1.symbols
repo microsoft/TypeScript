@@ -1,0 +1,27 @@
+=== tests/cases/compiler/file1.d.ts ===
+
+declare var x: number;
+>x : Symbol(x, Decl(file1.d.ts, 1, 11))
+
+declare var x1: number;
+>x1 : Symbol(x1, Decl(file1.d.ts, 2, 11))
+
+=== tests/cases/compiler/file2.ts ===
+export {x, x as y};
+>x : Symbol(x, Decl(file2.ts, 0, 8))
+>x : Symbol(y, Decl(file2.ts, 0, 10))
+>y : Symbol(y, Decl(file2.ts, 0, 10))
+
+export {x1, x1 as y1};
+>x1 : Symbol(x1, Decl(file2.ts, 1, 8))
+>x1 : Symbol(y1, Decl(file2.ts, 1, 11))
+>y1 : Symbol(y1, Decl(file2.ts, 1, 11))
+
+export {x as z};
+>x : Symbol(z, Decl(file2.ts, 3, 8))
+>z : Symbol(z, Decl(file2.ts, 3, 8))
+
+export {x1 as z1};
+>x1 : Symbol(z1, Decl(file2.ts, 4, 8))
+>z1 : Symbol(z1, Decl(file2.ts, 4, 8))
+

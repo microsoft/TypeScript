@@ -15482,6 +15482,11 @@ namespace ts {
             return symbol && getExportSymbolOfValueSymbolIfExported(symbol).valueDeclaration;
         }
 
+        function isReferenceToGlobalValueDeclaration(reference: Identifier): boolean {
+            const symbol =  getNodeLinks(reference).resolvedSymbol || resolveName(reference, reference.text, SymbolFlags.Value | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined);
+            return symbol && isGlobalSourceFile(getSourceFileOfNode(symbol.declarations[0]));
+        }
+
         function createResolver(): EmitResolver {
             return {
                 getReferencedExportContainer,
@@ -15489,6 +15494,7 @@ namespace ts {
                 getReferencedNestedRedeclaration,
                 isNestedRedeclaration,
                 isValueAliasDeclaration,
+                isReferenceToGlobalValueDeclaration,
                 hasGlobalName,
                 isReferencedAliasDeclaration,
                 getNodeCheckFlags,
