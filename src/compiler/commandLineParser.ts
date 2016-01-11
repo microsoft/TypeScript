@@ -247,7 +247,12 @@ namespace ts {
             },
             description: Diagnostics.Specifies_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
             error: Diagnostics.Argument_for_moduleResolution_option_must_be_node_or_classic,
-        }
+        },
+        {
+            name: "forceConsistentCasingInFileNames",
+            type: "boolean",
+            description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
+        },
     ];
 
     /* @internal */

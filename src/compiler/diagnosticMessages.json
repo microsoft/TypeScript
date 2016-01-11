@@ -2290,7 +2290,10 @@
         "category": "Message",
         "code": 6072
     },
-
+    "Disallow inconsistently-cased references to the same file.": {
+        "category": "Message",
+        "code": 6073
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
