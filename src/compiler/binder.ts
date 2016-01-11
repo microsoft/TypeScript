@@ -888,7 +888,7 @@ namespace ts {
             }
         }
 
-        function bindFunctionOrConstructorTypeOrJSDocFunctionType(node: SignatureDeclaration): void {
+        function bindFunctionOrConstructorType(node: SignatureDeclaration): void {
             // For a given function symbol "<...>(...) => T" we want to generate a symbol identical
             // to the one we would get for: { <...>(...): T }
             //
@@ -1274,7 +1274,7 @@ namespace ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.JSDocFunctionType:
-                    return bindFunctionOrConstructorTypeOrJSDocFunctionType(<SignatureDeclaration>node);
+                    return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocRecordType:
                     return bindAnonymousDeclaration(<TypeLiteralNode>node, SymbolFlags.TypeLiteral, "__type");
@@ -1288,8 +1288,6 @@ namespace ts {
 
                 case SyntaxKind.CallExpression:
                     if (isInJavaScriptFile(node)) {
-                        // We're only inspecting call expressions to detect CommonJS modules, so we can skip
-                        // this check if we've already seen the module indicator
                         bindCallExpression(<CallExpression>node);
                     }
                     break;

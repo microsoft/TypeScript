@@ -3924,7 +3924,7 @@ namespace ts {
             return result;
         }
 
-        function isOptionalParameter(node: ParameterDeclaration, skipSignatureCheck?: boolean) {
+        function isOptionalParameter(node: ParameterDeclaration) {
             if (node.parserContextFlags & ParserContextFlags.JavaScriptFile) {
                 if (node.type && node.type.kind === SyntaxKind.JSDocOptionalType) {
                     return true;
@@ -3947,10 +3947,6 @@ namespace ts {
             }
 
             if (node.initializer) {
-                if (skipSignatureCheck) {
-                    return true;
-                }
-
                 const signatureDeclaration = <SignatureDeclaration>node.parent;
                 const signature = getSignatureFromDeclaration(signatureDeclaration);
                 const parameterIndex = ts.indexOf(signatureDeclaration.parameters, node);
