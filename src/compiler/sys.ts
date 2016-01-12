@@ -329,8 +329,8 @@ namespace ts {
                     }
 
                     const watcher: DirectoryWatcher = _fs.watch(
-                        dirPath, 
-                        { persistent: true }, 
+                        dirPath,
+                        { persistent: true },
                         (eventName: string, relativeFileName: string) => fileEventHandler(eventName, relativeFileName, dirPath)
                     );
                     watcher.referenceCount = 1;
