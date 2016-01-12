@@ -2658,7 +2658,7 @@ namespace ts {
         directoryExists(path: string): boolean;
         // The writeFile function creates a new file, writes the specified string to the file,
         // and then closes the file. If the target file already exists, it is overwritten.
-        writeFile(path: string, data: string): void;
+        writeFile?(path: string, data: string): void;
     }
 
     export interface ModuleResolutionHost {
