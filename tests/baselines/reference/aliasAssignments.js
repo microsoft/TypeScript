@@ -19,7 +19,7 @@ var someClass = (function () {
     function someClass() {
     }
     return someClass;
-})();
+}());
 exports.someClass = someClass;
 //// [aliasAssignments_1.js]
 "use strict";

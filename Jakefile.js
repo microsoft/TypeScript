@@ -108,17 +108,6 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
-var scriptSources = [
-    "tslint/booleanTriviaRule.ts",
-    "tslint/nextLineRule.ts",
-    "tslint/noNullRule.ts",
-    "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts",
-    "tslint/noInOperatorRule.ts"
-].map(function (f) {
-    return path.join(scriptsDirectory, f);
-});
-
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -544,7 +533,8 @@ compileFile(word2mdJs,
 // The generated spec.md; built for the 'generate-spec' task
 file(specMd, [word2mdJs, specWord], function () {
     var specWordFullPath = path.resolve(specWord);
-    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + specMd;
+    var specMDFullPath = path.resolve(specMd);
+    var cmd = "cscript //nologo " + word2mdJs + ' "' + specWordFullPath + '" ' + '"' + specMDFullPath + '"';
     console.log(cmd);
     child_process.exec(cmd, function () {
         complete();
@@ -877,7 +867,8 @@ var tslintRules = ([
     "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
-    "noInOperatorRule"
+    "noInOperatorRule",
+    "noIncrementDecrementRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -920,10 +911,20 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
+var servicesLintTargets = [
+    "navigateTo.ts",
+    "outliningElementsCollector.ts",
+    "patternMatcher.ts",
+    "services.ts",
+    "shims.ts",
+].map(function (s) {
+    return path.join(servicesDirectory, s);
+});
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
-    .concat(scriptSources);
+    .concat(tslintRulesFiles)
+    .concat(servicesLintTargets);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

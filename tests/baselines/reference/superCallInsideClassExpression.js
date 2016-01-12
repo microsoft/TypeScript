@@ -26,12 +26,12 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
@@ -41,7 +41,7 @@ var B = (function (_super) {
                 _super.call(this);
             }
             return class_1;
-        })(C);
+        }(C));
     }
     return B;
-})(A);
+}(A));

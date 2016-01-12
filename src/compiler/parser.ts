@@ -771,10 +771,6 @@ namespace ts {
             return doInsideOfContext(ParserContextFlags.Yield, func);
         }
 
-        function doOutsideOfYieldContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Yield, func);
-        }
-
         function doInDecoratorContext<T>(func: () => T): T {
             return doInsideOfContext(ParserContextFlags.Decorator, func);
         }
@@ -789,10 +785,6 @@ namespace ts {
 
         function doInYieldAndAwaitContext<T>(func: () => T): T {
             return doInsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
-        }
-
-        function doOutsideOfYieldAndAwaitContext<T>(func: () => T): T {
-            return doOutsideOfContext(ParserContextFlags.Yield | ParserContextFlags.Await, func);
         }
 
         function inContext(flags: ParserContextFlags) {
@@ -849,10 +841,6 @@ namespace ts {
 
         function nextToken(): SyntaxKind {
             return token = scanner.scan();
-        }
-
-        function getTokenPos(pos: number): number {
-            return skipTrivia(sourceText, pos);
         }
 
         function reScanGreaterToken(): SyntaxKind {
@@ -1963,11 +1951,7 @@ namespace ts {
         function parseTypeReferenceOrTypePredicate(): TypeReferenceNode | TypePredicateNode {
             const typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
             if (typeName.kind === SyntaxKind.Identifier && token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
-                nextToken();
-                const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typeName.pos);
-                node.parameterName = <Identifier>typeName;
-                node.type = parseType();
-                return finishNode(node);
+                return parseTypePredicate(typeName as Identifier);
             }
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
             node.typeName = typeName;
@@ -1977,8 +1961,16 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseThisTypeNode(): TypeNode {
-            const node = <TypeNode>createNode(SyntaxKind.ThisType);
+        function parseTypePredicate(lhs: Identifier | ThisTypeNode): TypePredicateNode {
+            nextToken();
+            const node = createNode(SyntaxKind.TypePredicate, lhs.pos) as TypePredicateNode;
+            node.parameterName = lhs;
+            node.type = parseType();
+            return finishNode(node);
+        }
+
+        function parseThisTypeNode(): ThisTypeNode {
+            const node = createNode(SyntaxKind.ThisType) as ThisTypeNode;
             nextToken();
             return finishNode(node);
         }
@@ -2424,8 +2416,15 @@ namespace ts {
                     return parseStringLiteralTypeNode();
                 case SyntaxKind.VoidKeyword:
                     return parseTokenNode<TypeNode>();
-                case SyntaxKind.ThisKeyword:
-                    return parseThisTypeNode();
+                case SyntaxKind.ThisKeyword: {
+                    const thisKeyword = parseThisTypeNode();
+                    if (token === SyntaxKind.IsKeyword && !scanner.hasPrecedingLineBreak()) {
+                        return parseTypePredicate(thisKeyword);
+                    }
+                    else {
+                        return thisKeyword;
+                    }
+                }
                 case SyntaxKind.TypeOfKeyword:
                     return parseTypeQuery();
                 case SyntaxKind.OpenBraceToken:
@@ -2631,10 +2630,6 @@ namespace ts {
                 token !== SyntaxKind.ClassKeyword &&
                 token !== SyntaxKind.AtToken &&
                 isStartOfExpression();
-        }
-
-        function allowInAndParseExpression(): Expression {
-            return allowInAnd(parseExpression);
         }
 
         function parseExpression(): Expression {
@@ -3502,6 +3497,20 @@ namespace ts {
             return finishNode(node);
         }
 
+        function tagNamesAreEquivalent(lhs: EntityName, rhs: EntityName): boolean {
+            if (lhs.kind !== rhs.kind) {
+                return false;
+            }
+
+            if (lhs.kind === SyntaxKind.Identifier) {
+                return (<Identifier>lhs).text === (<Identifier>rhs).text;
+            }
+
+            return (<QualifiedName>lhs).right.text === (<QualifiedName>rhs).right.text &&
+                tagNamesAreEquivalent((<QualifiedName>lhs).left, (<QualifiedName>rhs).left);
+        }
+
+
         function parseJsxElementOrSelfClosingElement(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement {
             const opening = parseJsxOpeningOrSelfClosingElement(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement;
@@ -3511,6 +3520,11 @@ namespace ts {
 
                 node.children = parseJsxChildren(node.openingElement.tagName);
                 node.closingElement = parseJsxClosingElement(inExpressionContext);
+
+                if (!tagNamesAreEquivalent(node.openingElement.tagName, node.closingElement.tagName)) {
+                    parseErrorAtPosition(node.closingElement.pos, node.closingElement.end - node.closingElement.pos, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, node.openingElement.tagName));
+                }
+
                 result = finishNode(node);
             }
             else {
@@ -3570,10 +3584,13 @@ namespace ts {
             while (true) {
                 token = scanner.reScanJsxToken();
                 if (token === SyntaxKind.LessThanSlashToken) {
+                    // Closing tag
                     break;
                 }
                 else if (token === SyntaxKind.EndOfFileToken) {
-                    parseErrorAtCurrentToken(Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                    // If we hit EOF, issue the error at the tag that lacks the closing element
+                    // rather than at the end of the file (which is useless)
+                    parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
                     break;
                 }
                 result.push(parseJsxChild());
@@ -3639,7 +3656,7 @@ namespace ts {
 
             parseExpected(SyntaxKind.OpenBraceToken);
             if (token !== SyntaxKind.CloseBraceToken) {
-                node.expression = parseExpression();
+                node.expression = parseAssignmentExpressionOrHigher();
             }
             if (inExpressionContext) {
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -3951,7 +3968,6 @@ namespace ts {
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             const tokenIsIdentifier = isIdentifier();
-            const nameToken = token;
             const propertyName = parsePropertyName();
 
             // Disallowing of optional property assignments happens in the grammar checker.
@@ -3981,6 +3997,7 @@ namespace ts {
             }
             else {
                 const propertyAssignment = <PropertyAssignment>createNode(SyntaxKind.PropertyAssignment, fullStart);
+                propertyAssignment.modifiers = modifiers;
                 propertyAssignment.name = propertyName;
                 propertyAssignment.questionToken = questionToken;
                 parseExpected(SyntaxKind.ColonToken);
@@ -5092,10 +5109,6 @@ namespace ts {
             return undefined;
         }
 
-        function parseHeritageClausesWorker() {
-            return parseList(ParsingContext.HeritageClauses, parseHeritageClause);
-        }
-
         function parseHeritageClause() {
             if (token === SyntaxKind.ExtendsKeyword || token === SyntaxKind.ImplementsKeyword) {
                 const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
@@ -5239,12 +5252,6 @@ namespace ts {
 
         function nextTokenIsSlash() {
             return nextToken() === SyntaxKind.SlashToken;
-        }
-
-        function nextTokenIsCommaOrFromKeyword() {
-            nextToken();
-            return token === SyntaxKind.CommaToken ||
-                token === SyntaxKind.FromKeyword;
         }
 
         function parseImportDeclarationOrImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: ModifiersArray): ImportEqualsDeclaration | ImportDeclaration {
@@ -5737,13 +5744,6 @@ namespace ts {
                 const parameter = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
                 parameter.type = parseJSDocType();
                 return finishNode(parameter);
-            }
-
-            function parseJSDocOptionalType(type: JSDocType): JSDocOptionalType {
-                const result = <JSDocOptionalType>createNode(SyntaxKind.JSDocOptionalType, type.pos);
-                nextToken();
-                result.type = type;
-                return finishNode(result);
             }
 
             function parseJSDocTypeReference(): JSDocTypeReference {

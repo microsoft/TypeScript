@@ -18,5 +18,5 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 //# sourceMappingURL=a.js.map

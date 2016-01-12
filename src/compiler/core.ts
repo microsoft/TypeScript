@@ -244,9 +244,11 @@ namespace ts {
             const count = array.length;
             if (count > 0) {
                 let pos = 0;
-                let result = arguments.length <= 2 ? array[pos++] : initial;
+                let result = arguments.length <= 2 ? array[pos] : initial;
+                pos++;
                 while (pos < count) {
-                    result = f(<U>result, array[pos++]);
+                    result = f(<U>result, array[pos]);
+                    pos++;
                 }
                 return <U>result;
             }
@@ -260,9 +262,11 @@ namespace ts {
         if (array) {
             let pos = array.length - 1;
             if (pos >= 0) {
-                let result = arguments.length <= 2 ? array[pos--] : initial;
+                let result = arguments.length <= 2 ? array[pos] : initial;
+                pos--;
                 while (pos >= 0) {
-                    result = f(<U>result, array[pos--]);
+                    result = f(<U>result, array[pos]);
+                    pos--;
                 }
                 return <U>result;
             }
@@ -793,23 +797,6 @@ namespace ts {
         }
         return path;
     }
-
-    const backslashOrDoubleQuote = /[\"\\]/g;
-    const escapedCharsRegExp = /[\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    const escapedCharsMap: Map<string> = {
-        "\0": "\\0",
-        "\t": "\\t",
-        "\v": "\\v",
-        "\f": "\\f",
-        "\b": "\\b",
-        "\r": "\\r",
-        "\n": "\\n",
-        "\\": "\\\\",
-        "\"": "\\\"",
-        "\u2028": "\\u2028", // lineSeparator
-        "\u2029": "\\u2029", // paragraphSeparator
-        "\u0085": "\\u0085"  // nextLine
-    };
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;

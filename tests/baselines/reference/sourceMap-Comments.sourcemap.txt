@@ -332,7 +332,7 @@ sourceFile:sourceMap-Comments.ts
 1->Emitted(22, 13) Source(17, 5) + SourceIndex(0)
 2 >Emitted(22, 24) Source(17, 6) + SourceIndex(0)
 ---
->>>        })();
+>>>        }());
 1 >^^^^^^^^
 2 >        ^
 3 >         

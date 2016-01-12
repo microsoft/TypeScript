@@ -128,14 +128,14 @@ var A = (function () {
         this.p2 = 0;
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
         this.p1 = 0;
         this.p2 = 0;
     }
     return B;
-})();
+}());
 var C = (function () {
     function C(p1, p2, p3) {
         if (p1 === void 0) { p1 = 0; }
@@ -145,7 +145,7 @@ var C = (function () {
         this.p2 = p2;
     }
     return C;
-})();
+}());
 //
 // test requirements for super calls
 //
@@ -153,7 +153,7 @@ var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
@@ -161,13 +161,13 @@ var E = (function (_super) {
         this.p1 = 0;
     }
     return E;
-})(D);
+}(D));
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
     } // ERROR - super call required
     return F;
-})(E);
+}(E));
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
@@ -175,20 +175,20 @@ var G = (function (_super) {
         this.p1 = 0;
     } // NO ERROR
     return G;
-})(D);
+}(D));
 var H = (function () {
     function H() {
         _super.call(this);
     } // ERROR - no super call allowed
     return H;
-})();
+}());
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
         _super.call(this);
     } // ERROR - no super call allowed
     return I;
-})(Object);
+}(Object));
 var J = (function (_super) {
     __extends(J, _super);
     function J(p1) {
@@ -196,7 +196,7 @@ var J = (function (_super) {
         this.p1 = p1;
     }
     return J;
-})(G);
+}(G));
 var K = (function (_super) {
     __extends(K, _super);
     function K(p1) {
@@ -205,7 +205,7 @@ var K = (function (_super) {
         _super.call(this);
     }
     return K;
-})(G);
+}(G));
 var L = (function (_super) {
     __extends(L, _super);
     function L(p1) {
@@ -213,7 +213,7 @@ var L = (function (_super) {
         this.p1 = p1;
     }
     return L;
-})(G);
+}(G));
 var M = (function (_super) {
     __extends(M, _super);
     function M(p1) {
@@ -222,7 +222,7 @@ var M = (function (_super) {
         _super.call(this);
     }
     return M;
-})(G);
+}(G));
 //
 // test this reference in field initializers
 //
@@ -233,7 +233,7 @@ var N = (function () {
         this.p2 = 0;
     }
     return N;
-})();
+}());
 //
 // test error on property declarations within class constructors
 //
@@ -242,22 +242,22 @@ var O = (function () {
         this.p1 = 0; // ERROR
     }
     return O;
-})();
+}());
 var P = (function () {
     function P() {
         this.p1 = 0; // ERROR
     }
     return P;
-})();
+}());
 var Q = (function () {
     function Q() {
         this.p1 = 0; // ERROR
     }
     return Q;
-})();
+}());
 var R = (function () {
     function R() {
         this.p1 = 0; // ERROR
     }
     return R;
-})();
+}());

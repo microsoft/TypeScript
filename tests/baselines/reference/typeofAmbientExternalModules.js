@@ -24,7 +24,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 exports.C = C;
 //// [typeofAmbientExternalModules_1.js]
 "use strict";
@@ -32,7 +32,7 @@ var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 module.exports = D;
 //// [typeofAmbientExternalModules_2.js]
 "use strict";

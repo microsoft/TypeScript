@@ -43,7 +43,7 @@ var sas;
                 }
             };
             return Test;
-        })();
+        }());
         tools.Test = Test;
     })(tools = sas.tools || (sas.tools = {}));
 })(sas || (sas = {}));

@@ -25,11 +25,11 @@ var C = (function (_super) {
         return Object.create(null);
     }
     return C;
-})(null);
+}(null));
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
         return Object.create(null);
     }
     return D;
-})(null);
+}(null));

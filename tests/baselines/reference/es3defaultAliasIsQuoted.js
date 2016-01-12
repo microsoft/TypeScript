@@ -21,7 +21,7 @@ var Foo = (function () {
     }
     Foo.CONSTANT = "Foo";
     return Foo;
-})();
+}());
 exports.Foo = Foo;
 function assert(value) {
     if (!value)

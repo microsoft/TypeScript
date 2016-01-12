@@ -26,7 +26,7 @@ define(["require", "exports"], function (require, exports) {
         function Collection() {
         }
         return Collection;
-    })();
+    }());
     exports.Collection = Collection;
     var List = (function (_super) {
         __extends(List, _super);
@@ -35,13 +35,13 @@ define(["require", "exports"], function (require, exports) {
         }
         List.prototype.Bar = function () { };
         return List;
-    })(Collection);
+    }(Collection));
     exports.List = List;
     var CollectionItem = (function () {
         function CollectionItem() {
         }
         return CollectionItem;
-    })();
+    }());
     exports.CollectionItem = CollectionItem;
     var ListItem = (function (_super) {
         __extends(ListItem, _super);
@@ -49,6 +49,6 @@ define(["require", "exports"], function (require, exports) {
             _super.apply(this, arguments);
         }
         return ListItem;
-    })(CollectionItem);
+    }(CollectionItem));
     exports.ListItem = ListItem;
 });

@@ -59,7 +59,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c2;
 var i2;
 var M;
@@ -69,7 +69,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var E;
@@ -84,6 +84,6 @@ var foo;
         function C() {
         }
         return C;
-    })();
+    }());
     foo.C = C;
 })(foo || (foo = {}));

@@ -38,7 +38,7 @@ var X;
                     _super.apply(this, arguments);
                 }
                 return W;
-            })(A.B.Base.W);
+            }(A.B.Base.W));
             base.W = W;
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
@@ -57,7 +57,7 @@ var X;
                         _super.apply(this, arguments);
                     }
                     return W;
-                })(X.Y.base.W);
+                }(X.Y.base.W));
                 Z.W = W;
             })(Z = base.Z || (base.Z = {}));
         })(base = Y.base || (Y.base = {}));

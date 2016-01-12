@@ -29,7 +29,7 @@ var C = (function (_super) {
         _super.apply(this, arguments);
     }
     return C;
-})(module_2.c2.C);
+}(module_2.c2.C));
 var x = new module_1.c();
 var y = ns.value;
 var module_3 = require("module");

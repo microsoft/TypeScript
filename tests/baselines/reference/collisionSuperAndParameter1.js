@@ -19,7 +19,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var Foo2 = (function (_super) {
     __extends(Foo2, _super);
     function Foo2() {
@@ -30,4 +30,4 @@ var Foo2 = (function (_super) {
         };
     };
     return Foo2;
-})(Foo);
+}(Foo));

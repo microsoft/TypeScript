@@ -15,7 +15,7 @@ var C = (function () {
         return this.x;
     };
     return C;
-})();
+}());
 
 
 //// [declFileForTypeParameters.d.ts]

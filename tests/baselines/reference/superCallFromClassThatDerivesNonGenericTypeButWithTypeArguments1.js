@@ -21,11 +21,11 @@ var A = (function () {
         this.map = map;
     }
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.call(this, function (value) { return String(value); });
     }
     return B;
-})(A);
+}(A));

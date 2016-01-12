@@ -110,7 +110,7 @@ function foo1<a>(value: void|a): void {
 >a : a
 
     if (isVoid(value)) {
->isVoid(value) : boolean
+>isVoid(value) : value is void
 >isVoid : <a>(value: void | a) => value is void
 >value : void | a
 
@@ -130,7 +130,7 @@ function baz1<a>(value: void|a): void {
 >a : a
 
       if (isNonVoid(value)) {
->isNonVoid(value) : boolean
+>isNonVoid(value) : value is a
 >isNonVoid : <a>(value: void | a) => value is a
 >value : void | a
 

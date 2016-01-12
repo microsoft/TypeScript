@@ -54,12 +54,12 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 function F(x) { return 42; }
 var M;
 (function (M) {
@@ -67,7 +67,7 @@ var M;
         function A() {
         }
         return A;
-    })();
+    }());
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;

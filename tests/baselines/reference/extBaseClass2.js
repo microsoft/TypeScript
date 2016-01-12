@@ -24,7 +24,7 @@ var N;
             _super.apply(this, arguments);
         }
         return C4;
-    })(M.B);
+    }(M.B));
     N.C4 = C4;
 })(N || (N = {}));
 var M;
@@ -35,6 +35,6 @@ var M;
             _super.apply(this, arguments);
         }
         return C5;
-    })(B);
+    }(B));
     M.C5 = C5;
 })(M || (M = {}));

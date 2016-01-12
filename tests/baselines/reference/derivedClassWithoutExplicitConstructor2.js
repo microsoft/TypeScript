@@ -45,7 +45,7 @@ var Base = (function () {
         this.a = x;
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -54,7 +54,7 @@ var Derived = (function (_super) {
         this.y = 'hello';
     }
     return Derived;
-})(Base);
+}(Base));
 var r = new Derived(); // error
 var r2 = new Derived(1);
 var r3 = new Derived(1, 2);
@@ -64,7 +64,7 @@ var Base2 = (function () {
         this.a = x;
     }
     return Base2;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
@@ -73,7 +73,7 @@ var D = (function (_super) {
         this.y = null;
     }
     return D;
-})(Base2);
+}(Base2));
 var d = new D(); // error
 var d2 = new D(new Date()); // ok
 var d3 = new D(new Date(), new Date());

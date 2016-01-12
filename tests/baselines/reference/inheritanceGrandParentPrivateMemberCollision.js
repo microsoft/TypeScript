@@ -21,14 +21,14 @@ var A = (function () {
     }
     A.prototype.myMethod = function () { };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
         _super.apply(this, arguments);
     }
     return B;
-})(A);
+}(A));
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
@@ -36,4 +36,4 @@ var C = (function (_super) {
     }
     C.prototype.myMethod = function () { };
     return C;
-})(B);
+}(B));

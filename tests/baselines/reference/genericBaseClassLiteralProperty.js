@@ -22,7 +22,7 @@ var BaseClass = (function () {
     function BaseClass() {
     }
     return BaseClass;
-})();
+}());
 var SubClass = (function (_super) {
     __extends(SubClass, _super);
     function SubClass() {
@@ -33,4 +33,4 @@ var SubClass = (function (_super) {
         var y = this._getValue2();
     };
     return SubClass;
-})(BaseClass);
+}(BaseClass));

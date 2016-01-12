@@ -16,7 +16,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var Foo;
 (function (Foo) {
     var A = 1;
@@ -26,5 +26,5 @@ var Foo;
             _super.apply(this, arguments);
         }
         return B;
-    })(A);
+    }(A));
 })(Foo || (Foo = {}));

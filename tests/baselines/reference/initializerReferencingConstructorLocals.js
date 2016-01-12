@@ -31,7 +31,7 @@ var C = (function () {
         z = 1;
     }
     return C;
-})();
+}());
 var D = (function () {
     function D(x) {
         this.a = z; // error
@@ -40,4 +40,4 @@ var D = (function () {
         z = 1;
     }
     return D;
-})();
+}());

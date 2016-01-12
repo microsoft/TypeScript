@@ -32,14 +32,14 @@ var C = (function () {
         this.a = x; // error
     }
     return C;
-})();
+}());
 var D = (function () {
     function D(x) {
         this.x = x;
         this.a = x; // error
     }
     return D;
-})();
+}());
 var E = (function () {
     function E(x) {
         this.x = x;
@@ -47,7 +47,7 @@ var E = (function () {
         this.b = this.x; // error
     }
     return E;
-})();
+}());
 var F = (function () {
     function F(x) {
         this.x = x;
@@ -55,4 +55,4 @@ var F = (function () {
         this.b = x; // error
     }
     return F;
-})();
+}());

@@ -45,7 +45,7 @@ define(["require", "exports"], function (require, exports) {
             this.errorMessageRegEx = errorMessageRegEx;
         }
         return TestCase;
-    })();
+    }());
     exports.TestCase = TestCase;
     var TestRunner = (function () {
         function TestRunner() {
@@ -56,7 +56,7 @@ define(["require", "exports"], function (require, exports) {
         TestRunner.prototype.addTest = function (test) {
         };
         return TestRunner;
-    })();
+    }());
     exports.TestRunner = TestRunner;
     exports.tests = (function () {
         var testRunner = new TestRunner();

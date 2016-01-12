@@ -940,7 +940,7 @@ var TypeScript;
                 this.asts[this.top - 0].isStatementBlock === false;
         };
         return AstPath;
-    })();
+    }());
     TypeScript.AstPath = AstPath;
     function isValidAstNode(ast) {
         if (ast === null)
@@ -955,7 +955,7 @@ var TypeScript;
             this.path = new TypeScript.AstPath();
         }
         return AstPathContext;
-    })();
+    }());
     TypeScript.AstPathContext = AstPathContext;
     (function (GetAstPathOptions) {
         GetAstPathOptions[GetAstPathOptions["Default"] = 0] = "Default";

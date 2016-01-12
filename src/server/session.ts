@@ -129,9 +129,6 @@ namespace ts.server {
 
     export class Session {
         protected projectService: ProjectService;
-        private pendingOperation = false;
-        private fileHash: ts.Map<number> = {};
-        private nextFileId = 1;
         private errorTimer: any; /*NodeJS.Timer | number*/
         private immediateId: any;
         private changeSeq = 0;
@@ -239,11 +236,6 @@ namespace ts.server {
             }
         }
 
-        private errorCheck(file: string, project: Project) {
-            this.syntacticCheck(file, project);
-            this.semanticCheck(file, project);
-        }
-
         private reloadProjects() {
             this.projectService.reloadProjects();
         }
@@ -271,7 +263,8 @@ namespace ts.server {
             let index = 0;
             const checkOne = () => {
                 if (matchSeq(seq)) {
-                    const checkSpec = checkList[index++];
+                    const checkSpec = checkList[index];
+                    index++;
                     if (checkSpec.project.getSourceFileFromName(checkSpec.fileName, requireOpen)) {
                         this.syntacticCheck(checkSpec.fileName, checkSpec.project);
                         this.immediateId = setImmediate(() => {
@@ -901,7 +894,7 @@ namespace ts.server {
         }
 
         getDiagnosticsForProject(delay: number, fileName: string) {
-            const { configFileName, fileNames } = this.getProjectInfo(fileName, /*needFileNameList*/ true);
+            const { fileNames } = this.getProjectInfo(fileName, /*needFileNameList*/ true);
             // No need to analyze lib.d.ts
             let fileNamesInProject = fileNames.filter((value, index, array) => value.indexOf("lib.d.ts") < 0);
 

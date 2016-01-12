@@ -21,7 +21,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 
 
 //// [computedPropertyNamesDeclarationEmit1_ES5.d.ts]

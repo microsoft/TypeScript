@@ -14,9 +14,9 @@ var C = (function () {
     function C() {
     } // error
     return C;
-})();
+}());
 var D = (function () {
     function D(x) {
     } // error
     return D;
-})();
+}());

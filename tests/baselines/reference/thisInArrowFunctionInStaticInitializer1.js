@@ -19,4 +19,4 @@ var Vector = (function () {
         log(_this);
     };
     return Vector;
-})();
+}());

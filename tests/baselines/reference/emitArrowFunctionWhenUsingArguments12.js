@@ -14,4 +14,4 @@ var C = (function () {
         var a = function () { return arguments; };
     };
     return C;
-})();
+}());

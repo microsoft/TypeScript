@@ -111,7 +111,7 @@ var Base = (function () {
     function Base(n) {
     }
     return Base;
-})();
+}());
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
@@ -119,7 +119,7 @@ var Derived = (function (_super) {
         _super.call(this, function () { return _this; });
     }
     return Derived;
-})(Base);
+}(Base));
 // Arrow function as function argument
 window.setTimeout(function () { return null; }, 100);
 // Arrow function as value in array literal
@@ -151,7 +151,7 @@ var M2;
         function Base(n) {
         }
         return Base;
-    })();
+    }());
     var Derived = (function (_super) {
         __extends(Derived, _super);
         function Derived() {
@@ -159,7 +159,7 @@ var M2;
             _super.call(this, function () { return _this; });
         }
         return Derived;
-    })(Base);
+    }(Base));
     // Arrow function as function argument
     window.setTimeout(function () { return null; }, 100);
     // Arrow function as value in array literal
