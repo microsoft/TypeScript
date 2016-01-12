@@ -1475,6 +1475,8 @@ namespace ts {
         type: JSDocType;
     }
 
+    export type JSDocTypeReferencingNode = JSDocThisType | JSDocConstructorType | JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
+
     // @kind(SyntaxKind.JSDocRecordMember)
     export interface JSDocRecordMember extends PropertySignature {
         name: Identifier | LiteralExpression;

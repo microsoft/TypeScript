@@ -4727,49 +4727,11 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getTypeFromJSDocFunctionType(node: JSDocFunctionType): Type {
-            Debug.assert(!!node.symbol);
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
-            }
-            return links.resolvedType;
-        }
-
-        function getTypeFromJSDocRecordType(node: JSDocRecordType): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                links.resolvedType = createObjectType(TypeFlags.Anonymous, node.symbol);
-            }
-            return links.resolvedType;
-        }
-
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const type = getTypeFromTypeNode(node.type);
                 links.resolvedType = type ? createArrayType(type) : unknownType;
-            }
-            return links.resolvedType;
-        }
-
-        function getTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
-            return getTypeFromTypeReference(node);
-        }
-
-        function getTypeFromJSDocArrayType(node: JSDocArrayType): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
-            }
-            return links.resolvedType;
-        }
-
-        function getTypeFromJSDocUnionType(node: JSDocUnionType): Type {
-            const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                const types = map(node.types, getTypeFromTypeNode);
-                links.resolvedType = getUnionType(types, /*noSubtypeReduction*/ true);
             }
             return links.resolvedType;
         }
@@ -4826,6 +4788,8 @@ namespace ts {
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
                     return anyType;
                 case SyntaxKind.StringKeyword:
                     return stringType;
@@ -4842,6 +4806,7 @@ namespace ts {
                 case SyntaxKind.StringLiteralType:
                     return getTypeFromStringLiteralTypeNode(<StringLiteralTypeNode>node);
                 case SyntaxKind.TypeReference:
+                case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
                 case SyntaxKind.TypePredicate:
                     return getTypeFromPredicateTypeNode(<TypePredicateNode>node);
@@ -4850,18 +4815,27 @@ namespace ts {
                 case SyntaxKind.TypeQuery:
                     return getTypeFromTypeQueryNode(<TypeQueryNode>node);
                 case SyntaxKind.ArrayType:
+                case SyntaxKind.JSDocArrayType:
                     return getTypeFromArrayTypeNode(<ArrayTypeNode>node);
                 case SyntaxKind.TupleType:
                     return getTypeFromTupleTypeNode(<TupleTypeNode>node);
                 case SyntaxKind.UnionType:
+                case SyntaxKind.JSDocUnionType:
                     return getTypeFromUnionTypeNode(<UnionTypeNode>node);
                 case SyntaxKind.IntersectionType:
                     return getTypeFromIntersectionTypeNode(<IntersectionTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
-                    return getTypeFromTypeNode((<ParenthesizedTypeNode>node).type);
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocConstructorType:
+                case SyntaxKind.JSDocThisType:
+                case SyntaxKind.JSDocOptionalType:
+                    return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode>node).type);
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.TypeLiteral:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocRecordType:
                     return getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
@@ -4869,34 +4843,10 @@ namespace ts {
                 case SyntaxKind.QualifiedName:
                     const symbol = getSymbolAtLocation(node);
                     return symbol && getDeclaredTypeOfSymbol(symbol);
-                case SyntaxKind.JSDocAllType:
-                    return anyType;
-                case SyntaxKind.JSDocUnknownType:
-                    return unknownType;
-                case SyntaxKind.JSDocArrayType:
-                    return getTypeFromJSDocArrayType(<JSDocArrayType>node);
                 case SyntaxKind.JSDocTupleType:
                     return getTypeFromJSDocTupleType(<JSDocTupleType>node);
-                case SyntaxKind.JSDocUnionType:
-                    return getTypeFromJSDocUnionType(<JSDocUnionType>node);
-                case SyntaxKind.JSDocNullableType:
-                    return getTypeFromTypeNode((<JSDocNullableType>node).type);
-                case SyntaxKind.JSDocNonNullableType:
-                    return getTypeFromTypeNode((<JSDocNonNullableType>node).type);
-                case SyntaxKind.JSDocTypeReference:
-                    return getTypeFromJSDocTypeReference(<JSDocTypeReference>node);
-                case SyntaxKind.JSDocOptionalType:
-                    return getTypeFromTypeNode((<JSDocOptionalType>node).type);
-                case SyntaxKind.JSDocFunctionType:
-                    return getTypeFromJSDocFunctionType(<JSDocFunctionType>node);
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(<JSDocVariadicType>node);
-                case SyntaxKind.JSDocConstructorType:
-                    return getTypeFromTypeNode((<JSDocConstructorType>node).type);
-                case SyntaxKind.JSDocRecordType:
-                    return getTypeFromJSDocRecordType(<JSDocRecordType>node);
-                case SyntaxKind.JSDocThisType:
-                    return getTypeFromTypeNode((<JSDocThisType>node).type);
                 default:
                     return unknownType;
             }
