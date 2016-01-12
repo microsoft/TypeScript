@@ -16,7 +16,11 @@ namespace ts.server {
     }
 
     const lineCollectionCapacity = 4;
-    const globalCachePath = ts.combinePaths(process.env.HOME, ".typingCache");
+    const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
+    const globalCachePath = toPath(
+        ".typingCache",
+        process.env[(process.platform === "win32") ? "USERPROFILE" : "HOME"],
+        getCanonicalFileName);
 
     function mergeFormatOptions(formatCodeOptions: FormatCodeOptions, formatOptions: protocol.FormatOptions): void {
         const hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -783,6 +787,10 @@ namespace ts.server {
                     this.openFileRoots = openFileRoots;
                     this.openFileRoots.push(info);
                 }
+
+                if (fileExtensionIs(info.fileName, ".js") || fileExtensionIs(info.fileName, ".jsx")) {
+                    this.acquireTypingForJs(info.defaultProject);
+                }
             }
             this.updateConfiguredProjectList();
         }
@@ -1046,11 +1054,23 @@ namespace ts.server {
         acquireTypingForJs(project: Project) {
             if (!project) { return; }
 
+            let tsd: any;
+            try {
+                tsd = require("tsd");
+            }
+            catch(e) {
+                this.log("Error requiring the tsd module");
+                return;
+            }
+
             const cachePath = project.isConfiguredProject()
-                ? ts.getDirectoryPath(project.projectFilename)
+                ? toPath(getDirectoryPath(project.projectFilename), project.projectFilename, getCanonicalFileName)
                 : globalCachePath;
 
-            const typingOptions = project.projectOptions ? project.projectOptions.typingOptions : undefined;
+            // For inferred project, we always enable the auto typing discover feature, therefore the typingOptions
+            // has a default value
+            const typingOptions: TypingOptions = 
+                project.projectOptions ? project.projectOptions.typingOptions : { enableAutoDiscovery: true };
             const compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
 
             const { cachedTypingPaths, newTypingNames } = ts.JsTyping.discoverTypings(
@@ -1070,7 +1090,6 @@ namespace ts.server {
             if (!sys.directoryExists(cachePath)) {
                 sys.createDirectory(cachePath);
             }
-            const tsd = require("tsd");
             const tsdJsonPath = ts.combinePaths(cachePath, "tsd.json");
             const typingsPath = ts.combinePaths(cachePath, "typings");
             const api = tsd.getAPI(tsdJsonPath);
@@ -1106,6 +1125,9 @@ namespace ts.server {
                         const keys = Object.keys(installResult.written.dict);
                         keys.forEach(key => addTypingToProject(ts.combinePaths(typingsPath, key), project));
                         project.projectService.updateProjectStructure();
+                        if (cachePath !== globalCachePath) {
+                            JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath);
+                        }
                     });
             }
 
@@ -1306,6 +1328,12 @@ namespace ts.server {
                     path => this.directoryWatchedForSourceFilesChanged(project, path),
                     /*recursive*/ true
                 );
+
+                // Acquire typings for JS files
+                if (projectOptions.typingOptions) {
+                    this.acquireTypingForJs(project);
+                }
+
                 return { success: true, project: project };
             }
         }
@@ -1361,7 +1389,7 @@ namespace ts.server {
                     project.setProjectOptions(projectOptions);
                     project.finishGraph();
 
-                    //Acquire typings for JS files
+                    // Acquire typings for JS files
                     if (projectOptions.typingOptions) {
                         this.acquireTypingForJs(project);
                     }

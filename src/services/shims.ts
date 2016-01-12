@@ -1032,6 +1032,7 @@ namespace ts {
         }
 
         public resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson?: string, compilerOptionsJson?: string): string {
+            const getCanonicalFileName = createGetCanonicalFileName(false);
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
                 let cachePath = projectRootPath ? projectRootPath : globalCachePath;
                 let typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
@@ -1041,7 +1042,13 @@ namespace ts {
 
                 let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 let fileNames: string[] = JSON.parse(fileNamesJson);
-                return ts.JsTyping.discoverTypings(this.host, fileNames, globalCachePath, cachePath, typingOptions, compilerOptions);
+                return ts.JsTyping.discoverTypings(
+                    this.host,
+                    fileNames,
+                    toPath(globalCachePath, globalCachePath, getCanonicalFileName),
+                    toPath(cachePath, cachePath, getCanonicalFileName),
+                    typingOptions,
+                    compilerOptions);
             });
         }
 
@@ -1050,7 +1057,7 @@ namespace ts {
                 let cachedTypingsPaths: string[] = JSON.parse(cachedTypingsPathsJson);
                 let newTypingNames: string[] = JSON.parse(newTypingsJson);
                 let cachePath = projectRootPath ? projectRootPath : globalCachePath;
-                ts.JsTyping.updateTypingsConfig(this.host, cachedTypingsPaths, newTypingNames, cachePath);
+                ts.JsTyping.updateNotFoundTypingNames(newTypingNames, cachePath);
             });
         }
     }

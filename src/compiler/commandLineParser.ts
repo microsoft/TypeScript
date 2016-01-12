@@ -539,16 +539,14 @@ namespace ts {
         }
 
         function getTypingOptions(): TypingOptions {
+            const options: TypingOptions = 
+                getBaseFileName(configFileName) === "jsconfig.json" ? { enableAutoDiscovery: true } : undefined;
             const jsonTypingOptions = json["typingOptions"];
             if (jsonTypingOptions) {
-                const options: TypingOptions = {};
                 for (const id in jsonTypingOptions) {
                     if (id === "enableAutoDiscovery") {
                         if (typeof jsonTypingOptions[id] === "boolean") {
                             options.enableAutoDiscovery = jsonTypingOptions[id];
-                        }
-                        else {
-                            // Todo: add diagnostics
                         }
                     }
                     else if (id === "include") {
@@ -562,9 +560,8 @@ namespace ts {
                         errors.push(createCompilerDiagnostic(Diagnostics.Unknown_compiler_option_0, id));
                     }
                 }
-                return options;
             }
-            return undefined;
+            return options;
         }
     }
 
