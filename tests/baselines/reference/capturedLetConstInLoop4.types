@@ -2,20 +2,20 @@
 
 //======let
 export function exportedFoo() {
->exportedFoo : () => any
+>exportedFoo : () => string
 
     return v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8;
->v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 : any
->v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 : any
->v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 : any
->v0 + v00 + v1 + v2 + v3 + v4 + v5 : any
->v0 + v00 + v1 + v2 + v3 + v4 : any
->v0 + v00 + v1 + v2 + v3 : any
->v0 + v00 + v1 + v2 : any
->v0 + v00 + v1 : any
->v0 + v00 : any
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 + v8 : string
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 + v7 : string
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 + v6 : string
+>v0 + v00 + v1 + v2 + v3 + v4 + v5 : string
+>v0 + v00 + v1 + v2 + v3 + v4 : string
+>v0 + v00 + v1 + v2 + v3 : string
+>v0 + v00 + v1 + v2 : string
+>v0 + v00 + v1 : string
+>v0 + v00 : string
 >v0 : any
->v00 : any
+>v00 : string
 >v1 : number
 >v2 : any
 >v3 : any
@@ -48,24 +48,24 @@ for (let x of []) {
 }
 
 for (let x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
     var v00 = x;
->v00 : any
->x : any
+>v00 : string
+>x : string
 
     (function() { return x + v00});
->(function() { return x + v00}) : () => any
->function() { return x + v00} : () => any
->x + v00 : any
->x : any
->v00 : any
+>(function() { return x + v00}) : () => string
+>function() { return x + v00} : () => string
+>x + v00 : string
+>x : string
+>v00 : string
 
     (() => x);    
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 }
 
 for (let x = 0; x < 1; ++x) {
@@ -302,20 +302,20 @@ for (let y = 0; y < 1; ++y) {
 
 //======const
 export function exportedFoo2() {
->exportedFoo2 : () => any
+>exportedFoo2 : () => string
 
     return v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c + v8_c;
->v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c + v8_c : any
->v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c : any
->v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c : any
->v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c : any
->v0_c + v00_c + v1_c + v2_c + v3_c + v4_c : any
->v0_c + v00_c + v1_c + v2_c + v3_c : any
->v0_c + v00_c + v1_c + v2_c : any
->v0_c + v00_c + v1_c : any
->v0_c + v00_c : any
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c + v8_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c + v7_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c + v6_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c + v5_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c + v4_c : string
+>v0_c + v00_c + v1_c + v2_c + v3_c : string
+>v0_c + v00_c + v1_c + v2_c : string
+>v0_c + v00_c + v1_c : string
+>v0_c + v00_c : string
 >v0_c : any
->v00_c : any
+>v00_c : string
 >v1_c : number
 >v2_c : number
 >v3_c : number
@@ -348,24 +348,24 @@ for (const x of []) {
 }
 
 for (const x in []) {
->x : any
+>x : string
 >[] : undefined[]
 
     var v00_c = x;
->v00_c : any
->x : any
+>v00_c : string
+>x : string
 
     (function() { return x + v00});
->(function() { return x + v00}) : () => any
->function() { return x + v00} : () => any
->x + v00 : any
->x : any
->v00 : any
+>(function() { return x + v00}) : () => string
+>function() { return x + v00} : () => string
+>x + v00 : string
+>x : string
+>v00 : string
 
     (() => x);    
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => string
+>() => x : () => string
+>x : string
 }
 
 for (const x = 0; x < 1;) {
