@@ -1136,7 +1136,7 @@ namespace ts {
                     moduleNames.push(name.text);
                 }
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
-                for (let i = 0; i < moduleNames.length; ++i) {
+                for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
                     setResolvedModule(file, moduleNames[i], resolution);
                     // add file to program only if:
