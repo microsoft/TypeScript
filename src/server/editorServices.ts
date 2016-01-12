@@ -1060,7 +1060,7 @@ namespace ts.server {
             try {
                 tsd = require("tsd");
             }
-            catch(e) {
+            catch (e) {
                 this.log("Error requiring the tsd module");
                 return;
             }
@@ -1071,7 +1071,7 @@ namespace ts.server {
 
             // For inferred project, we always enable the auto typing discover feature, therefore the typingOptions
             // has a default value
-            const typingOptions: TypingOptions = 
+            const typingOptions: TypingOptions =
                 project.projectOptions ? project.projectOptions.typingOptions : { enableAutoDiscovery: true };
             const compilerOptions = project.projectOptions ? project.projectOptions.compilerOptions : undefined;
 

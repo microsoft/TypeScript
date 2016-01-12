@@ -230,7 +230,7 @@ namespace ts {
         getTSConfigFileInfo(fileName: string, sourceText: IScriptSnapshot): string;
         getDefaultCompilationSettings(): string;
         resolveTypeDefinitions(fileNamesJson: string, cachePath: string, projectRootPath: string, compilerOptionsJson?: string, includeListJson?: string, safeListJson?: string, noDevDependencies?: boolean): string;
-        updateNotFoundTypingNames(newTypingsJson: string, cachePath: string, projectRootPath: string): string 
+        updateNotFoundTypingNames(newTypingsJson: string, cachePath: string, projectRootPath: string): string;
     }
 
     function logInternalError(logger: Logger, err: Error) {
@@ -974,14 +974,14 @@ namespace ts {
         public resolveTypeDefinitions(fileNamesJson: string, globalCachePath: string, projectRootPath: string, typingOptionsJson?: string, compilerOptionsJson?: string): string {
             const getCanonicalFileName = createGetCanonicalFileName(false);
             return this.forwardJSONCall("resolveTypeDefinitions()", () => {
-                let cachePath = projectRootPath ? projectRootPath : globalCachePath;
-                let typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
+                const cachePath = projectRootPath ? projectRootPath : globalCachePath;
+                const typingOptions = <TypingOptions>JSON.parse(typingOptionsJson);
                 // Convert the include and exclude lists from a semi-colon delimited string to a string array
                 typingOptions.include = typingOptions.include ? typingOptions.include.toString().split(";") : [];
                 typingOptions.exclude = typingOptions.exclude ? typingOptions.exclude.toString().split(";") : [];
 
-                let compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
-                let fileNames: string[] = JSON.parse(fileNamesJson);
+                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const fileNames: string[] = JSON.parse(fileNamesJson);
                 return ts.JsTyping.discoverTypings(
                     this.host,
                     fileNames,
