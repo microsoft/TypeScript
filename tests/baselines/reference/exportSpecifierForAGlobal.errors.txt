@@ -1,0 +1,16 @@
+tests/cases/compiler/b.ts(1,9): error TS2661: Cannot re-export name that is not defined in the module.
+
+
+==== tests/cases/compiler/a.d.ts (0 errors) ====
+    
+    declare class X { }
+    
+==== tests/cases/compiler/b.ts (1 errors) ====
+    export {X};
+            ~
+!!! error TS2661: Cannot re-export name that is not defined in the module.
+    export function f() {
+        var x: X;
+        return x;
+    } 
+    

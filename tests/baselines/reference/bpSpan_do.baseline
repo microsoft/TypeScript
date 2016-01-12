@@ -107,14 +107,7 @@
     >:=> (line 15, col 2) to (line 17, col 15)
 15 >} while ((function () {
 
-             ~                                    => Pos: (131 to 131)  SpanInfo: {"start":131,"length":46}
-    >(function () {
-    >        return 30 * i;
-    >    })()
-    >:=> (line 15, col 9) to (line 17, col 8)
-15 >} while ((function () {
-
-              ~~~~~~~~~~~~~~                      => Pos: (132 to 145)  SpanInfo: {"start":154,"length":13}
+             ~~~~~~~~~~~~~~~                      => Pos: (131 to 145)  SpanInfo: {"start":154,"length":13}
     >return 30 * i
     >:=> (line 16, col 8) to (line 16, col 21)
 --------------------------------
@@ -125,15 +118,9 @@
     >:=> (line 16, col 8) to (line 16, col 21)
 --------------------------------
 17 >    })() !== i); 
-    ~~~~~                                         => Pos: (169 to 173)  SpanInfo: {"start":173,"length":1}
+    ~~~~~~~~                                      => Pos: (169 to 176)  SpanInfo: {"start":173,"length":1}
     >}
     >:=> (line 17, col 4) to (line 17, col 5)
-17 >    })() !== i); 
-         ~~~                                      => Pos: (174 to 176)  SpanInfo: {"start":131,"length":46}
-    >(function () {
-    >        return 30 * i;
-    >    })()
-    >:=> (line 15, col 9) to (line 17, col 8)
 17 >    })() !== i); 
             ~~~~~~~~~                             => Pos: (177 to 185)  SpanInfo: {"start":124,"length":60}
     >while ((function () {

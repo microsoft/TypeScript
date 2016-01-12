@@ -5,8 +5,8 @@
 
 goTo.marker("1");
 edit.insert(";");
-verify.currentLineContentIs("String.call `${123}`;");
+verify.currentLineContentIs("String.call`${123}`;");
 
 goTo.marker("2");
 edit.insert(";");
-verify.currentLineContentIs("String.call `${123} ${456}`;");
+verify.currentLineContentIs("String.call`${123} ${456}`;");

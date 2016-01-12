@@ -1,5 +1,5 @@
-tests/cases/compiler/f1.d.ts(4,19): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/f2.d.ts(3,19): error TS2662: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/f1.d.ts(4,19): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/f2.d.ts(3,19): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 
 
 ==== tests/cases/compiler/f3.ts (0 errors) ====
@@ -15,7 +15,7 @@ tests/cases/compiler/f2.d.ts(3,19): error TS2662: Module augmentation cannot int
         global {
             interface Something {x}
                       ~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         }
     }
 ==== tests/cases/compiler/f2.d.ts (1 errors) ====
@@ -23,6 +23,6 @@ tests/cases/compiler/f2.d.ts(3,19): error TS2662: Module augmentation cannot int
         global {
             interface Something {y}
                       ~~~~~~~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         }
     }

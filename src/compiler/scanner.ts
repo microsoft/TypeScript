@@ -289,7 +289,8 @@ namespace ts {
         let pos = 0;
         let lineStart = 0;
         while (pos < text.length) {
-           const ch = text.charCodeAt(pos++);
+           const ch = text.charCodeAt(pos);
+           pos++;
            switch (ch) {
                 case CharacterCodes.carriageReturn:
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
@@ -688,6 +689,21 @@ namespace ts {
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
+    /* @internal */
+    export function isIdentifier(name: string, languageVersion: ScriptTarget): boolean {
+        if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
+            return false;
+        }
+
+        for (let i = 1, n = name.length; i < n; i++) {
+            if (!isIdentifierPart(name.charCodeAt(i), languageVersion)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Creates a scanner over a (possibly unspecified) range of a piece of text.
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
@@ -824,7 +840,8 @@ namespace ts {
         }
 
         function scanString(): string {
-            const quote = text.charCodeAt(pos++);
+            const quote = text.charCodeAt(pos);
+            pos++;
             let result = "";
             let start = pos;
             while (true) {
@@ -934,7 +951,8 @@ namespace ts {
                 error(Diagnostics.Unexpected_end_of_text);
                 return "";
             }
-            const ch = text.charCodeAt(pos++);
+            const ch = text.charCodeAt(pos);
+            pos++;
             switch (ch) {
                 case CharacterCodes._0:
                     return "\0";
@@ -1183,7 +1201,8 @@ namespace ts {
                             }
                             return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.ExclamationToken;
+                        pos++;
+                        return token = SyntaxKind.ExclamationToken;
                     case CharacterCodes.doubleQuote:
                     case CharacterCodes.singleQuote:
                         tokenValue = scanString();
@@ -1194,7 +1213,8 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.PercentToken;
+                        pos++;
+                        return token = SyntaxKind.PercentToken;
                     case CharacterCodes.ampersand:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
                             return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
@@ -1202,11 +1222,14 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.AmpersandEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.AmpersandToken;
+                        pos++;
+                        return token = SyntaxKind.AmpersandToken;
                     case CharacterCodes.openParen:
-                        return pos++, token = SyntaxKind.OpenParenToken;
+                        pos++;
+                        return token = SyntaxKind.OpenParenToken;
                     case CharacterCodes.closeParen:
-                        return pos++, token = SyntaxKind.CloseParenToken;
+                        pos++;
+                        return token = SyntaxKind.CloseParenToken;
                     case CharacterCodes.asterisk:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
@@ -1217,7 +1240,8 @@ namespace ts {
                             }
                             return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                         }
-                        return pos++, token = SyntaxKind.AsteriskToken;
+                        pos++;
+                        return token = SyntaxKind.AsteriskToken;
                     case CharacterCodes.plus:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.plus) {
                             return pos += 2, token = SyntaxKind.PlusPlusToken;
@@ -1225,9 +1249,11 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PlusEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.PlusToken;
+                        pos++;
+                        return token = SyntaxKind.PlusToken;
                     case CharacterCodes.comma:
-                        return pos++, token = SyntaxKind.CommaToken;
+                        pos++;
+                        return token = SyntaxKind.CommaToken;
                     case CharacterCodes.minus:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.minus) {
                             return pos += 2, token = SyntaxKind.MinusMinusToken;
@@ -1235,7 +1261,8 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.MinusEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.MinusToken;
+                        pos++;
+                        return token = SyntaxKind.MinusToken;
                     case CharacterCodes.dot:
                         if (isDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = scanNumber();
@@ -1244,7 +1271,8 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
                             return pos += 3, token = SyntaxKind.DotDotDotToken;
                         }
-                        return pos++, token = SyntaxKind.DotToken;
+                        pos++;
+                        return token = SyntaxKind.DotToken;
                     case CharacterCodes.slash:
                         // Single-line comment
                         if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
@@ -1302,7 +1330,8 @@ namespace ts {
                             return pos += 2, token = SyntaxKind.SlashEqualsToken;
                         }
 
-                        return pos++, token = SyntaxKind.SlashToken;
+                        pos++;
+                        return token = SyntaxKind.SlashToken;
 
                     case CharacterCodes._0:
                         if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
@@ -1355,9 +1384,11 @@ namespace ts {
                         tokenValue = scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     case CharacterCodes.colon:
-                        return pos++, token = SyntaxKind.ColonToken;
+                        pos++;
+                        return  token = SyntaxKind.ColonToken;
                     case CharacterCodes.semicolon:
-                        return pos++, token = SyntaxKind.SemicolonToken;
+                        pos++;
+                        return token = SyntaxKind.SemicolonToken;
                     case CharacterCodes.lessThan:
                         if (isConflictMarkerTrivia(text, pos)) {
                             pos = scanConflictMarkerTrivia(text, pos, error);
@@ -1383,7 +1414,8 @@ namespace ts {
                                 text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
                             return pos += 2, token = SyntaxKind.LessThanSlashToken;
                         }
-                        return pos++, token = SyntaxKind.LessThanToken;
+                        pos++;
+                        return token = SyntaxKind.LessThanToken;
                     case CharacterCodes.equals:
                         if (isConflictMarkerTrivia(text, pos)) {
                             pos = scanConflictMarkerTrivia(text, pos, error);
@@ -1404,7 +1436,8 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.greaterThan) {
                             return pos += 2, token = SyntaxKind.EqualsGreaterThanToken;
                         }
-                        return pos++, token = SyntaxKind.EqualsToken;
+                        pos++;
+                        return token = SyntaxKind.EqualsToken;
                     case CharacterCodes.greaterThan:
                         if (isConflictMarkerTrivia(text, pos)) {
                             pos = scanConflictMarkerTrivia(text, pos, error);
@@ -1416,20 +1449,26 @@ namespace ts {
                             }
                         }
 
-                        return pos++, token = SyntaxKind.GreaterThanToken;
+                        pos++;
+                        return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
-                        return pos++, token = SyntaxKind.QuestionToken;
+                        pos++;
+                        return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
-                        return pos++, token = SyntaxKind.OpenBracketToken;
+                        pos++;
+                        return token = SyntaxKind.OpenBracketToken;
                     case CharacterCodes.closeBracket:
-                        return pos++, token = SyntaxKind.CloseBracketToken;
+                        pos++;
+                        return token = SyntaxKind.CloseBracketToken;
                     case CharacterCodes.caret:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.CaretEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.CaretToken;
+                        pos++;
+                        return token = SyntaxKind.CaretToken;
                     case CharacterCodes.openBrace:
-                        return pos++, token = SyntaxKind.OpenBraceToken;
+                        pos++;
+                        return token = SyntaxKind.OpenBraceToken;
                     case CharacterCodes.bar:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
                             return pos += 2, token = SyntaxKind.BarBarToken;
@@ -1437,13 +1476,17 @@ namespace ts {
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.BarEqualsToken;
                         }
-                        return pos++, token = SyntaxKind.BarToken;
+                        pos++;
+                        return token = SyntaxKind.BarToken;
                     case CharacterCodes.closeBrace:
-                        return pos++, token = SyntaxKind.CloseBraceToken;
+                        pos++;
+                        return token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
-                        return pos++, token = SyntaxKind.TildeToken;
+                        pos++;
+                        return token = SyntaxKind.TildeToken;
                     case CharacterCodes.at:
-                        return pos++, token = SyntaxKind.AtToken;
+                        pos++;
+                        return token = SyntaxKind.AtToken;
                     case CharacterCodes.backslash:
                         let cookedChar = peekUnicodeEscape();
                         if (cookedChar >= 0 && isIdentifierStart(cookedChar, languageVersion)) {
@@ -1452,7 +1495,8 @@ namespace ts {
                             return token = getIdentifierToken();
                         }
                         error(Diagnostics.Invalid_character);
-                        return pos++, token = SyntaxKind.Unknown;
+                        pos++;
+                        return token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {
                             pos++;
@@ -1473,7 +1517,8 @@ namespace ts {
                             continue;
                         }
                         error(Diagnostics.Invalid_character);
-                        return pos++, token = SyntaxKind.Unknown;
+                        pos++;
+                        return token = SyntaxKind.Unknown;
                 }
             }
         }
@@ -1490,10 +1535,12 @@ namespace ts {
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.GreaterThanGreaterThanEqualsToken;
                     }
-                    return pos++, token = SyntaxKind.GreaterThanGreaterThanToken;
+                    pos++;
+                    return token = SyntaxKind.GreaterThanGreaterThanToken;
                 }
                 if (text.charCodeAt(pos) === CharacterCodes.equals) {
-                    return pos++, token = SyntaxKind.GreaterThanEqualsToken;
+                    pos++;
+                    return token = SyntaxKind.GreaterThanEqualsToken;
                 }
             }
             return token;

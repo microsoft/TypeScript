@@ -317,6 +317,7 @@ namespace FourSlash {
                 InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
                 InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+                InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
                 PlaceOpenBraceOnNewLineForFunctions: false,
                 PlaceOpenBraceOnNewLineForControlBlocks: false,
             };
@@ -727,7 +728,7 @@ namespace FourSlash {
                 // Count only the references in local files. Filter the ones in lib and other files.
                 ts.forEach(references, entry => {
                     if (localFiles.some((fileName) => fileName === entry.fileName)) {
-                        ++referencesCount;
+                        referencesCount++;
                     }
                 });
             }
@@ -1079,9 +1080,15 @@ namespace FourSlash {
         }
 
         public baselineCurrentFileBreakpointLocations() {
+            let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
+            if (!baselineFile) {
+                baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
+                baselineFile = baselineFile.replace(".ts", ".baseline");
+
+            }
             Harness.Baseline.runBaseline(
                 "Breakpoint Locations for " + this.activeFile.fileName,
-                this.testData.globalOptions[metadataOptionNames.baselineFile],
+                baselineFile,
                 () => {
                     return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos));
                 },
@@ -1093,7 +1100,7 @@ namespace FourSlash {
             const emitFiles: FourSlashFile[] = [];  // List of FourSlashFile that has emitThisFile flag on
 
             const allFourSlashFiles = this.testData.files;
-            for (let idx = 0; idx < allFourSlashFiles.length; ++idx) {
+            for (let idx = 0; idx < allFourSlashFiles.length; idx++) {
                 const file = allFourSlashFiles[idx];
                 if (file.fileOptions[metadataOptionNames.emitThisFile] === "true") {
                     // Find a file with the flag emitThisFile turned on
@@ -1853,7 +1860,7 @@ namespace FourSlash {
             let item: ts.NavigateToItem = null;
 
             // Count only the match that match the same MatchKind
-            for (let i = 0; i < items.length; ++i) {
+            for (let i = 0; i < items.length; i++) {
                 item = items[i];
                 if (!matchKind || item.matchKind === matchKind) {
                     actual++;
@@ -3282,6 +3289,30 @@ namespace FourSlashInterface {
 
         export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
             return getClassification("typeAliasName", text, position);
+        }
+
+        export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxOpenTagName", text, position);
+        }
+
+        export function jsxCloseTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxCloseTagName", text, position);
+        }
+
+        export function jsxSelfClosingTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxSelfClosingTagName", text, position);
+        }
+
+        export function jsxAttribute(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttribute", text, position);
+        }
+
+        export function jsxText(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxText", text, position);
+        }
+
+        export function jsxAttributeStringLiteralValue(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
+            return getClassification("jsxAttributeStringLiteralValue", text, position);
         }
 
         function getClassification(type: string, text: string, position?: number) {

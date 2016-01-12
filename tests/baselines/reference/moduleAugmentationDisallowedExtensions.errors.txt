@@ -1,20 +1,20 @@
-tests/cases/compiler/x.ts(7,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(8,9): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(9,11): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(10,10): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(10,14): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(11,15): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(12,15): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(15,11): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(16,14): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(17,10): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/x.ts(18,5): error TS2664: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+tests/cases/compiler/x.ts(7,9): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(8,9): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(9,11): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(10,10): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(10,14): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(11,15): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(12,15): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(15,11): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(16,14): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(17,10): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(18,5): error TS2665: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/x.ts(18,26): error TS2307: Cannot find module './x0'.
-tests/cases/compiler/x.ts(19,5): error TS2664: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+tests/cases/compiler/x.ts(19,5): error TS2665: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/x.ts(19,21): error TS2307: Cannot find module './x0'.
-tests/cases/compiler/x.ts(20,5): error TS2663: Exports are not permitted in module augmentations.
+tests/cases/compiler/x.ts(20,5): error TS2664: Exports are not permitted in module augmentations.
 tests/cases/compiler/x.ts(20,19): error TS2307: Cannot find module './x0'.
-tests/cases/compiler/x.ts(21,5): error TS2663: Exports are not permitted in module augmentations.
+tests/cases/compiler/x.ts(21,5): error TS2664: Exports are not permitted in module augmentations.
 tests/cases/compiler/x.ts(21,21): error TS2307: Cannot find module './x0'.
 
 
@@ -31,53 +31,53 @@ tests/cases/compiler/x.ts(21,21): error TS2307: Cannot find module './x0'.
     declare module "./observable" {
         var x: number;
             ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         let y: number;
             ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         const z: number;
               ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         let {x1, y1}: {x1: number, y1: string}
              ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
                  ~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         interface A { x }
                   ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         namespace N {
                   ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
             export class C {}
         }
         class Cls {}
               ~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         function foo(): number;
                  ~~~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         type T = number;
              ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         import * as all from "./x0";
         ~~~~~~
-!!! error TS2664: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+!!! error TS2665: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
                              ~~~~~~
 !!! error TS2307: Cannot find module './x0'.
         import {a} from "./x0";
         ~~~~~~
-!!! error TS2664: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+!!! error TS2665: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
                         ~~~~~~
 !!! error TS2307: Cannot find module './x0'.
         export * from "./x0";
         ~~~~~~
-!!! error TS2663: Exports are not permitted in module augmentations.
+!!! error TS2664: Exports are not permitted in module augmentations.
                       ~~~~~~
 !!! error TS2307: Cannot find module './x0'.
         export {a} from "./x0";
         ~~~~~~
-!!! error TS2663: Exports are not permitted in module augmentations.
+!!! error TS2664: Exports are not permitted in module augmentations.
                         ~~~~~~
 !!! error TS2307: Cannot find module './x0'.
     }

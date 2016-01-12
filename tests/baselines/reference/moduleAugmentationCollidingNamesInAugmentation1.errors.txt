@@ -1,5 +1,5 @@
-tests/cases/compiler/map1.ts(7,15): error TS2662: Module augmentation cannot introduce new names in the top level scope.
-tests/cases/compiler/map2.ts(6,15): error TS2662: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map1.ts(7,15): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/map2.ts(6,15): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 
 
 ==== tests/cases/compiler/map1.ts (1 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/map2.ts(6,15): error TS2662: Module augmentation cannot int
     declare module "./observable" {
         interface I {x0}
                   ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
     }
     
 ==== tests/cases/compiler/map2.ts (1 errors) ====
@@ -22,7 +22,7 @@ tests/cases/compiler/map2.ts(6,15): error TS2662: Module augmentation cannot int
     declare module "./observable" {
         interface I {x1}
                   ~
-!!! error TS2662: Module augmentation cannot introduce new names in the top level scope.
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
     }
     
     

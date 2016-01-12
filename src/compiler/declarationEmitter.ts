@@ -511,7 +511,8 @@ namespace ts {
             }
             let count = 0;
             while (true) {
-                const name = baseName + "_" + (++count);
+                count++;
+                const name = baseName + "_" + count;
                 if (!hasProperty(currentIdentifiers, name)) {
                     return name;
                 }

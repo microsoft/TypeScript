@@ -1771,33 +1771,37 @@
         "category": "Error",
         "code": 2660
     },
-    "Invalid module name in augmentation, module '{0}' cannot be found.": {
+    "Cannot re-export name that is not defined in the module.": {
         "category": "Error",
         "code": 2661
     },
-    "Module augmentation cannot introduce new names in the top level scope.": {
+    "Invalid module name in augmentation, module '{0}' cannot be found.": {
         "category": "Error",
         "code": 2662
     },
-    "Exports are not permitted in module augmentations.": {
+    "Module augmentation cannot introduce new names in the top level scope.": {
         "category": "Error",
         "code": 2663
     },
-    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.": {
+    "Exports are not permitted in module augmentations.": {
         "category": "Error",
         "code": 2664
     },
-    "'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.": {
+    "Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.": {
         "category": "Error",
         "code": 2665
     },
-    "Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.": {
+    "'export' modifier cannot be applied to ambient modules and module augmentations since they are always visible.": {
         "category": "Error",
         "code": 2666
     },
-    "Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.": {
+    "Augmentations for the global scope can only be directly nested in external modules or ambient module declarations.": {
         "category": "Error",
         "code": 2667
+    },
+    "Augmentations for the global scope should have 'declare' modifier unless they appear in already ambient context.": {
+        "category": "Error",
+        "code": 2668
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2151,6 +2155,10 @@
         "category": "Error",
         "code": 5058
     },
+    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+        "category": "Error",
+        "code": 5059
+    },
 
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2421,6 +2429,10 @@
         "category": "Message",
         "code": 6083
     },
+    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
+        "category": "Message",
+        "code": 6084
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -2449,6 +2461,10 @@
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
+    },
+    "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
+        "category": "Error",
+        "code": 7015
     },
     "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
         "category": "Error",
@@ -2614,5 +2630,9 @@
     "A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.": {
       "category": "Error",
       "code": 17007
+    },
+    "JSX element '{0}' has no corresponding closing tag.": {
+      "category": "Error",
+      "code": 17008
     }
 }

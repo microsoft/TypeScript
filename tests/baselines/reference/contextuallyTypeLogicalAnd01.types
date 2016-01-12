@@ -1,0 +1,20 @@
+=== tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd01.ts ===
+
+let x: (a: string) => string;
+>x : (a: string) => string
+>a : string
+
+let y = true;
+>y : boolean
+>true : boolean
+
+x = y && (a => a);
+>x = y && (a => a) : (a: string) => string
+>x : (a: string) => string
+>y && (a => a) : (a: string) => string
+>y : boolean
+>(a => a) : (a: string) => string
+>a => a : (a: string) => string
+>a : string
+>a : string
+
