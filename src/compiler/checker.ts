@@ -8231,26 +8231,30 @@ namespace ts {
                     // Get the element instance type (the result of newing or invoking this tag)
                     const elemInstanceType = getJsxElementInstanceType(node);
 
-                    // Is this is a stateless function component? See if its single signature is
-                    // assignable to the JSX Element Type
-                    const callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
-                    const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                    let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && (paramType.flags & TypeFlags.ObjectType)) {
-                        // Intersect in JSX.IntrinsicAttributes if it exists
-                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                        if (intrinsicAttributes !== unknownType) {
-                            paramType = intersectTypes(intrinsicAttributes, paramType);
+                    const elemClassType = getJsxGlobalElementClassType();
+
+                    if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
+                        // Is this is a stateless function component? See if its single signature's return type is
+                        // assignable to the JSX Element Type
+                        const elemType = getTypeOfSymbol(sym);
+                        const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
+                        const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
+                        const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                        let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                            // Intersect in JSX.IntrinsicAttributes if it exists
+                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                            if (intrinsicAttributes !== unknownType) {
+                                paramType = intersectTypes(intrinsicAttributes, paramType);
+                            }
+                            return links.resolvedJsxType = paramType;
                         }
-                        return paramType;
                     }
 
                     // Issue an error if this return type isn't assignable to JSX.ElementClass
-                    const elemClassType = getJsxGlobalElementClassType();
                     if (elemClassType) {
                         checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
                     }
-
 
                     if (isTypeAny(elemInstanceType)) {
                         return links.resolvedJsxType = elemInstanceType;
