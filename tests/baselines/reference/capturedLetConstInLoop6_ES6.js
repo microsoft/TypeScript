@@ -14,10 +14,10 @@ for (let x of []) {
 for (let x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
 }
@@ -133,10 +133,10 @@ for (const x of []) {
 for (const x in []) {
     (function() { return x});
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
 }
@@ -253,10 +253,10 @@ for (let x of []) {
 for (let x in []) {
     (function () { return x; });
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
 }
@@ -360,10 +360,10 @@ for (const x of []) {
 for (const x in []) {
     (function () { return x; });
     (() => x);
-    if (x == 1) {
+    if (x == "1") {
         break;
     }
-    if (x == 2) {
+    if (x == "2") {
         continue;
     }
 }

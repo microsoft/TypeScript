@@ -1,0 +1,11 @@
+tests/cases/compiler/exportSpecifierReferencingOuterDeclaration1.ts(3,14): error TS2661: Cannot re-export name that is not defined in the module.
+
+
+==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration1.ts (1 errors) ====
+    declare module X { export interface bar { } }
+    declare module "m" {
+        export { X };
+                 ~
+!!! error TS2661: Cannot re-export name that is not defined in the module.
+        export function foo(): X.bar;
+    }

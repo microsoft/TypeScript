@@ -1715,6 +1715,10 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
             }
 
+            if (options.reactNamespace && !isIdentifier(options.reactNamespace, languageVersion)) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalide_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
+            }
+
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
             if (!options.noEmit) {
                 const emitHost = getEmitHost();

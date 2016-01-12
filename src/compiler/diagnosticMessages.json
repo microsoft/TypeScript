@@ -1771,6 +1771,10 @@
         "category": "Error",
         "code": 2660
     },
+    "Cannot re-export name that is not defined in the module.": {
+        "category": "Error",
+        "code": 2661
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2123,25 +2127,29 @@
         "category": "Error",
         "code": 5058
     },
-    "Option '{0}' can only be used when option 'moduleResolution' is 'baseUrl'.": {
+    "Invalide value for '--reactNamespace'. '{0}' is not a valid identifier.": {
         "category": "Error",
         "code": 5059
     },
-    "Pattern '{0}' can have at most one '*' character": {
+    "Option '{0}' can only be used when option 'moduleResolution' is 'baseUrl'.": {
         "category": "Error",
         "code": 5060
     },
-    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character": {
+    "Pattern '{0}' can have at most one '*' character": {
         "category": "Error",
         "code": 5061
     },
-    "'moduleResolution' kind 'baseUrl' cannot be used without specifying '--baseUrl' option.": {
+    "Substitution '{0}' in pattern '{1}' in can have at most one '*' character": {
         "category": "Error",
         "code": 5062
     },
-    "Module resolution kind cannot be determined automatically. Please specify module resolution explicitly via 'moduleResolution' option.": {
+    "'moduleResolution' kind 'baseUrl' cannot be used without specifying '--baseUrl' option.": {
         "category": "Error",
         "code": 5063
+    },
+    "Module resolution kind cannot be determined automatically. Please specify module resolution explicitly via 'moduleResolution' option.": {
+        "category": "Error",
+        "code": 5064
     },
     "Concatenate and emit output to single file.": {
         "category": "Message",
@@ -2415,126 +2423,130 @@
         "category": "Message",
         "code": 6083
     },
-    "Enable tracing of the module resolution process.": {
+    "Specifies the object invoked for createElement and __spread when targeting 'react' JSX emit": {
         "category": "Message",
         "code": 6084
     },
-    "======== Resolving module '{0}' from '{1}'. ========": {
+    "Enable tracing of the module resolution process.": {
         "category": "Message",
         "code": 6085
     },
-    "Explicitly specified module resolution kind: '{0}'.": {
+    "======== Resolving module '{0}' from '{1}'. ========": {
         "category": "Message",
         "code": 6086
     },
-    "Module resolution kind is not specified, using '{0}'.": {
+    "Explicitly specified module resolution kind: '{0}'.": {
         "category": "Message",
         "code": 6087
     },
-    "======== Module name '{0}' was successfully resolved to '{1}'. ========": {
+    "Module resolution kind is not specified, using '{0}'.": {
         "category": "Message",
         "code": 6088
     },
-    "======== Module name '{0}' was not resolved. ========": {
+    "======== Module name '{0}' was successfully resolved to '{1}'. ========": {
         "category": "Message",
         "code": 6089
     },
-    "Resolving rooted module name '{0}' - use it as a candidate location.": {
+    "======== Module name '{0}' was not resolved. ========": {
         "category": "Message",
         "code": 6090
     },
-    "Resolving relative module name '{0}'.": {
+    "Resolving rooted module name '{0}' - use it as a candidate location.": {
         "category": "Message",
         "code": 6091
     },
-    "Resolving non-relative module name '{0}'.": {
+    "Resolving relative module name '{0}'.": {
         "category": "Message",
         "code": 6092
     },
-    "Converting relative module name '{0}' to absolute using '{1}' as a base directory => '{2}'.": {
+    "Resolving non-relative module name '{0}'.": {
         "category": "Message",
         "code": 6093
     },
-    "'rootDirs' option is specified, searching for a longest matching prefix...": {
+    "Converting relative module name '{0}' to absolute using '{1}' as a base directory => '{2}'.": {
         "category": "Message",
         "code": 6094
     },
-    "Found longest matching rootDir '{0}', 'converted relative path '{1}', to non-relative path '{2}'": {
+    "'rootDirs' option is specified, searching for a longest matching prefix...": {
         "category": "Message",
         "code": 6095
     },
-    "'rootDirs' option is not specified, using '{0}' as candidate location.": {
+    "Found longest matching rootDir '{0}', 'converted relative path '{1}', to non-relative path '{2}'": {
         "category": "Message",
         "code": 6096
     },
-    "'paths' option is specified, looking for a pattern to match module name '{0}'.": {
+    "'rootDirs' option is not specified, using '{0}' as candidate location.": {
         "category": "Message",
         "code": 6097
     },
-    "Module name '{0}', matched pattern '{1}'.": {
+    "'paths' option is specified, looking for a pattern to match module name '{0}'.": {
         "category": "Message",
         "code": 6098
     },
-    "Trying substitution '{0}', candidate module location: '{1}'.": {
+    "Module name '{0}', matched pattern '{1}'.": {
         "category": "Message",
         "code": 6099
     },
-    "Resolving module name '{0}' relative to base url '{1}' - '{2}'.": {
+    "Trying substitution '{0}', candidate module location: '{1}'.": {
         "category": "Message",
         "code": 6100
     },
-    "Loading module '{0}' as file / folder, candidate module location '{1}'.": {
+    "Resolving module name '{0}' relative to base url '{1}' - '{2}'.": {
         "category": "Message",
         "code": 6101
     },
-    "File '{0}' does not exist.": {
+    "Loading module '{0}' as file / folder, candidate module location '{1}'.": {
         "category": "Message",
         "code": 6102
     },
-    "File '{0}' exist - use it as a module resolution result.": {
+    "File '{0}' does not exist.": {
         "category": "Message",
         "code": 6103
     },
-    "Loading module '{0}' from 'node_modules' folder.": {
+    "File '{0}' exist - use it as a module resolution result.": {
         "category": "Message",
         "code": 6104
     },
-    "Found 'package.json' at '{0}'.": {
+    "Loading module '{0}' from 'node_modules' folder.": {
         "category": "Message",
         "code": 6105
     },
-    "'package.json' does not have 'typings' field.": {
+    "Found 'package.json' at '{0}'.": {
         "category": "Message",
         "code": 6106
     },
-    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
+    "'package.json' does not have 'typings' field.": {
         "category": "Message",
         "code": 6107
     },
-    "Module name '{0}' contains '!' character.": {
+    "'package.json' has 'typings' field '{0}' that references '{1}'.": {
         "category": "Message",
         "code": 6108
     },
-    "Allow javascript files to be compiled.": {
+    "Module name '{0}' contains '!' character.": {
         "category": "Message",
         "code": 6109
     },
-    "Base url: '{0}'.": {
+    "Allow javascript files to be compiled.": {
         "category": "Message",
         "code": 6110
     },
+    "Base url: '{0}'.": {
+        "category": "Message",
+        "code": 6111
+    },
     "Option '{0}' should have array of strings as a value.": {
         "category": "Error",
-        "code": 6111
+        "code": 6112
     },
     "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
         "category": "Message",
-        "code": 6112
+        "code": 6113
     },
     "Expected type of 'typings' field in 'package.json' to be 'string', got '{0}'.": {
         "category": "Message",
-        "code": 6113
-    },    
+        "code": 6114
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2562,6 +2574,10 @@
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
+    },
+    "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
+        "category": "Error",
+        "code": 7015
     },
     "Property '{0}' implicitly has type 'any', because its 'set' accessor lacks a type annotation.": {
         "category": "Error",

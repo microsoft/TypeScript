@@ -55,6 +55,11 @@ namespace ts {
             error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {
+            name: "reactNamespace",
+            type: "string",
+            description: Diagnostics.Specifies_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },

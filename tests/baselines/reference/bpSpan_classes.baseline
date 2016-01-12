@@ -171,14 +171,9 @@
 --------------------------------
 15 >        return new Greeter(greeting);
 
-    ~~~~~~~~~~~~~~                                => Pos: (249 to 262)  SpanInfo: {"start":257,"length":28}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        => Pos: (249 to 286)  SpanInfo: {"start":257,"length":28}
     >return new Greeter(greeting)
     >:=> (line 15, col 8) to (line 15, col 36)
-15 >        return new Greeter(greeting);
-
-                  ~~~~~~~~~~~~~~~~~~~~~~~~        => Pos: (263 to 286)  SpanInfo: {"start":264,"length":21}
-    >new Greeter(greeting)
-    >:=> (line 15, col 15) to (line 15, col 36)
 --------------------------------
 16 >    }
 
@@ -192,25 +187,15 @@
 --------------------------------
 18 >    var greeter = new Greeter("Hello, world!");
 
-    ~~~~~~~~~~~~~~~~~                             => Pos: (294 to 310)  SpanInfo: {"start":298,"length":42}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (294 to 341)  SpanInfo: {"start":298,"length":42}
     >var greeter = new Greeter("Hello, world!")
     >:=> (line 18, col 4) to (line 18, col 46)
-18 >    var greeter = new Greeter("Hello, world!");
-
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (311 to 341)  SpanInfo: {"start":312,"length":28}
-    >new Greeter("Hello, world!")
-    >:=> (line 18, col 18) to (line 18, col 46)
 --------------------------------
 19 >    var str = greeter.greet();
 
-    ~~~~~~~~~~~~~                                 => Pos: (342 to 354)  SpanInfo: {"start":346,"length":25}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (342 to 372)  SpanInfo: {"start":346,"length":25}
     >var str = greeter.greet()
     >:=> (line 19, col 4) to (line 19, col 29)
-19 >    var str = greeter.greet();
-
-                 ~~~~~~~~~~~~~~~~~~               => Pos: (355 to 372)  SpanInfo: {"start":356,"length":15}
-    >greeter.greet()
-    >:=> (line 19, col 14) to (line 19, col 29)
 --------------------------------
 20 >
 
@@ -240,14 +225,9 @@
 --------------------------------
 23 >        greeters[0] = new Greeter(greeting);
 
-    ~~~~~~~~~~~~~~~~~~~~~                         => Pos: (525 to 545)  SpanInfo: {"start":533,"length":35}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (525 to 569)  SpanInfo: {"start":533,"length":35}
     >greeters[0] = new Greeter(greeting)
     >:=> (line 23, col 8) to (line 23, col 43)
-23 >        greeters[0] = new Greeter(greeting);
-
-                         ~~~~~~~~~~~~~~~~~~~~~~~~ => Pos: (546 to 569)  SpanInfo: {"start":547,"length":21}
-    >new Greeter(greeting)
-    >:=> (line 23, col 22) to (line 23, col 43)
 --------------------------------
 24 >        for (var i = 0; i < restGreetings.length; i++) {
 
@@ -267,17 +247,7 @@
 --------------------------------
 25 >            greeters.push(new Greeter(restGreetings[i]));
 
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (627 to 652)  SpanInfo: {"start":639,"length":44}
-    >greeters.push(new Greeter(restGreetings[i]))
-    >:=> (line 25, col 12) to (line 25, col 56)
-25 >            greeters.push(new Greeter(restGreetings[i]));
-
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (653 to 681)  SpanInfo: {"start":653,"length":29}
-    >new Greeter(restGreetings[i])
-    >:=> (line 25, col 26) to (line 25, col 55)
-25 >            greeters.push(new Greeter(restGreetings[i]));
-
-                                                           ~~~=> Pos: (682 to 684)  SpanInfo: {"start":639,"length":44}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (627 to 684)  SpanInfo: {"start":639,"length":44}
     >greeters.push(new Greeter(restGreetings[i]))
     >:=> (line 25, col 12) to (line 25, col 56)
 --------------------------------
@@ -309,14 +279,9 @@
 --------------------------------
 31 >    var b = foo2("Hello", "World", "!");
 
-    ~~~~~~~~~~~                                   => Pos: (728 to 738)  SpanInfo: {"start":732,"length":35}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (728 to 768)  SpanInfo: {"start":732,"length":35}
     >var b = foo2("Hello", "World", "!")
     >:=> (line 31, col 4) to (line 31, col 39)
-31 >    var b = foo2("Hello", "World", "!");
-
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     => Pos: (739 to 768)  SpanInfo: {"start":740,"length":27}
-    >foo2("Hello", "World", "!")
-    >:=> (line 31, col 12) to (line 31, col 39)
 --------------------------------
 32 >    // This is simple signle line comment
 
