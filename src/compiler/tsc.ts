@@ -536,13 +536,8 @@ namespace ts {
 
         const program = createProgram(fileNames, compilerOptions, compilerHost);
 
-        let exitStatus = ExitStatus.Success;
-        if (compilerOptions.listEmit) {
-            exitStatus = preComputeOutputFiles();
-        } else {
-            exitStatus = compileProgram();
-        }
- 
+        const exitStatus = compileProgram();
+
         if (compilerOptions.listFiles) {
             forEach(program.getSourceFiles(), file => {
                 sys.write(file.fileName + sys.newLine);
@@ -576,23 +571,6 @@ namespace ts {
         }
 
         return { program, exitStatus };
-
-        function preComputeOutputFiles(): ExitStatus {
-
-            // So user wants both the list of emitted files and 
-            // noEmit. Guess we're done
-            if (compilerOptions.noEmit) {
-                return ExitStatus.Success;
-            }
-
-            function writeFileName(fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void): void {
-                sys.write(fileName + sys.newLine);
-            };
-
-            program.emit(undefined, writeFileName);
-
-            return ExitStatus.Success;
-        }
 
         function compileProgram(): ExitStatus {
             let diagnostics: Diagnostic[];

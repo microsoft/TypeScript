@@ -343,9 +343,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         const emitJavaScript = createFileEmitter();
 
-        const emitFileCB = compilerOptions.listEmit ? emitNullFile : emitFile;
-
-        forEachExpectedEmitFile(host, emitFile, targetSourceFile);
+        forEachExpectedEmitFile(host, compilerOptions.listEmit ? emitNullFile : emitFile, targetSourceFile);
 
         return {
             emitSkipped,
@@ -7886,6 +7884,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
             }
         }
 
+        /**
+         * Write the file names for the emitted files to the console, don't actually compile and emit.
+         * This helps build tools to determine if they should invoke a full compilation.
+         */
         function emitNullFile({ jsFilePath, sourceMapFilePath, declarationFilePath}: { jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string },
             sourceFiles: SourceFile[], isBundledEmit: boolean) {
 
