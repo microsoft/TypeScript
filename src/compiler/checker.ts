@@ -740,7 +740,9 @@ namespace ts {
 
             if (!result) {
                 if (nameNotFoundMessage) {
-                    error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                    if (!checkForMissingPrefix(errorLocation, name, nameArg)) {
+                        error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                    }
                 }
                 return undefined;
             }
@@ -775,6 +777,39 @@ namespace ts {
                 }
             }
             return result;
+        }
+
+        function checkForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
+            if (!errorLocation || (errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
+                return false;
+            }
+            const container = getThisContainer(errorLocation, /* includeArrowFunctions */ true);
+            let location = container;
+            while (location) {
+                if (isClassLike(location.parent)) {
+                    const symbol = getSymbolOfNode(location.parent);
+                    let classType: Type;
+                    if (location.flags & NodeFlags.Static) {
+                        classType = getTypeOfSymbol(symbol);
+                        if (getPropertyOfType(classType, name)) {
+                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_to_prefix_the_static_member_with_the_class_name_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), symbolToString(symbol));
+                            return true;
+                        }
+                    }
+                    else {
+                        if (location === container) {
+                            classType = (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
+                            if (getPropertyOfType(classType, name)) {
+                                error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_to_prefix_the_object_member_with_this_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                location = location.parent;
+            }
+            return false;
         }
 
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
