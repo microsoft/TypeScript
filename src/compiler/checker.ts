@@ -14289,8 +14289,9 @@ namespace ts {
                         }
                     }
                     break;
+                case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ExportDeclaration:
-                    grammarErrorOnFirstToken(node, Diagnostics.Exports_are_not_permitted_in_module_augmentations);
+                    grammarErrorOnFirstToken(node, Diagnostics.Exports_and_export_assignments_are_not_permitted_in_module_augmentations);
                     break;
                 case SyntaxKind.ImportEqualsDeclaration:
                     if ((<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.StringLiteral) {
@@ -14564,7 +14565,9 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports["export="];
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
+                    if (!isTopLevelInExternalModuleAugmentation(declaration)) {
+                        error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
+                    }
                 }
                 // Checks for export * conflicts
                 const exports = getExportsOfModule(moduleSymbol);

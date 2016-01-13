@@ -12,17 +12,18 @@ tests/cases/compiler/x.ts(18,5): error TS2665: Imports are not permitted in modu
 tests/cases/compiler/x.ts(18,26): error TS2307: Cannot find module './x0'.
 tests/cases/compiler/x.ts(19,5): error TS2665: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/x.ts(19,21): error TS2307: Cannot find module './x0'.
-tests/cases/compiler/x.ts(20,5): error TS2664: Exports are not permitted in module augmentations.
+tests/cases/compiler/x.ts(20,5): error TS2664: Exports and export assignments are not permitted in module augmentations.
 tests/cases/compiler/x.ts(20,19): error TS2307: Cannot find module './x0'.
-tests/cases/compiler/x.ts(21,5): error TS2664: Exports are not permitted in module augmentations.
+tests/cases/compiler/x.ts(21,5): error TS2664: Exports and export assignments are not permitted in module augmentations.
 tests/cases/compiler/x.ts(21,21): error TS2307: Cannot find module './x0'.
+tests/cases/compiler/x.ts(25,5): error TS2664: Exports and export assignments are not permitted in module augmentations.
 
 
 ==== tests/cases/compiler/x0.ts (0 errors) ====
     
     export let a = 1;
     
-==== tests/cases/compiler/x.ts (18 errors) ====
+==== tests/cases/compiler/x.ts (19 errors) ====
     
     namespace N1 {
         export let x = 1;
@@ -72,14 +73,20 @@ tests/cases/compiler/x.ts(21,21): error TS2307: Cannot find module './x0'.
 !!! error TS2307: Cannot find module './x0'.
         export * from "./x0";
         ~~~~~~
-!!! error TS2664: Exports are not permitted in module augmentations.
+!!! error TS2664: Exports and export assignments are not permitted in module augmentations.
                       ~~~~~~
 !!! error TS2307: Cannot find module './x0'.
         export {a} from "./x0";
         ~~~~~~
-!!! error TS2664: Exports are not permitted in module augmentations.
+!!! error TS2664: Exports and export assignments are not permitted in module augmentations.
                         ~~~~~~
 !!! error TS2307: Cannot find module './x0'.
+    }
+    
+    declare module "./test" {
+        export = N1;
+        ~~~~~~
+!!! error TS2664: Exports and export assignments are not permitted in module augmentations.
     }
     export {}
     
@@ -88,6 +95,9 @@ tests/cases/compiler/x.ts(21,21): error TS2307: Cannot find module './x0'.
         filter(pred: (e:T) => boolean): Observable<T>;
     }
     export var x = 1;
+    
+==== tests/cases/compiler/test.ts (0 errors) ====
+    export let b = 1;
     
 ==== tests/cases/compiler/main.ts (0 errors) ====
     import { Observable } from "./observable"

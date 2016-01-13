@@ -27,6 +27,10 @@ declare module "./observable" {
     export * from "./x0";
     export {a} from "./x0";
 }
+
+declare module "./test" {
+    export = N1;
+}
 export {}
 
 //// [observable.ts]
@@ -34,6 +38,9 @@ export declare class Observable<T> {
     filter(pred: (e:T) => boolean): Observable<T>;
 }
 export var x = 1;
+
+//// [test.ts]
+export let b = 1;
 
 //// [main.ts]
 import { Observable } from "./observable"
@@ -52,6 +59,9 @@ var N1;
 //// [observable.js]
 "use strict";
 exports.x = 1;
+//// [test.js]
+"use strict";
+exports.b = 1;
 //// [main.js]
 "use strict";
 require("./x");
