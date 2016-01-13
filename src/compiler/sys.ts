@@ -311,12 +311,15 @@ namespace ts {
                 const fileWatcherCallbacks = createFileMap<FileWatcherCallback[]>();
                 return { addFile, removeFile };
 
-                function reduceDirWatcherRefCount(dirPath: Path) {
-                    const watcher = dirWatchers.get(dirPath);
-                    watcher.referenceCount -= 1;
-                    if (watcher.referenceCount <= 0) {
-                        watcher.close();
-                        dirWatchers.remove(dirPath);
+                function reduceDirWatcherRefCountForFile(filePath: Path) {
+                    const dirPath = getDirectoryPath(filePath);
+                    if (dirWatchers.contains(dirPath)) {
+                        const watcher = dirWatchers.get(dirPath);
+                        watcher.referenceCount -= 1;
+                        if (watcher.referenceCount <= 0) {
+                            watcher.close();
+                            dirWatchers.remove(dirPath);
+                        }
                     }
                 }
 
@@ -346,14 +349,6 @@ namespace ts {
                     }
                 }
 
-                function findWatchedDirForFile(filePath: Path): Path {
-                    const dirPath = getDirectoryPath(filePath);
-                    if (dirWatchers.contains(dirPath)) {
-                        return dirPath;
-                    }
-                    return undefined;
-                }
-
                 function addFile(filePath: Path, callback: FileWatcherCallback): WatchedFile {
                     addFileWatcherCallback(filePath, callback);
                     addDirWatcher(getDirectoryPath(filePath));
@@ -362,15 +357,15 @@ namespace ts {
                 }
 
                 function removeFile(watchedFile: WatchedFile) {
-                    const filePath = watchedFile.filePath;
+                    removeFileWatcherCallback(watchedFile.filePath, watchedFile.callback);
+                    reduceDirWatcherRefCountForFile(watchedFile.filePath);
+                }
+
+                function removeFileWatcherCallback(filePath: Path, callback: FileWatcherCallback) {
                     if (fileWatcherCallbacks.contains(filePath)) {
-                        const newCallbacks = copyListRemovingItem(watchedFile.callback, fileWatcherCallbacks.get(filePath));
+                        const newCallbacks = copyListRemovingItem(callback, fileWatcherCallbacks.get(filePath));
                         if (newCallbacks.length === 0) {
                             fileWatcherCallbacks.remove(filePath);
-                            const watchedDir = findWatchedDirForFile(filePath);
-                            if (watchedDir) {
-                                reduceDirWatcherRefCount(watchedDir);
-                            }
                         }
                         else {
                             fileWatcherCallbacks.set(filePath, newCallbacks);
