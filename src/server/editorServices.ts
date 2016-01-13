@@ -1332,6 +1332,7 @@ namespace ts.server {
             InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
             InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
             PlaceOpenBraceOnNewLineForFunctions: false,
             PlaceOpenBraceOnNewLineForControlBlocks: false,
         };
