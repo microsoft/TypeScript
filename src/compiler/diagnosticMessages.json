@@ -1775,11 +1775,11 @@
         "category": "Error",
         "code": 2661
     },
-    "Cannot find name '{0}'. Did you mean to prefix the static member with the class name, '{1}.{0}'?": {
+    "Cannot find name '{0}'. Did you mean the static member '{1}.{0}'?": {
         "category": "Error",
         "code": 2662
     },
-    "Cannot find name '{0}'. Did you mean to prefix the object member with 'this', 'this.{0}'?": {
+    "Cannot find name '{0}'. Did you mean the instance member 'this.{0}'?": {
         "category": "Error",
         "code": 2663
     },

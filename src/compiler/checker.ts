@@ -793,7 +793,7 @@ namespace ts {
                     if (location.flags & NodeFlags.Static) {
                         classType = getTypeOfSymbol(symbol);
                         if (getPropertyOfType(classType, name)) {
-                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_to_prefix_the_static_member_with_the_class_name_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), symbolToString(symbol));
+                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), symbolToString(symbol));
                             return true;
                         }
                     }
@@ -801,7 +801,7 @@ namespace ts {
                         if (location === container) {
                             classType = (<InterfaceType>getDeclaredTypeOfSymbol(symbol)).thisType;
                             if (getPropertyOfType(classType, name)) {
-                                error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_to_prefix_the_object_member_with_this_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                                error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                                 return true;
                             }
                         }
