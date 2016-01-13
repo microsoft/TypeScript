@@ -740,7 +740,7 @@ namespace ts {
 
             if (!result) {
                 if (nameNotFoundMessage) {
-                    if (!checkForMissingPrefix(errorLocation, name, nameArg)) {
+                    if (!checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg)) {
                         error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                     }
                 }
@@ -779,10 +779,11 @@ namespace ts {
             return result;
         }
 
-        function checkForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
+        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: string, nameArg: string | Identifier): boolean {
             if (!errorLocation || (errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
                 return false;
             }
+
             const container = getThisContainer(errorLocation, /* includeArrowFunctions */ true);
             let location = container;
             while (location) {
