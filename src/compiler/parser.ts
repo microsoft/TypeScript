@@ -2541,11 +2541,7 @@ namespace ts {
         }
 
         function parseTypeOrTypePredicate(): TypeNode {
-            let typePredicateVariable: Identifier;
-            if (isIdentifier()) {
-                typePredicateVariable = tryParse(parseTypePredicatePrefix);
-            }
-
+            const typePredicateVariable = isIdentifier() && tryParse(parseTypePredicatePrefix);
             const type = parseType();
             if (typePredicateVariable) {
                 const node = <TypePredicateNode>createNode(SyntaxKind.TypePredicate, typePredicateVariable.pos);
