@@ -602,13 +602,9 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const typeChecker = getDiagnosticsProducingTypeChecker();
-            let emitResolver: EmitResolver;
-            if (options.listEmit) {
-                emitResolver = typeChecker.getEmitResolverNoTypeCheck();
-            }
-            else {
-                emitResolver = typeChecker.getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
+            let emitResolver: EmitResolver = undefined;
+            if (!options.listOutputFiles) {
+                emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
             }
 
             const start = new Date().getTime();

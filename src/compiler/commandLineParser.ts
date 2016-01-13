@@ -296,7 +296,7 @@ namespace ts {
             description: Diagnostics.Allow_javascript_files_to_be_compiled
         },
         {
-            name: "listEmit",
+            name: "listOutputFiles",
             type: "boolean"
         }
     ];

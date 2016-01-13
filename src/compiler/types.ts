@@ -1752,7 +1752,6 @@ namespace ts {
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
         /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
-        /* @internal */ getEmitResolverNoTypeCheck(): EmitResolver;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2422,7 +2421,7 @@ namespace ts {
         forceConsistentCasingInFileNames?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowJs?: boolean;
-        listEmit?: boolean;
+        listOutputFiles?: boolean;
         /* @internal */ stripInternal?: boolean;
 
         // Skip checking lib.d.ts to help speed up tests.

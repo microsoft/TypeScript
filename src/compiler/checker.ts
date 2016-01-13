@@ -98,7 +98,6 @@ namespace ts {
             isImplementationOfOverload,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
-            getEmitResolverNoTypeCheck,
             getExportsOfModule: getExportsOfModuleAsArray,
 
             getJsxElementAttributesType,
@@ -256,10 +255,6 @@ namespace ts {
             // Ensure we have all the type information in place for this file so that all the
             // emitter questions of this resolver will return the right information.
             getDiagnostics(sourceFile, cancellationToken);
-            return emitResolver;
-        }
-
-        function getEmitResolverNoTypeCheck() {
             return emitResolver;
         }
 

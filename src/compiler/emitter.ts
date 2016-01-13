@@ -343,7 +343,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, Promi
 
         const emitJavaScript = createFileEmitter();
 
-        forEachExpectedEmitFile(host, compilerOptions.listEmit ? emitNullFile : emitFile, targetSourceFile);
+        forEachExpectedEmitFile(host, compilerOptions.listOutputFiles ? emitNullFile : emitFile, targetSourceFile);
 
         return {
             emitSkipped,
