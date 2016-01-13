@@ -20,3 +20,8 @@ declare var React: any;
 >div : any
 >div : any
 
+<div>Be careful of &quot;-ed strings!</div>;
+><div>Be careful of &quot;-ed strings!</div> : JSX.Element
+>div : any
+>div : any
+

@@ -108,17 +108,6 @@ var serverCoreSources = [
     return path.join(serverDirectory, f);
 });
 
-var scriptSources = [
-    "tslint/booleanTriviaRule.ts",
-    "tslint/nextLineRule.ts",
-    "tslint/noNullRule.ts",
-    "tslint/preferConstRule.ts",
-    "tslint/typeOperatorSpacingRule.ts",
-    "tslint/noInOperatorRule.ts"
-].map(function (f) {
-    return path.join(scriptsDirectory, f);
-});
-
 var serverSources = serverCoreSources.concat(servicesSources);
 
 var languageServiceLibrarySources = [
@@ -174,13 +163,13 @@ var harnessSources = harnessCoreSources.concat([
 }));
 
 var librarySourceMap = [
-        { target: "lib.core.d.ts", sources: ["core.d.ts"] },
+        { target: "lib.core.d.ts", sources: ["header.d.ts", "core.d.ts"] },
         { target: "lib.dom.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "dom.generated.d.ts"], },
         { target: "lib.webworker.d.ts", sources: ["importcore.d.ts", "intl.d.ts", "webworker.generated.d.ts"], },
         { target: "lib.scriptHost.d.ts", sources: ["importcore.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.d.ts", sources: ["core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
-        { target: "lib.core.es6.d.ts", sources: ["core.d.ts", "es6.d.ts"]},
-        { target: "lib.es6.d.ts", sources: ["es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
+        { target: "lib.d.ts", sources: ["header.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"], },
+        { target: "lib.core.es6.d.ts", sources: ["header.d.ts", "core.d.ts", "es6.d.ts"]},
+        { target: "lib.es6.d.ts", sources: ["header.d.ts", "es6.d.ts", "core.d.ts", "intl.d.ts", "dom.generated.d.ts", "dom.es6.d.ts", "webworker.importscripts.d.ts", "scriptHost.d.ts"] }
 ];
 
 var libraryTargets = librarySourceMap.map(function (f) {
@@ -878,7 +867,8 @@ var tslintRules = ([
     "preferConstRule",
     "booleanTriviaRule",
     "typeOperatorSpacingRule",
-    "noInOperatorRule"
+    "noInOperatorRule",
+    "noIncrementDecrementRule"
 ]);
 var tslintRulesFiles = tslintRules.map(function(p) {
     return path.join(tslintRuleDir, p + ".ts");
@@ -921,10 +911,20 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
+var servicesLintTargets = [
+    "navigateTo.ts",
+    "outliningElementsCollector.ts",
+    "patternMatcher.ts",
+    "services.ts",
+    "shims.ts",
+].map(function (s) {
+    return path.join(servicesDirectory, s);
+});
 var lintTargets = compilerSources
     .concat(harnessCoreSources)
     .concat(serverCoreSources)
-    .concat(scriptSources);
+    .concat(tslintRulesFiles)
+    .concat(servicesLintTargets);
 
 desc("Runs tslint on the compiler sources");
 task("lint", ["build-rules"], function() {

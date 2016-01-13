@@ -55,6 +55,11 @@ namespace ts {
             error: Diagnostics.Argument_for_jsx_must_be_preserve_or_react
         },
         {
+            name: "reactNamespace",
+            type: "string",
+            description: Diagnostics.Specifies_the_object_invoked_for_createElement_and_spread_when_targeting_react_JSX_emit
+        },
+        {
             name: "listFiles",
             type: "boolean",
         },
@@ -338,7 +343,8 @@ namespace ts {
         function parseStrings(args: string[]) {
             let i = 0;
             while (i < args.length) {
-                let s = args[i++];
+                let s = args[i];
+                i++;
                 if (s.charCodeAt(0) === CharacterCodes.at) {
                     parseResponseFile(s.slice(1));
                 }
@@ -360,18 +366,21 @@ namespace ts {
 
                         switch (opt.type) {
                             case "number":
-                                options[opt.name] = parseInt(args[i++]);
+                                options[opt.name] = parseInt(args[i]);
+                                i++;
                                 break;
                             case "boolean":
                                 options[opt.name] = true;
                                 break;
                             case "string":
-                                options[opt.name] = args[i++] || "";
+                                options[opt.name] = args[i] || "";
+                                i++;
                                 break;
                             // If not a primitive, the possible types are specified in what is effectively a map of options.
                             default:
                                 let map = <Map<number>>opt.type;
-                                let key = (args[i++] || "").toLowerCase();
+                                let key = (args[i] || "").toLowerCase();
+                                i++;
                                 if (hasProperty(map, key)) {
                                     options[opt.name] = map[key];
                                 }

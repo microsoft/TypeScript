@@ -8,6 +8,7 @@ let x = Test; // emit test_1.default
 >Test : Symbol(Test, Decl(consumer.tsx, 1, 6))
 
 <anything attr={Test} />; // ?
+>anything : Symbol(unknown)
 >attr : Symbol(unknown)
 >Test : Symbol(Test, Decl(consumer.tsx, 1, 6))
 
