@@ -25,7 +25,7 @@ namespace ts {
     }
 
     interface WatchedFile {
-        fileName: string;
+        filePath: Path;
         callback: FileWatcherCallback;
         mtime?: Date;
     }
@@ -244,13 +244,13 @@ namespace ts {
                         return;
                     }
 
-                    _fs.stat(watchedFile.fileName, (err: any, stats: any) => {
+                    _fs.stat(watchedFile.filePath, (err: any, stats: any) => {
                         if (err) {
-                            watchedFile.callback(watchedFile.fileName);
+                            watchedFile.callback(watchedFile.filePath);
                         }
                         else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                            watchedFile.mtime = getModifiedTime(watchedFile.fileName);
-                            watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
+                            watchedFile.mtime = getModifiedTime(watchedFile.filePath);
+                            watchedFile.callback(watchedFile.filePath, watchedFile.mtime.getTime() === 0);
                         }
                     });
                 }
@@ -278,11 +278,11 @@ namespace ts {
                     }, interval);
                 }
 
-                function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
+                function addFile(filePath: Path, callback: FileWatcherCallback): WatchedFile {
                     const file: WatchedFile = {
-                        fileName,
+                        filePath,
                         callback,
-                        mtime: getModifiedTime(fileName)
+                        mtime: getModifiedTime(filePath)
                     };
 
                     watchedFiles.push(file);
@@ -309,7 +309,6 @@ namespace ts {
                 const dirWatchers = createFileMap<DirectoryWatcher>();
                 // One file can have multiple watchers
                 const fileWatcherCallbacks = createFileMap<FileWatcherCallback[]>();
-                const currentDirectory = process.cwd();
                 return { addFile, removeFile };
 
                 function reduceDirWatcherRefCount(dirPath: Path) {
@@ -355,16 +354,15 @@ namespace ts {
                     return undefined;
                 }
 
-                function addFile(fileName: string, callback: FileWatcherCallback): WatchedFile {
-                    const filePath = toPath(fileName, currentDirectory, getCanonicalPath);
+                function addFile(filePath: Path, callback: FileWatcherCallback): WatchedFile {
                     addFileWatcherCallback(filePath, callback);
                     addDirWatcher(getDirectoryPath(filePath));
 
-                    return { fileName, callback };
+                    return { filePath, callback };
                 }
 
                 function removeFile(watchedFile: WatchedFile) {
-                    const filePath = toPath(watchedFile.fileName, currentDirectory, getCanonicalPath);
+                    const filePath = watchedFile.filePath;
                     if (fileWatcherCallbacks.contains(filePath)) {
                         const newCallbacks = copyListRemovingItem(watchedFile.callback, fileWatcherCallbacks.get(filePath));
                         if (newCallbacks.length === 0) {
@@ -513,7 +511,7 @@ namespace ts {
                     // and https://github.com/Microsoft/TypeScript/issues/4643), therefore
                     // if the current node.js version is newer than 4, use `fs.watch` instead.
                     const watchSet = isNode4OrLater() ? watchedFileSet : pollingWatchedFileSet;
-                    const watchedFile =  watchSet.addFile(fileName, callback);
+                    const watchedFile =  watchSet.addFile(<Path>fileName, callback);
                     return {
                         close: () => watchSet.removeFile(watchedFile)
                     };
