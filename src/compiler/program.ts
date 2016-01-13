@@ -606,7 +606,8 @@ namespace ts {
             let emitResolver: EmitResolver;
             if (options.listEmit) {
                 emitResolver = typeChecker.getEmitResolverNoTypeCheck();
-            } else {
+            }
+            else {
                 emitResolver = typeChecker.getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
             }
 
