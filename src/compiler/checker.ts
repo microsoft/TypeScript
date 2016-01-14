@@ -14246,7 +14246,7 @@ namespace ts {
                         if (checkBody) {
                             // body of ambient external module is always a module block
                             for (const statement of (<ModuleBlock>node.body).statements) {
-                                checkBodyOfModuleAugmentation(statement, isGlobalAugmentation);
+                                checkModuleAugmentationElement(statement, isGlobalAugmentation);
                             }
                         }
                     }
@@ -14273,20 +14273,12 @@ namespace ts {
             checkSourceElement(node.body);
         }
 
-        function checkBodyOfModuleAugmentation(node: Node, isGlobalAugmentation: boolean): void {
+        function checkModuleAugmentationElement(node: Node, isGlobalAugmentation: boolean): void {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
                     // error each individual name in variable statement instead of marking the entire variable statement
                     for (const decl of (<VariableStatement>node).declarationList.declarations) {
-                        if (isBindingPattern(decl.name)) {
-                            for (const el of (<BindingPattern>decl.name).elements) {
-                                // mark individual names in binding pattern
-                                checkBodyOfModuleAugmentation(el, isGlobalAugmentation);
-                            }
-                        }
-                        else {
-                            checkBodyOfModuleAugmentation(decl, isGlobalAugmentation);
-                        }
+                        checkModuleAugmentationElement(decl, isGlobalAugmentation);
                     }
                     break;
                 case SyntaxKind.ExportAssignment:
@@ -14302,7 +14294,23 @@ namespace ts {
                 case SyntaxKind.ImportDeclaration:
                     grammarErrorOnFirstToken(node, Diagnostics.Imports_are_not_permitted_in_module_augmentations_Consider_moving_them_to_the_enclosing_external_module);
                     break;
-                default:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.VariableDeclaration:
+                    const name = (<VariableDeclaration | BindingElement>node).name;
+                    if (isBindingPattern(name)) {
+                        for (const el of name.elements) {
+                            // mark individual names in binding pattern
+                            checkModuleAugmentationElement(el, isGlobalAugmentation);
+                        }
+                        break;
+                    }
+                    // fallthrough
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
                     const symbol = getSymbolOfNode(node);
                     if (symbol) {
                         // module augmentations cannot introduce new names on the top level scope of the module

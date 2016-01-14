@@ -527,13 +527,7 @@ namespace ts {
                     }
 
                     if (resolveModuleNamesWorker) {
-                        const moduleNames: string[] = [];
-                        for (const moduleName of newSourceFile.imports) {
-                            moduleNames.push(moduleName.text);
-                        }
-                        for (const moduleName of newSourceFile.moduleAugmentations) {
-                            moduleNames.push(moduleName.text);
-                        }
+                        const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
                         const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory));
                         // ensure that module resolution results are still correct
                         for (let i = 0; i < moduleNames.length; i++) {
@@ -922,6 +916,10 @@ namespace ts {
             return a.text === b.text;
         }
 
+        function getTextOfLiteral(literal: LiteralExpression): string {
+            return literal.text;
+        }
+
         function collectExternalModuleReferences(file: SourceFile): void {
             if (file.imports) {
                 return;
@@ -1128,13 +1126,7 @@ namespace ts {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
                 file.resolvedModules = {};
-                const moduleNames: string[] = [];
-                for (const name of file.imports) {
-                    moduleNames.push(name.text);
-                }
-                for (const name of file.moduleAugmentations) {
-                    moduleNames.push(name.text);
-                }
+                const moduleNames = map(concatenate(file.imports, file.moduleAugmentations), getTextOfLiteral);
                 const resolutions = resolveModuleNamesWorker(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory));
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];

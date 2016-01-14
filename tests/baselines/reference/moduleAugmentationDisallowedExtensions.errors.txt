@@ -3,6 +3,10 @@ tests/cases/compiler/x.ts(8,9): error TS2663: Module augmentation cannot introdu
 tests/cases/compiler/x.ts(9,11): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/x.ts(10,10): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/x.ts(10,14): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(10,23): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(10,38): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(10,43): error TS2663: Module augmentation cannot introduce new names in the top level scope.
+tests/cases/compiler/x.ts(10,48): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/x.ts(11,15): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/x.ts(12,15): error TS2663: Module augmentation cannot introduce new names in the top level scope.
 tests/cases/compiler/x.ts(15,11): error TS2663: Module augmentation cannot introduce new names in the top level scope.
@@ -23,7 +27,7 @@ tests/cases/compiler/x.ts(25,5): error TS2664: Exports and export assignments ar
     
     export let a = 1;
     
-==== tests/cases/compiler/x.ts (19 errors) ====
+==== tests/cases/compiler/x.ts (23 errors) ====
     
     namespace N1 {
         export let x = 1;
@@ -39,10 +43,18 @@ tests/cases/compiler/x.ts(25,5): error TS2664: Exports and export assignments ar
         const z: number;
               ~
 !!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
-        let {x1, y1}: {x1: number, y1: string}
+        let {x1, y1, z0: {n}, z1: {arr: [el1, el2, el3]}}: {x1: number, y1: string, z0: {n: number}, z1: {arr: number[]} }
              ~~
 !!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
                  ~~
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
+                          ~
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
+                                         ~~~
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
+                                              ~~~
+!!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
+                                                   ~~~
 !!! error TS2663: Module augmentation cannot introduce new names in the top level scope.
         interface A { x }
                   ~

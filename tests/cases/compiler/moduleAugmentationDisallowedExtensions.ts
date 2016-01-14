@@ -13,7 +13,7 @@ declare module "./observable" {
     var x: number;
     let y: number;
     const z: number;
-    let {x1, y1}: {x1: number, y1: string}
+    let {x1, y1, z0: {n}, z1: {arr: [el1, el2, el3]}}: {x1: number, y1: string, z0: {n: number}, z1: {arr: number[]} }
     interface A { x }
     namespace N {
         export class C {}
