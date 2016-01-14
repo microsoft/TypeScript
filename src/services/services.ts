@@ -2019,13 +2019,6 @@ namespace ts {
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, sourceFile.languageVersion, version, /*setNodeParents*/ true);
     }
 
-    export function createGetCanonicalFileName(useCaseSensitivefileNames: boolean): (fileName: string) => string {
-        return useCaseSensitivefileNames
-            ? ((fileName) => fileName)
-            : ((fileName) => fileName.toLowerCase());
-    }
-
-
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
