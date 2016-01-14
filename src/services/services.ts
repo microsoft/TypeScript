@@ -6010,8 +6010,8 @@ namespace ts {
                 // the symbol argument will be the symbol of an interface "C" and previousIterationSymbol is undefined,
                 // the function will add any found symbol of the property-name, then its sub-routine will call
                 // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
-                // visited symbol, interface "C", the sub- routine will pass the current symbol as previousIterationSymbol.
-                if (previousIterationSymbolsCache && previousIterationSymbolsCache[symbol.name] === symbol) {
+                // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
+                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
                     return;
                 }
 
