@@ -83,6 +83,7 @@ namespace ts {
             getSymbolsInScope,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
+            getExportSpecifierLocalTargetSymbol,
             getTypeAtLocation: getTypeOfNode,
             typeToString,
             getSymbolDisplayBuilder,
@@ -15062,9 +15063,16 @@ namespace ts {
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value);
+                return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
             }
             return undefined;
+        }
+
+        /** Returns the target of an export specifier without following aliases */
+        function getExportSpecifierLocalTargetSymbol(node: ExportSpecifier): Symbol {
+            return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
+                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
+                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
         }
 
         function getTypeOfNode(node: Node): Type {

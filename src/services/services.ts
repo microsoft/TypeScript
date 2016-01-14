@@ -5517,10 +5517,8 @@ namespace ts {
                 };
             }
 
-            function isImportOrExportSpecifierImportSymbol(symbol: Symbol) {
-                return (symbol.flags & SymbolFlags.Alias) && forEach(symbol.declarations, declaration => {
-                    return declaration.kind === SyntaxKind.ImportSpecifier || declaration.kind === SyntaxKind.ExportSpecifier;
-                });
+            function isImportSpecifierSymbol(symbol: Symbol) {
+                return (symbol.flags & SymbolFlags.Alias) && !!getDeclarationOfKind(symbol, SyntaxKind.ImportSpecifier);
             }
 
             function getInternedName(symbol: Symbol, location: Node, declarations: Declaration[]): string {
@@ -5964,8 +5962,17 @@ namespace ts {
                 let result = [symbol];
 
                 // If the symbol is an alias, add what it alaises to the list
-                if (isImportOrExportSpecifierImportSymbol(symbol)) {
-                    result.push(typeChecker.getAliasedSymbol(symbol));
+                if (isImportSpecifierSymbol(symbol)) {
+                     result.push(typeChecker.getAliasedSymbol(symbol));
+                }
+
+                // For export specifiers, the exported name can be refering to a local symbol, e.g.:
+                //     import {a} from "mod";
+                //     export {a as somethingElse}
+                // We want the *local* declaration of 'a' as declared in the import,
+                // *not* as declared within "mod" (or farther)
+                if (location.parent.kind === SyntaxKind.ExportSpecifier) {
+                    result.push(typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>location.parent));
                 }
 
                 // If the location is in a context sensitive location (i.e. in an object literal) try
@@ -6055,8 +6062,19 @@ namespace ts {
 
                 // If the reference symbol is an alias, check if what it is aliasing is one of the search
                 // symbols.
-                if (isImportOrExportSpecifierImportSymbol(referenceSymbol)) {
+                if (isImportSpecifierSymbol(referenceSymbol)) {
                     const aliasedSymbol = typeChecker.getAliasedSymbol(referenceSymbol);
+                    if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
+                        return aliasedSymbol;
+                    }
+                }
+
+                // For export specifiers, it can be a local symbol, e.g. 
+                //     import {a} from "mod";
+                //     export {a as somethingElse}
+                // We want the local target of the export (i.e. the import symbol) and not the final target (i.e. "mod".a)
+                if (referenceLocation.parent.kind === SyntaxKind.ExportSpecifier) {
+                    const aliasedSymbol = typeChecker.getExportSpecifierLocalTargetSymbol(<ExportSpecifier>referenceLocation.parent);
                     if (searchSymbols.indexOf(aliasedSymbol) >= 0) {
                         return aliasedSymbol;
                     }
