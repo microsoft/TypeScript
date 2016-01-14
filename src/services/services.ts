@@ -6018,14 +6018,38 @@ namespace ts {
 
                     // Add symbol of properties/methods of the same name in base classes and implemented interfaces definitions
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
                     }
                 });
 
                 return result;
             }
 
-            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[]): void {
+            /**
+             * Find symbol of the given property-name and add the symbol to the given result array
+             * @param symbol a symbol to start searching for the given propertyName
+             * @param propertyName a name of property to serach for
+             * @param result an array of symbol of found property symbols
+             * @param previousIterationSymbolsCache a cache of symbol from previous iterations of calling this function to prevent infinite revisitng of the same symbol.
+             *                                The value of previousIterationSymbol is undefined when the function is first called.
+             */
+            function getPropertySymbolsFromBaseTypes(symbol: Symbol, propertyName: string, result: Symbol[],
+                previousIterationSymbolsCache: SymbolTable): void {
+                // If the current symbol is the same as the previous-iteration symbol, we can just return the symbol that has already been visited
+                // This is particularly important for the following cases, so that we do not infinitely visit the same symbol.
+                // For example:
+                //      interface C extends C {
+                //          /*findRef*/propName: string;
+                //      }
+                // The first time getPropertySymbolsFromBaseTypes is called when finding-all-references at propName,
+                // the symbol argument will be the symbol of an interface "C" and previousIterationSymbol is undefined,
+                // the function will add any found symbol of the property-name, then its sub-routine will call
+                // getPropertySymbolsFromBaseTypes again to walk up any base types to prevent revisiting already
+                // visited symbol, interface "C", the sub-routine will pass the current symbol as previousIterationSymbol.
+                if (hasProperty(previousIterationSymbolsCache, symbol.name)) {
+                    return;
+                }
+
                 if (symbol && symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     forEach(symbol.getDeclarations(), declaration => {
                         if (declaration.kind === SyntaxKind.ClassDeclaration) {
@@ -6049,7 +6073,8 @@ namespace ts {
                             }
 
                             // Visit the typeReference as well to see if it directly or indirectly use that property
-                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result);
+                            previousIterationSymbolsCache[symbol.name] = symbol;
+                            getPropertySymbolsFromBaseTypes(type.symbol, propertyName, result, previousIterationSymbolsCache);
                         }
                     }
                 }
@@ -6101,7 +6126,7 @@ namespace ts {
                     // see if any is in the list
                     if (rootSymbol.parent && rootSymbol.parent.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                         const result: Symbol[] = [];
-                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result);
+                        getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.getName(), result, /*previousIterationSymbolsCache*/ {});
                         return forEach(result, s => searchSymbols.indexOf(s) >= 0 ? s : undefined);
                     }
 
