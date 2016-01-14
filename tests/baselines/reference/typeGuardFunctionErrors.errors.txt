@@ -27,7 +27,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,9):
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(98,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2322: Type 'boolean' is not assignable to type 'D'.
-  Property 'm1' is missing in type 'Boolean'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(105,16): error TS2409: Return type of constructor signature must be assignable to the instance type of the class
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(107,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(110,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
@@ -198,7 +197,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(137,39
             return true;
                    ~~~~
 !!! error TS2322: Type 'boolean' is not assignable to type 'D'.
-!!! error TS2322:   Property 'm1' is missing in type 'Boolean'.
                    ~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class
         }
