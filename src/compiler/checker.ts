@@ -83,6 +83,7 @@ namespace ts {
             getSymbolsInScope,
             getSymbolAtLocation,
             getShorthandAssignmentValueSymbol,
+            getExportSpecifierLocalTargetSymbol,
             getTypeAtLocation: getTypeOfNode,
             typeToString,
             getSymbolDisplayBuilder,
@@ -8274,26 +8275,30 @@ namespace ts {
                     // Get the element instance type (the result of newing or invoking this tag)
                     const elemInstanceType = getJsxElementInstanceType(node);
 
-                    // Is this is a stateless function component? See if its single signature is
-                    // assignable to the JSX Element Type
-                    const callSignature = getSingleCallSignature(getTypeOfSymbol(sym));
-                    const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
-                    let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                    if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType) && (paramType.flags & TypeFlags.ObjectType)) {
-                        // Intersect in JSX.IntrinsicAttributes if it exists
-                        const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
-                        if (intrinsicAttributes !== unknownType) {
-                            paramType = intersectTypes(intrinsicAttributes, paramType);
+                    const elemClassType = getJsxGlobalElementClassType();
+
+                    if (!elemClassType || !isTypeAssignableTo(elemInstanceType, elemClassType)) {
+                        // Is this is a stateless function component? See if its single signature's return type is
+                        // assignable to the JSX Element Type
+                        const elemType = getTypeOfSymbol(sym);
+                        const callSignatures = elemType && getSignaturesOfType(elemType, SignatureKind.Call);
+                        const callSignature = callSignatures && callSignatures.length > 0 && callSignatures[0];
+                        const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
+                        let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                        if (callReturnType && isTypeAssignableTo(callReturnType, jsxElementType)) {
+                            // Intersect in JSX.IntrinsicAttributes if it exists
+                            const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
+                            if (intrinsicAttributes !== unknownType) {
+                                paramType = intersectTypes(intrinsicAttributes, paramType);
+                            }
+                            return links.resolvedJsxType = paramType;
                         }
-                        return paramType;
                     }
 
                     // Issue an error if this return type isn't assignable to JSX.ElementClass
-                    const elemClassType = getJsxGlobalElementClassType();
                     if (elemClassType) {
                         checkTypeRelatedTo(elemInstanceType, elemClassType, assignableRelation, node, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
                     }
-
 
                     if (isTypeAny(elemInstanceType)) {
                         return links.resolvedJsxType = elemInstanceType;
@@ -11226,7 +11231,53 @@ namespace ts {
             return -1;
         }
 
-        function isInLegalParameterTypePredicatePosition(node: Node): boolean {
+        function checkTypePredicate(node: TypePredicateNode) {
+            const parent = getTypePredicateParent(node);
+            if (!parent) {
+                return;
+            }
+            const returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(parent));
+            if (!returnType || !(returnType.flags & TypeFlags.PredicateType)) {
+                return;
+            }
+            const { parameterName } = node;
+            if (parameterName.kind === SyntaxKind.ThisType) {
+                getTypeFromThisTypeNode(parameterName as ThisTypeNode);
+            }
+            else {
+                const typePredicate = <IdentifierTypePredicate>(<PredicateType>returnType).predicate;
+                if (typePredicate.parameterIndex >= 0) {
+                    if (parent.parameters[typePredicate.parameterIndex].dotDotDotToken) {
+                        error(parameterName,
+                            Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
+                    }
+                    else {
+                        checkTypeAssignableTo(typePredicate.type,
+                            getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
+                            node.type);
+                    }
+                }
+                else if (parameterName) {
+                    let hasReportedError = false;
+                    for (const { name } of parent.parameters) {
+                        if ((name.kind === SyntaxKind.ObjectBindingPattern ||
+                            name.kind === SyntaxKind.ArrayBindingPattern) &&
+                            checkIfTypePredicateVariableIsDeclaredInBindingPattern(
+                                <BindingPattern>name,
+                                parameterName,
+                                typePredicate.parameterName)) {
+                            hasReportedError = true;
+                            break;
+                        }
+                    }
+                    if (!hasReportedError) {
+                        error(node.parameterName, Diagnostics.Cannot_find_parameter_0, typePredicate.parameterName);
+                    }
+                }
+            }
+        }
+
+        function getTypePredicateParent(node: Node): SignatureDeclaration {
             switch (node.parent.kind) {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.CallSignature:
@@ -11235,22 +11286,35 @@ namespace ts {
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    return node === (<SignatureDeclaration>node.parent).type;
+                    const parent = <SignatureDeclaration>node.parent;
+                    if (node === parent.type) {
+                        return parent;
+                    }
             }
-            return false;
         }
 
-        function isInLegalThisTypePredicatePosition(node: Node): boolean {
-            if (isInLegalParameterTypePredicatePosition(node)) {
-                return true;
+        function checkIfTypePredicateVariableIsDeclaredInBindingPattern(
+            pattern: BindingPattern,
+            predicateVariableNode: Node,
+            predicateVariableName: string) {
+            for (const { name } of pattern.elements) {
+                if (name.kind === SyntaxKind.Identifier &&
+                    (<Identifier>name).text === predicateVariableName) {
+                    error(predicateVariableNode,
+                        Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
+                        predicateVariableName);
+                    return true;
+                }
+                else if (name.kind === SyntaxKind.ArrayBindingPattern ||
+                    name.kind === SyntaxKind.ObjectBindingPattern) {
+                    if (checkIfTypePredicateVariableIsDeclaredInBindingPattern(
+                        <BindingPattern>name,
+                        predicateVariableNode,
+                         predicateVariableName)) {
+                        return true;
+                    }
+                }
             }
-            switch (node.parent.kind) {
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                case SyntaxKind.GetAccessor:
-                    return node === (node.parent as (PropertyDeclaration | GetAccessorDeclaration | PropertySignature)).type;
-            }
-            return false;
         }
 
         function checkSignatureDeclaration(node: SignatureDeclaration) {
@@ -11269,68 +11333,8 @@ namespace ts {
 
             forEach(node.parameters, checkParameter);
 
-            if (node.type) {
-                if (node.type.kind === SyntaxKind.TypePredicate) {
-                    const returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
-                    if (!returnType || !(returnType.flags & TypeFlags.PredicateType)) {
-                        return;
-                    }
-                    const typePredicate = (returnType as PredicateType).predicate;
-                    const typePredicateNode = node.type as TypePredicateNode;
-                    checkSourceElement(typePredicateNode);
-                    if (isIdentifierTypePredicate(typePredicate)) {
-                        if (typePredicate.parameterIndex >= 0) {
-                            if (node.parameters[typePredicate.parameterIndex].dotDotDotToken) {
-                                error(typePredicateNode.parameterName,
-                                    Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
-                            }
-                            else {
-                                checkTypeAssignableTo(typePredicate.type,
-                                    getTypeOfNode(node.parameters[typePredicate.parameterIndex]),
-                                    typePredicateNode.type);
-                            }
-                        }
-                        else if (typePredicateNode.parameterName) {
-                            let hasReportedError = false;
-                            for (var param of node.parameters) {
-                                if (hasReportedError) {
-                                    break;
-                                }
-                                if (param.name.kind === SyntaxKind.ObjectBindingPattern ||
-                                    param.name.kind === SyntaxKind.ArrayBindingPattern) {
+            checkSourceElement(node.type);
 
-                                    (function checkBindingPattern(pattern: BindingPattern) {
-                                        for (const element of pattern.elements) {
-                                            if (element.name.kind === SyntaxKind.Identifier &&
-                                                (<Identifier>element.name).text === typePredicate.parameterName) {
-
-                                                error(typePredicateNode.parameterName,
-                                                    Diagnostics.A_type_predicate_cannot_reference_element_0_in_a_binding_pattern,
-                                                    typePredicate.parameterName);
-                                                hasReportedError = true;
-                                                break;
-                                            }
-                                            else if (element.name.kind === SyntaxKind.ArrayBindingPattern ||
-                                                element.name.kind === SyntaxKind.ObjectBindingPattern) {
-
-                                                checkBindingPattern(<BindingPattern>element.name);
-                                            }
-                                        }
-                                    })(<BindingPattern>param.name);
-                                }
-                            }
-                            if (!hasReportedError) {
-                                error(typePredicateNode.parameterName,
-                                    Diagnostics.Cannot_find_parameter_0,
-                                    typePredicate.parameterName);
-                            }
-                        }
-                    }
-                }
-                else {
-                    checkSourceElement(node.type);
-                }
-            }
 
             if (produceDiagnostics) {
                 checkCollisionWithArgumentsInGeneratedCode(node);
@@ -14602,20 +14606,6 @@ namespace ts {
             }
         }
 
-        function checkTypePredicate(node: TypePredicateNode) {
-            const { parameterName } = node;
-            if (parameterName.kind === SyntaxKind.Identifier && !isInLegalParameterTypePredicatePosition(node)) {
-                error(node, Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
-            }
-            else if (parameterName.kind === SyntaxKind.ThisType) {
-                if (!isInLegalThisTypePredicatePosition(node)) {
-                    error(node, Diagnostics.A_this_based_type_predicate_is_only_allowed_within_a_class_or_interface_s_members_get_accessors_or_return_type_positions_for_functions_and_methods);
-                }
-                else {
-                    getTypeFromThisTypeNode(parameterName as ThisTypeNode);
-                }
-            }
-        }
 
         function checkSourceElement(node: Node): void {
             if (!node) {
@@ -15219,9 +15209,16 @@ namespace ts {
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
             if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value);
+                return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
             }
             return undefined;
+        }
+
+        /** Returns the target of an export specifier without following aliases */
+        function getExportSpecifierLocalTargetSymbol(node: ExportSpecifier): Symbol {
+            return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
+                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node) :
+                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
         }
 
         function getTypeOfNode(node: Node): Type {
