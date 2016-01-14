@@ -36,7 +36,7 @@
         "istanbul": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "tslint": "next",
-        "typescript": "next",
+        "typescript": "1.8.0-dev.20160113",
         "tsd": "latest"
     },
     "scripts": {
