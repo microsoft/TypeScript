@@ -5240,7 +5240,9 @@ namespace ts {
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                         // Report structural errors only if we haven't reported any errors yet
-                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo ? ReportErrors.Elaborate : ReportErrors.None;
+                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !isPrimitiveApparentType(apparentType)
+                            ? ReportErrors.Elaborate
+                            : ReportErrors.None;
                         if (result = objectTypeRelatedTo(apparentType, source, target, reportStructuralErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
@@ -5629,7 +5631,7 @@ namespace ts {
                         }
                         // don't elaborate the primitive apparent types (like Number)
                         // because the actual primitives will have already been reported.
-                        if (shouldElaborateErrors && !isPrimitiveApparentType(source)) {
+                        if (shouldElaborateErrors) {
                             reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
                                 typeToString(source),
                                 signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
