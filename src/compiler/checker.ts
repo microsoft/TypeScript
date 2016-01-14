@@ -2,6 +2,12 @@
 
 /* @internal */
 namespace ts {
+    const enum ReportErrors {
+        None = 0,
+        Basic,
+        Elaborate,
+    }
+
     let nextSymbolId = 1;
     let nextNodeId = 1;
     let nextMergeId = 1;
@@ -4927,7 +4933,7 @@ namespace ts {
         function isSignatureAssignableTo(source: Signature,
                                          target: Signature,
                                          ignoreReturnTypes: boolean): boolean {
-            return compareSignaturesRelated(source, target, ignoreReturnTypes, /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
+            return compareSignaturesRelated(source, target, ignoreReturnTypes, ReportErrors.None, /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
         /**
@@ -4936,8 +4942,9 @@ namespace ts {
         function compareSignaturesRelated(source: Signature,
                                           target: Signature,
                                           ignoreReturnTypes: boolean,
+                                          reportErrors: ReportErrors,
                                           errorReporter: (d: DiagnosticMessage, arg0?: string, arg1?: string) => void,
-                                          compareTypes: (s: Type, t: Type, reportErrors?: boolean) => Ternary): Ternary {
+                                          compareTypes: (s: Type, t: Type, reportErrors?: ReportErrors) => Ternary): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
                 return Ternary.True;
@@ -4961,9 +4968,9 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const s = i < sourceMax ? getTypeOfSymbol(sourceParams[i]) : getRestTypeOfSignature(source);
                 const t = i < targetMax ? getTypeOfSymbol(targetParams[i]) : getRestTypeOfSignature(target);
-                const related = compareTypes(t, s, /*reportErrors*/ false) || compareTypes(s, t, !!errorReporter);
+                const related = compareTypes(t, s, /*reportErrors*/ ReportErrors.None) || compareTypes(s, t, reportErrors);
                 if (!related) {
-                    if (errorReporter) {
+                    if (reportErrors) {
                         errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
                             sourceParams[i < sourceMax ? i : sourceMax].name,
                             targetParams[i < targetMax ? i : targetMax].name);
@@ -4983,14 +4990,14 @@ namespace ts {
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 if (targetReturnType.flags & TypeFlags.PredicateType && (targetReturnType as PredicateType).predicate.kind === TypePredicateKind.Identifier) {
                     if (!(sourceReturnType.flags & TypeFlags.PredicateType)) {
-                        if (errorReporter) {
+                        if (reportErrors) {
                             errorReporter(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
                         }
                         return Ternary.False;
                     }
                 }
 
-                result &= compareTypes(sourceReturnType, targetReturnType, !!errorReporter);
+                result &= compareTypes(sourceReturnType, targetReturnType, reportErrors);
             }
 
             return result;
@@ -5064,11 +5071,10 @@ namespace ts {
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
-            let elaborateErrors = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
-            const result = isRelatedTo(source, target, errorNode !== undefined, headMessage);
+            const result = isRelatedTo(source, target, !!errorNode ? ReportErrors.Basic : ReportErrors.None, headMessage);
             if (overflow) {
                 error(errorNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
             }
@@ -5079,8 +5085,7 @@ namespace ts {
                 // where errors were being reported.
                 if (errorInfo.next === undefined) {
                     errorInfo = undefined;
-                    elaborateErrors = true;
-                    isRelatedTo(source, target, errorNode !== undefined, headMessage);
+                    isRelatedTo(source, target, !!errorNode ? ReportErrors.Elaborate : ReportErrors.None, headMessage);
                 }
                 if (containingMessageChain) {
                     errorInfo = concatenateDiagnosticMessageChains(containingMessageChain, errorInfo);
@@ -5091,6 +5096,7 @@ namespace ts {
             return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
+                Debug.assert(!!errorNode)
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
             }
 
@@ -5108,7 +5114,7 @@ namespace ts {
             // Ternary.True if they are related with no assumptions,
             // Ternary.Maybe if they are related with assumptions of other relationships, or
             // Ternary.False if they are not related.
-            function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
+            function isRelatedTo(source: Type, target: Type, reportErrors?: ReportErrors, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
@@ -5196,7 +5202,7 @@ namespace ts {
                     // A & B = (A & B) | (C & D).
                     if (source.flags & TypeFlags.Intersection) {
                         // If target is a union type the following check will report errors so we suppress them here
-                        if (result = someTypeRelatedToType(<IntersectionType>source, target, reportErrors && !(target.flags & TypeFlags.Union))) {
+                        if (result = someTypeRelatedToType(<IntersectionType>source, target, !(target.flags & TypeFlags.Union) ? reportErrors : ReportErrors.None)) {
                             return result;
                         }
                     }
@@ -5213,7 +5219,7 @@ namespace ts {
                         constraint = emptyObjectType;
                     }
                     // Report constraint errors only if the constraint is not the empty object type
-                    const reportConstraintErrors = reportErrors && constraint !== emptyObjectType;
+                    const reportConstraintErrors = constraint !== emptyObjectType ? reportErrors : ReportErrors.None;
                     if (result = isRelatedTo(constraint, target, reportConstraintErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
@@ -5234,7 +5240,7 @@ namespace ts {
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (apparentType.flags & (TypeFlags.ObjectType | TypeFlags.Intersection) && target.flags & TypeFlags.ObjectType) {
                         // Report structural errors only if we haven't reported any errors yet
-                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo;
+                        const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo ? ReportErrors.Elaborate : ReportErrors.None;
                         if (result = objectTypeRelatedTo(apparentType, source, target, reportStructuralErrors)) {
                             errorInfo = saveErrorInfo;
                             return result;
@@ -5253,11 +5259,11 @@ namespace ts {
                 if (source.flags & TypeFlags.ObjectType && target.flags & TypeFlags.ObjectType) {
                     if (source.flags & TypeFlags.Reference && target.flags & TypeFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                         // We have type references to same target type, see if all type arguments are identical
-                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, /*reportErrors*/ false)) {
+                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, ReportErrors.None)) {
                             return result;
                         }
                     }
-                    return objectTypeRelatedTo(source, source, target, /*reportErrors*/ false);
+                    return objectTypeRelatedTo(source, source, target, ReportErrors.None);
                 }
                 if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union ||
                     source.flags & TypeFlags.Intersection && target.flags & TypeFlags.Intersection) {
@@ -5292,7 +5298,7 @@ namespace ts {
                 return false;
             }
 
-            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
+            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: ReportErrors): boolean {
                 if (!(target.flags & TypeFlags.ObjectLiteralPatternWithComputedProperties) && someConstituentTypeHasKind(target, TypeFlags.ObjectType)) {
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.name)) {
@@ -5300,6 +5306,7 @@ namespace ts {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
                                 // reasoning about what went wrong.
+                                Debug.assert(!!errorNode);
                                 errorNode = prop.valueDeclaration;
                                 reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                     symbolToString(prop), typeToString(target));
@@ -5315,7 +5322,7 @@ namespace ts {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
-                    const related = typeRelatedToSomeType(sourceType, target, /*reportErrors*/ false);
+                    const related = typeRelatedToSomeType(sourceType, target, ReportErrors.None);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -5324,10 +5331,10 @@ namespace ts {
                 return result;
             }
 
-            function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
+            function typeRelatedToSomeType(source: Type, target: UnionOrIntersectionType, reportErrors: ReportErrors): Ternary {
                 const targetTypes = target.types;
                 for (let i = 0, len = targetTypes.length; i < len; i++) {
-                    const related = isRelatedTo(source, targetTypes[i], reportErrors && i === len - 1);
+                    const related = isRelatedTo(source, targetTypes[i], i === len - 1 ? reportErrors : ReportErrors.None);
                     if (related) {
                         return related;
                     }
@@ -5335,7 +5342,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function typeRelatedToEachType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
+            function typeRelatedToEachType(source: Type, target: UnionOrIntersectionType, reportErrors: ReportErrors): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
@@ -5348,10 +5355,10 @@ namespace ts {
                 return result;
             }
 
-            function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
+            function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: ReportErrors): Ternary {
                 const sourceTypes = source.types;
                 for (let i = 0, len = sourceTypes.length; i < len; i++) {
-                    const related = isRelatedTo(sourceTypes[i], target, reportErrors && i === len - 1);
+                    const related = isRelatedTo(sourceTypes[i], target, i === len - 1 ? reportErrors : ReportErrors.None);
                     if (related) {
                         return related;
                     }
@@ -5359,7 +5366,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
+            function eachTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: ReportErrors): Ternary {
                 let result = Ternary.True;
                 const sourceTypes = source.types;
                 for (const sourceType of sourceTypes) {
@@ -5372,7 +5379,7 @@ namespace ts {
                 return result;
             }
 
-            function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, reportErrors: boolean): Ternary {
+            function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, reportErrors: ReportErrors): Ternary {
                 const sources = source.typeArguments || emptyArray;
                 const targets = target.typeArguments || emptyArray;
                 if (sources.length !== targets.length && relation === identityRelation) {
@@ -5395,14 +5402,14 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function objectTypeRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
+            function objectTypeRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: ReportErrors): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
                 const id = relation !== identityRelation || source.id < target.id ? source.id + "," + target.id : target.id + "," + source.id;
                 const related = relation[id];
                 if (related !== undefined) {
-                    if (elaborateErrors && related === RelationComparisonResult.Failed) {
+                    if (reportErrors === ReportErrors.Elaborate && related === RelationComparisonResult.Failed) {
                         // We are elaborating errors and the cached result is an unreported failure. Record the result as a reported
                         // failure and continue computing the relation such that errors get reported.
                         relation[id] = RelationComparisonResult.FailedAndReported;
@@ -5472,7 +5479,7 @@ namespace ts {
                 return result;
             }
 
-            function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function propertiesRelatedTo(source: Type, target: Type, reportErrors: ReportErrors): Ternary {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
@@ -5580,7 +5587,7 @@ namespace ts {
                 return result;
             }
 
-            function signaturesRelatedTo(source: Type, target: Type, kind: SignatureKind, reportErrors: boolean): Ternary {
+            function signaturesRelatedTo(source: Type, target: Type, kind: SignatureKind, reportErrors: ReportErrors): Ternary {
                 if (relation === identityRelation) {
                     return signaturesIdenticalTo(source, target, kind);
                 }
@@ -5617,7 +5624,7 @@ namespace ts {
                                     errorInfo = saveErrorInfo;
                                     continue outer;
                                 }
-                                shouldElaborateErrors = false;
+                                shouldElaborateErrors = ReportErrors.None;
                             }
                         }
                         // don't elaborate the primitive apparent types (like Number)
@@ -5636,8 +5643,8 @@ namespace ts {
             /**
              * See signatureAssignableTo, compareSignaturesIdentical
              */
-            function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
-                return compareSignaturesRelated(source, target, /*ignoreReturnTypes*/ false, reportErrors ? reportError : undefined, isRelatedTo);
+            function signatureRelatedTo(source: Signature, target: Signature, reportErrors: ReportErrors): Ternary {
+                return compareSignaturesRelated(source, target, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
@@ -5657,7 +5664,7 @@ namespace ts {
                 return result;
             }
 
-            function stringIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
+            function stringIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: ReportErrors): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.String, source, target);
                 }
@@ -5687,7 +5694,7 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function numberIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: boolean): Ternary {
+            function numberIndexTypesRelatedTo(source: Type, originalSource: Type, target: Type, reportErrors: ReportErrors): Ternary {
                 if (relation === identityRelation) {
                     return indexTypesIdenticalTo(IndexKind.Number, source, target);
                 }
@@ -5709,7 +5716,7 @@ namespace ts {
                     let related: Ternary;
                     if (sourceStringType && sourceNumberType) {
                         // If we know for sure we're testing both string and numeric index types then only report errors from the second one
-                        related = isRelatedTo(sourceStringType, targetType, /*reportErrors*/ false) || isRelatedTo(sourceNumberType, targetType, reportErrors);
+                        related = isRelatedTo(sourceStringType, targetType, ReportErrors.None) || isRelatedTo(sourceNumberType, targetType, reportErrors);
                     }
                     else {
                         related = isRelatedTo(sourceStringType || sourceNumberType, targetType, reportErrors);
@@ -8990,7 +8997,7 @@ namespace ts {
             getInferredTypes(context);
         }
 
-        function checkTypeArguments(signature: Signature, typeArgumentNodes: TypeNode[], typeArgumentTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: TypeNode[], typeArgumentTypes: Type[], reportErrors: ReportErrors, headMessage?: DiagnosticMessage): boolean {
             const typeParameters = signature.typeParameters;
             let typeArgumentsAreAssignable = true;
             let mapper: TypeMapper;
@@ -9020,7 +9027,7 @@ namespace ts {
             return typeArgumentsAreAssignable;
         }
 
-        function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: boolean) {
+        function checkApplicableSignature(node: CallLikeExpression, args: Expression[], signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[], reportErrors: ReportErrors) {
             const argCount = getEffectiveArgumentCount(node, args, signature);
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
@@ -9468,12 +9475,12 @@ namespace ts {
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, ReportErrors.Basic);
             }
             else if (candidateForTypeArgumentError) {
                 if (!isTaggedTemplate && !isDecorator && typeArguments) {
                     const typeArguments = (<CallExpression>node).typeArguments;
-                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, headMessage);
+                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), ReportErrors.Basic, headMessage);
                 }
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
@@ -9541,7 +9548,7 @@ namespace ts {
                             let typeArgumentTypes: Type[];
                             if (typeArguments) {
                                 typeArgumentTypes = map(typeArguments, getTypeFromTypeNode);
-                                typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
+                                typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, ReportErrors.None);
                             }
                             else {
                                 inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
@@ -9553,7 +9560,7 @@ namespace ts {
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
-                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, ReportErrors.None)) {
                             break;
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, true) : -1;
